@@ -1,0 +1,203 @@
+\documentclass[17pt]{extarticle}
+\title{Linear Algebra Notes}
+\author{Giacomo Ellero}
+
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{dirtytalk}
+\usepackage{parskip}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\citeladr}[1]{
+    \begin{quotation}
+        This references \say{Linear Algebra Done Right}, #1
+    \end{quotation}
+}
+\newcommand{\innerprod}[1]{
+    \langle #1 \rangle
+}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Inner product spaces}
+
+\citeladr{Chapter 6}
+
+\subsection{Inner product and norms}
+
+\citeladr{Chapter 6.A}
+
+\subsubsection{Definition of complex conjugate}
+
+Let $z \in \C$, then
+
+$$
+    \overline z = \overline{a + bi} = a - bi
+$$
+
+\subsubsection{Definition of complex absolute value}
+
+Let $z \in \C$, then
+
+$$
+    |z| = \sqrt{a^2 + b^2}
+$$
+
+and
+
+$$
+    |z|^2 = z \overline z
+$$
+
+
+\subsubsection{Definition of norm}
+
+\citeladr{6.8}
+
+Let $v \in V$, then
+
+$$
+    \norm v = \sqrt{\langle v, v \rangle}
+$$
+
+\subsubsection{Definition of orthogonal}
+
+\citeladr{6.11}
+
+Two vectors $u, v$ are orthogonal if
+
+$$
+    \langle v, u \rangle = 0
+$$
+
+This is just a fancy way to say they are perpendicular since, for example, in $\R^2$, $\langle v, u \rangle = \norm v \norm u \cos \theta$.
+
+\subsubsection{Pythagorean theorem}
+
+\citeladr{6.13}
+
+Let $v, u \in V$ be orthogonal, then
+
+$$
+    \norm{u+v}^2 = \norm u^2 + \norm v^2
+$$
+
+\subsubsection{Orthogonal Decomposition}
+
+\citeladr{6.14}
+
+Let $v, u \in V$ and $w = u - cv$ orthogonal to $v$.
+
+We want to find $c \in \F$ and such that
+
+$$
+    u = cv + w
+$$
+
+To solve this problem we set
+
+$$
+    c = \frac{\langle u, v \rangle}{\norm v^2},
+    \quad
+    w = u - \frac{\langle u, v \rangle}{\norm v^2} v
+$$
+
+In this way we have that $u = cv + w$ and $\langle v, w \rangle = 0$
+
+\subsubsection{Cauchy-Schwarz Inequality}
+
+\citeladr{6.15}
+
+Let $u, v \in V$. Then
+
+$$
+    |\langle u, v \rangle \le \norm u \norm v
+$$
+
+\begin{proof}
+    Consider the orthogonal decomposition $u = cv + w$.
+    Since $cv$ is orthogonal to $w$, by the Pythagorean Theorem we have that
+
+    \begin{align*}
+        \norm u ^2 & = \norm {c v}^2 + \norm w^2                                                 \\
+                   & = \norm {\frac{\langle u, v \rangle}{\norm v^2} v}^2 + \norm w^2            \\
+                   & = \left(\frac{\langle u, v \rangle}{\norm v^2} \norm v\right)^2 + \norm w^2 \\
+                   & = \frac{|\langle u, v \rangle |^2}{\norm v^2} + \norm w^2                   \\
+                   & \ge \frac{|\langle u, v \rangle |^2}{\norm v^2}                             \\
+    \end{align*}
+
+    Now we take square roots on both sides and rearrange the terms to get our result.
+
+\end{proof}
+
+\subsubsection{Triangle Inequality}
+
+\citeladr{6.18}
+
+Let $u, v \in V$. Then
+
+$$
+    \norm{u+v} \le \norm u + \norm v
+$$
+
+\begin{proof}
+    \begin{align*}
+        \norm{u+v}^2 & = \innerprod{u+v, u+v}                                                                 \\
+                     & = \innerprod{u, u} + \innerprod{v,v} + \innerprod{u, v} + \innerprod{v, u}             \\
+                     & = \innerprod{u, u} + \innerprod{v,v} + \innerprod{u, v} + \overline {\innerprod{u, v}} \\
+                     & = \norm u^2 + \norm v^2 + 2 \Re \innerprod{u, v}                                       \\
+                     & \le \norm u^2 + \norm v^2 + 2|\innerprod{u, v}|                                        \\
+                     & \le \norm u^2 + \norm v^2 + 2 \norm u \norm v                                          \\
+                     & = (\norm u + \norm v)^2
+    \end{align*}
+\end{proof}
+
+\subsubsection{Parallelogram Equality}
+
+\citeladr{6.22}
+
+Let $u, v \in V$. Then
+
+$$
+    \norm {u+v}^2 + \norm{u-v}^2 = 2 (\norm u^2 + \norm v^2)
+$$
+
+This is quite easy to prove just with the definition of norm and inner product.
+
+\clearpage
+
+\subsection{Orthonormal Bases}
+
+\citeladr{Chapter 6.B}
+
+\subsubsection{Definition of Orthonormal List}
+
+\citeladr{6.23}
+
+A list of vectors is orthonormal if
+each vector has norm 1 and
+is orthogonal to the other vectors in the list.
+
+This means that in an orthonormal list $x_1, \dots, x_n$ of vectors in $V$
+
+$$
+    \innerprod{x_i, x_j} = \begin{cases*}
+        1  \text{ if } j = k, \\
+        0  \text{ if } j \ne k
+    \end{cases*}
+$$
+
+\end{document}

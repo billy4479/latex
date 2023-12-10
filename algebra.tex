@@ -440,16 +440,24 @@
     \citeladr{7.24 and 7.29}
 
     Let $V$ be finite-dimensional and $T$ be a self-adjoint mapping on $V$.
-    Then there exists an orthonormal basis of $V$ consisting of eigevectors of $T$.
+    Then there exists an orthonormal basis of $V$ consisting of eigenvectors of $T$.
 
     Moreover if $\F = \R$ this is an equivalence (if and only if).
 
     \begin{proof}
-        Let $\lambda$ be an eigenvalue of $T$ and $u$ its eigenvalue.
+        We proceed by induction on the dimension of $V$.
+        Let $n = \dim V$.
+
+        First, if $n = 1$ there is nothing more to prove
+        since we saw already that $T$ has at least one eigenvalue.
+
+        If $n \ge 2$ let $\lambda$ be an eigenvalue of $T$ and $u$ its eigenvalue.
         We can find another eigenvector of $T$ $u_n = \frac{u}{\norm u}$.
         Let $U = [u_n]$ (the span of $u_n$) and $U^\perp$ which will have $\dim U^\perp = n-1$.
 
-        We also have that
+        We now want to prove that any $Tv \in U^\perp$.
+        To do so we have to show that any $Tv$ is orthogonal to $u_n$.
+        We proceed as follows:
 
         $$
             \innerprod{Tv, u_n} \stackrel{\text{self-adjoint}}{=}
@@ -459,7 +467,15 @@
             0
         $$
 
-        % TODO: finish here
+        (Note that $\lambda \in \R$, so $\overline \lambda = \lambda$.)
+
+        Then we can restrict $T$ such that $\tilde T: U^\perp \to U^\perp$.
+        $\tilde T$ is a self-adjoint mapping of $U^\perp$,
+        hence we can repeat the procedure and get an orthonormal basis of $U^\perp$
+        made of eigenvectors of $\tilde T$ that looks like $u_1, \dots, u_{n-1}$.
+        To this list we append $u_n$ so that the resulting list $u_1, \dots, u_{n-1}, u_n$
+        is an orthonormal basis of $V$ consisting of eigenvectors of $T$.
+
     \end{proof}
 \end{theorem}
 

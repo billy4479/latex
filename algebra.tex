@@ -11,6 +11,8 @@
 \usepackage{dirtytalk}
 \usepackage{parskip}
 \usepackage{mathrsfs}
+\usepackage[many]{tcolorbox}
+\usepackage{xparse}
 \usepackage[a4paper,margin=1.5cm]{geometry}
 
 \newcommand{\C}{\mathbb{C}}
@@ -33,13 +35,19 @@
   {\par\xdef\tpd{\the\prevdepth}\egroup
    \prevdepth=\tpd}
 
-\newenvironment{theorem}[1]{
+\newtcolorbox{statementbox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries}
+
+\NewDocumentEnvironment{statement}{ O{} O{Theorem} m}{
 \begin{absolutelynopagebreak}
-\subsubsection{#1}
+\subsubsection{#3}
+{#1}
+\begin{statementbox}{#2}
 }
 {
+\end{statementbox}
 \end{absolutelynopagebreak}
 }
+
 
 \begin{document}
 
@@ -55,7 +63,7 @@
 
 \citeladr{Chapter 6.A}
 
-\begin{theorem}{Definition of complex conjugate}
+\begin{statement}[][Definition]{Definition of complex conjugate}
 
     Let $z \in \C$, then
 
@@ -63,9 +71,9 @@
         \overline z = \overline{a + bi} = a - bi
     $$
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Definition of complex absolute value}
+\begin{statement}[][Definition]{Definition of complex absolute value}
 
     Let $z \in \C$, then
 
@@ -78,13 +86,9 @@
     $$
         |z|^2 = z \overline z
     $$
+\end{statement}
 
-
-\end{theorem}
-
-\begin{theorem}{Definition of norm}
-
-    \citeladr{6.8}
+\begin{statement}[\citeladr{6.8}][Definition]{Definition of norm}
 
     Let $v \in V$, then
 
@@ -92,11 +96,9 @@
         \norm v = \sqrt{\langle v, v \rangle}
     $$
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Definition of orthogonal}
-
-    \citeladr{6.11}
+\begin{statement}[\citeladr{6.11}][Definition]{Definition of orthogonal}
 
     Two vectors $u, v$ are orthogonal if
 
@@ -106,11 +108,9 @@
 
     This is just a fancy way to say they are perpendicular since, for example, in $\R^2$, $\langle v, u \rangle = \norm v \norm u \cos \theta$.
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Pythagorean theorem}
-
-    \citeladr{6.13}
+\begin{statement}[\citeladr{6.13}]{Pythagorean theorem}
 
     Let $v, u \in V$ be orthogonal, then
 
@@ -118,11 +118,9 @@
         \norm{u+v}^2 = \norm u^2 + \norm v^2
     $$
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Orthogonal Decomposition}
-
-    \citeladr{6.14}
+\begin{statement}[\citeladr{6.14}]{Orthogonal Decomposition}
 
     Let $v, u \in V$ and $w = u - cv$ orthogonal to $v$.
 
@@ -135,93 +133,81 @@
     To solve this problem we set
 
     $$
-        c = \frac{\langle u, v \rangle}{\norm v^2},
+        c = \frac{\innerprod{u, v}}{\norm v^2},
         \quad
-        w = u - \frac{\langle u, v \rangle}{\norm v^2} v
+        w = u - \frac{\innerprod{u, v}}{\norm v^2} v
     $$
 
     In this way we have that $u = cv + w$ and $\langle v, w \rangle = 0$
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Cauchy-Schwarz Inequality}
-
-    \citeladr{6.15}
+\begin{statement}[\citeladr{6.15}]{Cauchy-Schwarz Inequality}
 
     Let $u, v \in V$. Then
 
     $$
-        |\langle u, v \rangle \le \norm u \norm v
+        |\innerprod{u, v} \le \norm u \norm v
     $$
+\end{statement}
 
-    \begin{proof}
-        Consider the orthogonal decomposition $u = cv + w$.
-        Since $cv$ is orthogonal to $w$, by the Pythagorean Theorem we have that
+\begin{proof}
+    Consider the orthogonal decomposition $u = cv + w$.
+    Since $cv$ is orthogonal to $w$, by the Pythagorean Theorem we have that
 
-        \begin{align*}
-            \norm u ^2 & = \norm {c v}^2 + \norm w^2                                                 \\
-                       & = \norm {\frac{\langle u, v \rangle}{\norm v^2} v}^2 + \norm w^2            \\
-                       & = \left(\frac{\langle u, v \rangle}{\norm v^2} \norm v\right)^2 + \norm w^2 \\
-                       & = \frac{|\langle u, v \rangle |^2}{\norm v^2} + \norm w^2                   \\
-                       & \ge \frac{|\langle u, v \rangle |^2}{\norm v^2}                             \\
-        \end{align*}
+    \begin{align*}
+        \norm u ^2 & = \norm {c v}^2 + \norm w^2                                             \\
+                   & = \norm {\frac{\innerprod{u, v}}{\norm v^2} v}^2 + \norm w^2            \\
+                   & = \left(\frac{\innerprod{u, v}}{\norm v^2} \norm v\right)^2 + \norm w^2 \\
+                   & = \frac{|\innerprod{u, v} |^2}{\norm v^2} + \norm w^2                   \\
+                   & \ge \frac{|\innerprod{u, v} |^2}{\norm v^2}                             \\
+    \end{align*}
 
-        Now we take square roots on both sides and rearrange the terms to get our result.
+    Now we take square roots on both sides and rearrange the terms to get our result.
 
-    \end{proof}
+\end{proof}
 
-\end{theorem}
-
-\begin{theorem}{Triangle Inequality}
-
-    \citeladr{6.18}
+\begin{statement}[\citeladr{6.18}]{Triangle Inequality}
 
     Let $u, v \in V$. Then
 
     $$
         \norm{u+v} \le \norm u + \norm v
     $$
+\end{statement}
 
-    \begin{proof}
-        \begin{align*}
-            \norm{u+v}^2 & = \innerprod{u+v, u+v}                                                                 \\
-                         & = \innerprod{u, u} + \innerprod{v,v} + \innerprod{u, v} + \innerprod{v, u}             \\
-                         & = \innerprod{u, u} + \innerprod{v,v} + \innerprod{u, v} + \overline {\innerprod{u, v}} \\
-                         & = \norm u^2 + \norm v^2 + 2 \Re \innerprod{u, v}                                       \\
-                         & \le \norm u^2 + \norm v^2 + 2|\innerprod{u, v}|                                        \\
-                         & \le \norm u^2 + \norm v^2 + 2 \norm u \norm v                                          \\
-                         & = (\norm u + \norm v)^2
-        \end{align*}
-    \end{proof}
+\begin{proof}
+    \begin{align*}
+        \norm{u+v}^2 & = \innerprod{u+v, u+v}                                                                 \\
+                     & = \innerprod{u, u} + \innerprod{v,v} + \innerprod{u, v} + \innerprod{v, u}             \\
+                     & = \innerprod{u, u} + \innerprod{v,v} + \innerprod{u, v} + \overline {\innerprod{u, v}} \\
+                     & = \norm u^2 + \norm v^2 + 2 \Re \innerprod{u, v}                                       \\
+                     & \le \norm u^2 + \norm v^2 + 2|\innerprod{u, v}|                                        \\
+                     & \le \norm u^2 + \norm v^2 + 2 \norm u \norm v                                          \\
+                     & = (\norm u + \norm v)^2
+    \end{align*}
+\end{proof}
 
-\end{theorem}
-
-\begin{theorem}{Parallelogram Equality}
-
-    \citeladr{6.22}
+\begin{statement}[\citeladr{6.22}]{Parallelogram Equality}
 
     Let $u, v \in V$. Then
 
     $$
         \norm {u+v}^2 + \norm{u-v}^2 = 2 (\norm u^2 + \norm v^2)
     $$
+\end{statement}
+This is quite easy to prove just with the definition of norm and inner product.
 
-    This is quite easy to prove just with the definition of norm and inner product.
+\clearpage
 
-    \clearpage
+\subsection{Orthonormal Bases}
 
-    \subsection{Orthonormal Bases}
+\citeladr{Chapter 6.B}
 
-    \citeladr{Chapter 6.B}
 
-\end{theorem}
+\begin{statement}[\citeladr{6.23}]{Definition of Orthonormal List}
 
-\begin{theorem}{Definition of Orthonormal List}
-
-    \citeladr{6.23}
-
-    A list of vectors is orthonormal if
-    each vector has norm 1 and
+    A list of vectors is orthonormal if each vector has norm 1 and
     is orthogonal to the other vectors in the list.
 
     This means that in an orthonormal list $e_1, \dots, e_n$ of vectors in $V$
@@ -232,14 +218,10 @@
             0  \text{ if } j \ne k
         \end{cases*}
     $$
+\end{statement}
+From now on when we usually denote an orthonormal lists of vectors with $e_i$.
 
-    From now on when we usually denote an orthonormal lists of vectors with $e_i$.
-
-\end{theorem}
-
-\begin{theorem}{Norm of an orthonormal linear combination}
-
-    \citeladr{6.25}
+\begin{statement}[\citeladr{6.25}]{Norm of an orthonormal linear combination}
 
     Let $e_1, \dots, e_n$ orthonormal. Then
 
@@ -248,26 +230,21 @@
     $$
 
     for all $a_1, \dots, a_n \in \F$.
+\end{statement}
+\begin{proof}
+    This is just the repeated application of the Pythagorean Theorem.
+\end{proof}
 
-    \begin{proof}
-        This is just the repeated application of the Pythagorean Theorem.
-    \end{proof}
-\end{theorem}
 
-\begin{theorem}{Definition of Orthonormal Basis}
-
-    \citeladr{6.26, 6.27 and 6.28}
-
+\begin{statement}[\citeladr{6.26, 6.27 and 6.28}]{Definition of Orthonormal Basis}
     As a corollary of the previous theorem we have that \textbf{every orthonormal list of vectors is linearly independent}.
     This is quite obvious from the previous theorem.
 
     It follows that if we have an orthonormal list of the right length we can form a basis.
     Such basis will be referred as an \textbf{orthonormal basis}.
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Writing a Vector as a L.C. of Orthonormal Basis}
-
-    \citeladr{6.30}
+\begin{statement}[\citeladr{6.30}]{Writing a Vector as a L.C. of Orthonormal Basis}
 
     Let $e_1, \dots, e_n$ be an orthonormal basis of $V$ and $v \in V$.
     Then
@@ -282,11 +259,9 @@
         \norm v^2 = |\innerprod{v, e_1}| + \dots + |\innerprod{v, e_n}|
     $$
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Gram-Schmidt Procedure}
-
-    \citeladr{6.31}
+\begin{statement}[\citeladr{6.31}]{Gram-Schmidt Procedure}
 
     This is a procedure for finding orthonormal basis of a given vector space.
 
@@ -305,11 +280,9 @@
         e_i  & = \frac{v_i'}{\norm {v_i'}}                                               \\
     \end{align*}
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Riesz Representation Theorem}
-    \citeladr{6.42}
-
+\begin{statement}[\citeladr{6.42}]{Riesz Representation Theorem}
     Let $V$ be finite-dimensional and $\varphi: V \to \F$.
     Then there exists an unique $u \in V$ such that
 
@@ -318,7 +291,7 @@
     $$
 
     This gives an isomorphism between $V' = \mathscr L(V, \F)$ and $V$.
-\end{theorem}
+\end{statement}
 
 \clearpage
 
@@ -326,9 +299,7 @@
 
 \citeladr{Chapter 6.B}
 
-\begin{theorem}{Definition of Orthogonal Complement}
-    \citeladr{6.45}
-
+\begin{statement}[\citeladr{6.45}]{Definition of Orthogonal Complement}
     Let $U \subset V$ (not necessarily a subspace).
     Then we denote as $U^\perp$ the \textbf{orthogonal complement} of $U$
     the set of all vectors in $V$ orthogonal to every vector in $U$.
@@ -337,13 +308,13 @@
         U^\perp = \{ v \in V \enspace | \enspace \forall u \in U, \innerprod{v, u} = 0 \}
     $$
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Proprieties of the Orthogonal Complement}
-
-    \citeladr{6.46, 6.47, and 6.48}
+\begin{statement}[\citeladr{6.46, 6.47, and 6.48}]{Proprieties of the Orthogonal Complement}
 
     Applying the Riesz theorem we get an isomorphism between $U^\perp$ and $U^\circ$.
+
+    \tcbline
 
     The following proprieties hold:
 
@@ -355,11 +326,15 @@
         \item If $U \subseteq W$, then $W^\perp \subseteq U^\perp$
     \end{enumerate}
 
+    \tcbline
+
     Also it holds that
 
     $$
         V = U \oplus U^\perp
     $$
+
+    \tcbline
 
     Moreover, if $V$ is finite-dimensional we get that
 
@@ -368,7 +343,8 @@
     $$
 
 
-\end{theorem}
+
+\end{statement}
 
 \clearpage
 
@@ -380,20 +356,15 @@
 
 \citeladr{Chapter 7.A}
 
-\begin{theorem}{Definition of Self-Adjoint Mapping}
-
-    \citeladr{7.11}
-
+\begin{statement}[\citeladr{7.11}]{Definition of Self-Adjoint Mapping}
     A linear mapping $T \in \mathscr L(V)$ is self-adjoint if and only if
 
     $$
         \forall v, w \in V, \quad \innerprod{Tv, w} = \innerprod{v, Tw}
     $$
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Transpose and Conjugate of Self-Adjoint Mapping}
-
-    \citeladr{7.10 (chopped)}
+\begin{statement}[\citeladr{7.10 (chopped)}]{Transpose and Conjugate of Self-Adjoint Mapping}
 
     Let $V$ be finite-dimensional, $T$ be a self-adjoint mapping on $V$,
     and $\mathscr B = (e_1, \dots, e_n)$ be an orthogonal basis of $V$.
@@ -406,15 +377,11 @@
 
     (The transpose of $A$ is its conjugate.)
 
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{Transpose of the Product of Matrices}
-
-    \begin{quote}
-        This section references the slides of week 11 and is not contained in this chapter of "Linear Algebra Done Right".
-
-        This is a quite general result that will be useful for other proofs even though it's not strictly part of this topic.
-    \end{quote}
+\begin{statement}[\begin{quote}
+            This section references the slides of week 11 and is not contained in this chapter of "Linear Algebra Done Right".
+        \end{quote}]{Transpose of the Product of Matrices}
 
     Let $A \in \mathscr M_{m,n}(F)$ and $B \in \mathscr M_{n, p}(F)$ such that $AB$ is defined. Then
 
@@ -422,61 +389,64 @@
         (AB)' = B'A'
     $$
 
-\end{theorem}
+\end{statement}
+
+This is a quite general result that will be useful for other proofs even though it's not strictly part of this topic.
+
+\clearpage
 
 \subsection{The Spectral Theorem}
 
 \citeladr{Chapter 7.B}
 
-\begin{theorem}{Eigenvalues of Self-Adjoint Mapping are Real}
+\begin{statement}{Eigenvalues of Self-Adjoint Mapping are Real}
     Let $T$ be a self-adjoint mapping on $V$.
     Then all the eigenvalues of $T$ are real.
 
     In other words if a matrix $A$ is such that $A' = \overline A$,
     then $P_A$ (characteristic polynomial) has all roots in $\R$.
-\end{theorem}
+\end{statement}
 
-\begin{theorem}{The Spectral Theorem}
-    \citeladr{7.24 and 7.29}
+\begin{statement}[\citeladr{7.24 and 7.29}]{The Spectral Theorem}
 
     Let $V$ be finite-dimensional and $T$ be a self-adjoint mapping on $V$.
     Then there exists an orthonormal basis of $V$ consisting of eigenvectors of $T$.
 
     Moreover if $\F = \R$ this is an equivalence (if and only if).
 
-    \begin{proof}
-        We proceed by induction on the dimension of $V$.
-        Let $n = \dim V$.
+\end{statement}
+\begin{proof}
+    We proceed by induction on the dimension of $V$.
+    Let $n = \dim V$.
 
-        First, if $n = 1$ there is nothing more to prove
-        since we saw already that $T$ has at least one eigenvalue.
+    First, if $n = 1$ there is nothing more to prove
+    since we saw already that $T$ has at least one eigenvalue.
 
-        If $n \ge 2$ let $\lambda$ be an eigenvalue of $T$ and $u$ its eigenvalue.
-        We can find another eigenvector of $T$ $u_n = \frac{u}{\norm u}$.
-        Let $U = [u_n]$ (the span of $u_n$) and $U^\perp$ which will have $\dim U^\perp = n-1$.
+    If $n \ge 2$ let $\lambda$ be an eigenvalue of $T$ and $u$ its eigenvalue.
+    We can find another eigenvector of $T$ $u_n = \frac{u}{\norm u}$.
+    Let $U = [u_n]$ (the span of $u_n$) and $U^\perp$ which will have $\dim U^\perp = n-1$.
 
-        We now want to prove that any $Tv \in U^\perp$.
-        To do so we have to show that any $Tv$ is orthogonal to $u_n$.
-        We proceed as follows:
+    We now want to prove that any $Tv \in U^\perp$.
+    To do so we have to show that any $Tv$ is orthogonal to $u_n$.
+    We proceed as follows:
 
-        $$
-            \innerprod{Tv, u_n} \stackrel{\text{self-adjoint}}{=}
-            \innerprod{v, Tu_n} \stackrel{\text{eigenvector}}{=}
-            \innerprod{v, \lambda u_n} \stackrel{\text{semi-linearity}}{=}
-            \overline \lambda \innerprod{v, u_n} \stackrel{\text{orthognality of } U^\perp}{=}
-            0
-        $$
+    $$
+        \innerprod{Tv, u_n} \stackrel{\text{self-adjoint}}{=}
+        \innerprod{v, Tu_n} \stackrel{\text{eigenvector}}{=}
+        \innerprod{v, \lambda u_n} \stackrel{\text{semi-linearity}}{=}
+        \overline \lambda \innerprod{v, u_n} \stackrel{\text{orthognality of } U^\perp}{=}
+        0
+    $$
 
-        (Note that $\lambda \in \R$, so $\overline \lambda = \lambda$.)
+    (Note that $\lambda \in \R$, so $\overline \lambda = \lambda$.)
 
-        Then we can restrict $T$ such that $\tilde T: U^\perp \to U^\perp$.
-        $\tilde T$ is a self-adjoint mapping of $U^\perp$,
-        hence we can repeat the procedure and get an orthonormal basis of $U^\perp$
-        made of eigenvectors of $\tilde T$ that looks like $u_1, \dots, u_{n-1}$.
-        To this list we append $u_n$ so that the resulting list $u_1, \dots, u_{n-1}, u_n$
-        is an orthonormal basis of $V$ consisting of eigenvectors of $T$.
+    Then we can restrict $T$ such that $\tilde T: U^\perp \to U^\perp$.
+    $\tilde T$ is a self-adjoint mapping of $U^\perp$,
+    hence we can repeat the procedure and get an orthonormal basis of $U^\perp$
+    made of eigenvectors of $\tilde T$ that looks like $u_1, \dots, u_{n-1}$.
+    To this list we append $u_n$ so that the resulting list $u_1, \dots, u_{n-1}, u_n$
+    is an orthonormal basis of $V$ consisting of eigenvectors of $T$.
 
-    \end{proof}
-\end{theorem}
+\end{proof}
 
 \end{document}

@@ -23,6 +23,11 @@
         This section references \say{Linear Algebra Done Right}, #1
     \end{quotation}
 }
+\newcommand{\citebarberian}[1]{
+    \begin{quotation}
+        This section references \say{Barberian}, #1
+    \end{quotation}
+}
 \newcommand{\innerprod}[1]{
     \langle #1 \rangle
 }
@@ -35,11 +40,12 @@
   {\par\xdef\tpd{\the\prevdepth}\egroup
    \prevdepth=\tpd}
 
-\newtcolorbox{statementbox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries}
+\newtcolorbox{statementbox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
 
 \NewDocumentEnvironment{statement}{ O{} O{Theorem} m}{
 \begin{absolutelynopagebreak}
 \subsubsection{#3}
+\label{#3}
 {#1}
 \begin{statementbox}{#2}
 }
@@ -53,6 +59,145 @@
 
 \maketitle
 \tableofcontents
+\clearpage
+
+\section{Similarity, Determinant and Trace}
+
+\subsection{Determinant}
+
+\begin{statement}[][Definition]{Definition of $(i,j)$-th Minor}
+    Let $A \in \mathscr M_n(F)$.
+    For each $(i,j)$, let $A^{i,j} \in \mathscr M_{n-1}$
+    be the matrix obtained by removing $i$-th row and $j$-th column.
+
+    We call $A^{i,j}$ the $(i,j)$-th minor of $A$.
+\end{statement}
+
+\begin{statement}[\citebarberian{7.4.1}][Definition]{Definition of Cofactor}
+    Let $A \in \mathscr M_n(F)$.
+    Then the cofactor of $a_{ij}$ is
+
+    $$
+        A_{ij} = (-1)^{i+j} \det A^{i,j}
+    $$
+
+\end{statement}
+
+\begin{statement}[][Definition]{Definition of Determinant}
+    Let $A \in \mathscr M_n(F)$.
+
+    If $n = 1$, $\det A = a_{11}$.
+
+    If $n \ge 2$ we have that
+
+    $$
+        \det A = \sum^n_{j=1} a_{1j}A_{1j} = \sum^n_{j=1} a_{1j}(-1)^{1+j} \det A^{1,j}
+    $$
+
+    with the notation of cofactor and $(i,j)$-th minor from before.
+\end{statement}
+
+\clearpage
+
+\section{Structure of Vector Spaces}
+
+\citebarberian{Chapter 3}
+
+\subsection{Duality of Vector Spaces}
+
+\citebarberian{Chapter 3.9}
+
+\begin{statement}[\citebarberian{3.9.1}][Definition]{Definition of Dual Space}
+    Let $\mathscr L(V, F)$ be the set of all \textbf{linear forms} on $V$ (that is the set of all linear mappings $T: V \to F$).
+
+    This is called \textbf{dual space} of $V$ and is usually denoted as $V'$.
+\end{statement}
+
+\begin{statement}[\citebarberian{3.9.2}]{Dimension of the Dual Space}
+    If $V$ is finite-dimensional, then
+    $$
+        \dim V' = \dim V
+    $$
+\end{statement}
+
+\begin{statement}[\citebarberian{3.9.4}]{Definition of Dual Basis}
+
+    Let $x_1, \dots, x_n$ be a basis of $V$.
+    One calls $f_1, \dots, f_n$ the basis of $V'$ dual to $x_1, \dots, x_n$ if
+
+    $$
+        f_i(x_j) = \begin{cases} 1 \text{ if } i = j \\ 0 \text{ if } i \ne j  \end{cases}
+    $$
+
+\end{statement}
+
+\begin{statement}[\citebarberian{3.9.6 and 3.9.7}][Definition]{Definition of Transpose of $T$}
+
+    Let $T': W' \to V'$ defined as defined as $T'(g) = gT$ (with $T: V \to W$).
+    This mapping is linear and it's called \textbf{transpose} of $T$.
+
+\end{statement}
+
+This means that $T'$, given a linear form $g: W \to F$ will yield back another linear form, say $h: V \to F$ defined as $h = g \circ T$.
+
+Basically $V \xrightarrow{T} W \xrightarrow{g} F$ and $V \xrightarrow {gT} F$.
+
+\begin{statement}[\citebarberian{3.9.10}][Definition]{Definition of Annihilator}
+
+    Let $M$ be a linear subset of $V$.
+    The annihilator of $M \subset V'$ is the set of all linear forms such that $\forall x \in M, f(x) = 0$.
+    The annihilator of $M$ is denoted as $M^\circ$.
+
+    $M^ \circ$ is a linear subspace of $V'$.
+\end{statement}
+
+\begin{statement}[\citebarberian{3.9.11}]{Dimension of the Annihilator}
+
+    $$
+        \dim M ^\circ =  \dim V - \dim M
+    $$
+
+\end{statement}
+
+\begin{proof}
+    See the book/slides for an formal proof.
+    (Slides should be easier.)
+\end{proof}
+
+
+\begin{statement}[\citebarberian{3.9.9}]{Kernel of $T'$ is the Annihilator of $T(V)$}
+
+    $$
+        \ker T' = [T(V)] ^\circ
+    $$
+
+    Given $T: V \to W$ it's image $T(V)$ is a L.S. of $W$.
+
+\end{statement}
+
+\begin{proof}
+    See the book/slides for an formal proof.
+    (Slides should be easier.)
+
+    Remember that $\ker T' = \{ g \in T' : T'g = \theta \implies T'g(V) = \{ 0 \} \}$.
+\end{proof}
+
+
+\begin{statement}[\citebarberian{3.9.12}]{Rank of the Transpose}
+
+    $$\rho(T') = \rho(T)$$
+
+    Their nullity $\nu$ might be different though.
+
+\end{statement}
+
+\begin{proof}
+    See the book/slides for an formal proof.
+
+    Generally, this follows by the rank-nullity theorem and by
+    \ref{Dimension of the Dual Space}, \ref{Kernel of $T'$ is the Annihilator of $T(V)$}, \ref{Dimension of the Annihilator}.
+\end{proof}
+
 \clearpage
 
 \section{Inner product spaces}
@@ -448,5 +593,7 @@ This is a quite general result that will be useful for other proofs even though 
     is an orthonormal basis of $V$ consisting of eigenvectors of $T$.
 
 \end{proof}
+
+\clearpage
 
 \end{document}

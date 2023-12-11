@@ -2,3 +2,5 @@
 !*.tex
 !*.md
 !.gitignore
+!LICENSE
+!README.md

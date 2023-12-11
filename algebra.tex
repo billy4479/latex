@@ -14,18 +14,19 @@
 \usepackage[many]{tcolorbox}
 \usepackage{xparse}
 \usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{bookmark}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\F}{\mathbb{F}}
 \newcommand{\citeladr}[1]{
     \begin{quotation}
-        This section references \say{Linear Algebra Done Right}, #1
+        This section references \say{Linear Algebra Done Right}, #1.
     \end{quotation}
 }
 \newcommand{\citebarberian}[1]{
     \begin{quotation}
-        This section references \say{Barberian}, #1
+        This section references \say{Barberian}, #1.
     \end{quotation}
 }
 \newcommand{\innerprod}[1]{
@@ -103,6 +104,97 @@
 
 \citebarberian{Chapter 3}
 
+\subsection{Basis and Dimension}
+\citebarberian{Chapter 3.5}
+
+\begin{statement}[\citebarberian{3.5.5, (3.3.2 and 3.4.2 for the proof)}]{Bijectivity of mappings from basis of $V$ to $V$}
+
+    Let $T: F^n \to V$ defined as $T(a_1, \dots, a_n) = a_1 x_1 + \dots + a_n x_n$.
+
+    $$
+        T \text{ is bijective } \iff  x_1, ..., x_n \text{ is a basis of } V
+    $$
+
+
+\end{statement}
+\begin{proof}
+    $T$ (defined above) takes the linear combination of $x_1, \dots, x_n$.
+
+    If $x_1, \dots, x_n$ is a basis it's generating and linearly independent.
+
+    By the definition of generating we know that if $x_1, \dots, x_n$ are generating
+    every vector in $V$ can be written as a linear combination of $x_1, \dots, x_n$.
+    This means that $T(V) = V$, hence $T$ is surjective.
+
+    By the definition of linear independence we have that if $x_1, \dots, x_n$ are linearly independent
+    $c_1 x_1 + \dots + c_n x_n = \underline 0 \iff c_1 = \dots = c_n = 0$.
+    This means that $\ker T = \{ 0 \}$, hence $T$ is injective.
+\end{proof}
+
+
+\clearpage
+
+\subsection{Dimension of $\mathscr L(V, W)$}
+
+\citebarberian{Chapter 3.8}
+
+\begin{statement}[\citebarberian{3.8.1}]{Converting basis of $V$ to elements of $W$}
+    Let $x_1, ..., x_n$ be a basis of $V$, then $\exists ! T:V \to W$ such that $Tx_i = w_i$ for $i = 1, ..., n$.
+\end{statement}
+\begin{proof}
+    We first prove existence then uniqueness.
+
+    \textit{Existence}: Define $R: \F^n \to V$ and $S: \F^n \to W$ as follows
+
+    \begin{align*}
+        R(a_1, \dots, a_n) & = a_1 x_1 + \dots + a_n x_n \\
+        S(a_1, \dots, a_n) & = a_1 w_1 + \dots + a_n w_n
+    \end{align*}
+
+    In this way if we use the canonical basis of $\F$ $e_1, \dots, e_n$
+    we get that $Re_i = x_i$ and $Se_i = w_i$ for all $i = 1, \dots, n$.
+
+    $R$ is bijective (\ref{Bijectivity of mappings from basis of $V$ to $V$}), hence invertible.
+    We get that $e_i = R^{-1}x_i$ and $w_i = SR^{-1}x_i$,
+    hence the linear mapping $T = SR^{-1}$ satisfies our requirements.
+
+    \textit{Uniqueness}: Suppose $T_1: V \to W$ and $T_2: V \to W$ both satisfy our requirements.
+
+    We would have that $T_1 x_i = w_i = T_2 x_i \implies (T_1 -T_2)(x_i) = \underline 0$.
+    But this means that $\ker (T_1 - T_2)$ contains all the elements of $V$ since $x_1, \dots, x_n$ is a basis,
+    hence $T_1 - T_2 = 0$ and $T_1 = T_2$.
+
+\end{proof}
+
+\begin{statement}[\citebarberian{3.8.2}]{Dimension of space of linear functions}
+    If $V$ and $W$ are finite-dimensional then $\mathscr L(V, W)$ is also finite-dimensional.
+    Moreover
+
+    $$
+        \dim \mathscr L(V, W) = (\dim V) (\dim W)
+    $$
+
+\end{statement}
+
+\begin{proof}
+    Let $n = \dim V$ and $m = \dim W$.
+    We know that $W^n = W \times \dots \times W$ has dimension $n \cdot m$.
+    $W^n$ is the space of matrixes of the operators from $V$ to $W$.
+
+    Let $\Phi: \mathscr L (V, W) \to W^n$ be the mapping that takes each mapping
+    to its matrix relative to some basis $x_1, \dots, x_n$ of $V$ defined as such
+
+    $$
+        \Phi(T) = (Tx_1, \dots, Tx_n)
+    $$
+
+    By \ref{Converting basis of $V$ to elements of $W$} we have that
+    $\Phi$ is an bijective, hence an isomorphism, hence $\dim W^n = \dim \mathscr L(V, W)$.
+
+\end{proof}
+
+\clearpage
+
 \subsection{Duality of Vector Spaces}
 
 \citebarberian{Chapter 3.9}
@@ -158,28 +250,42 @@ Basically $V \xrightarrow{T} W \xrightarrow{g} F$ and $V \xrightarrow {gT} F$.
     $$
 
 \end{statement}
-
 \begin{proof}
-    See the book/slides for an formal proof.
-    (Slides should be easier.)
+    Let $\{x_1, \dots, x_k\}$ be a basis of $M$.
+    Extend it do be a basis of $V$ such as $\{x_1, \dots, x_k, x_{k+1}, \dots, x_n\}$.
+    Now consider the dual basis of $V'$ (as seen in \ref{Definition of Dual Basis}) $\{ f_1, \dots, f_n \}$.
+
+    By the definition of dual basis $\{f_1, \dots, f_k\} \notin M^\circ$ because
+    $\exists x \in M$ such that $f(x) \ne 0$. On the contrary, $\{f_{k+1}, \dots, f_n\} \in M^\circ$.
+
+    Therefore $\dim(V') = \dim (M) + \dim (M^\circ)$, applying \ref{Dimension of the Dual Space} we get the result.
 \end{proof}
 
 
 \begin{statement}[\citebarberian{3.9.9}]{Kernel of $T'$ is the Annihilator of $T(V)$}
 
+    Let $T: V \to W$ and $T': W' \to V'$ its transpose.
+    Then
+
     $$
         \ker T' = [T(V)] ^\circ
     $$
 
-    Given $T: V \to W$ it's image $T(V)$ is a L.S. of $W$.
-
 \end{statement}
 
 \begin{proof}
-    See the book/slides for an formal proof.
-    (Slides should be easier.)
+    By the definition of kernel we have that
+    $\ker T' = \{ g \in W' : T'g = \underline 0\}$ with $T'g \in V'$.
 
-    Remember that $\ker T' = \{ g \in T' : T'g = \theta \implies T'g(V) = \{ 0 \} \}$.
+    That is
+    \begin{align*}
+        \forall g \in \ker T' & \iff T'g = \underline 0  & \text{by def. kernel}               \\
+                              & \iff (T'g)(V) = \{ 0 \}  & \text{by def. } \underline 0 \in V' \\
+                              & \iff gT(V) = \{ 0 \}     & \text{by def. } T'                  \\
+                              & \iff g(T(V)) = \{ 0 \}   & \text{by def. composition}          \\
+                              & \iff g \in [T(V)] ^\circ & \text{by def. annihilator}          \\
+    \end{align*}
+
 \end{proof}
 
 

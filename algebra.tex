@@ -1,4 +1,4 @@
-\documentclass[14pt]{extarticle}
+\documentclass[10pt]{extarticle}
 \title{Linear Algebra Notes}
 \author{Giacomo Ellero}
 
@@ -18,7 +18,8 @@
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\F}{\mathbb{F}}
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\rk}{\operatorfont{rk} }
 \newcommand{\citeladr}[1]{
     \begin{quotation}
         This section references \say{Linear Algebra Done Right}, #1.
@@ -60,44 +61,6 @@
 
 \maketitle
 \tableofcontents
-\clearpage
-
-\section{Similarity, Determinant and Trace}
-
-\subsection{Determinant}
-
-\begin{statement}[][Definition]{Definition of $(i,j)$-th Minor}
-    Let $A \in \mathscr M_n(F)$.
-    For each $(i,j)$, let $A^{i,j} \in \mathscr M_{n-1}$
-    be the matrix obtained by removing $i$-th row and $j$-th column.
-
-    We call $A^{i,j}$ the $(i,j)$-th minor of $A$.
-\end{statement}
-
-\begin{statement}[\citebarberian{7.4.1}][Definition]{Definition of Cofactor}
-    Let $A \in \mathscr M_n(F)$.
-    Then the cofactor of $a_{ij}$ is
-
-    $$
-        A_{ij} = (-1)^{i+j} \det A^{i,j}
-    $$
-
-\end{statement}
-
-\begin{statement}[][Definition]{Definition of Determinant}
-    Let $A \in \mathscr M_n(F)$.
-
-    If $n = 1$, $\det A = a_{11}$.
-
-    If $n \ge 2$ we have that
-
-    $$
-        \det A = \sum^n_{j=1} a_{1j}A_{1j} = \sum^n_{j=1} a_{1j}(-1)^{1+j} \det A^{1,j}
-    $$
-
-    with the notation of cofactor and $(i,j)$-th minor from before.
-\end{statement}
-
 \clearpage
 
 \section{Structure of Vector Spaces}
@@ -298,11 +261,139 @@ Basically $V \xrightarrow{T} W \xrightarrow{g} F$ and $V \xrightarrow {gT} F$.
 \end{statement}
 
 \begin{proof}
-    See the book/slides for an formal proof.
+    The linear mappings are $T: V \to W$ and $T': W' \to V'$.
+    We have:
 
-    Generally, this follows by the rank-nullity theorem and by
-    \ref{Dimension of the Dual Space}, \ref{Kernel of $T'$ is the Annihilator of $T(V)$}, \ref{Dimension of the Annihilator}.
+    \begin{align*}
+        \rho(T') & = \dim(\Im T')                      & \text{by def. rank } \rho                                      \\
+                 & = \dim (W') - \dim (\ker T')        & \text{by rank-nullity theorem}                                 \\ % TODO: prove it
+                 & = \dim (W') - \dim ((\Im T)^\circ)  & \text{by (\ref{Kernel of $T'$ is the Annihilator of $T(V)$}) } \\
+                 & = \dim(W') - \dim (W) + \dim(\Im T) & \text{by (\ref{Dimension of the Annihilator})}                 \\
+                 & = \dim(\Im T)                       & \text{by (\ref{Dimension of the Dual Space})}                  \\
+                 & = \rho(T)                           & \text{by def. rank } \rho
+    \end{align*}
+
 \end{proof}
+
+\clearpage
+
+\section{Matrixes}
+
+\citebarberian{Chapter 4}
+
+\subsection{Transpose of a Matrix}
+
+\citebarberian{Chapter 4.6}
+
+\begin{statement}[\citebarberian{4.6.6}]{The Matrix of the Transpose is the Transpose of the Matrix}
+
+    Let $V$ and $W$ be finite-dimensional vector spaces,
+    $T: V \to W$ a linear mapping and $T': W' \to V'$ its transpose.
+    Choose some basis of $V$ and $W$ and construct the dual bases of $V'$ and $W'$.
+
+    Relative to these bases we have that
+
+    $$
+        \operatorfont{mat}(T') = (\operatorfont{mat} \  T)'
+    $$
+
+\end{statement}
+
+\begin{proof}
+    Let $(x_1, \dots, x_n)$ and $(y_1, \dots, y_m)$ be the bases of $V$ and $W$
+    and $(f_1, \dots, f_n)$ and $(g_1, \dots, g_m)$ be their respective dual bases.
+
+    We have that
+
+    \begin{align}
+         & \forall j = 1, \dots, n & Tx_j = \sum^m_{i=1} a_{ij}y_i   \label{eq:transpose:1} \\
+         & \forall i = 1, \dots, m & T'g_i = \sum^m_{j=1} b_{ji}f_i \label{eq:transpose:2}
+    \end{align}
+
+    We will prove that $a_{ij} = b_{ji}$.
+
+    Now, for any $i = 1, \dots, m$ and $k = 1, \dots, n$ we evaluate the $i$-th form in
+    (\ref{eq:transpose:1}) at each basis $x_k$:
+
+    \begin{align*}
+        (T'g_i)(x_k) & = \sum^m_{j=1} b_{ji}f_i(x_k)     &                                         \\
+        g_i(Tx_k)    & = \sum^m_{j=1} b_{ji} \delta_{jk} & \text{by def. transpose and dual basis} \\
+                     & = b_{ki}                          & \text{by def. } \delta_{jk}
+    \end{align*}
+
+    But we can also use (\ref{eq:transpose:2}) to compute $g_i(Tx_k)$:
+
+    \begin{align*}
+        g_i(Tx_k) & = g_i \left(\sum^m_{h=1} a_{hk} y_h \right) &                             \\
+                  & = \sum^m_{h=1} a_{hk} g_i(y_h)              &                             \\
+                  & = \sum^m_{h=1} a_{hj} \delta_{ih}           & \text{by def. dual basis}   \\
+                  & = a_{ik}                                    & \text{by def. } \delta_{ih}
+    \end{align*}
+
+    Hence $a_{ik} = g_i(Tx_k) = b_{ki}$.
+\end{proof}
+
+\begin{statement}[\citebarberian{4.6.7}]{Row Rank and Column Rank}
+    The row rank of a matrix is equal to its column rank.
+\end{statement}
+\begin{proof}
+    Let $A \in \mathscr M_{m,n}(\F)$ and $T: \F^n \to \F^m$
+    such that $A$ is the matrix of $T$ relative to the canonical basis of $\F^n$.
+
+    We saw how the column rank of $A$ is equal to the rank of $T$, % TODO: write proof of this.
+    But the rank of $T$ is equal to the rank of $T'$ (\ref{Rank of the Transpose})
+    which is equal to the column rank of $A'$ (\ref{The Matrix of the Transpose is the Transpose of the Matrix})
+    which is equal to the row rank of $A$.
+
+    Formally:
+
+    \begin{align*}
+        \rk_{\text{col}}(A) & = \rho(T)              \\
+                            & = \rho(T')             \\
+                            & = \rk_{\text{col}}(A') \\
+                            & = \rk_{\text{row}}(A)
+    \end{align*}
+\end{proof}
+
+\clearpage
+
+\section{Similarity, Determinant and Trace}
+
+\subsection{Determinant}
+
+\begin{statement}[][Definition]{Definition of $(i,j)$-th Minor}
+    Let $A \in \mathscr M_n(F)$.
+    For each $(i,j)$, let $A^{i,j} \in \mathscr M_{n-1}$
+    be the matrix obtained by removing $i$-th row and $j$-th column.
+
+    We call $A^{i,j}$ the $(i,j)$-th minor of $A$.
+\end{statement}
+
+\begin{statement}[\citebarberian{7.4.1}][Definition]{Definition of Cofactor}
+    Let $A \in \mathscr M_n(F)$.
+    Then the cofactor of $a_{ij}$ is
+
+    $$
+        A_{ij} = (-1)^{i+j} \det A^{i,j}
+    $$
+
+\end{statement}
+
+\begin{statement}[][Definition]{Definition of Determinant}
+    Let $A \in \mathscr M_n(F)$.
+
+    If $n = 1$, $\det A = a_{11}$.
+
+    If $n \ge 2$ we have that
+
+    $$
+        \det A = \sum^n_{j=1} a_{1j}A_{1j} = \sum^n_{j=1} a_{1j}(-1)^{1+j} \det A^{1,j}
+    $$
+
+    with the notation of cofactor and $(i,j)$-th minor from before.
+\end{statement}
+
+
 
 \clearpage
 

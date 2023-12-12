@@ -430,7 +430,50 @@ Basically $V \xrightarrow{T} W \xrightarrow{g} F$ and $V \xrightarrow {gT} F$.
     $$
 \end{statement}
 
-\begin{statement}[\citeladr{6.8}][Definition]{Definition of norm}
+\begin{statement}[\citeladr{6.3, 6.4}][Definition]{Definition of Inner Product}
+
+    Let $V$ be a finite-dimensional vector space.
+    An inner product on $V$ is a function that takes an ordered pair
+    $(u, v) \in V^2$ to a number in $\F$.
+
+    It is usually denoted as
+
+    $$
+        \innerprod{u, v}
+    $$
+
+    Inner products have the following proprieties:
+
+    \begin{enumerate}
+        \item $\forall v \in V, \innerprod{v, v} \ge 0$
+        \item $\forall v \in V, \innerprod{v, v} \ge 0 \iff v = \underline 0$
+        \item Quasi-linearity: fixed the value on the right, the value on the left behaves like a linear function
+        \item $\innerprod{v, u} = \overline {\innerprod{u,v}}$
+    \end{enumerate}
+
+\end{statement}
+
+On $\F^n$ we can define the \textbf{Euclidean inner product} as
+
+$$
+    \innerprod{(x_1, \dots, x_n), (y_1, \dots, y_n)} = x_1 \overline{y_1} + \dots + x_n \overline{y_n}
+$$
+
+In the space of continuos real functions in an interval (say $[-1, 1]$)
+we can define the inner product as follows
+
+$$
+    \innerprod{f, g} = \int^1_{-1} f(x)\overline{g(x)}dx
+$$
+
+In the space of polynomials we can define the inner product as follows
+
+$$
+    \innerprod{P, Q} = \int^ \infty _0 P(x)\overline{Q(x)} e^{-x} dx
+$$
+
+
+\begin{statement}[\citeladr{6.8}][Definition]{Definition of Norm}
 
     Let $v \in V$, then
 
@@ -440,7 +483,7 @@ Basically $V \xrightarrow{T} W \xrightarrow{g} F$ and $V \xrightarrow {gT} F$.
 
 \end{statement}
 
-\begin{statement}[\citeladr{6.11}][Definition]{Definition of orthogonal}
+\begin{statement}[\citeladr{6.11}][Definition]{Definition of Orthogonal}
 
     Two vectors $u, v$ are orthogonal if
 
@@ -462,17 +505,33 @@ Basically $V \xrightarrow{T} W \xrightarrow{g} F$ and $V \xrightarrow {gT} F$.
 
 \end{statement}
 
+\begin{proof}
+    Let $u, v \in V$ such that $\innerprod{u, v} = 0$.
+    Then
+
+    \begin{align*}
+        \norm{u+v}^2 & = \innerprod{u+v, u+v}                                                   \\
+                     & = \innerprod{u, u+v} + \innerprod{v, u+v}                                \\
+                     & = \innerprod{u, u} + \innerprod{u,v} + \innerprod{v,u} + \innerprod{v,v} \\
+                     & = \norm u ^2 + \norm v ^2
+    \end{align*}
+
+    Note that this works only if $\innerprod{u, v} + \innerprod{v, u} = 0$.
+    This is always true if $\F = \R$, but if $\F = \C$ we are not sure about this.
+\end{proof}
+
 \begin{statement}[\citeladr{6.14}]{Orthogonal Decomposition}
 
-    Let $v, u \in V$ and $w = u - cv$ orthogonal to $v$.
+    Let $v, u \in V$.
+    We need to find $w \in V$ such that $w$ is orthogonal to $v$.
 
     We want to find $c \in \F$ and such that
 
     $$
-        u = cv + w
+        u = cv + w, \quad \innerprod{v, w} = 0
     $$
 
-    To solve this problem we set
+    To solve this problem we can set
 
     $$
         c = \frac{\innerprod{u, v}}{\norm v^2},
@@ -480,9 +539,18 @@ Basically $V \xrightarrow{T} W \xrightarrow{g} F$ and $V \xrightarrow {gT} F$.
         w = u - \frac{\innerprod{u, v}}{\norm v^2} v
     $$
 
-    In this way we have that $u = cv + w$ and $\langle v, w \rangle = 0$
+    In this way we obtain the wanted result.
 
 \end{statement}
+
+\begin{proof}
+    \begin{align*}
+        \innerprod{u, v} & = \innerprod{cv + w, v}                \\
+                         & = c \innerprod{v,v} + \innerprod{w, v} \\
+                         & = c \norm v ^2                         \\
+        c                & = \frac{\innerprod{u,v}}{\norm v^2}
+    \end{align*}
+\end{proof}
 
 \begin{statement}[\citeladr{6.15}]{Cauchy-Schwarz Inequality}
 

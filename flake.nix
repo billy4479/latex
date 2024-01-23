@@ -1,19 +1,21 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = {
     self,
     nixpkgs,
-  }: let
-    system = "x86_64-linux"; # TODO: add more systems as they are supported
-    pkgs = nixpkgs.legacyPackages.${system};
-  in {
-    devShells.${system}.default = pkgs.mkShell {
-      buildInputs = with pkgs; [
-        texliveFull
-      ];
-    };
-  };
+    flake-utils,
+  }:
+    flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      devShells.default = pkgs.mkShell {
+        nativeBuildInputs = with pkgs; [
+          texliveFull # TODO: This can probably be reduced
+        ];
+      };
+    });
 }

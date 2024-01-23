@@ -1,0 +1,147 @@
+\documentclass[17pt]{extarticle}
+\title{Analysis Notes - Part 2}
+\author{Giacomo Ellero}
+
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{dirtytalk}
+\usepackage{parskip}
+\usepackage{mathrsfs}
+\usepackage[many]{tcolorbox}
+\usepackage{xparse}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{bookmark}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\rk}{\operatorfont{rk} }
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+\newtcolorbox{statementbox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+
+\NewDocumentEnvironment{statement}{ O{Theorem} m}{
+\begin{absolutelynopagebreak}
+\subsubsection{#2}
+\label{#2}
+\begin{statementbox}{#1}
+}
+{
+\end{statementbox}
+\end{absolutelynopagebreak}
+}
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section {Differential calculus}
+\subsection{Derivative and affine functions}
+
+
+\begin{statement}[Definition]{Affine and linear functions}
+  Affine functions are of form $l(x) = px + q$ with $p, q \in \R$.
+\end{statement}
+
+Linear functions are of form $l(x) = px$.
+Affine functions respect linearity $l(\alpha x_0 + \beta x_1) = \alpha l(x_1) + \beta l(x_2)$
+iff $\alpha + \beta = 1$.
+
+\begin{statement}[Definition]{Derivative}
+  Let $f: \operatorfont{dom} f \to \R$ be a function defined in the neighbourhood of $x_0$.
+  We say $f$ is differentiable at $x_0$ if the limit
+
+  $$
+    \lim_{x_1 \to x_0} \frac{f(x_1) - f(x_0)}{x_1 - x_0}
+  $$
+
+  exists and is a finitite real number.
+\end{statement}
+
+We note how if $f$ is differentiable at $x_0$ its tangent at that point has the equation
+
+$$
+  y = f'(x_0)(x-x_0) + f(x_0)
+$$
+
+We can formulate the limit from the definition in the following equivalent form
+
+$$
+  \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h}
+$$
+
+\begin{statement}{Right and left derivatives}
+  Considering the limit from the previous definition we say that
+  the limit as $h \to 0^-$ is the \textbf{left derivative}
+  and the limit as $h \to 0^+$ is the \textbf{right derivative}.
+
+  A function is differentiable at $x_0$ iff its left and right derivative exist, are finite and equal.
+\end{statement}
+
+\begin{statement}{Differentiability implies continuity *}
+  If $f$ is derivable at $x_0$ then it is also continous at $x_0$.
+\end{statement}
+
+\begin{proof}
+  Suppose $f$ is differentiable.
+  We need to prove that $\lim_{x \to x_0} f(x) = f(x_0)$ which is equivalent to $\lim{x \to x_0} (f(x) - f(x_0)) = 0$
+
+  \begin{align*}
+     & \lim_{x \to x_0} \left(f(x) - f(x_0)\right) = 0          \\
+     & \lim_{x \to x_0} \frac{f(x) - f(x_0)}{x-x_0} (x-x_0) = 0 \\
+     & \lim_{x \to x_0} f'(x_0) (x-x_0) = 0                     \\
+     & \lim_{x \to x_0} f'(x_0) 0 = 0                           \\
+  \end{align*}
+
+  Which is indeed true iff $f'(x_0)$ exists and is a finite number.
+\end{proof}
+
+\subsection{Differentiability as best local approximation by linear function}
+
+We want to find the best approximation of $f$ in terms of an affine function $l$ in a neightbourhood of $x_0$.
+We then need to choose $p, q$ for our $l(x) = p(x-x_0) + q$.
+
+We need define the error $E(x) = f(x) - l(x) = f(x) - p(x-x_0) - q$.
+
+\begin{enumerate}
+  \item We want that $E(x_0) = \lim_{x \to x_0} E(x) = 0$, hence $q := f(x_0)$
+  \item Now we need to choose $p$. We choose $p$ such that $E(x) = o(x-x_0)$
+\end{enumerate}
+
+We can now elaborate on our second contraint.
+By the definition of $o$ we have that
+$\lim{x \to x_0} \omega = 0$.
+
+We can define
+$$
+  \omega (x) := \begin{cases}
+    \frac{E(x)}{x-x_0} \text{ if } x \ne x_0 \\
+    0  \text{ if } x = x_0
+  \end{cases}
+$$
+
+Then $E(x) = \omega (x)(x - x_0)$ and
+
+\begin{align*}
+  f(x) & = f(x_0) + p(x - x_0) + E(x)              \\
+       & = f(x_0) + p(x - x_0) + \omega (x)(x-x_0) \\
+       & = f(x_0) + (p + \omega(x))(x-x_0)         \\
+       & = f(x_0) + (p + o(1))(x-x_0)              \\
+       & = f(x_0) + p(x - x_0) + o(x-x_0)
+\end{align*}
+
+\end{document}

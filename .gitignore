@@ -1,7 +1,9 @@
 *
+!/flake.nix
+!/flake.lock
 !*.tex
 !*.md
 !.gitignore
 !LICENSE
 !README.md
-!.vscode
+!/.vscode

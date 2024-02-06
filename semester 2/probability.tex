@@ -1,0 +1,194 @@
+\documentclass[10pt]{extarticle}
+\title{Probability Notes}
+\author{Giacomo Ellero}
+
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{dirtytalk}
+\usepackage{parskip}
+\usepackage{mathrsfs}
+\usepackage[many]{tcolorbox}
+\usepackage{xparse}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{bookmark}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{notebox}[1]{colback=green!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Class of 05/02/2024}
+
+\subsection{Interpretations of probability}
+
+Probability has had many interpretations over the years, here's some of them:
+\begin{enumerate}
+    \item \textbf{Classical interpretation}: Games of chances, all the outcomes are equaly likely.
+          We can calculate probability as the number of favourable outcomes over the total.
+          This only works on finite spaces with perfect simmetries.
+    \item \textbf{Frequency interpretation}: This is the probability calculated in the long run by repeating the experiment infinitely many times.
+          This only works if the experiment is repeatable. What if we cannot take the limit?
+    \item \textbf{Subjective interpretation}: How much are people willing to bet on something to happen?
+\end{enumerate}
+
+\subsection{Sample spaces and outcomes}
+
+In an \textbf{experiment} we call \textbf{sample space} $\Omega$ the set of all possible outcomes,
+while a singular outcome is denoted as $\omega$.
+$\Omega$ can be finite, countable or uncountable.
+
+\begin{examplebox}{Example}
+    \begin{itemize}
+        \item Rolling a die: $\Omega = \{1, 2, 3, 4, 5, 6\}$
+              \begin{itemize}
+                  \item This is sample space is finite.
+              \end{itemize}
+        \item Tossing a coin until heads comes up: $\Omega = \{H, TH, TTH, \dots, TTT\dots\}$
+              \begin{itemize}
+                  \item This is sample space is not finite, but it is countable.
+              \end{itemize}
+        \item Dart in a circular target of radius $r$: $\Omega = \{(x, y) \in \R^2 : x^2 + y^2 \le r\}$
+              \begin{itemize}
+                  \item This is sample space is uncountable.
+              \end{itemize}
+    \end{itemize}
+\end{examplebox}
+
+\begin{notebox}{impossible $\ne$ probability 0}
+    Despite some elements having probability 0, it doesn't mean they are impossible.
+
+    \begin{itemize}
+        \item In the dart example, the probability of hitting a single point is 0 since $\Omega$ is uncountable, but it's not impossible.
+        \item In the coin example, the probability of getting an infinite number of tails is 0, but it's not impossible.
+    \end{itemize}
+
+    In particular note that if $\Omega$ is uncountable every singular outcome has probability 0.
+\end{notebox}
+
+\subsection{Events}
+
+An \textbf{event} is a subset of the sample space of all the outcomes such that the event occurs.
+We denote it as $A \subseteq \Omega$.
+
+In particular:
+\begin{itemize}
+    \item The \textbf{empty set} $\varnothing$ is the impossible event.
+    \item The \textbf{whole sample space} $\Omega$ is the certain event.
+\end{itemize}
+
+We can define the following operations on events:
+\begin{itemize}
+    \item \textbf{Complement}: $A^c$, the event occurs if $A$ doesn't.
+    \item \textbf{Union}: $A \cup B$, the event occurs if $A$ \textit{or} $B$ occurs.
+    \item \textbf{Intersection}: $A \cap B$, the event occurs if $A$ \textit{and} $B$ occur.
+    \item \textbf{Difference}: $A \setminus B$, the event occurs if $A$ occurs but $B$ doesn't.
+    \item \textbf{Symmetric difference}: $A \triangle B$, the event occurs if $A$ or $B$ occur but not both.
+\end{itemize}
+
+Moreover we say that $A$ \textbf{depends} of $B$ if $A \subseteq B$. This means that if $B$ occurs, then $A$ also occurs.
+
+\begin{examplebox}{Example}
+    Say we toss a coin twice, then the sample space is $\Omega = \{HH, HT, TH, TT\}$.
+
+    We define the following events:
+    \begin{itemize}
+        \item $A = \{\text{first toss is a head}\} = \{HH, HT\}$
+        \item $B = \{\text{2 times heads}\} = \{HH\}$
+    \end{itemize}
+
+    We have that $A \subseteq B$, so $A$ depends on $B$.
+\end{examplebox}
+
+\begin{notebox}{singleton events}
+    Events that contain only one outcome are called \textbf{singleton events}.
+\end{notebox}
+
+\subsection{Sigma-algebras}
+
+We usually denote a sigma-algebra as $\F$ and it's a subset of the power set of $\Omega$.
+Every sigma-algebra, by definition, has the following properties:
+\begin{enumerate}
+    \item $\Omega \in \F$
+    \item If $A \in \F$, then $A^c \in \F$
+    \item If $A_1, A_2, \dots \in \F$, then $\bigcup_{i=1}^\infty A_i \in \F$
+\end{enumerate}
+
+\begin{notebox}{notation}
+    We introduce the following notation:
+    $$
+        \bigcap_{i=1}^\infty A_i \qquad \text{ and } \qquad \bigcup_{i=1}^\infty A_i
+    $$
+
+    These symbols just denote the intersection and the union respectively for a infinite, countable set of events.
+\end{notebox}
+
+\subsubsection{Proprieties of sigma-algebras}
+
+Moreover, we can prove the following properties:
+\begin{enumerate}
+    \item $\varnothing \in \F$
+    \item $\F$ is closed under finite unions
+    \item $\F$ is closed under finite and countable intersections
+\end{enumerate}
+
+\begin{proof}
+    According to the properties of sigma-algebras we have that:
+
+    \begin{enumerate}
+        \item $\Omega \in \F$ by $(1)$, so $\Omega^c = \varnothing \in \F$, by $(2)$.
+        \item Let $A_1 \cup A_2 \cup \dots \cup A_n$, we extend it by adding $\varnothing$ to the end of the sequence.
+              Then this is in $\F$ by $(3)$.
+        \item According to De Morgan's laws we have:
+              $$
+                  \bigcap_{i=1}^n A_i = \left(\left(\bigcap_{i=1}^n A_i\right)^c\right)^c = \left(\bigcup_{i=1}^n A_i^c\right)^c
+              $$
+              Since the intersection is in $\F$ by $(3)$ and the complement is in $\F$ by $(2)$, then the union is also in $\F$.
+    \end{enumerate}
+\end{proof}
+
+\begin{notebox}{Reminder of De Morgan's Laws}
+    $$
+        \left(\bigcup_{i=1}^n A_i\right)^c = \bigcap_{i=1}^n A_i^c
+        \qquad \text{ and } \qquad
+        \left(\bigcap_{i=1}^n A_i\right)^c = \bigcup_{i=1}^n A_i^c
+    $$
+\end{notebox}
+
+\subsubsection{Borel sigma-algebra}
+
+Suppose $\Omega$ is uncountable and we want to define a sigma-algebra on it.
+
+We start by choosing a class $\mathcal C$ of subsets of $\Omega$ that we want to include in the sigma-algebra.
+Then we define the sigma-algebra generated by $\mathcal C$ as the smallest sigma-algebra that contains $\mathcal C$.
+
+In particular Borel sigma-algebra is the sigma-algebra generated by the open sets of $\R$:
+$$
+    \mathcal B (\R) = \sigma(\{(a, b) : -\infty < a < b < \infty\})
+$$
+
+This definition can be extended to $\R^n$ by taking the gaussian product sigma-algebra:
+$$
+    \mathcal B (\R^n) = \sigma(\{(a_1, b_1) \times \dots \times (a_n, b_n) : -\infty < a_i < b_i < \infty\})
+$$
+
+\end{document}

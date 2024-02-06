@@ -1,0 +1,21 @@
+name: Build Latex
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            **/*.tex
+          latexmk_use_lualatex: true
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            **/*.pdf

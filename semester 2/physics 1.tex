@@ -1,0 +1,151 @@
+\documentclass[10pt]{extarticle}
+\title{Physics 1 Notes}
+\author{Giacomo Ellero}
+
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{dirtytalk}
+\usepackage{parskip}
+\usepackage{mathrsfs}
+\usepackage[many]{tcolorbox}
+\usepackage{xparse}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{bookmark}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{notebox}[1]{colback=green!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Class of 06/02/2024 - Introduction}
+
+\subsection{How does science work?}
+
+\subsubsection{Dimension, measure and uncertainty}
+
+We will use SI units. Defining such units is a hard task.
+
+When we measure something we need to take into account the uncertainty of the measurement:
+the tool we use to measure has a precision, hence we cannot measure something smaller than the precision of the tool.
+
+Moreover we have to check that the measurements are compatible with the errors in each of them.
+
+\subsubsection{Dimensionsional analysis}
+
+When we do a calculation we need to check that the units are consistent.
+
+This can also be done before the actual calculation to check that the theory is truthful.
+
+\subsubsection{Theory vs reality}
+
+In our theory we take in account way less phenomena than what happens in reality.
+We need to understand what we can neglect and what we can't.
+
+\begin{enumerate}
+  \item Identify the key ingredients
+  \item Build a simplified model of reality
+  \item Solve it (if you can)
+  \item Add additional ingredients
+\end{enumerate}
+
+\subsection{Introduction to kinematics}
+
+In this course we will discuss \textbf{kinematics} and \textbf{dynamics} which are two branches of mechanics:
+\begin{itemize}
+  \item \textbf{Kinematics}: How did the object move?
+  \item \textbf{Dynamics}: Why did the object move?
+\end{itemize}
+
+\subsubsection{Position vector}
+
+We will start describing the motion of a point mass or a particle
+and to do so we wll need to introduce vectors from linear algebra.
+
+We have two ways to represent a vector.
+Here we use the position vector as an example.
+
+\textbf{Position vector} $\vec{r}$:
+\begin{itemize}
+  \item $\vec{r} = (x, y, z)$
+  \item $\vec{r} = x \hat{i} + y \hat{j} + z \hat{k}$
+\end{itemize}
+
+In the second representation we have the \textbf{unit vectors} $\hat{i}, \hat{j}, \hat{k}$ which are the basis of the space.
+
+Moreover we can represent the position vector as a function of time:
+$$
+  \vec{r}(t) = \begin{pmatrix} x(t) \\ y(t) \\ z(t) \end{pmatrix}
+$$
+
+$\vec {r}(t)$ is called trajectory.
+
+\subsubsection{Degrees of freedom}
+
+We call \textbf{degree of freedom} the number of independent coordinates needed to describe the position of a point.
+Generarly we need 3 degrees of freedom.
+
+\begin{examplebox}{Example}
+  \begin{itemize}
+    \item Consider two points connected by a rigid rod of length $l$ (of negligible cross section).
+
+          The position of the first point $A$ requires all 3 degrees of freedom,
+          but for the second point $B$ we only need 2 degrees of freedom since the distance from $A$ is fixed.
+
+    \item A rigid body has 6 degrees of freedom: 3 for the position of the center of mass and 3 for the orientation.
+  \end{itemize}
+
+\end{examplebox}
+
+\subsubsection{Velocity}
+
+We define the \textbf{displacement vector} as
+$$
+  \Delta \vec{r} = \vec{r}(t') - \vec{r}(t) \text{ with } t' > t
+$$
+
+Note that the displacement vector could be zero even if the particle moved.
+
+We define the \textbf{average velocity} as $\vec{v}_{\text{avg}} = \frac{\Delta \vec{r}}{\Delta t}$.
+
+We define the \textbf{instantaneous velocity} as
+\begin{align*}
+  \vec{v}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{r}}{\Delta t}                                                        \\
+             & = \frac{d\vec{r}}{dt} \text{ this is the derivative of a vector}                                               \\
+             & = \begin{pmatrix} \frac{dx(t)}{dt} \hat{i} & \frac{dy(t)}{dt} \hat{j} & \frac{dz(t)}{dt} \hat{k} \end{pmatrix}
+\end{align*}
+
+\subsubsection{Acceleration}
+
+Similarly to the velocity, we define the \textbf{average acceleration} as $\vec{a}_{\text{avg}} = \frac{\Delta \vec{v}}{\Delta t}$
+and we pass to the limit to get
+
+\begin{align*}
+  \vec{a}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{v}}{\Delta t} \\
+             & = \frac{d\vec{v}}{dt} = \frac{d^2\vec{r}}{dt^2}
+\end{align*}
+
+We see that the acceleration is the second derivative of the position vector.
+
+We will be able to reconstruct the whole trajectory starting from the acceleration.
+
+\end{document}

@@ -1,0 +1,136 @@
+\documentclass[14pt]{extarticle}
+\title{Probability Notes}
+\author{Giacomo Ellero}
+
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{dirtytalk}
+\usepackage{parskip}
+\usepackage{mathrsfs}
+\usepackage[many]{tcolorbox}
+\usepackage{xparse}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{bookmark}
+\usepackage{bytefield}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{notebox}[1]{colback=green!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{bluebox}[1]{colback=green!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Class of 06/02/2024}
+
+\subsection{Asymptotic notation}
+
+\begin{bluebox}{Definition}
+    If $\exists C \in \R^+$ and $N \in \N$ such that for two sequences $a_n, b_n > 0$
+    we have that $a_n \leq Cb_n$ for all $n \geq N$, then we write $a_n = O(b_n)$ and we read \say{$a_n$ is big O of $b_n$}.
+\end{bluebox}
+
+These sequences describe the time it takes for an algorithm to solve a certain problem of size $n$.
+
+\begin{examplebox}{Example}
+    Let $a_n = n^2 + 2n + 1$. We will prove that $a_n = O(n^2)$.
+
+    \begin{proof}
+        We have that
+        \begin{align*}
+            a_n & = n^2 + 2n + 1        \\
+                & \leq n^2 + 2n^2 + n^2 \\
+                & = 4n^2
+        \end{align*}
+    \end{proof}
+
+    As we can see just need to show that $C$ exists, we don't need to find the best one.
+\end{examplebox}
+
+Usually we don't use limits to prove that a sequence is big O of another, it is usually more convenient to procede by inequalities.
+
+\begin{notebox}{Logarithms}
+    When we have sequences with logarithms we don't need to specify the basis,
+    as the logarithm is a constant factor of another logarithm by the change of basis formula.
+\end{notebox}
+
+\subsubsection{Operations and other notation}
+
+Let $a_n = O(c_n)$ and $b_n = O(d_n)$, then we have that
+
+\begin{itemize}
+    \item $a_n + b_n = O(\max\{c_n, d_n\})$
+    \item $a_n \cdot b_n = O(c_n \cdot d_n)$
+\end{itemize}
+
+We also define the \say {opposite} of big O notation, the $\Omega$ notation:
+$a_n$ is $\Omega(b_n)$ if $a_n \geq Cb_n$ for all $n \geq N$.
+
+Moreover, if $a_n = O(b_n)$ and $a_n = \Omega(b_n)$ (for some different $C$ and $N$) then we write $a_n = \Theta(b_n)$.
+
+\subsection{Randomness}
+
+When we run an experiment we can define
+\begin{itemize}
+    \item an outcome $\omega_i$
+    \item the value of the outcome $x_i$ (similar to a bet)
+    \item the probability of the outcome $p_i$
+\end{itemize}
+
+We can aslo define the expected result $E(X)$ of the experiment as
+$$
+    E(X) = \sum ^n _{i = 1} x_i p_i
+$$
+
+\subsection{IEEE-754}
+
+This is not in the syllabus but it's useful to know.
+
+IEEE-754 is a standard for representing floating point numbers in computers.
+We will discuss in particular the 32-bits representation but larger or smaller formats also exist.
+
+We subdivide the 32 bits in 3 parts: 1 bit for the \textbf{sign}, 8 bits for the \textbf{exponent}, and 23 bits for the \textbf{fraction} or mantissa.
+
+\begin{center}
+    \begin{bytefield}[bitwidth=1.1em, bitheight=\widthof{~Sign~}]{32}
+        \bitheader{0,8,31} \\
+        \bitbox{1}{1}
+        \bitboxes{1}{00100101}
+        \bitboxes{1}{00110110101101001111011} \\
+        \bitbox{1}{\rotatebox{90}{Sign}}
+        \bitbox{8}{Exponent}
+        \bitbox{23}{Fraction}
+    \end{bytefield}
+\end{center}
+
+The number is interpreded according to the following formula:
+
+$$
+    n = (-1)^s \cdot 2^{e - 127} \cdot (1 + f)
+$$
+
+Basically the number is represented in scientific notation, in base 2.
+
+Note that when converting the fraction part to decimal the powers of 2 are negative and decreasing
+(i.e.: bit at 9 is $2^{-1}$, bit at 10 is $2^{-2}$, etc).
+
+\end{document}

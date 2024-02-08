@@ -15,6 +15,7 @@
 \usepackage{xparse}
 \usepackage[a4paper,margin=1.5cm]{geometry}
 \usepackage{bookmark}
+\usepackage{cancel}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -30,6 +31,7 @@
 
 \newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
 \newtcolorbox{notebox}[1]{colback=green!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{bluebox}[1]{colback=green!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
 
 \begin{document}
 
@@ -190,5 +192,210 @@ This definition can be extended to $\R^n$ by taking the gaussian product sigma-a
 $$
     \mathcal B (\R^n) = \sigma(\{(a_1, b_1) \times \dots \times (a_n, b_n) : -\infty < a_i < b_i < \infty\})
 $$
+
+\section{Class of 07/02/2024}
+
+Let $\Omega$ be a sample space and $\F$ a sigma-algebra on $\Omega$,
+then we call $(\Omega, \F)$ a \textbf{measurable space}.
+
+\subsection{Probability measure}
+
+\begin{bluebox}{Definition}
+    A \textbf{probability measure} is a function $P: \F \to \R$ such that:
+    \begin{enumerate}
+        \item $P(A) \ge 0$ for all $A \in \F$
+        \item $P(\Omega) = 1$
+        \item If $A_1, A_2, \dots \in \F$ are pairwise disjoint, then:
+              $$
+                  P\left(\bigcup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty P(A_i)
+              $$
+    \end{enumerate}
+\end{bluebox}
+
+\subsubsection{Properties of probability measures}
+
+We can prove the following properties of probability measures:
+\begin{enumerate}
+    \item $P(\bigcup_{i=1}^n A_i) = \sum_{i=1}^n P(A_i)$
+    \item $P(A^c) = 1 - P(A)$
+    \item If $A \subseteq B$, then $P(A) \le P(B)$
+    \item $P(A \cup B) = P(A) + P(B) - P(A \cap B)$
+\end{enumerate}
+
+\begin{proof}
+    We will prove the properties in order:
+    \begin{enumerate}
+        \item We will not prove this but it's easy to see that it follows from point 3 of the definition.
+        \item Consider the disjoint events $A$ and $A^c$.
+              We have that $P(A \cup A^c) = P(\Omega) = 1$.
+
+              Since $A$ and $A^c$ are disjoint, we can apply property 1 to get that
+              \begin{align*}
+                           & P(A) + P(A^c) = P(\Omega) = 1 \\
+                  \implies & P(A^c) = 1 - P(A)
+              \end{align*}
+        \item Write $B$ as $B = A \cup (B \setminus A)$.
+              We have that $A$ and $B \setminus A$ are disjoint, so:
+              $$
+                  P(B) = P(A) + P(B \setminus A) \ge P(A)
+              $$
+              since $P(X) \ge 0 \quad \forall X \in \F$.
+              Moreover $P(B \setminus A) = P(B) - P(A)$.
+
+              We say that probability is monotone.
+        \item We can write $A \cup B = A \cup (B \setminus A)$.
+              We have that $A$ and $B \setminus A$ are disjoint, so:
+              \begin{align*}
+                  P(A \cup B) & = P(A) + P(B \setminus A)   \\
+                              & = P(A) + P(B) - P(A \cap B)
+              \end{align*}
+              by property 3.
+    \end{enumerate}
+\end{proof}
+
+We can extend property 4 to the case of $n$ events by induction:
+\begin{itemize}
+    \item For the case of $n = 3$ we have that
+          \begin{align*}
+              P(A \cup B \cup C) & = P(A \cup (B \cup C))                                                              \\
+                                 & = P(A) + P(B \cup C) - P(A \cap (B \cup C))                                         \\
+                                 & = P(A) + P(B) + P(C) - P(B \cap C) - P(A \cap B) - P(A \cap C) + P(A \cap B \cap C)
+          \end{align*}
+    \item For the general case we have that
+          \begin{align*}
+              P(\bigcup^n_{i=1} A_i) & = \sum^n_{i=1} P(A_i) - \sum_{1 \leq i < j \leq n} P(A_i \cap A_j) & \\
+                                     & + \sum_{1 \leq i < j < k \leq n} P(A_i \cap A_j \cap A_k) - \dots    \\
+                                     & + (-1)^{n-1} P(A_1 \cap \dots \cap A_n)
+          \end{align*}
+\end{itemize}
+We will not prove the general case.
+
+\begin{examplebox}{Example}
+    $P(\text{winning the game}) = 1\%$, we need to find $P(\text{winning at least once in 3 games})$.
+
+    Let $A_i$ be the event of winning the $i$-th game, then we have that:
+    \begin{align*}
+        P (A_1 \cup A_2 \cup A_3) & = P(A_1) + P(A_2) + P(A_3)                            \\
+                                  & - P(A_1 \cap A_2) - P(A_1 \cap A_3) - P(A_2 \cap A_3) \\
+                                  & + P(A_1 \cap A_2 \cap A_3)                            \\
+                                  & < 3\%
+    \end{align*}
+\end{examplebox}
+
+\subsubsection{Probability of monotone events}
+
+We can prove the following properties:
+\begin{enumerate}
+    \item Let $A_1 \subseteq A_2 \subseteq \dots$ be a sequence of events, then:
+          $$
+              P\left(\bigcup_{i=1}^\infty A_i\right) = \lim_{n \to \infty} P(A_n)
+          $$
+    \item Let $A_1 \supseteq A_2 \supseteq \dots$ be a sequence of events, then:
+          $$
+              P\left(\bigcap_{i=1}^\infty A_i\right) = \lim_{n \to \infty} P(A_n)
+          $$
+    \item For every sequence $(A_n)$ of events, we have that:
+          $$
+              P(\bigcup_{i=1}^\infty A_i) \le \sum_{i=1}^\infty P(A_i)
+          $$
+\end{enumerate}
+
+These properties are easy to see by looking at an Euler-Venn diagram but not as trival to prove.
+
+\begin{proof}
+    We will prove the properties in order:
+    \begin{enumerate}
+        \item Let $(B_n)$ be a sequence of events defined by induction as $B_1 = A_1$ and $B_n = A_n \setminus A_{n-1}$.
+              We note that $B_n$ are disjoint
+              and that $\bigcup_{i=1}^\infty A_i = \bigcup_{i=1}^\infty B_i$
+              since $A_i = \bigcup_{j=1}^i B_j$.
+
+              We have that
+              \begin{align*}
+                  P\left(\bigcup_{i=1}^\infty A_i\right) & = P\left(\bigcup_{i=1}^\infty B_i\right)                             \\
+                                                         & = \sum_{i=1}^\infty P(B_i) = \lim_{n \to \infty} \sum_{i=1}^n P(B_i) \\
+                                                         & = \lim_{n \to \infty} P\left(\bigcup_{i=1}^n B_i\right)              \\
+                                                         & = \lim_{n \to \infty} P(A_n)
+              \end{align*}
+        \item Let $(B_n)$ be the sequence defined as $B_n = A_n^c$.
+              This sequence is increasing, hence we can apply property 1 and get that
+              \begin{align*}
+                  P\left(\bigcup_{i=1}^\infty B_i\right)                         & = \lim_{n \to \infty} P(B_n)              \\
+                  \implies P\left(\left(\bigcap_{i=1}^\infty A_i\right)^c\right) & = \lim_{n \to \infty} (1-P(A_n))          \\
+                  \implies \cancel{1 -} P\left(\bigcup_{i=1}^\infty A_i\right)   & = \cancel{1 -} \lim_{n \to \infty} P(A_n) \\
+              \end{align*}
+        \item Let $B_n = \bigcup_{i=1}^n A_i$.
+              Indeed we have that
+              \[
+                  \bigcup_{i=1}^\infty B_n =
+                  \bigcup_{i=1}^\infty \left( \bigcup_{i=1}^n A_i \right) =
+                  \bigcup_{i=1}^\infty A_i
+                  \tag{*}
+              \]
+              Moreover, we note that $B_n$ is increasing, hence we can apply property 1 to get that
+              $$
+                  P\left(\bigcup_{i=1}^\infty B_i\right) = \lim_{n \to \infty} P(B_n)
+              $$
+
+              We can apply (*) on the right hand side and the definition of $B_n$ on the left hand side to get that
+              $$
+                  P\left(\bigcup_{i=1}^\infty A_i\right) = \lim_{n \to \infty} P(B_n) \le \sum_{i=1}^\infty P(A_i)
+              $$
+
+              TODO: there's something wrong here, I'll fix it when i get the book.
+    \end{enumerate}
+
+    \begin{examplebox}{Example}
+        We will toss a coin infinitely many times. What's the never getting a head?
+
+        Let $A_n$ be the event of getting a head in the first $n$ tosses.
+        We have that $P(A_n) = \left(\frac{1}{2}\right)^n$.
+
+        We notice that $A_n \supseteq A_{n+1}$, hence it's a decreasing sequence.
+
+        $$
+            P\left(\bigcap_{i=1}^\infty A_i\right) = \lim_{n \to \infty} P(A_n) = 0
+        $$
+
+        by property 2.
+
+    \end{examplebox}
+\end{proof}
+
+\subsection{Probability in fair games}
+
+\subsubsection{Finite or countable sample space}
+
+Let $\Omega = \{\omega_1, \omega_2, \dots\}$ and $p_i = P(\{\omega_i\})$.
+Then
+$$
+    P(A) = \sum_{\omega_i \in A} p_i
+$$
+
+Let $N = |\Omega|$ be the cardinality of the sample space.
+We have that
+$$
+    p_i = \frac{1}{N} \enspace \forall i \qquad \text{ and } \qquad P(A) = \frac{|A|}{N}
+$$
+
+Where $|A|$ is the cardinality of the set $A$.
+
+\subsubsection{Uncountable sample space}
+
+We will use $\Omega \subseteq \R^2$ as an example.
+
+Then, the probability of an event $A$ is given by
+$$
+    P(A) = \frac{\text{Area of } A}{\text{Area of } \Omega}
+$$
+
+\begin{examplebox}{Example: Dart in a circular target or radius 1}
+    We want to find the probability of $A = \text{distance from center} \leq 0.5$.
+
+    We have that
+    $$
+        P(A) = \frac{\pi \cdot 0.5^2}{\pi \cdot 1^2} = \frac{1}{4}
+    $$
+\end{examplebox}
 
 \end{document}

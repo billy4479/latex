@@ -13,6 +13,7 @@ jobs:
           root_file: |
             **/*.tex
           latexmk_use_lualatex: true
+          latexmk_shell_escape: true
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4

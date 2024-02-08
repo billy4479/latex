@@ -8,5 +8,16 @@
         "parbox",
         "Riesz",
         "surjective"
-    ]
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-lualatex",
+                "-shell-escape",
+                "%DOC%"
+            ]
+        }
+    ],
 }

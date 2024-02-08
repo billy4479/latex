@@ -1,0 +1,283 @@
+\documentclass[10pt]{extarticle}
+\title{Probability Notes}
+\author{Giacomo Ellero}
+
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{dirtytalk}
+\usepackage{parskip}
+\usepackage{mathrsfs}
+\usepackage[many]{tcolorbox}
+\usepackage{xparse}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{bookmark}
+\usepackage{bytefield}
+\usepackage{minted}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{notebox}[1]{colback=green!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{bluebox}[1]{colback=green!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Class of 06/02/2024}
+
+\subsection{Asymptotic notation}
+
+\begin{bluebox}{Definition}
+    If $\exists C \in \R^+$ and $N \in \N$ such that for two sequences $a_n, b_n > 0$
+    we have that $a_n \leq Cb_n$ for all $n \geq N$, then we write $a_n = O(b_n)$ and we read \say{$a_n$ is big O of $b_n$}.
+\end{bluebox}
+
+These sequences describe the time it takes for an algorithm to solve a certain problem of size $n$.
+
+\begin{examplebox}{Example}
+    Let $a_n = n^2 + 2n + 1$. We will prove that $a_n = O(n^2)$.
+
+    \begin{proof}
+        We have that
+        \begin{align*}
+            a_n & = n^2 + 2n + 1        \\
+                & \leq n^2 + 2n^2 + n^2 \\
+                & = 4n^2
+        \end{align*}
+    \end{proof}
+
+    As we can see just need to show that $C$ exists, we don't need to find the best one.
+\end{examplebox}
+
+Usually we don't use limits to prove that a sequence is big O of another, it is usually more convenient to proceed by inequalities.
+
+\begin{notebox}{Logarithms}
+    When we have sequences with logarithms we don't need to specify the basis,
+    as the logarithm is a constant factor of another logarithm by the change of basis formula.
+\end{notebox}
+
+\subsubsection{Operations and other notation}
+
+Let $a_n = O(c_n)$ and $b_n = O(d_n)$, then we have that
+
+\begin{itemize}
+    \item $a_n + b_n = O(\max\{c_n, d_n\})$
+    \item $a_n \cdot b_n = O(c_n \cdot d_n)$
+\end{itemize}
+
+We also define the \say {opposite} of big O notation, the $\Omega$ notation:
+$a_n$ is $\Omega(b_n)$ if $a_n \geq Cb_n$ for all $n \geq N$.
+
+Moreover, if $a_n = O(b_n)$ and $a_n = \Omega(b_n)$ (for some different $C$ and $N$) then we write $a_n = \Theta(b_n)$.
+
+\subsection{Randomness}
+
+When we run an experiment we can define
+\begin{itemize}
+    \item an outcome $\omega_i$
+    \item the value of the outcome $x_i$ (similar to a bet)
+    \item the probability of the outcome $p_i$
+\end{itemize}
+
+We can also define the expected result $E(X)$ of the experiment as
+$$
+    E(X) = \sum ^n _{i = 1} x_i p_i
+$$
+
+\subsection{IEEE-754}
+
+This is not in the syllabus but it's useful to know.
+
+IEEE-754 is a standard for representing floating point numbers in computers.
+We will discuss in particular the 32-bits representation but larger or smaller formats also exist.
+
+We subdivide the 32 bits in 3 parts: 1 bit for the \textbf{sign}, 8 bits for the \textbf{exponent}, and 23 bits for the \textbf{fraction} or mantissa.
+
+\begin{center}
+    \begin{bytefield}[bitwidth=1.1em, bitheight=\widthof{~Sign~}]{32}
+        \bitheader{0,8,31} \\
+        \bitbox{1}{1}
+        \bitboxes{1}{00100101}
+        \bitboxes{1}{00110110101101001111011} \\
+        \bitbox{1}{\rotatebox{90}{Sign}}
+        \bitbox{8}{Exponent}
+        \bitbox{23}{Fraction}
+    \end{bytefield}
+\end{center}
+
+The number is interpreted according to the following formula:
+
+$$
+    n = (-1)^s \cdot 2^{e - 127} \cdot (1 + f)
+$$
+
+Basically the number is represented in scientific notation, in base 2.
+
+Note that when converting the fraction part to decimal the powers of 2 are negative and decreasing
+(i.e.: bit at 9 is $2^{-1}$, bit at 10 is $2^{-2}$, etc).
+
+\section{Class of 08/02/2024}
+
+\subsection{Introductory statements}
+
+We will start by stating the following facts without providing a proof (they can be proven but in class we skipped them).
+
+\begin{itemize}
+    \item If $c \in \R^+$, then $g(n) = 1 + c + c^2 + \dots + c^n$ is $\Theta(1)$ if $c < 1$, $\Theta(n)$ if $c = 1$, and $\Theta(c^n)$ if $c > 1$.
+    \item In any base $b \ge 2$ the sum of any 3 single-digit numbers is at most 2 digits long.
+    \item $\forall n \in \N$ and any base $b$ there exists a power of $b$ in $[n, bn].$
+\end{itemize}
+
+\begin{notebox}{$\Theta(1)$}
+    When we say that a function is $\Theta(1)$ we mean that it is bounded from above by a constant $C$ (since it is big O of 1)
+    and bounded from below by a constant $c$ (since it is $\Omega(1)$).
+
+    This usually means that $a_n \ne 0$ for all $n$.
+\end{notebox}
+
+\subsection{How to approach a algorithm problem}
+
+We usually proceed by following these steps:
+\begin{enumerate}
+    \item Find an algorithm
+    \item Prove that the algorithm is correct
+    \item Calculate the time complexity of the algorithm
+          \begin{enumerate}
+              \item Can we do better?
+          \end{enumerate}
+\end{enumerate}
+
+We will use the following steps to approach some classic problems such as addition and multiplication of binary numbers.
+
+\begin{notebox}{Shifts}
+    We refer to shifts as the operation of moving all the bits of a number to the left or to the right by a certain amount of positions.
+    This operation mathematically corresponds to multiplying or dividing the number by a power of the base.
+
+    $$
+        x \ll n = x \cdot b^n
+    $$
+
+    The $\ll$ symbol denotes a left shift by $n$ positions, while the $\gg$ symbol denotes a right shift by $n$ positions.
+
+    In our mathematical world each shift is $O(n)$, in the real world it is usually $O(1)$.
+\end{notebox}
+
+\subsection{Addition}
+
+\underline{Problem}: Let $x, y$ be binary numbers of $n$ bits. We want to compute $x + y$.
+
+We proceed by using the normal addition algorithm: this is a well know algorithm that we know is correct.
+
+At each step we are adding at most 3 numbers (2 bits and a carry).
+We know that the result of each step is at most 2 bits long: one bit goes for the result and the other goes for the carry.
+This ensures that at the next step we will also be adding at most 3 numbers, hence each step is performed in a finite amount of time.
+
+Since we are performing $n$ steps, the time complexity of this algorithm is $O(n)$.
+
+\textit{Can we do better?} No, we can't, since we need to read all the bits of the input and this operation is already $O(n)$.
+
+\subsection{Multiplication}
+
+\underline{Problem}: Let $x, y$ be binary numbers of $n$ bits. We want to compute $x \cdot y$.
+
+Again, we proceed using the normal multiplication algorithm that we know is correct.
+The algorithm has the following parts:
+\begin{enumerate}
+    \item Write the multiplications of $x$ by each bit of $y$
+    \item Sum all the results
+\end{enumerate}
+
+\textbf{Part 1}: Let $(s_n)$ be the sequence of the shifted values of $x$ and $p_n$ be the sequence of the partial products.
+
+\begin{align*}
+    s_0 & = x                         \\
+    s_n & = s_{n-1} \ll 1             \\
+    p_n & = \begin{cases*}
+                0   & \text{if } y[n] = 0 \\
+                s_n & \text{if } y[n] = 1
+            \end{cases*}
+\end{align*}
+
+Choosing the right $p_n$ is $O(1)$, but computing $s_n$ is $O(n)$ hence this part is $O(n)$.
+
+Note that we are \say{storing} the result of the previous shifts, so if we want to compute $s_5$, for example, we don't need to compute $s_4$ again.
+Without this optimization the time complexity of this part would be $O(n^2)$.
+
+\textbf{Part 2}:
+In this step we are computing $\sum_{i = 0}^n p_n$.
+These are sums of numbers of at most $2n$ bits, hence this part is $O(n)$.
+
+\textbf{Conclusion}: The time complexity of the multiplication algorithm is $O(n) \cdot O(n) = O(n^2)$.
+
+\subsubsection{Egyptian Multiplication}
+
+This is an ancient algorithm that is used to multiply two numbers.
+It works as follows:
+
+\begin{enumerate}
+    \item Write the two numbers in two columns
+    \item Divide the first number by 2, floor the result and write it underneath it in the same column
+    \item Multiply the second number by 2 and write the result underneath it in the same column
+    \item When the first number is 1, sum all the numbers in the second column if the corresponding number in the first column is odd
+\end{enumerate}
+
+We can easily implement this algorithm in Python as follows:
+\begin{minted}{python}
+    def egyptian_multiplication(x, y):
+        result = 0
+        while x >= 1:       # This loop runs n times since x has n bits
+            if x % 2 == 1:  # We always consider the worst case, hence this is always true
+                result += y # Sums are O(n)
+            x = x >> 2      # Shifts are O(n)
+            y = y << 2      # Shifts are O(n)
+        return result
+\end{minted}
+
+The complexity of the algorithm is $(O(n) + O(n) + O(n)) \cdot O(n) = O(n^2)$.
+
+\subsubsection{Other multiplication algorithms}
+
+Another algorithm we can use to implement multiplication works by dividing each number in half and recursively computing the result.
+
+First we write the two numbers as
+\begin{align*}
+    x & = 2^{\frac{n}{2}}x_{\text{up}} + y_{\text{low}} \\
+    y & = 2^{\frac{n}{2}}y_{\text{up}} + y_{\text{low}}
+\end{align*}
+
+Where $x_{\text{up}}$ and $y_{\text{up}}$ are the upper halves of $x$ and $y$ and $x_{\text{low}}$ and $y_{\text{low}}$ are the lower halves of $x$ and $y$.
+
+Then we compute the result as
+$$
+    x \cdot y = 2^n x_{\text{up}}y_{\text{up}} + 2^{\frac{n}{2}}(x_{\text{up}}y_{\text{low}} + x_{\text{low}}y_{\text{up}}) + x_{\text{low}}y_{\text{low}}
+$$
+
+Each time we are performing 4 multiplication of half the size and adding them together.
+The time this algorithm takes is
+$$
+    T(n) = 4T\left(\frac{n}{2}\right) + O(n)
+$$
+
+However if we keep expanding the recursion we will see that eventually we get to $T(1)$ which is $O(1)$
+and we are left with $n$-many $O(n)$ terms, hence the time complexity of this algorithm is also $O(n^2)$.
+
+
+\end{document}

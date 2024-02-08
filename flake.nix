@@ -18,6 +18,10 @@
         ];
         nativeBuildInputs = with pkgs; [
           texliveFull # TODO: This can probably be reduced
+
+          # `minted` dependencies
+          python3
+          python3Packages.pygments
         ];
       };
     });

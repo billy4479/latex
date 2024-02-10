@@ -23,6 +23,8 @@
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 
+\newcommand{\indep}{\perp \!\!\! \perp}
+
 \newenvironment{absolutelynopagebreak}
   {\par\nobreak\vfil\penalty0\vfilneg
    \vtop\bgroup}
@@ -398,5 +400,166 @@ $$
         P(A) = \frac{\pi \cdot 0.5^2}{\pi \cdot 1^2} = \frac{1}{4}
     $$
 \end{examplebox}
+
+\section{Class of 09/02/2024 - Conditional probability}
+
+\subsubsection{Notation}
+
+
+Consider an experiment with sample space $\Omega$, sigma-algebra $\F$, and probability measure $P$.
+We denote the \textbf{probability space} as $(\Omega, \F, P)$.
+
+If $P(A) = 0$, then we say that $A$ is a \textbf{null event}.
+$\varnothing$ is a null event.
+
+If $P(B) = 1$, then we say that $B$ is a \textbf{almost sure event}.
+$\Omega$ is a almost sure event.
+
+\subsection{Definition of conditional probability}
+
+\begin{warningbox}{Examples in this section}
+    Since the examples made in class are the same as the ones in the book,
+    I will write down only the ones that have some important comment to be made.
+\end{warningbox}
+
+\begin{notebox}{Definition}
+    Let $A, B \in \F$ be events such that $P(B) > 0$.
+    The \textbf{conditional probability} of $A$ given $B$ is defined as
+    $$
+        P(A|B) = \frac{P(A \cap B)}{P(B)}
+    $$
+\end{notebox}
+
+The intuition behind this formula is that, since we know that $B$ occurred, we can restrict our attention to the set $B$.
+Then, the probability of $A$ is the probability of $A \cap B$ normalized by the probability of $B$ which is kind of the new $\Omega$.
+
+From the definition is immediate that
+$$
+    P(A \cap B) = P(A|B) \cdot P(B)
+$$
+
+\subsection{Bayes' Theorem}
+
+Before stating Bayes' Theorem we need to define the concept of \textbf{partition} and prove the \textbf{total probability} lemma.
+
+\subsubsection{Partition}
+
+\begin{bluebox}{Definition}
+    Let $(\Omega, \F, P)$ be a probability space and let $B_1, B_2, \dots \in \F$ be a sequence of events such that
+    \begin{enumerate}
+        \item $B_i \cap B_j = \varnothing \quad \forall i \ne j$
+        \item $\bigcup_{i=1}^\infty B_i = \Omega$
+    \end{enumerate}
+\end{bluebox}
+
+In words, this means that a partition is a sequence of events such that one and only one of them occurs.
+
+\subsubsection{Total probability}
+
+\begin{bluebox}{Lemma}
+    Let $(\Omega, \F, P)$ be a probability space and let $B_1, B_2, \dots \in \F$ be a partition of $\Omega$
+    such that $P(B_i) > 0 \enspace \forall i$.
+    Then, for every event $A \in \F$ we have that
+    $$
+        P(A) = \sum_{i=1}^\infty P(A|B_i) \cdot P(B_i)
+    $$
+\end{bluebox}
+
+\begin{proof}
+    We divide $A$ in disjoint events $\{A_1, \dots, A_n\}$ where $A_i = A \cap B_i$.
+
+    Then
+    \begin{align*}
+        P(A) & = P\left(\bigcup_{i=1}^\infty A_i\right)  \\
+             & = \sum_{i=1}^\infty P(A_i)                \\
+             & = \sum_{i=1}^\infty P(A \cap B_i)         \\
+             & = \sum_{i=1}^\infty P(A|B_i) \cdot P(B_i)
+    \end{align*}
+\end{proof}
+
+\subsubsection{Bayes' Theorem}
+
+Now we are ready to prove Bayes' Theorem.
+
+\begin{bluebox}{Theorem}
+    Let $(\Omega, \F, P)$ be a probability space and let $B_1, B_2, \dots \in \F$ be a partition of $\Omega$
+    such that $P(B_i) > 0 \enspace \forall i$.
+    Let $A \in \F$ be an event such that $P(A) > 0$.
+    Then, for every $i$ we have that
+    $$
+        P(B_i|A) = \frac{P(A|B_i) \cdot P(B_i)}{\sum_{j=1}^\infty P(A|B_j) \cdot P(B_j)}
+    $$
+\end{bluebox}
+
+Note that the denominator is just the total probability of $A$.
+
+This theorem is useful when we need to find $P(A|B)$ but we only know $P(B|A)$.
+
+\begin{proof}
+    We have that
+    \begin{align*}
+        P(B_i|A) & = \frac{P(A \cap B_i)}{P(A)}                                            \\
+                 & = \frac{P(A|B_i) \cdot P(B_i)}{P(A)}                                    \\
+                 & = \frac{P(A|B_i) \cdot P(B_i)}{\sum_{j=1}^\infty P(A|B_j) \cdot P(B_j)}
+    \end{align*}
+\end{proof}
+
+\subsection{Independent events}
+
+\begin{bluebox}{Definition}
+    Let $(\Omega, \F, P)$ be a probability space and let $A, B \in \F$ be events.
+    We say that $A$ and $B$ are (stochastically) \textbf{independent} if and only if
+    $$
+        P(A \cap B) = P(A) \cdot P(B)
+    $$
+\end{bluebox}
+
+If we know that $P(A) > 0$ and $P(B) > 0$, then we can rewrite the definition as
+$$
+    P(A|B) = P(A) \quad \text{ and } \quad P(B|A) = P(B)
+$$
+
+This means that knowing that $B$ occurred doesn't change the probability of $A$ and vice versa.
+
+Note that if $A$ is independent of $B$, then also $B$ is independent of $A$.
+
+We can consider the following special cases:
+\begin{itemize}
+    \item If $P(A) = 0$, we have that $P(A \cap B) = 0$ and $P(A) \cdot P(B) = 0$.
+          Hence, $A$ is independent of any $B$.
+    \item If $P(A) = 1$, we have that $P(A \cap B) = P(B)$ and $P(A) \cdot P(B) = P(B)$.
+          Hence, $A$ is independent of any $B$.
+\end{itemize}
+
+In general, null events and almost sure events are independent of any event.
+
+\textbf{Notation}: We denote the independence of $A$ and $B$ as $A \indep B$.
+
+\subsubsection{Mutually independent events}
+
+\begin{bluebox}{Definition}
+    Let $(\Omega, \F, P)$ be a probability space and let $\{A_i : A_i \in \F, i \in I\}$ be a sequence of events.
+    We say that $A_1, A_2, \dots$ are mutually (stochastically) \textbf{independent} if
+    $\forall J \in I$ finite we have that
+
+    $$
+        P\left(\bigcap_{i \in J} A_i\right) = \prod_{i \in J} P(A_i)
+    $$
+
+\end{bluebox}
+
+This definition is a generalization of the definition of independence for two events.
+
+If we have mutually independent events we know that if some of them occur, then the probability of the others won't change.
+
+For example, if we want to check that $A, B, C$ are mutually independent, we need to check that
+\begin{align*}
+    P(A \cap B)        & = P(A) \cdot P(B)            \\
+    P(A \cap C)        & = P(A) \cdot P(C)            \\
+    P(B \cap C)        & = P(B) \cdot P(C)            \\
+    P(A \cap B \cap C) & = P(A) \cdot P(B) \cdot P(C)
+\end{align*}
+
+It is not enough to check just the one with the other, we need to check all the possible intersections.
 
 \end{document}

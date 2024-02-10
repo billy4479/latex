@@ -1,4 +1,4 @@
-\documentclass[10pt]{extarticle}
+\documentclass[14pt]{extarticle}
 \title{Physics 1 Notes}
 \author{Giacomo Ellero}
 
@@ -15,6 +15,8 @@
 \usepackage{xparse}
 \usepackage[a4paper,margin=1.5cm]{geometry}
 \usepackage{bookmark}
+\usepackage{physics}
+\usepackage{tikz}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -129,9 +131,9 @@ We define the \textbf{average velocity} as $\vec{v}_{\text{avg}} = \frac{\Delta 
 
 We define the \textbf{instantaneous velocity} as
 \begin{align*}
-  \vec{v}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{r}}{\Delta t}                                                        \\
-             & = \frac{d\vec{r}}{dt} \text{ this is the derivative of a vector}                                               \\
-             & = \begin{pmatrix} \frac{dx(t)}{dt} \hat{i} & \frac{dy(t)}{dt} \hat{j} & \frac{dz(t)}{dt} \hat{k} \end{pmatrix}
+  \vec{v}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{r}}{\Delta t}                                            \\
+             & = \dv{\vec{r}}{t} \text{ this is the derivative of a vector}                                       \\
+             & = \begin{pmatrix} \dv{x(t)}{t} \hat{i} & \dv{y(t)}{t} \hat{j} & \dv{z(t)}{t} \hat{k} \end{pmatrix}
 \end{align*}
 
 \subsubsection{Acceleration}
@@ -141,11 +143,167 @@ and we pass to the limit to get
 
 \begin{align*}
   \vec{a}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{v}}{\Delta t} \\
-             & = \frac{d\vec{v}}{dt} = \frac{d^2\vec{r}}{dt^2}
+             & = \dv{\vec{v}}{t} = \dv[2]{\vec{r}}{t}
 \end{align*}
 
 We see that the acceleration is the second derivative of the position vector.
 
 We will be able to reconstruct the whole trajectory starting from the acceleration.
+
+\section{Class of 08/02/2024 - Kinematics}
+
+\subsection{Decomposing vectors}
+
+Consider a 2D position vector, let $\theta$ be the angle between the vector and the $x$ axis,
+let $r = \norm{\vec{r}}$ be the magnitude of the vector,
+and let $\hat{r} = \vec{r} / r$ be the unit vector in the direction of $\vec{r}$.
+
+\begin{align*}
+  \vec{r} & = x \hat{i} + y \hat{j}                         \\
+          & = r \cos \theta \hat{i} + r \sin \theta \hat{j} \\
+          & = r \hat{r}
+\end{align*}
+
+This decomposition works for any vector in 2D, like the velocity and the acceleration.
+
+\subsection{Changing the direction of motion is an acceleration}
+
+According to these definitions we have that the acceletation, which is the derivative of the velocity, can be written as
+
+\begin{align*}
+  \vec{a} & = \dv{\vec{v}}{t} = \dv{t} (v \hat{v}) \\ &=
+  \underbrace{ \dv{v}{t} \hat{v} }_{\text{change in speed}} +
+  \underbrace{ v \dv{\hat{v}}{t} }_{\text{change in direction}}
+\end{align*}
+
+We see how changing the direction of the velocity will cause an acceleration.
+
+\subsection{Recovering the trajectory from the acceleration}
+
+We can use differential equations to get that
+
+\begin{align*}
+  \vec{v}(t) & = \int \vec{a}(t) \dd{t} + c_1 \\
+  \vec{r}(t) & = \int \vec{v}(t) \dd{t} + c_2
+\end{align*}
+
+In the result we get two constants of integration $c_1$ and $c_2$
+which can be determined by knowing the position or velocity at a certain time.
+
+For example if $v(t_0)$ and $r(t_0)$ are known we have that, at $t_1$,
+
+\begin{align*}
+  \vec{v}(t_1) & = \vec{v}(t_0) + \int_{t_0}^{t_1} \vec{a}(t) \dd{t} \\
+  \vec{r}(t_1) & = \vec{r}(t_0) + \int_{t_0}^{t_1} \vec{v}(t) \dd{t}
+\end{align*}
+
+\subsubsection{Uniformly accelerated motion}
+
+If we consider the case where $\vec{a}$ is constant we get
+the high-school equation for uniformly accelerated motion:
+
+\begin{align*}
+  \vec{v}(t) & = \vec{a} t - v(t_0)                                \\
+  \vec{r}(t) & = \frac{1}{2} \vec{a} t^2 - v(t_0) t + \vec{r}(t_0)
+\end{align*}
+
+Moreover, we can substitute one into the other to get an equation for the trajectory:
+$$
+  r = \frac{v^2(t) - v^2(t_0)}{2a}
+$$
+
+\subsection{Relative motion}
+
+Multiple observers may have different reference frames,
+we need a way to convert from a reference frame to the other.
+
+\begin{center}
+  \begin{tikzpicture}
+    % Normal axis
+    \draw[black, ->] (-3,0) -- (5,0) node[anchor=north]{$\hat{i}$};
+    \draw[black, ->] (0,-3) -- (0,5) node[anchor=east]{$\hat{j}$};
+
+    % Rotated axis
+    \draw[dashed, black, ->] (-3,-1.8) -- (5,3) node[anchor=south]{$\hat{i'}$};
+    \draw[dashed, black, ->] (1.8,-3) -- (-3,5) node[anchor=east]{$\hat{j'}$};
+
+    % Vector
+    \draw[blue, thick, ->] (0,0) -- (3,3) node[anchor=south]{$\vec{r}$};
+
+    % Angle between axis
+    \draw[red, thick] (0.5,0) arc (0:31:0.5) node[right]{$\theta$};
+  \end{tikzpicture}
+\end{center}
+
+We can write $\hat{i}$ and $\hat{j}$ in terms of $\hat{i'}$ and $\hat{j'}$:
+
+\begin{align*}
+  \hat{i'} & = \left( \hat{i'} \cdot \hat{i} \right) \hat{i}
+  + \left( \hat{i'} \cdot \hat{j} \right) \hat{j}            \\
+           & = \cos \theta \hat{i} + \sin \theta \hat{j}     \\
+  \hat{j'} & = \left( \hat{j'} \cdot \hat{i} \right) \hat{i}
+  + \left( \hat{j'} \cdot \hat{j} \right) \hat{j}            \\
+           & = -\sin \theta \hat{i} + \cos \theta \hat{j}
+\end{align*}
+
+Then, $\vec{r} = x \hat{i} + y \hat{j}$ can be written as
+
+\begin{align*}
+  \vec{r} & = x \left( \cos \theta \hat{i'} + \sin \theta \hat{j'} \right)  + y \left( -\sin \theta \hat{i'} + \cos \theta \hat{j'} \right) \\
+          & = \underbrace{ (x \cos \theta - y \sin \theta) }_x \hat{i'}
+  + \underbrace{ (x \sin \theta + y \cos \theta) }_y \hat{j'}
+\end{align*}
+
+We just performed a linear transformtion on the position vector,
+we can write the matrix representing this transformation:
+
+$$
+  R = \begin{pmatrix}
+    \cos \theta & -\sin \theta \\
+    \sin \theta & \cos \theta
+  \end{pmatrix}
+$$
+
+We have
+$$
+  \begin{pmatrix}
+    x \\
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    \cos \theta & -\sin \theta \\
+    \sin \theta & \cos \theta
+  \end{pmatrix}
+  \begin{pmatrix}
+    x' \\
+    y'
+  \end{pmatrix}
+$$
+
+The inverse transformation is given by the inverse of the matrix:
+
+$$
+  R^{-1} = \begin{pmatrix}
+    \cos \theta  & \sin \theta \\
+    -\sin \theta & \cos \theta
+  \end{pmatrix}
+$$
+
+\subsubsection{Frames of reference in relative motion}
+
+Using vectors we can abstract away the complexity derived from the fact that the reference frames are moving.
+
+Consider the classic example of a train moving at constant speed, with two observers, one on the train and one on the ground,
+and a ball which is moving inside the train.
+
+We have that the trajectory of the ball for the observer on the ground is given by
+$$
+  \vec{r}_{gb} = \vec{r}_{gt} + \vec{r}_{tb}
+$$
+
+We don't need to worry about the direction of the train, we can just sum the vectors.
+
+Similar considerations can be made for the velocity and the acceleration.
 
 \end{document}

@@ -15,6 +15,9 @@
             "command": "latexmk",
             "args": [
                 "-lualatex",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
                 "-shell-escape",
                 "%DOC%"
             ]

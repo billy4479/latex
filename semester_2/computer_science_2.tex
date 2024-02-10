@@ -1,5 +1,5 @@
 \documentclass[10pt]{extarticle}
-\title{Probability Notes}
+\title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
 
 \usepackage{amsfonts}
@@ -278,6 +278,240 @@ $$
 
 However if we keep expanding the recursion we will see that eventually we get to $T(1)$ which is $O(1)$
 and we are left with $n$-many $O(n)$ terms, hence the time complexity of this algorithm is also $O(n^2)$.
+
+\section{Class of 09/02/2024}
+
+\subsection{Karatsuba's algorithm}
+
+This is a multiplication algorithm that is based on the last algorithm we discussed in the last class with some variations.
+
+The algorithm takes inspiration from the multiplication of two complex numbers:
+\begin{align*}
+    (a + bi)(c + di) & = (ac - bd) + (ad + bc)i   \\
+    \implies bc + ad & = (a + b)(c + d) - ac - bd
+\end{align*}
+
+Applying this to the multiplication of two binary numbers we get
+\begin{align*}
+    x \cdot y & = x_{\text{up}} y_{\text{up}} 2^n
+    + 2^\frac{n}{2}((x_{\text{up}} + x_{\text{low}})(y_{\text{up}} + y_{\text{low}}) - x_{\text{up}}y_{\text{up}} - x_{\text{low}}y_{\text{low}}) + x_{\text{low}}y_{\text{low}}
+\end{align*}
+
+By doing this we are performing 3 multiplications of half the size and 4 additions.
+Since we saw how additions are faster than multiplications we can expect this algorithm to be faster than the previous one.
+
+$$
+    T(n) = 3T\left(\frac{n}{2}\right) + O(n)
+$$
+
+We can arrange the work in nodes of a tree:
+
+\begin{center}
+    \begin{tabular}{ |c|c|c|c| }
+        \hline
+        level  & nodes  & work per node    & total work                      \\
+        \hline
+        0      & 1      & $Cn$             & $Cn$                            \\
+        1      & 3      & $\frac{n}{2}C$   & $\frac{3}{2}Cn$                 \\
+        2      & 9      & $\frac{n}{4}C$   & $\frac{9}{4}Cn$                 \\
+        \vdots & \vdots & \vdots           & \vdots                          \\
+        $k$    & $3^k$  & $\frac{n}{2^k}C$ & $\left(\frac{3}{2}\right)^k Cn$ \\
+        \hline
+    \end{tabular}
+\end{center}
+
+We have that the total work is the sum of the total work at each level of the tree:
+$$
+    Cn\left(1+\frac{3}{2}+\left(\frac{3}{2}\right)^2+\dots+\left(\frac{3}{2}\right)^k\right)
+$$
+
+Compared to the \say{old} algorithm that has a total work that looks like
+
+$$
+    Cn\left(1+2+2^2+\dots+2^k\right)
+$$
+
+Through some algebra we can show that this sum is $3Cn^{\log_{2}3}$,
+hence proving that the algorithm is $O(n^{\log_{2}3}) \sim O(n^{1.58})$.
+
+\subsection{The master theorem}
+
+\underline{Statement}: If $a > 0, b > 1, d \ge 0$, $n$ is a power of $b$, and
+$T(n)$ is defined by induction as
+\begin{align*}
+    T(1) & = 1                                   \\
+    T(n) & = aT\left(\frac{n}{b}\right) + O(n^d)
+\end{align*}
+
+Where
+\begin{itemize}
+    \item $a$ is the number of subproblems
+    \item $b$ is the factor by which the problem size is reduced at each step
+    \item $d$ is the exponent in the work done at each level
+\end{itemize}
+
+Then
+
+\begin{align*}
+    T(n) = \begin{cases}
+               O(n^d)          & \text{if } d > \log_b a \\
+               O(n^d \log n)   & \text{if } d = \log_b a \\
+               O(n^{\log_b a}) & \text{if } d < \log_b a
+           \end{cases}
+\end{align*}
+
+\begin{proof}
+    We can write a table with the work to be done at each size of the problem
+
+    \begin{center}
+        \begin{tabular}{ |c|c|c|c| }
+            \hline
+            level  & \# of problems & size of each problem & total work                         \\
+            \hline
+            0      & 1              & $n$                  & $Cn^d$                             \\
+            1      & $a$            & $\frac{n}{b}$        & $Ca\left(\frac{n}{b}\right)^d$     \\
+            2      & $a^2$          & $\frac{n}{b^2}$      & $Ca^2\left(\frac{n}{b^2}\right)^d$ \\
+            \vdots & \vdots         & \vdots               & \vdots                             \\
+            $k$    & $a^k$          & $\frac{n}{b^k}$      & $Ca^k\left(\frac{n}{b^k}\right)^d$ \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    To find the total work we need to evaluate the following sum
+    $$
+        Cn^d\left(1+\left(\frac{a}{b^d}\right)+\left(\frac{a}{b^d}\right)^2+\dots+\left(\frac{a}{b^d}\right)^k\right)
+    $$
+
+    We can consider the following 3 cases:
+    \begin{itemize}
+        \item If $\frac{a}{b^d} = 1$, then $d = \log_b a$ and the sum becomes $ ??? $ and its complexity is $O(n^d \log n)$
+        \item If $\frac{a}{b^d} < 1$, then $d > \log_b a$ and the sum becomes $ ??? $ and its complexity is $O(n^d)$
+        \item If $\frac{a}{b^d} > 1$, then $d < \log_b a$ and the sum becomes $ ??? $ and its complexity is $O(n^{\log_b a})$
+    \end{itemize}
+
+    % TODO: complete the proof with picture and book
+\end{proof}
+
+\subsection{Introduction to sorting algorithms}
+
+\subsubsection{Comparison based sorting}
+
+Every comparison-based sorting algorithm
+must do $\Omega(n \log n)$ comparison to sort $n$ distinct elements in the worst case.
+
+\underline{Statement}: For any comparison-based algorith $A$, for all $n \ge 2$ there exists an input of size $n$
+such that $A$ makes at least $\log_2(n!) = \Omega(n \log n)$ comparisons.
+
+The $n!$ comes from the fact that the factorial represents all the possible permutations of $n$ numbers,
+hence, when we are sorting, we are just finding the \say{correct} permutation that sorts the input.
+
+The $\log_2$ comes from the fact that each comparison we are making a choice, which the end gives two outcomes,
+each one with half the options available for the next permutation.
+Since we are looking for the worst outcome we have that we stop after $\log_2$ of the number we started with.
+
+\subsubsection{Sorting without comparisons}
+
+This is kinda surprising but it is actually possible if we have some other informations about the input we are sorting.
+
+For example, if we know that the input is a sequence of integers in a certain range we can use the \textbf{counting sort} algorithm.
+This algorithm works by counting the occurrences of each number in the input and then writing them in the correct order.
+This is a very fast algorithm compared to other generic sorting and takes $O(n)$ time.
+
+Other examples of sorting algorithms that don't use comparisons are \textbf{radix sort} and \textbf{bucket sort}.
+
+\subsection{Finding the median}
+
+In general we can sort the list and find the median like that, which would be $O(n \log n)$.
+It turns out that we can do better than that.
+
+We will solve the more general problem that looks like this:
+\begin{itemize}
+    \item \textit{Input}: A list of numbers $S$; an integer $k$
+    \item \textit{Output}: The $k$-th smallest element of $S$
+\end{itemize}
+
+In particular if $k = \frac{|S|}{2}$ we have that $k$ is the median.
+
+\subsubsection{Description of the algorithm}
+
+To do so we will use a recursion based algorithm:
+
+\begin{enumerate}
+    \item Select an element $V$ from $S$ at random
+    \item We create 3 sub-lists:
+          \begin{enumerate}
+              \item $S_L = {x \in S : x < V}$
+              \item $S_V = {x \in S : x = V}$
+              \item $S_R = {x \in S : x > V}$
+          \end{enumerate}
+    \item We now call the algorithm recursively with the following parameters:
+          \begin{enumerate}
+              \item If $k \le |S_L|$ then we call the algorithm with $S_L$ and $k$
+              \item If $|S_L| < k \leq |S_L| + |S_V|$ then we return $V$
+              \item If $k > |S_L| + |S_V|$ then we call the algorithm with $S_R$ and $k - |S_L| - |S_V|$
+          \end{enumerate}
+\end{enumerate}
+
+\subsubsection{The choice of V}
+
+To calculate the time complexity of this algorithm we first have to choose a good $V$.
+This is a hard task, because the \say{best} $V$ would be the median, but that's exacltly what we are trying to find;
+on the other hand the \say{worst} $V$ would be the minimum or the maximum of the input, which would reduce the problem size by only 1.
+
+Since we cannot choose a good $V$ we will choose a random $V$:
+the odds of choosing the best or the worst cases are both extreamly unlikely,
+hence we need to define a \say{good enough} $V$.
+
+We consider a good enough $V$ if it lies between $\frac{1}{4}$ and $\frac{3}{4}$ of the input,
+hence we can expect that the size of the sub-problems will be at most $\frac{3}{4}$ of the original problem.
+
+This choice is arbirtraitly, we could have chosen any other fraction and the time complexity,
+as we will see later, would have been the same.
+We chose these fractions because in this way the input
+is divided in 2 \say{bad} cases of size $\frac{1}{4}$ and a \say{good} case of size $\frac{1}{2}$,
+hence the size of the \say{bad} part is the same as the size of the \say{good} part.
+
+\subsection{Time complexity}
+
+We can now compute the time complexity
+
+$$
+    T(n) = \underbrace{T\left(\frac{3}{4}n\right)}
+    _{\text{expected reduction}} +
+    \underbrace{O(n)}_{\text{compatisons with } V}
+    + \underbrace{\gamma O(n)}_{\text{finding a good } V}
+$$
+
+Note that $\gamma$ is the byproduct of the random choice of $V$,
+we don't know how many times we will have to choose $V$ to find a good one.
+
+Although we cannot be sure about the exact time this algorithm takes,
+we can compute the \textbf{expected} time.
+
+We saw before how the probability of choosing a good $V$ is $\frac{1}{2}$.
+We can calculate the expected time as follows:
+we pick a random $V$ and
+
+\begin{enumerate}
+    \item If $V$ is good we are done
+    \item If $V$ is bad we need to repeat the algorithm
+\end{enumerate}
+
+Hence we have that $E = 1 + \frac{1}{2} E$, thus $E = 2$.
+We have
+
+
+\begin{align*}
+    E(T(n)) & = E\left(T\left(\frac{3}{4}n\right)\right) + O(n) + 2O(n) \\
+            & = O(n) + O(n) + 2O(n)                                     \\
+            & = O(n)
+\end{align*}
+
+\begin{notebox}{Other solutions}
+    This algorithm is presented to illustrate that algorithms that make use of random variables exist and can be useful;
+    in the case of this specific problem there exist better algorithms that can solve the problem in a deterministic way,
+    such as the \textbf{median of medians} algorithm.
+\end{notebox}
 
 
 \end{document}

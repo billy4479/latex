@@ -1,4 +1,4 @@
-\documentclass[10pt]{extarticle}
+\documentclass[14pt]{extarticle}
 \title{Physics 1 Notes}
 \author{Giacomo Ellero}
 
@@ -17,6 +17,7 @@
 \usepackage{bookmark}
 \usepackage{physics}
 \usepackage{tikz}
+\usepackage{cancel}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -307,5 +308,217 @@ $$
 We don't need to worry about the direction of the train, we can just sum the vectors.
 
 Similar considerations can be made for the velocity and the acceleration.
+
+\section{Class of 12/02/2024}
+
+\subsection {Uniform circular motion}
+
+In this kind of motion a particle spins in circle of radius $R$
+and with a velocity of constant module:
+
+$$
+  |\vec v| = \text{const}
+$$
+
+This means that the particle spans equal angles $\theta$ in equal times.
+
+We introduce the angular velocity $\omega$ defined as
+$$
+  \omega = \frac{\theta}{t} = \text{const}
+$$
+
+We can then write the law of motion in terms of angles:
+
+$$
+  \theta(t) = \theta_0 + \omega t
+$$
+
+In general
+
+$$
+  \omega (t) = \dv{\theta t}{t}
+$$
+
+After one turn we have that $\Delta \theta (t) = 2 \pi$
+We call period $T$ the time it takes to do a full turn, then
+$$
+  T = \frac{2 \pi}{\omega}
+$$
+
+We also define the frequency as
+
+$$
+  \nu = \frac{1}{T}
+$$
+
+We note the relationship between $v$ and $\omega$:
+
+$$
+  v = \frac{2 \pi R}{T} = R \omega
+$$
+
+\subsubsection{Using position vector}
+
+We decompose the position vector in its components:
+
+$$
+  \vec{r}(t) = x (t) \hat i  + y(t) + \hat j
+$$
+
+Note that $|\vec r (t)| = R \enspace \forall t$, hence
+
+\begin{align*}
+  \begin{cases}
+    x(t) & = R \cos (\theta (t)) \\
+    y(t) & = R \sin (\theta (t))
+  \end{cases}
+\end{align*}
+
+We have that the velocity is
+
+\begin{align*}
+  \vec v & = \dv {r}{t} = \dv{x}{t} \hat i + \dv {y}{t} \hat j                     \\
+         & = - R \sin (\theta(t)) \dv{\theta(t)}{t} \hat i
+  + R \cos (\theta(t)) \dv{\theta(t)}{t} \hat j                                    \\
+         & = - R \sin (\theta(t)) \omega \hat i + R \cos (\theta(t)) \omega \hat j \\
+         & = v_x (t) \hat i + v_y (t) \hat j
+\end{align*}
+
+The module of the velocity is
+
+\begin{align*}
+  |\vec v| & = \sqrt{v_x^2(t) + v_y^2(t)}                 \\
+           & = \sqrt{R^2 \omega^2 \underbrace{(\dots)}_1} \\
+           & = R\omega
+\end{align*}
+
+\subsubsection{Acceleration}
+
+\begin{align*}
+  \vec a & = \dv {\vec v}{t} = \dv {t} (v \hat v) \\
+         & = \dv {v}{t}\hat v + \dv{\hat v}{t} v  \\
+         & = \dv {\hat v}{t} v \ne 0
+\end{align*}
+
+since the modulus doesn't change.
+
+We can also compute this quantity by differentiating the velocity equation from above
+
+\begin{align*}
+  \vec a & = \dv{\vec v}{t}                                                                          \\
+         & = - R \omega ^2 \cos (\theta(t)) \hat i - R \omega^2 \sin (\theta(t)) \hat j              \\
+         & = - \omega^2 \underbrace{(R \cos (\theta(t)) \hat i +  \sin (\theta(t)) \hat j)}_{\vec r} \\
+         & = -\omega^2 \vec r
+\end{align*}
+
+It's easy to compute the module of this vector since $|\vec r| = R$, hence
+
+$$
+  a = \omega^2  |\vec r| = \omega^2 R
+$$
+
+\subsection{Polar coordinates}
+
+Depending on the exercise, using cartesian coordinates can be difficult.
+We can introduce the polar coordinates to mitigate this issue.
+
+Instead of specifying $x$ and $y$, we define a radius $R$ and an angle $\theta$.
+
+This is quite helpful in the case of circular motion since we have that $R$ is constant
+and only $\theta$ is a function of time.
+
+We can define a function to map $(x, y) \to (r, \theta)$:
+
+\begin{align*}
+  \begin{cases}
+    r      & = \sqrt{x^2 + y^2}                \\
+    \theta & = \arctan\left(\frac{y}{x}\right)
+  \end{cases}
+\end{align*}
+
+We note that this function is a bijection between the two coordinate spaces.
+
+Moreover, we denote the have that the angle vector $\vec \theta$
+and the radious vector $\vec r$ are orthogonal. This makes the polar coordinates \textbf{orthonormal}.
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
+    \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
+
+    \draw[blue, thick] (0,0) circle (4);
+    \draw[red, thick, ->] (0,0) -- (4.5,4.5) node[anchor=west]{$\vec r$};
+
+    \filldraw [gray] (2.82,2.82) circle (2pt);
+    \filldraw [gray] (0,2.82) circle (2pt) node[anchor=east]{$y(t)$};
+    \filldraw [gray] (2.82,0) circle (2pt) node[anchor=north]{$x(t)$};
+
+    \draw[gray, dashed] (2.82,0) -- (2.82,2.82);
+    \draw[gray, dashed] (0,2.82) -- (2.82,2.82);
+
+    \draw[green, ->] (2.82,2.82) -- (3.82,3.82) node[anchor=north]{$\hat r$};
+    \draw[green, ->] (2.82,2.82) -- (2,3.66) node[anchor=south]{$\hat \theta$};
+  \end{tikzpicture}
+\end{center}
+
+We can write the position vector in polar coordinates as follows
+
+$$
+  \vec r = x \hat i + y \hat j = r \hat r + \theta \hat \theta
+$$
+
+The terms $\hat r$ and $\hat \theta$ can change direction depending on $\theta$:
+
+\begin{align*}
+  \begin{cases}
+    \hat r(\theta)      & = \cos \theta \hat i + \sin \theta \hat j   \\
+    \hat \theta(\theta) & = - \sin \theta \hat i + \cos \theta \hat j
+  \end{cases}
+\end{align*}
+
+or, in matrix form,
+
+$$
+  \begin{pmatrix}
+    \vec r \\
+    \vec \theta
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    \cos \theta  & \sin \theta \\
+    -\sin \theta & \cos \theta
+  \end{pmatrix}
+  \begin{pmatrix}
+    \hat i \\
+    \hat j
+  \end{pmatrix}
+$$
+
+\subsubsection{Application in circular motion}
+
+This is quite useful, for example, to calculate the velocity
+
+$$
+  \vec v = \dv {\vec r}{t} = \dv{t} (R \hat r + \cancel{\theta \hat \theta})
+  = R \dv{\hat r}{t}
+$$
+
+(we cancelled $\theta \hat \theta$ because the $\theta$ component is 0, $\vec r$ it's just the radius.)
+
+To compute $\dv{\hat r}{t}$ we need to pass back to cartesian coordinates and get the result from above
+
+\begin{align*}
+  \vec{v} & = - R \sin (\theta(t)) \omega \hat i + R \cos (\theta(t)) \omega \hat j                   \\
+          & = R \omega \underbrace{[\sin (\theta(t)) \hat i + \cos (\theta(t)) \hat j]}_{\hat \theta} \\
+          & = R \omega \hat \theta
+\end{align*}
+
+\begin{bluebox}{EXERCISE}
+  Derive the same relation for acceleration.
+
+  $$
+    \vec{a} = \dv {t} \vec v = \dv{t}(R \omega \hat \theta) = ?
+  $$
+\end{bluebox}
 
 \end{document}

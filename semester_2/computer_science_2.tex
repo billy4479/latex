@@ -1,4 +1,4 @@
-\documentclass[10pt]{extarticle}
+\documentclass[14pt]{extarticle}
 \title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
 
@@ -17,6 +17,7 @@
 \usepackage{bookmark}
 \usepackage{bytefield}
 \usepackage{minted}
+\usepackage{capt-of}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -513,6 +514,212 @@ We have
     in the case of this specific problem there exist better algorithms that can solve the problem in a deterministic way,
     such as the \textbf{median of medians} algorithm.
 \end{notebox}
+
+\section{Class of 13/02/2024 - Graphs}
+
+This week we will be working on graphs, this is referenced in chapter 3 of the book.
+
+\begin{center}
+
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (2, 0) {B};
+        \node[draw, circle] (C) at (2, 2) {C};
+        \node[draw, circle] (D) at (6, 2) {D};
+        \node[draw, circle] (E) at (0, 5) {E};
+        \node[draw, circle] (F) at (2, 4) {F};
+        \node[draw, circle] (G) at (-2, 4) {G};
+        \node[draw, circle] (H) at (3, 3) {H};
+
+        \draw (A) -- (B);
+        \draw (B) -- (C);
+        \draw (C) -- (D);
+        \draw (D) -- (A);
+        \draw (A) -- (E);
+        \draw (E) -- (F);
+        \draw (F) -- (C);
+        \draw (C) -- (G);
+        \draw (H) -- (C);
+    \end{tikzpicture}
+    \captionof{figure}{An example of a graph} \label{fig:graph}
+\end{center}
+
+Graphs can be useful to represent a lot of different things,
+for example relationships, networks, maps, tournaments, etc.
+
+\subsection{Definitions}
+
+\begin{bluebox}{Definition}
+    A \textbf{graphs} $G = (V, E)$ is a pair of finite sets where
+    $V$ is the set of \textbf{vertices} (or nodes) and $E$ is the set of \textbf{edges}.
+
+    $E$ is a subset of $V \times V$.
+\end{bluebox}
+
+The elements of $E$ are pairs of vertices that represent the connections between the vertices.
+
+These are some other useful definitions we will use:
+\begin{description}
+    \item[Adjacent vertices] If $e = (u, v) \in E$ then we say that $u$ and $v$ are adjacent.
+    \item[Incident edges] If $e = (u, v) \in E$ then we say that $e$ is incident to $u$ and $v$.
+    \item[Neighbour] A vertex joined by an edge to another vertex is called a neighbor.
+    \item[Directed and undirected graphs] a graph is \textit{directed} if the edges have a direction, otherwise it is \textit{undirected}. In an undirected graph the edges are unordered pairs $\{u, v\}$, in a directed graph they are ordered pairs $(u,v)$.
+    \item[Loop] if a vertex is connected to itself we say that it is a loop.
+    \item[Simple graph] a graph is simple if it has no loops and any pair of vertices is connected by at most one edge.
+    \item[Degree of a vertex] the degree of a vertex $v$, $d(v)$ is the number of edges incident to it.
+    \item[Walk] a walk on a graph is an alternating series of vertices and edges in which every edge is incident to the two vertices immediately preceding and following it.
+    \item[Path] a path is a walk in which no vertex is repeated.
+    \item[Cycle] a cycle is a path in which the first and last vertices are the same.
+    \item[Acyclic] a graph is acyclic if it has no cycles.
+    \item[Connectedness] we have two definition depending if the graph is directed or undirected:
+        \begin{itemize}
+            \item An \underline{undirected graph} is connected if every vertex is reachable from all other vertices.
+            \item A \underline{directed graph} is \textit{strongly connected} if every vertex is reachable from all other vertices. We use the word \textit{strongly} because some nodes may have edges connecting to it but not going out of it.
+        \end{itemize}
+
+        We call each connected part of the graph a \textbf{connected component} of $G$. In \textit{undirected graphs} this is an equivalence relation on the set of vertices.
+    \item[Bipartite graph] a bipartite graph is an undirected graph $G = (V, E)$ where $V$ can be partitioned into two sets $V_1, V_2$ such that every edge $(u, v) \in E$ is such that $u \in V_1$ and $v \in V_2$.
+        This means that there are no edges between vertices in the same set.
+
+    \item[Tree] a tree is a connected acyclic undirected graph, or a connected forest.
+        In every tree it is possible to identify a node a the \underline{root}, every node can be seen as the root of the tree.
+        We call \underline{descendant} of a node $v$ every node that is reachable from $v$ going downwards and \underline{ancestor} every node that is reachable from $v$ going upwards.
+    \item[Forest] a forest is an acyclic undirected graph, or a union of trees.
+\end{description}
+
+\subsection{Memory representation}
+
+\subsubsection{Adjacency matrix}
+
+\begin{bluebox}{Definition}
+    Let $G = (V, E)$ be a graph with $|V| = n$.
+
+    An \textbf{adjacency matrix} is a $|V| \times |V|$ matrix $A$ where
+    $$
+        a_{ij} = \begin{cases}
+            1 & \text{if } (i, j) \in E    \\
+            0 & \text{if } (i, j) \notin E
+        \end{cases}
+    $$
+\end{bluebox}
+
+We want to represent the following graph using an adjacency matrix:
+
+\begin{absolutelynopagebreak}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw, circle] (A) at (0, 2) {1};
+            \node[draw, circle] (B) at (2, 2) {2};
+            \node[draw, circle] (C) at (0, 0) {3};
+            \node[draw, circle] (D) at (2, 0) {4};
+
+            \draw (A) -- (B);
+            \draw (A) -- (C);
+            \draw (A) -- (D);
+        \end{tikzpicture}
+        \captionof{figure}{An example graph} \label{fig:repr:graph1}
+    \end{center}
+\end{absolutelynopagebreak}
+
+We can represent this graph using the following adjacency matrix:
+
+\begin{absolutelynopagebreak}
+    \begin{center}
+        $$
+            \begin{bytefield}[bitwidth=1.25em]{4}
+                \bitheader{0,1,2,3} \\
+                \bitboxes{1}{0111} \\
+                \bitboxes{1}{1000} \\
+                \bitboxes{1}{1000} \\
+                \bitboxes{1}{1000} \\
+            \end{bytefield}
+        $$
+        \captionof{figure}{The adjacency matrix of the graph in (\ref{fig:repr:graph1})}
+        \label{fig:repr:adjmatrix1}
+    \end{center}
+\end{absolutelynopagebreak}
+
+Using this representation we can easily check if two vertices are connected ($O(1)$) but we need a lot of space to store it ($O(|V|^2)$).
+
+Adjacency matrices can be useful can be useful since we can perform linear algebra magic on them
+(e.g.: compute the $k$ power, or find the eigenvalues) to find some properties of the graph.
+
+\subsubsection{Adjacency list}
+
+This is a more space efficient way to represent a graph, especially if the graph is sparse (meaning it has few edges and a lot of nodes).
+
+\begin{bluebox}{Definition}
+    Let $G = (V, E)$ be a graph with $|V| = n$.
+
+    An \textbf{adjacency list} is a list of $n$ lists where the $i$-th list contains all the vertices adjacent to the $i$-th vertex.
+\end{bluebox}
+
+\textbf{Example}: The graph in (\ref{fig:repr:graph1}) can be represented using the following adjacency list:
+
+\begin{absolutelynopagebreak}
+    \begin{center}
+        \begin{tabular}{c|c}
+            Vertex & Adjacent vertices \\
+            \hline
+            1      & 2, 3, 4           \\
+            2      & 1                 \\
+            3      & 1                 \\
+            4      & 1
+        \end{tabular}
+        \captionof{figure}{The adjacency list of the graph in (\ref{fig:repr:graph1})}
+        \label{fig:repr:adjlist1}
+    \end{center}
+\end{absolutelynopagebreak}
+
+This in practice can be implemented using linked lists: in this case we have a space complexity of $O(|V| + |E|)$ while the time complexity to find if a vertex is connected to another one is $O(|E|)$.
+
+(Is really linked lists the best way to implement this? What about other data structures?)
+
+\subsubsection{Summerizing}
+
+We can use the following table to summarize the two representations:
+
+\begin{center}
+    \begin{tabular}{c|c|c|c}
+               & space          & $(u, v) \in E$ & all neighbors \\
+        \hline
+        matrix & $O(|V|^2)$     & $O(1)$         & $O(|V|)$      \\
+        list   & $O(|V| + |E|)$ & $O(d(v))$      & $O(d(v))$
+    \end{tabular}
+    \captionof{table}{Comparison of graph representations}
+    \label{tab:graphrepr}
+\end{center}
+
+\subsection{Exploring a graph - Depth First Search (DFS)}
+
+In this section we will look at algorithms to explore a graph.
+
+We setup the algorithm like this:
+
+\begin{minted}{python}
+    clock = 1
+    for v in V:
+        visited[v] = False
+        pre[v] = None  # time of first visit of `v`
+        post[v] = None # time of last visit of `v`
+\end{minted}
+
+The actual algorithm is as follows:
+
+\begin{minted}{python}
+    def explore(G, v):
+        visited[v] = True
+        pre[v] = clock
+        clock += 1
+        for (u, v) in edges(v):
+            if not visited[u]:
+                explore(G, u)
+        post[v] = clock
+        clock += 1
+\end{minted}
+
+Then we call \texttt{explore} on any vertex of $G$ and let the function traverse the graph.
+
 
 
 \end{document}

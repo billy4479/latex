@@ -5,8 +5,10 @@
         "cofactor",
         "fonttitle",
         "injective",
+        "Karatsuba's",
         "parbox",
         "Riesz",
+        "subproblems",
         "surjective"
     ],
     "latex-workshop.latex.tools": [

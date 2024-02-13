@@ -1,4 +1,4 @@
-\documentclass[14pt]{extarticle}
+\documentclass[10pt]{extarticle}
 \title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
 
@@ -401,7 +401,7 @@ Then
 Every comparison-based sorting algorithm
 must do $\Omega(n \log n)$ comparison to sort $n$ distinct elements in the worst case.
 
-\underline{Statement}: For any comparison-based algorith $A$, for all $n \ge 2$ there exists an input of size $n$
+\underline{Statement}: For any comparison-based algorithm $A$, for all $n \ge 2$ there exists an input of size $n$
 such that $A$ makes at least $\log_2(n!) = \Omega(n \log n)$ comparisons.
 
 The $n!$ comes from the fact that the factorial represents all the possible permutations of $n$ numbers,
@@ -413,7 +413,7 @@ Since we are looking for the worst outcome we have that we stop after $\log_2$ o
 
 \subsubsection{Sorting without comparisons}
 
-This is kinda surprising but it is actually possible if we have some other informations about the input we are sorting.
+This is kinda surprising but it is actually possible if we have some other information about the input we are sorting.
 
 For example, if we know that the input is a sequence of integers in a certain range we can use the \textbf{counting sort} algorithm.
 This algorithm works by counting the occurrences of each number in the input and then writing them in the correct order.
@@ -457,17 +457,17 @@ To do so we will use a recursion based algorithm:
 \subsubsection{The choice of V}
 
 To calculate the time complexity of this algorithm we first have to choose a good $V$.
-This is a hard task, because the \say{best} $V$ would be the median, but that's exacltly what we are trying to find;
+This is a hard task, because the \say{best} $V$ would be the median, but that's exactly what we are trying to find;
 on the other hand the \say{worst} $V$ would be the minimum or the maximum of the input, which would reduce the problem size by only 1.
 
 Since we cannot choose a good $V$ we will choose a random $V$:
-the odds of choosing the best or the worst cases are both extreamly unlikely,
+the odds of choosing the best or the worst cases are both extremely unlikely,
 hence we need to define a \say{good enough} $V$.
 
 We consider a good enough $V$ if it lies between $\frac{1}{4}$ and $\frac{3}{4}$ of the input,
 hence we can expect that the size of the sub-problems will be at most $\frac{3}{4}$ of the original problem.
 
-This choice is arbirtraitly, we could have chosen any other fraction and the time complexity,
+This choice is arbitrarily, we could have chosen any other fraction and the time complexity,
 as we will see later, would have been the same.
 We chose these fractions because in this way the input
 is divided in 2 \say{bad} cases of size $\frac{1}{4}$ and a \say{good} case of size $\frac{1}{2}$,
@@ -480,7 +480,7 @@ We can now compute the time complexity
 $$
     T(n) = \underbrace{T\left(\frac{3}{4}n\right)}
     _{\text{expected reduction}} +
-    \underbrace{O(n)}_{\text{compatisons with } V}
+    \underbrace{O(n)}_{\text{comparisons with } V}
     + \underbrace{\gamma O(n)}_{\text{finding a good } V}
 $$
 

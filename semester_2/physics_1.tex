@@ -18,6 +18,7 @@
 \usepackage{physics}
 \usepackage{tikz}
 \usepackage{cancel}
+\usepackage{siunitx}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -171,7 +172,7 @@ This decomposition works for any vector in 2D, like the velocity and the acceler
 
 \subsection{Changing the direction of motion is an acceleration}
 
-According to these definitions we have that the acceletation, which is the derivative of the velocity, can be written as
+According to these definitions we have that the acceleration, which is the derivative of the velocity, can be written as
 
 \begin{align*}
   \vec{a} & = \dv{\vec{v}}{t} = \dv{t} (v \hat{v}) \\ &=
@@ -257,7 +258,7 @@ Then, $\vec{r} = x \hat{i} + y \hat{j}$ can be written as
   + \underbrace{ (x \sin \theta + y \cos \theta) }_y \hat{j'}
 \end{align*}
 
-We just performed a linear transformtion on the position vector,
+We just performed a linear transformation on the position vector,
 we can write the matrix representing this transformation:
 
 $$
@@ -414,7 +415,7 @@ We can also compute this quantity by differentiating the velocity equation from 
 It's easy to compute the module of this vector since $|\vec r| = R$, hence
 
 $$
-  a = \omega^2  |\vec r| = \omega^2 R
+  a = \omega^2  |\vec r| = \omega^2 R = \frac{v ^2}{r}
 $$
 
 \subsection{Polar coordinates}
@@ -439,7 +440,7 @@ We can define a function to map $(x, y) \to (r, \theta)$:
 We note that this function is a bijection between the two coordinate spaces.
 
 Moreover, we denote the have that the angle vector $\vec \theta$
-and the radious vector $\vec r$ are orthogonal. This makes the polar coordinates \textbf{orthonormal}.
+and the radius vector $\vec r$ are orthogonal. This makes the polar coordinates \textbf{orthonormal}.
 
 \begin{center}
   \begin{tikzpicture}
@@ -520,5 +521,244 @@ To compute $\dv{\hat r}{t}$ we need to pass back to cartesian coordinates and ge
     \vec{a} = \dv {t} \vec v = \dv{t}(R \omega \hat \theta) = ?
   $$
 \end{bluebox}
+
+\section{Class of 13/02/2024 - Dynamics}
+
+Dynamics is the study of the \textit{causes} of motion.
+
+\subsection{Newton's laws}
+
+\begin{enumerate}
+  \item \textbf{First law} (or law of inertia): A body that is subject to no external forces maintains in uniform velocity.
+  \item \textbf{Second law}: The acceleration of a body is proportional to the force acting on it.
+  \item \textbf{Third law}: For every action, there is an equal and opposite reaction.
+\end{enumerate}
+
+Note that that these laws cannot be proven mathematically, they are just a good model of reality.
+
+\subsection{First law}
+
+By looking at the laws it might look like the first law is a special case of the second law,
+but it is actually very important by itself because it tells us that we need to specify the reference frame:
+only some frame of reference can be \say{put in contact} and describe the same motion; we call such frames \textbf{inertial frames}.
+
+\begin{examplebox}{Example}
+  Consider an object that is steady from the point of view of some observer.
+
+  Now consider another observer that is moving in circle.
+  To this second observer will see the object moving in circle, hence he will see an acceleration.
+
+  These two observers are in different frames of reference, and only the first one is inertial.
+\end{examplebox}
+
+\subsubsection{Galilean group}
+
+$$
+  \begin{cases}
+    \vec {r'} = \vec r + \vec{r_b} \\
+    \vec {r'} = R \vec r           \\
+    \vec {r'} = \vec r + \vec{v_b} t
+  \end{cases}
+$$
+
+These equations describe transformations between inertial frames of reference.
+
+The first equation is a translation, the second is a scaling, the third one is uniform motion.
+
+We can see how, based on the third equation, we cannot know if we are moving or if the other frame is moving.
+
+\subsection{Second law}
+
+We can write the second law as
+
+$$
+  F \propto a
+$$
+
+which simply means that $F$ is proportional to $a$.
+We can be more precise and write the equation in vector form:
+
+$$
+  \vec F = m \vec a
+$$
+
+where $m$ is the mass of the object.
+
+This $\vec F$ is the sum of all forces acting on the object.
+
+The unit of the force is
+
+$$
+  [F] = [M][L][T]^{-2} = \si{\kilogram \meter \per \second \squared} = \si{\newton}
+$$
+
+Even though the equation seams simple it is actually quite difficult to show it is true.
+For example, what is the mass of an object? This is a concept that Newton had to introduce.
+
+To answer this question we need to find a constant force, measure the acceleration it causes and define the mass according to the law.
+
+Still, when we measure mass (or any dimension really), we are just comparing a mass to another mass.
+
+\subsubsection{Hooke's law}
+
+This law describes the force exerted by a spring.
+
+$$
+  F = - k \Delta x
+$$
+
+We cannot prove this law mathematically, but experimentally we can see that for small displacements it holds (after too much pulling we break the spring).
+We call the displacement range where the law holds \textit{linear regime}.
+
+The constant $k$ is called \textit{spring constant} and it depends on the material and the shape of the spring.
+
+\subsubsection{First cardinal law of motion}
+
+We define a new quantity called \textit{momentum} $\vec p$.
+
+$$
+  \vec p = m \vec v = m \dv{\vec r}{t}
+$$
+
+its unit is $[p] = [M][L][T]^{-1} = \si{\kilogram \meter \per \second}$.
+
+We can write the second law in terms of momentum:
+
+$$
+  \vec F = \dv{\vec p}{t} = \dv{t} (m \vec v) = m \dv{\vec v}{t} + \dv{m}{t} \vec v
+$$
+
+This is very interesting because we see how the force changes if, while the object is moving, the mass changes (for example a rocket using fuel).
+
+Usually though this doesn't happen and we can rely on the special case described above.
+
+Generally we see how force can be a function of many different things:
+
+$$
+  m \dv[2]{\vec r}{t} = \vec F(\vec r, \dv{\vec r}{v}, t)
+$$
+
+This is a second order differential equation: it is quite difficult to solve and there is no standard method to solve it.
+
+To attempt to solve this equation we need to consider some initial conditions, 2 for each degree of freedom.
+
+\subsection{Third law}
+
+We can write the third law mathematically as
+
+$$
+  \vec{F}_{1 \to 2} = - \vec{F}_{2 \to 1}
+$$
+
+There is not much more to say regarding this law.
+
+\subsection{Gravitational force}
+
+Consider the following system:
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
+    \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
+
+    \filldraw[red] (2,3) circle (2pt) node[anchor=south]{$m_1$};
+    \filldraw[red] (4,4) circle (2pt) node[anchor=east]{$m_2$};
+
+    \draw[black, ->] (2,3) -- (4,4) node[anchor=west]{$\vec r_2 - \vec r_1$};
+    \draw[black, ->] (0,0) -- (2,3) node[anchor=north]{$\vec r_1$};
+    \draw[black, ->] (0,0) -- (4,4) node[anchor=north]{$\vec r_2$};
+
+  \end{tikzpicture}
+\end{center}
+
+We have that the gravitational force is given by
+
+$$
+  \vec F = G \frac{ m_1 m_2}{|\vec r_2 - \vec r_1|^2} \hat r
+$$
+
+Note that if we put $F = ma$ we get that the acceleration for $m_1$ is
+
+$$
+  \vec a = G \frac{m_2}{|\vec r_2 - \vec r_1|^2} \hat r
+$$
+
+If we are on the surface of the Earth we can use the approximation $|\vec r_2 - \vec r_1| \approx R$, since the position on the planet is negligible compared to the radius of the planet.
+
+Then we get that the acceleration of any object on the surface of Earth is
+
+$$
+  \vec a = - G \frac{M}{R^2} = g \approx \SI{9.81}{\meter \per \second \squared}
+$$
+
+\subsection{Examples}
+
+\subsubsection{Example 1}
+
+Consider the very basic case of a still box of mass $m$ on a table.
+
+We have two forces acting on the box: the gravitational force (pulling the box down) and the normal force (keeping the box on the table).
+
+$$
+  \vec N = - m \vec g
+$$
+
+\subsubsection{Example 2}
+
+Consider two boxes one next to the other on a surface with no friction, one of mass $m_1$ and the other of mass $m_2$.
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw[black] (0,0) -- (5,0);
+    \draw[blue] (2,0) rectangle (3,1) node[midway]{$m_1$};
+    \draw[red] (3,0) rectangle (4,3) node[midway]{$m_2$};
+  \end{tikzpicture}
+\end{center}
+
+Intuitively we can just consider the two boxes as a single object of mass $m_1 + m_2$ but we will solve the problem as if we didn't notice this.
+
+For each body we can draw a \textbf{free body diagram}:
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw[blue] (0,0) rectangle (3,3) node[midway]{$m_1$};
+
+    \draw[black, ->] (1.5,0) -- (1.5,-1.5) node[anchor=west]{$-m_1 g$};
+    \draw[black, ->] (1.5,3) -- (1.5,4.5) node[anchor=west]{$\vec N_1$};
+    \draw[black, ->] (-1.5,1.5) -- (0,1.5) node[anchor=east]{$\vec F$};
+    \draw[black, ->] (3,1.5) -- (4.5,1.5) node[anchor=west]{$\vec f_1$};
+  \end{tikzpicture}
+
+
+  \begin{tikzpicture}
+    \draw[red] (0,0) rectangle (3,3) node[midway]{$m_2$};
+
+    \draw[black, ->] (1.5,0) -- (1.5,-1.5) node[anchor=west]{$-m_2 g$};
+    \draw[black, ->] (1.5,3) -- (1.5,4.5) node[anchor=west]{$\vec N_2$};
+    \draw[black, ->] (-1.5,1.5) -- (0,1.5) node[anchor=east]{$-\vec f$};
+  \end{tikzpicture}
+\end{center}
+
+We know that the normal forces are equal and opposite to the gravitational forces, and since there are no other forces acting in those directions we can cancel them out.
+
+Now we focus on the horizontal direction.
+We write the second law for each box:
+
+\begin{align*}
+  m_1 a_1 & = F - f \\
+  m_2 a_2 & = f
+\end{align*}
+
+and
+
+$$
+  (m_1 + m_2) a = F
+$$
+
+\subsubsection{Example 3}
+
+Consider two boxes connected by a rope.
+We can define \textbf{tension} as the force exerted by the rope on the boxes.
+By the third law we have that the tension is the same for both boxes.
 
 \end{document}

@@ -1,4 +1,4 @@
-\documentclass[10pt]{extarticle}
+\documentclass[14pt]{extarticle}
 \title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
 
@@ -281,7 +281,10 @@ $$
 However if we keep expanding the recursion we will see that eventually we get to $T(1)$ which is $O(1)$
 and we are left with $n$-many $O(n)$ terms, hence the time complexity of this algorithm is also $O(n^2)$.
 
-\section{Class of 09/02/2024}
+\section{Class of 09/02/2024 - Divide and Conquer}
+
+In this class we will see a class of algorithm that
+split the problem in smaller sub-problems which are easier to compute and then combine the results.
 
 \subsection{Karatsuba's algorithm}
 
@@ -338,6 +341,9 @@ hence proving that the algorithm is $O(n^{\log_{2}3}) \sim O(n^{1.58})$.
 
 \subsection{The master theorem}
 
+This theorem helps us to compute the time complexity of divide and conquer algorithms.
+The proof of the theorem is quite complex and, despite being written here, it is not as important as understanding the statement.
+
 \underline{Statement}: If $a > 0, b > 1, d \ge 0$, $n$ is a power of $b$, and
 $T(n)$ is defined by induction as
 \begin{align*}
@@ -379,7 +385,10 @@ Then
         \end{tabular}
     \end{center}
 
-    To find the total work we need to evaluate the following sum
+    with $k = \log_b n$.
+
+    To find the total work we need to sum all the total work at each step.
+    With some algebra we can show that the total work is
     $$
         Cn^d\left(1+\left(\frac{a}{b^d}\right)+\left(\frac{a}{b^d}\right)^2+\dots+\left(\frac{a}{b^d}\right)^k\right)
     $$
@@ -697,11 +706,18 @@ In this section we will look at algorithms to explore a graph.
 We setup the algorithm like this:
 
 \begin{minted}{python}
+    # These are the variables we will be using:
     clock = 1
-    for v in V:
-        visited[v] = False
-        pre[v] = None  # time of first visit of `v`
-        post[v] = None # time of last visit of `v`
+    visited = {}
+    pre = {}
+    post = {}
+
+    def setup(G):
+        clock = 1
+        for v in G.vertices():
+            visited[v] = False
+            pre[v] = None  # time of first visit of `v`
+            post[v] = None # time of last visit of `v`
 \end{minted}
 
 The actual algorithm is as follows:
@@ -711,7 +727,7 @@ The actual algorithm is as follows:
         visited[v] = True
         pre[v] = clock
         clock += 1
-        for (u, v) in edges(v):
+        for (u, v) in v.edges():
             if not visited[u]:
                 explore(G, u)
         post[v] = clock
@@ -720,6 +736,124 @@ The actual algorithm is as follows:
 
 Then we call \texttt{explore} on any vertex of $G$ and let the function traverse the graph.
 
+\section{Class of 14/02/2024}
 
+\subsection{Depth First Search (DFS) - continued}
+
+We can now state the algorithm formally:
+
+\underline{Statement}: Let $G = (V, E)$ be a graph and $v \in V$.
+The algorithm \texttt{explore(G, v)} visits all the vertices of $G$ that are reachable from $v$.
+
+This is equivalent to
+
+\underline{Statement}: $v$ can reach $u$ $\iff$ \texttt{visited[u]} is \texttt{True} after completing \texttt{explore(G, v)}.
+
+\begin{proof}
+    We prove each implication separately:
+
+    \begin{description}
+        \item[$\impliedby$] Since we started from \texttt{visited} containing only \texttt{False} values,
+            the only way \texttt{visited[u]} can be \texttt{True} is if $u$ was part of the exploration of some other node $w$.
+            If $W = v$ we are done, otherwise we can repeat the argument for $w$.
+            We know this procedure will terminate since the graph is finite.
+        \item[$\implies$] We prove this by contradiction.
+            Suppose that $u$ is reachable from $v$ and that there is a run of \texttt{explore} that misses $u$.
+            Since $u$ is reachable from $v$ there is a path from $v$ to $u$.
+            Let $w$ be the first vertex on this path that is not visited by the run of \texttt{explore} and let $z$ be the vertex that precedes $w$.
+            This is a contradiction, by the way the algorithm is defined, since $w$ is a neighbor of $z$ and it is not visited we visit it.
+    \end{description}
+\end{proof}
+
+By the definition of the algorithm we have that it doesn't work if we have a graph with more than 1 connected component.
+
+We can complete the algorithm to take care of this case too:
+
+\begin{minted}{python}
+    def DFS(G):
+        # Setup
+        clock = 1
+        visited = {}
+        pre = {}
+        post = {}
+
+        for v in G.vertices():
+            visited[v] = False
+            pre[v] = None
+            post[v] = None
+
+        # Run the algorithm for all nodes.
+        # This will actually call `explore` just once
+        # per connected component.
+        for v in G.vertices():
+            if not visited[v]:
+                explore(G, v)
+
+\end{minted}
+
+\subsubsection{Time comlexity}
+
+We have that the setup part is $O(|V|)$, since we are looping through all nodes.
+
+For the actual \texttt{explore} part we have at least $O(|V|)$ since for each node we have to set \texttt{visited} to \texttt{True},
+but we have to take in account the time to visit all the edges of the graph:
+each edge is visited exactly twice.
+
+Combining the two parts we have that the time complexity of the algorithm is $O(|V| + |E|)$.
+
+\subsubsection{About the pre and post variables}
+
+\underline{Remark}: For every node $v$ we have that \texttt{pre[v]} $<$ \texttt{post[v]}.
+
+\begin{proof}
+    This is obvious from the definition of the algorithm.
+\end{proof}
+
+\underline{Theorem}: For every node $v$ and $u$, the intervals $[\text{pre}(v), \text{post}(v)]$ and $[\text{pre}(u), \text{post}(u)]$ are either disjoint or one is contained in the other.
+
+\begin{proof}
+    We have two cases:
+    \begin{enumerate}
+        \item $\text{pre}(v) < \text{post}(u)$, hence $\text{pre}(u) < \text{pre}(v) < \text{post}(u)$. This means that $v$ is a descendant of $u$, thus the exploration of $v$ must have ended before the exploration of $u$.
+              We have that $\text{pre}(u) < \text{pre}(v) < \text{pre}(u) < \text{post}(v)$, hence the intervals are contained in one another.
+        \item $\text{pre}(u) > \text{post}(v)$, hence $\text{pre}(u) < \text{post}(u) < \text{pre}(v) < \text{post}(v)$ and the intervals are disjoint.
+    \end{enumerate}
+\end{proof}
+
+\subsubsection{Counting connected components}
+
+We can modify the algorithm to count the number of connected components in the graph.
+
+\begin{minted}{python}
+    def DFS(G):
+        clock = 1
+        visited = {}
+        pre = {}
+        post = {}
+        cc = {}
+
+        for v in G.vertices():
+            visited[v] = False
+            pre[v] = None
+            post[v] = None
+            cc[v] = None
+
+        connected_component = 0
+
+        for v in G.vertices():
+            if not visited[v]:
+                connected_component += 1
+                explore(G, v)
+
+
+    def explore(G, v):
+        cc[v] = connected_component
+        # Snip
+
+
+
+\end{minted}
+
+In this way, at the end of the procedure the variable \texttt{connected\_component} will contain the number of connected components in the graph.
 
 \end{document}

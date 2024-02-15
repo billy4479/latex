@@ -1,6 +1,7 @@
-\documentclass[14pt]{extarticle}
+\documentclass[10pt]{extarticle}
 \title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
+\date{Semester 2, 2023/2024}
 
 \usepackage{amsfonts}
 \usepackage{amsthm}
@@ -736,9 +737,9 @@ The actual algorithm is as follows:
 
 Then we call \texttt{explore} on any vertex of $G$ and let the function traverse the graph.
 
-\section{Class of 14/02/2024}
+\section{Class of 14/02/2024 - DFS continued}
 
-\subsection{Depth First Search (DFS) - continued}
+\subsection{Formal statement}
 
 We can now state the algorithm formally:
 
@@ -791,7 +792,7 @@ We can complete the algorithm to take care of this case too:
 
 \end{minted}
 
-\subsubsection{Time comlexity}
+\subsection{Time comlexity}
 
 We have that the setup part is $O(|V|)$, since we are looping through all nodes.
 
@@ -801,7 +802,7 @@ each edge is visited exactly twice.
 
 Combining the two parts we have that the time complexity of the algorithm is $O(|V| + |E|)$.
 
-\subsubsection{About the pre and post variables}
+\subsection{About the pre and post variables}
 
 \underline{Remark}: For every node $v$ we have that \texttt{pre[v]} $<$ \texttt{post[v]}.
 
@@ -820,7 +821,7 @@ Combining the two parts we have that the time complexity of the algorithm is $O(
     \end{enumerate}
 \end{proof}
 
-\subsubsection{Counting connected components}
+\subsection{Counting connected components}
 
 We can modify the algorithm to count the number of connected components in the graph.
 
@@ -848,12 +849,172 @@ We can modify the algorithm to count the number of connected components in the g
 
     def explore(G, v):
         cc[v] = connected_component
-        # Snip
-
+        # The rest of the algorithm is the same
 
 
 \end{minted}
 
-In this way, at the end of the procedure the variable \texttt{connected\_component} will contain the number of connected components in the graph.
+In this way, at the end of the procedure the variable \texttt{connected\_component} will contain the number of connected components in the graph
+and the variable \texttt{cc} will contain the connected component of each node.
+
+\section{Class of 15/02/2024 - DFS continued}
+
+\subsection{DFS-Tree}
+
+We can introduce a new variable, initialized as
+
+\begin{minted}{python}
+    parent = {}
+    for v in G.vertices():
+        parent[v] = None
+\end{minted}
+
+When exploring the graph we set this variable to the node that called the current one.
+In this way we can build a tree that represents the exploration of the graph.
+
+\subsection{Directed graphs}
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (-2, 0) {B};
+        \node[draw, circle] (C) at (2, 0) {C};
+        \node[draw, circle] (D) at (2, -2) {D};
+        \node[draw, circle] (E) at (-2, -2) {E};
+        \node[draw, circle] (F) at (0, -2) {F};
+        \node[draw, circle] (G) at (0, -4) {G};
+        \node[draw, circle] (H) at (2, -4) {H};
+
+        \draw[->, very thick] (A) -- (B);
+        \draw[->, very thick] (A) -- (C);
+        \draw[->, very thick] (C) -- (D);
+        \draw[->, very thick] (D) -- (A);
+        \draw[->, very thick] (A) -- (F);
+        \draw[->, very thick] (B) -- (E);
+        \draw[->, very thick] (E) -- (F);
+        \draw[->, very thick] (E) -- (G);
+        \draw[->, very thick] (E) -- (H);
+        \draw[->, very thick] (D) -- (H);
+        \draw[->, very thick] (F) -- (G);
+        \draw[->, very thick] (H) -- (G);
+    \end{tikzpicture}
+    \captionof{figure}{An example of a directed graph} \label{fig:directedgraph}
+\end{center}
+
+By looking at the graph in (\ref{fig:directedgraph}) and performing a DFS in our head we can see that, starting from $A$, we can reach all the other nodes.
+We also note that this is not true for every node, for example $G$ cannot reach any other node.
+
+If we construct the DFS tree of this graph starting from $A$ and breaking ties in alphabetical order we get the following tree:
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (-2, -2) {B};
+        \node[draw, circle] (C) at (2, -2) {C};
+        \node[draw, circle] (D) at (2, -4) {D};
+        \node[draw, circle] (E) at (-2, -4) {E};
+        \node[draw, circle] (F) at (-1, -6) {F};
+        \node[draw, circle] (G) at (-1, -8) {G};
+        \node[draw, circle] (H) at (-3, -6) {H};
+
+        \draw[->, very thick] (A) -- (B);
+        \draw[->, very thick] (A) -- (C);
+        \draw[->, very thick] (C) -- (D);
+        \draw[->, very thick] (B) -- (E);
+        \draw[->, very thick] (E) -- (F);
+        \draw[->, very thick] (F) -- (G);
+        \draw[->, very thick] (E) -- (H);
+    \end{tikzpicture}
+    \captionof{figure}{The DFS tree of the graph in (\ref{fig:directedgraph})} \label{fig:dfs-tree}
+\end{center}
+
+We can define the following for DFS trees:
+
+\begin{description}
+    \item[Forward edge] an edge of the original graph that goes from a node to one of its descendants in the DFS tree.
+    \item[Back edge] an edge of the original graph that goes from a node to one of its ancestors in the DFS tree.
+    \item[Cross edge] an edge of the original graph that goes from a node to a node that is neither an ancestor nor a descendant.
+\end{description}
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (-2, -2) {B};
+        \node[draw, circle] (C) at (2, -2) {C};
+        \node[draw, circle] (D) at (2, -4) {D};
+        \node[draw, circle] (E) at (-2, -4) {E};
+        \node[draw, circle] (F) at (-1, -6) {F};
+        \node[draw, circle] (G) at (-1, -8) {G};
+        \node[draw, circle] (H) at (-3, -6) {H};
+
+        \draw[->, very thick] (A) -- (B);
+        \draw[->, very thick] (A) -- (C);
+        \draw[->, very thick] (C) -- (D);
+        \draw[->, very thick] (B) -- (E);
+        \draw[->, very thick] (E) -- (F);
+        \draw[->, very thick] (F) -- (G);
+        \draw[->, very thick] (E) -- (H);
+
+        % Back edges
+        \draw[->, very thick, blue] (D) to [bend left] (A);
+        \draw[->, very thick, blue] (F) to [bend right] (B);
+
+        % Forward edges
+        \draw[->, very thick, red] (A) to [bend left] (F);
+        \draw[->, very thick, red] (E) to [bend right] (G);
+
+        % Cross edges
+        \draw[->, very thick, green] (D) to (H);
+        \draw[->, very thick, green] (H) to [bend right] (G);
+
+    \end{tikzpicture}
+    \captionof{figure}{The DFS tree of the graph in (\ref{fig:directedgraph}) with forward (red), back (blue), and cross edges (green)} \label{fig:dfs-tree-fbg}
+\end{center}
+
+We note that if we consider the pre and post variable for each node as an \say{interval},
+we can see that nodes connected with a forward edge have the interval of the children contained into the interval of the parent,
+nodes connected with a back edge have the interval of the parent contained in the interval of the children,
+and nodes connected with a cross edge have disjoint intervals.
+
+\subsection{Theorems about edges}
+
+\subsubsection{Edges in undirected graphs}
+
+\underline{Statement}: In a DFS of an undirected graph, every edge is either a tree edge or a back edge.
+
+\begin{proof}
+    Let $\{u, v\}$ be an edge of $G$ and suppose that $\text{pre}(u) < \text{pre}(v)$, hence $u$ is discovered before $v$.
+
+    We have two cases:
+
+    \begin{itemize}
+        \item If the first time the search explores $\{u, v\}$ is in the direction from $u$ to $v$ then $v$ is undiscovered until that time.
+              Then the edge $\{u, v\}$ is a tree edge.
+        \item If the first time the search explores $\{u, v\}$ is in the direction from $v$ to $u$ then $v$ is already discovered.
+              Then the edge $\{u, v\}$ is a back edge.
+    \end{itemize}
+\end{proof}
+
+\subsubsection{Cycles and back edges}
+
+\underline{Statement}: A directed graph has a cycle $\iff$ a DFS of the graph has at least one back edge.
+
+\begin{proof}
+    We prove each implication separately:
+
+    \begin{description}
+        \item[$\impliedby$] If $(u, v)$ is a back edge then there is a cycle consisting of the edge $(u, v)$ and the path from $v$ to $u$ in the DFS tree. We know such path exists since to have a back edge we have to get to $v$ with $u$ already being discovered.
+        \item[$\implies$] If $G$ has a cycle, then we can write it as $v_0 \to v_1 \to \dots \to v_k \to v_0$.
+            Let $v_i$ be the first vertex in the cycle that is discovered.
+            When we enter the cycle all the other nodes of the cycle are undiscovered since $v_i$ is the first one by definition. Since DFS visits all the \say{legal} edges the algorithm will visit all edges of the cycle, hence eventually it will reach the edge $(v_{i-1}, v_i)$, which is a back edge.
+    \end{description}
+\end{proof}
+
+\subsection{Topological Sort}
+
+\underline{Definition}: If $G = (V, E)$ is a directed graph we say that an ordered list $L$ of the vertices in $V$ is a \textbf{topological sort} of $G$ if for every edge $(u, v) \in E$, the vertex $u$ comes before $v$ in $L$.
+
+\underline{Example}: Consider the graph in Figure (\ref{fig:directedgraph}). A topological sort of this graph is $[A, C, D, B, E, F, H, G]$.
+Note that topological sorts are not unique.
 
 \end{document}

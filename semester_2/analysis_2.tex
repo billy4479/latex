@@ -1,0 +1,217 @@
+\documentclass[14pt]{extarticle}
+\title{Analysis 2 Notes}
+\author{Giacomo Ellero}
+\date{Semester 2, 2023/2024}
+
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{dirtytalk}
+\usepackage{parskip}
+\usepackage{mathrsfs}
+\usepackage[many]{tcolorbox}
+\usepackage{xparse}
+\usepackage[a4paper,margin=1.5cm]{geometry}
+\usepackage{bookmark}
+\usepackage{physics}
+\usepackage{tikz}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newenvironment{absolutelynopagebreak}
+  {\par\nobreak\vfil\penalty0\vfilneg
+   \vtop\bgroup}
+  {\par\xdef\tpd{\the\prevdepth}\egroup
+   \prevdepth=\tpd}
+
+\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{notebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
+   
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Class of 12/02/2024}
+
+In this class we will discuss mainly multivariable calculus:
+\begin{itemize}
+    \item Parametric curves: $\R \to \R^d$.
+    \item Graphs: $\R^2 \to \R$.
+    \item Vector fields: $\R^d \to \R^d$.
+\end{itemize}
+
+And in general we will discuss functions $f: \R^d \to \R^p$.
+
+$\R^d$ is a vector space, like the ones we have seen in linear algebra, so many notions carry over.
+
+\subsection{Dot product and distance}
+
+\underline{Definition}: Let $x, y \in \R^d$. The dot product of $x$ and $y$ is defined as
+
+$$
+    \underline{x} \cdot \underline{y} = \sum_{i=1}^d x_i y_i
+$$
+
+We have seen dot products (inner products) in linear algebra but we will see some of their proprieties again:
+\begin{enumerate}
+    \item $\underline{x} \cdot \underline{y} = \underline{y} \cdot \underline{x}$.
+    \item $\underline{x} \cdot (\underline{y} + \underline{z}) = \underline{x} \cdot \underline{y} + \underline{x} \cdot \underline{z}$.
+    \item $\underline{x} \cdot \underline{x} \geq 0$ and $\underline{x} \cdot \underline{x} = 0 \iff \underline{x} = \underline{0}$.
+\end{enumerate}
+
+% TODO: add previous classes
+
+\section{Class of 16/02/2024}
+
+\subsection{Parametrizing ellipses}
+
+Last class we saw how to parametrize lines and circles, now we will have a look at ellipses.
+
+An ellipse is defined by the parametrization
+
+\[
+    \begin{cases}
+        x = a \cos t \\
+        y = b \sin t
+    \end{cases}
+\]
+
+where $a$ and $b$ are the semi-axes of the ellipse. Note that if $a = b$ we get a circle of radius $a$.
+
+For the equation we have
+
+$$
+    \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1
+$$
+
+The ellipse is the image of the unit circle by tge linear transformation $\begin{pmatrix}
+        x \\ y
+    \end{pmatrix} \to \begin{pmatrix}
+        ax \\ by
+    \end{pmatrix}$.
+
+\subsubsection{Applying transformations to curves}
+
+Consider curve $\gamma_1$ which we want to rotate by an angle $\theta$ to obtain $\gamma_2$.
+
+Remember the rotation matrix
+
+$$
+    R(\theta) = \begin{pmatrix}
+        \cos \theta & -\sin \theta \\
+        \sin \theta & \cos \theta
+    \end{pmatrix}
+$$
+
+For the parametrization is quite easy since we just need to multiply the vector by the rotation matrix.
+
+$$
+    \begin{pmatrix}
+        x \\ y
+    \end{pmatrix} = \begin{pmatrix}
+        \cos \theta & -\sin \theta \\
+        \sin \theta & \cos \theta
+    \end{pmatrix} \begin{pmatrix}
+        f(t) \\ g(t)
+    \end{pmatrix}
+$$
+
+Getting the equation is a bit trickier.
+We have to invert the transformation matrix:
+consider a point $(x, y)$ on $\gamma_2$, we have that $(x, y) = R(\theta) (x', y')$, hence $(x', y') \in \gamma_1 = R(-\theta) (x, y)$.
+We have that $(x,y) \in \gamma_2 \iff R(-\theta)(x, y) \in \gamma_1$.
+Now we have $(x', y')$ in terms of $(x, y)$ and we can plug the result of the reverse transformation into the equation of $\gamma_1$.
+
+\subsection{Cylinders}
+
+Let $(x, y, z) \in \R^3$. We have that $\sqrt{x^2 + y^2 + z^2}$ is the distance from the origin and $\sqrt{x^2 + y^2}$ is the distance to the $Oz$ axis.
+
+The equation of a cylinder is
+
+$$
+    \left\{ (x, y, z) \in \R^3  : x^2 + y^2 = r^2\right\}
+$$
+
+we are basically saying that the distance from the $Oz$ axis is constant and is equal to $r$.
+
+\subsection{Cones}
+
+The way we describe cones is by saying that if we slice the cone at altitude $z$ we will have a circle of radius $z$ and center at $(0,0,z)$.
+
+So we want $\sqrt{x^2 + y^2} = |z|$, hence
+
+$$
+    \left\{ (x, y, z) \in \R^3 : x^2 + y^2 = z^2 \right\}
+$$
+
+\subsubsection{Variations of the cone}
+
+We can consider the following variations
+
+$$
+    x^2 + y^2 = z^2 + 1 \\
+    x^2 + y^2 = z^2 - 1
+$$
+
+In the first one we have that at $z=0$ we have a circle of radius 1, in the second one we have that at $z=0$ we have a circle of radius $-1$ which is not possible, hence the second equation only gets to $z = \pm 1$.
+
+These type of surfaces are called hyperboloids of revolution.
+
+% TODO: Add the drawings
+
+\subsection{Parametric curves}
+
+We can now give a formal definition of a parametric curve.
+
+\underline{Definition}: A parametric curve $\gamma$ is a function of $t \in I \subseteq \R$ and valued in $\R^d$.
+
+$$
+    \gamma(t) = \begin{pmatrix}
+        \gamma_1(t) \\
+        \vdots      \\
+        \gamma_d(t)
+    \end{pmatrix} \in \R^d
+$$
+
+where $\gamma_1, \ldots, \gamma_d$ are the coordinate functions defined as $\gamma_i: I \to \R$.
+
+Parametric curves are basically the description of the motion of a point in space as a function of time.
+
+\underline{Definition}: The \textbf{domain of definition} of $\gamma$ is the intersection of the domains of the coordinate functions.
+
+\subsubsection{How to represent a curve}
+
+There are many ways to represent a curve, for example we could graph the individual coordinate functions but this is not very representative of the curve itself.
+
+We can try to use a graph to represent a curve $\gamma$:
+
+\underline{Definition}: The \textbf{graph} of $\gamma$ is the subset of $\R^{d+1}$ made of points
+$$
+    (t, \gamma(t)) = (t, \gamma_1(t), \ldots, \gamma_d(t))
+$$
+for $t \in I$.
+
+The graphs contains all the information about the curve, but it is not very practical to use because of its complexity.
+
+\underline{Definition}: The \textbf{image} of $\gamma$ is the subset of $\R^d$ made of points $\gamma(t)$ for $t \in I$.
+
+The image is basically the graphs seen from the $x$ axis.
+
+This representation is quite practical but we are losing some information about the parameter $t$, this is mostly ok though.
+
+Note that different curves will always have different graphs but might have the same image.
+
+\underline{Remark}: Every graph is the image of some function in $\R^{d+1}$, but not all images are graphs of some function in $\R^{d-1}$.
+
+\end{document}

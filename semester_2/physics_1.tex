@@ -761,4 +761,175 @@ Consider two boxes connected by a rope.
 We can define \textbf{tension} as the force exerted by the rope on the boxes.
 By the third law we have that the tension is the same for both boxes.
 
+\section{Class of 15/02/2024}
+
+\subsection{Equivalence principle}
+
+We have two different kind of masses: the \textbf{inertial mass} and the \textbf{gravitational mass}.
+
+The first one is the mass that appears in the second law, the second one is the mass that appears in the gravitational force.
+
+The equivalence principle (proposed by Einstein) states that the two masses are the same.
+
+\subsubsection{Example: elevator}
+
+Consider an elevator which is accelerating upwards with an acceleration $a$.
+
+We have that
+
+$$
+  N - m g = m a
+$$
+
+Where $N$ is the normal force. We get that $N = m(a + g)$
+
+(Note that we are ignoring tidal forces.)
+
+This principle says that there is no way to distinguish between the two forces, in the example we see how we cannot know if the elevator is accelerating or if the gravitational force is stronger.
+
+\subsection{Harmonic oscillator}
+
+Consider a mass $m$ attached to a spring with spring constant $k$. Let $\Delta x$ be the displacement from the equilibrium position $x_0$. For simplicity we will consider a system with origin in $x_0$. Suppose there is no gravity and no friction.
+
+From the equation of motion we have that
+
+$$
+  m a_x = m \dv[2]{t}x(t) = F(t) = - k x(t)
+$$
+
+We need to solve the differential equation
+
+$$
+  \dv[2]{t}x(t) = - \frac{k}{m} x(t)
+$$
+
+\subsubsection{Solving the differential equation}
+
+To solve this we have to find a function that is its own second derivative but with the sign changed.
+
+We can work on the function $e^t$ since it is similar to the result we want to get. We can obtain the minus sign by introducing the imaginary unit $i$.
+
+$$
+  \dv[2]{t}e^{i t} = - e^{i t}
+$$
+
+Although this would work we have the problem of the dimension of time: when we do a taylor expansion of a $e^t$ we get a number that has dimension $[T] + [T]^2 + \dots$ which is not what we want.
+
+To get rid of the dimension of $t$ we introduce a coefficient $\omega$ with dimension $[T]^{-1}$.
+
+$$
+  \dv[2]{t}e^{i \omega t} = - \omega^2 e^{i \omega t}
+$$
+
+From complex analysis we know Euler's formula:
+
+$$
+  e^{i \omega t} = \cos (\omega t) + i \sin (\omega t)
+$$
+
+Now, since we are doing physics here, we want to get rid of the imaginary unit.
+
+We notice that both $\cos(\omega t)$ and $\sin(\omega t)$ solves the equation. When we solve differential equations (we know ?) that the general solution is a linear combination of 2 particular solutions.
+
+$$
+  x(t) = A \cos(\omega t) + B \sin(\omega t)
+$$
+
+Now we reparametrize the function:
+
+\begin{align*}
+  A & = R \cos(\gamma) \\
+  B & = R \sin(\gamma)
+\end{align*}
+
+We can write the function as
+
+\begin{align*}
+  x(t) & = R \cos(\gamma) \cos(\omega t) + R \sin(\gamma) \sin(\omega t)              \\
+       & = R \left( \cos(\gamma) \cos(\omega t) + \sin(\gamma) \sin(\omega t) \right) \\
+       & = R \cos(\omega t - \gamma)
+\end{align*}
+
+\subsubsection{Fixing the constants}
+
+We know that $\omega^2 = \frac{k}{m} \implies \omega = \pm \sqrt{\frac{k}{m}}$.
+
+Now we have to fix the constants $R$ and $\gamma$ and to do so we will use the initial conditions of the system.
+
+\begin{align*}
+  x(0) & = x_0 = R \cos(\gamma)        \\
+  v(0) & = v_0 = R \omega \sin(\gamma)
+\end{align*}
+
+We obtain these results by setting $t = 0$ in the function and in its derivative and exploiting the fact that sine is an even function.
+
+\subsection{Friction}
+
+Friction is quite a complex force that depends on many complex factors. For the purpose of this course we will consider a simple model of friction which describes well enough the behavior we see in real life.
+
+The first thing we notice is that the friction depends on the two surfaces in contact, we will model this through a coefficient $\mu$.
+
+Moreover we see how if we push a mass with a force $F$ the friction will keep the mass still until the force is greater than a certain value, after that threshold the mass will start moving.
+We call this value $f_{\text{max}}$ and say that $\norm{f} \leq f_{\text{max}}$.
+
+We also notice that the friction is proportional to the normal force. Combining all the above we get that
+
+$$
+  f = \mu N
+$$
+
+The direction of this force is opposite to the direction of the force that is trying to move the mass.
+
+Moreover the coefficient $\mu$ changes if the mass is moving or not: if the mass is still we use the static coefficient of friction $\mu_s$, if the mass is moving we use the kinetic coefficient of friction $\mu_k$.
+
+\subsubsection{Example: Inclined plane}
+
+\begin{center}
+  \begin{tikzpicture}
+    \draw[black] (0,3) -- (5,0);
+    \draw[black] (0,0) -- (5,0) node[midway, below]{$b$};
+    \draw[black] (0,0) -- (0,3) node[midway, left]{$h$};
+
+    % \draw[blue, rotate=60] (5,1) rectangle (7,2) node[midway]{$m$};
+    % TODO: finish the drawing
+  \end{tikzpicture}
+\end{center}
+
+Consider a mass $m$ on an inclined plane with angle $\theta$.
+
+We have that $\theta = \arctan\left(\frac{h}{b}\right)$.
+
+The gravitational force is always pointing towards $-\hat j$, hence it will try to pull the mass down the plane.
+
+Since the plane is inclined we need to find the two components of the gravitational force in order to find which one is causing the body to move and which one is creating a normal force.
+
+The friction force, then, will be pointing in the opposite direction of motion, hence the opposite direction of the component of the gravitational force that is causing the motion.
+
+We will consider as frame of reference the one that is parallel $\hat u_{\parallel}$ and perpendicular $\hat u_{\perp}$ to the plane.
+
+Consider the forces along each direction:
+
+\begin{itemize}
+  \item $\hat u_{\parallel}$:
+        Here we have the gravitational force $F_{g\parallel} = mg \sin \theta$ and the friction $f = \mu N$
+  \item $\hat u_{\perp}$: Here we have the normal force $N$ and the gravitational force $F_{g\perp} = mg \cos \theta = - N$
+\end{itemize}
+
+The body will start moving only after $F_{g\parallel} > f$. Thus
+
+\begin{align*}
+  F_{g\parallel} & < f       \\
+  mg \sin \theta & < \mu_s N
+\end{align*}
+
+We call $\theta_c$ ($\theta$ critical) the angle at which the body starts moving. We can calculate it as follows:
+
+\begin{align*}
+  mg \sin \theta_c & = \mu_s N                \\
+  mg \sin \theta_c & = \mu_s mg \cos \theta_c \\
+  \tan \theta_c    & = \mu_s
+\end{align*}
+
+This is very important because in this way we have a way to measure the coefficient of friction.
+
 \end{document}

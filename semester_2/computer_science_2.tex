@@ -1,4 +1,4 @@
-\documentclass[10pt]{extarticle}
+\documentclass[14pt]{extarticle}
 \title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
 \date{Semester 2, 2023/2024}
@@ -1016,5 +1016,187 @@ and nodes connected with a cross edge have disjoint intervals.
 
 \underline{Example}: Consider the graph in Figure (\ref{fig:directedgraph}). A topological sort of this graph is $[A, C, D, B, E, F, H, G]$.
 Note that topological sorts are not unique.
+
+\section{Class of 16/02/2024 - Topological sort continued}
+
+\subsection{Cycles and topological sorts}
+
+\subsubsection{Theorem: cycle implies no topological sort}
+
+\underline{Statement}: If a directed graph has a cycle then it has no topological sorts.
+
+\begin{proof}
+    By contradiction, we assume that $G$ has a topological sort $L$.
+    Let $v_0, v_1, \dots, v_k$ be the cycle in $G$.
+    Every node $v_i$ in the cycle has a predecessor $u$, such that $(v_i, u) \in E$.
+    Let $\overline{v}$ be the first node in the cycle that is in $L$.
+    Since $\overline {u}$ is a predecessor of $\overline{v}$, $\overline{u}$ comes before $\overline{v}$ in $L$,
+    but this is a contradiction since $\overline{v}$ comes before $\overline{u}$ in the cycle.
+\end{proof}
+
+\subsubsection{Lemma: incoming edges and cycles}
+
+\underline{Statement}: If $G = (V, E)$ is a directed graph in which every vertex has at least one incoming edge, then $G$ has at least one cycle.
+
+\begin{proof}
+    Take any vertex $v$ in $V$ and call it $v_{n+1}$, where $n = |V|$.
+
+    Since every vertex has at least one incoming edge, there exists a vertex $v_n$ such that $(x, v_{n+1}) \in E$.
+
+    We repeat this process until we reach a vertex $v_1$, which will have an outgoing edge to some other vertex $\overline{v}$ that we have already visited.
+\end{proof}
+
+\subsubsection{Theorem: no cycle implies topological sort}
+
+\underline{Statement}: If a directed graph $G$ doesn't contain a cycle,
+then it has at least one topological sort.
+
+\begin{proof}
+    We will prove this by constructing an algorithm that will find a topological sort of $G$.
+
+    \begin{minted}{python}
+        def find_topological_sort(G):
+            L = []
+            V = G.vertices()
+            E = G.edges()
+            while len(V) > 0:
+                v = V.get_vertex_with_no_incoming_edges()
+                L.append(v)
+                V.remove(v)
+                E.remove_all_edges_from(v)
+            return L
+    \end{minted}
+
+    The idea is that if a vertex has no incoming edges then it is correct to append it to the list.
+
+    This algorithm will work since we will always be able to get a vertex with no incoming edges since, if we couldn't, we would have a cycle (by the lemma above).
+
+\end{proof}
+
+\subsection{Topological sorts from DFS}
+
+\subsubsection{Theorem: DFS and topological sorts in DAGs}
+
+Consider the following the following algorithm:
+
+\begin{minted}{python}
+    visited = {}
+    L = []
+
+    def explore(G,v):
+        visited[v] = True
+        for (u, v) in v.edges():
+            if not visited[u]:
+                explore(G, u)
+        L.append(v)
+\end{minted}
+
+We want to prove that the list $L$ will be a topological sort of the graph $G$ by the end of the algorithm.
+
+Now we formally state and prove this.
+
+\underline{Statement}: $G=(V, E)$ is a directed acyclic graph (DAG). If we run the algorithm \texttt{DFS(G)}, then for every edge $(u, v) \in E$, the call to \texttt{explore(G, u)} will end after the call to \texttt{explore(G, v)}.
+
+\begin{proof}
+    We look at the state of the algorithm when the edge $(u, v)$ is explored.
+    The other vertices can be in one of the following states:
+    \begin{enumerate}
+        \item not yet visited
+        \item visited and in \texttt{L}
+        \item visited but not in \texttt{L} because the exploration of the vertex has not ended yet
+    \end{enumerate}
+
+    We note that when we explore $u$, $v$ will be in state 1 or 2, not 3.
+    This is because if $v$ is in state 3 then there exist a path from $v$ to $u$ and we have a cycle, which is a contradiction.
+
+    Now we consider the two possible cases separately:
+    \begin{enumerate}
+        \item Then we are about to explore from $u$. $v$ is a neighbor of $u$ and it is unexplored yet so we will explore it.
+              The exploration of $v$ will end before the exploration of $u$.
+        \item Then the exploration of $v$ has already ended. This means that the exploration of $u$ will end after the exploration of $v$.
+    \end{enumerate}
+
+    In both cases we have our result.
+\end{proof}
+
+This theorem works for any DAG, but not any directed graph is a DAG.
+
+\subsection{Strongly connected components (SCC)}
+
+\subsubsection{Reverse of a graph}
+
+\underline{Definition}: Given a directed graph $G=(V, E)$,
+the \textbf{reverse} of $G$ is the graph $G^R = (V, E^R)$ where $(u, v) \in E^R \iff (v,u) \in E$.
+
+\subsubsection{Theorem: component graphs are DAGs}
+
+Let $G$ be a directed graph, then the \textbf{component graph} $G'$ is obtained by grouping all the vertices of a connected components of $G$.
+
+\underline{Statement}: If $G$ is a directed graph and $G'$ is its component graph, then $G'$ is a directed acyclic graph.
+
+\begin{proof}
+    We prove this by contradiction.
+
+    Suppose that $G'$ has a cycle $C_1, \ldots, C_n$.
+    This means that it is possible for any $v \in C_i$ to reach any $u \in C_{i+1}$.
+    This means that the two components should be merged, which is a contradiction.
+\end{proof}
+
+\subsubsection{Theorem: strongly connected components in the reverse}
+
+\underline{Statement}: Let $G = (V, E)$ be a directed graph and $G^R = (V, E^R)$ its reverse.
+Then the connected components of $G^R$ are the strongly connected components of $G$.
+
+\begin{proof}
+    If we consider $G^R$ we have that the connected components stay connected in the reverse, and they don't get connected to other components since $G'$ is a DAG.
+
+    % TODO: ???? is this formal enough?
+\end{proof}
+
+\subsubsection{Theorem: post numbers in SCCs}
+
+\underline{Statement}: If $C, C'$ are two strongly connected components (SCC) of a directed graph $G$ and there is an edge from a node in $C$ to a node in $C'$, then the highest \texttt{post} number in $C$ is greater than the highest \texttt{post} number in $C'$.
+
+\begin{proof}
+    If DFS visits the component $C$ before $C'$ then all of $C'$ will be visited before we exit $C$.
+
+    If DFS visits $C'$ before $C$ then $C$ will not be visited until we exit $C'$.
+\end{proof}
+
+\subsubsection{Definitions: source and sink}
+
+\underline{Definition}:
+\begin{itemize}
+    \item Source is a vertex with no incoming edges.
+    \item Sink is a vertex with no outgoing edges.
+\end{itemize}
+
+Note that the source will have the highest \texttt{post} number.
+
+Reversing the graph will transform the sources into sinks and vice versa.
+
+\subsubsection{Finding SCCs}
+
+To do so we follow the following algorithm:
+
+\begin{minted}{python}
+    # Consider an explore function that
+    # returns a list of the vertices explored
+
+    def find_SCCs(G):
+        V = G.vertices()
+        SCCs = {}
+        while len(V) > 0:
+            G_R = G.reverse()
+            explored_nodes_of_reverse = explore(G_R, G_R.random_vertex())
+            sink = explored_nodes_of_reverse.get_vertex_with_highest_post()
+
+            # These nodes are all part of the same SCC
+            explored_nodes = explore(G, sink)
+            SCCs.add(explored_nodes)
+            V.remove_all(explored_nodes)
+
+    return SCCs
+\end{minted}
 
 \end{document}

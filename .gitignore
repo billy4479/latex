@@ -1,3 +1,4 @@
 /.direnv
 /semester_*/*
 !/semester_*/*.tex
+!assets

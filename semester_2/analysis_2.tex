@@ -1,4 +1,4 @@
-\documentclass[14pt]{extarticle}
+\documentclass[10pt]{extarticle}
 \title{Analysis 2 Notes}
 \author{Giacomo Ellero}
 \date{Semester 2, 2023/2024}
@@ -18,6 +18,8 @@
 \usepackage{bookmark}
 \usepackage{physics}
 \usepackage{tikz}
+\usepackage{capt-of}
+\usepackage{subfig}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -213,5 +215,203 @@ This representation is quite practical but we are losing some information about 
 Note that different curves will always have different graphs but might have the same image.
 
 \underline{Remark}: Every graph is the image of some function in $\R^{d+1}$, but not all images are graphs of some function in $\R^{d-1}$.
+
+\section{Class of 19/02/2024}
+
+\subsection{Continuity and differentiability for parametric curves}
+
+\textbf{\underline{Definition} (continuity)}: Let $\gamma: t \to (\gamma_1, \gamma_2, \ldots, \gamma_d) \in R^d$ be a parametric curve.
+$\gamma$ is continuous at $t_0 \in I$ if all the functions $\gamma_1, \ldots, \gamma_d$ are continuous at $t_0$.
+
+\textbf{\underline{Definition} (differentiability)}: Let $\gamma: t \to (\gamma_1, \gamma_2, \ldots, \gamma_d) \in R^d$ be a parametric curve.
+$\gamma$ is differentiable at $t_0 \in I$ if all the functions $\gamma_1, \ldots, \gamma_d$ are differentiable at $t_0$.
+We define $\gamma'(t_0) = (\gamma_1'(t_0), \ldots, \gamma_d'(t_0))$.
+
+\textbf{\underline{Definition} (speed)}: Let $\gamma: t \to (\gamma_1, \gamma_2, \ldots, \gamma_d) \in R^d$ be a parametric curve differentiable at $t_0 \in I$.
+Its speed at $t_0$ is $\norm{\gamma'(t_0)}$.
+
+\underline{Example}: consider the unit circle $\gamma(t) = (\cos t, \sin t)$, we have that
+
+$$
+    \gamma'(t) = (-\sin t, \cos t)
+$$
+
+and
+$$
+    \norm{\gamma'(t)} = \sqrt{(-\sin t)^2 + \cos^2 t} = 1
+$$
+
+\textbf{\underline{Definition} (higher order differentiability)}:
+The parametric curve $\gamma$ is $k$ times differentiable at $t_0 \in I$ if all the functions $\gamma_1, \ldots, \gamma_d$ are $k$ times differentiable at $t_0$.
+
+Note that in physics we sometimes use $\dot{o}, \ddot{o}, \ldots$ to denote the derivative of a function with respect to time.
+
+\subsection{Taylor expansion and local behavior}
+
+\textbf{\underline{Definition} (regular point)}:
+If $\gamma: I \to \R^d$ is differentiable at $t_0 \in I$, we say that $t_0$ is a regular point if $\gamma'(t_0) \neq \underline{0}$.
+
+\textbf{\underline{Definition} (tangent line)}:
+If $\gamma$ is differentiable and $t_0$ is a regular point, the tangent to the image of $\gamma$ at $\gamma(t_0)$ is the line passing through $\gamma(t_0)$ and directed by $\gamma'(t_0)$.
+That is
+
+$$
+    h \in R \mapsto \gamma(t_0) + h \gamma'(t_0) \in \R^d
+$$
+
+\subsubsection{Equation of a line}
+
+We can write the equation of a line from a point and a normal vector:
+
+$$
+    \left(
+    \begin{pmatrix}
+            x \\ y
+        \end{pmatrix} - \begin{pmatrix}
+            x_0 \\ y_0
+        \end{pmatrix}
+    \right) \cdot \begin{pmatrix}
+        a \\ b
+    \end{pmatrix} = 0
+$$
+
+where $\begin{pmatrix}
+        a \\ b
+    \end{pmatrix}$ is the normal vector to the line and $\begin{pmatrix}
+        x_0 \\ y_0
+    \end{pmatrix}$ is a point on the line.
+
+
+\underline{Example} (unit circle):
+Consider the tangent on the unit circle. We have that its parametrization is
+$$
+    h \mapsto \begin{pmatrix}
+        \cos t_0 \\ \sin t_0
+    \end{pmatrix} + h \begin{pmatrix}
+        -\sin t_0 \\ \cos t_0
+    \end{pmatrix} =
+    \begin{pmatrix}
+        \cos t_0 - h \sin t_0 \\
+        \sin t_0 + h \cos t_0
+    \end{pmatrix}
+$$
+
+In the case of the unit circle the normal vector is
+
+$$
+    \begin{pmatrix}
+        a \\ b
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        -\cos t_0 \\ -\sin t_0
+    \end{pmatrix}
+    =
+    - \gamma(t_0)
+$$
+
+(Note that this is the case only for the unit circle.)
+
+We have that the equation of the tangent line of the unit circle at $t_0$ is
+
+$$
+    \left(
+    \begin{pmatrix}
+            x \\ y
+        \end{pmatrix} - \begin{pmatrix}
+            \cos t_0 \\ \sin t_0
+        \end{pmatrix}
+    \right)
+    \cdot
+    \begin{pmatrix}
+        -\cos t_0 \\ -\sin t_0
+    \end{pmatrix}
+    = 0
+$$
+
+\underline{Example} ($t_0$ is not a regular point):
+Let $\gamma(t) = (t^2, t^3)$, which is continuous and differentiable.
+Let $t_0 = 0$, we that $\gamma'(t_0) = \underline 0$.
+We have that
+$$
+    \begin{cases}
+        y = x^{3/2}  & \text{ if } t \geq 0 \\
+        y = -x^{3/2} & \text{ if } t \leq 0
+    \end{cases}
+$$
+
+with $x \geq 0$. We see how $\gamma'(t_0)$ exists but is not regular.
+
+We call this an \textbf{ordinary cusp} (formal definition later).
+
+\begin{figure}
+    \centering
+    \subfloat[\centering Image]{{
+                \includegraphics[width=0.35\textwidth]{assets/ordinary_cusp_image.png}
+            }}
+    \subfloat[\centering Graph]{{
+                \includegraphics[width=0.35\textwidth]{assets/ordinary_cusp_graph.png}
+            }}
+    \caption{Ordinary cusp}
+    \label{fig:ordinary_cusp}
+\end{figure}
+
+\subsubsection{Taylor expansion}
+
+\textbf{\underline{Definition} (Taylor expansion)}:
+Let $\gamma: I \to \R^d$ be $k$ times differentiable over $I$.
+Then
+
+$$
+    \gamma(t_0 + h) =
+    \gamma(t_0) +
+    h \gamma'(t_0) +
+    \frac{h^2}{2!} \gamma''(t_0) +
+    \ldots +
+    \frac{h^k}{k!} \gamma^{(k)}(t_0) +
+    o(h^k)
+$$
+
+From this definition we see that the image of $\gamma$ is close to $\gamma (t_0)$ since it is the principal term of the expansion.
+
+Moreover note that the Taylor expansion of order 1 with $\gamma'(t_0) \ne \underline 0$ is
+
+$$
+    \gamma(t_0 + h) = \gamma(t_0) + h \gamma'(t_0) + o(h)
+$$
+
+which is the equation of the tangent line.
+
+\subsubsection{Local behavior}
+
+We can use the Taylor expansion to study the behavior of a curve in the neighborhood of $t_0$.
+
+% TODO: add graphs
+
+\textbf{\underline{Definition} (biregular point)}:
+Let $\gamma: I \to \R^d$ such that $\gamma'(t_0) \ne \underline 0$ and $\gamma''(t_0)$ is linearly independent from $\gamma'(t_0)$.
+Then we say that $t_0$ is a biregular point.
+
+\textbf{\underline{Definition} (inflection point)}:
+$t_0$ is an inflection point if $\gamma'(t_0) \ne \underline 0$ but $\gamma''(t_0)$ is linearly dependent from $\gamma'(t_0)$.
+
+This means that the curve crosses the tangent line at $t_0$.
+
+
+\textbf{\underline{Definition} (ordinary cusp)}:
+$t_0$ is an ordinary cusp if $\gamma'(t_0) = \underline 0$ but $\gamma''(t_0), \gamma'''(t_0)$ are linearly independent.
+
+\begin{figure}
+    \centering
+    \subfloat[\centering Inflection point]{{
+                \includegraphics[width=0.35\textwidth]{assets/inflection_point.png}
+            }}
+    \subfloat[\centering Ordinary cusp]{{
+                \includegraphics[width=0.35\textwidth]{assets/ordinary_cusp.png}
+            }}
+    \caption{Inflection point and ordinary cusp}
+    \label{fig:inflection_point_and_ordinary_cusp}
+\end{figure}
+
 
 \end{document}

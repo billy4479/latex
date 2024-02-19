@@ -562,4 +562,232 @@ For example, if we want to check that $A, B, C$ are mutually independent, we nee
 
 It is not enough to check just the one with the other, we need to check all the possible intersections.
 
+
+\subsection{Conditional independence}
+
+Consider $P(A|B)$. If we fix $B$ we can define a new a function
+$$
+    P(\cdot|B) : A \in \F \mapsto P(A|B)
+$$
+
+We can prove that $P(\cdot|B)$ is a probability measure.
+
+\begin{bluebox}{Definition}
+    Let $(\Omega, \F, P)$ be a probability space and let $A, B, C \in \F$ be events.
+    We say that $A$ and $C$ are (stochastically) \textbf{conditionally independent} given $B$ if and only if
+    $$
+        P(A \cap C|B) = P(A|B) \cdot P(C|B)
+    $$
+\end{bluebox}
+
+\section{Class of 12/02/2024 - Random variables}
+
+Random variables are functions $X: \Omega \to \R$. They are used to describe the outcome of an experiment in a numerical way.
+
+A function to be a random variable needs to be measurable, this means that $(X \leq a) = \{\omega \in \Omega: X(\omega) \leq a\} \in \F \enspace \forall a \in \R$.
+
+\subsubsection{Proprieties of random variables}
+
+We can prove the following properties are equivalent:
+\begin{enumerate}
+    \item $(X \leq a) \in \F \enspace \forall a \in \R$
+    \item $(X < a) \in \F \enspace \forall a \in \R$
+    \item $(X > a) \in \F \enspace \forall a \in \R$
+    \item $(X \geq a) \in \F \enspace \forall a \in \R$
+\end{enumerate}
+
+\begin{proof}
+    We will prove just some of these proprieties, the proof for the others is very similar.
+    \begin{description}
+        \item[$1 \implies 2$] We need to write $(X < a)$ as a union of $(X \leq b)$.
+            We have that
+            $$
+                (X < a) = \bigcup_{n=1}^\infty (X \leq a - \frac{1}{n})
+            $$
+        \item[$2 \implies 1$] We need to write $(X \leq a)$ as a intersection of $(X < b)$.
+            We have that
+            $$
+                (X \leq a) = \bigcap_{n=1}^\infty (X < a + \frac{1}{n})
+            $$
+        \item[$1 \implies 3$] We need to write $(X > a)$ as a complement of $(X \leq b)$.
+            We have that
+            $$
+                (X > a) = (X \leq a)^c
+            $$
+    \end{description}
+\end{proof}
+
+Moreover it is possible eto prove that $\forall B \in \mathcal{B}(\R) \enspace (x \in B) \in \F$
+
+\subsection{Indicator function}
+
+Let $A \in \F$, then the \textbf{indicator function} of $A$ is defined as
+
+$$
+    I_A(\omega) =
+    \begin{cases}
+        1 & \text{if } \omega \in A    \\
+        0 & \text{if } \omega \notin A
+    \end{cases}
+$$
+
+\subsubsection{Proprieties of the indicator function}
+
+\begin{itemize}
+    \item $I_{A \cap B} = I_A \cdot I_B$
+    \item If $A \cap B = \varnothing$ then $I_{A \cup B} = I_A + I_B$
+    \item Let ${B_1, \ldots, B_n}$ be a partition of $\Omega$, then $I_A = \sum_{i = 1}^n I_{A \cap B}$
+\end{itemize}
+
+\subsection{Cumulative probability function}
+
+or cumulative distribution function (CDF).
+
+\begin{bluebox}{Definition}
+    Let $X$ be a random variable, then the \textbf{cumulative probability function} of $X$ is defined as the function $F_X: \R \to [0, 1]$ such that
+    $$
+        F_X(x) = P(X \leq x) \enspace \forall x \in \R
+    $$
+\end{bluebox}
+
+\subsubsection{Proprieties of the cumulative probability function}
+
+We can prove the following properties:
+\begin{enumerate}
+    \item $F_X$ is increasing
+    \item $\lim_{x \to -\infty} F_X(x) = 0$ and $\lim_{x \to +\infty} F_X(x) = 1$
+    \item $F_X$ is right-continuous, hence $\lim_{h \to 0^+} F_X(x + h) = F_X(x)$
+\end{enumerate}
+
+Any function that satisfies these properties is a cumulative probability function of some random variable $X$.
+
+\section{Class of 14/02/2024}
+
+\subsection{Proprieties of cumulative probability functions}
+
+We can prove the following properties:
+\begin{enumerate}
+    \item $P(X > x) = 1 - F_X(x)$
+    \item $P(x < X \leq y) = F_X(y) - F_X(x)$
+    \item $P(X < x) = F_X(x^-)$ (left-limit of $F_X$)
+    \item $P(X = x) = F_X(x) - F_X(x^-)$
+\end{enumerate}
+
+\begin{proof}
+    We have
+    \begin{enumerate}
+        \item $(X > x) = (X \leq x)^c$, hence
+              $$
+                  P(X > x) = 1 - P(X \leq x) = 1 - F_X(x)
+              $$
+        \item $(x < X \leq y) = (X \leq y) \setminus (X \leq x)$, hence
+              $$
+                  P(x < X \leq y) = P(X \leq y) - P(X \leq x) = F_X(y) - F_X(x)
+              $$
+        \item We use the proprieties of monotone events to get that
+              \begin{align*}
+                  (X < x) & = \left(\bigcup^\infty_{n = 1} \left(X \leq x - \frac{1}{n}\right)\right) \\
+                          & = \lim_{n \to \infty} P\left(X \leq x - \frac{1}{n}\right)                \\
+                          & = F(x^-)
+              \end{align*}
+        \item
+              \begin{align*}
+                  P(X = x) & = P\left((X \leq x) \setminus (X < x)\right) \\
+                           & = P(X \leq x) - P(X < x)                     \\
+                           & = F_X(x) - F_X(x^-)
+              \end{align*}
+    \end{enumerate}
+\end{proof}
+
+\subsection{Discrete random variables}
+
+\begin{bluebox}{Definition}
+    Let $X$ be a random variable, then $X$ is \textbf{discrete} if there exists a countable set $S \subseteq \R$ such that
+    $$
+        P(X = x_i) > 0 \enspace \forall x_i \in S
+    $$
+\end{bluebox}
+
+$S$ is called the \textbf{support} of $X$.
+
+\subsubsection{Probability mass function (PMF)}
+
+\begin{bluebox}{Definition}
+    Let $X$ be a discrete random variable, then the \textbf{probability mass function (PMF)} of $X$ is defined as
+    $$
+        f_X(x) = P(X = x) \enspace \forall x \in \R
+    $$
+\end{bluebox}
+
+PMFs have the following proprieties:
+\begin{enumerate}
+    \item $f(x) = 0 \enspace \forall x \notin S$
+    \item $f(x) \ge 0 \enspace \forall x \in S$
+    \item $\sum_{x \in S} f(x) = 1$
+\end{enumerate}
+
+Note that if we have a PMF, then we can find
+
+$$
+    F(X \in B) = \sum_{x \in B} f(x)
+$$
+
+From the proprieties of PMFs we can easily see that
+
+\begin{enumerate}
+    \item $F(x) = \sum_{x_i \leq x} f(x_i)$
+    \item $f(x) = F(x) - F(x^-)$
+\end{enumerate}
+
+\subsection{Distributions}
+
+\begin{bluebox}{Definition}
+    Let $f$ be a PMF and $S$ the support of $f$, then the \textbf{distribution} of $f$ is the pair $(S, f)$.
+\end{bluebox}
+
+We will see some of the most common distributions.
+
+\subsubsection{Bernoulli distribution}
+
+Let $0 < p < 1$ and $q = 1 - p$.
+The PMF of a Bernoulli distribution is
+
+$$
+    f(x) =
+    \begin{cases}
+        p & \text{if } x = 1 \\
+        q & \text{if } x = 0 \\
+        0 & \text{otherwise}
+    \end{cases}
+$$
+
+with $x \begin{cases}
+        0 & p \\
+        1 & q
+    \end{cases}$.
+
+An example of a Bernoulli distribution is the indicator function of an event.
+We say $I_A \sim \text{Bernoulli}(p)$ which reads as \say{is distributed as}.
+
+\subsubsection{Binomial distribution}
+
+Remember that the binomial coefficient is defined as
+
+$$
+    \binom{n}{k} = \frac{n!}{k! \cdot (n - k)!} = \frac{n \cdot (n - 1) \cdot \ldots \cdot (n - k + 1)}{k!} = \binom{n}{n - k}
+$$
+
+Now, consider an experiment and partition $\Omega$ in \say{success} and \say{failure}.
+We repeat the experiment $n$ times and let $X$ be the number of successes.
+
+Note that the experiment are independent, hence $P$ of the success is always the same.
+
+\begin{align*}
+    X        & = \text{ \# of successes}                      \\
+    S        & = \{0, 1, \ldots, n\}                          \\
+    P(X = x) & = \binom{n}{x} \cdot p^x \cdot (1 - p)^{n - x}
+\end{align*}
+
+We use the binomial coefficient to count the number of ways we can arrange the successes and the failures in $n$ attempts.
+
 \end{document}

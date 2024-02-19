@@ -20,6 +20,7 @@
 \usepackage{tikz}
 \usepackage{capt-of}
 \usepackage{subfig}
+\usepackage{cancel}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -59,7 +60,7 @@ $\R^d$ is a vector space, like the ones we have seen in linear algebra, so many 
 
 \subsection{Dot product and distance}
 
-\underline{Definition}: Let $x, y \in \R^d$. The dot product of $x$ and $y$ is defined as
+\textbf{\underline{Definition} (dot product)}: Let $x, y \in \R^d$. The dot product of $x$ and $y$ is defined as
 
 $$
     \underline{x} \cdot \underline{y} = \sum_{i=1}^d x_i y_i
@@ -71,6 +72,76 @@ We have seen dot products (inner products) in linear algebra but we will see som
     \item $\underline{x} \cdot (\underline{y} + \underline{z}) = \underline{x} \cdot \underline{y} + \underline{x} \cdot \underline{z}$.
     \item $\underline{x} \cdot \underline{x} \geq 0$ and $\underline{x} \cdot \underline{x} = 0 \iff \underline{x} = \underline{0}$.
 \end{enumerate}
+
+\subsubsection{Norm}
+
+\textbf{\underline{Definition} (norm)}: Let $\underline{x} \in \R^d$. The norm of $\underline{x}$ is defined as
+
+$$
+    \norm{\underline{x}} = \sqrt{\underline{x} \cdot \underline{x}}
+$$
+
+For a more general definition see the linear algebra notes.
+
+\subsection{Cauchy-Schwarz inequality}
+
+\textbf{\underline{Theorem} (Cauchy-Schwarz inequality)}: Let $\underline{x}, \underline{y} \in \R^d$. Then
+
+$$
+    \abs{\underline{x} \cdot \underline{y}} \leq \norm{\underline{x}} \norm{\underline{y}}
+$$
+
+\begin{proof}
+    We introduce $f(t) = \norm{\underline{x} + t \underline{y}}^2$.
+
+    We apply some algebraic manipulation to $f(t)$ according to the proprieties of the dot product and the norm:
+
+    \begin{align*}
+        f(t) & = \norm{\underline{x} + t \underline{y}}^2                                                                                                              \\
+             & = (\underline{x} + t \underline{y}) \cdot (\underline{x} + t \underline{y})                                                                             \\
+             & = \underline{x} \cdot (\underline{x} + t \underline{y}) + t \underline{y} \cdot (\underline{x} + t \underline{y})                                       \\
+             & = \underline{x} \cdot \underline{x} + t \underline{x} \cdot \underline{y} + t \underline{y} \cdot \underline{x} + t^2 \underline{y} \cdot \underline{y} \\
+             & = \norm{\underline{x}}^2 + 2t \underline{x} \cdot \underline{y} + t^2 \norm{\underline{y}}^2
+    \end{align*}
+
+    If $\underline{y} \ne 0$ we have that $f(t)$ is a parabola which is always positive, hence $\Delta \leq 0$. We have
+
+    \begin{align*}
+        \Delta & = (2 \underline{x} \cdot \underline{y})^2 - 4 \norm{\underline{x}}^2 \norm{\underline{y}}^2        \\
+               & = 4 (\underline{x} \cdot \underline{y})^2 - 4 \norm{\underline{x}}^2 \norm{\underline{y}}^2 \leq 0 \\
+    \end{align*}
+
+    We pass to the inequality and we get
+
+    \begin{align*}
+        \cancel{4}(\underline{x} \cdot \underline{y})^2 & \leq \cancel{4} \norm{\underline{x}}^2 \norm{\underline{y}}^2 \\
+        \abs{\underline{x} \cdot \underline{y}} ^2      & \leq \norm{\underline{x}}^2 \norm{\underline{y}}^2            \\
+        \abs{\underline{x} \cdot \underline{y}}         & \leq \norm{\underline{x}} \norm{\underline{y}}
+    \end{align*}
+\end{proof}
+
+Note that if $\Delta = 0$ it's easy to prove that $\underline{x}$  = t $\underline{y}$, hence they are linearly dependent. This is the only case in which the inequality becomes an equality.
+
+\subsection{Defining the angle between two vectors}
+
+\textbf{\underline{Definition} (angle)}: Let $\underline{x}, \underline{y} \in \R^d$. The following relation holds between the dot product and the angle $\theta$ between the two vectors:
+
+$$
+    \underline{x} \cdot \underline{y} = \norm{\underline{x}} \norm{\underline{y}} \cos \theta
+$$
+
+hence
+
+$$
+    \theta = \arccos \left( \frac{\underline{x} \cdot \underline{y}}{\norm{\underline{x}} \norm{\underline{y}}} \right)
+$$
+
+From the definition we get that $\underline{x} \cdot \underline{y} = 0 \iff \theta = \frac{\pi}{2}$.
+
+Cauchy-Schwarz inequality guarantees that the argument of $\arccos$ is always between -1 and 1.
+
+Note that this is a definition, not a theorem: we are defining the concept of angle from the dot product.
+
 
 % TODO: add previous classes
 

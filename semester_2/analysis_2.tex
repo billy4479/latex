@@ -142,6 +142,190 @@ Cauchy-Schwarz inequality guarantees that the argument of $\arccos$ is always be
 
 Note that this is a definition, not a theorem: we are defining the concept of angle from the dot product.
 
+\section{Class of 14/02/2024}
+
+These theorems have been covered already in linear algebra, see the notes for more details.
+
+\subsection{Triangle inequality}
+
+\textbf{\underline{Theorem} (triangle inequality)}: Let $\underline{x}, \underline{y} \in \R^d$. Then
+
+$$
+    \norm{\underline{x} + \underline{y}} \leq \norm{\underline{x}} + \norm{\underline{y}}
+$$
+
+\begin{proof}
+    We have that
+
+    \begin{align*}
+        \norm{\underline{x} + \underline{y}}^2 & = (\underline{x} + \underline{y}) \cdot (\underline{x} + \underline{y})                                                                         \\
+                                               & = \underline{x} \cdot (\underline{x} + \underline{y}) + \underline{y} \cdot (\underline{x} + \underline{y})                                     \\
+                                               & = \underline{x} \cdot \underline{x} + \underline{x} \cdot \underline{y} + \underline{y} \cdot \underline{x} + \underline{y} \cdot \underline{y} \\
+                                               & = \norm{\underline{x}}^2 + 2 \underline{x} \cdot \underline{y} + \norm{\underline{y}}^2
+    \end{align*}
+
+    We apply the Cauchy-Schwarz inequality and we get
+
+    \begin{align*}
+        \norm{\underline{x} + \underline{y}}^2 & \leq \norm{\underline{x}}^2 + 2 \norm{\underline{x}} \norm{\underline{y}} + \norm{\underline{y}}^2 \\
+        \norm{\underline{x} + \underline{y}}^2 & \leq \left(\norm{\underline{x}} + \norm{\underline{y}}\right)^2
+    \end{align*}
+
+    We take the square root of both sides and we get the result.
+\end{proof}
+
+\subsection{Pythagorean theorem}
+
+\textbf{\underline{Theorem} (Pythagorean theorem)}: Let $\underline{x}, \underline{y} \in \R^d$ be orthogonal. Then
+
+$$
+    \norm{\underline{x} + \underline{y}}^2 = \norm{\underline{x}}^2 + \norm{\underline{y}}^2
+$$
+
+I will not report the proof here, if you're interested you can find it in my linear algebra notes.
+
+\subsection{Law of cosines}
+
+This is a generalization of the Pythagorean theorem.
+
+\textbf{\underline{Theorem} (law of cosines)}: Let $\underline{x}, \underline{y} \in \R^d$. Then
+
+$$
+    \norm{\underline{x} - \underline{y}}^2 = \norm{\underline{x}}^2 + \norm{\underline{y}}^2 - 2 \norm{\underline{x}} \norm{\underline{y}} \cos \theta
+$$
+
+where $\theta$ is the angle between $\underline{x}$ and $\underline{y}$.
+
+\subsection{Planes}
+
+Planes in $\R^3$ are identified by a point $A$ and a normal vector $\underline{n}$.
+
+A point $M = \begin{pmatrix}
+        x \\ y \\ z
+    \end{pmatrix} \in \R^3$ belongs to a plane $\pi$ if and only if the vector $AM$ is orthogonal to $\underline{n}$.
+
+This means that the equation of the plane is
+
+$$
+    \left(
+    \begin{pmatrix}
+            x \\ y \\ z
+        \end{pmatrix} - \begin{pmatrix}
+            A_x \\ A_y \\ A_z
+        \end{pmatrix}
+    \right)
+    \cdot
+    \begin{pmatrix}
+        n_x \\ n_y \\ n_z
+    \end{pmatrix}
+    = 0
+$$
+
+\subsection{Orientation of vectors}
+
+Consider $B_1, B_2$ be pairs of vectors in $\R^2$.
+
+\begin{center}
+    \begin{tikzpicture}
+        \draw[->] (-1, 0) -- (0, 1) node[anchor=south] {$x$};
+        \draw[->] (-1, 0) -- (0, 0) node[anchor=north] {$y$};
+
+        \draw[->] (1, 1) -- (2, 1) node[anchor=south] {$y$};
+        \draw[->] (1, 1) -- (2, 0) node[anchor=north] {$x$};
+    \end{tikzpicture}
+
+    \captionof{figure}{Two pair of vectors $B_1$ and $B_2$}
+    \label{fig:orientation_of_vectors}
+\end{center}
+
+$B_1$ and $B_2$ are both bases of $\R^2$, but if we try to \say{continuously} transform one into the other by \say{rotating} the vectors
+while keeping them a basis we will see that at some point we will have $\underline{x} \cdot \underline{y} = 0$,
+hence the two vectors no longe form a basis.
+
+We call this propriety the \textbf{orientation} of the basis.
+When we choose the orientation of the axis of a space we are choosing the orientation of the basis.
+
+By convention we say that the positive orientation of the basis is the one defined by the right-hand rule.
+
+We can extend this concept to $\R^d$ by considering the determinant of the matrix of the vectors.
+
+\subsection{Determinant}
+
+Determinants have been covered already in linear algebra, for definition and proprieties see those notes.
+We will discuss here some of their geometric proprieties that weren't covered before.
+
+In $\R^2$ the determinant of a matrix of two vectors is the area of the parallelogram defined by the two vectors.
+In $\R^3$ it is the volume of the parallelepiped defined by the three vectors.
+
+\begin{gather*}
+    \det \left( \begin{pmatrix}
+            \underline{x} & \underline{y}
+        \end{pmatrix} \right) = \text{ area} \\
+    \det \left( \begin{pmatrix}
+            \underline{x} & \underline{y} & \underline{z}
+        \end{pmatrix} \right) = \text{ volume}
+\end{gather*}
+
+\subsubsection{Cross product}
+
+\textbf{\underline{Definition} (cross product)}: Let $\underline{x} = \begin{pmatrix}
+        x_1 \\ x_2 \\ x_3
+    \end{pmatrix}$ and $\underline{y} = \begin{pmatrix}
+        y_1 \\ y_2 \\ y_3
+    \end{pmatrix}$.
+The cross product of $\underline{x}$ and $\underline{y}$ is the vector
+
+$$
+    \underline{x} \times \underline{y} = \begin{pmatrix}
+        x_2 y_3 - x_3 y_2 \\
+        x_3 y_1 - x_1 y_3 \\
+        x_1 y_2 - x_2 y_1
+    \end{pmatrix}
+$$
+
+\subsubsection{Cross product and determinant}
+
+\textbf{\underline{Theorem}}: Let $\underline{x}, \underline{y}, \underline{z} \in \R^3$. Then
+
+$$
+    \det \left( \begin{pmatrix}
+            \underline{x} & \underline{y} & \underline{z}
+        \end{pmatrix} \right) = (\underline{x} \times \underline{y}) \cdot \underline{z}
+$$
+
+\begin{proof}
+    We have that
+
+    \begin{align*}
+        \det \left( \begin{pmatrix}
+                            \underline{x} & \underline{y} & \underline{z}
+                        \end{pmatrix} \right)
+         & = \det \begin{pmatrix}
+                      x_1 & y_1 & z_1 \\
+                      x_2 & y_2 & z_2 \\
+                      x_3 & y_3 & z_3
+                  \end{pmatrix}                                                        \\
+         & = z_1 \det \begin{pmatrix}
+                          x_2 & y_2 \\
+                          x_3 & y_3
+                      \end{pmatrix}
+        - z_2 \det \begin{pmatrix}
+                       x_1 & y_1 \\
+                       x_3 & y_3
+                   \end{pmatrix}
+        + z_3 \det \begin{pmatrix}
+                       x_1 & y_1 \\
+                       x_2 & y_2
+                   \end{pmatrix}                                                        \\
+         & = z_1 (x_2 y_3 - x_3 y_2) - z_2 (x_1 y_3 - x_3 y_1) + z_3 (x_1 y_2 - x_2 y_1) \\
+         & = \begin{pmatrix}
+                 z_1 \\ z_2 \\ z_3
+             \end{pmatrix} \cdot (\underline{x} \times \underline{y})
+    \end{align*}
+
+    The last steps follow from the definition of determinant for $2 \times 2$ matrixes and the definition of the cross product.
+\end{proof}
+
 
 % TODO: add previous classes
 

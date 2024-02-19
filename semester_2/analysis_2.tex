@@ -47,7 +47,7 @@
 
 \section{Class of 12/02/2024}
 
-In this class we will discuss mainly multivariable calculus:
+In this class we will discuss mainly multi-variable calculus:
 \begin{itemize}
     \item Parametric curves: $\R \to \R^d$.
     \item Graphs: $\R^2 \to \R$.
@@ -326,8 +326,65 @@ $$
     The last steps follow from the definition of determinant for $2 \times 2$ matrixes and the definition of the cross product.
 \end{proof}
 
+\section{Class of 15/02/2024}
 
-% TODO: add previous classes
+\subsection{Proprieties of the cross product}
+
+\textbf{\underline{Proposition} (characterization of the cross product)}:
+
+\begin{enumerate}
+    \item $\underline{x} \times \underline{y}$ is orthogonal to $\underline{x}$ and $\underline{y}$.
+    \item $\norm{\underline{x} \times \underline{y}} = \norm{\underline{x}} \norm {\underline{y}} \abs{\sin \theta}$
+          where $\theta$ is the angle between $\underline{x}$ and $\underline{y}$.
+    \item $\det (\underline{x}, \underline{y}, \underline{x} \times \underline{y}) \geq 0$
+          so that the basis $\underline{x}, \underline{y}, \underline{x} \times \underline{y}$ is positively oriented.
+\end{enumerate}
+
+\begin{proof}
+    We will prove the proprieties one by one.
+    These proofs will make heavy use of the definition of the cross product and the determinant from above.
+    \begin{enumerate}
+        \item From the definition of cross product and knowing that the determinant of a matrix is 0 if two rows are equal we have
+              \begin{itemize}
+                  \item $(\underline{x} \times \underline{y}) \cdot \underline{x} = \det (\underline{x}, \underline{y}, \underline{x}) = 0$
+                  \item $(\underline{x} \times \underline{y}) \cdot \underline{y} = \det (\underline{x}, \underline{y}, \underline{y}) = 0$
+              \end{itemize}
+        \item Let $\underline{z}$ be a vector normal to $\underline{x}$ and $\underline{y}$, with $\norm{\underline{z}} \ne 0$.
+              We have that $\abs{\det (\underline{x}, \underline{y}, \underline{z})} = \abs{(\underline{x} \times \underline{y}) \cdot \underline{z}}$.
+              Recall that the formula to compute the area of a parallelogram is $\norm{\underline{x}} \norm{\underline{y}} \abs{\sin \theta}$.
+              Since $\det (\underline{x}, \underline{y}, \underline{z})$ is the volume of the parallelepiped defined by the three vectors we have that
+              $\abs{\det (\underline{x}, \underline{y}, \underline{z})} = \left(\norm{\underline{x}} \norm{\underline{y}} \abs{\sin \theta}\right) \cdot \norm{\underline{z}}$ just by using the normal formula for the volume (area of base times height).
+              Because of (1) we have that $\sin \theta = 1$ and simplifying $\norm{\underline{z}}$ we get the result.
+        \item We have that $\det (\underline{x}, \underline{y}, \underline{x} \times \underline{y}) = \norm{\underline{x} \times \underline{y}}^2 \geq 0$.
+    \end{enumerate}
+\end{proof}
+
+\textbf{\underline{Proposition} (proprieties of the cross product)}:
+Let $\underline{x}, \underline{y}, \underline{z} \in \R^3$ and $a, b \in \R$. Then
+
+\begin{enumerate}
+    \item \textit{Bilinearity}: $(a \underline{x} + b \underline{y}) \times \underline{z} = a (\underline{x} \times \underline{z}) + b (\underline{y} \times \underline{z})$ and $\underline{x} \times (a \underline{y} + b \underline{z}) = a (\underline{x} \times \underline{y}) + b (\underline{x} \times \underline{z})$.
+    \item \textit{Asymmetry}: $\underline{x} \times \underline{y} = - \underline{y} \times \underline{x}$.
+    \item \textit{Linear independence}: $\underline{x} \times \underline{y} = \underline{0} \iff \underline{x}$ and $\underline{y}$ are linearly dependent.
+\end{enumerate}
+
+\begin{proof}
+    To prove (1) and (2) we just apply the definition of the cross product and the determinant.
+
+    For (3) we have
+    \begin{align*}
+        \norm{\underline{x} \times \underline{y}} = 0
+         & \iff
+        \norm {\underline{x}} \norm{\underline{y}} \abs{\sin \theta} = 0                                        \\
+         & \iff \abs{\sin \theta} = 0 \text{ or } \norm{\underline{x}} = 0 \text{ or } \norm{\underline{y}} = 0 \\
+         & \iff \underline{x} \text{ and } \underline{y} \text{ are linearly dependent}
+    \end{align*}
+
+\end{proof}
+
+\subsection{Parametrization}
+
+TODO
 
 \section{Class of 16/02/2024}
 

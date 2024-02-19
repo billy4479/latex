@@ -19,6 +19,7 @@
 \usepackage{tikz}
 \usepackage{cancel}
 \usepackage{siunitx}
+\usepackage{capt-of}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -207,8 +208,8 @@ If we consider the case where $\vec{a}$ is constant we get
 the high-school equation for uniformly accelerated motion:
 
 \begin{align*}
-  \vec{v}(t) & = \vec{a} t - v(t_0)                                \\
-  \vec{r}(t) & = \frac{1}{2} \vec{a} t^2 - v(t_0) t + \vec{r}(t_0)
+  \vec{v}(t) & = \vec{a} t + v(t_0)                                \\
+  \vec{r}(t) & = \frac{1}{2} \vec{a} t^2 + v(t_0) t + \vec{r}(t_0)
 \end{align*}
 
 Moreover, we can substitute one into the other to get an equation for the trajectory:
@@ -237,6 +238,8 @@ we need a way to convert from a reference frame to the other.
     % Angle between axis
     \draw[red, thick] (0.5,0) arc (0:31:0.5) node[right]{$\theta$};
   \end{tikzpicture}
+  \captionof{figure}{Rotated frame of reference}
+  \label{fig:rotated_frame}
 \end{center}
 
 We can write $\hat{i}$ and $\hat{j}$ in terms of $\hat{i'}$ and $\hat{j'}$:
@@ -310,7 +313,7 @@ We don't need to worry about the direction of the train, we can just sum the vec
 
 Similar considerations can be made for the velocity and the acceleration.
 
-\section{Class of 12/02/2024}
+\section{Class of 12/02/2024 - Circular motion}
 
 \subsection {Uniform circular motion}
 
@@ -460,6 +463,9 @@ and the radius vector $\vec r$ are orthogonal. This makes the polar coordinates 
     \draw[green, ->] (2.82,2.82) -- (3.82,3.82) node[anchor=north]{$\hat r$};
     \draw[green, ->] (2.82,2.82) -- (2,3.66) node[anchor=south]{$\hat \theta$};
   \end{tikzpicture}
+
+  \captionof{figure}{Polar frame of reference}
+  \label{fig:polar_frame}
 \end{center}
 
 We can write the position vector in polar coordinates as follows
@@ -661,14 +667,17 @@ Consider the following system:
     \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
     \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
 
-    \filldraw[red] (2,3) circle (2pt) node[anchor=south]{$m_1$};
-    \filldraw[red] (4,4) circle (2pt) node[anchor=east]{$m_2$};
+    \filldraw[red] (2,3) circle (2pt) node[anchor=east]{$m_1$};
+    \filldraw[red] (4,4) circle (2pt) node[anchor=west]{$m_2$};
 
-    \draw[black, ->] (2,3) -- (4,4) node[anchor=west]{$\vec r_2 - \vec r_1$};
-    \draw[black, ->] (0,0) -- (2,3) node[anchor=north]{$\vec r_1$};
-    \draw[black, ->] (0,0) -- (4,4) node[anchor=north]{$\vec r_2$};
+    \draw[black, ->] (2,3) -- (4,4) node[anchor=south, midway]{$\vec r_2 - \vec r_1$};
+    \draw[black, ->] (0,0) -- (2,3) node[anchor=east, midway]{$\vec r_1$};
+    \draw[black, ->] (0,0) -- (4,4) node[anchor=west, midway]{$\vec r_2$};
 
   \end{tikzpicture}
+
+  \captionof{figure}{Two masses in space}
+  \label{fig:gravforce_masses}
 \end{center}
 
 We have that the gravitational force is given by
@@ -721,21 +730,20 @@ For each body we can draw a \textbf{free body diagram}:
 
 \begin{center}
   \begin{tikzpicture}
-    \draw[blue] (0,0) rectangle (3,3) node[midway]{$m_1$};
+    % m_1
+    \draw[blue] (-4,0) rectangle (-2,2) node[midway]{$m_1$};
 
-    \draw[black, ->] (1.5,0) -- (1.5,-1.5) node[anchor=west]{$-m_1 g$};
-    \draw[black, ->] (1.5,3) -- (1.5,4.5) node[anchor=west]{$\vec N_1$};
-    \draw[black, ->] (-1.5,1.5) -- (0,1.5) node[anchor=east]{$\vec F$};
-    \draw[black, ->] (3,1.5) -- (4.5,1.5) node[anchor=west]{$\vec f_1$};
-  \end{tikzpicture}
+    \draw[black, ->] (-3,0) -- (-3,-1) node[anchor=west, midway]{$-m_1 g$};
+    \draw[black, ->] (-3,2) -- (-3,3) node[anchor=west, midway]{$\vec N_1$};
+    \draw[black, ->] (-5,1) -- (-4,1) node[anchor=north, midway]{$\vec F$};
+    \draw[black, ->] (-2,1) -- (-1,1) node[anchor=north, midway]{$\vec f_1$};
 
+    % m_2
+    \draw[red] (4,0) rectangle (6,2) node[midway]{$m_2$};
 
-  \begin{tikzpicture}
-    \draw[red] (0,0) rectangle (3,3) node[midway]{$m_2$};
-
-    \draw[black, ->] (1.5,0) -- (1.5,-1.5) node[anchor=west]{$-m_2 g$};
-    \draw[black, ->] (1.5,3) -- (1.5,4.5) node[anchor=west]{$\vec N_2$};
-    \draw[black, ->] (-1.5,1.5) -- (0,1.5) node[anchor=east]{$-\vec f$};
+    \draw[black, ->] (5,0) -- (5,-1) node[anchor=west, midway]{$-m_2 g$};
+    \draw[black, ->] (5,2) -- (5,3) node[anchor=west, midway]{$\vec N_2$};
+    \draw[black, ->] (3,1) -- (4,1) node[anchor=north, midway]{$-\vec f$};
   \end{tikzpicture}
 \end{center}
 

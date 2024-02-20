@@ -1,4 +1,4 @@
-\documentclass[14pt]{extarticle}
+\documentclass[10pt]{extarticle}
 \title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
 \date{Semester 2, 2023/2024}
@@ -1177,7 +1177,7 @@ Reversing the graph will transform the sources into sinks and vice versa.
 
 \subsubsection{Finding SCCs}
 
-To do so we follow the following algorithm:
+To find SCCs we can use the following algorithm:
 
 \begin{minted}{python}
     # Consider an explore function that
@@ -1198,5 +1198,219 @@ To do so we follow the following algorithm:
 
     return SCCs
 \end{minted}
+
+\section{Class of 21/02/2024 - Shortest path}
+
+\subsection{Introduction}
+
+For this class we had to hand in an assignment,
+you can find my solution in \texttt{cs\_assignment\_1.pdf}.
+
+The problem we are going to look at now is how to get from one vertex to another in a graph passing through the fewest number of edges.
+
+It's easy to see that DFS is not the right tool for this problem. We need to find a different algorithm.
+
+\textbf{\underline{Definition} (shortest path)}:
+Let $G = (V, E)$ and $s \in V$ be the start vertex.
+The shortest path distance $d(v)$ from $s$ to $v \in V$ is the minimum number of edges in any path from $s$ to $v$.
+If there is no path from $s$ to $v$ then $d(v) = \infty$.
+
+\subsection{Breadth First Search (BFS)}
+
+This is the algorithm we will use to find the shortest path.
+
+It works in the following way:
+
+\begin{minted}{python}
+    def BFS(G, s):
+        distance = {}
+        for v in G.vertices():
+            distance[v] = float('inf')
+
+        distance[s] = 0
+        queue = Queue()
+        queue.enqueue(s)
+
+        while not queue.is_empty():
+            v = queue.dequeue()
+            for u in v.neighbors():
+                if distance[u] == float('inf'):
+                    distance[u] = distance[v] + 1
+                    queue.enqueue(u)
+\end{minted}
+
+You can watch the algorithm in action here: \url{https://www.cs.usfca.edu/~galles/visualization/BFS.html}.
+
+\subsubsection{Sidenote: queues}
+
+For this algorithm we use a \texttt{Queue} data structure.
+
+Queues are similar to arrays and have the following operations:
+\begin{itemize}
+    \item \texttt{enqueue(x)}: add an element to the end of the queue
+    \item \texttt{dequeue()}: remove the first element of the queue and returns it
+\end{itemize}
+
+Sometimes \texttt{enqueue} is called \texttt{inject} and \texttt{dequeue} is called \texttt{eject}.
+
+We say that queues are \textit{FIFO} (First In First Out) data structures.
+
+\subsubsection{Proof of correctness}
+
+\textbf{\underline{Theorem} (correctness of BFS)}: Let $G = (V, E)$ be a graph and $s \in V$.
+Assume the range of distances $d$ from $s$ to all other vertices is $[0, M]$.
+For each $t \in [0, M]$ there is an iteration of the algorithm such that:
+\begin{enumerate}
+    \item all the vertices $v \in \texttt{queue}$ have $d[v] = t$
+    \item all the vertices $u$ that have been removed from \texttt{queue} have $d[u]$ equal to the correct distance from $s$ to $u$
+    \item For all vertices $u$ that have been removed from \texttt{queue} we have that $d[u] \leq t - 1$
+\end{enumerate}
+
+Note that since the conditions (1), (2), and (3) have to be true for any $t$ we call them \textit{invariants}.
+
+\begin{proof}
+    We will prove this by induction on $t$.
+
+    \begin{description}
+        \item[Base case] $t = 0$.
+            This is trivially true since the only vertex in the queue is $s$ and $d[s] = 0$.
+
+        \item[Inductive step] We assume that the statements are true for $t = \tau$.
+
+            At this time, some vertices have been already removed from \texttt{queue}, others are still in it, and some have yet to be explored.
+
+            At this point of time we know the following facts:
+            \begin{itemize}
+                \item By (3), all vertices removed from \texttt{queue} have $d[u] \leq \tau - 1$
+                \item By (2) the distances are correct.
+                \item By (1), all vertices in \texttt{queue} have $d[v] = \tau$.
+            \end{itemize}
+
+            At the next round $\tau + 1$, BFS will go through as many iterations as the number of vertices in \texttt{queue}: the algorithm will remove those vertices.
+            Note that these vertices vertices have all distance $\tau$ and their distance is no longer going to change. This implies that (2) and (3) are true.
+
+            Moreover, all vertices not yet seen that are neighbor of the ones that were in \texttt{queue} at $\tau$ have their distances set to $\tau + 1$, thus (1) is true.
+    \end{description}
+\end{proof}
+
+\subsubsection{Time complexity}
+
+We split the algorithm in parts:
+
+\begin{itemize}
+    \item The setup part of the algorithm is $O(|V|)$.
+    \item We check whether the queue is empty $|V| + 1$ times, hence $O(|V|)$.
+    \item We insert a vertex in the queue based on its neighbors, hence $O(|E|)$.
+    \item We enqueue and dequeue every vertex in the graph at most once, hence $O(|V|)$.
+\end{itemize}
+
+Combining all the steps we get a time complexity of $O(|V| + |E|)$.
+
+Note that we need to take in account the time for queue operations, which depend on the implementation of the queue itself.
+
+\subsubsection{Time complexity of queue operations - basic}
+
+For the sake of this course its enough to know that queue both \texttt{enqueue} and \texttt{dequeue} are $O(1)$.
+
+Moreover queues are usually implemented using a linked list, but if you know already the maximum size of the queue you can also use an array which is slightly more efficient.
+
+\subsubsection{Implementation of a queue - if you're curious}
+
+\begin{warningbox}{Advanced stuff ahead}
+    This is not part of the course, but if you are curious you can read on.
+
+    The following code snippets are written in C.
+\end{warningbox}
+
+We will implement a queue using a linked list as underlying data structure.
+
+\begin{minted}{c}
+    struct node {
+        int data;
+        struct node *next;
+    };
+
+    struct queue {
+        struct node *head;
+        struct node *tail;
+    };
+
+    struct queue *create_queue() {
+        struct queue *q = malloc(sizeof(struct queue));
+        q->head = NULL;
+        q->tail = NULL;
+        return q;
+    }
+
+    void enqueue(struct queue *q, int x) {
+        struct node *n = malloc(sizeof(struct node));
+        n->data = x;
+        n->next = NULL;
+        if (q->head == NULL) {
+            q->head = n;
+            q->tail = n;
+        } else {
+            q->tail->next = n;
+            q->tail = n;
+        }
+    }
+
+    int dequeue(struct queue *q) {
+        int x = q->head->data;
+        struct node *n = q->head;
+        q->head = q->head->next;
+        free(n);
+        return x;
+    }
+\end{minted}
+
+We see that each of the operations do not depend on the length of the queue, hence they are both $O(1)$.
+
+Note that in this implementation we have to \texttt{malloc} each node (which is a slow operation) and dereference a pointer (which can also be slow).
+
+If we know the maximum size of the queue we can use an array to implement it, which will make the operations even faster.
+
+The idea is that we keep a pointer of the first and last element of the queue and we use an array to store the elements.
+
+When we enqueue an element we add it to the end of the array and we increment the pointer to the last element.
+When we dequeue an element we return the first element of the array and we increment the pointer to the first element.
+
+If we run out of space at the end of the array we can just cycle back to the beginning since, by knowing the maximum size of the queue, we are sure that the first elements are not going to be used anymore at the time we have to cycle back to the start.
+
+\begin{minted}{c}
+    struct queue {
+        int *data;
+        off_t head;
+        off_t tail;
+        size_t size;
+    };
+
+    struct queue *create_queue(size_t size) {
+        struct queue *q = malloc(sizeof(struct queue));
+        q->data = malloc(size * sizeof(int));
+        q->head = 0;
+        q->tail = 0;
+        q->size = size;
+        return q;
+    }
+
+    void enqueue(struct queue *q, int x) {
+        q->data[q->tail] = x;
+        q->tail = (q->tail + 1) % q->size;
+    }
+
+    int dequeue(struct queue *q) {
+        if (q->head == q->tail) {
+            // The queue is empty
+            return -1;
+        }
+
+        int x = q->data[q->head];
+        q->head = (q->head + 1) % q->size;
+        return x;
+    }
+\end{minted}
+
+We see that the operations are still $O(1)$ but this time we \texttt{malloc} only once and we don't have to dereference any pointers.
 
 \end{document}

@@ -12,6 +12,7 @@
         "reparametrize",
         "Riesz",
         "Schwarz",
+        "struct",
         "subproblems",
         "surjective"
     ],

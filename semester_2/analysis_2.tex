@@ -21,12 +21,15 @@
 \usepackage{capt-of}
 \usepackage{subfig}
 \usepackage{cancel}
+\usepackage{float}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\F}{\mathcal{F}}
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\munderbar}[1]{\underbar{\ensuremath{#1}}}
+
 
 \newenvironment{absolutelynopagebreak}
   {\par\nobreak\vfil\penalty0\vfilneg
@@ -60,83 +63,83 @@ $\R^d$ is a vector space, like the ones we have seen in linear algebra, so many 
 
 \subsection{Dot product and distance}
 
-\textbf{\underline{Definition} (dot product)}: Let $\underbar{x}, \underbar{y} \in \R^d$. The dot product of $x$ and $y$ is defined as
+\textbf{\underline{Definition} (dot product)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. The dot product of $x$ and $y$ is defined as
 
 $$
-    \underbar{x} \cdot \underbar{y} = \sum_{i=1}^d x_i y_i
+    \munderbar{x} \cdot \munderbar{y} = \sum_{i=1}^d x_i y_i
 $$
 
 We have seen dot products (inner products) in linear algebra but we will see some of their proprieties again:
 \begin{enumerate}
-    \item $\underbar{x} \cdot \underbar{y} = \underbar{y} \cdot \underbar{x}$.
-    \item $\underbar{x} \cdot (\underbar{y} + \underbar{z}) = \underbar{x} \cdot \underbar{y} + \underbar{x} \cdot \underbar{z}$.
-    \item $\underbar{x} \cdot \underbar{x} \geq 0$ and $\underbar{x} \cdot \underbar{x} = 0 \iff \underbar{x} = \underbar{0}$.
+    \item $\munderbar{x} \cdot \munderbar{y} = \munderbar{y} \cdot \munderbar{x}$.
+    \item $\munderbar{x} \cdot (\munderbar{y} + \munderbar{z}) = \munderbar{x} \cdot \munderbar{y} + \munderbar{x} \cdot \munderbar{z}$.
+    \item $\munderbar{x} \cdot \munderbar{x} \geq 0$ and $\munderbar{x} \cdot \munderbar{x} = 0 \iff \munderbar{x} = \munderbar{0}$.
 \end{enumerate}
 
 \subsubsection{Norm}
 
-\textbf{\underline{Definition} (norm)}: Let $\underbar{x} \in \R^d$. The norm of $\underbar{x}$ is defined as
+\textbf{\underline{Definition} (norm)}: Let $\munderbar{x} \in \R^d$. The norm of $\munderbar{x}$ is defined as
 
 $$
-    \norm{\underbar{x}} = \sqrt{\underbar{x} \cdot \underbar{x}}
+    \norm{\munderbar{x}} = \sqrt{\munderbar{x} \cdot \munderbar{x}}
 $$
 
 For a more general definition see the linear algebra notes.
 
 \subsection{Cauchy-Schwarz inequality}
 
-\textbf{\underline{Theorem} (Cauchy-Schwarz inequality)}: Let $\underbar{x}, \underbar{y} \in \R^d$. Then
+\textbf{\underline{Theorem} (Cauchy-Schwarz inequality)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. Then
 
 $$
-    \abs{\underbar{x} \cdot \underbar{y}} \leq \norm{\underbar{x}} \norm{\underbar{y}}
+    \abs{\munderbar{x} \cdot \munderbar{y}} \leq \norm{\munderbar{x}} \norm{\munderbar{y}}
 $$
 
 \begin{proof}
-    We introduce $f(t) = \norm{\underbar{x} + t \underbar{y}}^2$.
+    We introduce $f(t) = \norm{\munderbar{x} + t \munderbar{y}}^2$.
 
     We apply some algebraic manipulation to $f(t)$ according to the proprieties of the dot product and the norm:
 
     \begin{align*}
-        f(t) & = \norm{\underbar{x} + t \underbar{y}}^2                                                                                                        \\
-             & = (\underbar{x} + t \underbar{y}) \cdot (\underbar{x} + t \underbar{y})                                                                         \\
-             & = \underbar{x} \cdot (\underbar{x} + t \underbar{y}) + t \underbar{y} \cdot (\underbar{x} + t \underbar{y})                                     \\
-             & = \underbar{x} \cdot \underbar{x} + t \underbar{x} \cdot \underbar{y} + t \underbar{y} \cdot \underbar{x} + t^2 \underbar{y} \cdot \underbar{y} \\
-             & = \norm{\underbar{x}}^2 + 2t \underbar{x} \cdot \underbar{y} + t^2 \norm{\underbar{y}}^2
+        f(t) & = \norm{\munderbar{x} + t \munderbar{y}}^2                                                                                                              \\
+             & = (\munderbar{x} + t \munderbar{y}) \cdot (\munderbar{x} + t \munderbar{y})                                                                             \\
+             & = \munderbar{x} \cdot (\munderbar{x} + t \munderbar{y}) + t \munderbar{y} \cdot (\munderbar{x} + t \munderbar{y})                                       \\
+             & = \munderbar{x} \cdot \munderbar{x} + t \munderbar{x} \cdot \munderbar{y} + t \munderbar{y} \cdot \munderbar{x} + t^2 \munderbar{y} \cdot \munderbar{y} \\
+             & = \norm{\munderbar{x}}^2 + 2t \munderbar{x} \cdot \munderbar{y} + t^2 \norm{\munderbar{y}}^2
     \end{align*}
 
-    If $\underbar{y} \ne 0$ we have that $f(t)$ is a parabola which is always positive, hence $\Delta \leq 0$. We have
+    If $\munderbar{y} \ne 0$ we have that $f(t)$ is a parabola which is always positive, hence $\Delta \leq 0$. We have
 
     \begin{align*}
-        \Delta & = (2 \underbar{x} \cdot \underbar{y})^2 - 4 \norm{\underbar{x}}^2 \norm{\underbar{y}}^2        \\
-               & = 4 (\underbar{x} \cdot \underbar{y})^2 - 4 \norm{\underbar{x}}^2 \norm{\underbar{y}}^2 \leq 0 \\
+        \Delta & = (2 \munderbar{x} \cdot \munderbar{y})^2 - 4 \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2        \\
+               & = 4 (\munderbar{x} \cdot \munderbar{y})^2 - 4 \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2 \leq 0 \\
     \end{align*}
 
     We pass to the inequality and we get
 
     \begin{align*}
-        \cancel{4}(\underbar{x} \cdot \underbar{y})^2 & \leq \cancel{4} \norm{\underbar{x}}^2 \norm{\underbar{y}}^2 \\
-        \abs{\underbar{x} \cdot \underbar{y}} ^2      & \leq \norm{\underbar{x}}^2 \norm{\underbar{y}}^2            \\
-        \abs{\underbar{x} \cdot \underbar{y}}         & \leq \norm{\underbar{x}} \norm{\underbar{y}}
+        \cancel{4}(\munderbar{x} \cdot \munderbar{y})^2 & \leq \cancel{4} \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2 \\
+        \abs{\munderbar{x} \cdot \munderbar{y}} ^2      & \leq \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2            \\
+        \abs{\munderbar{x} \cdot \munderbar{y}}         & \leq \norm{\munderbar{x}} \norm{\munderbar{y}}
     \end{align*}
 \end{proof}
 
-Note that if $\Delta = 0$ it's easy to prove that $\underbar{x}$  = t $\underbar{y}$, hence they are linearly dependent. This is the only case in which the inequality becomes an equality.
+Note that if $\Delta = 0$ it's easy to prove that $\munderbar{x}$  = t $\munderbar{y}$, hence they are linearly dependent. This is the only case in which the inequality becomes an equality.
 
 \subsection{Defining the angle between two vectors}
 
-\textbf{\underline{Definition} (angle)}: Let $\underbar{x}, \underbar{y} \in \R^d$. The following relation holds between the dot product and the angle $\theta$ between the two vectors:
+\textbf{\underline{Definition} (angle)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. The following relation holds between the dot product and the angle $\theta$ between the two vectors:
 
 $$
-    \underbar{x} \cdot \underbar{y} = \norm{\underbar{x}} \norm{\underbar{y}} \cos \theta
+    \munderbar{x} \cdot \munderbar{y} = \norm{\munderbar{x}} \norm{\munderbar{y}} \cos \theta
 $$
 
 hence
 
 $$
-    \theta = \arccos \left( \frac{\underbar{x} \cdot \underbar{y}}{\norm{\underbar{x}} \norm{\underbar{y}}} \right)
+    \theta = \arccos \left( \frac{\munderbar{x} \cdot \munderbar{y}}{\norm{\munderbar{x}} \norm{\munderbar{y}}} \right)
 $$
 
-From the definition we get that $\underbar{x} \cdot \underbar{y} = 0 \iff \theta = \frac{\pi}{2}$.
+From the definition we get that $\munderbar{x} \cdot \munderbar{y} = 0 \iff \theta = \frac{\pi}{2}$.
 
 Cauchy-Schwarz inequality guarantees that the argument of $\arccos$ is always between -1 and 1.
 
@@ -148,27 +151,27 @@ These theorems have been covered already in linear algebra, see the notes for mo
 
 \subsection{Triangle inequality}
 
-\textbf{\underline{Theorem} (triangle inequality)}: Let $\underbar{x}, \underbar{y} \in \R^d$. Then
+\textbf{\underline{Theorem} (triangle inequality)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. Then
 
 $$
-    \norm{\underbar{x} + \underbar{y}} \leq \norm{\underbar{x}} + \norm{\underbar{y}}
+    \norm{\munderbar{x} + \munderbar{y}} \leq \norm{\munderbar{x}} + \norm{\munderbar{y}}
 $$
 
 \begin{proof}
     We have that
 
     \begin{align*}
-        \norm{\underbar{x} + \underbar{y}}^2 & = (\underbar{x} + \underbar{y}) \cdot (\underbar{x} + \underbar{y})                                                                     \\
-                                             & = \underbar{x} \cdot (\underbar{x} + \underbar{y}) + \underbar{y} \cdot (\underbar{x} + \underbar{y})                                   \\
-                                             & = \underbar{x} \cdot \underbar{x} + \underbar{x} \cdot \underbar{y} + \underbar{y} \cdot \underbar{x} + \underbar{y} \cdot \underbar{y} \\
-                                             & = \norm{\underbar{x}}^2 + 2 \underbar{x} \cdot \underbar{y} + \norm{\underbar{y}}^2
+        \norm{\munderbar{x} + \munderbar{y}}^2 & = (\munderbar{x} + \munderbar{y}) \cdot (\munderbar{x} + \munderbar{y})                                                                         \\
+                                               & = \munderbar{x} \cdot (\munderbar{x} + \munderbar{y}) + \munderbar{y} \cdot (\munderbar{x} + \munderbar{y})                                     \\
+                                               & = \munderbar{x} \cdot \munderbar{x} + \munderbar{x} \cdot \munderbar{y} + \munderbar{y} \cdot \munderbar{x} + \munderbar{y} \cdot \munderbar{y} \\
+                                               & = \norm{\munderbar{x}}^2 + 2 \munderbar{x} \cdot \munderbar{y} + \norm{\munderbar{y}}^2
     \end{align*}
 
     We apply the Cauchy-Schwarz inequality and we get
 
     \begin{align*}
-        \norm{\underbar{x} + \underbar{y}}^2 & \leq \norm{\underbar{x}}^2 + 2 \norm{\underbar{x}} \norm{\underbar{y}} + \norm{\underbar{y}}^2 \\
-        \norm{\underbar{x} + \underbar{y}}^2 & \leq \left(\norm{\underbar{x}} + \norm{\underbar{y}}\right)^2
+        \norm{\munderbar{x} + \munderbar{y}}^2 & \leq \norm{\munderbar{x}}^2 + 2 \norm{\munderbar{x}} \norm{\munderbar{y}} + \norm{\munderbar{y}}^2 \\
+        \norm{\munderbar{x} + \munderbar{y}}^2 & \leq \left(\norm{\munderbar{x}} + \norm{\munderbar{y}}\right)^2
     \end{align*}
 
     We take the square root of both sides and we get the result.
@@ -176,10 +179,10 @@ $$
 
 \subsection{Pythagorean theorem}
 
-\textbf{\underline{Theorem} (Pythagorean theorem)}: Let $\underbar{x}, \underbar{y} \in \R^d$ be orthogonal. Then
+\textbf{\underline{Theorem} (Pythagorean theorem)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$ be orthogonal. Then
 
 $$
-    \norm{\underbar{x} + \underbar{y}}^2 = \norm{\underbar{x}}^2 + \norm{\underbar{y}}^2
+    \norm{\munderbar{x} + \munderbar{y}}^2 = \norm{\munderbar{x}}^2 + \norm{\munderbar{y}}^2
 $$
 
 I will not report the proof here, if you're interested you can find it in my linear algebra notes.
@@ -188,21 +191,21 @@ I will not report the proof here, if you're interested you can find it in my lin
 
 This is a generalization of the Pythagorean theorem.
 
-\textbf{\underline{Theorem} (law of cosines)}: Let $\underbar{x}, \underbar{y} \in \R^d$. Then
+\textbf{\underline{Theorem} (law of cosines)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. Then
 
 $$
-    \norm{\underbar{x} - \underbar{y}}^2 = \norm{\underbar{x}}^2 + \norm{\underbar{y}}^2 - 2 \norm{\underbar{x}} \norm{\underbar{y}} \cos \theta
+    \norm{\munderbar{x} - \munderbar{y}}^2 = \norm{\munderbar{x}}^2 + \norm{\munderbar{y}}^2 - 2 \norm{\munderbar{x}} \norm{\munderbar{y}} \cos \theta
 $$
 
-where $\theta$ is the angle between $\underbar{x}$ and $\underbar{y}$.
+where $\theta$ is the angle between $\munderbar{x}$ and $\munderbar{y}$.
 
 \subsection{Planes}
 
-Planes in $\R^3$ are identified by a point $A$ and a normal vector $\underbar{n}$.
+Planes in $\R^3$ are identified by a point $A$ and a normal vector $\munderbar{n}$.
 
 A point $M = \begin{pmatrix}
         x \\ y \\ z
-    \end{pmatrix} \in \R^3$ belongs to a plane $\pi$ if and only if the vector $AM$ is orthogonal to $\underbar{n}$.
+    \end{pmatrix} \in \R^3$ belongs to a plane $\pi$ if and only if the vector $AM$ is orthogonal to $\munderbar{n}$.
 
 This means that the equation of the plane is
 
@@ -239,7 +242,7 @@ Consider $B_1, B_2$ be pairs of vectors in $\R^2$.
 \end{center}
 
 $B_1$ and $B_2$ are both bases of $\R^2$, but if we try to \say{continuously} transform one into the other by \say{rotating} the vectors
-while keeping them a basis we will see that at some point we will have $\underbar{x} \cdot \underbar{y} = 0$,
+while keeping them a basis we will see that at some point we will have $\munderbar{x} \cdot \munderbar{y} = 0$,
 hence the two vectors no longe form a basis.
 
 We call this propriety the \textbf{orientation} of the basis.
@@ -259,24 +262,24 @@ In $\R^3$ it is the volume of the parallelepiped defined by the three vectors.
 
 \begin{gather*}
     \det \left( \begin{pmatrix}
-            \underbar{x} & \underbar{y}
+            \munderbar{x} & \munderbar{y}
         \end{pmatrix} \right) = \text{ area} \\
     \det \left( \begin{pmatrix}
-            \underbar{x} & \underbar{y} & \underbar{z}
+            \munderbar{x} & \munderbar{y} & \munderbar{z}
         \end{pmatrix} \right) = \text{ volume}
 \end{gather*}
 
 \subsubsection{Cross product}
 
-\textbf{\underline{Definition} (cross product)}: Let $\underbar{x} = \begin{pmatrix}
+\textbf{\underline{Definition} (cross product)}: Let $\munderbar{x} = \begin{pmatrix}
         x_1 \\ x_2 \\ x_3
-    \end{pmatrix}$ and $\underbar{y} = \begin{pmatrix}
+    \end{pmatrix}$ and $\munderbar{y} = \begin{pmatrix}
         y_1 \\ y_2 \\ y_3
     \end{pmatrix}$.
-The cross product of $\underbar{x}$ and $\underbar{y}$ is the vector
+The cross product of $\munderbar{x}$ and $\munderbar{y}$ is the vector
 
 $$
-    \underbar{x} \times \underbar{y} = \begin{pmatrix}
+    \munderbar{x} \times \munderbar{y} = \begin{pmatrix}
         x_2 y_3 - x_3 y_2 \\
         x_3 y_1 - x_1 y_3 \\
         x_1 y_2 - x_2 y_1
@@ -285,12 +288,12 @@ $$
 
 \subsubsection{Cross product and determinant}
 
-\textbf{\underline{Theorem}}: Let $\underbar{x}, \underbar{y}, \underbar{z} \in \R^3$. Then
+\textbf{\underline{Theorem}}: Let $\munderbar{x}, \munderbar{y}, \munderbar{z} \in \R^3$. Then
 
 $$
     \det \left( \begin{pmatrix}
-            \underbar{x} & \underbar{y} & \underbar{z}
-        \end{pmatrix} \right) = (\underbar{x} \times \underbar{y}) \cdot \underbar{z}
+            \munderbar{x} & \munderbar{y} & \munderbar{z}
+        \end{pmatrix} \right) = (\munderbar{x} \times \munderbar{y}) \cdot \munderbar{z}
 $$
 
 \begin{proof}
@@ -298,7 +301,7 @@ $$
 
     \begin{align*}
         \det \left( \begin{pmatrix}
-                            \underbar{x} & \underbar{y} & \underbar{z}
+                            \munderbar{x} & \munderbar{y} & \munderbar{z}
                         \end{pmatrix} \right)
          & = \det \begin{pmatrix}
                       x_1 & y_1 & z_1 \\
@@ -320,7 +323,7 @@ $$
          & = z_1 (x_2 y_3 - x_3 y_2) - z_2 (x_1 y_3 - x_3 y_1) + z_3 (x_1 y_2 - x_2 y_1) \\
          & = \begin{pmatrix}
                  z_1 \\ z_2 \\ z_3
-             \end{pmatrix} \cdot (\underbar{x} \times \underbar{y})
+             \end{pmatrix} \cdot (\munderbar{x} \times \munderbar{y})
     \end{align*}
 
     The last steps follow from the definition of determinant for $2 \times 2$ matrixes and the definition of the cross product.
@@ -333,11 +336,11 @@ $$
 \textbf{\underline{Proposition} (characterization of the cross product)}:
 
 \begin{enumerate}
-    \item $\underbar{x} \times \underbar{y}$ is orthogonal to $\underbar{x}$ and $\underbar{y}$.
-    \item $\norm{\underbar{x} \times \underbar{y}} = \norm{\underbar{x}} \norm {\underbar{y}} \abs{\sin \theta}$
-          where $\theta$ is the angle between $\underbar{x}$ and $\underbar{y}$.
-    \item $\det (\underbar{x}, \underbar{y}, \underbar{x} \times \underbar{y}) \geq 0$
-          so that the basis $\underbar{x}, \underbar{y}, \underbar{x} \times \underbar{y}$ is positively oriented.
+    \item $\munderbar{x} \times \munderbar{y}$ is orthogonal to $\munderbar{x}$ and $\munderbar{y}$.
+    \item $\norm{\munderbar{x} \times \munderbar{y}} = \norm{\munderbar{x}} \norm {\munderbar{y}} \abs{\sin \theta}$
+          where $\theta$ is the angle between $\munderbar{x}$ and $\munderbar{y}$.
+    \item $\det (\munderbar{x}, \munderbar{y}, \munderbar{x} \times \munderbar{y}) \geq 0$
+          so that the basis $\munderbar{x}, \munderbar{y}, \munderbar{x} \times \munderbar{y}$ is positively oriented.
 \end{enumerate}
 
 \begin{proof}
@@ -346,26 +349,26 @@ $$
     \begin{enumerate}
         \item From the definition of cross product and knowing that the determinant of a matrix is 0 if two rows are equal we have
               \begin{itemize}
-                  \item $(\underbar{x} \times \underbar{y}) \cdot \underbar{x} = \det (\underbar{x}, \underbar{y}, \underbar{x}) = 0$
-                  \item $(\underbar{x} \times \underbar{y}) \cdot \underbar{y} = \det (\underbar{x}, \underbar{y}, \underbar{y}) = 0$
+                  \item $(\munderbar{x} \times \munderbar{y}) \cdot \munderbar{x} = \det (\munderbar{x}, \munderbar{y}, \munderbar{x}) = 0$
+                  \item $(\munderbar{x} \times \munderbar{y}) \cdot \munderbar{y} = \det (\munderbar{x}, \munderbar{y}, \munderbar{y}) = 0$
               \end{itemize}
-        \item Let $\underbar{z}$ be a vector normal to $\underbar{x}$ and $\underbar{y}$, with $\norm{\underbar{z}} \ne 0$.
-              We have that $\abs{\det (\underbar{x}, \underbar{y}, \underbar{z})} = \abs{(\underbar{x} \times \underbar{y}) \cdot \underbar{z}}$.
-              Recall that the formula to compute the area of a parallelogram is $\norm{\underbar{x}} \norm{\underbar{y}} \abs{\sin \theta}$.
-              Since $\det (\underbar{x}, \underbar{y}, \underbar{z})$ is the volume of the parallelepiped defined by the three vectors we have that
-              $\abs{\det (\underbar{x}, \underbar{y}, \underbar{z})} = \left(\norm{\underbar{x}} \norm{\underbar{y}} \abs{\sin \theta}\right) \cdot \norm{\underbar{z}}$ just by using the normal formula for the volume (area of base times height).
-              Because of (1) we have that $\sin \theta = 1$ and simplifying $\norm{\underbar{z}}$ we get the result.
-        \item We have that $\det (\underbar{x}, \underbar{y}, \underbar{x} \times \underbar{y}) = \norm{\underbar{x} \times \underbar{y}}^2 \geq 0$.
+        \item Let $\munderbar{z}$ be a vector normal to $\munderbar{x}$ and $\munderbar{y}$, with $\norm{\munderbar{z}} \ne 0$.
+              We have that $\abs{\det (\munderbar{x}, \munderbar{y}, \munderbar{z})} = \abs{(\munderbar{x} \times \munderbar{y}) \cdot \munderbar{z}}$.
+              Recall that the formula to compute the area of a parallelogram is $\norm{\munderbar{x}} \norm{\munderbar{y}} \abs{\sin \theta}$.
+              Since $\det (\munderbar{x}, \munderbar{y}, \munderbar{z})$ is the volume of the parallelepiped defined by the three vectors we have that
+              $\abs{\det (\munderbar{x}, \munderbar{y}, \munderbar{z})} = \left(\norm{\munderbar{x}} \norm{\munderbar{y}} \abs{\sin \theta}\right) \cdot \norm{\munderbar{z}}$ just by using the normal formula for the volume (area of base times height).
+              Because of (1) we have that $\sin \theta = 1$ and simplifying $\norm{\munderbar{z}}$ we get the result.
+        \item We have that $\det (\munderbar{x}, \munderbar{y}, \munderbar{x} \times \munderbar{y}) = \norm{\munderbar{x} \times \munderbar{y}}^2 \geq 0$.
     \end{enumerate}
 \end{proof}
 
 \textbf{\underline{Proposition} (proprieties of the cross product)}:
-Let $\underbar{x}, \underbar{y}, \underbar{z} \in \R^3$ and $a, b \in \R$. Then
+Let $\munderbar{x}, \munderbar{y}, \munderbar{z} \in \R^3$ and $a, b \in \R$. Then
 
 \begin{enumerate}
-    \item \textit{Bilinearity}: $(a \underbar{x} + b \underbar{y}) \times \underbar{z} = a (\underbar{x} \times \underbar{z}) + b (\underbar{y} \times \underbar{z})$ and $\underbar{x} \times (a \underbar{y} + b \underbar{z}) = a (\underbar{x} \times \underbar{y}) + b (\underbar{x} \times \underbar{z})$.
-    \item \textit{Asymmetry}: $\underbar{x} \times \underbar{y} = - \underbar{y} \times \underbar{x}$.
-    \item \textit{Linear independence}: $\underbar{x} \times \underbar{y} = \underbar{0} \iff \underbar{x}$ and $\underbar{y}$ are linearly dependent.
+    \item \textit{Bilinearity}: $(a \munderbar{x} + b \munderbar{y}) \times \munderbar{z} = a (\munderbar{x} \times \munderbar{z}) + b (\munderbar{y} \times \munderbar{z})$ and $\munderbar{x} \times (a \munderbar{y} + b \munderbar{z}) = a (\munderbar{x} \times \munderbar{y}) + b (\munderbar{x} \times \munderbar{z})$.
+    \item \textit{Asymmetry}: $\munderbar{x} \times \munderbar{y} = - \munderbar{y} \times \munderbar{x}$.
+    \item \textit{Linear independence}: $\munderbar{x} \times \munderbar{y} = \munderbar{0} \iff \munderbar{x}$ and $\munderbar{y}$ are linearly dependent.
 \end{enumerate}
 
 \begin{proof}
@@ -373,11 +376,11 @@ Let $\underbar{x}, \underbar{y}, \underbar{z} \in \R^3$ and $a, b \in \R$. Then
 
     For (3) we have
     \begin{align*}
-        \norm{\underbar{x} \times \underbar{y}} = 0
+        \norm{\munderbar{x} \times \munderbar{y}} = 0
          & \iff
-        \norm {\underbar{x}} \norm{\underbar{y}} \abs{\sin \theta} = 0                                        \\
-         & \iff \abs{\sin \theta} = 0 \text{ or } \norm{\underbar{x}} = 0 \text{ or } \norm{\underbar{y}} = 0 \\
-         & \iff \underbar{x} \text{ and } \underbar{y} \text{ are linearly dependent}
+        \norm {\munderbar{x}} \norm{\munderbar{y}} \abs{\sin \theta} = 0                                        \\
+         & \iff \abs{\sin \theta} = 0 \text{ or } \norm{\munderbar{x}} = 0 \text{ or } \norm{\munderbar{y}} = 0 \\
+         & \iff \munderbar{x} \text{ and } \munderbar{y} \text{ are linearly dependent}
     \end{align*}
 
 \end{proof}
@@ -561,7 +564,7 @@ Note that in physics we sometimes use $\dot{o}, \ddot{o}, \ldots$ to denote the 
 \subsection{Taylor expansion and local behavior}
 
 \textbf{\underline{Definition} (regular point)}:
-If $\gamma: I \to \R^d$ is differentiable at $t_0 \in I$, we say that $t_0$ is a regular point if $\gamma'(t_0) \neq \underbar{0}$.
+If $\gamma: I \to \R^d$ is differentiable at $t_0 \in I$, we say that $t_0$ is a regular point if $\gamma'(t_0) \neq \munderbar{0}$.
 
 \textbf{\underline{Definition} (tangent line)}:
 If $\gamma$ is differentiable and $t_0$ is a regular point, the tangent to the image of $\gamma$ at $\gamma(t_0)$ is the line passing through $\gamma(t_0)$ and directed by $\gamma'(t_0)$.
@@ -643,7 +646,7 @@ $$
 
 \underline{Example} ($t_0$ is not a regular point):
 Let $\gamma(t) = (t^2, t^3)$, which is continuous and differentiable.
-Let $t_0 = 0$, we that $\gamma'(t_0) = \underbar{0}$.
+Let $t_0 = 0$, we that $\gamma'(t_0) = \munderbar{0}$.
 We have that
 $$
     \begin{cases}
@@ -656,7 +659,7 @@ with $x \geq 0$. We see how $\gamma'(t_0)$ exists but is not regular.
 
 We call this an \textbf{ordinary cusp} (formal definition later).
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subfloat[\centering Image]{{
                 \includegraphics[width=0.35\textwidth]{assets/ordinary_cusp_image.png}
@@ -686,7 +689,7 @@ $$
 
 From this definition we see that the image of $\gamma$ is close to $\gamma (t_0)$ since it is the principal term of the expansion.
 
-Moreover note that the Taylor expansion of order 1 with $\gamma'(t_0) \ne \underbar{0}$ is
+Moreover note that the Taylor expansion of order 1 with $\gamma'(t_0) \ne \munderbar{0}$ is
 
 $$
     \gamma(t_0 + h) = \gamma(t_0) + h \gamma'(t_0) + o(h)
@@ -701,19 +704,19 @@ We can use the Taylor expansion to study the behavior of a curve in the neighbor
 % TODO: add graphs
 
 \textbf{\underline{Definition} (biregular point)}:
-Let $\gamma: I \to \R^d$ such that $\gamma'(t_0) \ne \underbar{0}$ and $\gamma''(t_0)$ is linearly independent from $\gamma'(t_0)$.
+Let $\gamma: I \to \R^d$ such that $\gamma'(t_0) \ne \munderbar{0}$ and $\gamma''(t_0)$ is linearly independent from $\gamma'(t_0)$.
 Then we say that $t_0$ is a biregular point.
 
 \textbf{\underline{Definition} (inflection point)}:
-$t_0$ is an inflection point if $\gamma'(t_0) \ne \underbar{0}$ but $\gamma''(t_0)$ is linearly dependent from $\gamma'(t_0)$.
+$t_0$ is an inflection point if $\gamma'(t_0) \ne \munderbar{0}$ but $\gamma''(t_0)$ is linearly dependent from $\gamma'(t_0)$.
 
 This means that the curve crosses the tangent line at $t_0$.
 
 
 \textbf{\underline{Definition} (ordinary cusp)}:
-$t_0$ is an ordinary cusp if $\gamma'(t_0) = \underbar{0}$ but $\gamma''(t_0), \gamma'''(t_0)$ are linearly independent.
+$t_0$ is an ordinary cusp if $\gamma'(t_0) = \munderbar{0}$ but $\gamma''(t_0), \gamma'''(t_0)$ are linearly independent.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \subfloat[\centering Inflection point]{{
                 \includegraphics[width=0.35\textwidth]{assets/inflection_point.png}
@@ -725,5 +728,188 @@ $t_0$ is an ordinary cusp if $\gamma'(t_0) = \underbar{0}$ but $\gamma''(t_0), \
     \label{fig:inflection_point_and_ordinary_cusp}
 \end{figure}
 
+\section{Class of 21/02/2024}
+
+\textbf{\underline{Lemma} ($\gamma'$ and $\gamma''$)}:
+If $\gamma: I \to \R^d$ is of class $C^2$ then
+
+$$
+    \gamma'(t) \cdot \gamma''(t) = \dv{t}\left(\frac{1}{2}\norm{\gamma'(t)}^2\right)
+$$
+
+A direct consequence of this is that $\forall t \in I$, $\gamma'(t) \cdot \gamma''(t) = 0 \iff t \mapsto \norm{\gamma'(t)}^2$ is constant.
+
+\begin{proof}
+    We have that
+
+    \begin{align*}
+        \dv{t}\norm{\gamma'(t)}^2 & = \dv{t}(\gamma'(t) \cdot \gamma'(t))                         \\
+                                  & = \gamma''(t) \cdot \gamma'(t) + \gamma'(t) \cdot \gamma''(t) \\
+                                  & = 2 \gamma''(t) \cdot \gamma'(t)
+    \end{align*}
+\end{proof}
+
+\subsection{Mean value theorem}
+
+Recall the mean value theorem for functions of one variable:
+
+\begin{itemize}
+    \item If $f : [a, b] \to \R$ is differentiable then $\exists c \in (a, b)$ such that
+
+          $$
+              f'(c) = \frac{f(b) - f(a)}{b - a}
+          $$
+
+    \item If $f$ is of class $C^1$ then $\exists c \in (a, b)$ such that
+
+          $$
+              f(b) - f(a) = \int_a^b f'(x) \dd{x}
+          $$
+\end{itemize}
+
+Note that for curves the first point is \textbf{not} generally true.
+Consider as counterexample $\gamma(t) = \begin{pmatrix}
+        \cos t \\ \sin t
+    \end{pmatrix}$ with $t \in [0, 2\pi]$.
+We have in fact that $ \frac{\gamma(2\pi) - \gamma(0)}{2\pi - 0} = \munderbar{0}$ which is not equal to $\gamma'(t)$ for any $t$.
+
+However the second point is still true.
+
+\textbf{\underline{Theorem} (mean value theorem)}:
+If $\gamma$ is of class $C^1$ then
+
+$$
+    \gamma(b) - \gamma(a) = \int_a^b \gamma'(t) \dd{t}
+$$
+
+where $\int_a^b \gamma'(t) \dd{t}$ is the vector in $\R^d$ whose $i$-th component is $\int_a^b \gamma_i'(t) \dd{t}$.
+
+\subsection{Curves in polar coordinates}
+
+\textbf{\underline{Definition} (polar coordinates functions)}:
+Let $I \subseteq \R$ and $g: I \to [0, +\infty)$ be a non-negative function.
+The curve $r = g(\theta)$ is the real valued function
+
+$$
+    \gamma: \theta \in I \to g(\theta) \begin{pmatrix}
+        \cos \theta \\ \sin \theta
+    \end{pmatrix} \in \R^2
+$$
+
+Let's now introduce
+
+$$
+    e_r = \begin{pmatrix}
+        \cos \theta \\ \sin \theta
+    \end{pmatrix},
+    \quad
+    e_\theta = \begin{pmatrix}
+        -\sin \theta \\ \cos \theta
+    \end{pmatrix}
+$$
+
+These two vectors represent the basis of the polar coordinates system.
+
+\textbf{\underline{Lemma} ($e_r$ and $e_\theta$)}:
+\begin{itemize}
+    \item $\forall \theta \in I$, $e_r \cdot e_\theta = 0$.
+    \item $\theta \mapsto e_r(\theta)$ and $\theta \mapsto e_\theta(\theta)$ are class $C^\infty$ and $e_r' = e_\theta$, $e_\theta' = -e_r$.
+\end{itemize}
+
+\begin{proof}
+    We use the lemma discussed at the beginning of the class:
+
+    TODO
+\end{proof}
+
+\textbf{\underline{Lemma}}: Let $g: I \subseteq \R \to [0, +\infty)$ of class $C^2$.
+Then the curve $\gamma: \theta \mapsto g(\theta) e_r(\theta)$ is of class $C^2$ and
+
+\begin{align*}
+    \gamma'  & = g' e_r + g e_\theta                         \\
+    \gamma'' & = g'' e_r + g' e_\theta + g' e_\theta - g e_r \\
+             & = (g'' - g) e_r + 2 g' e_\theta
+\end{align*}
+
+
+\textbf{\underline{Remark}}:
+\begin{align*}
+    \text{a point $\theta_0$ is regular} & \iff \gamma'(\theta_0) \ne \munderbar{0}                                           \\
+                                         & \iff g'(\theta_0) e_r(\theta_0) + g(\theta_0) e_\theta(\theta_0) \ne \munderbar{0} \\
+                                         & \iff \begin{pmatrix}
+                                                    g'(\theta_0) \\ g(\theta_0)
+                                                \end{pmatrix} \ne \begin{pmatrix}
+                                                                      0 \\ 0
+                                                                  \end{pmatrix}                                              \\
+                                         & \iff g'(\theta_0) \ne 0
+\end{align*}
+
+\begin{proof}
+    TODO, just show the calculations, it's just a bunch of derivatives.
+\end{proof}
+
+\begin{proof}
+    The first steps are just the definition of regular point and deriving $\gamma$.
+
+    The last step is true because we know that $g \geq 0$ by definition, hence if $g = 0$ then it is a minimum and $g' = 0$.
+\end{proof}
+
+\subsection{Bezier curves and splines}
+
+Bezier curves are a way for computers to represent curves.
+We use a set of control points we can move around to change the shape of the curve.
+
+By convention $t$ is in $[0, 1]$. We will look at the cases for 2 and 3 control points and then generalize to $n$ control points.
+
+\begin{description}
+    \item[2 points] We have $P_0$ and $P_1$.
+        In this case there isn't much to do, we just have a line from $P_0$ to $P_1$. The parametrization is
+
+        $$
+            \gamma(t) = (1 - t) \munderbar{P_0} + t \munderbar{P_1}
+        $$
+
+    \item[3 points] We have $P_0$, $P_1$ and $P_2$.
+        We could just draw straight lines from $P_0$ to $P_1$ and from $P_1$ to $P_2$ but we want to have a smooth curve.
+
+        Let $\gamma_{0,1}$ and $\gamma_{1,2}$ be the parametrizations of the lines from $P_0$ to $P_1$ and from $P_1$ to $P_2$.
+        Then $\gamma_{0,1,2}$ will be the interpolation between $\gamma_{0,1}$ and $\gamma_{12}$.
+
+        \begin{align*}
+            \gamma_{0,1,2}(t) & = (1 - t) \gamma_{0,1}(t) + t \gamma_{1,2}(t)                                                                                   \\
+                              & = (1 - t) \left((1 - t) \munderbar{P_0} + t \munderbar{P_1}\right) + t \left((1 - t) \munderbar{P_1} + t \munderbar{P_2}\right)
+        \end{align*}
+
+    \item[General case] We define this by recursion:
+        \begin{itemize}
+            \item $\gamma_{0,1}(t) = (1 - t) \munderbar{P_0} + t \munderbar{P_1}$
+            \item $\gamma_{0,1, \ldots, n}(t) = (1 - t) \gamma_{0,1, \ldots, n}(t) + t \gamma_{1,2, \ldots, n+1}(t)$
+        \end{itemize}
+\end{description}
+
+\textbf{\underline{Lemma}}:
+For every $t \in [0, 1]$
+
+$$
+    \gamma_{0,1, \ldots, n}(t) = \sum_{k=0}^n \binom{n}{k} (1 - t)^{n-k} t^k \munderbar{P_k}
+$$
+
+We see how this is a polynomial of class $C^\infty$. It is also very easy to compute the derivative and the bounding box of the curve.
+
+You can find many animations of Bezier curves on the internet, such as this one: \url{https://www.jasondavies.com/animated-bezier/}.
+
+\subsubsection{Spines}
+
+Spines are a generalization of Bezier curves.
+
+\textbf{\underline{Definition}}: Let $\Psi_{k, n}: [0, 1]\to [0, 1]$ such that
+
+$$
+    \gamma_{0,1, \ldots, n}(t) = \sum_{k=0}^n \Psi_{k, n}(t) \munderbar{P_k}
+$$
+
+with $\sum_{k=0}^n \Psi_{k, n}(t) = 1$.
+
+See \url{https://www.ibiblio.org/e-notes/Splines/basis.html} for animations of spines.
 
 \end{document}

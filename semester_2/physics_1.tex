@@ -1,6 +1,7 @@
 \documentclass[10pt]{extarticle}
 \title{Physics 1 Notes}
 \author{Giacomo Ellero}
+\date{Semester 2 - 2023/2024}
 
 \usepackage{amsfonts}
 \usepackage{amsthm}
@@ -941,6 +942,10 @@ This is very important because in this way we have a way to measure the coeffici
 
 \section{Class of 19/02/2024 - Exercises}
 
+\begin{warningbox}{Exercises}
+  In this class we just solved exercised so I won't report anything here except for important results.
+\end{warningbox}
+
 We derived, by solving some exercises, the following relations:
 
 $$
@@ -954,6 +959,233 @@ $$
 $$
 
 These are relations that describe the refraction and reflection of light but it's interesting to see how they can be derived from the fact that light travels the fastest path.
+
+\section{Class of 20/02/2024 - Work and energy}
+
+\subsection{Work-energy theorem}
+
+Consider the following equations:
+
+\begin{align*}
+  \dv{v}{t}                                 & = a                         \\
+  v \dv{v}{t}                               & = a v                       \\
+  \frac{1}{2} \dv{v^2}{t}                   & = a \dv{x}{t}               \\
+  \frac{1}{2} \int_{v_0}^{v_1} v^2 \dd{}    & = a \int_{x_0}^{x_1} \dd{x} \\
+  \frac{1}{2} (v_1^2 - v_0^2)               & = a (x_1 - x_0)             \\
+  \frac{1}{2} (v_1^2 - v_0^2)               & = \frac{F}{m} (x_1 - x_0)   \\
+  \frac{1}{2} m v_1^2 - \frac{1}{2} m v_0^2 & = F (x_1 - x_0)
+\end{align*}
+
+
+We have seen these equations up to the fifth line but now that we know that $F = m a$ we can write the equation in terms of the force.
+
+Note that this equation does not depend on time.
+
+We define the following from the equation above:
+
+\begin{itemize}
+  \item \underline{Work}: $W = F \Delta x$
+  \item \underline{Kinetic energy}: $K = \frac{1}{2} m v^2$
+\end{itemize}
+
+We get the \textbf{work-energy theorem}:
+
+$$
+  \Delta K = W
+$$
+
+The unit of energy and work is
+
+$$
+  [K] = [W] = [F][L] = [M][L]^2[T]^{-2} = \si{\kilogram \meter \squared \per \second \squared} = \si{\joule}
+$$
+
+\subsection{Power}
+
+Moreover we define \textbf{power} as the rate of change of work:
+
+\begin{align*}
+  P & = \dv{W}{t}           \\
+    & = \dv{t} (F \Delta x) \\
+    & = F \dv{x}{t}         \\
+    & = F v
+\end{align*}
+
+
+The unit of power is
+
+$$
+  [P] = [F][L][T]^{-1} = \si{\kilogram \meter \squared \per \second \cubed} = \si{\watt}
+$$
+
+\subsection{Non-constant force}
+
+Note that the relationship we defined above are valid only if the force is constant, otherwise we have to do some extra work.
+
+In fact
+
+\begin{align*}
+  \dd{W}          & = F(x) \dd{x}          \\
+  \int_0^1 \dd{W} & = \int_0^1 F(x) \dd{x} \\
+  W = K_1 - K_0   & = \int_0^1 F(x) \dd{x}
+\end{align*}
+
+\subsection{Potential energy}
+
+Assume we know
+
+$$
+  F(x) = \dv{x} G(x)
+$$
+
+for some function $G(x)$.
+
+We get
+
+$$
+  \int_0^1 F(x) \dd{x} = \int_0^1 \dv{G}{x} \dd{x}
+$$
+
+We can simplify the differentials and get
+
+$$
+  \int_0^1 F(x) \dd{x} = \int_0^1 \dd{G} = G(1) - G(0)
+$$
+
+We define the \textbf{potential energy} associated to a force $F$ as
+
+$$
+  V = - G
+$$
+
+We will use this concept to define the total mechanical energy:
+
+$$
+  E = K + V = \text{ const}
+$$
+
+
+\subsubsection{Example: gravitational force}
+
+We know that
+
+$$
+  F_g = - m g \hat j = - \dv{V_g}{y}(y) \hat j
+$$
+
+We get that the potential is
+
+$$
+  V_g(y) = m g y + c
+$$
+
+Note that the potential is an artificial construct which cannot be measured directly.
+That's why we have the $c$ term: this is a constant we can choose to make the potential zero at some point.
+
+\subsubsection{Example: spring force}
+
+We know that
+
+$$
+  F_s(x) = -k (x - x_0) = - \dv{V_s}{x}(x)
+$$
+
+We get that the potential is
+
+\begin{align*}
+  V_s(x) & = \frac{1}{2} k (x - x_0)^2 + c  \\
+         & = \frac{1}{2} k (\Delta x)^2 + c
+\end{align*}
+
+\subsection{Non conservative forces}
+
+We will start with an example.
+
+Consider a mass $m$ on a surface with friction attached to a spring.
+
+We write the equation of work:
+
+$$
+  (K_1 + \frac{1}{2}kx_1^2) - (K_0 + \frac{1}{2}kx_0^2) = W_{\text{friction}}
+$$
+
+This $W_{\text{friction}}$ is the work done by the friction force and it is something like
+
+$$
+  W_{\text{friction}} = \int_0^1 f(x, \ldots) \dd{x}
+$$
+
+Friction is a complex force that depends on many factors, hence we cannot integrate it that easily. We recall that in our model $\vec f = \mu_d \vec N$, thus
+
+\begin{align*}
+  W_{\text{friction}} & = \int_0^1 \mu_d mg \dd{x} \\
+                      & = \mu_d mg (x_1 - x_0)     \\
+                      & < 0
+\end{align*}
+
+We see that when we introduce friction we lose energy, hence we call friction a \textbf{non-conservative force}.
+
+\subsubsection{Example}
+
+Consider a mass $m$ on a surface with friction attached to a spring.
+
+We want to find $x_1$ given $x_0$ and that $K_0 = K_1 = 0$ (we want to find the position at which $m$ stops).
+
+If we take the equation from above and remove the kinetic energies we get
+
+\begin{align*}
+  \frac{1}{2} k x_1^2 - \frac{1}{2} k x_0^2 & = - \mu_d m g (x_1 - x_0) \\
+  \frac{1}{2} k (x_1^2 - x_0^2)             & = - \mu_d m g (x_1 - x_0) \\
+  \frac{1}{2} k (x_1 - x_0)(x_1 + x_0)      & = - \mu_d m g (x_1 - x_0) \\
+\end{align*}
+
+and
+
+$$
+  (x_1 - x_0) \left( \frac{1}{2} k (x_1 + x_0) + \mu_d m g \right) = 0
+$$
+
+This equation tells us some interesting facts:
+we get that $m$ will be still if $x_1 = x_0$ or if $x_1 = -x_0$ minus some factor that depends on the friction.
+
+\subsection{Dynamical system}
+
+Consider the problem of finding the position of a point knowing just the forces acting on it.
+
+We have seen this problem before by using a second order differential equation, but we can also solve it by using the concept of potential energy.
+
+We have that
+
+\begin{align*}
+  E                  & = \frac{1}{2} m \left( \dv{x}{t} \right) + V(x) = \text{ const} \\
+  \implies \dv{x}{t} & = \pm \sqrt{\frac{2}{m} (E - V(x))}
+\end{align*}
+
+\begin{bluebox}{Sidenote: separable differential equations}
+  To complete this problem we need to solve a differential equation of the form
+
+  $$
+    \dv{x}{t} = f(x) g(t)
+  $$
+
+  This type of equation is called \textbf{separable} and it's one of the few types of differential equations that can be solved analytically.
+
+  We can solve it by separating the variables and integrating both sides:
+
+  \begin{align*}
+    \dv{x}{t}                         & = f(x) g(t)        \\
+    \implies \int \frac{\dd{x}}{f(x)} & = \int g(t) \dd{t}
+  \end{align*}
+
+  Remember to choose the same bounds for both integrals.
+\end{bluebox}
+
+We identify that $\dv{x}{t} = f(x)g(t)$ where $f(x) = \pm \sqrt{\frac{2}{m} (E - V(x))}$ and $g(t) = 1$.
+Now we can solve the separable differential equation:
+
+$$
+  \pm \int_0^1 \frac{\dd{x}}{\sqrt{\frac{2}{m} (E - V(x))}} = \int_0^1 \dd{t} = t
+$$
 
 
 

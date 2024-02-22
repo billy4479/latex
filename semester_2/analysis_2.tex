@@ -25,10 +25,12 @@
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
 \newcommand{\F}{\mathcal{F}}
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 \newcommand{\munderbar}[1]{\underbar{\ensuremath{#1}}}
+\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
 
 
 \newenvironment{absolutelynopagebreak}
@@ -911,5 +913,141 @@ $$
 with $\sum_{k=0}^n \Psi_{k, n}(t) = 1$.
 
 See \url{https://www.ibiblio.org/e-notes/Splines/basis.html} for animations of spines.
+
+\section{Class of 22/02/2024 - Notions of topology}
+
+
+\subsection{Introduction to path integrals}
+
+This is not part of this section of the course but we are doing it now because we will use it in physics very soon.
+
+Let $\gamma: t \in I \to \R^d$ with $d = 1, 2, 3$.
+If $\gamma(t)$ is the position at time $t$, then $\gamma'(t) = \dot{\gamma}(t)$ is the velocity, $\gamma''(t) = \ddot{\gamma}(t)$ is the acceleration and the image of $\gamma$ is the trajectory.
+
+Many times in physics we have differential equations of the form
+
+$$
+    m \ddot{\gamma} = F(\gamma, \dot{\gamma}, t)
+$$
+
+We might use path integrals of a vector fields, for example, to calculate the work done by a force along a trajectory.
+
+Consider the force vector field:
+
+\begin{align*}
+    \munderbar{F}: \R^d & \to \R^d                \\
+    F(x,y)              & = \begin{pmatrix}
+                                F_1(x, y) \\ F_2(x, y)
+                            \end{pmatrix}
+\end{align*}
+
+\textbf{\underline{Definition} (path integral)}:
+
+$$
+    \int_\gamma \munderbar{F} \cdot \dd{\munderbar{s}} = \int_a^b \munderbar{F}(\gamma(t)) \cdot \gamma'(t) \dd{t}
+$$
+
+From this formula we obtain 2 results that we will not prove yet because we don't have the tools but they are important to know:
+
+\begin{itemize}
+    \item The result does not depend on the speed of the curve, only on the trajectory.
+    \item If $\munderbar{F} = \triangledown g$ (with $g: \R^2 \to \R$) is the gradient of a potential $g$, then $\int_\gamma \munderbar{F} \cdot \dd{\munderbar{s}} = \int_\gamma \triangledown g \cdot \dd{\munderbar{s}} = g(\gamma(b)) - g(\gamma(a))$.
+
+          If $g = g(x, y)$ then we have that $\triangledown g = \begin{pmatrix}
+                  \pdv{g(x, y)}{x} \\ \pdv{g(x,y)}{y}
+              \end{pmatrix}$.
+
+          Note that this is basically the extension of the fundamental theorem of calculus in higher dimensions.
+\end{itemize}
+
+\subsection{Topology in higher dimensions}
+
+\subsubsection{Useful notions}
+
+We recall some notions we saw earlier in the course:
+
+\begin{itemize}
+    \item $\norm{\munderbar{x}} \in [0,+\infty)$ with $\munderbar{x} \in \R^d$ (norm).
+    \item $\norm{\munderbar{x} + \munderbar{y}} \leq \norm{\munderbar{x}} + \norm{\munderbar{y}}$ (triangle inequality).
+    \item $\norm{a \munderbar{x}}$ = $\abs{a} \norm{\munderbar{x}}$.
+    \item $\norm{\munderbar{x}} = 0 \iff \munderbar{x} = \munderbar{0}$.
+\end{itemize}
+
+\textbf{\underline{Definition} (distance)}: If $\munderbar{x}, \munderbar{y} \in \R^d$ then the distance between $\munderbar{x}$ and $\munderbar{y}$ is
+
+$$
+    d = \norm{\munderbar{x} - \munderbar{y}} \in \R
+$$
+
+\subsubsection{Limits}
+
+\textbf{\underline{Definition} (limits in $\R^d$)}:
+We say that a sequence in $\R^d$, $\left(\munderbar{x}_n\right)_{n \in \N}$ converges to $\munderbar{a} \in \R^d$ if the real-valued sequence $\left(\norm{\munderbar{x}_n - \munderbar{a}}\right)_{n \in \N}$ converges to 0.
+
+We can also define limits using the usual $\varepsilon - N$ characterization: $\left(\munderbar{x}_n\right)_{n \in \N}$ converges to $\munderbar{a} \in \R^d$ iff
+
+$$
+    \forall \varepsilon > 0, \exists N \in \N : n \geq N \implies \norm{\munderbar{x}_n - \munderbar{a}} < \varepsilon
+$$
+
+Geometrically, this means considering a ball of radius $\varepsilon$ centered at $\munderbar{a}$, then all the points of the sequence will eventually be inside the ball.
+
+\textbf{\underline{Proposition}}:
+Let $\munderbar{x}_n = \begin{pmatrix}
+        x_{n,1} \\ \vdots \\ x_{n,d}
+    \end{pmatrix}$.
+
+$\left(\munderbar{x}_n\right)_{n \in \N}$ converges iff for $i \in \{1, \ldots, d\}$, $\left(x_{n,i}\right)_{n \in \N}$ converges to $a_i$ as $n \to +\infty$.
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[$\implies$]
+            Assume $\norm{\munderbar{x}_n - \munderbar{a}}$ converges to 0.
+            Fix $i \in \{1, \ldots, d\}$.
+            Note that
+
+            $$
+                \sum_{j = 1}^d \left(x_{j, n} - a_j\right)^2 \geq \left(x_{i, n} - a_i\right)^2
+            $$
+
+            So if we take the square root we get that
+
+            $$
+                \norm{\munderbar{x}_n - \munderbar{a}} \geq \abs{x_{i, n} - a_i}
+            $$
+
+            So since $\norm{\munderbar{x}_n - \munderbar{a}}$ converges to 0 we have that $\abs{x_{i, n} - a_i}$ converges to 0 as well, thus $x_{i, n}$ converges to $a_i$.
+        \item[$\impliedby$]
+            Assume that $\left(x_{n, i}\right)_{n \in \N}$ converges to $a_i$ for $i \in \{1, \ldots, d\}$.
+            Let $u_{i, n} = x_{i, n} - a_i$, then $u_{i, n}$ converges to 0.
+
+            We want to prove that
+
+            $$
+                \norm{\munderbar{x}_n - \munderbar{a}} = \sqrt{\sum_{i=1}^d \left(x_{i, n} - a_i\right)^2} = \sqrt{\sum_{i=1}^d \left(u_{i, n}\right)^2}
+            $$
+            converges to 0.
+
+            Since $u_{i, n} \to 0$ then also $\left(u_{i, n}\right)^2 \to 0$.
+            Then since the square root is continuous we can apply the transference principle to obtain the result.
+    \end{description}
+\end{proof}
+
+\textbf{\underline{Definition} (operations on limits)}:
+Let $\left(\munderbar{x}_n\right)_{n \in \N}$ and $\left(\munderbar{y}_n\right)_{n \in \N}$ be sequences in $\R^d$ converging to $\munderbar{a}$ and $\munderbar{b}$ respectively.
+Then
+
+\begin{enumerate}
+
+    \item $\left(\munderbar{x}_n + \munderbar{y}_n\right)_{n \in \N}$ converges to $\munderbar{a} + \munderbar{b}$.
+    \item $\left(\munderbar{x}_n \cdot \munderbar{y}_n\right)_{n \in \N}$ converges to $\munderbar{a} \cdot \munderbar{b}$.
+    \item If $d = 3$ then $\left(\munderbar{x}_n \times \munderbar{y}_n\right)_{n \in \N}$ converges to $\munderbar{a} \times \munderbar{b}$.
+    \item $\norm{\munderbar{x}_n}$ converges to $\norm{\munderbar{a}}$.
+\end{enumerate}
+
+\begin{proof}
+    The proof of this is very easy and can be obtained by applying the previous proposition and properties of limits in $\R$.
+\end{proof}
 
 \end{document}

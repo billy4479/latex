@@ -1214,7 +1214,7 @@ Then the best approach to try to solve this integral is to use a Taylor expansio
 
 If we are lucky we might be able to solve this integral analytically, surely it's easier to solve this than the second order differential equation.
 
-\subsection{Conservation of energy in 2D}
+\subsection{Work and energy in 2D}
 
 We have that the total mechanical energy is conserved if the forces are conservative.
 
@@ -1347,16 +1347,24 @@ $$
 Note that from this result we see that there can exist non-zero forces that do no work:
 if the direction of the force is orthogonal to the direction of the path then the work is zero.
 
-\subsubsection{Constructing a conservative force}
+\subsection{Conservative forces in 2D}
 
-All the effort we put in the calculus section above to show that the mixed partial derivatives are equal is actually only valid for infinitesimal variations of the function.
-In fact, in the general case of discrete variations of the function the mixed partial derivatives are not equal.
+Despite all the effort we put in the calculus section above to show that the mixed partial derivatives are equal is actually only valid for infinitesimal variations of the function.
+In fact, in the general case of discrete variations of the function this is not true.
+
+In 1D it was easy to show that every force (except for friction) is conservative, but in 2D and 3D this is not true:
+if we just consider 2D, for example, there are infinitely many ways to get from a point to another, and it's easy so see that the work done by a force can depend on the path taken.
+If you are not convinced you can read section 6.4 of the book which contains nice examples and more verbose explanations.
+
+To summarize, in $d \geq 2$ we cannot assume that a force is conservative. In fact, in general, we have that
 
 $$
     \int_{\gamma_A} \vec{F}(\vec{r}) \cdot \dd \vec{r} \neq \int_{\gamma_B} \vec{F}(\vec{r}) \cdot \dd \vec{r} \ne V(\vec{r}_A) - V(\vec{r}_B)
 $$
 
-Therefore we need a way to construct a force that is path independent.
+\subsubsection{Contructing a conservative force}
+
+Even though we cannot assume that a force is conservative we have a way to construct one.
 
 We choose a $V(x, y)$ such that
 
@@ -1364,7 +1372,7 @@ $$
     \vec{F} = \left( - \pdv{V}{x}, - \pdv{V}{y} \right) = -\vec{\nabla} V
 $$
 
-where $\vec{\nabla} = \left( \pdv{x}, \pdv{y} \right)$ is the \textbf{gradient} operator.
+where $\vec{\nabla} = \left( \pdv{x}, \pdv{y} \right)$ is the \textbf{gradient} operator. (See analysis 2.)
 
 Then
 
@@ -1376,8 +1384,5 @@ Then
 \end{align*}
 
 and we obtain the result we wanted.
-
-Note that this means that in general we cannot assume that a force is conservative.
-
 
 \end{document}

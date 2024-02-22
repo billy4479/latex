@@ -1187,6 +1187,157 @@ $$
   \pm \int_0^1 \frac{\dd{x}}{\sqrt{\frac{2}{m} (E - V(x))}} = \int_0^1 \dd{t} = t
 $$
 
+\section{Class of 22/02/2024}
+
+\subsection{Equilibrium}
+
+An mass is in equilibrium when $F = 0$.
+We also know that $F = -\dv{V}{x}$.
+
+Moreover we can study the \textbf{stability} of the equilibrium by looking to what happens to the force when we move the mass a little bit from the equilibrium:
+we say that the equilibrium is \textbf{stable} if the force is directed towards the equilibrium and \textbf{unstable} if the force is directed away from the equilibrium. Hence we have stability if $V''(x) > 0$.
+
+Consider the following situation:
+the mass is converting its kinetic energy into potential energy; it is approaching a point of unstable equilibrium $x_e$ and it has just enough energy $E$ to reach it.
+We want to calculate the time it takes to reach the equilibrium.
+
+First we need to compute $V(x_e + \delta x)$, we can do so by using a Taylor expansion.
+
+Then we consider the bound of integration $x_0 = x_e + \delta x_0$ and $x_1 = x_e + \delta x_1$ and use the formula we saw in the last class to find the time.
+
+$$
+  \Delta t = \pm \int_{x_e + \delta x_0}^{x_e + \delta x_1} \frac{\dd{x}}{\sqrt{\frac{2}{m} (E - V(x_e + \delta x))}}
+$$
+
+Then the best approach to try to solve this integral is to use a Taylor expansion of $V$, substitute $u = \delta x$ and shift the bounds of integration.
+
+If we are lucky we might be able to solve this integral analytically, surely it's easier to solve this than the second order differential equation.
+
+\subsection{Conservation of energy}
+
+We have that the total mechanical energy is conserved if the forces are conservative.
+
+A force is conservative if it only depends on starting and ending points and not on the path taken. In 1D this is easy to see, it's a bit more difficult in 2D and 3D.
+
+In 1D we have that
+
+$$
+  f(x + \dd{x}) - f(x) = \dd{f} = f'(x) \dd{x}
+$$
+
+In higher dimensions we have to use partial derivatives.
+
+Consider a function $f(x, y)$, we have that
+
+\begin{align*}
+  \pdv{f}{x} & = \lim_{\Delta x \to 0} \frac{f((x + \Delta x), y) - f(x, y)}{\Delta x} \\
+  \pdv{f}{y} & = \lim_{\Delta y \to 0} \frac{f(x, (y + \Delta y)) - f(x, y)}{\Delta y}
+\end{align*}
+
+where $\pdv{f}{x}$ and $\pdv{f}{y}$ are called \textbf{partial derivatives} of $f$ with respect to $x$ and $y$.
+This means that we fix one variable and we take the derivative with respect to the other.
+
+Partial derivatives represent the variation of the function along just one direction, now we have to find what is the total variation $\dd{f}$ of the function.
+
+Consider the two possible paths to go from $(x, y)$ to $(x + \dd{x}, y + \dd{y})$:
+
+\begin{itemize}
+  \item For $(x, y) \to (x + \dd{x}, y) \to (x + \dd{x}, y + \dd{y})$ we have
+
+        \begin{align*}
+          df_1^{(A)} & = \pdv{f(x,y)}{x} \dd x          \\
+          df_2^{(A)} & = \pdv{f(x + \dd x, y)}{y} \dd y
+        \end{align*}
+
+  \item For $(x, y) \to (x, y + \dd{y}) \to (x + \dd{x}, y + \dd{y})$ we have
+
+        \begin{align*}
+          df_1^{(B)} & = \pdv{f(x,y)}{y} \dd y          \\
+          df_2^{(B)} & = \pdv{f(x, y + \dd y)}{x} \dd x
+        \end{align*}
+\end{itemize}
+
+We now want to prove that
+
+$$
+  df_1^{(A)} + df_2^{(A)} = df_1^{(B)} + df_2^{(B)}
+$$
+
+We can do a taylor expansion
+
+\begin{align*}
+  \dd{f_2}^{(A)} = \pdv{f(x + \dd{x}, y)}{y} & = \pdv{f(x, y)}{y} + \pdv{x} \left( \pdv{f(x, y)}{y} \right) \dd{x} \\
+                                             & = \pdv{f(x, y)}{y} + \pdv{f(x, y)}{x}{y}                            \\
+  \dd{f_2}^{(B)} = \pdv{f(x, y + \dd{y})}{x} & = \pdv{f(x, y)}{x} + \pdv{y} \left( \pdv{f(x, y)}{x} \right) \dd{y} \\
+                                             & = \pdv{f(x, y)}{x} + \pdv{f(x, y)}{x}{y}
+\end{align*}
+
+MAGIC HERE
+
+TODO: we need to show the two paths are equal if the second order terms are equal.
+
+therefore we get that the the total variation $\dd{f}$ is the same for both paths.
+
+\subsection{Energy in 2D}
+
+We have that
+
+\begin{align*}
+  K & = \frac{1}{2} m v^2              \\
+    & = \frac{1}{2} m \norm{\vec{v}}^2 \\
+    & = \frac{1}{2} m (v_x^2 + v_y^2)  \\
+\end{align*}
+
+Power is
+
+\begin{align*}
+  P = \dv{K}{t} & = \frac{1}{2}m \dv{t} (v_x^2 + v_y^2) \\
+                & = m v_x a_x + m v_y a_y               \\
+                & = \vec F \cdot \vec v
+\end{align*}
+
+Hence
+
+$$
+  \dv{W}{t} = \vec F \cdot \vec v = \vec F \cdot \dv{\vec r}{t}
+$$
+
+We can calculate the work done by a force on a path with a path integral (see analysis 2).
+
+$$
+  W = \int_{\gamma} F(\vec{r}) \cdot \dd{\vec{r}}
+$$
+
+Note that from this result we see that there can exist non-zero forces that do no work:
+if the direction of the force is orthogonal to the direction of the path then the work is zero.
+
+\subsection{Constructing a conservative force}
+
+If we are considering a non-infinitesimal path we note that in general the work done by a force is path dependent.
+In fact
+
+$$
+  \int_{\gamma_A} \vec{F}(\vec{r}) \cdot \dd \vec{r} \neq \int_{\gamma_B} \vec{F}(\vec{r}) \cdot \dd \vec{r} \ne V(\vec{r}_A) - V(\vec{r}_B)
+$$
+
+Therefore we need a way to construct a force that is path independent.
+
+We choose a $V(x, y)$ such that
+
+$$
+  \vec{F} = \left( - \pdv{V}{x}, - \pdv{V}{y} \right) = -\vec{\nabla} V
+$$
+
+where $\vec{\nabla} = \left( \pdv{x}, \pdv{y} \right)$ is the \textbf{gradient} operator.
+
+Then
+
+\begin{align*}
+  \int_\gamma \vec{F} \cdot \dd{\vec{r}} & = \int_\gamma \left( -\pdv{V}{x}, -\pdv{V}{y} \right) \cdot (\dd{x}, \dd{y}) \\
+                                         & = - \int_\gamma \pdv{V}{x} \dd{x} + \pdv{V}{y} \dd{y}                        \\
+                                         & = - \int_\gamma \dd{V}                                                       \\
+                                         & = V(\vec{r}_A) - V(\vec{r}_B)
+\end{align*}
 
 
 \end{document}

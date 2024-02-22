@@ -21,6 +21,7 @@
 \usepackage{cancel}
 \usepackage{siunitx}
 \usepackage{capt-of}
+\usepackage{float}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -70,18 +71,18 @@ In our theory we take in account way less phenomena than what happens in reality
 We need to understand what we can neglect and what we can't.
 
 \begin{enumerate}
-  \item Identify the key ingredients
-  \item Build a simplified model of reality
-  \item Solve it (if you can)
-  \item Add additional ingredients
+    \item Identify the key ingredients
+    \item Build a simplified model of reality
+    \item Solve it (if you can)
+    \item Add additional ingredients
 \end{enumerate}
 
 \subsection{Introduction to kinematics}
 
 In this course we will discuss \textbf{kinematics} and \textbf{dynamics} which are two branches of mechanics:
 \begin{itemize}
-  \item \textbf{Kinematics}: How did the object move?
-  \item \textbf{Dynamics}: Why did the object move?
+    \item \textbf{Kinematics}: How did the object move?
+    \item \textbf{Dynamics}: Why did the object move?
 \end{itemize}
 
 \subsubsection{Position vector}
@@ -94,15 +95,15 @@ Here we use the position vector as an example.
 
 \textbf{Position vector} $\vec{r}$:
 \begin{itemize}
-  \item $\vec{r} = (x, y, z)$
-  \item $\vec{r} = x \hat{i} + y \hat{j} + z \hat{k}$
+    \item $\vec{r} = (x, y, z)$
+    \item $\vec{r} = x \hat{i} + y \hat{j} + z \hat{k}$
 \end{itemize}
 
 In the second representation we have the \textbf{unit vectors} $\hat{i}, \hat{j}, \hat{k}$ which are the basis of the space.
 
 Moreover we can represent the position vector as a function of time:
 $$
-  \vec{r}(t) = \begin{pmatrix} x(t) \\ y(t) \\ z(t) \end{pmatrix}
+    \vec{r}(t) = \begin{pmatrix} x(t) \\ y(t) \\ z(t) \end{pmatrix}
 $$
 
 $\vec {r}(t)$ is called trajectory.
@@ -113,14 +114,14 @@ We call \textbf{degree of freedom} the number of independent coordinates needed 
 Generally we need 3 degrees of freedom.
 
 \begin{examplebox}{Example}
-  \begin{itemize}
-    \item Consider two points connected by a rigid rod of length $l$ (of negligible cross section).
+    \begin{itemize}
+        \item Consider two points connected by a rigid rod of length $l$ (of negligible cross section).
 
-          The position of the first point $A$ requires all 3 degrees of freedom,
-          but for the second point $B$ we only need 2 degrees of freedom since the distance from $A$ is fixed.
+              The position of the first point $A$ requires all 3 degrees of freedom,
+              but for the second point $B$ we only need 2 degrees of freedom since the distance from $A$ is fixed.
 
-    \item A rigid body has 6 degrees of freedom: 3 for the position of the center of mass and 3 for the orientation.
-  \end{itemize}
+        \item A rigid body has 6 degrees of freedom: 3 for the position of the center of mass and 3 for the orientation.
+    \end{itemize}
 
 \end{examplebox}
 
@@ -128,7 +129,7 @@ Generally we need 3 degrees of freedom.
 
 We define the \textbf{displacement vector} as
 $$
-  \Delta \vec{r} = \vec{r}(t') - \vec{r}(t) \text{ with } t' > t
+    \Delta \vec{r} = \vec{r}(t') - \vec{r}(t) \text{ with } t' > t
 $$
 
 Note that the displacement vector could be zero even if the particle moved.
@@ -137,9 +138,9 @@ We define the \textbf{average velocity} as $\vec{v}_{\text{avg}} = \frac{\Delta 
 
 We define the \textbf{instantaneous velocity} as
 \begin{align*}
-  \vec{v}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{r}}{\Delta t}                                            \\
-             & = \dv{\vec{r}}{t} \text{ this is the derivative of a vector}                                       \\
-             & = \begin{pmatrix} \dv{x(t)}{t} \hat{i} & \dv{y(t)}{t} \hat{j} & \dv{z(t)}{t} \hat{k} \end{pmatrix}
+    \vec{v}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{r}}{\Delta t}                                            \\
+               & = \dv{\vec{r}}{t} \text{ this is the derivative of a vector}                                       \\
+               & = \begin{pmatrix} \dv{x(t)}{t} \hat{i} & \dv{y(t)}{t} \hat{j} & \dv{z(t)}{t} \hat{k} \end{pmatrix}
 \end{align*}
 
 \subsubsection{Acceleration}
@@ -148,8 +149,8 @@ Similarly to the velocity, we define the \textbf{average acceleration} as $\vec{
 and we pass to the limit to get
 
 \begin{align*}
-  \vec{a}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{v}}{\Delta t} \\
-             & = \dv{\vec{v}}{t} = \dv[2]{\vec{r}}{t}
+    \vec{a}(t) & = \lim_{\Delta t \to 0} \frac{\Delta \vec{v}}{\Delta t} \\
+               & = \dv{\vec{v}}{t} = \dv[2]{\vec{r}}{t}
 \end{align*}
 
 We see that the acceleration is the second derivative of the position vector.
@@ -165,9 +166,9 @@ let $r = \norm{\vec{r}}$ be the magnitude of the vector,
 and let $\hat{r} = \vec{r} / r$ be the unit vector in the direction of $\vec{r}$.
 
 \begin{align*}
-  \vec{r} & = x \hat{i} + y \hat{j}                         \\
-          & = r \cos \theta \hat{i} + r \sin \theta \hat{j} \\
-          & = r \hat{r}
+    \vec{r} & = x \hat{i} + y \hat{j}                         \\
+            & = r \cos \theta \hat{i} + r \sin \theta \hat{j} \\
+            & = r \hat{r}
 \end{align*}
 
 This decomposition works for any vector in 2D, like the velocity and the acceleration.
@@ -177,9 +178,9 @@ This decomposition works for any vector in 2D, like the velocity and the acceler
 According to these definitions we have that the acceleration, which is the derivative of the velocity, can be written as
 
 \begin{align*}
-  \vec{a} & = \dv{\vec{v}}{t} = \dv{t} (v \hat{v}) \\ &=
-  \underbrace{ \dv{v}{t} \hat{v} }_{\text{change in speed}} +
-  \underbrace{ v \dv{\hat{v}}{t} }_{\text{change in direction}}
+    \vec{a} & = \dv{\vec{v}}{t} = \dv{t} (v \hat{v}) \\ &=
+    \underbrace{ \dv{v}{t} \hat{v} }_{\text{change in speed}} +
+    \underbrace{ v \dv{\hat{v}}{t} }_{\text{change in direction}}
 \end{align*}
 
 We see how changing the direction of the velocity will cause an acceleration.
@@ -189,8 +190,8 @@ We see how changing the direction of the velocity will cause an acceleration.
 We can use differential equations to get that
 
 \begin{align*}
-  \vec{v}(t) & = \int \vec{a}(t) \dd{t} + c_1 \\
-  \vec{r}(t) & = \int \vec{v}(t) \dd{t} + c_2
+    \vec{v}(t) & = \int \vec{a}(t) \dd{t} + c_1 \\
+    \vec{r}(t) & = \int \vec{v}(t) \dd{t} + c_2
 \end{align*}
 
 In the result we get two constants of integration $c_1$ and $c_2$
@@ -199,8 +200,8 @@ which can be determined by knowing the position or velocity at a certain time.
 For example if $v(t_0)$ and $r(t_0)$ are known we have that, at $t_1$,
 
 \begin{align*}
-  \vec{v}(t_1) & = \vec{v}(t_0) + \int_{t_0}^{t_1} \vec{a}(t) \dd{t} \\
-  \vec{r}(t_1) & = \vec{r}(t_0) + \int_{t_0}^{t_1} \vec{v}(t) \dd{t}
+    \vec{v}(t_1) & = \vec{v}(t_0) + \int_{t_0}^{t_1} \vec{a}(t) \dd{t} \\
+    \vec{r}(t_1) & = \vec{r}(t_0) + \int_{t_0}^{t_1} \vec{v}(t) \dd{t}
 \end{align*}
 
 \subsubsection{Uniformly accelerated motion}
@@ -209,13 +210,13 @@ If we consider the case where $\vec{a}$ is constant we get
 the high-school equation for uniformly accelerated motion:
 
 \begin{align*}
-  \vec{v}(t) & = \vec{a} t + v(t_0)                                \\
-  \vec{r}(t) & = \frac{1}{2} \vec{a} t^2 + v(t_0) t + \vec{r}(t_0)
+    \vec{v}(t) & = \vec{a} t + v(t_0)                                \\
+    \vec{r}(t) & = \frac{1}{2} \vec{a} t^2 + v(t_0) t + \vec{r}(t_0)
 \end{align*}
 
 Moreover, we can substitute one into the other to get an equation for the trajectory:
 $$
-  r = \frac{v^2(t) - v^2(t_0)}{2a}
+    r = \frac{v^2(t) - v^2(t_0)}{2a}
 $$
 
 \subsection{Relative motion}
@@ -224,78 +225,78 @@ Multiple observers may have different reference frames,
 we need a way to convert from a reference frame to the other.
 
 \begin{center}
-  \begin{tikzpicture}
-    % Normal axis
-    \draw[black, ->] (-3,0) -- (5,0) node[anchor=north]{$\hat{i}$};
-    \draw[black, ->] (0,-3) -- (0,5) node[anchor=east]{$\hat{j}$};
+    \begin{tikzpicture}
+        % Normal axis
+        \draw[black, ->] (-3,0) -- (5,0) node[anchor=north]{$\hat{i}$};
+        \draw[black, ->] (0,-3) -- (0,5) node[anchor=east]{$\hat{j}$};
 
-    % Rotated axis
-    \draw[dashed, black, ->] (-3,-1.8) -- (5,3) node[anchor=south]{$\hat{i'}$};
-    \draw[dashed, black, ->] (1.8,-3) -- (-3,5) node[anchor=east]{$\hat{j'}$};
+        % Rotated axis
+        \draw[dashed, black, ->] (-3,-1.8) -- (5,3) node[anchor=south]{$\hat{i'}$};
+        \draw[dashed, black, ->] (1.8,-3) -- (-3,5) node[anchor=east]{$\hat{j'}$};
 
-    % Vector
-    \draw[blue, thick, ->] (0,0) -- (3,3) node[anchor=south]{$\vec{r}$};
+        % Vector
+        \draw[blue, thick, ->] (0,0) -- (3,3) node[anchor=south]{$\vec{r}$};
 
-    % Angle between axis
-    \draw[red, thick] (0.5,0) arc (0:31:0.5) node[right]{$\theta$};
-  \end{tikzpicture}
-  \captionof{figure}{Rotated frame of reference}
-  \label{fig:rotated_frame}
+        % Angle between axis
+        \draw[red, thick] (0.5,0) arc (0:31:0.5) node[right]{$\theta$};
+    \end{tikzpicture}
+    \captionof{figure}{Rotated frame of reference}
+    \label{fig:rotated_frame}
 \end{center}
 
 We can write $\hat{i}$ and $\hat{j}$ in terms of $\hat{i'}$ and $\hat{j'}$:
 
 \begin{align*}
-  \hat{i'} & = \left( \hat{i'} \cdot \hat{i} \right) \hat{i}
-  + \left( \hat{i'} \cdot \hat{j} \right) \hat{j}            \\
-           & = \cos \theta \hat{i} + \sin \theta \hat{j}     \\
-  \hat{j'} & = \left( \hat{j'} \cdot \hat{i} \right) \hat{i}
-  + \left( \hat{j'} \cdot \hat{j} \right) \hat{j}            \\
-           & = -\sin \theta \hat{i} + \cos \theta \hat{j}
+    \hat{i'} & = \left( \hat{i'} \cdot \hat{i} \right) \hat{i}
+    + \left( \hat{i'} \cdot \hat{j} \right) \hat{j}            \\
+             & = \cos \theta \hat{i} + \sin \theta \hat{j}     \\
+    \hat{j'} & = \left( \hat{j'} \cdot \hat{i} \right) \hat{i}
+    + \left( \hat{j'} \cdot \hat{j} \right) \hat{j}            \\
+             & = -\sin \theta \hat{i} + \cos \theta \hat{j}
 \end{align*}
 
 Then, $\vec{r} = x \hat{i} + y \hat{j}$ can be written as
 
 \begin{align*}
-  \vec{r} & = x \left( \cos \theta \hat{i'} + \sin \theta \hat{j'} \right)  + y \left( -\sin \theta \hat{i'} + \cos \theta \hat{j'} \right) \\
-          & = \underbrace{ (x \cos \theta - y \sin \theta) }_x \hat{i'}
-  + \underbrace{ (x \sin \theta + y \cos \theta) }_y \hat{j'}
+    \vec{r} & = x \left( \cos \theta \hat{i'} + \sin \theta \hat{j'} \right)  + y \left( -\sin \theta \hat{i'} + \cos \theta \hat{j'} \right) \\
+            & = \underbrace{ (x \cos \theta - y \sin \theta) }_x \hat{i'}
+    + \underbrace{ (x \sin \theta + y \cos \theta) }_y \hat{j'}
 \end{align*}
 
 We just performed a linear transformation on the position vector,
 we can write the matrix representing this transformation:
 
 $$
-  R = \begin{pmatrix}
-    \cos \theta & -\sin \theta \\
-    \sin \theta & \cos \theta
-  \end{pmatrix}
+    R = \begin{pmatrix}
+        \cos \theta & -\sin \theta \\
+        \sin \theta & \cos \theta
+    \end{pmatrix}
 $$
 
 We have
 $$
-  \begin{pmatrix}
-    x \\
-    y
-  \end{pmatrix}
-  =
-  \begin{pmatrix}
-    \cos \theta & -\sin \theta \\
-    \sin \theta & \cos \theta
-  \end{pmatrix}
-  \begin{pmatrix}
-    x' \\
-    y'
-  \end{pmatrix}
+    \begin{pmatrix}
+        x \\
+        y
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \cos \theta & -\sin \theta \\
+        \sin \theta & \cos \theta
+    \end{pmatrix}
+    \begin{pmatrix}
+        x' \\
+        y'
+    \end{pmatrix}
 $$
 
 The inverse transformation is given by the inverse of the matrix:
 
 $$
-  R^{-1} = \begin{pmatrix}
-    \cos \theta  & \sin \theta \\
-    -\sin \theta & \cos \theta
-  \end{pmatrix}
+    R^{-1} = \begin{pmatrix}
+        \cos \theta  & \sin \theta \\
+        -\sin \theta & \cos \theta
+    \end{pmatrix}
 $$
 
 \subsubsection{Frames of reference in relative motion}
@@ -307,7 +308,7 @@ and a ball which is moving inside the train.
 
 We have that the trajectory of the ball for the observer on the ground is given by
 $$
-  \vec{r}_{gb} = \vec{r}_{gt} + \vec{r}_{tb}
+    \vec{r}_{gb} = \vec{r}_{gt} + \vec{r}_{tb}
 $$
 
 We don't need to worry about the direction of the train, we can just sum the vectors.
@@ -322,44 +323,44 @@ In this kind of motion a particle spins in circle of radius $R$
 and with a velocity of constant module:
 
 $$
-  |\vec v| = \text{const}
+    |\vec v| = \text{const}
 $$
 
 This means that the particle spans equal angles $\theta$ in equal times.
 
 We introduce the angular velocity $\omega$ defined as
 $$
-  \omega = \frac{\theta}{t} = \text{const}
+    \omega = \frac{\theta}{t} = \text{const}
 $$
 
 We can then write the law of motion in terms of angles:
 
 $$
-  \theta(t) = \theta_0 + \omega t
+    \theta(t) = \theta_0 + \omega t
 $$
 
 In general
 
 $$
-  \omega (t) = \dv{\theta t}{t}
+    \omega (t) = \dv{\theta t}{t}
 $$
 
 After one turn we have that $\Delta \theta (t) = 2 \pi$
 We call period $T$ the time it takes to do a full turn, then
 $$
-  T = \frac{2 \pi}{\omega}
+    T = \frac{2 \pi}{\omega}
 $$
 
 We also define the frequency as
 
 $$
-  \nu = \frac{1}{T}
+    \nu = \frac{1}{T}
 $$
 
 We note the relationship between $v$ and $\omega$:
 
 $$
-  v = \frac{2 \pi R}{T} = R \omega
+    v = \frac{2 \pi R}{T} = R \omega
 $$
 
 \subsubsection{Using position vector}
@@ -367,42 +368,42 @@ $$
 We decompose the position vector in its components:
 
 $$
-  \vec{r}(t) = x (t) \hat i  + y(t) + \hat j
+    \vec{r}(t) = x (t) \hat i  + y(t) + \hat j
 $$
 
 Note that $|\vec r (t)| = R \enspace \forall t$, hence
 
 \begin{align*}
-  \begin{cases}
-    x(t) & = R \cos (\theta (t)) \\
-    y(t) & = R \sin (\theta (t))
-  \end{cases}
+    \begin{cases}
+        x(t) & = R \cos (\theta (t)) \\
+        y(t) & = R \sin (\theta (t))
+    \end{cases}
 \end{align*}
 
 We have that the velocity is
 
 \begin{align*}
-  \vec v & = \dv {r}{t} = \dv{x}{t} \hat i + \dv {y}{t} \hat j                     \\
-         & = - R \sin (\theta(t)) \dv{\theta(t)}{t} \hat i
-  + R \cos (\theta(t)) \dv{\theta(t)}{t} \hat j                                    \\
-         & = - R \sin (\theta(t)) \omega \hat i + R \cos (\theta(t)) \omega \hat j \\
-         & = v_x (t) \hat i + v_y (t) \hat j
+    \vec v & = \dv {r}{t} = \dv{x}{t} \hat i + \dv {y}{t} \hat j                     \\
+           & = - R \sin (\theta(t)) \dv{\theta(t)}{t} \hat i
+    + R \cos (\theta(t)) \dv{\theta(t)}{t} \hat j                                    \\
+           & = - R \sin (\theta(t)) \omega \hat i + R \cos (\theta(t)) \omega \hat j \\
+           & = v_x (t) \hat i + v_y (t) \hat j
 \end{align*}
 
 The module of the velocity is
 
 \begin{align*}
-  |\vec v| & = \sqrt{v_x^2(t) + v_y^2(t)}                 \\
-           & = \sqrt{R^2 \omega^2 \underbrace{(\dots)}_1} \\
-           & = R\omega
+    |\vec v| & = \sqrt{v_x^2(t) + v_y^2(t)}                 \\
+             & = \sqrt{R^2 \omega^2 \underbrace{(\dots)}_1} \\
+             & = R\omega
 \end{align*}
 
 \subsubsection{Acceleration}
 
 \begin{align*}
-  \vec a & = \dv {\vec v}{t} = \dv {t} (v \hat v) \\
-         & = \dv {v}{t}\hat v + \dv{\hat v}{t} v  \\
-         & = \dv {\hat v}{t} v \ne 0
+    \vec a & = \dv {\vec v}{t} = \dv {t} (v \hat v) \\
+           & = \dv {v}{t}\hat v + \dv{\hat v}{t} v  \\
+           & = \dv {\hat v}{t} v \ne 0
 \end{align*}
 
 since the modulus doesn't change.
@@ -410,16 +411,16 @@ since the modulus doesn't change.
 We can also compute this quantity by differentiating the velocity equation from above
 
 \begin{align*}
-  \vec a & = \dv{\vec v}{t}                                                                          \\
-         & = - R \omega ^2 \cos (\theta(t)) \hat i - R \omega^2 \sin (\theta(t)) \hat j              \\
-         & = - \omega^2 \underbrace{(R \cos (\theta(t)) \hat i +  \sin (\theta(t)) \hat j)}_{\vec r} \\
-         & = -\omega^2 \vec r
+    \vec a & = \dv{\vec v}{t}                                                                          \\
+           & = - R \omega ^2 \cos (\theta(t)) \hat i - R \omega^2 \sin (\theta(t)) \hat j              \\
+           & = - \omega^2 \underbrace{(R \cos (\theta(t)) \hat i +  \sin (\theta(t)) \hat j)}_{\vec r} \\
+           & = -\omega^2 \vec r
 \end{align*}
 
 It's easy to compute the module of this vector since $|\vec r| = R$, hence
 
 $$
-  a = \omega^2  |\vec r| = \omega^2 R = \frac{v ^2}{r}
+    a = \omega^2  |\vec r| = \omega^2 R = \frac{v ^2}{r}
 $$
 
 \subsection{Polar coordinates}
@@ -435,10 +436,10 @@ and only $\theta$ is a function of time.
 We can define a function to map $(x, y) \to (r, \theta)$:
 
 \begin{align*}
-  \begin{cases}
-    r      & = \sqrt{x^2 + y^2}                \\
-    \theta & = \arctan\left(\frac{y}{x}\right)
-  \end{cases}
+    \begin{cases}
+        r      & = \sqrt{x^2 + y^2}                \\
+        \theta & = \arctan\left(\frac{y}{x}\right)
+    \end{cases}
 \end{align*}
 
 We note that this function is a bijection between the two coordinate spaces.
@@ -447,59 +448,59 @@ Moreover, we denote the have that the angle vector $\vec \theta$
 and the radius vector $\vec r$ are orthogonal. This makes the polar coordinates \textbf{orthonormal}.
 
 \begin{center}
-  \begin{tikzpicture}
-    \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
-    \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
+    \begin{tikzpicture}
+        \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
+        \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
 
-    \draw[blue, thick] (0,0) circle (4);
-    \draw[red, thick, ->] (0,0) -- (4.5,4.5) node[anchor=west]{$\vec r$};
+        \draw[blue, thick] (0,0) circle (4);
+        \draw[red, thick, ->] (0,0) -- (4.5,4.5) node[anchor=west]{$\vec r$};
 
-    \filldraw [gray] (2.82,2.82) circle (2pt);
-    \filldraw [gray] (0,2.82) circle (2pt) node[anchor=east]{$y(t)$};
-    \filldraw [gray] (2.82,0) circle (2pt) node[anchor=north]{$x(t)$};
+        \filldraw [gray] (2.82,2.82) circle (2pt);
+        \filldraw [gray] (0,2.82) circle (2pt) node[anchor=east]{$y(t)$};
+        \filldraw [gray] (2.82,0) circle (2pt) node[anchor=north]{$x(t)$};
 
-    \draw[gray, dashed] (2.82,0) -- (2.82,2.82);
-    \draw[gray, dashed] (0,2.82) -- (2.82,2.82);
+        \draw[gray, dashed] (2.82,0) -- (2.82,2.82);
+        \draw[gray, dashed] (0,2.82) -- (2.82,2.82);
 
-    \draw[green, ->] (2.82,2.82) -- (3.82,3.82) node[anchor=north]{$\hat r$};
-    \draw[green, ->] (2.82,2.82) -- (2,3.66) node[anchor=south]{$\hat \theta$};
-  \end{tikzpicture}
+        \draw[green, ->] (2.82,2.82) -- (3.82,3.82) node[anchor=north]{$\hat r$};
+        \draw[green, ->] (2.82,2.82) -- (2,3.66) node[anchor=south]{$\hat \theta$};
+    \end{tikzpicture}
 
-  \captionof{figure}{Polar frame of reference}
-  \label{fig:polar_frame}
+    \captionof{figure}{Polar frame of reference}
+    \label{fig:polar_frame}
 \end{center}
 
 We can write the position vector in polar coordinates as follows
 
 $$
-  \vec r = x \hat i + y \hat j = r \hat r + \theta \hat \theta
+    \vec r = x \hat i + y \hat j = r \hat r + \theta \hat \theta
 $$
 
 The terms $\hat r$ and $\hat \theta$ can change direction depending on $\theta$:
 
 \begin{align*}
-  \begin{cases}
-    \hat r(\theta)      & = \cos \theta \hat i + \sin \theta \hat j   \\
-    \hat \theta(\theta) & = - \sin \theta \hat i + \cos \theta \hat j
-  \end{cases}
+    \begin{cases}
+        \hat r(\theta)      & = \cos \theta \hat i + \sin \theta \hat j   \\
+        \hat \theta(\theta) & = - \sin \theta \hat i + \cos \theta \hat j
+    \end{cases}
 \end{align*}
 
 or, in matrix form,
 
 $$
-  \begin{pmatrix}
-    \vec r \\
-    \vec \theta
-  \end{pmatrix}
-  =
-  \begin{pmatrix}
-    \cos \theta  & \sin \theta \\
-    -\sin \theta & \cos \theta
-  \end{pmatrix}
-  \begin{pmatrix}
-    \hat i \\
-    \hat j
-  \end{pmatrix}
+    \begin{pmatrix}
+        \vec r \\
+        \vec \theta
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \cos \theta  & \sin \theta \\
+        -\sin \theta & \cos \theta
+    \end{pmatrix}
+    \begin{pmatrix}
+        \hat i \\
+        \hat j
+    \end{pmatrix}
 $$
 
 \subsubsection{Application in circular motion}
@@ -507,8 +508,8 @@ $$
 This is quite useful, for example, to calculate the velocity
 
 $$
-  \vec v = \dv {\vec r}{t} = \dv{t} (R \hat r + \cancel{\theta \hat \theta})
-  = R \dv{\hat r}{t}
+    \vec v = \dv {\vec r}{t} = \dv{t} (R \hat r + \cancel{\theta \hat \theta})
+    = R \dv{\hat r}{t}
 $$
 
 (we cancelled $\theta \hat \theta$ because the $\theta$ component is 0, $\vec r$ it's just the radius.)
@@ -516,17 +517,17 @@ $$
 To compute $\dv{\hat r}{t}$ we need to pass back to cartesian coordinates and get the result from above
 
 \begin{align*}
-  \vec{v} & = - R \sin (\theta(t)) \omega \hat i + R \cos (\theta(t)) \omega \hat j                   \\
-          & = R \omega \underbrace{[\sin (\theta(t)) \hat i + \cos (\theta(t)) \hat j]}_{\hat \theta} \\
-          & = R \omega \hat \theta
+    \vec{v} & = - R \sin (\theta(t)) \omega \hat i + R \cos (\theta(t)) \omega \hat j                   \\
+            & = R \omega \underbrace{[\sin (\theta(t)) \hat i + \cos (\theta(t)) \hat j]}_{\hat \theta} \\
+            & = R \omega \hat \theta
 \end{align*}
 
 \begin{bluebox}{EXERCISE}
-  Derive the same relation for acceleration.
+    Derive the same relation for acceleration.
 
-  $$
-    \vec{a} = \dv {t} \vec v = \dv{t}(R \omega \hat \theta) = ?
-  $$
+    $$
+        \vec{a} = \dv {t} \vec v = \dv{t}(R \omega \hat \theta) = ?
+    $$
 \end{bluebox}
 
 \section{Class of 13/02/2024 - Dynamics}
@@ -536,9 +537,9 @@ Dynamics is the study of the \textit{causes} of motion.
 \subsection{Newton's laws}
 
 \begin{enumerate}
-  \item \textbf{First law} (or law of inertia): A body that is subject to no external forces maintains in uniform velocity.
-  \item \textbf{Second law}: The acceleration of a body is proportional to the force acting on it.
-  \item \textbf{Third law}: For every action, there is an equal and opposite reaction.
+    \item \textbf{First law} (or law of inertia): A body that is subject to no external forces maintains in uniform velocity.
+    \item \textbf{Second law}: The acceleration of a body is proportional to the force acting on it.
+    \item \textbf{Third law}: For every action, there is an equal and opposite reaction.
 \end{enumerate}
 
 Note that that these laws cannot be proven mathematically, they are just a good model of reality.
@@ -550,22 +551,22 @@ but it is actually very important by itself because it tells us that we need to 
 only some frame of reference can be \say{put in contact} and describe the same motion; we call such frames \textbf{inertial frames}.
 
 \begin{examplebox}{Example}
-  Consider an object that is steady from the point of view of some observer.
+    Consider an object that is steady from the point of view of some observer.
 
-  Now consider another observer that is moving in circle.
-  To this second observer will see the object moving in circle, hence he will see an acceleration.
+    Now consider another observer that is moving in circle.
+    To this second observer will see the object moving in circle, hence he will see an acceleration.
 
-  These two observers are in different frames of reference, and only the first one is inertial.
+    These two observers are in different frames of reference, and only the first one is inertial.
 \end{examplebox}
 
 \subsubsection{Galilean group}
 
 $$
-  \begin{cases}
-    \vec {r'} = \vec r + \vec{r_b} \\
-    \vec {r'} = R \vec r           \\
-    \vec {r'} = \vec r + \vec{v_b} t
-  \end{cases}
+    \begin{cases}
+        \vec {r'} = \vec r + \vec{r_b} \\
+        \vec {r'} = R \vec r           \\
+        \vec {r'} = \vec r + \vec{v_b} t
+    \end{cases}
 $$
 
 These equations describe transformations between inertial frames of reference.
@@ -579,14 +580,14 @@ We can see how, based on the third equation, we cannot know if we are moving or 
 We can write the second law as
 
 $$
-  F \propto a
+    F \propto a
 $$
 
 which simply means that $F$ is proportional to $a$.
 We can be more precise and write the equation in vector form:
 
 $$
-  \vec F = m \vec a
+    \vec F = m \vec a
 $$
 
 where $m$ is the mass of the object.
@@ -596,7 +597,7 @@ This $\vec F$ is the sum of all forces acting on the object.
 The unit of the force is
 
 $$
-  [F] = [M][L][T]^{-2} = \si{\kilogram \meter \per \second \squared} = \si{\newton}
+    [F] = [M][L][T]^{-2} = \si{\kilogram \meter \per \second \squared} = \si{\newton}
 $$
 
 Even though the equation seams simple it is actually quite difficult to show it is true.
@@ -611,7 +612,7 @@ Still, when we measure mass (or any dimension really), we are just comparing a m
 This law describes the force exerted by a spring.
 
 $$
-  F = - k \Delta x
+    F = - k \Delta x
 $$
 
 We cannot prove this law mathematically, but experimentally we can see that for small displacements it holds (after too much pulling we break the spring).
@@ -624,7 +625,7 @@ The constant $k$ is called \textit{spring constant} and it depends on the materi
 We define a new quantity called \textit{momentum} $\vec p$.
 
 $$
-  \vec p = m \vec v = m \dv{\vec r}{t}
+    \vec p = m \vec v = m \dv{\vec r}{t}
 $$
 
 its unit is $[p] = [M][L][T]^{-1} = \si{\kilogram \meter \per \second}$.
@@ -632,7 +633,7 @@ its unit is $[p] = [M][L][T]^{-1} = \si{\kilogram \meter \per \second}$.
 We can write the second law in terms of momentum:
 
 $$
-  \vec F = \dv{\vec p}{t} = \dv{t} (m \vec v) = m \dv{\vec v}{t} + \dv{m}{t} \vec v
+    \vec F = \dv{\vec p}{t} = \dv{t} (m \vec v) = m \dv{\vec v}{t} + \dv{m}{t} \vec v
 $$
 
 This is very interesting because we see how the force changes if, while the object is moving, the mass changes (for example a rocket using fuel).
@@ -642,7 +643,7 @@ Usually though this doesn't happen and we can rely on the special case described
 Generally we see how force can be a function of many different things:
 
 $$
-  m \dv[2]{\vec r}{t} = \vec F(\vec r, \dv{\vec r}{v}, t)
+    m \dv[2]{\vec r}{t} = \vec F(\vec r, \dv{\vec r}{v}, t)
 $$
 
 This is a second order differential equation: it is quite difficult to solve and there is no standard method to solve it.
@@ -654,7 +655,7 @@ To attempt to solve this equation we need to consider some initial conditions, 2
 We can write the third law mathematically as
 
 $$
-  \vec{F}_{1 \to 2} = - \vec{F}_{2 \to 1}
+    \vec{F}_{1 \to 2} = - \vec{F}_{2 \to 1}
 $$
 
 There is not much more to say regarding this law.
@@ -664,33 +665,33 @@ There is not much more to say regarding this law.
 Consider the following system:
 
 \begin{center}
-  \begin{tikzpicture}
-    \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
-    \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
+    \begin{tikzpicture}
+        \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
+        \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
 
-    \filldraw[red] (2,3) circle (2pt) node[anchor=east]{$m_1$};
-    \filldraw[red] (4,4) circle (2pt) node[anchor=west]{$m_2$};
+        \filldraw[red] (2,3) circle (2pt) node[anchor=east]{$m_1$};
+        \filldraw[red] (4,4) circle (2pt) node[anchor=west]{$m_2$};
 
-    \draw[black, ->] (2,3) -- (4,4) node[anchor=south, midway]{$\vec r_2 - \vec r_1$};
-    \draw[black, ->] (0,0) -- (2,3) node[anchor=east, midway]{$\vec r_1$};
-    \draw[black, ->] (0,0) -- (4,4) node[anchor=west, midway]{$\vec r_2$};
+        \draw[black, ->] (2,3) -- (4,4) node[anchor=south, midway]{$\vec r_2 - \vec r_1$};
+        \draw[black, ->] (0,0) -- (2,3) node[anchor=east, midway]{$\vec r_1$};
+        \draw[black, ->] (0,0) -- (4,4) node[anchor=west, midway]{$\vec r_2$};
 
-  \end{tikzpicture}
+    \end{tikzpicture}
 
-  \captionof{figure}{Two masses in space}
-  \label{fig:gravforce_masses}
+    \captionof{figure}{Two masses in space}
+    \label{fig:gravforce_masses}
 \end{center}
 
 We have that the gravitational force is given by
 
 $$
-  \vec F = G \frac{ m_1 m_2}{|\vec r_2 - \vec r_1|^2} \hat r
+    \vec F = G \frac{ m_1 m_2}{|\vec r_2 - \vec r_1|^2} \hat r
 $$
 
 Note that if we put $F = ma$ we get that the acceleration for $m_1$ is
 
 $$
-  \vec a = G \frac{m_2}{|\vec r_2 - \vec r_1|^2} \hat r
+    \vec a = G \frac{m_2}{|\vec r_2 - \vec r_1|^2} \hat r
 $$
 
 If we are on the surface of the Earth we can use the approximation $|\vec r_2 - \vec r_1| \approx R$, since the position on the planet is negligible compared to the radius of the planet.
@@ -698,7 +699,7 @@ If we are on the surface of the Earth we can use the approximation $|\vec r_2 - 
 Then we get that the acceleration of any object on the surface of Earth is
 
 $$
-  \vec a = - G \frac{M}{R^2} = g \approx \SI{9.81}{\meter \per \second \squared}
+    \vec a = - G \frac{M}{R^2} = g \approx \SI{9.81}{\meter \per \second \squared}
 $$
 
 \subsection{Examples}
@@ -710,7 +711,7 @@ Consider the very basic case of a still box of mass $m$ on a table.
 We have two forces acting on the box: the gravitational force (pulling the box down) and the normal force (keeping the box on the table).
 
 $$
-  \vec N = - m \vec g
+    \vec N = - m \vec g
 $$
 
 \subsubsection{Example 2}
@@ -718,11 +719,11 @@ $$
 Consider two boxes one next to the other on a surface with no friction, one of mass $m_1$ and the other of mass $m_2$.
 
 \begin{center}
-  \begin{tikzpicture}
-    \draw[black] (0,0) -- (5,0);
-    \draw[blue] (2,0) rectangle (3,1) node[midway]{$m_1$};
-    \draw[red] (3,0) rectangle (4,3) node[midway]{$m_2$};
-  \end{tikzpicture}
+    \begin{tikzpicture}
+        \draw[black] (0,0) -- (5,0);
+        \draw[blue] (2,0) rectangle (3,1) node[midway]{$m_1$};
+        \draw[red] (3,0) rectangle (4,3) node[midway]{$m_2$};
+    \end{tikzpicture}
 \end{center}
 
 Intuitively we can just consider the two boxes as a single object of mass $m_1 + m_2$ but we will solve the problem as if we didn't notice this.
@@ -730,22 +731,22 @@ Intuitively we can just consider the two boxes as a single object of mass $m_1 +
 For each body we can draw a \textbf{free body diagram}:
 
 \begin{center}
-  \begin{tikzpicture}
-    % m_1
-    \draw[blue] (-4,0) rectangle (-2,2) node[midway]{$m_1$};
+    \begin{tikzpicture}
+        % m_1
+        \draw[blue] (-4,0) rectangle (-2,2) node[midway]{$m_1$};
 
-    \draw[black, ->] (-3,0) -- (-3,-1) node[anchor=west, midway]{$-m_1 g$};
-    \draw[black, ->] (-3,2) -- (-3,3) node[anchor=west, midway]{$\vec N_1$};
-    \draw[black, ->] (-5,1) -- (-4,1) node[anchor=north, midway]{$\vec F$};
-    \draw[black, ->] (-2,1) -- (-1,1) node[anchor=north, midway]{$\vec f_1$};
+        \draw[black, ->] (-3,0) -- (-3,-1) node[anchor=west, midway]{$-m_1 g$};
+        \draw[black, ->] (-3,2) -- (-3,3) node[anchor=west, midway]{$\vec N_1$};
+        \draw[black, ->] (-5,1) -- (-4,1) node[anchor=north, midway]{$\vec F$};
+        \draw[black, ->] (-2,1) -- (-1,1) node[anchor=north, midway]{$\vec f_1$};
 
-    % m_2
-    \draw[red] (4,0) rectangle (6,2) node[midway]{$m_2$};
+        % m_2
+        \draw[red] (4,0) rectangle (6,2) node[midway]{$m_2$};
 
-    \draw[black, ->] (5,0) -- (5,-1) node[anchor=west, midway]{$-m_2 g$};
-    \draw[black, ->] (5,2) -- (5,3) node[anchor=west, midway]{$\vec N_2$};
-    \draw[black, ->] (3,1) -- (4,1) node[anchor=north, midway]{$-\vec f$};
-  \end{tikzpicture}
+        \draw[black, ->] (5,0) -- (5,-1) node[anchor=west, midway]{$-m_2 g$};
+        \draw[black, ->] (5,2) -- (5,3) node[anchor=west, midway]{$\vec N_2$};
+        \draw[black, ->] (3,1) -- (4,1) node[anchor=north, midway]{$-\vec f$};
+    \end{tikzpicture}
 \end{center}
 
 We know that the normal forces are equal and opposite to the gravitational forces, and since there are no other forces acting in those directions we can cancel them out.
@@ -754,14 +755,14 @@ Now we focus on the horizontal direction.
 We write the second law for each box:
 
 \begin{align*}
-  m_1 a_1 & = F - f \\
-  m_2 a_2 & = f
+    m_1 a_1 & = F - f \\
+    m_2 a_2 & = f
 \end{align*}
 
 and
 
 $$
-  (m_1 + m_2) a = F
+    (m_1 + m_2) a = F
 $$
 
 \subsubsection{Example 3}
@@ -787,7 +788,7 @@ Consider an elevator which is accelerating upwards with an acceleration $a$.
 We have that
 
 $$
-  N - m g = m a
+    N - m g = m a
 $$
 
 Where $N$ is the normal force. We get that $N = m(a + g)$
@@ -803,13 +804,13 @@ Consider a mass $m$ attached to a spring with spring constant $k$. Let $\Delta x
 From the equation of motion we have that
 
 $$
-  m a_x = m \dv[2]{t}x(t) = F(t) = - k x(t)
+    m a_x = m \dv[2]{t}x(t) = F(t) = - k x(t)
 $$
 
 We need to solve the differential equation
 
 $$
-  \dv[2]{t}x(t) = - \frac{k}{m} x(t)
+    \dv[2]{t}x(t) = - \frac{k}{m} x(t)
 $$
 
 \subsubsection{Solving the differential equation}
@@ -819,7 +820,7 @@ To solve this we have to find a function that is its own second derivative but w
 We can work on the function $e^t$ since it is similar to the result we want to get. We can obtain the minus sign by introducing the imaginary unit $i$.
 
 $$
-  \dv[2]{t}e^{i t} = - e^{i t}
+    \dv[2]{t}e^{i t} = - e^{i t}
 $$
 
 Although this would work we have the problem of the dimension of time: when we do a taylor expansion of a $e^t$ we get a number that has dimension $[T] + [T]^2 + \dots$ which is not what we want.
@@ -827,13 +828,13 @@ Although this would work we have the problem of the dimension of time: when we d
 To get rid of the dimension of $t$ we introduce a coefficient $\omega$ with dimension $[T]^{-1}$.
 
 $$
-  \dv[2]{t}e^{i \omega t} = - \omega^2 e^{i \omega t}
+    \dv[2]{t}e^{i \omega t} = - \omega^2 e^{i \omega t}
 $$
 
 From complex analysis we know Euler's formula:
 
 $$
-  e^{i \omega t} = \cos (\omega t) + i \sin (\omega t)
+    e^{i \omega t} = \cos (\omega t) + i \sin (\omega t)
 $$
 
 Now, since we are doing physics here, we want to get rid of the imaginary unit.
@@ -841,22 +842,22 @@ Now, since we are doing physics here, we want to get rid of the imaginary unit.
 We notice that both $\cos(\omega t)$ and $\sin(\omega t)$ solves the equation. When we solve differential equations (we know ?) that the general solution is a linear combination of 2 particular solutions.
 
 $$
-  x(t) = A \cos(\omega t) + B \sin(\omega t)
+    x(t) = A \cos(\omega t) + B \sin(\omega t)
 $$
 
 Now we reparametrize the function:
 
 \begin{align*}
-  A & = R \cos(\gamma) \\
-  B & = R \sin(\gamma)
+    A & = R \cos(\gamma) \\
+    B & = R \sin(\gamma)
 \end{align*}
 
 We can write the function as
 
 \begin{align*}
-  x(t) & = R \cos(\gamma) \cos(\omega t) + R \sin(\gamma) \sin(\omega t)              \\
-       & = R \left( \cos(\gamma) \cos(\omega t) + \sin(\gamma) \sin(\omega t) \right) \\
-       & = R \cos(\omega t - \gamma)
+    x(t) & = R \cos(\gamma) \cos(\omega t) + R \sin(\gamma) \sin(\omega t)              \\
+         & = R \left( \cos(\gamma) \cos(\omega t) + \sin(\gamma) \sin(\omega t) \right) \\
+         & = R \cos(\omega t - \gamma)
 \end{align*}
 
 \subsubsection{Fixing the constants}
@@ -866,8 +867,8 @@ We know that $\omega^2 = \frac{k}{m} \implies \omega = \pm \sqrt{\frac{k}{m}}$.
 Now we have to fix the constants $R$ and $\gamma$ and to do so we will use the initial conditions of the system.
 
 \begin{align*}
-  x(0) & = x_0 = R \cos(\gamma)        \\
-  v(0) & = v_0 = R \omega \sin(\gamma)
+    x(0) & = x_0 = R \cos(\gamma)        \\
+    v(0) & = v_0 = R \omega \sin(\gamma)
 \end{align*}
 
 We obtain these results by setting $t = 0$ in the function and in its derivative and exploiting the fact that sine is an even function.
@@ -884,7 +885,7 @@ We call this value $f_{\text{max}}$ and say that $\norm{f} \leq f_{\text{max}}$.
 We also notice that the friction is proportional to the normal force. Combining all the above we get that
 
 $$
-  f = \mu N
+    f = \mu N
 $$
 
 The direction of this force is opposite to the direction of the force that is trying to move the mass.
@@ -894,13 +895,13 @@ Moreover the coefficient $\mu$ changes if the mass is moving or not: if the mass
 \subsubsection{Example: Inclined plane}
 
 \begin{center}
-  \begin{tikzpicture}
-    \draw[black] (0,3) -- (5,0);
-    \draw[black] (0,0) -- (5,0) node[midway, below]{$b$};
-    \draw[black] (0,0) -- (0,3) node[midway, left]{$h$};
+    \begin{tikzpicture}
+        \draw[black] (0,3) -- (5,0);
+        \draw[black] (0,0) -- (5,0) node[midway, below]{$b$};
+        \draw[black] (0,0) -- (0,3) node[midway, left]{$h$};
 
-    \draw[blue, rotate=59] (2.57,-2) rectangle (4.07,-0.5) node[midway]{$m$};
-  \end{tikzpicture}
+        \draw[blue, rotate=59] (2.57,-2) rectangle (4.07,-0.5) node[midway]{$m$};
+    \end{tikzpicture}
 \end{center}
 
 Consider a mass $m$ on an inclined plane with angle $\theta$.
@@ -918,24 +919,24 @@ We will consider as frame of reference the one that is parallel $\hat u_{\parall
 Consider the forces along each direction:
 
 \begin{itemize}
-  \item $\hat u_{\parallel}$:
-        Here we have the gravitational force $F_{g\parallel} = mg \sin \theta$ and the friction $f = \mu N$
-  \item $\hat u_{\perp}$: Here we have the normal force $N$ and the gravitational force $F_{g\perp} = mg \cos \theta = - N$
+    \item $\hat u_{\parallel}$:
+          Here we have the gravitational force $F_{g\parallel} = mg \sin \theta$ and the friction $f = \mu N$
+    \item $\hat u_{\perp}$: Here we have the normal force $N$ and the gravitational force $F_{g\perp} = mg \cos \theta = - N$
 \end{itemize}
 
 The body will start moving only after $F_{g\parallel} > f$. Thus
 
 \begin{align*}
-  F_{g\parallel} & < f       \\
-  mg \sin \theta & < \mu_s N
+    F_{g\parallel} & < f       \\
+    mg \sin \theta & < \mu_s N
 \end{align*}
 
 We call $\theta_c$ ($\theta$ critical) the angle at which the body starts moving. We can calculate it as follows:
 
 \begin{align*}
-  mg \sin \theta_c & = \mu_s N                \\
-  mg \sin \theta_c & = \mu_s mg \cos \theta_c \\
-  \tan \theta_c    & = \mu_s
+    mg \sin \theta_c & = \mu_s N                \\
+    mg \sin \theta_c & = \mu_s mg \cos \theta_c \\
+    \tan \theta_c    & = \mu_s
 \end{align*}
 
 This is very important because in this way we have a way to measure the coefficient of friction.
@@ -943,19 +944,19 @@ This is very important because in this way we have a way to measure the coeffici
 \section{Class of 19/02/2024 - Exercises}
 
 \begin{warningbox}{Exercises}
-  In this class we just solved exercised so I won't report anything here except for important results.
+    In this class we just solved exercised so I won't report anything here except for important results.
 \end{warningbox}
 
 We derived, by solving some exercises, the following relations:
 
 $$
-  \frac{\sin \theta_1}{\sin \theta_2} = \frac{v_1}{v_2}
+    \frac{\sin \theta_1}{\sin \theta_2} = \frac{v_1}{v_2}
 $$
 
 and
 
 $$
-  \theta_1 = \theta_2
+    \theta_1 = \theta_2
 $$
 
 These are relations that describe the refraction and reflection of light but it's interesting to see how they can be derived from the fact that light travels the fastest path.
@@ -967,13 +968,13 @@ These are relations that describe the refraction and reflection of light but it'
 Consider the following equations:
 
 \begin{align*}
-  \dv{v}{t}                                 & = a                         \\
-  v \dv{v}{t}                               & = a v                       \\
-  \frac{1}{2} \dv{v^2}{t}                   & = a \dv{x}{t}               \\
-  \frac{1}{2} \int_{v_0}^{v_1} v^2 \dd{}    & = a \int_{x_0}^{x_1} \dd{x} \\
-  \frac{1}{2} (v_1^2 - v_0^2)               & = a (x_1 - x_0)             \\
-  \frac{1}{2} (v_1^2 - v_0^2)               & = \frac{F}{m} (x_1 - x_0)   \\
-  \frac{1}{2} m v_1^2 - \frac{1}{2} m v_0^2 & = F (x_1 - x_0)
+    \dv{v}{t}                                 & = a                         \\
+    v \dv{v}{t}                               & = a v                       \\
+    \frac{1}{2} \dv{v^2}{t}                   & = a \dv{x}{t}               \\
+    \frac{1}{2} \int_{v_0}^{v_1} v^2 \dd{}    & = a \int_{x_0}^{x_1} \dd{x} \\
+    \frac{1}{2} (v_1^2 - v_0^2)               & = a (x_1 - x_0)             \\
+    \frac{1}{2} (v_1^2 - v_0^2)               & = \frac{F}{m} (x_1 - x_0)   \\
+    \frac{1}{2} m v_1^2 - \frac{1}{2} m v_0^2 & = F (x_1 - x_0)
 \end{align*}
 
 
@@ -984,20 +985,20 @@ Note that this equation does not depend on time.
 We define the following from the equation above:
 
 \begin{itemize}
-  \item \underline{Work}: $W = F \Delta x$
-  \item \underline{Kinetic energy}: $K = \frac{1}{2} m v^2$
+    \item \underline{Work}: $W = F \Delta x$
+    \item \underline{Kinetic energy}: $K = \frac{1}{2} m v^2$
 \end{itemize}
 
 We get the \textbf{work-energy theorem}:
 
 $$
-  \Delta K = W
+    \Delta K = W
 $$
 
 The unit of energy and work is
 
 $$
-  [K] = [W] = [F][L] = [M][L]^2[T]^{-2} = \si{\kilogram \meter \squared \per \second \squared} = \si{\joule}
+    [K] = [W] = [F][L] = [M][L]^2[T]^{-2} = \si{\kilogram \meter \squared \per \second \squared} = \si{\joule}
 $$
 
 \subsection{Power}
@@ -1005,17 +1006,17 @@ $$
 Moreover we define \textbf{power} as the rate of change of work:
 
 \begin{align*}
-  P & = \dv{W}{t}           \\
-    & = \dv{t} (F \Delta x) \\
-    & = F \dv{x}{t}         \\
-    & = F v
+    P & = \dv{W}{t}           \\
+      & = \dv{t} (F \Delta x) \\
+      & = F \dv{x}{t}         \\
+      & = F v
 \end{align*}
 
 
 The unit of power is
 
 $$
-  [P] = [F][L][T]^{-1} = \si{\kilogram \meter \squared \per \second \cubed} = \si{\watt}
+    [P] = [F][L][T]^{-1} = \si{\kilogram \meter \squared \per \second \cubed} = \si{\watt}
 $$
 
 \subsection{Non-constant force}
@@ -1025,9 +1026,9 @@ Note that the relationship we defined above are valid only if the force is const
 In fact
 
 \begin{align*}
-  \dd{W}          & = F(x) \dd{x}          \\
-  \int_0^1 \dd{W} & = \int_0^1 F(x) \dd{x} \\
-  W = K_1 - K_0   & = \int_0^1 F(x) \dd{x}
+    \dd{W}          & = F(x) \dd{x}          \\
+    \int_0^1 \dd{W} & = \int_0^1 F(x) \dd{x} \\
+    W = K_1 - K_0   & = \int_0^1 F(x) \dd{x}
 \end{align*}
 
 \subsection{Potential energy}
@@ -1035,7 +1036,7 @@ In fact
 Assume we know
 
 $$
-  F(x) = \dv{x} G(x)
+    F(x) = \dv{x} G(x)
 $$
 
 for some function $G(x)$.
@@ -1043,25 +1044,25 @@ for some function $G(x)$.
 We get
 
 $$
-  \int_0^1 F(x) \dd{x} = \int_0^1 \dv{G}{x} \dd{x}
+    \int_0^1 F(x) \dd{x} = \int_0^1 \dv{G}{x} \dd{x}
 $$
 
 We can simplify the differentials and get
 
 $$
-  \int_0^1 F(x) \dd{x} = \int_0^1 \dd{G} = G(1) - G(0)
+    \int_0^1 F(x) \dd{x} = \int_0^1 \dd{G} = G(1) - G(0)
 $$
 
 We define the \textbf{potential energy} associated to a force $F$ as
 
 $$
-  V = - G
+    V = - G
 $$
 
 We will use this concept to define the total mechanical energy:
 
 $$
-  E = K + V = \text{ const}
+    E = K + V = \text{ const}
 $$
 
 
@@ -1070,13 +1071,13 @@ $$
 We know that
 
 $$
-  F_g = - m g \hat j = - \dv{V_g}{y}(y) \hat j
+    F_g = - m g \hat j = - \dv{V_g}{y}(y) \hat j
 $$
 
 We get that the potential is
 
 $$
-  V_g(y) = m g y + c
+    V_g(y) = m g y + c
 $$
 
 Note that the potential is an artificial construct which cannot be measured directly.
@@ -1087,14 +1088,14 @@ That's why we have the $c$ term: this is a constant we can choose to make the po
 We know that
 
 $$
-  F_s(x) = -k (x - x_0) = - \dv{V_s}{x}(x)
+    F_s(x) = -k (x - x_0) = - \dv{V_s}{x}(x)
 $$
 
 We get that the potential is
 
 \begin{align*}
-  V_s(x) & = \frac{1}{2} k (x - x_0)^2 + c  \\
-         & = \frac{1}{2} k (\Delta x)^2 + c
+    V_s(x) & = \frac{1}{2} k (x - x_0)^2 + c  \\
+           & = \frac{1}{2} k (\Delta x)^2 + c
 \end{align*}
 
 \subsection{Non conservative forces}
@@ -1106,21 +1107,21 @@ Consider a mass $m$ on a surface with friction attached to a spring.
 We write the equation of work:
 
 $$
-  (K_1 + \frac{1}{2}kx_1^2) - (K_0 + \frac{1}{2}kx_0^2) = W_{\text{friction}}
+    (K_1 + \frac{1}{2}kx_1^2) - (K_0 + \frac{1}{2}kx_0^2) = W_{\text{friction}}
 $$
 
 This $W_{\text{friction}}$ is the work done by the friction force and it is something like
 
 $$
-  W_{\text{friction}} = \int_0^1 f(x, \ldots) \dd{x}
+    W_{\text{friction}} = \int_0^1 f(x, \ldots) \dd{x}
 $$
 
 Friction is a complex force that depends on many factors, hence we cannot integrate it that easily. We recall that in our model $\vec f = \mu_d \vec N$, thus
 
 \begin{align*}
-  W_{\text{friction}} & = \int_0^1 \mu_d mg \dd{x} \\
-                      & = \mu_d mg (x_1 - x_0)     \\
-                      & < 0
+    W_{\text{friction}} & = \int_0^1 \mu_d mg \dd{x} \\
+                        & = \mu_d mg (x_1 - x_0)     \\
+                        & < 0
 \end{align*}
 
 We see that when we introduce friction we lose energy, hence we call friction a \textbf{non-conservative force}.
@@ -1134,15 +1135,15 @@ We want to find $x_1$ given $x_0$ and that $K_0 = K_1 = 0$ (we want to find the 
 If we take the equation from above and remove the kinetic energies we get
 
 \begin{align*}
-  \frac{1}{2} k x_1^2 - \frac{1}{2} k x_0^2 & = - \mu_d m g (x_1 - x_0) \\
-  \frac{1}{2} k (x_1^2 - x_0^2)             & = - \mu_d m g (x_1 - x_0) \\
-  \frac{1}{2} k (x_1 - x_0)(x_1 + x_0)      & = - \mu_d m g (x_1 - x_0) \\
+    \frac{1}{2} k x_1^2 - \frac{1}{2} k x_0^2 & = - \mu_d m g (x_1 - x_0) \\
+    \frac{1}{2} k (x_1^2 - x_0^2)             & = - \mu_d m g (x_1 - x_0) \\
+    \frac{1}{2} k (x_1 - x_0)(x_1 + x_0)      & = - \mu_d m g (x_1 - x_0) \\
 \end{align*}
 
 and
 
 $$
-  (x_1 - x_0) \left( \frac{1}{2} k (x_1 + x_0) + \mu_d m g \right) = 0
+    (x_1 - x_0) \left( \frac{1}{2} k (x_1 + x_0) + \mu_d m g \right) = 0
 $$
 
 This equation tells us some interesting facts:
@@ -1157,34 +1158,34 @@ We have seen this problem before by using a second order differential equation, 
 We have that
 
 \begin{align*}
-  E                  & = \frac{1}{2} m \left( \dv{x}{t} \right) + V(x) = \text{ const} \\
-  \implies \dv{x}{t} & = \pm \sqrt{\frac{2}{m} (E - V(x))}
+    E                  & = \frac{1}{2} m \left( \dv{x}{t} \right) + V(x) = \text{ const} \\
+    \implies \dv{x}{t} & = \pm \sqrt{\frac{2}{m} (E - V(x))}
 \end{align*}
 
 \begin{bluebox}{Sidenote: separable differential equations}
-  To complete this problem we need to solve a differential equation of the form
+    To complete this problem we need to solve a differential equation of the form
 
-  $$
-    \dv{x}{t} = f(x) g(t)
-  $$
+    $$
+        \dv{x}{t} = f(x) g(t)
+    $$
 
-  This type of equation is called \textbf{separable} and it's one of the few types of differential equations that can be solved analytically.
+    This type of equation is called \textbf{separable} and it's one of the few types of differential equations that can be solved analytically.
 
-  We can solve it by separating the variables and integrating both sides:
+    We can solve it by separating the variables and integrating both sides:
 
-  \begin{align*}
-    \dv{x}{t}                         & = f(x) g(t)        \\
-    \implies \int \frac{\dd{x}}{f(x)} & = \int g(t) \dd{t}
-  \end{align*}
+    \begin{align*}
+        \dv{x}{t}                         & = f(x) g(t)        \\
+        \implies \int \frac{\dd{x}}{f(x)} & = \int g(t) \dd{t}
+    \end{align*}
 
-  Remember to choose the same bounds for both integrals.
+    Remember to choose the same bounds for both integrals.
 \end{bluebox}
 
 We identify that $\dv{x}{t} = f(x)g(t)$ where $f(x) = \pm \sqrt{\frac{2}{m} (E - V(x))}$ and $g(t) = 1$.
 Now we can solve the separable differential equation:
 
 $$
-  \pm \int_0^1 \frac{\dd{x}}{\sqrt{\frac{2}{m} (E - V(x))}} = \int_0^1 \dd{t} = t
+    \pm \int_0^1 \frac{\dd{x}}{\sqrt{\frac{2}{m} (E - V(x))}} = \int_0^1 \dd{t} = t
 $$
 
 \section{Class of 22/02/2024}
@@ -1206,14 +1207,14 @@ First we need to compute $V(x_e + \delta x)$, we can do so by using a Taylor exp
 Then we consider the bound of integration $x_0 = x_e + \delta x_0$ and $x_1 = x_e + \delta x_1$ and use the formula we saw in the last class to find the time.
 
 $$
-  \Delta t = \pm \int_{x_e + \delta x_0}^{x_e + \delta x_1} \frac{\dd{x}}{\sqrt{\frac{2}{m} (E - V(x_e + \delta x))}}
+    \Delta t = \pm \int_{x_e + \delta x_0}^{x_e + \delta x_1} \frac{\dd{x}}{\sqrt{\frac{2}{m} (E - V(x_e + \delta x))}}
 $$
 
 Then the best approach to try to solve this integral is to use a Taylor expansion of $V$, substitute $u = \delta x$ and shift the bounds of integration.
 
 If we are lucky we might be able to solve this integral analytically, surely it's easier to solve this than the second order differential equation.
 
-\subsection{Conservation of energy}
+\subsection{Conservation of energy in 2D}
 
 We have that the total mechanical energy is conserved if the forces are conservative.
 
@@ -1222,16 +1223,18 @@ A force is conservative if it only depends on starting and ending points and not
 In 1D we have that
 
 $$
-  f(x + \dd{x}) - f(x) = \dd{f} = f'(x) \dd{x}
+    f(x + \dd{x}) - f(x) = \dd{f} = f'(x) \dd{x}
 $$
 
 In higher dimensions we have to use partial derivatives.
 
+\subsubsection{Calculus review: partial derivatives}
+
 Consider a function $f(x, y)$, we have that
 
 \begin{align*}
-  \pdv{f}{x} & = \lim_{\Delta x \to 0} \frac{f((x + \Delta x), y) - f(x, y)}{\Delta x} \\
-  \pdv{f}{y} & = \lim_{\Delta y \to 0} \frac{f(x, (y + \Delta y)) - f(x, y)}{\Delta y}
+    \pdv{f}{x} & = \lim_{\Delta x \to 0} \frac{f((x + \Delta x), y) - f(x, y)}{\Delta x} \\
+    \pdv{f}{y} & = \lim_{\Delta y \to 0} \frac{f(x, (y + \Delta y)) - f(x, y)}{\Delta y}
 \end{align*}
 
 where $\pdv{f}{x}$ and $\pdv{f}{y}$ are called \textbf{partial derivatives} of $f$ with respect to $x$ and $y$.
@@ -1239,85 +1242,118 @@ This means that we fix one variable and we take the derivative with respect to t
 
 Partial derivatives represent the variation of the function along just one direction, now we have to find what is the total variation $\dd{f}$ of the function.
 
-Consider the two possible paths to go from $(x, y)$ to $(x + \dd{x}, y + \dd{y})$:
+Consider the two possible paths $(A)$ and $(B)$ to go from $(x, y)$ to $(x + \dd{x}, y + \dd{y})$ as in Figure (\ref{fig:partial_derivatives}):
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw[black, ->] (-1,0) -- (6,0) node[anchor=north]{$x$};
+        \draw[black, ->] (-1,0) -- (-1,4) node[anchor=west]{$y$};
+
+        \filldraw[red] (1,1) circle (2pt) node[anchor=east]{$(x, y)$};
+        \filldraw[red] (3,3) circle (2pt) node[anchor=west]{$(x + \dd{x}, y + \dd{y})$};
+        \filldraw[black] (1,3) circle (2pt) node[anchor=east]{$(x, y + \dd{y})$};
+        \filldraw[black] (3,1) circle (2pt) node[anchor=west]{$(x + \dd{x}, y)$};
+
+        \draw[thick, green, ->] (1,1) -- (3,1) node[anchor=north, midway]{$\dd{f}_1^{(A)}$};
+        \draw[thick, green, ->] (3,1) -- (3,3) node[anchor=west, midway]{$\dd{f}_2^{(A)}$};
+        \draw[thick, blue, ->] (1,1) -- (1,3) node[anchor=east, midway]{$\dd{f}_1^{(B)}$};
+        \draw[thick, blue, ->] (1,3) -- (3,3) node[anchor=south, midway]{$\dd{f}_2^{(B)}$};
+    \end{tikzpicture}
+
+    \caption{Possible paths to go from $(x, y)$ to $(x + \dd{x}, y + \dd{y})$}
+    \label{fig:partial_derivatives}
+\end{figure}
 
 \begin{itemize}
-  \item For $(x, y) \to (x + \dd{x}, y) \to (x + \dd{x}, y + \dd{y})$ we have
+    \item For $(x, y) \to (x + \dd{x}, y) \to (x + \dd{x}, y + \dd{y})$ we have
 
-        \begin{align*}
-          df_1^{(A)} & = \pdv{f(x,y)}{x} \dd x          \\
-          df_2^{(A)} & = \pdv{f(x + \dd x, y)}{y} \dd y
-        \end{align*}
+          \begin{align*}
+              \dd{f}_1^{(A)} & = \pdv{f(x,y)}{x} \dd x          \\
+              \dd{f}_2^{(A)} & = \pdv{f(x + \dd x, y)}{y} \dd y
+          \end{align*}
 
-  \item For $(x, y) \to (x, y + \dd{y}) \to (x + \dd{x}, y + \dd{y})$ we have
+    \item For $(x, y) \to (x, y + \dd{y}) \to (x + \dd{x}, y + \dd{y})$ we have
 
-        \begin{align*}
-          df_1^{(B)} & = \pdv{f(x,y)}{y} \dd y          \\
-          df_2^{(B)} & = \pdv{f(x, y + \dd y)}{x} \dd x
-        \end{align*}
+          \begin{align*}
+              \dd{f}_1^{(B)} & = \pdv{f(x,y)}{y} \dd y          \\
+              \dd{f}_2^{(B)} & = \pdv{f(x, y + \dd y)}{x} \dd x
+          \end{align*}
 \end{itemize}
 
 We now want to prove that
 
 $$
-  df_1^{(A)} + df_2^{(A)} = df_1^{(B)} + df_2^{(B)}
+    \dd{f}_1^{(A)} + \dd{f}_2^{(A)} \stackrel{?}{=} \dd{f}_1^{(B)} + \dd{f}_2^{(B)}
 $$
 
-We can do a taylor expansion
+Now we note that the terms $\dd{f}_2^{(A)}$ and $\dd{f}_2^{(B)}$ are partial derivatives at a mid point that depends on $\dd{x}$ and $\dd{y}$ respectively,
+if we use a Taylor expansion on those we get the following results:
 
 \begin{align*}
-  \dd{f_2}^{(A)} = \pdv{f(x + \dd{x}, y)}{y} & = \pdv{f(x, y)}{y} + \pdv{x} \left( \pdv{f(x, y)}{y} \right) \dd{x} \\
-                                             & = \pdv{f(x, y)}{y} + \pdv{f(x, y)}{x}{y}                            \\
-  \dd{f_2}^{(B)} = \pdv{f(x, y + \dd{y})}{x} & = \pdv{f(x, y)}{x} + \pdv{y} \left( \pdv{f(x, y)}{x} \right) \dd{y} \\
-                                             & = \pdv{f(x, y)}{x} + \pdv{f(x, y)}{x}{y}
+    \dd{f_2}^{(A)} = \pdv{f(x + \dd{x}, y)}{y} \dd{y} & = \pdv{f(x, y)}{y} \dd{y} + \pdv{x} \left( \pdv{f(x, y)}{y} \dd{y} \right) \dd{x} \\
+                                                      & = \pdv{f(x, y)}{y} \dd{y} + \pdv{f(x, y)}{x}{y} \dd{x} \dd{y}                     \\
+    \dd{f_2}^{(B)} = \pdv{f(x, y + \dd{y})}{x} \dd{x} & = \pdv{f(x, y)}{x} \dd{x} + \pdv{y} \left( \pdv{f(x, y)}{x} \dd{x} \right) \dd{y} \\
+                                                      & = \pdv{f(x, y)}{x} \dd{x} + \pdv{f(x, y)}{y}{x} \dd{y} \dd{x}
 \end{align*}
 
-MAGIC HERE
+(Note that Taylor expansions of functions of multiple variables have not been covered yet in analysis 2, hence we will not prove the above results.
+If you're curious ChatGPT is your friend.)
 
-TODO: we need to show the two paths are equal if the second order terms are equal.
+Now if we substitute these results in the equation we want to prove we can simplify a lot to get that
 
-therefore we get that the the total variation $\dd{f}$ is the same for both paths.
+$$
+    \pdv{f(x, y)}{x}{y} \dd{x} \dd{y} \stackrel{?}{=} \pdv{f(x, y)}{y}{x} \dd{y} \dd{x}
+$$
 
-\subsection{Energy in 2D}
+This result says that the mixed partial derivatives are equal, which is true for most functions we will encounter.
 
-We have that
+\subsubsection{Application to energy conservation}
+
+Now that we know how to use partial derivatives we can show that the kinetic energy is
 
 \begin{align*}
-  K & = \frac{1}{2} m v^2              \\
-    & = \frac{1}{2} m \norm{\vec{v}}^2 \\
-    & = \frac{1}{2} m (v_x^2 + v_y^2)  \\
+    K & = \frac{1}{2} m v^2                        \\
+      & = \frac{1}{2} m \norm{\vec{v}}^2           \\
+      & = \frac{1}{2} m \left(v_x^2 + v_y^2\right) \\
 \end{align*}
 
-Power is
+And knowing that power is the rate of change of work we can write the work done by a force as
 
 \begin{align*}
-  P = \dv{K}{t} & = \frac{1}{2}m \dv{t} (v_x^2 + v_y^2) \\
-                & = m v_x a_x + m v_y a_y               \\
-                & = \vec F \cdot \vec v
+    P = \dv{K}{t} & = \frac{1}{2}m \dv{t} \left(v_x^2 + v_y^2\right)                  \\
+                  & = \frac{1}{2}m \left(\dv{t} v_x^2 + \dv{t} v_y^2\right)           \\
+                  & = \frac{1}{2}m \left(2 v_x \dv{v_x}{t} + 2 v_y \dv{v_y}{t}\right) \\
+                  & = m (v_x a_x + v_y a_y)                                           \\
+                  & = m v_x a_x + m v_y a_y                                           \\
+                  & = F_x v_x + F_y v_y                                               \\
+                  & = \vec F \cdot \vec v
 \end{align*}
 
-Hence
+Therefore we have that
 
 $$
-  \dv{W}{t} = \vec F \cdot \vec v = \vec F \cdot \dv{\vec r}{t}
+    \dv{W}{t} = \vec F \cdot \vec v = \vec F \cdot \dv{\vec r}{t}
 $$
 
-We can calculate the work done by a force on a path with a path integral (see analysis 2).
+This result is useful to calculate the work done by a force along a path:
+knowing the force and the path we can use a path integral to get the result.
+(Path integrals have been explained briefly in today's analysis 2 lecture.)
 
 $$
-  W = \int_{\gamma} F(\vec{r}) \cdot \dd{\vec{r}}
+    W = \int_{\gamma} F(\vec{r}) \cdot \dd{\vec{r}}
 $$
 
 Note that from this result we see that there can exist non-zero forces that do no work:
 if the direction of the force is orthogonal to the direction of the path then the work is zero.
 
-\subsection{Constructing a conservative force}
+\subsubsection{Constructing a conservative force}
 
-If we are considering a non-infinitesimal path we note that in general the work done by a force is path dependent.
-In fact
+All the effort we put in the calculus section above to show that the mixed partial derivatives are equal is actually only valid for infinitesimal variations of the function.
+In fact, in the general case of discrete variations of the function the mixed partial derivatives are not equal.
 
 $$
-  \int_{\gamma_A} \vec{F}(\vec{r}) \cdot \dd \vec{r} \neq \int_{\gamma_B} \vec{F}(\vec{r}) \cdot \dd \vec{r} \ne V(\vec{r}_A) - V(\vec{r}_B)
+    \int_{\gamma_A} \vec{F}(\vec{r}) \cdot \dd \vec{r} \neq \int_{\gamma_B} \vec{F}(\vec{r}) \cdot \dd \vec{r} \ne V(\vec{r}_A) - V(\vec{r}_B)
 $$
 
 Therefore we need a way to construct a force that is path independent.
@@ -1325,7 +1361,7 @@ Therefore we need a way to construct a force that is path independent.
 We choose a $V(x, y)$ such that
 
 $$
-  \vec{F} = \left( - \pdv{V}{x}, - \pdv{V}{y} \right) = -\vec{\nabla} V
+    \vec{F} = \left( - \pdv{V}{x}, - \pdv{V}{y} \right) = -\vec{\nabla} V
 $$
 
 where $\vec{\nabla} = \left( \pdv{x}, \pdv{y} \right)$ is the \textbf{gradient} operator.
@@ -1333,11 +1369,15 @@ where $\vec{\nabla} = \left( \pdv{x}, \pdv{y} \right)$ is the \textbf{gradient} 
 Then
 
 \begin{align*}
-  \int_\gamma \vec{F} \cdot \dd{\vec{r}} & = \int_\gamma \left( -\pdv{V}{x}, -\pdv{V}{y} \right) \cdot (\dd{x}, \dd{y}) \\
-                                         & = - \int_\gamma \pdv{V}{x} \dd{x} + \pdv{V}{y} \dd{y}                        \\
-                                         & = - \int_\gamma \dd{V}                                                       \\
-                                         & = V(\vec{r}_A) - V(\vec{r}_B)
+    \int_\gamma \vec{F} \cdot \dd{\vec{r}} & = \int_\gamma \left( -\pdv{V}{x}, -\pdv{V}{y} \right) \cdot (\dd{x}, \dd{y}) \\
+                                           & = - \int_\gamma \pdv{V}{x} \dd{x} + \pdv{V}{y} \dd{y}                        \\
+                                           & = - \int_\gamma \dd{V}                                                       \\
+                                           & = V(\vec{r}_A) - V(\vec{r}_B)
 \end{align*}
+
+and we obtain the result we wanted.
+
+Note that this means that in general we cannot assume that a force is conservative.
 
 
 \end{document}

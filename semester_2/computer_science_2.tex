@@ -19,6 +19,8 @@
 \usepackage{bytefield}
 \usepackage{minted}
 \usepackage{capt-of}
+\usepackage{float}
+\usepackage{tikz}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -1412,5 +1414,229 @@ If we run out of space at the end of the array we can just cycle back to the beg
 \end{minted}
 
 We see that the operations are still $O(1)$ but this time we \texttt{malloc} only once and we don't have to dereference any pointers.
+
+\section{Class of 22/02/2024 - Dijkstra's algorithm}
+
+We now consider a graph $G = (V, E)$ and a function $l(u, v) > 0$ that assigns a length to each edge $(u, v) \in E$.
+
+Today's problem is to find the shortest path from a vertex $s \in V$ to any other vertex taking into account the length of the edges.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (2, 0) {B};
+        \node[draw, circle] (S) at (0, -2) {S};
+        \node[draw, circle] (D) at (2, -2) {D};
+        \node[draw, circle] (E) at (0, -4) {E};
+        \node[draw, circle] (F) at (2, -4) {F};
+
+        \draw[thick] (S) -- node[left] {3} (A);
+        \draw[thick] (S) -- node[above] {10} (D);
+        \draw[thick] (A) -- node[above] {5} (B);
+        \draw[thick] (D) -- node[right] {6} (B);
+        \draw[thick] (E) -- node[below] {1} (F);
+        \draw[thick] (D) -- node[right] {3} (F);
+        \draw[thick] (S) -- node[left] {2} (E);
+
+    \end{tikzpicture}
+
+    \caption{An example of a graph with weighted edges} \label{fig:weightedgraph}
+\end{figure}
+
+We have seen that BFS does a similar job, but it would work only if all the edges had the same length. We need to find a different algorithm.
+
+\subsubsection{Naive approach}
+
+We can try to convert the problem into a shortest path problem with unweighted edges, which we know already how to solve.
+
+For example, we could add new vertices in between each edge, one for each unit of length of the edge, and then connect them with edges of length 1.
+
+It is easy to show that this approach would work and it would convert the problem into one we already solved but it is also highly inefficient.
+
+\subsection{Tools: priority queues}
+
+For this algorithm we will need a new data structure: the priority queue.
+
+A priority queue works more or less like a normal queue but each element of the queue also has a priority.
+
+When we dequeue an element we get the one with the highest priority first, no matter when it was enqueued.
+
+An example of priority queue in real life is the triage in a hospital: the patients are not treated in the order they arrived but in the order of the severity of their condition.
+
+\subsubsection{Implementation with a linked list}
+
+This is the simplest implementation and the original one that Dijkstra used.
+
+\begin{center}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Operation}  & \textbf{Time complexity} \\
+        \hline
+        Init                & $O(n)$                   \\
+        Check empty         & $O(1)$                   \\
+        Find min and remove & $O(n)$                   \\
+        Update priority     & $O(1)$                   \\
+        \hline
+    \end{tabular}
+    \captionof{table}{Time complexity of the operations of a priority queue implemented with a linked list}
+    \label{tab:priorityqueue_linkedlist}
+\end{center}
+
+Note that these operations have these time complexities only if applied to this specific algorithm, in general they can be different.
+
+\subsubsection{Implementation with a binary heap}
+
+First we need to define a \textit{full binary tree}.
+
+A full binary tree is a rooted tree where each note has two children (left and right) or no children at all, except possibly on the bottom layer.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (-2, -2) {B};
+        \node[draw, circle] (C) at (2, -2) {C};
+        \node[draw, circle] (D) at (-3, -4) {D};
+        \node[draw, circle] (E) at (-1, -4) {E};
+        \node[draw, circle] (F) at (1, -4) {F};
+
+        \draw[thick] (A) -- (B);
+        \draw[thick] (A) -- (C);
+        \draw[thick] (B) -- (D);
+        \draw[thick] (B) -- (E);
+        \draw[thick] (C) -- (F);
+    \end{tikzpicture}
+    \caption{An example of a full binary tree} \label{fig:fullbinarytree}
+\end{figure}
+
+We can navigate the tree as follows:
+
+\begin{itemize}
+    \item From a parent of index $i$ we can get to the left child at index $2i$ and to the right child at index $2i + 1$.
+    \item From a child at index $i$ we can get to the parent at index $\lfloor i / 2 \rfloor$.
+\end{itemize}
+
+To get to the parent of a node at index $i$ we can use the floor function: $\lfloor i / 2 \rfloor$.
+
+Therefore this data structure can be implemented using an array and navigated using the above formulas.
+
+\subsection{Dijsktra's algorithm}
+
+\subsubsection{Definition}
+
+Let $G(V, E)$, $s \in V$, and $l(u, v) > 0 \forall (u, v) \in E$. Let $d(v)$ be the length of the shortest path from $s$ to $v$.
+
+\begin{absolutelynopagebreak}
+    \begin{minted}{python}
+    def Dijkstra(G, s):
+        d = {}
+
+        # Setup
+        for v in G.vertices():
+            d[v] = float('inf')
+        d[s] = 0
+
+        # Insert all vertices in the priority queue
+        Q = PriorityQueue(G.vertices())
+        while not Q.is_empty():
+
+            # Get the vertex with the smallest distance
+            u = Q.dequeue()
+            for v in u.neighbors():
+                # We check if we can reach v in a shorter path
+                if d[v] > d[u] + l(u, v):
+                    # If we can, we update the distance of v
+                    d[v] = d[u] + l(u, v)
+
+                    # Save the newfound distance of v in the queue
+                    # by updating its priority
+                    Q.update_priority(v, d[v])
+\end{minted}
+\end{absolutelynopagebreak}
+
+\subsubsection{Example}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{assets/computer_science_2/dijsktra.png}
+
+    \caption{An example of a directed graph with weighted edges}
+    \label{fig:weighted_directedgraph}
+\end{figure}
+
+In the graph in Figure (\ref{fig:weighted_directedgraph}) we would start from $A$ which is the start vertex and we apply the algorithm.
+
+We can make a table of the distances at each step of the algorithm:
+
+\begin{center}
+    \begin{tabular}{ |c|c|c|c|c|c| }
+        \hline
+        Extracted vertex & A & B          & C          & D          & E          \\
+        \hline
+        Setup            & 0 & $\infty$   & $\infty$   & $\infty$   & $\infty$   \\
+        A                & 0 & \textbf{4} & \textbf{2} & $\infty$   & $\infty$   \\
+        C                & 0 & \textbf{3} & 2          & \textbf{6} & \textbf{7} \\
+        B                & 0 & 3          & 2          & \textbf{5} & \textbf{6} \\
+        D                & 0 & 3          & 2          & 5          & 6          \\
+        E                & 0 & 3          & 2          & 5          & 6          \\
+        \hline
+    \end{tabular}
+    \captionof{table}{The distances at each step of the algorithm}
+    \label{tab:dijsktra_distances}
+\end{center}
+
+In the Table (\ref{tab:dijsktra_distances}) we have highlighted the vertices that have been updated.
+
+At each step we extract the vertex with the smallest distance from the queue and we update the distances of its neighbors if we can reach them in a shorter path.
+
+\subsubsection{Negative edges}
+
+Sometimes having a negative length edge can be useful, therefore we need to adjust the algorithm to take them into account.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (2, 2) {A};
+        \node[draw, circle] (B) at (4, 2) {B};
+        \node[draw, circle] (C) at (2, 0) {C};
+        \node[draw, circle] (D) at (4, 0) {D};
+        \node[draw, circle] (E) at (0, 0) {E};
+        \node[draw, circle] (F) at (6, 0) {F};
+
+        \draw[thick] (A) -- node[above] {1} (B);
+        \draw[thick] (A) -- node[left] {1} (C);
+        \draw[thick] (B) -- node[right] {-5} (D);
+        \draw[thick] (C) -- node[below] {1} (D);
+        \draw[thick] (D) -- node[below] {1} (F);
+        \draw[thick] (C) -- node[below] {1} (E);
+    \end{tikzpicture}
+
+    \caption{An example of a graph with negative edges}
+    \label{fig:negative_edges}
+\end{figure}
+
+In the graph in Figure (\ref{fig:negative_edges}) we have a cycle containing a negative edge, which means that we can go around the cycle as many times as we want and we will always decrease the distance.
+
+This is a problem which is not solvable with Dijkstra's algorithm, a graph with \textbf{negative cycles} is not solvable with this algorithm.
+
+Moreover, even if there was no negative cycle but still some negative edges, the algorithm would still not work correctly because it wouldn't be able to find the shortest path.
+
+Despite this flaw we can still use Dijkstra's algorithm in most cases, as long as there are no negative edges.
+
+\subsubsection{Time complexity}
+
+We analyze each step of the algorithm:
+
+\begin{itemize}
+    \item The setup part of the algorithm is done once
+    \item The check to determine whether the queue is empty is done $|V|$ times
+    \item Finding the right vertex to dequeue is done $|V|$ times
+    \item Updating the priority of the neighbors of the dequeued vertex is done $|E|$ times
+\end{itemize}
+
+Then, we have to take into account the time complexity of the priority queue operations.
+
+In the case of a linked list we get a total complexity of $O(|V| + |V|^2 + |E|)$.
 
 \end{document}

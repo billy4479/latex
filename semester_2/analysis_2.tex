@@ -1050,4 +1050,179 @@ Then
     The proof of this is very easy and can be obtained by applying the previous proposition and properties of limits in $\R$.
 \end{proof}
 
+\section{Class of 23/02/2024 - Interior and closure}
+
+\subsection{Interior}
+
+\textbf{\underline{Definition} (ball)}:
+Let $\munderbar{a} \in \R^d$ and $r \geq 0$.
+\begin{itemize}
+    \item The open ball of radius $r$ centered at $\munderbar{a}$ is
+          $$
+              B_o(\munderbar{a}, r) = \left\{ \munderbar{x} \in \R^d : \norm{\munderbar{x} - \munderbar{a}} < r \right\}
+          $$
+    \item The closed ball of radius $r$ centered at $\munderbar{a}$ is
+          $$
+              B_c(\munderbar{a}, r) = \left\{ \munderbar{x} \in \R^d : \norm{\munderbar{x} - \munderbar{a}} \leq r \right\}
+          $$
+\end{itemize}
+
+\textbf{\underline{Definition} (interior)}:
+If $V \subseteq \R^d$, we call interior of $V$, written $\mathring{V}$, the set of $n \in \R^d$ such that
+
+$$
+    \exists \varepsilon > 0, \enspace
+    \forall \munderbar{y} \in B_c(\munderbar{x}, \varepsilon), \enspace
+    \munderbar{y} \in V
+$$
+
+then
+
+$$
+    \munderbar{x} \in \mathring{V} \iff \exists \varepsilon > 0, \enspace
+    B_o(\munderbar{x}, \varepsilon) \subseteq V
+$$
+
+\subsubsection{Theorem: interior means removing the boundary}
+
+\underline{Statement}: Let $V \subseteq \R^d = \{ (x, y) \in \R^2 : x^2 + y^2 \leq 1 \}$.
+Then $\mathring{V} = \{ (x, y) \in \R^2 : x^2 + y^2 < 1 \}$.
+
+\begin{proof}
+    We have 3 cases to consider:
+    \begin{enumerate}
+        \item $x + y < 1$
+        \item $x + y = 1$
+        \item $x + y > 1$
+    \end{enumerate}
+
+    Then
+    \begin{enumerate}
+        \item $(x, y) \notin V$ so $(x, y) \notin \mathring{V}$. See next proposition for the proof.
+        \item Let $(x, y)$ s.t $x + y = 1$.
+              For $\varepsilon > 0$ consider $(x, y - \varepsilon)$.
+              Then $x + (y - \varepsilon) = 1 - \varepsilon < 1$, thus $(x, y - \varepsilon) \notin V$.
+              But $\norm{\begin{pmatrix}
+                          x \\ y
+                      \end{pmatrix} - \begin{pmatrix}
+                          x \\ y - \varepsilon
+                      \end{pmatrix}} = \varepsilon$ so $(x, y - \varepsilon) \in B_c((x, y), \varepsilon)$.
+              Therefore $(x, y) \notin \mathring{V}$.
+
+        \item Let $(x_0, y_0)$ s.t. $x_0 + y_0 > 1$.
+              We know that the direction towards the boundary is $\begin{pmatrix}
+                      -1 \\ -1
+                  \end{pmatrix}$,
+              so the curve $\gamma: t \mapsto \begin{pmatrix}
+                      x_0 \\ y_0
+                  \end{pmatrix} + t \begin{pmatrix}
+                      -1 \\ -1
+                  \end{pmatrix}$
+              intersects the boundary when $\gamma_1(t) + \gamma_2(t) = 1$.
+              That is when $x_0 - t + y_0 - t = 1$ and $t^* = \frac{x_0 + y_0 - 1}{2}$.
+              The distance is then $\norm{\gamma(t^*) - \begin{pmatrix}
+                          x_0 \\ y_0
+                      \end{pmatrix}} = \frac{\sqrt{2}}{2} (x_0 + y_0 - 1)$.
+              Therefore for $\varepsilon > 0$ with $\varepsilon < \frac{\sqrt{2}}{2} (x_0 + y_0 - 1)$ we have that $B_o((x_0, y_0), \varepsilon) \subseteq V$, thus $(x_0, y_0) \in \mathring{V}$.
+    \end{enumerate}
+\end{proof}
+
+\subsubsection{Neighborhoods}
+
+\textbf{\underline{Definition} (neighborhood)}:
+If $\munderbar{n} \in \R^d$, a set $V$ is said the neighborhood of $\munderbar{n}$ iff $\munderbar{n} \in \mathring{V}$.
+
+The idea is that when we speak about the interior we fix the set and look at the points inside, while when we speak about neighborhoods we fix the point and look at the sets around it.
+
+\subsubsection{Theorem: relationships between interior and other sets}
+
+\underline{Statement}: Let $V, W \subseteq \R^d$.
+Then
+
+\begin{enumerate}
+    \item $\mathring{V} \subseteq V$
+    \item If $V \subseteq W$ then $\mathring{V} \subseteq \mathring{W}$
+\end{enumerate}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}
+        \item Let $\munderbar{x} \in \mathring{V}$.
+              Since $\munderbar{x} \in \mathring{V}$ then $\exists \varepsilon > 0$ such that $B_c(\munderbar{x}, \varepsilon) \subseteq V$.
+              Thus, since $\munderbar{x} \in B_c(\munderbar{x}, \varepsilon)$ we have that $\munderbar{x} \in V$.
+        \item Let $V, W$ such that $V \subseteq W$ let and $\munderbar{x} \in \mathring{V}$.
+              Then, by definition, $\exists \varepsilon > 0$ such that $B_c(\munderbar{x}, \varepsilon) \subseteq V$.
+              As $V \subseteq W$ then $B_c(\munderbar{x}, \varepsilon) \subseteq V \subseteq W$.
+              Therefore $\exists \varepsilon > 0$ such that $B_c(\munderbar{x}, \varepsilon) \subseteq W$.
+              Thus $\munderbar{x} \in \mathring{W}$.
+    \end{enumerate}
+\end{proof}
+
+\subsection{Closure}
+
+\textbf{\underline{Definition} (closure)}:
+Let $V \subseteq \R^d$. The closure of $V$, written $\overline{V}$, is the set of $\munderbar{x} \in \R^d$ such that there exists a sequence $\left(\munderbar{x}_n\right)_{n \in \N}$ of elements of $V$ converging to $\munderbar{x}$.
+
+For example on $\R$ the closure of $(0, +\infty)$ is $[0, +\infty)$.
+
+\subsubsection{Theorem: closure adds the boundary}
+
+\underline{Statement}: Let $\munderbar{a} \in \R^d$ and $r > 0$.
+Then the closure of $B_o(\munderbar{a}, r)$ is $B_c(\munderbar{a}, r)$.
+
+\begin{proof}
+    We have 3 cases
+
+    \begin{enumerate}
+        \item $\norm{\munderbar{x} - \munderbar{a}} < r$
+        \item $\norm{\munderbar{x} - \munderbar{a}} = r$
+        \item $\norm{\munderbar{x} - \munderbar{a}} > r$
+    \end{enumerate}
+
+    Then
+
+    \begin{enumerate}
+        \item Since $\munderbar{x} \in V$ then $\munderbar{x} \in \overline{V}$. See next proposition for the proof.
+        \item Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} = r$.
+              Let $\munderbar{x}_n = \munderbar{x} + t_n(\munderbar{a} - \munderbar{x})$, where we want that $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x}_n \in V \enspace \forall n$.
+              The first condition is equivalent to saying that $\norm{\munderbar{x}_n - \munderbar{x}} = \norm{t_n(\munderbar{a} - \munderbar{x})} = t_n \norm{\munderbar{a} - \munderbar{x}} \to 0$, therefore we want $t_n \to 0$.
+              For the second condition we want that $\norm{\munderbar{x}_n - \munderbar{a}} < r$, which is
+              $\norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} + t_n(\munderbar{a} - \munderbar{x}) - \munderbar{a}} = \norm{(\munderbar{x} - \munderbar{a})(1 - t_n)} = r \abs{1 - t_n} < r$. Then this is $< r$ if $t_n \in [0, 1]$.
+              We can take $t_n = \frac{1}{2^n}$.
+        \item We will prove this one by contradiction. Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} > r$.
+              Take a sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in V$ converging to $\munderbar{x}$.
+              This means that $\norm{\munderbar{x}_n - \munderbar{a}} < r$ for any $n$.
+              As $\munderbar{x}_n \to \munderbar{x}$ we have that $(\munderbar{x}_n - \munderbar{a}) \to (\munderbar{x} - \munderbar{a})$.
+              Then $\norm{\munderbar{x}_n - \munderbar{a}} \to \norm{\munderbar{x} - \munderbar{a}}$.
+              So $\lim_{n \to +\infty} \norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} - \munderbar{a}}$, thus $\norm{\munderbar{x} - \munderbar{a}} \leq r$ and we have a contradiction.
+    \end{enumerate}
+\end{proof}
+
+\subsubsection{Theorem: relationships between closures and other sets}
+
+\underline{Statement}: Let $V, W \subseteq \R^d$.
+Then
+
+\begin{enumerate}
+    \item $V \subseteq \overline{V}$
+    \item If $V \subseteq W$ then $\overline{V} \subseteq \overline{W}$
+\end{enumerate}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}
+        \item Let $\munderbar{x} \in V$.
+              Then let $\left(\munderbar{x}_n\right)_{n \in \N} = \munderbar{x}$ be a constant sequence of elements of $V$.
+              Then $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x} \in \overline{V}$.
+        \item Let $V, W$ such that $V \subseteq W$ let and $\munderbar{x} \in \overline{V}$.
+              Then, by definition, $\exists \left(\munderbar{x}_n\right)_{n \in \N} \in V$ such that $\munderbar{x}_n \to \munderbar{x}$.
+              As $V \subseteq W$ then $\munderbar{x}_n \in W$ and $\munderbar{x} \in \overline{W}$.
+    \end{enumerate}
+\end{proof}
+
+\subsection{Boundary}
+
+\textbf{\underline{Definition} (boundary)}:
+If $V \subseteq \R^d$, the (topological) boundary of $V$, written $\partial V$, is the set defined as $\partial V = \overline{V} \setminus \mathring{V}$.
+
 \end{document}

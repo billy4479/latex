@@ -17,11 +17,13 @@
 \usepackage[a4paper,margin=1.5cm]{geometry}
 \usepackage{bookmark}
 \usepackage{physics}
-\usepackage{tikz}
 \usepackage{cancel}
 \usepackage{siunitx}
 \usepackage{capt-of}
 \usepackage{float}
+
+\usepackage{tikz}
+\usetikzlibrary{patterns}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -1384,5 +1386,208 @@ Then
 \end{align*}
 
 and we obtain the result we wanted.
+
+\section{Class of 23/02/2024}
+
+\subsection{A criterion for conservative forces}
+
+In the last class we have seen that if we have $f(x, y, z)$ and we want to move to $\dd{\vec r} = (\dd{x}, \dd{y}, \dd{z})$ we can write the differential as
+
+\begin{align*}
+    \dd{f} & = f(x + \dd{x}, y + \dd{y}, z + \dd{z}) - f(x, y, z)        \\
+           & = \pdv{f}{x} \dd{x} + \pdv{f}{y} \dd{y} + \pdv{f}{z} \dd{z} \\
+           & = \vec{\nabla} f \cdot \dd{\vec{r}}
+\end{align*}
+
+Therefore to have a conservative force we need to have a potential $V(x, y, z)$ such that $\vec{F} = -\vec{\nabla} V$.
+
+Note that $\int_\gamma = -\int_{-\gamma}$, thus if a force is conservative, if we take a path and then go back to the starting point we will get that the total work done is zero. We say $\oint_\gamma \vec{F} \cdot \dd{\vec{r}} = 0$.
+
+We can also derive a criterion to check if a force is conservative without computing integrals:
+
+\begin{align*}
+                                          & \pdv{F_x}{y} = \pdv{F_y}{x} \\
+    \vec{F} \text{ is conservative } \iff & \pdv{F_x}{z} = \pdv{F_z}{x} \\
+                                          & \pdv{F_y}{z} = \pdv{F_z}{y}
+\end{align*}
+
+\subsection{Kinetic energy must create a conservative force}
+
+We know that
+$$
+    E = \frac{1}{2} m v^2 + V(\vec{r}) = \text{ const}
+$$
+
+Since $E$ and we want a conservative $V$ we can write
+
+\begin{align*}
+    \dv{E}{t} = 0 & = \dv{t} \left( \frac{1}{2} m v^2 + V(\vec{r}) \right)                                                              \\
+                  & = m \vec{v} \cdot \dv{\vec{v}}{t} + \left(\pdv{V}{x} \dv{x}{t} + \pdv{V}{y} \dv{y}{t} + \pdv{V}{z} \dv{z}{t}\right) \\
+                  & = m \vec{v} \cdot \vec{a} + \vec{\nabla} V \cdot \vec{v}                                                            \\
+                  & = \vec{F} \cdot \vec{v} + \vec{\nabla} V \cdot \vec{v}                                                              \\
+                  & = \vec{v}\left(\vec{F} + \vec{\nabla} V\right) = 0                                                                  \\
+\end{align*}
+
+\subsection{Kepler's laws}
+
+These laws have been derived by Kepler but this was only possible thanks to the observations of Brahe.
+
+\begin{enumerate}
+    \item Planets follow elliptical orbits
+    \item Equal areas are swept in equal times
+    \item $T^2 / a^3 = \text{ const}$ where $T$ is the period of the orbit and $a$ is the semi-major axis of the orbit.
+\end{enumerate}
+
+For planet Earth we know that $T = 365 \si{day} = 3.2 \times 10^7 \si{s}$ and $a = 1.5 \times 10^{11} \si{m}$, hence we can calculate the constant for the third law to be $3.5 \times 10^{-19} \si{s^2/m^3}$.
+
+Kepler found these laws empirically, but Newton wanted to derive them from his laws. We will now follow Newton's steps and derive Kepler's laws starting from the laws of motion.
+
+\subsubsection{Gravitational force}
+
+Before starting with Kepler's laws we need to describe better the gravitational force.
+
+We will derive the law of gravitation from the laws of motion.
+
+We know the following facts:
+
+\begin{enumerate}
+    \item From Galileo we know that all bodies fall with the same acceleration.
+          We also know that $F = ma$ then $g = \frac{F}{m}$, therefore $F \propto F_0 m$.
+    \item Because of the action-reaction principle we have that $F \propto m M$.
+    \item Newton also found out that the force that causes the apple to fall is the same force that keeps the moon in orbit.
+          Then $F \propto r^{-2}$.
+\end{enumerate}
+
+We can combine these facts to get that
+
+$$
+    F = - G \frac{m M}{r^2}
+$$
+
+A more detailed derivation of this result can be found in the book.
+
+We will now discuss the unit of $G$.
+We have
+
+$$
+    [G] = [F][M]^{-2}[L]^2 = \si{\newton \meter \squared \per \kilogram \squared} = \si{\meter \cubed \per \kilogram \per \second \squared}
+$$
+
+Moreover we find that $G$ is very small, in fact $G = 6.67 \times 10^{-11} \si{\newton \meter \squared \per \kilogram \squared}$.
+
+This is a very small number, in fact, compared to, for example, the electric force, the gravitational force $10^{36}$ times weaker.
+
+\subsubsection{Principle of superposition}
+
+Consider a mass $m$ at a distance $d$ from a rod of mass $M$ of uniform density.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \filldraw[black] (-2, 0) circle (2pt) node[anchor=east]{$m$};
+
+        \draw[pattern=north west lines, pattern color=black] (0, -0.3) rectangle (3, 0.3) node[midway]{$M$};
+
+        \draw[black, dashed, thick, ->] (-2, 0) -- (0, 0) node[midway, above]{$d$};
+    \end{tikzpicture}
+
+    \caption{Mass $m$ at a distance $d$ from a rod of mass $M$}
+    \label{fig:mass_rod}
+\end{figure}
+
+We can write $M = \int_0^L \rho(x) \dd{x} = \rho L = \frac{M}{L}$.
+
+Then the gravitational force is
+
+\begin{align*}
+    \vec F & = - G m \int_0^L \frac{\rho(x)}{{\dd{} x}^2}  \dd{x} \hat i                   \\
+           & = - G \frac{m M}{L} \int_0^L \frac{1}{{\dd{} x}^2}  \dd{x} \hat i             \\
+           & = - G \frac{m M}{L} \left[ - \frac{1}{\dd{} + x} \right]_0^L \hat i           \\
+           & = G \frac{m M}{L} \left( \frac{1}{L + \dd{}} - \frac{1}{\dd{}} \right) \hat i \\
+           & = -G \frac{m M}{\dd{} (\dd{} + L)} \hat i
+\end{align*}
+
+For a \textbf{sphere} we have to integrate along all the points of the sphere, if we solve the 3D integral we get that it is equivalent to considering all the mass at the center of the sphere.
+
+Consider another case of a mass $m$ at the center of a \textbf{shell} of mass $M$. We see that even if $m$ is not at the very center of the shell the force is still 0.
+
+Consider a cone passing through $m$ and intersecting the shell in two circles of mass $\dd{M_1}$ and $\dd{M_2}$. If $\theta$ is very small the radius of the circle is just $r \dd{\theta}$.
+
+Then
+
+\begin{align*}
+    \dd{M_1} & = \rho \dd{A_1} = \rho \pi (r \dd{\theta})^2 \\
+    \dd{M_2} & = \rho \dd{A_2} = \rho \pi (r \dd{\theta})^2
+\end{align*}
+
+Then we notice that $\dv{M_1}{M_2} = \frac{R_1^2}{R_2^2}$. We could continue this reasoning and complete the proof of the \textbf{shell theorem} but we will stop here.
+What we saw it's enough to understand that the force is 0 even if $m$ is not at the center of the shell.
+
+\subsubsection{First Kepler's law}
+
+We have
+
+$$
+    m \dv[2]{\vec r}{t} = \vec F = - G \frac{m M}{r^2} \hat r
+$$
+
+For this kind of task it is useful to work with polar coordinates, we have
+
+\begin{align*}
+    \dv{\hat r}{t}       & = \dv{\theta}{t} \hat \theta \\
+    \dv {\hat \theta}{t} & = - \dv{\theta}{t} \hat r
+\end{align*}
+
+We can now start computing the second derivative of $\vec r$.
+
+\begin{align*}
+    \dv{t} \vec{r} = \dv{t} (r \hat r) & = \dv{r}{t} \hat r + r \dv{\hat r}{t}                                                                                                            \\
+    \dv{t}\left(\dv{\vec{r}}{t}\right) & = \dv{t}\left(\dv{r}{t} \hat r + r \dv{\hat r}{t})\right)                                                                                        \\
+                                       & = \dv[2]{r}{t} \hat r + \dv{r}{t} \dv{\hat r}{t} + r \dv[2]{\hat r}{t} + r \dv{\theta}{t} \dv{\hat \theta}{t}                                    \\
+                                       & = \dv[2]{r}{t} \hat r + \dv{r}{t} \dv{\theta}{t} \hat \theta + r \dv[2]{\theta}{t} \hat \theta - r \left(\dv{\theta}{t}\right)^2 \hat r          \\
+                                       & = \left(\dv[2]{r}{t} - r \left(\dv{\theta}{t}\right)^2\right) \hat r + \left(2 \dv{r}{t} \dv{\theta}{t} + r \dv[2]{\theta}{t}\right) \hat \theta
+\end{align*}
+
+Now we can apply the equation to both directions separately:
+
+\begin{itemize}
+    \item $\hat r$ direction:
+
+          \begin{align*}
+              m \left(\dv[2]{r}{t} - r \left(\dv{\theta}{t}\right)^2\right) & = - G \frac{m M}{r^2} \\
+              \dv[2]{r}{t} - r \left(\dv{\theta}{t}\right)^2                & = - G \frac{M}{r^2}
+          \end{align*}
+    \item $\hat \theta$ direction: there is no force in this direction, hence
+          $$
+              2 \dv{r}{t} \dv{\theta}{t} + r \dv[2]{\theta}{t} = 0
+          $$
+\end{itemize}
+
+From the $\hat \theta$ direction, by multiplying both sides by $r$ and applying the chain rule, we get
+
+\begin{align*}
+    2 r \dv{r}{t} \dv{\theta}{t} + r^2 \dv[2]{\theta}{t} & = 0 \\
+    \dv{t}(r^2) \dv{\theta}{t} + r^2 \dv[2]{\theta}{t}   & = 0 \\
+    \dv{t}(r^2 \dv{\theta}{t})                           & = 0
+\end{align*}
+
+We define the \textbf{angular momentum} as $L = r^2 \dv{\theta}{t}$.
+We see that since its derivative is 0 is is constant in time.
+
+We can now look at the problem of the areas covered in the same time.
+We will use the sine rule to calculate the area as follows:
+
+\begin{align*}
+    \dd{A} & = \frac{1}{2} \norm{r} \norm{\vec{r} + \dd{\vec{r}}} \sin \dd{\theta} \\
+           & \sim \frac{1}{2} \norm{r} \norm{\vec{r} + \dd{\vec{r}}} \dd{\theta}   \\
+           & \sim \frac{1}{2} r^2 \dd{\theta}                                      \\
+\end{align*}
+
+Therefore, if we take the derivatives in terms of $t$ we get
+$$
+    \dv{A}{t} = \frac{1}{2} \left(r^2 \dv{\theta}{t}\right)
+$$
+
+which we know is constant as we have seen before.
 
 \end{document}

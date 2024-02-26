@@ -1615,10 +1615,10 @@ For the sake of brevity we will consider the simper case of a circular orbit, he
 We start with our usual $ma = F_g$
 
 \begin{align*}
-    m r \dv[2]{\theta}{t} & = - G \frac{m M}{r^2} \\
-    r \omega^2            & = G \frac{M}{r^2}     \\
-    r^3 \omega^2          & = G M                 \\
-    v^2 r                 & = G M
+    % m r \dv[2]{\theta}{t} & = - G \frac{m M}{r^2} \hat r \\
+    m a_c         & = G \frac{m M}{r^2} \\
+    \frac{v^2}{r} & = G \frac{M}{r^2}   \\
+    v^2 r         & = G M
 \end{align*}
 
 and we have a circular motion with speed $v$ which depends on the radius of the orbit.
@@ -1630,40 +1630,60 @@ This proof is also very simple once we know the equations above.
 Now remember that $\omega = \frac{2 \pi}{T}$, therefore, substituting
 
 \begin{align*}
-    r^3 \left(\frac{2 \pi}{T}\right)^2 & = G M \\
-    \frac{T^2}{r^3} = \frac{4 \pi^2}{G M}
+    v^2 r                              & = G M                 \\
+    \omega^2 r^3                       & = G M                 \\
+    r^3 \left(\frac{2 \pi}{T}\right)^2 & = G M                 \\
+    \frac{T^2}{r^3}                    & = \frac{4 \pi^2}{G M}
 \end{align*}
 
 \subsection{Gravitational potential energy}
 
-We have that
+By using the fact that $\hat r = \frac{\vec r}{r}$ we can write the force as
 
-$$
-    \vec F_g (\vec r) = - G \frac{m M}{r^2} \hat r
-$$
+\begin{align*}
+    \vec F_g (\vec r) & = - G \frac{m M}{r^2} \hat r                         \\
+                      & = G \frac{m M}{r^3} \vec r                           \\
+                      & = G \frac{m M}{r^3} (x \hat i + y \hat j + z \hat k) \\
+\end{align*}
 
 and we claim that
 
 $$
-    V_g(x, y, z) = - G \frac{m M}{\sqrt{x^2 + y^2 + z^2}} = V(\sqrt{x^2 + y^2 + z^2}) = V(r) = - G \frac{m M}{r}
+    % V_g(x, y, z) = - G \frac{m M}{\sqrt{x^2 + y^2 + z^2}} = V(\sqrt{x^2 + y^2 + z^2}) = 
+    V(r) = - G \frac{m M}{r}
 $$
 
 Indeed if we calculate the gradient of $V$ we get
 
 \begin{align*}
-    - \vec \nabla V_g & = - \dv{V}{r} \left(\pdv{r}{x},\pdv{r}{y},\pdv{r}{y} \right)                                \\
+    - \vec \nabla V_g & = \dv{V}{r} \left(\pdv{r}{x},\pdv{r}{y},\pdv{r}{y} \right)                                  \\
                       & = - G \frac{m M}{r^2} \left(\pdv{r}{x},\pdv{r}{y},\pdv{r}{y} \right) \sqrt{x^2 + y^2 + z^2} \\
-                      & = - G \frac{m M}{r^2} \frac{(x, y, z)}{r}                                                   \\
-                      & = - G \frac{m M}{r^2} \hat r = \vec F_g
+                      & = - G \frac{m M}{r^2} \frac{(x, y, z)}{\sqrt{x^2 + y^2 + z^2}}                              \\
+                      & = - G \frac{m M}{r^2} \frac{\vec r}{r}                                                      \\
+                      & = - G \frac{m M}{r^2} \hat r                                                                \\
+                      & = \vec F_g
 \end{align*}
 
-Note that on the surface of Earth if we consider a very small displacement $\delta r$ we can perform a Taylor expansion to get
+(Despite all of this notation being very confusing, we are just taking derivatives of $V$. We are taking 3 derivatives at once, but if you solve them one by one you get the same result. See the book at page 114 if you are confused.)
+
+\subsubsection{On the surface of Earth}
+
+We now have to choose a point of zero potential. This is not a trivial task, especially if we consider that just plugging in the equations we had before doesn't work:
+
+$$
+    - \frac{G m M}{R + \delta r} = m g \delta r = \frac{G M m}{R^2} \delta r
+$$
+
+note that $\delta r = h$: this is just a matter of notation to help emphasize that $\delta r$ is very small.
+We obtain this equality by substituting the $g = \frac{GM}{R^2}$, as we found before, in the standard $mgh$ formula, but surely it cannot be right, since the sign are inverted.
+
+Since on the surface of Earth $\delta r$ is very small we can perform a Taylor expansion to get
 
 \begin{align*}
     V(R + \delta r) & = - G \frac{m M}{R + \delta r}                                            \\
                     & = - G \frac{m M}{R (1 + \frac{\delta r}{R})}                              \\
                     & \sim - G \frac{m M}{R} (1 - \frac{\delta r}{R}) + \mathcal{O}(\delta r^2) \\
-                    & = V(R) + G \frac{m M}{R^2} \delta r                                       \\
+                    & = - G \frac{m M}{R} + G \frac{m M}{R^2} \delta r                          \\
                     & = V(R) + m g \delta r
 \end{align*}
 
@@ -1681,14 +1701,14 @@ We have that
 
 This is called a bound state.
 
-If we fix $E_0$ and we want to $\max r$ we need to set $v = 0$ and we get
+If we fix $E_0$ and we want to $\max r$ we need to solve for $v = 0$ and we get
 
 \begin{align*}
     E_0 & = - \frac{G m M}{2 r}   \\
     r   & = - \frac{G m M}{2 E_0}
 \end{align*}
 
-We could also reverse the problem and ask for the minimum $v$ to \say{esacape the gravitational field} (that is $E = 0$).
+We could also reverse the problem and ask for the minimum $v$ to \say{escape the gravitational field} (that is $E = 0$).
 
 \begin{align*}
     E & = \frac{1}{2} m v^2 - G \frac{mM}{R} = 0 \\

@@ -1387,7 +1387,7 @@ Then
 
 and we obtain the result we wanted.
 
-\section{Class of 23/02/2024}
+\section{Class of 23/02/2024 - Gravitation and Kepler's laws}
 
 \subsection{A criterion for conservative forces}
 
@@ -1411,7 +1411,7 @@ We can also derive a criterion to check if a force is conservative without compu
                                           & \pdv{F_y}{z} = \pdv{F_z}{y}
 \end{align*}
 
-\subsection{Kinetic energy must create a conservative force}
+\subsubsection{Kinetic energy must create a conservative force}
 
 We know that
 $$
@@ -1428,21 +1428,7 @@ Since $E$ and we want a conservative $V$ we can write
                   & = \vec{v}\left(\vec{F} + \vec{\nabla} V\right) = 0                                                                  \\
 \end{align*}
 
-\subsection{Kepler's laws}
-
-These laws have been derived by Kepler but this was only possible thanks to the observations of Brahe.
-
-\begin{enumerate}
-    \item Planets follow elliptical orbits
-    \item Equal areas are swept in equal times
-    \item $T^2 / a^3 = \text{ const}$ where $T$ is the period of the orbit and $a$ is the semi-major axis of the orbit.
-\end{enumerate}
-
-For planet Earth we know that $T = 365 \si{day} = 3.2 \times 10^7 \si{s}$ and $a = 1.5 \times 10^{11} \si{m}$, hence we can calculate the constant for the third law to be $3.5 \times 10^{-19} \si{s^2/m^3}$.
-
-Kepler found these laws empirically, but Newton wanted to derive them from his laws. We will now follow Newton's steps and derive Kepler's laws starting from the laws of motion.
-
-\subsubsection{Gravitational force}
+\subsection{Gravitational force}
 
 Before starting with Kepler's laws we need to describe better the gravitational force.
 
@@ -1523,7 +1509,23 @@ Then
 Then we notice that $\dv{M_1}{M_2} = \frac{R_1^2}{R_2^2}$. We could continue this reasoning and complete the proof of the \textbf{shell theorem} but we will stop here.
 What we saw it's enough to understand that the force is 0 even if $m$ is not at the center of the shell.
 
-\subsubsection{First Kepler's law}
+\subsection{Kepler's laws}
+
+These laws have been derived by Kepler but this was only possible thanks to the observations of Brahe.
+
+\begin{enumerate}
+    \item Planets follow elliptical orbits
+    \item Equal areas are swept in equal times
+    \item $T^2 / a^3 = \text{ const}$ where $T$ is the period of the orbit and $a$ is the semi-major axis of the orbit.
+\end{enumerate}
+
+For planet Earth we know that $T = 365 \si{day} = 3.2 \times 10^7 \si{s}$ and $a = 1.5 \times 10^{11} \si{m}$, hence we can calculate the constant for the third law to be $3.5 \times 10^{-19} \si{s^2/m^3}$.
+
+Kepler found these laws empirically, but Newton wanted to derive them from his laws. We will now follow Newton's steps and derive Kepler's laws starting from the laws of motion.
+
+We will not derive them in order, we will start with the second law.
+
+\subsubsection{Second Kepler's law}
 
 We have
 
@@ -1542,7 +1544,7 @@ We can now start computing the second derivative of $\vec r$.
 
 \begin{align*}
     \dv{t} \vec{r} = \dv{t} (r \hat r) & = \dv{r}{t} \hat r + r \dv{\hat r}{t}                                                                                                            \\
-    \dv{t}\left(\dv{\vec{r}}{t}\right) & = \dv{t}\left(\dv{r}{t} \hat r + r \dv{\hat r}{t})\right)                                                                                        \\
+    \dv{t}\left(\dv{\vec{r}}{t}\right) & = \dv{t}\left(\dv{r}{t} \hat r + r \dv{\hat r}{t}\right)                                                                                         \\
                                        & = \dv[2]{r}{t} \hat r + \dv{r}{t} \dv{\hat r}{t} + r \dv[2]{\hat r}{t} + r \dv{\theta}{t} \dv{\hat \theta}{t}                                    \\
                                        & = \dv[2]{r}{t} \hat r + \dv{r}{t} \dv{\theta}{t} \hat \theta + r \dv[2]{\theta}{t} \hat \theta - r \left(\dv{\theta}{t}\right)^2 \hat r          \\
                                        & = \left(\dv[2]{r}{t} - r \left(\dv{\theta}{t}\right)^2\right) \hat r + \left(2 \dv{r}{t} \dv{\theta}{t} + r \dv[2]{\theta}{t}\right) \hat \theta
@@ -1578,9 +1580,9 @@ We can now look at the problem of the areas covered in the same time.
 We will use the sine rule to calculate the area as follows:
 
 \begin{align*}
-    \dd{A} & = \frac{1}{2} \norm{r} \norm{\vec{r} + \dd{\vec{r}}} \sin \dd{\theta} \\
-           & \sim \frac{1}{2} \norm{r} \norm{\vec{r} + \dd{\vec{r}}} \dd{\theta}   \\
-           & \sim \frac{1}{2} r^2 \dd{\theta}                                      \\
+    \dd{A} & = \frac{1}{2} \norm{\vec r} \norm{\vec{r} + \dd{\vec{r}}} \sin \dd{\theta} \\
+           & \sim \frac{1}{2} \norm{\vec r} \norm{\vec{r} + \dd{\vec{r}}} \dd{\theta}   \\
+           & \sim \frac{1}{2} r^2 \dd{\theta}                                           \\
 \end{align*}
 
 Therefore, if we take the derivatives in terms of $t$ we get
@@ -1589,5 +1591,117 @@ $$
 $$
 
 which we know is constant as we have seen before.
+
+\section{Class of 26/02/2024 - Kepler's laws continued}
+
+\subsubsection{Conservation of angular momentum}
+
+In the last class we saw that the angular momentum
+
+$$
+    L = r^2 \dv{\theta}{t}
+$$
+
+is constant in time. This is a very important result called the \textbf{conservation of angular momentum}.
+
+\subsection{Kepler's laws}
+
+\subsubsection{First Kepler's law}
+
+Most of the heavy lifting has been done in the last class, we just need to finish the proof.
+
+For the sake of brevity we will consider the simper case of a circular orbit, hence $r = \text{const}$.
+
+We start with our usual $ma = F_g$
+
+\begin{align*}
+    m r \dv[2]{\theta}{t} & = - G \frac{m M}{r^2} \\
+    r \omega^2            & = G \frac{M}{r^2}     \\
+    r^3 \omega^2          & = G M                 \\
+    v^2 r                 & = G M
+\end{align*}
+
+and we have a circular motion with speed $v$ which depends on the radius of the orbit.
+
+\subsubsection{Third Kepler's law}
+
+This proof is also very simple once we know the equations above.
+
+Now remember that $\omega = \frac{2 \pi}{T}$, therefore, substituting
+
+\begin{align*}
+    r^3 \left(\frac{2 \pi}{T}\right)^2 & = G M \\
+    \frac{T^2}{r^3} = \frac{4 \pi^2}{G M}
+\end{align*}
+
+\subsection{Gravitational potential energy}
+
+We have that
+
+$$
+    \vec F_g (\vec r) = - G \frac{m M}{r^2} \hat r
+$$
+
+and we claim that
+
+$$
+    V_g(x, y, z) = - G \frac{m M}{\sqrt{x^2 + y^2 + z^2}} = V(\sqrt{x^2 + y^2 + z^2}) = V(r) = - G \frac{m M}{r}
+$$
+
+Indeed if we calculate the gradient of $V$ we get
+
+\begin{align*}
+    - \vec \nabla V_g & = - \dv{V}{r} \left(\pdv{r}{x},\pdv{r}{y},\pdv{r}{y} \right)                                \\
+                      & = - G \frac{m M}{r^2} \left(\pdv{r}{x},\pdv{r}{y},\pdv{r}{y} \right) \sqrt{x^2 + y^2 + z^2} \\
+                      & = - G \frac{m M}{r^2} \frac{(x, y, z)}{r}                                                   \\
+                      & = - G \frac{m M}{r^2} \hat r = \vec F_g
+\end{align*}
+
+Note that on the surface of Earth if we consider a very small displacement $\delta r$ we can perform a Taylor expansion to get
+
+\begin{align*}
+    V(R + \delta r) & = - G \frac{m M}{R + \delta r}                                            \\
+                    & = - G \frac{m M}{R (1 + \frac{\delta r}{R})}                              \\
+                    & \sim - G \frac{m M}{R} (1 - \frac{\delta r}{R}) + \mathcal{O}(\delta r^2) \\
+                    & = V(R) + G \frac{m M}{R^2} \delta r                                       \\
+                    & = V(R) + m g \delta r
+\end{align*}
+
+Note that this is only a good approximation only if $\delta r$ is small.
+
+\subsubsection{Energy conservation for planets}
+
+We have that
+
+\begin{align*}
+    E & = \frac{1}{2} m v^2 - G \frac{m}{M}           \\
+      & = \frac{1}{2} m \frac{G M}{r} - G \frac{m}{M} \\
+      & = - \frac{G m M}{2 r} < 0
+\end{align*}
+
+This is called a bound state.
+
+If we fix $E_0$ and we want to $\max r$ we need to set $v = 0$ and we get
+
+\begin{align*}
+    E_0 & = - \frac{G m M}{2 r}   \\
+    r   & = - \frac{G m M}{2 E_0}
+\end{align*}
+
+We could also reverse the problem and ask for the minimum $v$ to \say{esacape the gravitational field} (that is $E = 0$).
+
+\begin{align*}
+    E & = \frac{1}{2} m v^2 - G \frac{mM}{R} = 0 \\
+    v & = \sqrt{\frac{2 G M}{R}}
+\end{align*}
+
+Moreover we could even calculate the radius such that a mass $M$ would have more gravitational energy than the speed of light.
+
+$$
+    R^* < \frac{2 G M}{c^2}
+$$
+
+This is called the Schwarzschild radius and it is the radius of the event horizon of a black hole.
+
 
 \end{document}

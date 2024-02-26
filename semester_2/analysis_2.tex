@@ -26,6 +26,7 @@
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
 \newcommand{\F}{\mathcal{F}}
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
@@ -1165,64 +1166,166 @@ Let $V \subseteq \R^d$. The closure of $V$, written $\overline{V}$, is the set o
 
 For example on $\R$ the closure of $(0, +\infty)$ is $[0, +\infty)$.
 
-\subsubsection{Theorem: closure adds the boundary}
+                \subsubsection{Theorem: closure adds the boundary}
 
-\underline{Statement}: Let $\munderbar{a} \in \R^d$ and $r > 0$.
-Then the closure of $B_o(\munderbar{a}, r)$ is $B_c(\munderbar{a}, r)$.
+                \underline{Statement}: Let $\munderbar{a} \in \R^d$ and $r > 0$.
+                Then the closure of $B_o(\munderbar{a}, r)$ is $B_c(\munderbar{a}, r)$.
+
+                \begin{proof}
+                    We have 3 cases
+
+                    \begin{enumerate}
+                        \item $\norm{\munderbar{x} - \munderbar{a}} < r$
+                        \item $\norm{\munderbar{x} - \munderbar{a}} = r$
+                        \item $\norm{\munderbar{x} - \munderbar{a}} > r$
+                    \end{enumerate}
+
+                    Then
+
+                    \begin{enumerate}
+                        \item Since $\munderbar{x} \in V$ then $\munderbar{x} \in \overline{V}$. See next proposition for the proof.
+                        \item Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} = r$.
+                              Let $\munderbar{x}_n = \munderbar{x} + t_n(\munderbar{a} - \munderbar{x})$, where we want that $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x}_n \in V \enspace \forall n$.
+                              The first condition is equivalent to saying that $\norm{\munderbar{x}_n - \munderbar{x}} = \norm{t_n(\munderbar{a} - \munderbar{x})} = t_n \norm{\munderbar{a} - \munderbar{x}} \to 0$, therefore we want $t_n \to 0$.
+                              For the second condition we want that $\norm{\munderbar{x}_n - \munderbar{a}} < r$, which is
+                              $\norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} + t_n(\munderbar{a} - \munderbar{x}) - \munderbar{a}} = \norm{(\munderbar{x} - \munderbar{a})(1 - t_n)} = r \abs{1 - t_n} < r$. Then this is $< r$ if $t_n \in [0, 1]$.
+                              We can take $t_n = \frac{1}{2^n}$.
+                        \item We will prove this one by contradiction. Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} > r$.
+                              Take a sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in V$ converging to $\munderbar{x}$.
+                              This means that $\norm{\munderbar{x}_n - \munderbar{a}} < r$ for any $n$.
+                              As $\munderbar{x}_n \to \munderbar{x}$ we have that $(\munderbar{x}_n - \munderbar{a}) \to (\munderbar{x} - \munderbar{a})$.
+                              Then $\norm{\munderbar{x}_n - \munderbar{a}} \to \norm{\munderbar{x} - \munderbar{a}}$.
+                              So $\lim_{n \to +\infty} \norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} - \munderbar{a}}$, thus $\norm{\munderbar{x} - \munderbar{a}} \leq r$ and we have a contradiction.
+                    \end{enumerate}
+                \end{proof}
+
+                \subsubsection{Theorem: relationships between closures and other sets}
+
+                \underline{Statement}: Let $V, W \subseteq \R^d$.
+                Then
+
+                \begin{enumerate}
+                    \item $V \subseteq \overline{V}$
+                    \item If $V \subseteq W$ then $\overline{V} \subseteq \overline{W}$
+                \end{enumerate}
+
+                \begin{proof}
+                    \skiplineafterproof
+                    \begin{enumerate}
+                        \item Let $\munderbar{x} \in V$.
+                              Then let $\left(\munderbar{x}_n\right)_{n \in \N} = \munderbar{x}$ be a constant sequence of elements of $V$.
+                              Then $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x} \in \overline{V}$.
+                        \item Let $V, W$ such that $V \subseteq W$ let and $\munderbar{x} \in \overline{V}$.
+                              Then, by definition, $\exists \left(\munderbar{x}_n\right)_{n \in \N} \in V$ such that $\munderbar{x}_n \to \munderbar{x}$.
+                              As $V \subseteq W$ then $\munderbar{x}_n \in W$ and $\munderbar{x} \in \overline{W}$.
+                    \end{enumerate}
+                \end{proof}
+
+                \subsection{Boundary}
+
+                \textbf{\underline{Definition} (boundary)}:
+                If $V \subseteq \R^d$, the (topological) boundary of $V$, written $\partial V$, is the set defined as $\partial V = \overline{V} \setminus \mathring{V}$.
+
+                \section{Class of 26/02/2024}
+
+                \subsection{Examples of interior, closure and boundary}
+
+                \begin{center}
+                    \begin{tabular}{ |c|c|c|c| }
+                        \hline
+                                                            & Interior                                   & Closure                                       & Boundary                                   \\
+                        \hline
+                        $V_1 = \{ (x, y) : x + y \geq 1 \}$ & $x + y > 1$                                & $x + y \geq 1$                                & $x + y = 1$                                \\
+                        $V_2 = B_o(\munderbar{a}, r)$       & $\norm{\munderbar{x} - \munderbar{a}} < r$ & $\norm{\munderbar{x} - \munderbar{a}} \leq r$ & $\norm{\munderbar{x} - \munderbar{a}} = r$ \\
+                        $V_3 = \R^d$                        & $\R^d$                                     & $\R^d$                                        & $\varnothing$                              \\
+                        $V_4 = \varnothing$                 & $\varnothing$                              & $\varnothing$                                 & $\varnothing$                              \\
+                        $V_5 = \Q \subseteq \R$             & $\varnothing$                              & $\R$                                          & $\R$                                       \\
+                        $V_6 = (a, b] \subset \R$           & $(a, b)$                                   & $[a, b]$                                      & $\{a, b\}$                                 \\
+                        \hline
+                    \end{tabular}
+                \end{center}
+
+                We note these interesting facts:
+                \begin{itemize}
+                    \item The closure of $V_4$ does not contain $\pm \infty$, this is because the definition of converging sequence does not include them.
+                    \item The interior of $V_5$ is empty because $B_o(q, \varepsilon)$ contains numbers $\notin \Q$.
+                    \item The boundary of $V_5$ is $\R$ we can find sequences of rational numbers converging to any real number.
+                \end{itemize}
+
+                Also see last class notes for the proofs of interior of $V_1$ and closure of $V_2$.
+
+                \subsection{Theorem: complement of interiors and closures}
+
+                Let $V^c = \R^d \setminus V$, therefore $\R^d = V \cup V^c$.
+
+                \textbf{\underline{Statement}}: Let $V \subseteq \R^d$.
+                Then $\mathring{V} \cup \overline{V^c} = \R^d$ and the union is disjoint.
+                As a consequence
+                \begin{itemize}
+                    \item $\left(\mathring{V}\right)^c = \overline{V^c}$.
+                    \item $\left(\overline{V}\right)^c = \mathring{V^c}$.
+                \end{itemize}
+
+                \begin{proof}
+                    We will first prove that $\mathring{V} \cup \overline{V^c} = \R^d$ and then union is disjoint.
+
+                    \begin{itemize}
+                        \item
+                              First we prove that $\mathring{V} \cup \overline{V^c} = \R^d$. That is to show that if $\munderbar{x} \notin \mathring{V}$ then $\munderbar{x} \in \overline{V^c}$.
+                              Let $\munderbar{x} \notin \mathring{V}$, that is
+                              $\forall \varepsilon > 0, \enspace \exists \munderbar{y} \in B_o(\munderbar{x}, \varepsilon) : \munderbar{y} \notin V$, which is the same as saying that $\munderbar{y} \in V^c$.
+
+                              Then for $\varepsilon = \frac{1}{n}$ we can find a $y_n \in B_0 \left(\munderbar{x}, \frac{1}{n} \right)$ such that $y_n \in V^c$.
+                              By the definition of $B_o$ we have that $\norm{\munderbar{y} - \munderbar{x}} < \frac{1}{n}$, so $\lim_{n \to +\infty} \munderbar{y}_n = \munderbar{x}$.
+
+                              Then the sequence $y_n$ is converging to $\munderbar{x}$, thus $\munderbar{x} \in \overline{V^c}$.
+
+                        \item
+                              To prove that the union is disjoint (i.e. $\mathring{V} \cap \overline{V^c} = \varnothing$), we take $\munderbar{x} \in \mathring{V} \cap \overline{V^c}$ and show that this leads to a contradiction.
+
+                              We have that if $\munderbar{x} \in \mathring{V}$ then $\exists \varepsilon > 0$ such that $B_o(\munderbar{x}, \varepsilon) \subseteq V$.
+
+                              We also have that since $\munderbar{x} \in \overline{V^c}$ then $\exists \left(\munderbar{x}_n\right)_{n \in \N} \in V^c$ such that $\munderbar{x}_n \to \munderbar{x}$.
+                              As $\lim_{n \to +\infty} \munderbar{x}_n = \munderbar{x}$ then $\exists N$ such that $\munderbar{x_n} \in B_o(\munderbar{x}, \varepsilon)$ for $n \geq N$.
+
+                              So $\munderbar{x}_n \in V^c$ (by assumption) and $\munderbar{x}_n \in B_o(\munderbar{x}, \varepsilon) \subseteq V$, which is a contradiction.
+                    \end{itemize}
+
+                    Now we are left to prove the consequences.
+
+                    Recall that $W_1 \cup W_2 \text{ (disjoint union)} \iff W_1 = W_2^c \iff W_2 = W_1^c$.
+
+                    \begin{itemize}
+                        \item Since we just proved that $\mathring{V} \cup \overline{V^c} = \R^d$ and the union is disjoint then we apply the propriety above to get that $\left(\mathring{V}\right)^c = \overline{V^c}$.
+                        \item Let $V = W^c$ for some $W \subseteq \R^d$.
+                              Then we apply the propriety we just proved to get that $\left(\overline{V}\right)^c = \mathring{V^c}$, that is $\left(\mathring{W^c}\right)^c = \overline{W^{cc}} = \overline{W}$.
+                              Then we take the complement on each side and get that $\left(\mathring{W^c}\right)^{cc} = \mathring{W^c} = \left(\overline{W}\right)^c$
+                    \end{itemize}
+                \end{proof}
+
+                \subsection{Open and closed sets}
+
+                In $\R$ open and closed sets are just the intervals. We can generalize the definition to $\R^d$.
+
+                \textbf{\underline{Definition} (open set)}: A set $V$ is open if $V = \mathring{V}$.
+
+                \textbf{\underline{Definition} (closed set)}: A set $V$ is closed if $V = \overline{V}$.
+
+                Note that not all sets are open or closed, for example $(a, b]$ is neither open nor closed.
+
+In $\R^d$ open balls are open, closed balls are closed.
+Moreover $\R^d$ and $\varnothing$ are both both open and closed.
+
+\textbf{\underline{Proposition} (complement of open and closed sets)}:
+The complement of a closed set is open and the complement of an open set is closed.
 
 \begin{proof}
-    We have 3 cases
+    Let $V$ be a closed set (i.e. $V = \overline{V}$).
+    We want to show that $V^c$ is open (i.e. $V^c = \mathring{V^c}$).
 
-    \begin{enumerate}
-        \item $\norm{\munderbar{x} - \munderbar{a}} < r$
-        \item $\norm{\munderbar{x} - \munderbar{a}} = r$
-        \item $\norm{\munderbar{x} - \munderbar{a}} > r$
-    \end{enumerate}
+    We have that $\mathring{V^c} = \left(\overline{V}\right)^c = V^c$, by the previous theorem and by the definition of closed set.
 
-    Then
-
-    \begin{enumerate}
-        \item Since $\munderbar{x} \in V$ then $\munderbar{x} \in \overline{V}$. See next proposition for the proof.
-        \item Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} = r$.
-              Let $\munderbar{x}_n = \munderbar{x} + t_n(\munderbar{a} - \munderbar{x})$, where we want that $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x}_n \in V \enspace \forall n$.
-              The first condition is equivalent to saying that $\norm{\munderbar{x}_n - \munderbar{x}} = \norm{t_n(\munderbar{a} - \munderbar{x})} = t_n \norm{\munderbar{a} - \munderbar{x}} \to 0$, therefore we want $t_n \to 0$.
-              For the second condition we want that $\norm{\munderbar{x}_n - \munderbar{a}} < r$, which is
-              $\norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} + t_n(\munderbar{a} - \munderbar{x}) - \munderbar{a}} = \norm{(\munderbar{x} - \munderbar{a})(1 - t_n)} = r \abs{1 - t_n} < r$. Then this is $< r$ if $t_n \in [0, 1]$.
-              We can take $t_n = \frac{1}{2^n}$.
-        \item We will prove this one by contradiction. Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} > r$.
-              Take a sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in V$ converging to $\munderbar{x}$.
-              This means that $\norm{\munderbar{x}_n - \munderbar{a}} < r$ for any $n$.
-              As $\munderbar{x}_n \to \munderbar{x}$ we have that $(\munderbar{x}_n - \munderbar{a}) \to (\munderbar{x} - \munderbar{a})$.
-              Then $\norm{\munderbar{x}_n - \munderbar{a}} \to \norm{\munderbar{x} - \munderbar{a}}$.
-              So $\lim_{n \to +\infty} \norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} - \munderbar{a}}$, thus $\norm{\munderbar{x} - \munderbar{a}} \leq r$ and we have a contradiction.
-    \end{enumerate}
+    The proof of the other case is the same.
 \end{proof}
-
-\subsubsection{Theorem: relationships between closures and other sets}
-
-\underline{Statement}: Let $V, W \subseteq \R^d$.
-Then
-
-\begin{enumerate}
-    \item $V \subseteq \overline{V}$
-    \item If $V \subseteq W$ then $\overline{V} \subseteq \overline{W}$
-\end{enumerate}
-
-\begin{proof}
-    \skiplineafterproof
-    \begin{enumerate}
-        \item Let $\munderbar{x} \in V$.
-              Then let $\left(\munderbar{x}_n\right)_{n \in \N} = \munderbar{x}$ be a constant sequence of elements of $V$.
-              Then $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x} \in \overline{V}$.
-        \item Let $V, W$ such that $V \subseteq W$ let and $\munderbar{x} \in \overline{V}$.
-              Then, by definition, $\exists \left(\munderbar{x}_n\right)_{n \in \N} \in V$ such that $\munderbar{x}_n \to \munderbar{x}$.
-              As $V \subseteq W$ then $\munderbar{x}_n \in W$ and $\munderbar{x} \in \overline{W}$.
-    \end{enumerate}
-\end{proof}
-
-\subsection{Boundary}
-
-\textbf{\underline{Definition} (boundary)}:
-If $V \subseteq \R^d$, the (topological) boundary of $V$, written $\partial V$, is the set defined as $\partial V = \overline{V} \setminus \mathring{V}$.
 
 \end{document}

@@ -1723,5 +1723,144 @@ $$
 
 This is called the Schwarzschild radius and it is the radius of the event horizon of a black hole.
 
+\section{Class of 27/02/2024 - Multi-particle dynamics}
+
+Consider a 1D system of 2 particles connected by a spring.
+This is already a quite hard problem with a very complex motion.
+
+\subsection{Center of mass}
+
+We start by writing Newton's second law for both particles.
+
+\begin{align*}
+    m_1 \dv[2]{x_1}{t} & = F_{12} + F_{1 \text{ext}} \\
+    m_2 \dv[2]{x_2}{t} & = F_{21} + F_{2 \text{ext}}
+\end{align*}
+
+we also know that $F_{21} = - F_{12}$. We can now sum up the two equations to get
+
+$$
+    m_1 \dv[2]{x_1}{t} + m_2 \dv[2]{x_2}{t} = F_{1 \text{ext}} + F_{2 \text{ext}}
+$$
+
+We can now generalize this to $N$ particles.
+
+\begin{align*}
+    \dv[2]{t} \sum_{i = 1}^N m_i x_i & = \sum_{i = 1}^N F_{i \text{ext}}                             \\
+                                     & = \sum_{i = 1}^N m_i \dv[2]{x_i}{t}                           \\
+                                     & = M \dv[2]{t} \left( \frac{\sum_{i = 1}^N m_i x_i}{M} \right) \\
+                                     & = M \dv[2]{x_{cm}}{t}
+\end{align*}
+
+where
+
+$$
+    x_{cm} = \frac{1}{M} \sum_{i = 1}^N m_i x_i
+$$
+
+is the center of mass of the system, that is the weighted average of the positions with respect to the masses.
+
+Moreover, the computation of the center of mass can be done in steps, by considering 2 masses at the time. This can be useful to simplify the computation.
+
+\subsubsection{Center of mass of a rod}
+
+First we consider an uniform rod of length $L$.
+We have
+
+$$
+    M = \int_0^L \rho(x) \dd{x} = \rho L
+$$
+
+because the density $\rho$ is constant.
+
+To find the center of mass we can use
+
+$$
+    x_{cm} = \frac{1}{M} \int_0^L \dd{m}(x) x = \frac{L}{2}
+$$
+
+This was quite trivial to solve. Things will get more complicated once we consider a non-constant density.
+
+Let $\rho(x) = \rho_0 x$. We have
+
+\begin{align*}
+    x_{cm} & = \frac{\int_0^L \dd{m}(x) x}{M}       \\
+           & = \frac{\int_0^L \rho(x) \dd{x} x}{M}  \\
+           & = \frac{\int_0^L \rho_0 x^2 \dd{x}}{M} \\
+           & = \frac{\rho_0}{M} \frac{L^3}{3}       \\
+\end{align*}
+
+Moreover we can find the total mass with
+
+$$
+    M = \int_0^L \rho(x) \dd{x} = \int_0^L \rho_0 x \dd{x} = \rho_0 \frac{L^2}{2}
+$$
+
+and $\rho_0 = \frac{2M}{L^2}$.
+
+If we substitute this result in the equation for $x_{cm}$ we get
+
+$$
+    x_{cm} = \frac{L}{3}
+$$
+
+\subsubsection{Center of mass of a triangle}
+
+Consider a triangle as such:
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw[black, ->] (-1,0) -- (5,0) node[anchor=north]{$x$};
+        \draw[black, ->] (0,-3) -- (0,3) node[anchor=south]{$y$};
+
+        \draw[black, thick] (0,0) -- (4,2) -- (4,-2) -- (0,0);
+    \end{tikzpicture}
+\end{figure}
+
+In this example, because of symmetry, we see that $y_{cm} = 0$.
+Moreover, we can write
+
+\begin{align*}
+    y(x)                      & = \frac{h}{L} x         \\
+    \dd{A}(x) = 2 y(x) \dd{x} & = \frac{2h}{L} x \dd{x} \\
+\end{align*}
+
+Then, since the density is constant, we have
+
+$$
+    \dd{m}(x) = \rho \dd{A}(x) = \rho \frac{2h}{L} x \dd{x}
+$$
+
+and the center of mass is
+
+\begin{align*}
+    x_{cm} & = \frac{\int_0^L \dd{m}(x) x}{M}                  \\
+           & = \frac{\int_0^L \rho \frac{2h}{L} x^2 \dd{x}}{M} \\
+           & = \frac{2 \rho h}{ML} \frac{L^3}{3}               \\
+\end{align*}
+
+then, since $M = \rho A = \rho h L$ and $\rho = \frac{M}{hL}$ we get
+
+$$
+    x_{cm} = \frac{L}{3}
+$$
+
+\subsection{Conservation of momentum}
+
+We have
+
+\begin{align*}
+    \vec{p}_{cm} = M \dv{\vec{r}_{cm}}{t} & = \sum_{i = 1}^N m_i \dv{\vec{r}_i}{t} \\
+                                          & = \sum_{i = 1}^N \vec{p}_i
+\end{align*}
+
+Moreover, we can consider the fundamental law of motion:
+
+$$
+    \vec{F}_{\text{ext}} = \dv{\vec{p}_{cm}}{t}
+$$
+
+Therefore if there are no external forces the total momentum is conserved.
 
 \end{document}

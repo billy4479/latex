@@ -21,6 +21,7 @@
 \usepackage{capt-of}
 \usepackage{float}
 \usepackage{tikz}
+\usepackage{enumitem}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -1500,15 +1501,19 @@ A full binary tree is a rooted tree where each note has two children (left and r
         \node[draw, circle] (D) at (-3, -4) {D};
         \node[draw, circle] (E) at (-1, -4) {E};
         \node[draw, circle] (F) at (1, -4) {F};
+        \node[draw, circle] (G) at (3, -4) {G};
 
         \draw[thick] (A) -- (B);
         \draw[thick] (A) -- (C);
         \draw[thick] (B) -- (D);
         \draw[thick] (B) -- (E);
         \draw[thick] (C) -- (F);
+        \draw[thick] (C) -- (G);
     \end{tikzpicture}
     \caption{An example of a full binary tree} \label{fig:fullbinarytree}
 \end{figure}
+
+If the number of nodes is different than $2^h - 1$ for some $h$ then we start filling the tree from the left and we say that the tree is not full.
 
 We can navigate the tree as follows:
 
@@ -1517,9 +1522,67 @@ We can navigate the tree as follows:
     \item From a child at index $i$ we can get to the parent at index $\lfloor i / 2 \rfloor$.
 \end{itemize}
 
-To get to the parent of a node at index $i$ we can use the floor function: $\lfloor i / 2 \rfloor$.
-
 Therefore this data structure can be implemented using an array and navigated using the above formulas.
+
+We can now introduce a minimum binary heap or \textbf{min-heap}:
+this is a binary heap where the value of every node is less than or equal to the value of its children.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (D) at (0, -1) {D | 3};
+        \node[draw, circle] (B) at (-3, -2) {B | 6};
+        \node[draw, circle] (F) at (3, -2) {F | 11};
+        \node[draw, circle] (A) at (-5, -3) {A | 12};
+        \node[draw, circle] (E) at (-1, -3) {E | 15};
+        \node[draw, circle] (C) at (1, -3) {C | 16};
+        \node[draw, circle] (G) at (5, -3) {G | 20};
+        \node[draw, circle] (H) at (-6, -5) {H | 22};
+        \node[draw, circle] (I) at (-4, -5) {I | 23};
+        \node[draw, circle] (J) at (-2, -5) {J | 25};
+
+        \draw[thick] (D) -- (B);
+        \draw[thick] (D) -- (F);
+        \draw[thick] (B) -- (A);
+        \draw[thick] (B) -- (E);
+        \draw[thick] (F) -- (C);
+        \draw[thick] (F) -- (G);
+        \draw[thick] (A) -- (H);
+        \draw[thick] (A) -- (I);
+        \draw[thick] (E) -- (J);
+    \end{tikzpicture}
+
+    \caption{An example of a min-heap} \label{fig:minheap}
+\end{figure}
+
+where the letter is the value of the node and the number is the priority.
+
+We can now compile a table with the time complexity of each operation of a min-heap.
+
+\begin{center}
+    \begin{tabular}{ |c|c|c| }
+        \hline
+        \textbf{Operation} & \textbf{Time complexity} & \textbf{Comment}                        \\
+        \hline
+        Init               & $O(n \log n)$            & We need to sort the list first          \\
+        Check empty        & $O(1)$                   & We can just check if the array is empty \\
+        Remove minimum     & $O(\log n)$              & We remove the root and heapify the tree \\
+        Update priority    & $O(\log n)$              & We need to heapify the tree             \\
+        \hline
+    \end{tabular}
+    \captionof{table}{Time complexity of the operations of a min-heap}
+    \label{tab:minheap}
+\end{center}
+
+\textbf{Heapifying} the tree means to restore the property of the min-heap after we removed the root or updated the priority of a node.
+
+\begin{itemize}
+    \item
+          When we remove the root we swap it with the last node of the tree, then we swap the new root with its smallest child and we keep doing this until the tree is a min-heap again.
+          In this process we are doing $O(\log n)$ operations.
+    \item
+          When we update a priority we just need to swap the node with its parent until the tree is a min-heap again, which is also $O(\log n)$.
+\end{itemize}
 
 \subsection{Dijsktra's algorithm}
 
@@ -1527,8 +1590,7 @@ Therefore this data structure can be implemented using an array and navigated us
 
 Let $G(V, E)$, $s \in V$, and $l(u, v) > 0 \forall (u, v) \in E$. Let $d(v)$ be the length of the shortest path from $s$ to $v$.
 
-\begin{absolutelynopagebreak}
-    \begin{minted}{python}
+\begin{minted}{python}
     def Dijkstra(G, s):
         d = {}
 
@@ -1553,7 +1615,6 @@ Let $G(V, E)$, $s \in V$, and $l(u, v) > 0 \forall (u, v) \in E$. Let $d(v)$ be 
                     # by updating its priority
                     Q.update_priority(v, d[v])
 \end{minted}
-\end{absolutelynopagebreak}
 
 \subsubsection{Example}
 
@@ -1635,8 +1696,74 @@ We analyze each step of the algorithm:
     \item Updating the priority of the neighbors of the dequeued vertex is done $|E|$ times
 \end{itemize}
 
-Then, we have to take into account the time complexity of the priority queue operations.
+Then, we have to take into account the time complexity of the priority queue operations which vary depending on the implementation.
 
-In the case of a linked list we get a total complexity of $O(|V| + |V|^2 + |E|)$.
+\begin{center}
+    \begin{tabular}{ |c|c|c|c|c|c| }
+        \hline
+        \textbf{Operation}  & \textbf{Times} & \textbf{Linked list} & \textbf{Linked list total} & \textbf{Binary heap} & \textbf{Binary heap total} \\
+        \hline
+        Init                & 1              & $O(|V|)$             & $O(|V|)$                   & $O(|V| \log |V|)$    & $O(|V| \log |V|)$          \\
+        Check empty         & $|V|$          & $O(1)$               & $O(|V|)$                   & $O(1)$               & $O(|V|)$                   \\
+        Find min and remove & $|V|$          & $O(|V|)$             & $O(|V|^2)$                 & $O(\log |V|)$        & $O(|V| \log |V|)$          \\
+        Update priority     & $|E|$          & $O(1)$               & $O(|E|)$                   & $O(\log |V|)$        & $O(|E| \log |V|)$          \\
+        \hline
+    \end{tabular}
+\end{center}
+
+Summing up the time complexities we find
+
+\begin{itemize}
+    \item The linked list implementation has a total time complexity of $O(|V| + |V|^2 + |E|)$
+    \item The binary heap implementation has a total time complexity of $O(|V| \log |V| + |E| \log |V|)$.
+\end{itemize}
+
+\subsubsection{Proof of correctness}
+
+To make the proof easier we will use the following definitions:
+
+\begin{itemize}
+    \item At the end of each while loop, the nodes that have been removed from $Q$ are \textit{black}, and the nodes still in $Q$ are \textit{white}.
+    \item An \textbf{all-black} path from $s$ to $v$ is a path where each node, except possibly $v$, is black.
+\end{itemize}
+
+\underline{Statement}:
+\begin{itemize}
+    \item At all the times $\forall v \in V$ if $d(v)$ is not $\infty$ then there is an all-black path from $s$ to $v$ of length $d(v)$.
+    \item $\forall v in V$, $d(v)$ is the only decreased from step to step.
+    \item If at some point $d(v)$ equals to the length of the shortest path from $s$ to $v$ then $d(v)$ will never change again.
+\end{itemize}
+
+\begin{proof}
+    The proof is based on induction, similar to the proof for BFS.
+    We will find two invariants that will help us prove the statement.
+
+    We will need to prove several lemmas:
+    \begin{description}
+        \item[Lemma 1] At the end of each while loop
+            \begin{enumerate}[label=\roman*]
+                \item All the black nodes $v$ have a $d(v)$ equal to the length of the shortest path from $s$ to $v$ or $\infty$ if such path does not exist.
+                \item All nodes $v$ have $d(v)$ equal to the length of the shortest \textit{all-black} path from $s$ to $v$.
+            \end{enumerate}
+
+            Suppose that both statements are true at time $t$.
+            Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration.
+
+            We now want to prove that (i) and (ii) at time $t$ $\implies$ (i) at time $t+1$.
+
+            Note that the distance $d(v)$ remains what it was at time $t$.
+            That is $d_{t+1}(v) = d_t(v)$.
+
+            Suppose that at time $t+1$ there is a path of all black vertices from $s$ to $v$ of length $L < d_{t+1}(v)$.
+            But, since $d_{t+1}(v) = d_t(v)$ and (ii) was true at $t$, (ii) implies that there must be a white vertex along such path, let $u$ be such white vertex.
+            The length of this path 
+
+            TODO: look at the pdf about this
+
+    \end{description}
+
+
+
+\end{proof}
 
 \end{document}

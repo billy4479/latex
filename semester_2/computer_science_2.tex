@@ -795,7 +795,7 @@ We can complete the algorithm to take care of this case too:
 
 \end{minted}
 
-\subsection{Time comlexity}
+\subsection{Time complexity}
 
 We have that the setup part is $O(|V|)$, since we are looping through all nodes.
 
@@ -1584,7 +1584,7 @@ We can now compile a table with the time complexity of each operation of a min-h
           When we update a priority we just need to swap the node with its parent until the tree is a min-heap again, which is also $O(\log n)$.
 \end{itemize}
 
-\subsection{Dijsktra's algorithm}
+\subsection{Dijkstra's algorithm}
 
 \subsubsection{Definition}
 
@@ -1721,49 +1721,56 @@ Summing up the time complexities we find
 \subsubsection{Proof of correctness}
 
 To make the proof easier we will use the following definitions:
-
 \begin{itemize}
     \item At the end of each while loop, the nodes that have been removed from $Q$ are \textit{black}, and the nodes still in $Q$ are \textit{white}.
-    \item An \textbf{all-black} path from $s$ to $v$ is a path where each node, except possibly $v$, is black.
+    \item An \textit{all-black} path from $s$ to $v$ is a path where each node, except possibly $v$, is black.
 \end{itemize}
 
-\underline{Statement}:
-\begin{itemize}
-    \item At all the times $\forall v \in V$ if $d(v)$ is not $\infty$ then there is an all-black path from $s$ to $v$ of length $d(v)$.
-    \item $\forall v in V$, $d(v)$ is the only decreased from step to step.
-    \item If at some point $d(v)$ equals to the length of the shortest path from $s$ to $v$ then $d(v)$ will never change again.
-\end{itemize}
+\textbf{\underline{Statement}}: the following invariants hold:
+
+\begin{enumerate}[label=\roman*]
+    \item All the black nodes $v$ have a $d(v)$ equal to the length of the shortest path from $s$ to $v$ or $\infty$ if such path does not exist.
+    \item All nodes $v$ have $d(v)$ equal to the length of the shortest \textit{all-black} path from $s$ to $v$ or $\infty$ if such path does not exist.
+\end{enumerate}
+
+Moreover, at the end of the execution, all nodes are black, and the invariants imply that $d(v)$ is the length of the shortest path from $s$ to $v$ for all $v \in V$, that is, the algorithm is correct.
 
 \begin{proof}
-    The proof is based on induction, similar to the proof for BFS.
-    We will find two invariants that will help us prove the statement.
+    Before we start we make the following observations:
+    \begin{itemize}
+        \item At all the times $\forall v \in V$ if $d(v)$ is not $\infty$ then there is an all-black path from $s$ to $v$ of length $d(v)$.
+        \item $\forall v \in V$, $d(v)$ is the only decreased from step to step.
+        \item If at some point $d(v)$ equals to the length of the shortest path from $s$ to $v$ then $d(v)$ will never change again.
+    \end{itemize}
+    These are all obvious just by looking at the code.
 
-    We will need to prove several lemmas:
+    Then, we proceed by induction on the number of iterations of the while loop $t$.
+
     \begin{description}
-        \item[Lemma 1] At the end of each while loop
-            \begin{enumerate}[label=\roman*]
-                \item All the black nodes $v$ have a $d(v)$ equal to the length of the shortest path from $s$ to $v$ or $\infty$ if such path does not exist.
-                \item All nodes $v$ have $d(v)$ equal to the length of the shortest \textit{all-black} path from $s$ to $v$.
-            \end{enumerate}
+        \item[Base case]
+            At the beginning of the algorithm, $s$ is the only black node and $d(s) = 0$.
 
-            Suppose that both statements are true at time $t$.
-            Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration.
+            Indeed the shortest path from $s$ to $s$ is of length 0, therefore (i) is true.
+            Moreover, for all $v \in V$ if $v = s$ then $d(v) = 0$ and (ii) is true; if $v \neq s$ then either it is a neighbor of $s$ and $d(v) = l(s, v)$ or $d(v) = \infty$ which is again correct.
 
-            We now want to prove that (i) and (ii) at time $t$ $\implies$ (i) at time $t+1$.
+        \item[Inductive step 1]
+            In this step we assume that (i), (ii) are true at $t$ and we want to show that (i) at $t+1$.
+            Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration. We need to argue that $d(v)$ is the length of the shortest path from $s$ to $v$.
 
-            Note that the distance $d(v)$ remains what it was at time $t$.
-            That is $d_{t+1}(v) = d_t(v)$.
+            Notice that the algorithm does not  change $d(v)$ after $v$ is removed from the queue, therefore we just need to show that at time $t$ $d(v)$ is the length of the shortest path from $s$ to $v$.
 
-            Suppose that at time $t+1$ there is a path of all black vertices from $s$ to $v$ of length $L < d_{t+1}(v)$.
-            But, since $d_{t+1}(v) = d_t(v)$ and (ii) was true at $t$, (ii) implies that there must be a white vertex along such path, let $u$ be such white vertex.
-            The length of this path 
+            We argue by contradiction: suppose that at time $t$ there exists a path from $s$ to $v$ of length $L < d(v)$. By (ii) this path must contain a white vertex, let $u$ be the first white vertex along such path. Then, the length of this path up to $u$ is $\geq d(u)$ since (ii) guarantees that $d(u)$ is the shortest path from $s$ to $u$.
+            Moreover the length of this path up to $u$ is $\leq L$ since $u$ is a vertex along that path.
+            Combining all these facts we get
 
-            TODO: look at the pdf about this
+            $$
+                d(u) \leq L < d(v)
+            $$
 
+            which is a contradiction of the algorithm itself, since $v$ was chosen to be the white vertex with the smallest $d(.)$ at the end of the $t$-th iteration.
+
+        \item[Inductive step 2] To be explained in the next class.
     \end{description}
-
-
-
 \end{proof}
 
 \end{document}

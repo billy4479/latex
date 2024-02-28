@@ -1328,4 +1328,47 @@ The complement of a closed set is open and the complement of an open set is clos
     The proof of the other case is the same.
 \end{proof}
 
+\section{Class of 28/02/2024}
+
+\subsubsection{Theorem: properties of open and closed sets}
+
+\textbf{\underline{Proposition}}: Let $V \subseteq \R^d$.
+Then $\mathring{V}$ is open and its the largest open set contained in $V$.
+Also $\overline{V}$ is closed and its the smallest closed set containing $V$.
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{itemize}
+        \item
+              Let $V$ and $\mathring V$ be its interior. We want to prove that $\mathring V$ is open, that is $\forall \munderbar{x} \in \mathring V, \exists \varepsilon > 0 : B_o(\munderbar{x}, \varepsilon) \subseteq \mathring V$ (which is exactly the same as saying $\munderbar{x} \in \mathring{\mathring{V}}$)
+
+              Let $x \in \mathring V$, then $\exists \varepsilon > 0 : B_o(\munderbar{x}, \varepsilon) \subseteq V$.
+              But we know that $\mathring{B_o(\munderbar{x}, \varepsilon)} \subseteq \mathring{V}$.
+              But $B_o(\munderbar{x}, \varepsilon)$ is open, so $\mathring{B_o(\munderbar{x}, \varepsilon)} \subseteq \mathring{V}$, thus $\mathring{V}$ is open.
+
+              Moreover, let $W$ be an open set such that $W \subseteq V$.
+              Then $\mathring{W} \subseteq \mathring{V}$, but $W$ is open so $\mathring{W} \subseteq \mathring{V}$. Thus any open set contained in $V$ is contained in $\mathring{V}$.
+
+        \item
+              Let $V$ and $\overline V$ be its closure. We want to prove that $\overline V$ is closed, that is if we take a sequence $\left(\munderbar{x}_n\right) \in \overline{V}$ converging, we need to prove that it converges to a $\munderbar{x} \in \overline V$.
+
+              We could prove it this way but it's quite involved, we will use a different (simpler) approach.
+
+              Recall that $\left(\overline{V}\right)^c = \mathring{V^c}$, so $\left(\overline{V}\right)^c$ is open (since is an interior).
+              $\overline{V}$ is the complement of an open set, therefore is closed.
+
+              For the second part we need to prove that if $V \subseteq W$ and $W$ is closed then $\overline{V} \subseteq W$.
+              TODO: add this, it wasn't done in class
+    \end{itemize}
+\end{proof}
+
+\subsection{Functions of several variables}
+
+We will start by considering functions of the type $f: \R^2 \to \R$ since they are very common in many other subjects like probability, physics, economics, etc.
+
+\textbf{\underline{Definition}}: We look at $f: D \subseteq \R^2 \to \R$ which maps every point $(x, y) \in D$ to a real number $f(x, y)$.
+It's graph is a subset of $\R^3$ made of points $(x, y, f(x, y))$ for $(x, y) \in D$.
+
+\textbf{\underline{Definition} (level sets)}: the level set of $f: D \subseteq \R^2 \to \R$ at level $c \in \R$ is the subset of $\R^2$ made of points $\{ (x, y) \in D : f(x, y) = c \}$.
+
 \end{document}

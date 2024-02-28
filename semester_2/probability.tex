@@ -20,10 +20,12 @@
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\F}{\mathcal{F}}
+\newcommand{\N}{\mathbb{N}}
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 
 \newcommand{\indep}{\perp \!\!\! \perp}
+\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
 
 \newenvironment{absolutelynopagebreak}
   {\par\nobreak\vfil\penalty0\vfilneg
@@ -789,5 +791,112 @@ Note that the experiment are independent, hence $P$ of the success is always the
 \end{align*}
 
 We use the binomial coefficient to count the number of ways we can arrange the successes and the failures in $n$ attempts.
+
+\section{Class of 16/02/2024}
+
+\subsection{Poison distribution}
+
+Before we start we need to recall the following facts from analysis:
+
+\begin{itemize}
+    \item $\lim_{n \to \infty} \left(1 + \frac{x}{n}\right)^n = e^x$
+    \item $\sum_{n=0}^\infty \frac{x^n}{n!} = e^x$
+\end{itemize}
+
+\begin{bluebox}{Definition}
+    Let $\lambda > 0$ and $x \in \N$, then the PMF of a Poison distribution is
+    $$
+        f(x) = \frac{e^{-\lambda} \cdot \lambda^x}{x!} \quad \text{for } x \in \N^+
+    $$
+\end{bluebox}
+
+This distribution is closely related to the binomial distribution.
+In fact let
+
+$$
+    f_n(x) = \text{ PMF of Binomial}(n, \frac{\lambda}{n})
+$$
+
+we will prove that $\lim_{n \to \infty} f_n(x) = f(x)$, that is the Poison distribution is the limit of the binomial distribution.
+
+\begin{proof}
+    We have that
+
+    $$
+        f_n(x) = \binom{n}{x} p^x (1 - p)^{n - x}
+    $$
+
+    Since we are looking for the limit as $n \to +\infty$, we can fix $x$ which will make sure that $\binom{n}{x}$ will exist.
+
+    Then
+
+    \begin{align*}
+        \lim_{n \to \infty} f_n(x) & = \frac{n(n-1)\dots (n - x +1)}{x!} \left(\frac{\lambda}{n}\right)^x \left(1 - \frac{\lambda}{n}\right)^{n - x}                                           \\
+                                   & = \frac{\lambda^x}{x!} \lim_{n \to \infty} \frac{n (n-1) \dots (n-x+1)}{n^x} \left(1 - \frac{\lambda}{n}\right)^n \left(1 - \frac{\lambda}{n}\right)^{-x} \\
+                                   & = \frac{\lambda^x}{x!} \cdot 1 \cdot e^{-\lambda} \cdot 1                                                                                                 \\
+                                   & = \frac{e^{-\lambda} \cdot \lambda^x}{x!}
+    \end{align*}
+
+\end{proof}
+
+Now we need to prove that $f(x)$ is a PMF.
+
+\begin{proof}
+    We need to prove that
+    \begin{enumerate}
+        \item $f(x) \geq 0$
+        \item $f(x_i) > 0 \enspace \forall x_i \in S$
+        \item $\sum_{x \in S} f(x) = 1$
+    \end{enumerate}
+
+    The first two points hold by the definition of the Poison distribution. For the third point we have that
+
+    \begin{align*}
+        \sum_{x \in S} e^{-\lambda} \frac{\lambda^x}{x!} & = e^{-\lambda} \sum_{x \in S} \frac{\lambda^x}{x!} \\
+                                                         & = e^{-\lambda} \cdot e^\lambda                     \\
+                                                         & = 1
+    \end{align*}
+\end{proof}
+
+For this distribution to be a good approximation of reality we need to have a very large $n$ and a very small $p$. Some examples of Poison distributions are lottery tickets in the world or visitors in an time interval.
+
+\subsection{Independent random variables}
+
+\begin{bluebox}{Definition}
+    Let $X$ and $Y$ be random variables, then $X$ and $Y$ are \textbf{independent} if and only if $\forall A, B \in \F$ the events $(X \in A)$ and $(Y \in B)$ are independent.
+
+    This is equivalent to
+    $$
+        P((X \in A) \cap (Y \in B)) = P(X \in A) \cdot P(Y \in B)
+    $$
+\end{bluebox}
+
+Moreover, if $X$ and $Y$ are discrete (their support is countable) we have
+
+$$
+    X \indep Y \iff P((X = x) \cap (Y = y)) = P(X = x) \cdot P(Y = y) \quad \forall x \in S_X, y \in S_Y
+$$
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[$\implies$] By definition we have
+            $$
+                P((X \in A) \cap (Y \in B)) = P(X \in A) \cdot P(Y \in B)
+            $$
+            if we choose $A = \{x\}$ and $B = \{y\}$ we get the result
+
+        \item[$\impliedby$] We have that
+
+            \begin{align*}
+                P((X \in A) \cap (Y \in B)) & = P \left(\{\omega \in \Omega: X(\omega) \in A, Y(\omega) \in B\} \right)       \\
+                                            & = P\left(\bigcup_{x \in A, y \in B} \left( (X = x) \cap (Y = y) \right) \right) \\
+                                            & = \sum_{x \in A, y \in B} P((X = x) \cap (Y = y))                               \\
+                                            & = \sum_{x \in A} \sum_{y \in B} P(X = x) \cdot P(Y = y)                         \\
+                                            & = \sum_{x \in A} P(X = x) \cdot \sum_{y \in B} P(Y = y)                         \\
+                                            & = P(X \in A) \cdot P(Y \in B)
+            \end{align*}
+    \end{description}
+\end{proof}
 
 \end{document}

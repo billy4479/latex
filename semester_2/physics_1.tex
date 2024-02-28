@@ -23,7 +23,7 @@
 \usepackage{float}
 
 \usepackage{tikz}
-\usetikzlibrary{patterns}
+\usetikzlibrary{patterns,decorations.pathreplacing,calligraphy}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -1814,8 +1814,13 @@ Consider a triangle as such:
         \draw[black, ->] (-1,0) -- (5,0) node[anchor=north]{$x$};
         \draw[black, ->] (0,-3) -- (0,3) node[anchor=south]{$y$};
 
-        \draw[black, thick] (0,0) -- (4,2) -- (4,-2) -- (0,0);
+        \draw[blue, thick] (0,0) -- (4,2) -- (4,-2) -- (0,0);
+
+        \draw[black, very thick, decorate, decoration={calligraphic brace, mirror}] (4,0) -- (4,2) node[midway, anchor=west]{$h$};
+        \draw[black, very thick, decorate, decoration={calligraphic brace}] (0,0) -- (4,0) node[midway, anchor=south]{$L$};
     \end{tikzpicture}
+    \caption{Center of mass of a triangle}
+    \label{fig:cm_triangle}
 \end{figure}
 
 In this example, because of symmetry, we see that $y_{cm} = 0$.

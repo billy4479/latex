@@ -21,6 +21,7 @@
 \usepackage{siunitx}
 \usepackage{capt-of}
 \usepackage{float}
+\usepackage{enumitem}
 
 \usepackage{tikz}
 \usetikzlibrary{patterns,decorations.pathreplacing,calligraphy}
@@ -1867,5 +1868,96 @@ $$
 $$
 
 Therefore if there are no external forces the total momentum is conserved.
+
+\section{Class of 29/02/2024}
+
+Consider the motion of a rocket.
+At time $t_0$ the rocket has mass $m + \delta m$ and velocity $v$.
+At time $t_1$ the propeller gets activated and the rocket has mass $m$ and velocity $v + \delta v$, while the propeller has mass $\delta m$ and velocity $v + \delta v + v_r$.
+
+By conservation of quantity of motion we have
+
+\begin{align*}
+    (m + \delta m) v & = m (v + \delta v) + \delta m (v + \delta v + v_r)         \\
+                     & \implies \delta m (\delta v + v_r) + m \delta v = 0        \\
+                     & \implies \delta m \delta v + \delta m v_r + m \delta v = 0
+\end{align*}
+
+Now we approximate by saying that $\delta m \delta v \approx 0$ and we get
+
+$$
+    \frac{\delta m}{m} = - \frac{\delta v}{v_r}
+$$
+
+Let $\dd{m}$ be the change of mass of the rocket. We get that $\dd{m} = - \delta m$.
+
+We can now substitute and, since $v_r < 0$, we can write it as $v_r = - \abs{v_r}$.
+
+$$
+    \frac{\dd{m}}{m} = -\frac{\dd{v}}{\abs{v_r}}
+$$
+
+Now we can integrate and get
+
+\begin{align*}
+    - \int \frac{\dd{m}}{m} & = \int \frac{\dd{v}}{\abs{v_r}} \\
+    \log \frac{m(t)}{m}     & = \frac{v(t) - v_0}{\abs{v_r}}
+\end{align*}
+
+\subsection{Collisions}
+
+The only thing we know is that the total momentum is conserved. Thus
+
+$$
+    p_{cm} = m_1 v_1 + m_2 v_2 = p_1 + p_2 = m_1 v_1' + m_2 v_2' = p_1' + p_2'
+$$
+
+This is not enough to solve the problem, but we can specify additional constraint:
+
+\begin{enumerate}[label=\Alph*)]
+    \item Inelastic collision: $v'_1 = v_2'$, the two masses stick together
+    \item Elastic collision: $E_1 = E_2$, the total energy is conserved
+\end{enumerate}
+
+\subsubsection{Inelastic collision}
+
+We have
+
+\begin{align*}
+    m_1 v_1 + m_2 v_2 & = (m_1 + m_2) v'                      \\
+    v'                & = \frac{m_1 v_1 + m_2 v_2}{m_1 + m_2} \\
+    \dv{t} x_{cm}     & = v_{cm}
+\end{align*}
+
+We immediately see that here energy is not conserved.
+
+\subsubsection{Elastic collision}
+
+We have
+
+\begin{align*}
+     & \begin{cases}
+           m_1 v_1 + m_2 v_2 = m_1 v_1' + m_2 v_2' \\
+           \cancel{\frac{1}{2}} m_1 v_1^2 + \cancel{\frac{1}{2}} m_2 v_2^2 = \cancel{\frac{1}{2}} m_1 (v_1')^2 + \cancel{\frac{1}{2}} m_2 (v_2')^2
+       \end{cases} \\
+     & \begin{cases}
+           m_1(v_1 - v_1') = m_2(v_2' - v_2) \\
+           m_1 (v_1^2 - (v_1')^2) = m_2 ((v_2')^2 - v_2^2
+       \end{cases}                                                                                                                                          \\
+     & \begin{cases}
+           m_1(v_1 - v_1') = m_2(v_2' - v_2) \\
+           m_1 (v_1 + v_1')(v_1 - v_1') = m_2 (v_2' + v_2')(v_2' - v_2)
+       \end{cases}                                                                                                                            \\
+     & v_1 + v_1' = v_2 + v_2'  \quad \text{by taking the quotient of the two equations}                                                                                                      \\
+\end{align*}
+
+and by substituting we get
+
+$$
+    \begin{cases}
+        v_1' & = \frac{m_1 - m_2}{m_1 + m_2} v_1 + \frac{2 m_2}{m_1 + m_2} v_2 \\
+        v_2' & = \frac{m_2 - m_1}{m_1 + m_2} v_2 + \frac{2 m_1}{m_1 + m_2} v_1
+    \end{cases}
+$$
 
 \end{document}

@@ -22,6 +22,7 @@
 \usepackage{subfig}
 \usepackage{cancel}
 \usepackage{float}
+\usepackage{enumitem}
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -1370,5 +1371,97 @@ We will start by considering functions of the type $f: \R^2 \to \R$ since they a
 It's graph is a subset of $\R^3$ made of points $(x, y, f(x, y))$ for $(x, y) \in D$.
 
 \textbf{\underline{Definition} (level sets)}: the level set of $f: D \subseteq \R^2 \to \R$ at level $c \in \R$ is the subset of $\R^2$ made of points $\{ (x, y) \in D : f(x, y) = c \}$.
+
+\section{Class of 29/02/2024}
+
+Consider the function $f: \R^2 \to \R$ that defines a plane in $\R^3$:
+
+$$
+    z = f(x, y) = ax + by + c
+$$
+
+Then the graph of such function is a plane normal to
+$\begin{pmatrix}
+        a \\ b \\ -1
+    \end{pmatrix}$
+and passing through the point
+$\begin{pmatrix}
+        0 \\ 0 \\ c
+    \end{pmatrix}$
+.
+
+Its level set at height $k$ is the line with equation $ax + by = k - c$. All of these lines are parallel to each other and normal to the vector
+$\begin{pmatrix}
+        a \\ b
+    \end{pmatrix}$
+.
+
+
+\subsection{Continuity}
+
+Recall the definition of continuity for function $f: \R \to \R$:
+
+$$
+    \forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \forall x \in \R, \enspace \abs{x - x_0} < \delta \implies \abs{f(x) - f(x_0)} < \varepsilon
+$$
+
+The definition of continuity for functions of several variables is the same, but we replace the absolute value with the norm where needed.
+
+\textbf{\underline{Definition} (continuity)}: A function $f: D \subseteq \R^2 \to \R$ is continuous at $\munderbar{x}_0 \in D$ if
+
+$$
+    \forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \forall \munderbar{x} \in D, \enspace \norm{\munderbar{x} - \munderbar{x}_0} < \delta \implies \abs{f(\munderbar{x}) - f(\munderbar{x}_0)} < \varepsilon
+$$
+
+That is, for every $\varepsilon > 0$ we can find a ball of radius $\delta$ around $\munderbar{x}_0$ such that $f(B_o(\munderbar{x}_0, \delta)) \subseteq B_o(f(\munderbar{x}_0), \varepsilon)$.
+
+\textbf{\underline{Propostion} (transference principle)}:
+Let $f: D \subseteq \R^2 \to \R$, then $f$ is continuous at $\munderbar{x}_0 \in D$ iff for every sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in D$ converging to $\munderbar{x}_0$ there holds $\lim_{n \to +\infty} f(\munderbar{x}_n) = f(\munderbar{x}_0)$.
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[$\implies$]
+            Assume $f$ continous at $x_0$ and let $\left(\munderbar{x}_n\right)_{n \in \N} \in D$ converging to $\munderbar{x}_0$.
+            Let $\varepsilon > 0$.
+            As $f$ is continuous there is a $\delta > 0$ with $\abs{f(\munderbar{x}) - f(\munderbar{x}_0)} < \varepsilon$ if $\norm{\munderbar{x} - \munderbar{x}_0} < \delta$.
+
+            As $\munderbar{x}_n \to \munderbar{x}_0$ then $\exists N$ such that $\norm{\munderbar{x}_n - \munderbar{x}_0} < \delta$ for $n \geq N$.
+            Then $\abs{f(\munderbar{x}_n) - f(\munderbar{x}_0)} < \varepsilon$ for $n \geq N$, thus $\lim_{n \to +\infty} f(\munderbar{x}_n) = f(\munderbar{x}_0)$.
+
+        \item[$\impliedby$]
+            We will argue by contraposition and say that if $f$ is not continuous, then there exists a sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in D$ converging to $\munderbar{x}_0$ such that $\lim_{n \to +\infty} f(\munderbar{x}_n) \neq f(\munderbar{x}_0)$.
+
+            Since $f$ is not continuous $\exists \varepsilon > 0$ such that $\forall \delta > 0, \exists \munderbar{x} \in D$ such that $\norm{\munderbar{x} - \munderbar{x}_0} < \delta$ but $\abs{f(\munderbar{x}) - f(\munderbar{x}_0)} > \varepsilon$.
+
+            Fix such $\varepsilon > 0$. For $\delta = 1/n$ we can find $\munderbar{x}_n \in D$ such that $\norm{\munderbar{x}_n - \munderbar{x}_0} < 1/n$ but $\abs{f(\munderbar{x}_n) - f(\munderbar{x}_0)} > \varepsilon$.
+
+            Then $\munderbar{x}_n \to \munderbar{x}_0$ but $\lim_{n \to +\infty} f(\munderbar{x}_n) \neq f(\munderbar{x}_0)$.
+    \end{description}
+
+    This proof is very similar to the one seen in analysis 1 for functions of one variable.
+\end{proof}
+
+\textbf{\underline{Proposition} (operations on continuous functions)}:
+If $f, g: D \subseteq \R^2 \to \R$ are continuous at $\munderbar{x}_0 \in D$ then
+\begin{enumerate}[label=\roman*.]
+    \item $f + g$ is continuous at $\munderbar{x}_0$.
+    \item $f \cdot g$ is continuous at $\munderbar{x}_0$.
+    \item If $g(\munderbar{x}_0) \neq 0$ then $1/g$ is continuous at $\munderbar{x}_0$.
+\end{enumerate}
+
+\begin{proof}
+    oops
+\end{proof}
+
+\textbf{\underline{Proposition} (composition of continuous functions)}:
+Let $\gamma: I \in \R \to R^2$ be a continuous parametric curve and $f: D \subseteq \R^2 \to \R$ be continuous at $\gamma(t_0)$.
+Then $f \circ \gamma: I \to \R$ is continuous at $t_0$.
+
+\begin{proof}
+    Let $\left(t_n\right)_{n \in \N} \in I$ be a sequence converging to $t_0$.
+    Then, as $\gamma$ is continuous at $t_0$, $\lim_{n \to +\infty} \gamma(t_n) = \gamma(t_0)$ (limit coordinate by coordinate).
+    Then, as $f$ is continuous at $\gamma(t_0)$, $\lim_{n \to +\infty} f(\gamma(t_n)) = f(\gamma(t_0))$.
+\end{proof}
 
 \end{document}

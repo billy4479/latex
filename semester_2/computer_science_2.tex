@@ -1728,7 +1728,7 @@ To make the proof easier we will use the following definitions:
 
 \textbf{\underline{Statement}}: the following invariants hold:
 
-\begin{enumerate}[label=\roman*]
+\begin{enumerate}[label=\roman*.]
     \item All the black nodes $v$ have a $d(v)$ equal to the length of the shortest path from $s$ to $v$ or $\infty$ if such path does not exist.
     \item All nodes $v$ have $d(v)$ equal to the length of the shortest \textit{all-black} path from $s$ to $v$ or $\infty$ if such path does not exist.
 \end{enumerate}
@@ -1769,8 +1769,107 @@ Moreover, at the end of the execution, all nodes are black, and the invariants i
 
             which is a contradiction of the algorithm itself, since $v$ was chosen to be the white vertex with the smallest $d(.)$ at the end of the $t$-th iteration.
 
-        \item[Inductive step 2] To be explained in the next class.
+        \item[Inductive step 2]
+            In this step we assume that (i), (ii) are true at $t$ and (i) is true at $t+1$ (as we have just shown) and we want to show that (ii) is true at $t+1$.
+            Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration and denote $d_t(\cdot)$ the value of $d(\cdot)$ at time $t$ and $d_{t+1}(\cdot)$ the value of $d(\cdot)$ at time $t+1$.
+
+            At time $t$ every vertex $x$ is in one of the following states:
+            \begin{enumerate}
+                \item $x$ is black
+                \item $x = v$ (and therefore is white)
+                \item $x$ is white and $x \neq v$
+            \end{enumerate}
+
+            If we are in case (1) then $d_t(x)$ was the length of the shortest path from $s$ to $x$ at time $t$ (because of (i)) and $d_t(x) = d_{t+1}(x)$.
+            Then, by (ii) at $t$, there is an \textit{all-black} path from $s$ to $x$ of length $d_t(x)$ and this path is still valid at time $t+1$ since the distance is the same. Then (ii) is true at $t+1$.
+
+            If we are in case (2) the proof is very similar to the case of (1).
+            This is because we also have that $d_t(v) = d_{t+1}(v)$ and, since $v$ is turning black at this iteration, by (i) at $t+1$ $d_{t+1}(v)$ is the length of the shortest path from $s$ to $v$.
+            Then by (ii) at time $t$ there is an \textit{all-black} path from $s$ to $v$ of length $d_t(v)$ and this path is still valid at time $t+1$ since the distance is the same. Then (ii) is true at $t+1$.
+
+            If we are in case (3) we will argue by contradiction and suppose that there is an \textit{all-black} path $P$ from $s$ to $x$ of length $L < d_{t+1}(x)$.
+            We have 3 cases:
+            \begin{enumerate}[label=\alph*.]
+                \item
+                      $P$ does not contain $v$.
+                      But then
+                      $$
+                          L < d_{t+1}(x) \leq d_t(x)$$
+                      because if there is an all-black path at $t+1$ and $x \neq v$ then there is also one at $t$.
+                      But this is a contradiction since, because of (ii) at $t$, $d_t(x)$ is the length of the shortest all-black path from $s$ to $x$. Therefore such path $P$ cannot exist, and (ii) is true at $t+1$.
+
+                \item
+                      $P$ contains $v$ as the last intermediate vertex before $x$.
+                      Then, the length of the path from $s$ to $v$ is
+
+                      $$
+                          L_v = L - l(v, x)
+                      $$
+
+                      But $d_t(v) \leq L_v$ since, because of (ii) at $t$, $d_t(v)$ was already the length of the shortest path from $s$ to $v$, and we get that
+
+                      $$
+                          d_t(v) + l(v,x) \leq L
+                      $$
+
+                      Now the algorithm updates $d_{t+1}(x)$ to some value $L' \leq d_t(v) + l(v, x)$.
+                      Combining the assumptions with all the statements we get
+
+                      $$
+                          d_t(v) + l(v, x) \leq L < d_{t+1} \leq d_t(v) + l(v, x)
+                      $$
+
+                      which is a contradiction.
+
+                \item
+                      The path from $s$ to $x$ contains $v$ as an intermediate vertex but not as the last one.
+                      Let $y$ be the last intermediate vertex before $x$.
+                      So that $P$ is made of a path from $s$ to $v$, a path from $v$ to $y$, and the edge $(y, x)$.
+
+                      We have that $y$ must be black (since we are considering \textit{all-black} paths), therefore $y$ must have been taken out of the queue at some time $t' \leq t$. We have
+
+                      $$
+                          d_{t'}(y) + l(y, x) \leq L
+                      $$
+
+                      since, by (ii) at $t'$, $d_{t'}(y)$ is the length of the shortest \textit{all-black} from $s$ to $y$.
+                      Moreover, by the definition of algorithm, distances can only get shorter, therefore
+
+                      $$
+                          d_{t+1}(x) \leq d_{t'}(x) \leq d_{t'}(y) + l(y, x) \leq L
+                      $$
+
+                      but by assumption $L < d_{t+1}(x)$, which is a contradiction.
+            \end{enumerate}
     \end{description}
 \end{proof}
+
+\section{Class of 29/02/2024}
+
+\textbf{\underline{Definition} (minimum spanning tree)}: Given an undirected connected graph $G = (V, E)$ and a function $c: E \to \N^+$ that assigns a cost to each edge. A minimum (weight) spanning tree is a subset $S \subseteq E$ whose total cost is as small as possible that still connects all the vertices.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (3, 0) {B};
+        \node[draw, circle] (C) at (6, 0) {C};
+        \node[draw, circle] (D) at (0, -3) {D};
+        \node[draw, circle] (E) at (3, -3) {E};
+        \node[draw, circle] (F) at (6, -3) {F};
+
+        \draw[thick] (A) -- node[above] {5} (B);
+        \draw[thick] (B) -- node[above] {4} (C);
+        \draw[thick, red] (A) -- node[left] {1} (D);
+        \draw[thick, red] (B) -- node[left] {2} (E);
+        \draw[thick, red] (C) -- node[right] {3} (F);
+        \draw[thick] (D) -- node[below] {2} (E);
+        \draw[thick, red] (E) -- node[below] {1} (F);
+        \draw[thick, red] (B) -- node[midway, anchor=south east] {1} (D);
+        \draw[thick] (B) -- node[above, anchor=south west] {5} (F);
+    \end{tikzpicture}
+    \caption{An example of a graph and (in red) one of its minimum spanning tree}
+    \label{fig:minimum_spanning_tree}
+\end{figure}
 
 \end{document}

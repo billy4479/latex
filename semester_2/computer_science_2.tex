@@ -1,4 +1,4 @@
-\documentclass[10pt]{extarticle}
+\documentclass[12pt]{extarticle}
 \title{Computer Science 2 Notes}
 \author{Giacomo Ellero}
 \date{Semester 2, 2023/2024}
@@ -1698,18 +1698,21 @@ We analyze each step of the algorithm:
 
 Then, we have to take into account the time complexity of the priority queue operations which vary depending on the implementation.
 
-\begin{center}
+\begin{table}[H]
+    \centering
     \begin{tabular}{ |c|c|c|c|c|c| }
         \hline
-        \textbf{Operation}  & \textbf{Times} & \textbf{Linked list} & \textbf{Linked list total} & \textbf{Binary heap} & \textbf{Binary heap total} \\
+        \textbf{Operation}  & \textbf{Times} & \textbf{L.L} & \textbf{L.L tot.} & \textbf{B.H.}     & \textbf{B.H. tot.} \\
         \hline
-        Init                & 1              & $O(|V|)$             & $O(|V|)$                   & $O(|V| \log |V|)$    & $O(|V| \log |V|)$          \\
-        Check empty         & $|V|$          & $O(1)$               & $O(|V|)$                   & $O(1)$               & $O(|V|)$                   \\
-        Find min and remove & $|V|$          & $O(|V|)$             & $O(|V|^2)$                 & $O(\log |V|)$        & $O(|V| \log |V|)$          \\
-        Update priority     & $|E|$          & $O(1)$               & $O(|E|)$                   & $O(\log |V|)$        & $O(|E| \log |V|)$          \\
+        Init                & 1              & $O(|V|)$     & $O(|V|)$          & $O(|V| \log |V|)$ & $O(|V| \log |V|)$  \\
+        Check empty         & $|V|$          & $O(1)$       & $O(|V|)$          & $O(1)$            & $O(|V|)$           \\
+        Find min and remove & $|V|$          & $O(|V|)$     & $O(|V|^2)$        & $O(\log |V|)$     & $O(|V| \log |V|)$  \\
+        Update priority     & $|E|$          & $O(1)$       & $O(|E|)$          & $O(\log |V|)$     & $O(|E| \log |V|)$  \\
         \hline
     \end{tabular}
-\end{center}
+    \caption{Time complexity of the operations of Dijkstra's algorithm with a linked list (L.L) and a binary heap (B.H.)}
+    \label{tab:dijsktra_timecomplexity}
+\end{table}
 
 Summing up the time complexities we find
 
@@ -1844,7 +1847,9 @@ Moreover, at the end of the execution, all nodes are black, and the invariants i
     \end{description}
 \end{proof}
 
-\section{Class of 29/02/2024}
+\section{Class of 01/03/2024 - Kruskal's algorithm}
+
+\subsection{Minimum spanning tree}
 
 \textbf{\underline{Definition} (minimum spanning tree)}: Given an undirected connected graph $G = (V, E)$ and a function $c: E \to \N^+$ that assigns a cost to each edge. A minimum (weight) spanning tree is a subset $S \subseteq E$ whose total cost is as small as possible that still connects all the vertices.
 
@@ -1871,5 +1876,192 @@ Moreover, at the end of the execution, all nodes are black, and the invariants i
     \caption{An example of a graph and (in red) one of its minimum spanning tree}
     \label{fig:minimum_spanning_tree}
 \end{figure}
+
+\subsection{Kruskal's algorithm}
+
+This algorithm is used to find the minimum spanning tree of a graph.
+
+\subsubsection{Definition}
+
+Let $G(V,E)$ be a connected undirected graph and $c: E \to \N^+$ be a function that assigns a cost to each edge.
+
+The algorithm works as follows:
+
+\begin{minted}{python}
+    def Kruskal(G, c):
+        # A set of edges 
+        S = {}
+        
+        # Sort the edges by increasing cost
+        sorted_edges = sort_edges(G, c)
+        
+        for e in sorted_edges:
+            (u, v) = e
+
+            # If `e` connects two previously disconnected components
+            if not S.connects(u, v):
+                S.add_edge(e)
+
+        return S
+\end{minted}
+
+Basically the algorithm starts from a graph without any edges and adds the edges one by one, always choosing the one with the smallest cost that connects a node that wasn't already connected.
+
+Note that the check \texttt{if not S.connects(u, v)} is equivalent to saying \say{if adding this edge doesn't create a cycle}.
+We will prove this later.
+
+\subsubsection{Example}
+
+Consider the graph in Figure (\ref{fig:minimum_spanning_tree}).
+
+The algorithm will connect the vertices starting from the cheapest ones.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ |c|c c c c c c c c c| }
+        \hline
+        \textbf{Edge} & (A, D) & (B, D) & (E, F) & (B, E) & (D, E) & (C, F) & (B, C) & (A, B) & (B, F) \\
+        \textbf{Cost} & 1      & 1      & 1      & 2      & 2      & 3      & 4      & 5      & 5      \\
+        \hline
+    \end{tabular}
+    \caption{The edges of the graph in Figure (\ref{fig:minimum_spanning_tree}) sorted by cost}
+    \label{tab:kruskal_edges}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 0) {A};
+        \node[draw, circle] (B) at (3, 0) {B};
+        \node[draw, circle] (C) at (6, 0) {C};
+        \node[draw, circle] (D) at (0, -3) {D};
+        \node[draw, circle] (E) at (3, -3) {E};
+        \node[draw, circle] (F) at (6, -3) {F};
+
+        \draw[thick, red] (A) -- node[left] {1} (D);
+        \draw[thick, blue] (D) -- node[above] {2} (E);
+        \draw[thick, green] (C) -- node[right] {3} (F);
+        \draw[thick, red] (E) -- node[below] {1} (F);
+        \draw[thick, red] (B) -- node[midway, anchor=south east] {1} (D);
+    \end{tikzpicture}
+    \caption{The minimum spanning tree of the graph in Figure (\ref{fig:minimum_spanning_tree}). Red edges are added first, then blue, then green.}
+    \label{fig:minimum_spanning_tree_kruskal}
+\end{figure}
+
+This type of algorithm is called a \textit{greedy algorithm} because it always chooses the best option at each step.
+This is not always the best solution to the problem but in this case it gets the job done.
+
+\subsubsection{Theorem: solutions are trees}
+
+\textbf{\underline{Theorem}}: Any optimal solution to the problem of finding a minimum spanning tree is a tree (i.e. undirected, connected, and acyclic).
+
+\begin{proof}
+    The graph we start with is already undirected and connected, we just need to show that the graph is acyclic.
+
+    We note that if a connected undirected graph contains a cycle, then any one of the edges in the cycle can be removed without disconnecting the graph.
+
+    We will argue by contradiction that minimum spanning trees contain a cycle. Then, as we saw, we can remove an edge from the cycle and the graph will still be connected while the total cost of the edges will be smaller (since $c > 0$).
+
+    This contradicts the assumption that the original tree was a minimum spanning tree, therefore we have that minimum spanning trees are acyclic.
+\end{proof}
+
+\subsubsection{Theorem: the result set is connected}
+
+\textbf{\underline{Theorem}}: The set of edges $S$ is connected.
+
+\begin{proof}
+    We will argue by contradiction that the set of edges $S$ is divided in two or more connected components.
+
+    Since the original graph is connected, there must exist some edge $e$ that connects two of these components.
+    Then the algorithm (at some point) will add $e$ to $S$ and the two components will be connected.
+
+    We can repeat the same process for all the other connected components until we are left with just one.
+\end{proof}
+
+\textbf{\underline{Remark}}: If we don't assume that the original graph is connected, then $S$ will have as many connected components as the original graph.
+
+\subsubsection{Proof of correctness and optimality}
+
+We not only want to prove that the algorithm works, but also that it is the best solution possible.
+
+This is quite a tricky thing to prove and we will proceed by saying that there exist some optimal solutions (that we don't know), but each step of our algorithm is also a step in some optimal solution. We can formalize this as follows:
+
+\textbf{\underline{Theorem}}: At every step, there is an optimal solution $T^*$ that includes all the edges in $S$ at that step.
+
+\begin{proof}
+    We will proceed by induction on the number of iterations of the for loop $t$.
+
+
+    \begin{description}
+        \item[Temp assumption]
+            We will temporary assume that all the costs are distinct.
+            This is just to make the proof easier, we will remove this assumption at the end of the proof.
+        \item[Base case]
+            The base case is trivial, since at the beginning \texttt{S} is empty and there is an optimal solution that includes all the edges in $S$.
+        \item[Inductive step]
+            Suppose at some iteration $t$ the invariant is true, therefore there exists an optimal solution $T^*$ that includes all the edges in $S \subseteq T^*$ at that step. Let $e = (u, v)$ be the edge added at the $t+1$-th iteration.
+            We now want to show that $S \cup \{e\} \subseteq T^*$.
+
+            If $e \in T^*$ there is nothing to prove.
+            If $e \notin T^*$ then consider $T^* \cup \{e\}$: this graph must contain a cycle $C$.
+            We will now prove that this cannot happen since it is a contradiction.
+
+            In $C$ there must be a vertex that is in $T^*$ and is not in $S$ because otherwise the algorithm would not have added $e$ because we already have a path that connects $u$ and $v$.
+            Moreover, let $u \in S$, then $v \notin S$ because otherwise the algorithm would not have added $e$.
+
+            This means that on the path $P \subset T^*$ that connects $u$ and $v$ there is an edge $e' = (x,y) \in C, T^*$ and $e' \neq e$ that connects $x \in S$ and $y \notin S$.
+            We have that $c(e) < c(e') \enspace (*)$ because of the way we sorted the edges at the beginning of the algorithm.
+            But this implies that $T^* \cup \{e\} \setminus \{e'\}$ is a better solution than $T^*$, which is a contradiction.
+
+            Thus $e$ must be in $T^*$ and the invariant is true at $t+1$.
+        \item[Removing temp assumption]
+            Note that in the inequality $(*)$ we used the fact that all the costs are distinct.
+            If we didn't make this assumption we would have that $c(e) \leq c(e')$.
+
+            This is still fine because it just implies that there are more than one optimal solutions to the problem (for reference in our case $T^*$ and $T^* \cup \{e\} \setminus \{e'\}$) but our algorithm is always one of them.
+    \end{description}
+\end{proof}
+
+\textbf{\underline{Remark}}: If at the end of the algorithm the above theorem is true, then the algorithm is optimal.
+
+\begin{proof}
+    This is true by the definition of the algorithm itself, if $S \subsetneqq T^*$ then the cost of $T^*$ would be higher than the cost of $S$, but this is a contradiction of the fact that $T^*$ is a minimum spanning tree.
+\end{proof}
+
+\subsection{Prim's algorithm}
+
+This is another greedy algorithm that can be used to find the best path from one vertex to another.
+
+This is very similar to Dijkstra's algorithm, but we are keeping track on how to get from one vertex to another instead of just the distance.
+
+\subsubsection{Definition}
+
+Let $G(V, E)$ be a connected undirected graph, $w: E \to \N^+$ be a function that assigns a weight to each edge, and $s \in V$ be the starting vertex.
+
+The algorithm works as follows:
+
+\begin{minted}{python}
+    def Prim(G, w, s):
+        c = {} # Cost of the shorter path from s to v
+        P = {} # Predecessors
+
+        # Setup
+        for v in G.vertices():
+            c[v] = float('inf')
+            P[v] = None
+        
+        c[s] = 0
+        Q = PriorityQueue(G.vertices(), c)
+        while not Q.is_empty():
+            u = Q.dequeue()
+            for v in u.neighbors():
+                if c[v] > w(u, v):
+                    c[v] = w(u, v)
+                    P[v] = u # Set the predecessor of v to be u
+                    Q.update_priority(v, c[v])
+        return P
+\end{minted}
+
+From the array of predecessors \texttt{P} we can reconstruct the minimum spanning tree of $G$.
 
 \end{document}

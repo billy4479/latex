@@ -1464,4 +1464,80 @@ Then $f \circ \gamma: I \to \R$ is continuous at $t_0$.
     Then, as $f$ is continuous at $\gamma(t_0)$, $\lim_{n \to +\infty} f(\gamma(t_n)) = f(\gamma(t_0))$.
 \end{proof}
 
+\section{Class of 01/03/2024}
+
+\subsubsection{Example: limits and continuity}
+
+Consider the function
+
+$$
+    f(x, y) = \frac{x y^2}{x^2 + y^4}
+$$
+
+We want to find $\lim_{(x, y) \to (0, 0)} f(x, y)$.
+
+First we consider the denominator and notice that $x^2 \gg y^4$ as $(x, y) \to (0, 0)$.
+Then we can write
+
+\begin{align*}
+    f(x, y) = \frac{x y^2}{x^2 + y^4} & \approx \frac{x y^2}{x^2} \\
+                                      & = \frac{y^2}{x}           \\
+\end{align*}
+
+and since $x \gg y^2$ we have that the limit is 0 and we could think that the function is continuous at $(0, 0)$.
+
+But this depends on the path we take to $(0, 0)$: if we approach $(0, 0)$ in such a way that $x \sim y^2$ then the limit is $\frac{1}{2}$.
+
+This means that we can define a sequence that converges to $(0, 0)$ such that the limit of the function is different from 0, in the case of this particular function we can choose the following sequence:
+
+$$
+    \begin{pmatrix}
+        x_n \\ y_n
+    \end{pmatrix} = \begin{pmatrix}
+        \frac{1}{n^2} \\ \frac{1}{n}
+    \end{pmatrix}
+$$
+
+You can see the graph of this function here:
+\url{https://www.geogebra.org/3d/wujrd97y}.
+
+\subsection{Partial derivatives}
+
+\textbf{\underline{Definition} (partial derivative)}: Let $f: D \subseteq \R^2 \to \R$ and $(x_0, y_0) \in D$.
+We call partial derivative with respect to $x$ at $(x_0, y_0)$, if exists
+
+$$
+    \pdv{f}{x}(x_0, y_0) = \lim_{h \to 0} \frac{f(x_0 + h, y_0) - f(x_0, y_0)}{h}
+$$
+
+and partial derivative with respect to $y$ at $(x_0, y_0)$, if exists
+
+$$
+    \pdv{f}{y}(x_0, y_0) = \lim_{h \to 0} \frac{f(x_0, y_0 + h) - f(x_0, y_0)}{h}
+$$
+
+These are basically the normal derivatives but we fix one variable and let the other vary. Therefore when, for example, we take the partial derivative with respect to $x$ we consider the function $f(x, y_0)$ and we consider $y$ as a constant.
+
+\textbf{\underline{Definition}(directional derivative)}: Let $f: D \subseteq \R^2 \to \R$, $(x_0, y_0) \in D$ and $\munderbar{u} = (u_1, u_2) \in \R^2$ be a vector with norm $\norm{\munderbar{u}} = 1$.
+The directional derivative in the direction $\munderbar{u}$ is, if exists,
+
+$$
+    \pdv{f}{\munderbar{u}}(x_0, y_0) = \lim_{h \to 0} \frac{f(x_0 + h u_1, y_0 + h u_2) - f(x_0, y_0)}{h}
+$$
+
+This is just a generalization of the partial derivative, in fact, if $\munderbar{u} = (1, 0)$ then we get the partial derivative with respect to $x$ and if $\munderbar{u} = (0, 1)$ then we get the partial derivative with respect to $y$.
+
+Note that to compute partial derivatives we almost never have to compute limits. If we consider $\gamma: t \in \R \mapsto (x_0, y_0) + t\munderbar{u} = (x_0 + t u_1, y_0 + t u_2)$ then $\pdv{f}{\munderbar{u}}() (x_0, y_0)$ is the derivative at $t = 0$ of $t \mapsto f(\gamma(t))$.
+
+\subsubsection{Resolving confusing cases}
+
+Consider $f(x, y) = xy^2$. We what to understand what the following expressions mean:
+
+\begin{itemize}
+    \item $\pdv{f}{x}()(y,x)$: here we have that we take the derivative with respect to the first variable and then we evaluate it at $(y, x)$.
+    \item $\pdv{f}{x}()(x,x)$: here we have that we take the derivative with respect to the first variable and then we evaluate it at $(x, x)$. It could be clearer to use $\pdv{f}{\munderbar{u}}()(x,x)$ with $\munderbar{u} = (1, 0)$.
+    \item $\dv{f}{x}()(x,x)$: here we substitute $y$ with $x$ first and then we take the (normal) derivative with respect to $x$.
+\end{itemize}
+
+
 \end{document}

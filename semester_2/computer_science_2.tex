@@ -47,7 +47,8 @@
 \tableofcontents
 \clearpage
 
-\section{Class of 06/02/2024}
+% Class of 06/02/2024
+\section{Introduction}
 
 \subsection{Asymptotic notation}
 
@@ -96,6 +97,8 @@ Moreover, if $a_n = O(b_n)$ and $a_n = \Omega(b_n)$ (for some different $C$ and 
 
 \subsection{Randomness}
 
+In some algorithms we will need to use randomness to solve the problem, therefore we need a language to talk about it.
+
 When we run an experiment we can define
 \begin{itemize}
     \item an outcome $\omega_i$
@@ -108,6 +111,8 @@ $$
     E(X) = \sum ^n _{i = 1} x_i p_i
 $$
 
+For more about probability see the notes of the probability course.
+
 \subsection{IEEE-754}
 
 This is not in the syllabus but it's useful to know.
@@ -117,7 +122,8 @@ We will discuss in particular the 32-bits representation but larger or smaller f
 
 We subdivide the 32 bits in 3 parts: 1 bit for the \textbf{sign}, 8 bits for the \textbf{exponent}, and 23 bits for the \textbf{fraction} or mantissa.
 
-\begin{center}
+\begin{figure}[H]
+    \centering
     \begin{bytefield}[bitwidth=1.1em, bitheight=\widthof{~Sign~}]{32}
         \bitheader{0,8,31} \\
         \bitbox{1}{1}
@@ -127,7 +133,10 @@ We subdivide the 32 bits in 3 parts: 1 bit for the \textbf{sign}, 8 bits for the
         \bitbox{8}{Exponent}
         \bitbox{23}{Fraction}
     \end{bytefield}
-\end{center}
+
+    \caption{IEEE-754 32-bits representation}
+    \label{fig:ieee754}
+\end{figure}
 
 The number is interpreted according to the following formula:
 
@@ -140,26 +149,12 @@ Basically the number is represented in scientific notation, in base 2.
 Note that when converting the fraction part to decimal the powers of 2 are negative and decreasing
 (i.e.: bit at 9 is $2^{-1}$, bit at 10 is $2^{-2}$, etc).
 
-\section{Class of 08/02/2024}
+% Class of 08/02/2024
+\section{Basic algorithms}
 
 \subsection{Introductory statements}
 
-We will start by stating the following facts without providing a proof (they can be proven but in class we skipped them).
-
-\begin{itemize}
-    \item If $c \in \R^+$, then $g(n) = 1 + c + c^2 + \dots + c^n$ is $\Theta(1)$ if $c < 1$, $\Theta(n)$ if $c = 1$, and $\Theta(c^n)$ if $c > 1$.
-    \item In any base $b \ge 2$ the sum of any 3 single-digit numbers is at most 2 digits long.
-    \item $\forall n \in \N$ and any base $b$ there exists a power of $b$ in $[n, bn].$
-\end{itemize}
-
-\begin{notebox}{$\Theta(1)$}
-    When we say that a function is $\Theta(1)$ we mean that it is bounded from above by a constant $C$ (since it is big O of 1)
-    and bounded from below by a constant $c$ (since it is $\Omega(1)$).
-
-    This usually means that $a_n \ne 0$ for all $n$.
-\end{notebox}
-
-\subsection{How to approach a algorithm problem}
+\subsubsection{How to approach a algorithm problem}
 
 We usually proceed by following these steps:
 \begin{enumerate}
@@ -173,17 +168,34 @@ We usually proceed by following these steps:
 
 We will use the following steps to approach some classic problems such as addition and multiplication of binary numbers.
 
-\begin{notebox}{Shifts}
-    We refer to shifts as the operation of moving all the bits of a number to the left or to the right by a certain amount of positions.
-    This operation mathematically corresponds to multiplying or dividing the number by a power of the base.
+\subsubsection{Shifts}
 
-    $$
-        x \ll n = x \cdot b^n
-    $$
+We refer to shifts as the operation of moving all the bits of a number to the left or to the right by a certain amount of positions.
+This operation mathematically corresponds to multiplying or dividing the number by a power of the base.
 
-    The $\ll$ symbol denotes a left shift by $n$ positions, while the $\gg$ symbol denotes a right shift by $n$ positions.
+$$
+    x \ll n = x \cdot b^n
+$$
 
-    In our mathematical world each shift is $O(n)$, in the real world it is usually $O(1)$.
+The $\ll$ symbol denotes a left shift by $n$ positions, while the $\gg$ symbol denotes a right shift by $n$ positions.
+
+In our mathematical world shifts are $O(n)$, in the real world they are usually $O(1)$ because the computer can perform multiple shifts at the same time.
+
+\subsubsection{Useful facts}
+
+We will start by stating the following facts without providing a proof (prove them if you're curious but in class we skipped it).
+
+\begin{itemize}
+    \item If $c \in \R^+$, then $g(n) = 1 + c + c^2 + \dots + c^n$ is $\Theta(1)$ if $c < 1$, $\Theta(n)$ if $c = 1$, and $\Theta(c^n)$ if $c > 1$.
+    \item In any base $b \ge 2$ the sum of any 3 single-digit numbers is at most 2 digits long.
+    \item $\forall n \in \N$ and any base $b$ there exists a power of $b$ in $[n, bn].$
+\end{itemize}
+
+\begin{notebox}{$\Theta(1)$}
+    When we say that a function is $\Theta(1)$ we mean that it is bounded from above by a constant $C$ (since it is big O of 1)
+    and bounded from below by a constant $c$ (since it is $\Omega(1)$).
+
+    This usually means that $a_n \ne 0$ for all $n$.
 \end{notebox}
 
 \subsection{Addition}
@@ -211,27 +223,33 @@ The algorithm has the following parts:
     \item Sum all the results
 \end{enumerate}
 
-\textbf{Part 1}: Let $(s_n)$ be the sequence of the shifted values of $x$ and $p_n$ be the sequence of the partial products.
+\begin{description}
+    \item[Part 1]
+        Let $(s_n)$ be the sequence of the shifted values of $x$ and $p_n$ be the sequence of the partial products.
 
-\begin{align*}
-    s_0 & = x                         \\
-    s_n & = s_{n-1} \ll 1             \\
-    p_n & = \begin{cases*}
-                0   & \text{if } y[n] = 0 \\
-                s_n & \text{if } y[n] = 1
-            \end{cases*}
-\end{align*}
 
-Choosing the right $p_n$ is $O(1)$, but computing $s_n$ is $O(n)$ hence this part is $O(n)$.
+        \begin{align*}
+            s_0 & = x                         \\
+            s_n & = s_{n-1} \ll 1             \\
+            p_n & = \begin{cases*}
+                        0   & \text{if } y[n] = 0 \\
+                        s_n & \text{if } y[n] = 1
+                    \end{cases*}
+        \end{align*}
 
-Note that we are \say{storing} the result of the previous shifts, so if we want to compute $s_5$, for example, we don't need to compute $s_4$ again.
-Without this optimization the time complexity of this part would be $O(n^2)$.
+        Choosing the right $p_n$ is $O(1)$, but computing $s_n$ is $O(n)$ hence this part is $O(n)$.
 
-\textbf{Part 2}:
-In this step we are computing $\sum_{i = 0}^n p_n$.
-These are sums of numbers of at most $2n$ bits, hence this part is $O(n)$.
+        Note that we are \say{storing} the result of the previous shifts, so if we want to compute $s_5$, for example, we don't need to compute $s_4$ again.
+        Without this optimization the time complexity of this part would be $O(n^2)$.
 
-\textbf{Conclusion}: The time complexity of the multiplication algorithm is $O(n) \cdot O(n) = O(n^2)$.
+    \item[Part 2]
+        In this step we are computing $\sum_{i = 0}^n p_n$.
+        These are sums of numbers of at most $2n$ bits, hence this part is $O(n)$.
+
+    \item[Conclusion]
+        The time complexity of the multiplication algorithm is $O(n) \cdot O(n) = O(n^2)$.
+
+\end{description}
 
 \subsubsection{Egyptian Multiplication}
 
@@ -263,7 +281,9 @@ The complexity of the algorithm is $(O(n) + O(n) + O(n)) \cdot O(n) = O(n^2)$.
 
 Another algorithm we can use to implement multiplication works by dividing each number in half and recursively computing the result.
 
-First we write the two numbers as
+Let $x$ be a binary number of $n$ bits, then $x_{\text{up}}$ and $x_{\text{low}}$ are both binary numbers of $\frac{n}{2}$ bits such that $x = 2^{\frac{n}{2}}x_{\text{up}} + x_{\text{low}}$.
+
+We can use this fact to write the two numbers as
 \begin{align*}
     x & = 2^{\frac{n}{2}}x_{\text{up}} + y_{\text{low}} \\
     y & = 2^{\frac{n}{2}}y_{\text{up}} + y_{\text{low}}
@@ -285,14 +305,17 @@ $$
 However if we keep expanding the recursion we will see that eventually we get to $T(1)$ which is $O(1)$
 and we are left with $n$-many $O(n)$ terms, hence the time complexity of this algorithm is also $O(n^2)$.
 
-\section{Class of 09/02/2024 - Divide and Conquer}
+% Class of 09/02/2024
+\section{Divide and Conquer}
 
-In this class we will see a class of algorithm that
+We will now explore a class of algorithm that
 split the problem in smaller sub-problems which are easier to compute and then combine the results.
+
+The last algorithm we discussed is a very simple example of a divide and conquer algorithm, now we will dive into more complex ones.
 
 \subsection{Karatsuba's algorithm}
 
-This is a multiplication algorithm that is based on the last algorithm we discussed in the last class with some variations.
+This is a multiplication algorithm that is based on the last algorithm we discussed with some variations.
 
 The algorithm takes inspiration from the multiplication of two complex numbers:
 \begin{align*}
@@ -306,7 +329,7 @@ Applying this to the multiplication of two binary numbers we get
     + 2^\frac{n}{2}((x_{\text{up}} + x_{\text{low}})(y_{\text{up}} + y_{\text{low}}) - x_{\text{up}}y_{\text{up}} - x_{\text{low}}y_{\text{low}}) + x_{\text{low}}y_{\text{low}}
 \end{align*}
 
-By doing this we are performing 3 multiplications of half the size and 4 additions.
+By doing this we are performing only 3 unique multiplications of half the size and 4 additions.
 Since we saw how additions are faster than multiplications we can expect this algorithm to be faster than the previous one.
 
 $$
@@ -346,7 +369,7 @@ hence proving that the algorithm is $O(n^{\log_{2}3}) \sim O(n^{1.58})$.
 \subsection{The master theorem}
 
 This theorem helps us to compute the time complexity of divide and conquer algorithms.
-The proof of the theorem is quite complex and, despite being written here, it is not as important as understanding the statement.
+The proof of the theorem can be quite confusing and, despite being written here, it is not as important as understanding the statement.
 
 \underline{Statement}: If $a > 0, b > 1, d \ge 0$, $n$ is a power of $b$, and
 $T(n)$ is defined by induction as
@@ -407,9 +430,9 @@ Then
     % TODO: complete the proof with picture and book
 \end{proof}
 
-\subsection{Introduction to sorting algorithms}
+\section{Introduction to sorting algorithms}
 
-\subsubsection{Comparison based sorting}
+\subsection{Comparison based sorting}
 
 Every comparison-based sorting algorithm
 must do $\Omega(n \log n)$ comparison to sort $n$ distinct elements in the worst case.
@@ -424,7 +447,7 @@ The $\log_2$ comes from the fact that each comparison we are making a choice, wh
 each one with half the options available for the next permutation.
 Since we are looking for the worst outcome we have that we stop after $\log_2$ of the number we started with.
 
-\subsubsection{Sorting without comparisons}
+\subsection{Sorting without comparisons}
 
 This is kinda surprising but it is actually possible if we have some other information about the input we are sorting.
 
@@ -434,7 +457,7 @@ This is a very fast algorithm compared to other generic sorting and takes $O(n)$
 
 Other examples of sorting algorithms that don't use comparisons are \textbf{radix sort} and \textbf{bucket sort}.
 
-\subsection{Finding the median}
+\section{Finding the median}
 
 In general we can sort the list and find the median like that, which would be $O(n \log n)$.
 It turns out that we can do better than that.
@@ -447,7 +470,7 @@ We will solve the more general problem that looks like this:
 
 In particular if $k = \frac{|S|}{2}$ we have that $k$ is the median.
 
-\subsubsection{Description of the algorithm}
+\subsection{Description of the algorithm}
 
 To do so we will use a recursion based algorithm:
 
@@ -467,7 +490,7 @@ To do so we will use a recursion based algorithm:
           \end{enumerate}
 \end{enumerate}
 
-\subsubsection{The choice of V}
+\subsection{The choice of V}
 
 To calculate the time complexity of this algorithm we first have to choose a good $V$.
 This is a hard task, because the \say{best} $V$ would be the median, but that's exactly what we are trying to find;
@@ -528,12 +551,12 @@ We have
     such as the \textbf{median of medians} algorithm.
 \end{notebox}
 
-\section{Class of 13/02/2024 - Graphs}
+\section{Introduction to Graphs}
 
 This week we will be working on graphs, this is referenced in chapter 3 of the book.
 
-\begin{center}
-
+\begin{figure}[H]
+    \centering
     \begin{tikzpicture}
         \node[draw, circle] (A) at (0, 0) {A};
         \node[draw, circle] (B) at (2, 0) {B};
@@ -554,8 +577,9 @@ This week we will be working on graphs, this is referenced in chapter 3 of the b
         \draw (C) -- (G);
         \draw (H) -- (C);
     \end{tikzpicture}
-    \captionof{figure}{An example of a graph} \label{fig:graph}
-\end{center}
+    \caption{figure}{An example of a graph} \label{fig:graph}
+\end{figure}
+
 
 Graphs can be useful to represent a lot of different things,
 for example relationships, networks, maps, tournaments, etc.
@@ -604,53 +628,51 @@ These are some other useful definitions we will use:
 
 \subsubsection{Adjacency matrix}
 
-\begin{bluebox}{Definition}
-    Let $G = (V, E)$ be a graph with $|V| = n$.
+\textbf{\underline{Definition} (adjacency matrix)}:
+Let $G = (V, E)$ be a graph with $|V| = n$.
 
-    An \textbf{adjacency matrix} is a $|V| \times |V|$ matrix $A$ where
-    $$
-        a_{ij} = \begin{cases}
-            1 & \text{if } (i, j) \in E    \\
-            0 & \text{if } (i, j) \notin E
-        \end{cases}
-    $$
-\end{bluebox}
+An \textbf{adjacency matrix} is a $|V| \times |V|$ matrix $A$ where
+$$
+    a_{ij} = \begin{cases}
+        1 & \text{if } (i, j) \in E    \\
+        0 & \text{if } (i, j) \notin E
+    \end{cases}
+$$
 
 We want to represent the following graph using an adjacency matrix:
 
-\begin{absolutelynopagebreak}
-    \begin{center}
-        \begin{tikzpicture}
-            \node[draw, circle] (A) at (0, 2) {1};
-            \node[draw, circle] (B) at (2, 2) {2};
-            \node[draw, circle] (C) at (0, 0) {3};
-            \node[draw, circle] (D) at (2, 0) {4};
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (0, 2) {1};
+        \node[draw, circle] (B) at (2, 2) {2};
+        \node[draw, circle] (C) at (0, 0) {3};
+        \node[draw, circle] (D) at (2, 0) {4};
 
-            \draw (A) -- (B);
-            \draw (A) -- (C);
-            \draw (A) -- (D);
-        \end{tikzpicture}
-        \captionof{figure}{An example graph} \label{fig:repr:graph1}
-    \end{center}
-\end{absolutelynopagebreak}
+        \draw (A) -- (B);
+        \draw (A) -- (C);
+        \draw (A) -- (D);
+    \end{tikzpicture}
+    \caption{An example graph}
+    \label{fig:repr:graph1}
+\end{figure}
 
 We can represent this graph using the following adjacency matrix:
 
-\begin{absolutelynopagebreak}
-    \begin{center}
-        $$
-            \begin{bytefield}[bitwidth=1.25em]{4}
-                \bitheader{0,1,2,3} \\
-                \bitboxes{1}{0111} \\
-                \bitboxes{1}{1000} \\
-                \bitboxes{1}{1000} \\
-                \bitboxes{1}{1000} \\
-            \end{bytefield}
-        $$
-        \captionof{figure}{The adjacency matrix of the graph in (\ref{fig:repr:graph1})}
-        \label{fig:repr:adjmatrix1}
-    \end{center}
-\end{absolutelynopagebreak}
+\begin{figure}[H]
+    \centering
+    $$
+        \begin{bytefield}[bitwidth=1.25em]{4}
+            \bitheader{0,1,2,3} \\
+            \bitboxes{1}{0111} \\
+            \bitboxes{1}{1000} \\
+            \bitboxes{1}{1000} \\
+            \bitboxes{1}{1000} \\
+        \end{bytefield}
+    $$
+    \caption{The adjacency matrix of the graph in (\ref{fig:repr:graph1})}
+    \label{fig:repr:adjmatrix1}
+\end{figure}
 
 Using this representation we can easily check if two vertices are connected ($O(1)$) but we need a lot of space to store it ($O(|V|^2)$).
 
@@ -661,28 +683,26 @@ Adjacency matrices can be useful can be useful since we can perform linear algeb
 
 This is a more space efficient way to represent a graph, especially if the graph is sparse (meaning it has few edges and a lot of nodes).
 
-\begin{bluebox}{Definition}
-    Let $G = (V, E)$ be a graph with $|V| = n$.
+\textbf{\underline{Definition} (adjacency list)}:
+Let $G = (V, E)$ be a graph with $|V| = n$.
 
-    An \textbf{adjacency list} is a list of $n$ lists where the $i$-th list contains all the vertices adjacent to the $i$-th vertex.
-\end{bluebox}
+An \textbf{adjacency list} is a list of $n$ lists where the $i$-th list contains all the vertices adjacent to the $i$-th vertex.
 
 \textbf{Example}: The graph in (\ref{fig:repr:graph1}) can be represented using the following adjacency list:
 
-\begin{absolutelynopagebreak}
-    \begin{center}
-        \begin{tabular}{c|c}
-            Vertex & Adjacent vertices \\
-            \hline
-            1      & 2, 3, 4           \\
-            2      & 1                 \\
-            3      & 1                 \\
-            4      & 1
-        \end{tabular}
-        \captionof{figure}{The adjacency list of the graph in (\ref{fig:repr:graph1})}
-        \label{fig:repr:adjlist1}
-    \end{center}
-\end{absolutelynopagebreak}
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{c|c}
+        Vertex & Adjacent vertices \\
+        \hline
+        1      & 2, 3, 4           \\
+        2      & 1                 \\
+        3      & 1                 \\
+        4      & 1
+    \end{tabular}
+    \caption{The adjacency list of the graph in (\ref{fig:repr:graph1})}
+    \label{fig:repr:adjlist1}
+\end{figure}
 
 This in practice can be implemented using linked lists: in this case we have a space complexity of $O(|V| + |E|)$ while the time complexity to find if a vertex is connected to another one is $O(|E|)$.
 
@@ -692,20 +712,25 @@ This in practice can be implemented using linked lists: in this case we have a s
 
 We can use the following table to summarize the two representations:
 
-\begin{center}
-    \begin{tabular}{c|c|c|c}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ |c|c|c|c| }
+        \hline
                & space          & $(u, v) \in E$ & all neighbors \\
         \hline
         matrix & $O(|V|^2)$     & $O(1)$         & $O(|V|)$      \\
-        list   & $O(|V| + |E|)$ & $O(d(v))$      & $O(d(v))$
+        list   & $O(|V| + |E|)$ & $O(d(v))$      & $O(d(v))$     \\
+        \hline
     \end{tabular}
-    \captionof{table}{Comparison of graph representations}
+    \caption{Comparison of graph representations}
     \label{tab:graphrepr}
-\end{center}
+\end{table}
 
-\subsection{Exploring a graph - Depth First Search (DFS)}
+\section{Depth First Search (DFS)}
 
 In this section we will look at algorithms to explore a graph.
+
+\subsection{Definition}
 
 We setup the algorithm like this:
 
@@ -740,18 +765,16 @@ The actual algorithm is as follows:
 
 Then we call \texttt{explore} on any vertex of $G$ and let the function traverse the graph.
 
-\section{Class of 14/02/2024 - DFS continued}
-
-\subsection{Formal statement}
+\subsection{Proof of correctness}
 
 We can now state the algorithm formally:
 
-\underline{Statement}: Let $G = (V, E)$ be a graph and $v \in V$.
+\textbf{\underline{Statement} (DFS)}: Let $G = (V, E)$ be a graph and $v \in V$.
 The algorithm \texttt{explore(G, v)} visits all the vertices of $G$ that are reachable from $v$.
 
 This is equivalent to
 
-\underline{Statement}: $v$ can reach $u$ $\iff$ \texttt{visited[u]} is \texttt{True} after completing \texttt{explore(G, v)}.
+\textbf{\underline{Statement} (DFS)}: $v$ can reach $u$ $\iff$ \texttt{visited[u]} is \texttt{True} after completing \texttt{explore(G, v)}.
 
 \begin{proof}
     We prove each implication separately:
@@ -768,6 +791,8 @@ This is equivalent to
             This is a contradiction, by the way the algorithm is defined, since $w$ is a neighbor of $z$ and it is not visited we visit it.
     \end{description}
 \end{proof}
+
+\subsubsection{More than one connected component}
 
 By the definition of the algorithm we have that it doesn't work if we have a graph with more than 1 connected component.
 
@@ -807,13 +832,15 @@ Combining the two parts we have that the time complexity of the algorithm is $O(
 
 \subsection{About the pre and post variables}
 
-\underline{Remark}: For every node $v$ we have that \texttt{pre[v]} $<$ \texttt{post[v]}.
+\textbf{\underline{Remark} (pre and post)}:
+For every node $v$ we have that \texttt{pre[v]} $<$ \texttt{post[v]}.
 
 \begin{proof}
     This is obvious from the definition of the algorithm.
 \end{proof}
 
-\underline{Theorem}: For every node $v$ and $u$, the intervals $[\text{pre}(v), \text{post}(v)]$ and $[\text{pre}(u), \text{post}(u)]$ are either disjoint or one is contained in the other.
+\textbf{\underline{Theorem} (pre and post intervals)}:
+For every node $v$ and $u$, the intervals $[\text{pre}(v), \text{post}(v)]$ and $[\text{pre}(u), \text{post}(u)]$ are either disjoint or one is contained in the other.
 
 \begin{proof}
     We have two cases:
@@ -860,9 +887,10 @@ We can modify the algorithm to count the number of connected components in the g
 In this way, at the end of the procedure the variable \texttt{connected\_component} will contain the number of connected components in the graph
 and the variable \texttt{cc} will contain the connected component of each node.
 
-\section{Class of 15/02/2024 - DFS continued}
+% Class of 15/02/2024
+\section{DFS on directed graphs}
 
-\subsection{DFS-Tree}
+\subsection{DFS tree}
 
 We can introduce a new variable, initialized as
 
@@ -873,11 +901,10 @@ We can introduce a new variable, initialized as
 \end{minted}
 
 When exploring the graph we set this variable to the node that called the current one.
-In this way we can build a tree that represents the exploration of the graph.
+In this way we can build a tree that represents the exploration of the graph, this tree is called the \textbf{DFS tree}.
 
-\subsection{Directed graphs}
-
-\begin{center}
+\begin{figure}[H]
+    \centering
     \begin{tikzpicture}
         \node[draw, circle] (A) at (0, 0) {A};
         \node[draw, circle] (B) at (-2, 0) {B};
@@ -901,15 +928,17 @@ In this way we can build a tree that represents the exploration of the graph.
         \draw[->, very thick] (F) -- (G);
         \draw[->, very thick] (H) -- (G);
     \end{tikzpicture}
-    \captionof{figure}{An example of a directed graph} \label{fig:directedgraph}
-\end{center}
+    \caption{An example of a directed graph}
+    \label{fig:directedgraph}
+\end{figure}
 
 By looking at the graph in (\ref{fig:directedgraph}) and performing a DFS in our head we can see that, starting from $A$, we can reach all the other nodes.
 We also note that this is not true for every node, for example $G$ cannot reach any other node.
 
 If we construct the DFS tree of this graph starting from $A$ and breaking ties in alphabetical order we get the following tree:
 
-\begin{center}
+\begin{figure}[H]
+    \centering
     \begin{tikzpicture}
         \node[draw, circle] (A) at (0, 0) {A};
         \node[draw, circle] (B) at (-2, -2) {B};
@@ -928,8 +957,9 @@ If we construct the DFS tree of this graph starting from $A$ and breaking ties i
         \draw[->, very thick] (F) -- (G);
         \draw[->, very thick] (E) -- (H);
     \end{tikzpicture}
-    \captionof{figure}{The DFS tree of the graph in (\ref{fig:directedgraph})} \label{fig:dfs-tree}
-\end{center}
+    \caption{The DFS tree of the graph in (\ref{fig:directedgraph})}
+    \label{fig:dfs-tree}
+\end{figure}
 
 We can define the following for DFS trees:
 
@@ -939,7 +969,8 @@ We can define the following for DFS trees:
     \item[Cross edge] an edge of the original graph that goes from a node to a node that is neither an ancestor nor a descendant.
 \end{description}
 
-\begin{center}
+\begin{figure}[H]
+    \centering
     \begin{tikzpicture}
         \node[draw, circle] (A) at (0, 0) {A};
         \node[draw, circle] (B) at (-2, -2) {B};
@@ -972,7 +1003,7 @@ We can define the following for DFS trees:
 
     \end{tikzpicture}
     \captionof{figure}{The DFS tree of the graph in (\ref{fig:directedgraph}) with forward (red), back (blue), and cross edges (green)} \label{fig:dfs-tree-fbg}
-\end{center}
+\end{figure}
 
 We note that if we consider the pre and post variable for each node as an \say{interval},
 we can see that nodes connected with a forward edge have the interval of the children contained into the interval of the parent,
@@ -983,7 +1014,7 @@ and nodes connected with a cross edge have disjoint intervals.
 
 \subsubsection{Edges in undirected graphs}
 
-\underline{Statement}: In a DFS of an undirected graph, every edge is either a tree edge or a back edge.
+\textbf{\underline{Statement}}: In a DFS of an undirected graph, every edge is either a tree edge or a back edge.
 
 \begin{proof}
     Let $\{u, v\}$ be an edge of $G$ and suppose that $\text{pre}(u) < \text{pre}(v)$, hence $u$ is discovered before $v$.
@@ -1000,7 +1031,7 @@ and nodes connected with a cross edge have disjoint intervals.
 
 \subsubsection{Cycles and back edges}
 
-\underline{Statement}: A directed graph has a cycle $\iff$ a DFS of the graph has at least one back edge.
+\textbf{\underline{Statement}}: A directed graph has a cycle $\iff$ a DFS of the graph has at least one back edge.
 
 \begin{proof}
     We prove each implication separately:
@@ -1013,20 +1044,20 @@ and nodes connected with a cross edge have disjoint intervals.
     \end{description}
 \end{proof}
 
-\subsection{Topological Sort}
+\section{Topological sort}
 
-\underline{Definition}: If $G = (V, E)$ is a directed graph we say that an ordered list $L$ of the vertices in $V$ is a \textbf{topological sort} of $G$ if for every edge $(u, v) \in E$, the vertex $u$ comes before $v$ in $L$.
+\textbf{\underline{Definition} (topological sort)}: If $G = (V, E)$ is a directed graph we say that an ordered list $L$ of the vertices in $V$ is a topological sort of $G$ if for every edge $(u, v) \in E$, the vertex $u$ comes before $v$ in $L$.
 
 \underline{Example}: Consider the graph in Figure (\ref{fig:directedgraph}). A topological sort of this graph is $[A, C, D, B, E, F, H, G]$.
 Note that topological sorts are not unique.
 
-\section{Class of 16/02/2024 - Topological sort continued}
+% Class of 16/02/2024
 
 \subsection{Cycles and topological sorts}
 
 \subsubsection{Theorem: cycle implies no topological sort}
 
-\underline{Statement}: If a directed graph has a cycle then it has no topological sorts.
+\textbf{\underline{Statement}}: If a directed graph has a cycle then it has no topological sorts.
 
 \begin{proof}
     By contradiction, we assume that $G$ has a topological sort $L$.
@@ -1039,7 +1070,7 @@ Note that topological sorts are not unique.
 
 \subsubsection{Lemma: incoming edges and cycles}
 
-\underline{Statement}: If $G = (V, E)$ is a directed graph in which every vertex has at least one incoming edge, then $G$ has at least one cycle.
+\textbf{\underline{Statement}}: If $G = (V, E)$ is a directed graph in which every vertex has at least one incoming edge, then $G$ has at least one cycle.
 
 \begin{proof}
     Take any vertex $v$ in $V$ and call it $v_{n+1}$, where $n = |V|$.
@@ -1051,7 +1082,7 @@ Note that topological sorts are not unique.
 
 \subsubsection{Theorem: no cycle implies topological sort}
 
-\underline{Statement}: If a directed graph $G$ doesn't contain a cycle,
+\textbf{\underline{Statement}}: If a directed graph $G$ doesn't contain a cycle,
 then it has at least one topological sort.
 
 \begin{proof}
@@ -1098,7 +1129,7 @@ We want to prove that the list $L$ will be a topological sort of the graph $G$ b
 
 Now we formally state and prove this.
 
-\underline{Statement}: $G=(V, E)$ is a directed acyclic graph (DAG). If we run the algorithm \texttt{DFS(G)}, then for every edge $(u, v) \in E$, the call to \texttt{explore(G, u)} will end after the call to \texttt{explore(G, v)}.
+\textbf{\underline{Statement}}: $G=(V, E)$ is a directed acyclic graph (DAG). If we run the algorithm \texttt{DFS(G)}, then for every edge $(u, v) \in E$, the call to \texttt{explore(G, u)} will end after the call to \texttt{explore(G, v)}.
 
 \begin{proof}
     We look at the state of the algorithm when the edge $(u, v)$ is explored.
@@ -1122,20 +1153,23 @@ Now we formally state and prove this.
     In both cases we have our result.
 \end{proof}
 
-This theorem works for any DAG, but not any directed graph is a DAG.
+Note that this theorem only works for DAGs, if we have a graph with cycles then the list $L$ may not be a topological sort.
 
-\subsection{Strongly connected components (SCC)}
+\section{Strongly connected components (SCC)}
 
 \subsubsection{Reverse of a graph}
 
-\underline{Definition}: Given a directed graph $G=(V, E)$,
-the \textbf{reverse} of $G$ is the graph $G^R = (V, E^R)$ where $(u, v) \in E^R \iff (v,u) \in E$.
+\textbf{\underline{Definition} (reverse)}: Given a directed graph $G=(V, E)$,
+the reverse of $G$ is the graph $G^R = (V, E^R)$ where $(u, v) \in E^R \iff (v,u) \in E$.
+
+\subsection{Theorems about SCCs}
 
 \subsubsection{Theorem: component graphs are DAGs}
 
-Let $G$ be a directed graph, then the \textbf{component graph} $G'$ is obtained by grouping all the vertices of a connected components of $G$.
+\textbf{\underline{Definition} (component graph)}:
+Let $G$ be a directed graph, then the component graph $G'$ is obtained by grouping all the vertices of a connected components of $G$.
 
-\underline{Statement}: If $G$ is a directed graph and $G'$ is its component graph, then $G'$ is a directed acyclic graph.
+\textbf{\underline{Statement}}: If $G$ is a directed graph and $G'$ is its component graph, then $G'$ is a directed acyclic graph.
 
 \begin{proof}
     We prove this by contradiction.
@@ -1147,18 +1181,18 @@ Let $G$ be a directed graph, then the \textbf{component graph} $G'$ is obtained 
 
 \subsubsection{Theorem: strongly connected components in the reverse}
 
-\underline{Statement}: Let $G = (V, E)$ be a directed graph and $G^R = (V, E^R)$ its reverse.
+\textbf{\underline{Statement}}: Let $G = (V, E)$ be a directed graph and $G^R = (V, E^R)$ its reverse.
 Then the connected components of $G^R$ are the strongly connected components of $G$.
 
 \begin{proof}
     If we consider $G^R$ we have that the connected components stay connected in the reverse, and they don't get connected to other components since $G'$ is a DAG.
 
-    % TODO: ???? is this formal enough?
+    Note to reader: I don't think this is a formal enough proof. If you come up with a better one please let me know.
 \end{proof}
 
 \subsubsection{Theorem: post numbers in SCCs}
 
-\underline{Statement}: If $C, C'$ are two strongly connected components (SCC) of a directed graph $G$ and there is an edge from a node in $C$ to a node in $C'$, then the highest \texttt{post} number in $C$ is greater than the highest \texttt{post} number in $C'$.
+\textbf{\underline{Statement}}: If $C, C'$ are two strongly connected components (SCC) of a directed graph $G$ and there is an edge from a node in $C$ to a node in $C'$, then the highest \texttt{post} number in $C$ is greater than the highest \texttt{post} number in $C'$.
 
 \begin{proof}
     If DFS visits the component $C$ before $C'$ then all of $C'$ will be visited before we exit $C$.
@@ -1168,7 +1202,7 @@ Then the connected components of $G^R$ are the strongly connected components of 
 
 \subsubsection{Definitions: source and sink}
 
-\underline{Definition}:
+\textbf{\underline{Definition}}:
 \begin{itemize}
     \item Source is a vertex with no incoming edges.
     \item Sink is a vertex with no outgoing edges.
@@ -1178,7 +1212,7 @@ Note that the source will have the highest \texttt{post} number.
 
 Reversing the graph will transform the sources into sinks and vice versa.
 
-\subsubsection{Finding SCCs}
+\subsection{Finding SCCs}
 
 To find SCCs we can use the following algorithm:
 
@@ -1202,12 +1236,13 @@ To find SCCs we can use the following algorithm:
     return SCCs
 \end{minted}
 
-\section{Class of 21/02/2024 - Shortest path}
-
-\subsection{Introduction}
+% Class of 21/02/2024
+\section{Breadth First Search (BFS)}
 
 For this class we had to hand in an assignment,
 you can find my solution in \texttt{cs\_assignment\_1.pdf}.
+
+\subsection{Introduction}
 
 The problem we are going to look at now is how to get from one vertex to another in a graph passing through the fewest number of edges.
 
@@ -1218,7 +1253,7 @@ Let $G = (V, E)$ and $s \in V$ be the start vertex.
 The shortest path distance $d(v)$ from $s$ to $v \in V$ is the minimum number of edges in any path from $s$ to $v$.
 If there is no path from $s$ to $v$ then $d(v) = \infty$.
 
-\subsection{Breadth First Search (BFS)}
+\subsection{Definition of BFS}
 
 This is the algorithm we will use to find the shortest path.
 
@@ -1244,7 +1279,7 @@ It works in the following way:
 
 You can watch the algorithm in action here: \url{https://www.cs.usfca.edu/~galles/visualization/BFS.html}.
 
-\subsubsection{Sidenote: queues}
+\subsubsection{Tools: queues}
 
 For this algorithm we use a \texttt{Queue} data structure.
 
@@ -1258,7 +1293,9 @@ Sometimes \texttt{enqueue} is called \texttt{inject} and \texttt{dequeue} is cal
 
 We say that queues are \textit{FIFO} (First In First Out) data structures.
 
-\subsubsection{Proof of correctness}
+We will look at the implementation of a queue later.
+
+\subsection{Proof of correctness}
 
 \textbf{\underline{Theorem} (correctness of BFS)}: Let $G = (V, E)$ be a graph and $s \in V$.
 Assume the range of distances $d$ from $s$ to all other vertices is $[0, M]$.
@@ -1296,7 +1333,7 @@ Note that since the conditions (1), (2), and (3) have to be true for any $t$ we 
     \end{description}
 \end{proof}
 
-\subsubsection{Time complexity}
+\subsection{Time complexity}
 
 We split the algorithm in parts:
 
@@ -1317,13 +1354,15 @@ For the sake of this course its enough to know that queue both \texttt{enqueue} 
 
 Moreover queues are usually implemented using a linked list, but if you know already the maximum size of the queue you can also use an array which is slightly more efficient.
 
-\subsubsection{Implementation of a queue - if you're curious}
+\subsection{Implementation of a queue - optional}
 
 \begin{warningbox}{Advanced stuff ahead}
     This is not part of the course, but if you are curious you can read on.
 
     The following code snippets are written in C.
 \end{warningbox}
+
+\subsubsection{Linked list implementation}
 
 We will implement a queue using a linked list as underlying data structure.
 
@@ -1371,6 +1410,8 @@ We see that each of the operations do not depend on the length of the queue, hen
 
 Note that in this implementation we have to \texttt{malloc} each node (which is a slow operation) and dereference a pointer (which can also be slow).
 
+\subsubsection{Array implementation}
+
 If we know the maximum size of the queue we can use an array to implement it, which will make the operations even faster.
 
 The idea is that we keep a pointer of the first and last element of the queue and we use an array to store the elements.
@@ -1416,7 +1457,8 @@ If we run out of space at the end of the array we can just cycle back to the beg
 
 We see that the operations are still $O(1)$ but this time we \texttt{malloc} only once and we don't have to dereference any pointers.
 
-\section{Class of 22/02/2024 - Dijkstra's algorithm}
+% Class of 22/02/2024
+\section{Dijkstra's algorithm}
 
 We now consider a graph $G = (V, E)$ and a function $l(u, v) > 0$ that assigns a length to each edge $(u, v) \in E$.
 
@@ -1455,7 +1497,7 @@ For example, we could add new vertices in between each edge, one for each unit o
 
 It is easy to show that this approach would work and it would convert the problem into one we already solved but it is also highly inefficient.
 
-\subsection{Tools: priority queues}
+\subsubsection{Tools: priority queues}
 
 For this algorithm we will need a new data structure: the priority queue.
 
@@ -1465,7 +1507,120 @@ When we dequeue an element we get the one with the highest priority first, no ma
 
 An example of priority queue in real life is the triage in a hospital: the patients are not treated in the order they arrived but in the order of the severity of their condition.
 
-\subsubsection{Implementation with a linked list}
+\subsection{Definition}
+
+Let $G(V, E)$, $s \in V$, and $l(u, v) > 0 \forall (u, v) \in E$. Let $d(v)$ be the length of the shortest path from $s$ to $v$.
+
+\begin{minted}{python}
+    def Dijkstra(G, s):
+        d = {}
+
+        # Setup
+        for v in G.vertices():
+            d[v] = float('inf')
+        d[s] = 0
+
+        # Insert all vertices in the priority queue
+        Q = PriorityQueue(G.vertices())
+        while not Q.is_empty():
+
+            # Get the vertex with the smallest distance
+            u = Q.dequeue()
+            for v in u.neighbors():
+                # We check if we can reach v in a shorter path
+                if d[v] > d[u] + l(u, v):
+                    # If we can, we update the distance of v
+                    d[v] = d[u] + l(u, v)
+
+                    # Save the newfound distance of v in the queue
+                    # by updating its priority
+                    Q.update_priority(v, d[v])
+\end{minted}
+
+\subsubsection{Example}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{assets/computer_science_2/dijsktra.png}
+
+    \caption{An example of a directed graph with weighted edges}
+    \label{fig:weighted_directedgraph}
+\end{figure}
+
+In the graph in Figure (\ref{fig:weighted_directedgraph}) we would start from $A$ which is the start vertex and we apply the algorithm.
+
+We can make a table of the distances at each step of the algorithm:
+
+\begin{table}[H]
+    \center
+    \begin{tabular}{ |c|c|c|c|c|c| }
+        \hline
+        Extracted vertex & A & B          & C          & D          & E          \\
+        \hline
+        Setup            & 0 & $\infty$   & $\infty$   & $\infty$   & $\infty$   \\
+        A                & 0 & \textbf{4} & \textbf{2} & $\infty$   & $\infty$   \\
+        C                & 0 & \textbf{3} & 2          & \textbf{6} & \textbf{7} \\
+        B                & 0 & 3          & 2          & \textbf{5} & \textbf{6} \\
+        D                & 0 & 3          & 2          & 5          & 6          \\
+        E                & 0 & 3          & 2          & 5          & 6          \\
+        \hline
+    \end{tabular}
+    \caption{The distances at each step of the algorithm}
+    \label{tab:dijsktra_distances}
+\end{table}
+
+In the Table (\ref{tab:dijsktra_distances}) we have highlighted the vertices that have been updated.
+
+At each step we extract the vertex with the smallest distance from the queue and we update the distances of its neighbors if we can reach them in a shorter path.
+
+\subsubsection{Negative edges}
+
+Sometimes having a negative length edge can be useful, therefore we need to adjust the algorithm to take them into account.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node[draw, circle] (A) at (2, 2) {A};
+        \node[draw, circle] (B) at (4, 2) {B};
+        \node[draw, circle] (C) at (2, 0) {C};
+        \node[draw, circle] (D) at (4, 0) {D};
+        \node[draw, circle] (E) at (0, 0) {E};
+        \node[draw, circle] (F) at (6, 0) {F};
+
+        \draw[thick] (A) -- node[above] {1} (B);
+        \draw[thick] (A) -- node[left] {1} (C);
+        \draw[thick] (B) -- node[right] {-5} (D);
+        \draw[thick] (C) -- node[below] {1} (D);
+        \draw[thick] (D) -- node[below] {1} (F);
+        \draw[thick] (C) -- node[below] {1} (E);
+    \end{tikzpicture}
+
+    \caption{An example of a graph with negative edges}
+    \label{fig:negative_edges}
+\end{figure}
+
+In the graph in Figure (\ref{fig:negative_edges}) we have a cycle containing a negative edge, which means that we can go around the cycle as many times as we want and we will always decrease the distance.
+
+This is a problem which is not solvable with Dijkstra's algorithm, a graph with \textbf{negative cycles} is not solvable with this algorithm.
+
+Moreover, even if there was no negative cycle but still some negative edges, the algorithm would still not work correctly because it wouldn't be able to find the shortest path.
+
+Despite this flaw we can still use Dijkstra's algorithm in most cases, as long as there are no negative edges.
+
+\subsection{Time complexity}
+
+We analyze each step of the algorithm:
+
+\begin{itemize}
+    \item The setup part of the algorithm is done once
+    \item The check to determine whether the queue is empty is done $|V|$ times
+    \item Finding the right vertex to dequeue is done $|V|$ times
+    \item Updating the priority of the neighbors of the dequeued vertex is done $|E|$ times
+\end{itemize}
+
+Then, we have to take into account the time complexity of the priority queue operations which vary depending on the implementation.
+
+\subsubsection{With a linked list}
 
 This is the simplest implementation and the original one that Dijkstra used.
 
@@ -1486,7 +1641,7 @@ This is the simplest implementation and the original one that Dijkstra used.
 
 Note that these operations have these time complexities only if applied to this specific algorithm, in general they can be different.
 
-\subsubsection{Implementation with a binary heap}
+\subsubsection{With a binary heap}
 
 First we need to define a \textit{full binary tree}.
 
@@ -1584,119 +1739,7 @@ We can now compile a table with the time complexity of each operation of a min-h
           When we update a priority we just need to swap the node with its parent until the tree is a min-heap again, which is also $O(\log n)$.
 \end{itemize}
 
-\subsection{Dijkstra's algorithm}
-
-\subsubsection{Definition}
-
-Let $G(V, E)$, $s \in V$, and $l(u, v) > 0 \forall (u, v) \in E$. Let $d(v)$ be the length of the shortest path from $s$ to $v$.
-
-\begin{minted}{python}
-    def Dijkstra(G, s):
-        d = {}
-
-        # Setup
-        for v in G.vertices():
-            d[v] = float('inf')
-        d[s] = 0
-
-        # Insert all vertices in the priority queue
-        Q = PriorityQueue(G.vertices())
-        while not Q.is_empty():
-
-            # Get the vertex with the smallest distance
-            u = Q.dequeue()
-            for v in u.neighbors():
-                # We check if we can reach v in a shorter path
-                if d[v] > d[u] + l(u, v):
-                    # If we can, we update the distance of v
-                    d[v] = d[u] + l(u, v)
-
-                    # Save the newfound distance of v in the queue
-                    # by updating its priority
-                    Q.update_priority(v, d[v])
-\end{minted}
-
-\subsubsection{Example}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.4\textwidth]{assets/computer_science_2/dijsktra.png}
-
-    \caption{An example of a directed graph with weighted edges}
-    \label{fig:weighted_directedgraph}
-\end{figure}
-
-In the graph in Figure (\ref{fig:weighted_directedgraph}) we would start from $A$ which is the start vertex and we apply the algorithm.
-
-We can make a table of the distances at each step of the algorithm:
-
-\begin{center}
-    \begin{tabular}{ |c|c|c|c|c|c| }
-        \hline
-        Extracted vertex & A & B          & C          & D          & E          \\
-        \hline
-        Setup            & 0 & $\infty$   & $\infty$   & $\infty$   & $\infty$   \\
-        A                & 0 & \textbf{4} & \textbf{2} & $\infty$   & $\infty$   \\
-        C                & 0 & \textbf{3} & 2          & \textbf{6} & \textbf{7} \\
-        B                & 0 & 3          & 2          & \textbf{5} & \textbf{6} \\
-        D                & 0 & 3          & 2          & 5          & 6          \\
-        E                & 0 & 3          & 2          & 5          & 6          \\
-        \hline
-    \end{tabular}
-    \captionof{table}{The distances at each step of the algorithm}
-    \label{tab:dijsktra_distances}
-\end{center}
-
-In the Table (\ref{tab:dijsktra_distances}) we have highlighted the vertices that have been updated.
-
-At each step we extract the vertex with the smallest distance from the queue and we update the distances of its neighbors if we can reach them in a shorter path.
-
-\subsubsection{Negative edges}
-
-Sometimes having a negative length edge can be useful, therefore we need to adjust the algorithm to take them into account.
-
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        \node[draw, circle] (A) at (2, 2) {A};
-        \node[draw, circle] (B) at (4, 2) {B};
-        \node[draw, circle] (C) at (2, 0) {C};
-        \node[draw, circle] (D) at (4, 0) {D};
-        \node[draw, circle] (E) at (0, 0) {E};
-        \node[draw, circle] (F) at (6, 0) {F};
-
-        \draw[thick] (A) -- node[above] {1} (B);
-        \draw[thick] (A) -- node[left] {1} (C);
-        \draw[thick] (B) -- node[right] {-5} (D);
-        \draw[thick] (C) -- node[below] {1} (D);
-        \draw[thick] (D) -- node[below] {1} (F);
-        \draw[thick] (C) -- node[below] {1} (E);
-    \end{tikzpicture}
-
-    \caption{An example of a graph with negative edges}
-    \label{fig:negative_edges}
-\end{figure}
-
-In the graph in Figure (\ref{fig:negative_edges}) we have a cycle containing a negative edge, which means that we can go around the cycle as many times as we want and we will always decrease the distance.
-
-This is a problem which is not solvable with Dijkstra's algorithm, a graph with \textbf{negative cycles} is not solvable with this algorithm.
-
-Moreover, even if there was no negative cycle but still some negative edges, the algorithm would still not work correctly because it wouldn't be able to find the shortest path.
-
-Despite this flaw we can still use Dijkstra's algorithm in most cases, as long as there are no negative edges.
-
-\subsubsection{Time complexity}
-
-We analyze each step of the algorithm:
-
-\begin{itemize}
-    \item The setup part of the algorithm is done once
-    \item The check to determine whether the queue is empty is done $|V|$ times
-    \item Finding the right vertex to dequeue is done $|V|$ times
-    \item Updating the priority of the neighbors of the dequeued vertex is done $|E|$ times
-\end{itemize}
-
-Then, we have to take into account the time complexity of the priority queue operations which vary depending on the implementation.
+\subsubsection{Summarizing}
 
 \begin{table}[H]
     \centering
@@ -1721,7 +1764,9 @@ Summing up the time complexities we find
     \item The binary heap implementation has a total time complexity of $O(|V| \log |V| + |E| \log |V|)$.
 \end{itemize}
 
-\subsubsection{Proof of correctness}
+\subsection{Proof of correctness}
+
+This is a very long and complex proof, it will not be asked during the exam, it was done in class to show how to approach proofs like this.
 
 To make the proof easier we will use the following definitions:
 \begin{itemize}
@@ -1847,7 +1892,8 @@ Moreover, at the end of the execution, all nodes are black, and the invariants i
     \end{description}
 \end{proof}
 
-\section{Class of 01/03/2024 - Kruskal's algorithm}
+% Class of 01/03/2024
+\section{Kruskal's algorithm}
 
 \subsection{Minimum spanning tree}
 
@@ -1877,11 +1923,9 @@ Moreover, at the end of the execution, all nodes are black, and the invariants i
     \label{fig:minimum_spanning_tree}
 \end{figure}
 
-\subsection{Kruskal's algorithm}
+\subsection{Definition}
 
 This algorithm is used to find the minimum spanning tree of a graph.
-
-\subsubsection{Definition}
 
 Let $G(V,E)$ be a connected undirected graph and $c: E \to \N^+$ be a function that assigns a cost to each edge.
 
@@ -1950,6 +1994,8 @@ The algorithm will connect the vertices starting from the cheapest ones.
 
 This type of algorithm is called a \textit{greedy algorithm} because it always chooses the best option at each step.
 This is not always the best solution to the problem but in this case it gets the job done.
+
+\subsection{Theorems and proofs}
 
 \subsubsection{Theorem: solutions are trees}
 
@@ -2028,13 +2074,13 @@ This is quite a tricky thing to prove and we will proceed by saying that there e
     This is true by the definition of the algorithm itself, if $S \subsetneqq T^*$ then the cost of $T^*$ would be higher than the cost of $S$, but this is a contradiction of the fact that $T^*$ is a minimum spanning tree.
 \end{proof}
 
-\subsection{Prim's algorithm}
+\section{Prim's algorithm}
 
 This is another greedy algorithm that can be used to find the best path from one vertex to another.
 
 This is very similar to Dijkstra's algorithm, but we are keeping track on how to get from one vertex to another instead of just the distance.
 
-\subsubsection{Definition}
+\subsection{Definition}
 
 Let $G(V, E)$ be a connected undirected graph, $w: E \to \N^+$ be a function that assigns a weight to each edge, and $s \in V$ be the starting vertex.
 

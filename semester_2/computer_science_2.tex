@@ -2078,7 +2078,7 @@ This is quite a tricky thing to prove and we will proceed by saying that there e
 
 This is another greedy algorithm that can be used to find the best path from one vertex to another.
 
-This is very similar to Dijkstra's algorithm, but we are keeping track on how to get from one vertex to another instead of just the distance.
+This is very similar to Dijkstra's algorithm, but we mainly focus on the weight of the edges and not on the distance from the starting vertex.
 
 \subsection{Definition}
 
@@ -2101,6 +2101,8 @@ The algorithm works as follows:
         while not Q.is_empty():
             u = Q.dequeue()
             for v in u.neighbors():
+                # In this algorithm we check the weight of the edge
+                # not the distance from the starting vertex
                 if c[v] > w(u, v):
                     c[v] = w(u, v)
                     P[v] = u # Set the predecessor of v to be u

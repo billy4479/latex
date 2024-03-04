@@ -22,6 +22,7 @@
 \usepackage{tikz}
 \usepackage{enumitem}
 \usepackage{fancyhdr}
+\usepackage{subfig}
 
 \pagestyle{fancy}
 \chead{Giacomo Ellero - 3243701}
@@ -52,43 +53,74 @@
 \section*{Exercise 1}
 
 \begin{enumerate}
-    \item According to Kruskal's algorithm, the first edge to be added to the MST is the edge with the smallest weight, therefore $e$, being an edge of minimum weight, will be the first edge to be added to some MST, depending on the order in which the edges are considered.
-    \item If we decrease the weight of $e$ it will still be the added to the MST, since it will still be the edge with the smallest weight. Moreover, since the cost of $T$ is the sum of the weights of the edges in $T$, the cost of $T$ will decrease because the weight of $e$ is part of the sum. Note that the fact that $c(e)$ decreased will not affect the other edges in $T$ because $e$ was going to be added to $T$ anyway.
-    \item According to Kruskal's algorithm, we sort the list of edges by increasing weight and then we add the edges to the MST one by one as described by the algorithm. If the costs of the edges are not unique (i.e. $\exists, (u, v) \neq (u', v') \in E$ such that $C = c(u, v) = c(u', v')$), then it is possible that the MST is not unique because when get to the step where we add edges of cost $C$ the algorithm, in some cases, could choose to add $(u, v)$ instead of $(u', v')$ and vice versa. This is not always the case though, for example in the graph in Figure \ref{fig:counterexample} the MST is unique even though there are two edges of the same weight.
-    \item We can use a modified version of Dijkstra's algorithm, called Prim's algorithm, to find the MST of a graph. To prove that the result of this algorithm is a MST we proceed as follows:
-          \begin{enumerate}[label=\roman*)]
-              \item
-                    The result of the algorithm is a tree since it is undirected because the graph is undirected to begin with, it is connected because Dijkstra's algorithm will explore all the edges of the same connected component (therefore the only way to get a tree that is not spanning is to have more than one connected component to begin with), and it is acyclic because if there was to be a cycle then Dijkstra would choose the edge that costs less and discard the other one and update the costs accordingly.
-              \item
-                    Note that since the graph is undirected the result of Dijkstra's algorithm (assuming that costs are unique) will be the same regardless of the starting vertex.
-                    Then the result is also minimal because if it wasn't there would exist a path $P^* \notin T$ from $u$ to $v$ such that the path $P \in T$ from $u$ to $v$ that was found by the algorithm would have a cost $c(P) > c(P^*)$, but this is a contradiction because running Dijkstra's algorithm starting from $u$ would have found $P^*$ instead of $P$.
-          \end{enumerate}
+    \item True. According to Kruskal's algorithm, the first edge to be added to the MST is the edge with the smallest weight, therefore $e$, being an edge of minimum weight, will be the first edge to be added to some MST, depending on the order in which the edges are considered.
+    \item True. If we decrease the weight of $e$ it will still be the added to the MST, since it will still be the edge with the smallest weight. Moreover, since the cost of $T$ is the sum of the weights of the edges in $T$, the cost of $T$ will decrease because the weight of $e$ is part of the sum. Note that the fact that $c(e)$ decreased will not affect the other edges in $T$ because $e$ was going to be added to $T$ anyway.
+    \item False. According to Kruskal's algorithm, we sort the list of edges by increasing weight and then we add the edges to the MST one by one as described by the algorithm. If the costs of the edges are not unique (i.e. $\exists, (u, v) \neq (u', v') \in E$ such that $C = c(u, v) = c(u', v')$), then it is possible that the MST is not unique because when get to the step where we add edges of cost $C$ the algorithm, in some cases, could choose to add $(u, v)$ instead of $(u', v')$ and vice versa. This is not always the case though, for example in the graph in Figure \ref{fig:counterexample_1} the MST is unique even though there are two edges of the same weight.
+
+          \begin{figure}[H]
+              \centering
+
+              \begin{tikzpicture}
+                  \node[draw, circle] (A) at (0, 0) {A};
+                  \node[draw, circle] (B) at (2, 0) {B};
+                  \node[draw, circle] (C) at (2, 2) {C};
+                  \node[draw, circle] (D) at (4, 2) {D};
+                  \node[draw, circle] (E) at (4, 0) {E};
+                  \node[draw, circle] (F) at (6, 0) {F};
+
+
+                  \draw (A) -- node[above] {3} (B);
+                  \draw (B) -- node[left] {1} (C);
+                  \draw (B) -- node[below] {25} (E);
+                  \draw (C) -- node[above] {1} (D);
+                  \draw (D) -- node[right] {1} (E);
+                  \draw (E) -- node[above] {25} (F);
+
+              \end{tikzpicture}
+
+              \caption{Counterexample, a graph with two edges of the same weight that has a unique MST.}
+              \label{fig:counterexample_1}
+          \end{figure}
+
+    \item False. We can use the graph in Figure \ref{fig:counterexample_2} as a counterexample. The idea of Dijkstra's algorithm is to find the shortest path from a source vertex to all the other vertices in the graph, not the best way to connect all vertices of the graph.
+          Indeed the result that Dijkstra's algorithm gives depends on the choice of the start vertex, and in the counterexample provided below, starting from $S$ doesn't yield the MST.
+
+          Note however that Dijkstra's algorithm can be modified into Prim's algorithm which is a similar algorithm which can be used to find the MST.
+          \begin{figure}[H]
+              \centering
+
+              \subfloat[\centering Actual MST (green)]{{
+                          \begin{tikzpicture}
+                              \node[draw, circle] (S) at (0, 0) {S};
+                              \node[draw, circle] (A) at (1, 1) {A};
+                              \node[draw, circle] (B) at (2, 0) {B};
+                              \node[draw, circle] (C) at (3.5, 0) {C};
+
+
+                              \draw[thick, green] (S) -- node[midway, anchor=south east] {2} (A);
+                              \draw[thick, green] (A) -- node[midway, anchor=south west] {4} (B);
+                              \draw[thick, green] (B) -- node[above] {3} (C);
+                              \draw (S) to [bend right=30] node[below] {5} (B);
+                          \end{tikzpicture}
+                      }}\qquad
+              \subfloat[\centering Dijkstra's choice (red)]{{
+                          \begin{tikzpicture}
+                              \node[draw, circle] (S) at (0, 0) {S};
+                              \node[draw, circle] (A) at (1, 1) {A};
+                              \node[draw, circle] (B) at (2, 0) {B};
+                              \node[draw, circle] (C) at (3.5, 0) {C};
+
+
+                              \draw[thick, red] (S) -- node[midway, anchor=south east] {2} (A);
+                              \draw (A) -- node[midway, anchor=south west] {4} (B);
+                              \draw[thick, red] (B) -- node[above] {3} (C);
+                              \draw[thick, red] (S) to [bend right=30] node[below] {5} (B);
+                          \end{tikzpicture}
+                      }}
+              \caption{Counterexample, a graph where Dijkstra's algorithm doesn't find the MST.}
+              \label{fig:counterexample_2}
+          \end{figure}
 \end{enumerate}
-
-\begin{figure}[H]
-    \centering
-
-    \begin{tikzpicture}
-        \node[draw, circle] (A) at (0, 0) {A};
-        \node[draw, circle] (B) at (2, 0) {B};
-        \node[draw, circle] (C) at (2, 2) {C};
-        \node[draw, circle] (D) at (4, 2) {D};
-        \node[draw, circle] (E) at (4, 0) {E};
-        \node[draw, circle] (F) at (6, 0) {F};
-
-
-        \draw (A) -- node[above] {3} (B);
-        \draw (B) -- node[left] {1} (C);
-        \draw (B) -- node[below] {25} (E);
-        \draw (C) -- node[above] {1} (D);
-        \draw (D) -- node[right] {1} (E);
-        \draw (E) -- node[above] {25} (F);
-
-    \end{tikzpicture}
-
-    \caption{Counterexample, a graph with two edges of the same weight that has a unique MST.}
-    \label{fig:counterexample}
-\end{figure}
 
 \section*{Exercise 2}
 \begin{enumerate}

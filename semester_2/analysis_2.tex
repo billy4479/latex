@@ -1539,5 +1539,224 @@ Consider $f(x, y) = xy^2$. We what to understand what the following expressions 
     \item $\dv{f}{x}()(x,x)$: here we substitute $y$ with $x$ first and then we take the (normal) derivative with respect to $x$.
 \end{itemize}
 
+\section{Class of 05/03/2024}
+
+\subsubsection{Example: computing partial derivatives}
+
+Consider the function $f(x, y) = \sqrt{\abs{xy}}$. We want to compute the partial derivatives at $(0, 1)$.
+
+We need to consider the mappings
+
+\begin{align*}
+    h & \mapsto f(x_0 +h, y_0) \\
+    h & \mapsto f(x_0, y_0 +h)
+\end{align*}
+
+and check weather the limits exist as $h \to 0$.
+
+We have
+
+\begin{align*}
+    f(h, 1)     & = \sqrt{h} & \text{ not differentiable} \\
+    f(0, 1 + h) & = 0        & \text{ differentiable}     \\
+\end{align*}
+
+Therefore the solution to the problem is
+
+\begin{align*}
+    \pdv{f}{x}()(0, 1) & \text{ does not exist} \\
+    \pdv{f}{y}()(0, 1) & = 0
+\end{align*}
+
+\subsubsection{Example: non-differentiability}
+
+Let
+
+$$
+    f(x, y) = \begin{cases}
+        \frac{x y^2}{x^2 + y^4} & \text{ if } (x, y) \neq (0, 0) \\
+        0                       & \text{ if } (x, y) = (0, 0)
+    \end{cases}
+$$
+
+as we saw in the previous class, the directional derivatives of this function at $(0, 0)$ exist from any direction, but the the function is still not continuous nor differentiable at $(0, 0)$.
+
+This is the worst case scenario and it can be hard to spot it.
+
+We proceed by computing the directional derivative with respect to $\munderbar{u} = (u_1, u_2)$.
+
+\begin{align*}
+    f(x_0 + hu_1, y_0 + hu_2) & = f(hu_1, hu_2)                         \\
+                              & = \frac{hu_1(u_2)^2}{u_1^2 + h^2 u_2^4} \\
+\end{align*}
+
+and we can also calculate the limit as $h \to 0$.
+
+\begin{align*}
+    \pdv{f}{\munderbar{u}}()(0, 0) & = \dv{h} \left[ f(hu_1, hu_2) \right]_{h = 0} \\
+                                   & = \frac{u_2^2}{u_1}                           \\
+\end{align*}
+
+\subsection{Differentiability}
+
+As we just saw in the previous example, the existence of directional derivatives does not imply the differentiability of the function.
+We need to add another condition.
+
+We will now introduce the concept of \textbf{differentials}.
+
+Recall the definition of differentiability for functions $f: \R \to \R$:
+
+$$
+    \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h} = f'(x_0)
+$$
+
+We have trouble to generalize this definition for functions of several variables, because if $h$ becomes a vector then the division by $h$ is not defined a priori.
+
+Recall also the the taylor expansion
+
+$$
+    f(x_0 + h) = f(x_0) + hf'(x_0) + o(h)
+$$
+
+The best way to think about this in $\R^d$ is to consider $hf'(x_0)$ as a linear function of $h$ and let $g(h) = o(h)$ with $\lim_{h \to 0} \frac{g(h)}{h} = 0$.
+
+In $\R^2$ we can write the taylor expansion as
+
+$$
+    \begin{cases}
+        f(x_0 + h, y_0) = f(x_0, y_0) + h \pdv{f}{x}()(x_0, y_0) + o(h) \\
+        f(x_0, y_0 + k) = f(x_0, y_0) + k \pdv{f}{y}()(x_0, y_0) + o(k)
+    \end{cases}
+$$
+
+We would like something similar to
+
+$$
+    f(x_0 + h, y_0 + k) \approx f(x_0, y_0) + h \pdv{f}{x}()(x_0, y_0) + k \pdv{f}{y}()(x_0, y_0)
+$$
+
+this is in fact the definition of differentiability: we not only need the existence of the partial derivatives but also that the first order taylor expansion is a good approximation of the function.
+
+The only missing piece is now to define what exactly means $\approx$ in this context, that is what is the definition of $o(h, k)$.
+
+\textbf{\underline{Proposition} (little o)}:
+Let $g : D \in R^2 \to \R$ with $D$ be a neighborhood of $(0,0)$.
+Then the following are equivalent:
+
+\begin{enumerate}[label=(\roman*)]
+    \item $g(0,0) = 0$ and the function $\frac{g(h,k)}{\norm{(h,k)}}$ converges to 0 as $(h,k) \to (0,0)$. That is
+          $$
+              \forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \forall (h,k) \in D, \enspace \norm{(h,k)} \leq \delta \implies \frac{g(h,k)}{\norm{(h,k)}} \leq \varepsilon
+          $$
+    \item
+          $$
+              \forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \norm{(h,k)} \leq \delta \implies g(h, k) \leq \varepsilon \norm{(h,k)}
+          $$
+
+    \item There exists $\omega: D \to \R$, continuos, with $\omega(0,0) = 0$ and
+          $$
+              g(h,k) = \norm{(h,k)} \omega(h,k)
+          $$
+\end{enumerate}
+
+If $g$ satisfies these proprieties then we say that $g = o(h,k)$ as $(h,k) \to (0,0)$.
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[(i) $\iff$ (ii)]
+            We multiply/divide by $\norm{(h,k)}$.
+
+        \item[(i) $\iff$ (iii)]
+            Define $\omega$ as
+
+            $$
+                \omega(h,k) = \begin{cases}
+                    \frac{g(h,k)}{\norm{(h,k)}} & \text{ if } (h,k) \neq (0,0) \\
+                    0                           & \text{ if } (h,k) = (0,0)
+                \end{cases}
+            $$
+    \end{description}
+\end{proof}
+
+\textbf{\underline{Definition} (differentiability)}:
+Let $f: D \subseteq \R^2 \to \R$ and $(x_0, y_0) \in D$ with $D$ open.
+We say that $f$ is differentiable at $(x_0, y_0)$ if all of the following comditions are true
+\begin{itemize}
+    \item Both partial derivative exist at $(x_0, y_0)$
+    \item There exists $r > 0$ such that $(x_0 + h, y_0 + k) \in D$ for any $(h, k) \in B_o \left((0,0), r\right)$
+    \item The first order taylor expansion is a good approximation of the function, that is
+          $$
+              f(x_0 + h, y_0 + k) = f(x_0, y_0) + h \pdv{f}{x}()(x_0, y_0) + k \pdv{f}{y}()(x_0, y_0) + o(h, k)
+          $$
+\end{itemize}
+
+\textbf{\underline{Definition} (differential)}:
+Let $Df_{(x_0, y_0)}$ be the linear map defined as
+
+$$
+    Df_{(x_0, y_0)}: \begin{pmatrix}
+        h \\ k
+    \end{pmatrix}
+    \mapsto h \pdv{f}{x}()(x_0, y_0) + k \pdv{f}{y}()(x_0, y_0)
+$$
+
+\textbf{\underline{Definition} (gradient)}:
+If $f$ is differentiable at $(x_0, y_0)$ then the gradient of $f$ at $(x_0, y_0)$ is
+
+$$
+    \nabla f(x_0, y_0) = \begin{pmatrix}
+        \pdv{f}{x}()(x_0, y_0) \\ \pdv{f}{y}()(x_0, y_0)
+    \end{pmatrix} \in \R^2
+$$
+
+Note that
+
+\begin{align*}
+    h \pdv{f}{x}()(x_0, y_0) + k \pdv{f}{y}()(x_0, y_0) & = \begin{pmatrix}
+                                                                h \\ k
+                                                            \end{pmatrix} \cdot \begin{pmatrix}
+                                                                                    \pdv{f}{x}()(x_0, y_0) \\ \pdv{f}{y}()(x_0, y_0)
+                                                                                \end{pmatrix} \\
+                                                        & = \begin{pmatrix}
+                                                                h \\ k
+                                                            \end{pmatrix} \cdot \nabla f(x_0, y_0)
+\end{align*}
+
+And we can write the taylor expansion as
+
+$$
+    f(\munderbar{x_0} + \munderbar{h}) = f(\munderbar{x_0}) + \nabla f(\munderbar{x_0}) \cdot \munderbar{h} + o(\munderbar{h})
+$$
+
+\textbf{\underline{Remark} (the gradient is the direction of maximum increase)}:
+If we choose $\munderbar{u} = \nabla f(\munderbar{x_0})$ then we have that the directional derivative is the maximum possible.
+Moreover if we choose $\munderbar{u} = -\nabla f(\munderbar{x_0})$ then we have that the directional derivative is the minimum possible.
+
+Instead, if we choose $\munderbar{u}$ orthogonal to $\nabla f(\munderbar{x_0})$ then we have that the directional derivative is 0 and we find a level set of the function.
+
+\textbf{\underline{Proposition} (differentiability implies continuity)}:
+Let $f: D \subseteq \R^2 \to \R$ be differentiable at $(x_0, y_0)$.
+Then $f$ is continuous at $(x_0, y_0)$.
+
+\begin{proof}
+    We want to prove that $\munderbar{x_0} = (x_0, y_0)$, $\munderbar{h} \mapsto f(\munderbar{x_0} + \munderbar{h})$ is continuous at $\munderbar{h} = \munderbar{0}$.
+
+    Since $f$ is differentiable we have that
+
+    $$
+        f(\munderbar{x_0} + \munderbar{h}) =
+        \underbrace{f(\munderbar{x_0})}_{\text{constant}}
+        + \underbrace{\nabla f(\munderbar{x_0}) \cdot \munderbar{h}}_{\text{continuous and } \to 0}
+        + \underbrace{o(\munderbar{h})}_{\to 0 \text{ by definition}}
+    $$
+
+    For $g(\munderbar{h}) o(\munderbar{h})$ we say $\forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \norm{\munderbar{h}} \leq \delta \implies \abs{g(\munderbar{h})} \leq \varepsilon \norm{\munderbar{h}}$.
+
+    If we set $\varepsilon = 1$ we have that there exists some $\delta > 0$ such that
+    $\norm{\munderbar{h}} \leq \delta \implies \abs{o(\munderbar{h})} \leq \norm{\munderbar{h}}$.
+    Then $\lim_{\munderbar{h} \to \munderbar{0}} g(\munderbar{h}) = 0$.
+
+\end{proof}
 
 \end{document}

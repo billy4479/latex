@@ -2,3 +2,4 @@
 /semester_*/*
 !/semester_*/*.tex
 !assets
+!preamble.sty

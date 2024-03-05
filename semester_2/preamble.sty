@@ -1,0 +1,50 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{preamble}
+[2024/03/05 Preamble]
+
+\author{Giacomo Ellero}
+
+\RequirePackage{amsfonts}
+\RequirePackage{amsthm}
+\RequirePackage{amssymb}
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+\RequirePackage{commath}
+\RequirePackage{dirtytalk}
+\RequirePackage{parskip}
+\RequirePackage{mathrsfs}
+\RequirePackage[many]{tcolorbox}
+\RequirePackage{xparse}
+\RequirePackage[a4paper,margin=1.5cm]{geometry}
+\RequirePackage{bookmark}
+\RequirePackage{bytefield}
+\RequirePackage{minted}
+\RequirePackage{float}
+\RequirePackage{tikz}
+\RequirePackage{enumitem}
+\RequirePackage{physics}
+\RequirePackage{fancyhdr}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newenvironment{absolutelynopagebreak}
+{\par\nobreak\vfil\penalty0\vfilneg
+    \vtop\bgroup}
+{\par\xdef\tpd{\the\prevdepth}\egroup
+    \prevdepth=\tpd}
+
+\pagestyle{fancy}
+\chead{Giacomo Ellero}
+\lhead{}
+\rhead{}
+
+\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{notebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
+
+\endinput

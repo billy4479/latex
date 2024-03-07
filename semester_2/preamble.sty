@@ -4,30 +4,40 @@
 
 \author{Giacomo Ellero}
 
+% Math stuff
 \RequirePackage{amsfonts}
 \RequirePackage{amsthm}
 \RequirePackage{amssymb}
 \RequirePackage{amsmath}
 \RequirePackage{mathtools}
 \RequirePackage{commath}
-\RequirePackage{dirtytalk}
-\RequirePackage{parskip}
 \RequirePackage{mathrsfs}
-\RequirePackage[many]{tcolorbox}
-\RequirePackage{xparse}
-\RequirePackage[a4paper,margin=1.5cm]{geometry}
-\RequirePackage{bookmark}
-\RequirePackage{bytefield}
-\RequirePackage{minted}
-\RequirePackage{float}
-\RequirePackage{tikz}
-\RequirePackage{enumitem}
-\RequirePackage{physics}
-\RequirePackage{fancyhdr}
+\RequirePackage{bm} % for bold math symbols
+\RequirePackage{physics} % for derivatives
+\RequirePackage{cancel} % for canceling terms
+
+\RequirePackage{parskip} % for no indentation
+\RequirePackage[a4paper,margin=1.5cm]{geometry} % to adjust margins
+\RequirePackage{bookmark} % for pdf bookmarks
+
+\RequirePackage{float} % for H in figures
+\RequirePackage{graphicx} % for images
+\RequirePackage{subfig} % for subfigures
+
+\RequirePackage{dirtytalk} % for quotes
+\RequirePackage[many]{tcolorbox} % for boxes
+\RequirePackage{tikz} % for drawings
+\RequirePackage{enumitem} % for custom lists
+\RequirePackage{fancyhdr} % for headers
 
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
+
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 

@@ -3,48 +3,10 @@
 \author{Giacomo Ellero}
 \date{Semester 2, 2023/2024}
 
-\usepackage{amsfonts}
-\usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{mathtools}
-\usepackage{commath}
-\usepackage{dirtytalk}
-\usepackage{parskip}
-\usepackage{mathrsfs}
-\usepackage[many]{tcolorbox}
-\usepackage{xparse}
-\usepackage[a4paper,margin=1.5cm]{geometry}
-\usepackage{bookmark}
-\usepackage{physics}
-\usepackage{tikz}
-\usepackage{capt-of}
-\usepackage{subfig}
-\usepackage{cancel}
-\usepackage{float}
-\usepackage{enumitem}
+\usepackage{preamble}
 
-\newcommand{\C}{\mathbb{C}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Q}{\mathbb{Q}}
 \newcommand{\F}{\mathcal{F}}
-\renewcommand{\Re}{\operatorname{Re}}
-\renewcommand{\Im}{\operatorname{Im}}
-\newcommand{\munderbar}[1]{\underbar{\ensuremath{#1}}}
-\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
-
-
-\newenvironment{absolutelynopagebreak}
-  {\par\nobreak\vfil\penalty0\vfilneg
-   \vtop\bgroup}
-  {\par\xdef\tpd{\the\prevdepth}\egroup
-   \prevdepth=\tpd}
-
-\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{notebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
+\renewcommand{\vec}[1]{\underbar{\ensuremath{#1}}}
    
 \begin{document}
 
@@ -67,83 +29,83 @@ $\R^d$ is a vector space, like the ones we have seen in linear algebra, so many 
 
 \subsection{Dot product and distance}
 
-\textbf{\underline{Definition} (dot product)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. The dot product of $x$ and $y$ is defined as
+\textbf{\underline{Definition} (dot product)}: Let $\vec{x}, \vec{y} \in \R^d$. The dot product of $x$ and $y$ is defined as
 
 $$
-    \munderbar{x} \cdot \munderbar{y} = \sum_{i=1}^d x_i y_i
+    \vec{x} \cdot \vec{y} = \sum_{i=1}^d x_i y_i
 $$
 
 We have seen dot products (inner products) in linear algebra but we will see some of their proprieties again:
 \begin{enumerate}
-    \item $\munderbar{x} \cdot \munderbar{y} = \munderbar{y} \cdot \munderbar{x}$.
-    \item $\munderbar{x} \cdot (\munderbar{y} + \munderbar{z}) = \munderbar{x} \cdot \munderbar{y} + \munderbar{x} \cdot \munderbar{z}$.
-    \item $\munderbar{x} \cdot \munderbar{x} \geq 0$ and $\munderbar{x} \cdot \munderbar{x} = 0 \iff \munderbar{x} = \munderbar{0}$.
+    \item $\vec{x} \cdot \vec{y} = \vec{y} \cdot \vec{x}$.
+    \item $\vec{x} \cdot (\vec{y} + \vec{z}) = \vec{x} \cdot \vec{y} + \vec{x} \cdot \vec{z}$.
+    \item $\vec{x} \cdot \vec{x} \geq 0$ and $\vec{x} \cdot \vec{x} = 0 \iff \vec{x} = \vec{0}$.
 \end{enumerate}
 
 \subsubsection{Norm}
 
-\textbf{\underline{Definition} (norm)}: Let $\munderbar{x} \in \R^d$. The norm of $\munderbar{x}$ is defined as
+\textbf{\underline{Definition} (norm)}: Let $\vec{x} \in \R^d$. The norm of $\vec{x}$ is defined as
 
 $$
-    \norm{\munderbar{x}} = \sqrt{\munderbar{x} \cdot \munderbar{x}}
+    \norm{\vec{x}} = \sqrt{\vec{x} \cdot \vec{x}}
 $$
 
 For a more general definition see the linear algebra notes.
 
 \subsection{Cauchy-Schwarz inequality}
 
-\textbf{\underline{Theorem} (Cauchy-Schwarz inequality)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. Then
+\textbf{\underline{Theorem} (Cauchy-Schwarz inequality)}: Let $\vec{x}, \vec{y} \in \R^d$. Then
 
 $$
-    \abs{\munderbar{x} \cdot \munderbar{y}} \leq \norm{\munderbar{x}} \norm{\munderbar{y}}
+    \abs{\vec{x} \cdot \vec{y}} \leq \norm{\vec{x}} \norm{\vec{y}}
 $$
 
 \begin{proof}
-    We introduce $f(t) = \norm{\munderbar{x} + t \munderbar{y}}^2$.
+    We introduce $f(t) = \norm{\vec{x} + t \vec{y}}^2$.
 
     We apply some algebraic manipulation to $f(t)$ according to the proprieties of the dot product and the norm:
 
     \begin{align*}
-        f(t) & = \norm{\munderbar{x} + t \munderbar{y}}^2                                                                                                              \\
-             & = (\munderbar{x} + t \munderbar{y}) \cdot (\munderbar{x} + t \munderbar{y})                                                                             \\
-             & = \munderbar{x} \cdot (\munderbar{x} + t \munderbar{y}) + t \munderbar{y} \cdot (\munderbar{x} + t \munderbar{y})                                       \\
-             & = \munderbar{x} \cdot \munderbar{x} + t \munderbar{x} \cdot \munderbar{y} + t \munderbar{y} \cdot \munderbar{x} + t^2 \munderbar{y} \cdot \munderbar{y} \\
-             & = \norm{\munderbar{x}}^2 + 2t \munderbar{x} \cdot \munderbar{y} + t^2 \norm{\munderbar{y}}^2
+        f(t) & = \norm{\vec{x} + t \vec{y}}^2                                                                                                              \\
+             & = (\vec{x} + t \vec{y}) \cdot (\vec{x} + t \vec{y})                                                                             \\
+             & = \vec{x} \cdot (\vec{x} + t \vec{y}) + t \vec{y} \cdot (\vec{x} + t \vec{y})                                       \\
+             & = \vec{x} \cdot \vec{x} + t \vec{x} \cdot \vec{y} + t \vec{y} \cdot \vec{x} + t^2 \vec{y} \cdot \vec{y} \\
+             & = \norm{\vec{x}}^2 + 2t \vec{x} \cdot \vec{y} + t^2 \norm{\vec{y}}^2
     \end{align*}
 
-    If $\munderbar{y} \ne 0$ we have that $f(t)$ is a parabola which is always positive, hence $\Delta \leq 0$. We have
+    If $\vec{y} \ne 0$ we have that $f(t)$ is a parabola which is always positive, hence $\Delta \leq 0$. We have
 
     \begin{align*}
-        \Delta & = (2 \munderbar{x} \cdot \munderbar{y})^2 - 4 \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2        \\
-               & = 4 (\munderbar{x} \cdot \munderbar{y})^2 - 4 \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2 \leq 0 \\
+        \Delta & = (2 \vec{x} \cdot \vec{y})^2 - 4 \norm{\vec{x}}^2 \norm{\vec{y}}^2        \\
+               & = 4 (\vec{x} \cdot \vec{y})^2 - 4 \norm{\vec{x}}^2 \norm{\vec{y}}^2 \leq 0 \\
     \end{align*}
 
     We pass to the inequality and we get
 
     \begin{align*}
-        \cancel{4}(\munderbar{x} \cdot \munderbar{y})^2 & \leq \cancel{4} \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2 \\
-        \abs{\munderbar{x} \cdot \munderbar{y}} ^2      & \leq \norm{\munderbar{x}}^2 \norm{\munderbar{y}}^2            \\
-        \abs{\munderbar{x} \cdot \munderbar{y}}         & \leq \norm{\munderbar{x}} \norm{\munderbar{y}}
+        \cancel{4}(\vec{x} \cdot \vec{y})^2 & \leq \cancel{4} \norm{\vec{x}}^2 \norm{\vec{y}}^2 \\
+        \abs{\vec{x} \cdot \vec{y}} ^2      & \leq \norm{\vec{x}}^2 \norm{\vec{y}}^2            \\
+        \abs{\vec{x} \cdot \vec{y}}         & \leq \norm{\vec{x}} \norm{\vec{y}}
     \end{align*}
 \end{proof}
 
-Note that if $\Delta = 0$ it's easy to prove that $\munderbar{x}$  = t $\munderbar{y}$, hence they are linearly dependent. This is the only case in which the inequality becomes an equality.
+Note that if $\Delta = 0$ it's easy to prove that $\vec{x}$  = t $\vec{y}$, hence they are linearly dependent. This is the only case in which the inequality becomes an equality.
 
 \subsection{Defining the angle between two vectors}
 
-\textbf{\underline{Definition} (angle)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. The following relation holds between the dot product and the angle $\theta$ between the two vectors:
+\textbf{\underline{Definition} (angle)}: Let $\vec{x}, \vec{y} \in \R^d$. The following relation holds between the dot product and the angle $\theta$ between the two vectors:
 
 $$
-    \munderbar{x} \cdot \munderbar{y} = \norm{\munderbar{x}} \norm{\munderbar{y}} \cos \theta
+    \vec{x} \cdot \vec{y} = \norm{\vec{x}} \norm{\vec{y}} \cos \theta
 $$
 
 hence
 
 $$
-    \theta = \arccos \left( \frac{\munderbar{x} \cdot \munderbar{y}}{\norm{\munderbar{x}} \norm{\munderbar{y}}} \right)
+    \theta = \arccos \left( \frac{\vec{x} \cdot \vec{y}}{\norm{\vec{x}} \norm{\vec{y}}} \right)
 $$
 
-From the definition we get that $\munderbar{x} \cdot \munderbar{y} = 0 \iff \theta = \frac{\pi}{2}$.
+From the definition we get that $\vec{x} \cdot \vec{y} = 0 \iff \theta = \frac{\pi}{2}$.
 
 Cauchy-Schwarz inequality guarantees that the argument of $\arccos$ is always between -1 and 1.
 
@@ -155,27 +117,27 @@ These theorems have been covered already in linear algebra, see the notes for mo
 
 \subsection{Triangle inequality}
 
-\textbf{\underline{Theorem} (triangle inequality)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. Then
+\textbf{\underline{Theorem} (triangle inequality)}: Let $\vec{x}, \vec{y} \in \R^d$. Then
 
 $$
-    \norm{\munderbar{x} + \munderbar{y}} \leq \norm{\munderbar{x}} + \norm{\munderbar{y}}
+    \norm{\vec{x} + \vec{y}} \leq \norm{\vec{x}} + \norm{\vec{y}}
 $$
 
 \begin{proof}
     We have that
 
     \begin{align*}
-        \norm{\munderbar{x} + \munderbar{y}}^2 & = (\munderbar{x} + \munderbar{y}) \cdot (\munderbar{x} + \munderbar{y})                                                                         \\
-                                               & = \munderbar{x} \cdot (\munderbar{x} + \munderbar{y}) + \munderbar{y} \cdot (\munderbar{x} + \munderbar{y})                                     \\
-                                               & = \munderbar{x} \cdot \munderbar{x} + \munderbar{x} \cdot \munderbar{y} + \munderbar{y} \cdot \munderbar{x} + \munderbar{y} \cdot \munderbar{y} \\
-                                               & = \norm{\munderbar{x}}^2 + 2 \munderbar{x} \cdot \munderbar{y} + \norm{\munderbar{y}}^2
+        \norm{\vec{x} + \vec{y}}^2 & = (\vec{x} + \vec{y}) \cdot (\vec{x} + \vec{y})                                                                         \\
+                                               & = \vec{x} \cdot (\vec{x} + \vec{y}) + \vec{y} \cdot (\vec{x} + \vec{y})                                     \\
+                                               & = \vec{x} \cdot \vec{x} + \vec{x} \cdot \vec{y} + \vec{y} \cdot \vec{x} + \vec{y} \cdot \vec{y} \\
+                                               & = \norm{\vec{x}}^2 + 2 \vec{x} \cdot \vec{y} + \norm{\vec{y}}^2
     \end{align*}
 
     We apply the Cauchy-Schwarz inequality and we get
 
     \begin{align*}
-        \norm{\munderbar{x} + \munderbar{y}}^2 & \leq \norm{\munderbar{x}}^2 + 2 \norm{\munderbar{x}} \norm{\munderbar{y}} + \norm{\munderbar{y}}^2 \\
-        \norm{\munderbar{x} + \munderbar{y}}^2 & \leq \left(\norm{\munderbar{x}} + \norm{\munderbar{y}}\right)^2
+        \norm{\vec{x} + \vec{y}}^2 & \leq \norm{\vec{x}}^2 + 2 \norm{\vec{x}} \norm{\vec{y}} + \norm{\vec{y}}^2 \\
+        \norm{\vec{x} + \vec{y}}^2 & \leq \left(\norm{\vec{x}} + \norm{\vec{y}}\right)^2
     \end{align*}
 
     We take the square root of both sides and we get the result.
@@ -183,10 +145,10 @@ $$
 
 \subsection{Pythagorean theorem}
 
-\textbf{\underline{Theorem} (Pythagorean theorem)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$ be orthogonal. Then
+\textbf{\underline{Theorem} (Pythagorean theorem)}: Let $\vec{x}, \vec{y} \in \R^d$ be orthogonal. Then
 
 $$
-    \norm{\munderbar{x} + \munderbar{y}}^2 = \norm{\munderbar{x}}^2 + \norm{\munderbar{y}}^2
+    \norm{\vec{x} + \vec{y}}^2 = \norm{\vec{x}}^2 + \norm{\vec{y}}^2
 $$
 
 I will not report the proof here, if you're interested you can find it in my linear algebra notes.
@@ -195,21 +157,21 @@ I will not report the proof here, if you're interested you can find it in my lin
 
 This is a generalization of the Pythagorean theorem.
 
-\textbf{\underline{Theorem} (law of cosines)}: Let $\munderbar{x}, \munderbar{y} \in \R^d$. Then
+\textbf{\underline{Theorem} (law of cosines)}: Let $\vec{x}, \vec{y} \in \R^d$. Then
 
 $$
-    \norm{\munderbar{x} - \munderbar{y}}^2 = \norm{\munderbar{x}}^2 + \norm{\munderbar{y}}^2 - 2 \norm{\munderbar{x}} \norm{\munderbar{y}} \cos \theta
+    \norm{\vec{x} - \vec{y}}^2 = \norm{\vec{x}}^2 + \norm{\vec{y}}^2 - 2 \norm{\vec{x}} \norm{\vec{y}} \cos \theta
 $$
 
-where $\theta$ is the angle between $\munderbar{x}$ and $\munderbar{y}$.
+where $\theta$ is the angle between $\vec{x}$ and $\vec{y}$.
 
 \subsection{Planes}
 
-Planes in $\R^3$ are identified by a point $A$ and a normal vector $\munderbar{n}$.
+Planes in $\R^3$ are identified by a point $A$ and a normal vector $\vec{n}$.
 
 A point $M = \begin{pmatrix}
         x \\ y \\ z
-    \end{pmatrix} \in \R^3$ belongs to a plane $\pi$ if and only if the vector $AM$ is orthogonal to $\munderbar{n}$.
+    \end{pmatrix} \in \R^3$ belongs to a plane $\pi$ if and only if the vector $AM$ is orthogonal to $\vec{n}$.
 
 This means that the equation of the plane is
 
@@ -232,7 +194,8 @@ $$
 
 Consider $B_1, B_2$ be pairs of vectors in $\R^2$.
 
-\begin{center}
+\begin{figure}[H]
+    \centering
     \begin{tikzpicture}
         \draw[->] (-1, 0) -- (0, 1) node[anchor=south] {$x$};
         \draw[->] (-1, 0) -- (0, 0) node[anchor=north] {$y$};
@@ -241,12 +204,12 @@ Consider $B_1, B_2$ be pairs of vectors in $\R^2$.
         \draw[->] (1, 1) -- (2, 0) node[anchor=north] {$x$};
     \end{tikzpicture}
 
-    \captionof{figure}{Two pair of vectors $B_1$ and $B_2$}
+    \caption{Two pair of vectors $B_1$ and $B_2$}
     \label{fig:orientation_of_vectors}
-\end{center}
+\end{figure}
 
 $B_1$ and $B_2$ are both bases of $\R^2$, but if we try to \say{continuously} transform one into the other by \say{rotating} the vectors
-while keeping them a basis we will see that at some point we will have $\munderbar{x} \cdot \munderbar{y} = 0$,
+while keeping them a basis we will see that at some point we will have $\vec{x} \cdot \vec{y} = 0$,
 hence the two vectors no longe form a basis.
 
 We call this propriety the \textbf{orientation} of the basis.
@@ -266,24 +229,24 @@ In $\R^3$ it is the volume of the parallelepiped defined by the three vectors.
 
 \begin{gather*}
     \det \left( \begin{pmatrix}
-            \munderbar{x} & \munderbar{y}
+            \vec{x} & \vec{y}
         \end{pmatrix} \right) = \text{ area} \\
     \det \left( \begin{pmatrix}
-            \munderbar{x} & \munderbar{y} & \munderbar{z}
+            \vec{x} & \vec{y} & \vec{z}
         \end{pmatrix} \right) = \text{ volume}
 \end{gather*}
 
 \subsubsection{Cross product}
 
-\textbf{\underline{Definition} (cross product)}: Let $\munderbar{x} = \begin{pmatrix}
+\textbf{\underline{Definition} (cross product)}: Let $\vec{x} = \begin{pmatrix}
         x_1 \\ x_2 \\ x_3
-    \end{pmatrix}$ and $\munderbar{y} = \begin{pmatrix}
+    \end{pmatrix}$ and $\vec{y} = \begin{pmatrix}
         y_1 \\ y_2 \\ y_3
     \end{pmatrix}$.
-The cross product of $\munderbar{x}$ and $\munderbar{y}$ is the vector
+The cross product of $\vec{x}$ and $\vec{y}$ is the vector
 
 $$
-    \munderbar{x} \times \munderbar{y} = \begin{pmatrix}
+    \vec{x} \times \vec{y} = \begin{pmatrix}
         x_2 y_3 - x_3 y_2 \\
         x_3 y_1 - x_1 y_3 \\
         x_1 y_2 - x_2 y_1
@@ -292,12 +255,12 @@ $$
 
 \subsubsection{Cross product and determinant}
 
-\textbf{\underline{Theorem}}: Let $\munderbar{x}, \munderbar{y}, \munderbar{z} \in \R^3$. Then
+\textbf{\underline{Theorem}}: Let $\vec{x}, \vec{y}, \vec{z} \in \R^3$. Then
 
 $$
     \det \left( \begin{pmatrix}
-            \munderbar{x} & \munderbar{y} & \munderbar{z}
-        \end{pmatrix} \right) = (\munderbar{x} \times \munderbar{y}) \cdot \munderbar{z}
+            \vec{x} & \vec{y} & \vec{z}
+        \end{pmatrix} \right) = (\vec{x} \times \vec{y}) \cdot \vec{z}
 $$
 
 \begin{proof}
@@ -305,7 +268,7 @@ $$
 
     \begin{align*}
         \det \left( \begin{pmatrix}
-                            \munderbar{x} & \munderbar{y} & \munderbar{z}
+                            \vec{x} & \vec{y} & \vec{z}
                         \end{pmatrix} \right)
          & = \det \begin{pmatrix}
                       x_1 & y_1 & z_1 \\
@@ -327,7 +290,7 @@ $$
          & = z_1 (x_2 y_3 - x_3 y_2) - z_2 (x_1 y_3 - x_3 y_1) + z_3 (x_1 y_2 - x_2 y_1) \\
          & = \begin{pmatrix}
                  z_1 \\ z_2 \\ z_3
-             \end{pmatrix} \cdot (\munderbar{x} \times \munderbar{y})
+             \end{pmatrix} \cdot (\vec{x} \times \vec{y})
     \end{align*}
 
     The last steps follow from the definition of determinant for $2 \times 2$ matrixes and the definition of the cross product.
@@ -340,11 +303,11 @@ $$
 \textbf{\underline{Proposition} (characterization of the cross product)}:
 
 \begin{enumerate}
-    \item $\munderbar{x} \times \munderbar{y}$ is orthogonal to $\munderbar{x}$ and $\munderbar{y}$.
-    \item $\norm{\munderbar{x} \times \munderbar{y}} = \norm{\munderbar{x}} \norm {\munderbar{y}} \abs{\sin \theta}$
-          where $\theta$ is the angle between $\munderbar{x}$ and $\munderbar{y}$.
-    \item $\det (\munderbar{x}, \munderbar{y}, \munderbar{x} \times \munderbar{y}) \geq 0$
-          so that the basis $\munderbar{x}, \munderbar{y}, \munderbar{x} \times \munderbar{y}$ is positively oriented.
+    \item $\vec{x} \times \vec{y}$ is orthogonal to $\vec{x}$ and $\vec{y}$.
+    \item $\norm{\vec{x} \times \vec{y}} = \norm{\vec{x}} \norm {\vec{y}} \abs{\sin \theta}$
+          where $\theta$ is the angle between $\vec{x}$ and $\vec{y}$.
+    \item $\det (\vec{x}, \vec{y}, \vec{x} \times \vec{y}) \geq 0$
+          so that the basis $\vec{x}, \vec{y}, \vec{x} \times \vec{y}$ is positively oriented.
 \end{enumerate}
 
 \begin{proof}
@@ -353,26 +316,26 @@ $$
     \begin{enumerate}
         \item From the definition of cross product and knowing that the determinant of a matrix is 0 if two rows are equal we have
               \begin{itemize}
-                  \item $(\munderbar{x} \times \munderbar{y}) \cdot \munderbar{x} = \det (\munderbar{x}, \munderbar{y}, \munderbar{x}) = 0$
-                  \item $(\munderbar{x} \times \munderbar{y}) \cdot \munderbar{y} = \det (\munderbar{x}, \munderbar{y}, \munderbar{y}) = 0$
+                  \item $(\vec{x} \times \vec{y}) \cdot \vec{x} = \det (\vec{x}, \vec{y}, \vec{x}) = 0$
+                  \item $(\vec{x} \times \vec{y}) \cdot \vec{y} = \det (\vec{x}, \vec{y}, \vec{y}) = 0$
               \end{itemize}
-        \item Let $\munderbar{z}$ be a vector normal to $\munderbar{x}$ and $\munderbar{y}$, with $\norm{\munderbar{z}} \ne 0$.
-              We have that $\abs{\det (\munderbar{x}, \munderbar{y}, \munderbar{z})} = \abs{(\munderbar{x} \times \munderbar{y}) \cdot \munderbar{z}}$.
-              Recall that the formula to compute the area of a parallelogram is $\norm{\munderbar{x}} \norm{\munderbar{y}} \abs{\sin \theta}$.
-              Since $\det (\munderbar{x}, \munderbar{y}, \munderbar{z})$ is the volume of the parallelepiped defined by the three vectors we have that
-              $\abs{\det (\munderbar{x}, \munderbar{y}, \munderbar{z})} = \left(\norm{\munderbar{x}} \norm{\munderbar{y}} \abs{\sin \theta}\right) \cdot \norm{\munderbar{z}}$ just by using the normal formula for the volume (area of base times height).
-              Because of (1) we have that $\sin \theta = 1$ and simplifying $\norm{\munderbar{z}}$ we get the result.
-        \item We have that $\det (\munderbar{x}, \munderbar{y}, \munderbar{x} \times \munderbar{y}) = \norm{\munderbar{x} \times \munderbar{y}}^2 \geq 0$.
+        \item Let $\vec{z}$ be a vector normal to $\vec{x}$ and $\vec{y}$, with $\norm{\vec{z}} \ne 0$.
+              We have that $\abs{\det (\vec{x}, \vec{y}, \vec{z})} = \abs{(\vec{x} \times \vec{y}) \cdot \vec{z}}$.
+              Recall that the formula to compute the area of a parallelogram is $\norm{\vec{x}} \norm{\vec{y}} \abs{\sin \theta}$.
+              Since $\det (\vec{x}, \vec{y}, \vec{z})$ is the volume of the parallelepiped defined by the three vectors we have that
+              $\abs{\det (\vec{x}, \vec{y}, \vec{z})} = \left(\norm{\vec{x}} \norm{\vec{y}} \abs{\sin \theta}\right) \cdot \norm{\vec{z}}$ just by using the normal formula for the volume (area of base times height).
+              Because of (1) we have that $\sin \theta = 1$ and simplifying $\norm{\vec{z}}$ we get the result.
+        \item We have that $\det (\vec{x}, \vec{y}, \vec{x} \times \vec{y}) = \norm{\vec{x} \times \vec{y}}^2 \geq 0$.
     \end{enumerate}
 \end{proof}
 
 \textbf{\underline{Proposition} (proprieties of the cross product)}:
-Let $\munderbar{x}, \munderbar{y}, \munderbar{z} \in \R^3$ and $a, b \in \R$. Then
+Let $\vec{x}, \vec{y}, \vec{z} \in \R^3$ and $a, b \in \R$. Then
 
 \begin{enumerate}
-    \item \textit{Bilinearity}: $(a \munderbar{x} + b \munderbar{y}) \times \munderbar{z} = a (\munderbar{x} \times \munderbar{z}) + b (\munderbar{y} \times \munderbar{z})$ and $\munderbar{x} \times (a \munderbar{y} + b \munderbar{z}) = a (\munderbar{x} \times \munderbar{y}) + b (\munderbar{x} \times \munderbar{z})$.
-    \item \textit{Asymmetry}: $\munderbar{x} \times \munderbar{y} = - \munderbar{y} \times \munderbar{x}$.
-    \item \textit{Linear independence}: $\munderbar{x} \times \munderbar{y} = \munderbar{0} \iff \munderbar{x}$ and $\munderbar{y}$ are linearly dependent.
+    \item \textit{Bilinearity}: $(a \vec{x} + b \vec{y}) \times \vec{z} = a (\vec{x} \times \vec{z}) + b (\vec{y} \times \vec{z})$ and $\vec{x} \times (a \vec{y} + b \vec{z}) = a (\vec{x} \times \vec{y}) + b (\vec{x} \times \vec{z})$.
+    \item \textit{Asymmetry}: $\vec{x} \times \vec{y} = - \vec{y} \times \vec{x}$.
+    \item \textit{Linear independence}: $\vec{x} \times \vec{y} = \vec{0} \iff \vec{x}$ and $\vec{y}$ are linearly dependent.
 \end{enumerate}
 
 \begin{proof}
@@ -380,11 +343,11 @@ Let $\munderbar{x}, \munderbar{y}, \munderbar{z} \in \R^3$ and $a, b \in \R$. Th
 
     For (3) we have
     \begin{align*}
-        \norm{\munderbar{x} \times \munderbar{y}} = 0
+        \norm{\vec{x} \times \vec{y}} = 0
          & \iff
-        \norm {\munderbar{x}} \norm{\munderbar{y}} \abs{\sin \theta} = 0                                        \\
-         & \iff \abs{\sin \theta} = 0 \text{ or } \norm{\munderbar{x}} = 0 \text{ or } \norm{\munderbar{y}} = 0 \\
-         & \iff \munderbar{x} \text{ and } \munderbar{y} \text{ are linearly dependent}
+        \norm {\vec{x}} \norm{\vec{y}} \abs{\sin \theta} = 0                                        \\
+         & \iff \abs{\sin \theta} = 0 \text{ or } \norm{\vec{x}} = 0 \text{ or } \norm{\vec{y}} = 0 \\
+         & \iff \vec{x} \text{ and } \vec{y} \text{ are linearly dependent}
     \end{align*}
 
 \end{proof}
@@ -568,7 +531,7 @@ Note that in physics we sometimes use $\dot{o}, \ddot{o}, \ldots$ to denote the 
 \subsection{Taylor expansion and local behavior}
 
 \textbf{\underline{Definition} (regular point)}:
-If $\gamma: I \to \R^d$ is differentiable at $t_0 \in I$, we say that $t_0$ is a regular point if $\gamma'(t_0) \neq \munderbar{0}$.
+If $\gamma: I \to \R^d$ is differentiable at $t_0 \in I$, we say that $t_0$ is a regular point if $\gamma'(t_0) \neq \vec{0}$.
 
 \textbf{\underline{Definition} (tangent line)}:
 If $\gamma$ is differentiable and $t_0$ is a regular point, the tangent to the image of $\gamma$ at $\gamma(t_0)$ is the line passing through $\gamma(t_0)$ and directed by $\gamma'(t_0)$.
@@ -650,7 +613,7 @@ $$
 
 \underline{Example} ($t_0$ is not a regular point):
 Let $\gamma(t) = (t^2, t^3)$, which is continuous and differentiable.
-Let $t_0 = 0$, we that $\gamma'(t_0) = \munderbar{0}$.
+Let $t_0 = 0$, we that $\gamma'(t_0) = \vec{0}$.
 We have that
 $$
     \begin{cases}
@@ -693,7 +656,7 @@ $$
 
 From this definition we see that the image of $\gamma$ is close to $\gamma (t_0)$ since it is the principal term of the expansion.
 
-Moreover note that the Taylor expansion of order 1 with $\gamma'(t_0) \ne \munderbar{0}$ is
+Moreover note that the Taylor expansion of order 1 with $\gamma'(t_0) \ne \vec{0}$ is
 
 $$
     \gamma(t_0 + h) = \gamma(t_0) + h \gamma'(t_0) + o(h)
@@ -708,17 +671,17 @@ We can use the Taylor expansion to study the behavior of a curve in the neighbor
 % TODO: add graphs
 
 \textbf{\underline{Definition} (biregular point)}:
-Let $\gamma: I \to \R^d$ such that $\gamma'(t_0) \ne \munderbar{0}$ and $\gamma''(t_0)$ is linearly independent from $\gamma'(t_0)$.
+Let $\gamma: I \to \R^d$ such that $\gamma'(t_0) \ne \vec{0}$ and $\gamma''(t_0)$ is linearly independent from $\gamma'(t_0)$.
 Then we say that $t_0$ is a biregular point.
 
 \textbf{\underline{Definition} (inflection point)}:
-$t_0$ is an inflection point if $\gamma'(t_0) \ne \munderbar{0}$ but $\gamma''(t_0)$ is linearly dependent from $\gamma'(t_0)$.
+$t_0$ is an inflection point if $\gamma'(t_0) \ne \vec{0}$ but $\gamma''(t_0)$ is linearly dependent from $\gamma'(t_0)$.
 
 This means that the curve crosses the tangent line at $t_0$.
 
 
 \textbf{\underline{Definition} (ordinary cusp)}:
-$t_0$ is an ordinary cusp if $\gamma'(t_0) = \munderbar{0}$ but $\gamma''(t_0), \gamma'''(t_0)$ are linearly independent.
+$t_0$ is an ordinary cusp if $\gamma'(t_0) = \vec{0}$ but $\gamma''(t_0), \gamma'''(t_0)$ are linearly independent.
 
 \begin{figure}[H]
     \centering
@@ -775,7 +738,7 @@ Note that for curves the first point is \textbf{not} generally true.
 Consider as counterexample $\gamma(t) = \begin{pmatrix}
         \cos t \\ \sin t
     \end{pmatrix}$ with $t \in [0, 2\pi]$.
-We have in fact that $ \frac{\gamma(2\pi) - \gamma(0)}{2\pi - 0} = \munderbar{0}$ which is not equal to $\gamma'(t)$ for any $t$.
+We have in fact that $ \frac{\gamma(2\pi) - \gamma(0)}{2\pi - 0} = \vec{0}$ which is not equal to $\gamma'(t)$ for any $t$.
 
 However the second point is still true.
 
@@ -838,8 +801,8 @@ Then the curve $\gamma: \theta \mapsto g(\theta) e_r(\theta)$ is of class $C^2$ 
 
 \textbf{\underline{Remark}}:
 \begin{align*}
-    \text{a point $\theta_0$ is regular} & \iff \gamma'(\theta_0) \ne \munderbar{0}                                           \\
-                                         & \iff g'(\theta_0) e_r(\theta_0) + g(\theta_0) e_\theta(\theta_0) \ne \munderbar{0} \\
+    \text{a point $\theta_0$ is regular} & \iff \gamma'(\theta_0) \ne \vec{0}                                           \\
+                                         & \iff g'(\theta_0) e_r(\theta_0) + g(\theta_0) e_\theta(\theta_0) \ne \vec{0} \\
                                          & \iff \begin{pmatrix}
                                                     g'(\theta_0) \\ g(\theta_0)
                                                 \end{pmatrix} \ne \begin{pmatrix}
@@ -870,7 +833,7 @@ By convention $t$ is in $[0, 1]$. We will look at the cases for 2 and 3 control 
         In this case there isn't much to do, we just have a line from $P_0$ to $P_1$. The parametrization is
 
         $$
-            \gamma(t) = (1 - t) \munderbar{P_0} + t \munderbar{P_1}
+            \gamma(t) = (1 - t) \vec{P_0} + t \vec{P_1}
         $$
 
     \item[3 points] We have $P_0$, $P_1$ and $P_2$.
@@ -881,12 +844,12 @@ By convention $t$ is in $[0, 1]$. We will look at the cases for 2 and 3 control 
 
         \begin{align*}
             \gamma_{0,1,2}(t) & = (1 - t) \gamma_{0,1}(t) + t \gamma_{1,2}(t)                                                                                   \\
-                              & = (1 - t) \left((1 - t) \munderbar{P_0} + t \munderbar{P_1}\right) + t \left((1 - t) \munderbar{P_1} + t \munderbar{P_2}\right)
+                              & = (1 - t) \left((1 - t) \vec{P_0} + t \vec{P_1}\right) + t \left((1 - t) \vec{P_1} + t \vec{P_2}\right)
         \end{align*}
 
     \item[General case] We define this by recursion:
         \begin{itemize}
-            \item $\gamma_{0,1}(t) = (1 - t) \munderbar{P_0} + t \munderbar{P_1}$
+            \item $\gamma_{0,1}(t) = (1 - t) \vec{P_0} + t \vec{P_1}$
             \item $\gamma_{0,1, \ldots, n}(t) = (1 - t) \gamma_{0,1, \ldots, n}(t) + t \gamma_{1,2, \ldots, n+1}(t)$
         \end{itemize}
 \end{description}
@@ -895,7 +858,7 @@ By convention $t$ is in $[0, 1]$. We will look at the cases for 2 and 3 control 
 For every $t \in [0, 1]$
 
 $$
-    \gamma_{0,1, \ldots, n}(t) = \sum_{k=0}^n \binom{n}{k} (1 - t)^{n-k} t^k \munderbar{P_k}
+    \gamma_{0,1, \ldots, n}(t) = \sum_{k=0}^n \binom{n}{k} (1 - t)^{n-k} t^k \vec{P_k}
 $$
 
 We see how this is a polynomial of class $C^\infty$. It is also very easy to compute the derivative and the bounding box of the curve.
@@ -909,7 +872,7 @@ Spines are a generalization of Bezier curves.
 \textbf{\underline{Definition}}: Let $\Psi_{k, n}: [0, 1]\to [0, 1]$ such that
 
 $$
-    \gamma_{0,1, \ldots, n}(t) = \sum_{k=0}^n \Psi_{k, n}(t) \munderbar{P_k}
+    \gamma_{0,1, \ldots, n}(t) = \sum_{k=0}^n \Psi_{k, n}(t) \vec{P_k}
 $$
 
 with $\sum_{k=0}^n \Psi_{k, n}(t) = 1$.
@@ -937,7 +900,7 @@ We might use path integrals of a vector fields, for example, to calculate the wo
 Consider the force vector field:
 
 \begin{align*}
-    \munderbar{F}: \R^d & \to \R^d                \\
+    \vec{F}: \R^d & \to \R^d                \\
     F(x,y)              & = \begin{pmatrix}
                                 F_1(x, y) \\ F_2(x, y)
                             \end{pmatrix}
@@ -946,14 +909,14 @@ Consider the force vector field:
 \textbf{\underline{Definition} (path integral)}:
 
 $$
-    \int_\gamma \munderbar{F} \cdot \dd{\munderbar{s}} = \int_a^b \munderbar{F}(\gamma(t)) \cdot \gamma'(t) \dd{t}
+    \int_\gamma \vec{F} \cdot \dd{\vec{s}} = \int_a^b \vec{F}(\gamma(t)) \cdot \gamma'(t) \dd{t}
 $$
 
 From this formula we obtain 2 results that we will not prove yet because we don't have the tools but they are important to know:
 
 \begin{itemize}
     \item The result does not depend on the speed of the curve, only on the trajectory.
-    \item If $\munderbar{F} = \nabla g$ (with $g: \R^2 \to \R$) is the gradient of a potential $g$, then $\int_\gamma \munderbar{F} \cdot \dd{\munderbar{s}} = \int_\gamma \nabla g \cdot \dd{\munderbar{s}} = g(\gamma(b)) - g(\gamma(a))$.
+    \item If $\vec{F} = \nabla g$ (with $g: \R^2 \to \R$) is the gradient of a potential $g$, then $\int_\gamma \vec{F} \cdot \dd{\vec{s}} = \int_\gamma \nabla g \cdot \dd{\vec{s}} = g(\gamma(b)) - g(\gamma(a))$.
 
           If $g = g(x, y)$ then we have that $\nabla g = \begin{pmatrix}
                   \pdv{g(x, y)}{x} \\ \pdv{g(x,y)}{y}
@@ -969,43 +932,43 @@ From this formula we obtain 2 results that we will not prove yet because we don'
 We recall some notions we saw earlier in the course:
 
 \begin{itemize}
-    \item $\norm{\munderbar{x}} \in [0,+\infty)$ with $\munderbar{x} \in \R^d$ (norm).
-    \item $\norm{\munderbar{x} + \munderbar{y}} \leq \norm{\munderbar{x}} + \norm{\munderbar{y}}$ (triangle inequality).
-    \item $\norm{a \munderbar{x}}$ = $\abs{a} \norm{\munderbar{x}}$.
-    \item $\norm{\munderbar{x}} = 0 \iff \munderbar{x} = \munderbar{0}$.
+    \item $\norm{\vec{x}} \in [0,+\infty)$ with $\vec{x} \in \R^d$ (norm).
+    \item $\norm{\vec{x} + \vec{y}} \leq \norm{\vec{x}} + \norm{\vec{y}}$ (triangle inequality).
+    \item $\norm{a \vec{x}}$ = $\abs{a} \norm{\vec{x}}$.
+    \item $\norm{\vec{x}} = 0 \iff \vec{x} = \vec{0}$.
 \end{itemize}
 
-\textbf{\underline{Definition} (distance)}: If $\munderbar{x}, \munderbar{y} \in \R^d$ then the distance between $\munderbar{x}$ and $\munderbar{y}$ is
+\textbf{\underline{Definition} (distance)}: If $\vec{x}, \vec{y} \in \R^d$ then the distance between $\vec{x}$ and $\vec{y}$ is
 
 $$
-    d = \norm{\munderbar{x} - \munderbar{y}} \in \R
+    d = \norm{\vec{x} - \vec{y}} \in \R
 $$
 
 \subsubsection{Limits}
 
 \textbf{\underline{Definition} (limits in $\R^d$)}:
-We say that a sequence in $\R^d$, $\left(\munderbar{x}_n\right)_{n \in \N}$ converges to $\munderbar{a} \in \R^d$ if the real-valued sequence $\left(\norm{\munderbar{x}_n - \munderbar{a}}\right)_{n \in \N}$ converges to 0.
+We say that a sequence in $\R^d$, $\left(\vec{x}_n\right)_{n \in \N}$ converges to $\vec{a} \in \R^d$ if the real-valued sequence $\left(\norm{\vec{x}_n - \vec{a}}\right)_{n \in \N}$ converges to 0.
 
-We can also define limits using the usual $\varepsilon - N$ characterization: $\left(\munderbar{x}_n\right)_{n \in \N}$ converges to $\munderbar{a} \in \R^d$ iff
+We can also define limits using the usual $\varepsilon - N$ characterization: $\left(\vec{x}_n\right)_{n \in \N}$ converges to $\vec{a} \in \R^d$ iff
 
 $$
-    \forall \varepsilon > 0, \exists N \in \N : n \geq N \implies \norm{\munderbar{x}_n - \munderbar{a}} < \varepsilon
+    \forall \varepsilon > 0, \exists N \in \N : n \geq N \implies \norm{\vec{x}_n - \vec{a}} < \varepsilon
 $$
 
-Geometrically, this means considering a ball of radius $\varepsilon$ centered at $\munderbar{a}$, then all the points of the sequence will eventually be inside the ball.
+Geometrically, this means considering a ball of radius $\varepsilon$ centered at $\vec{a}$, then all the points of the sequence will eventually be inside the ball.
 
 \textbf{\underline{Proposition}}:
-Let $\munderbar{x}_n = \begin{pmatrix}
+Let $\vec{x}_n = \begin{pmatrix}
         x_{n,1} \\ \vdots \\ x_{n,d}
     \end{pmatrix}$.
 
-$\left(\munderbar{x}_n\right)_{n \in \N}$ converges iff for $i \in \{1, \ldots, d\}$, $\left(x_{n,i}\right)_{n \in \N}$ converges to $a_i$ as $n \to +\infty$.
+$\left(\vec{x}_n\right)_{n \in \N}$ converges iff for $i \in \{1, \ldots, d\}$, $\left(x_{n,i}\right)_{n \in \N}$ converges to $a_i$ as $n \to +\infty$.
 
 \begin{proof}
     \skiplineafterproof
     \begin{description}
         \item[$\implies$]
-            Assume $\norm{\munderbar{x}_n - \munderbar{a}}$ converges to 0.
+            Assume $\norm{\vec{x}_n - \vec{a}}$ converges to 0.
             Fix $i \in \{1, \ldots, d\}$.
             Note that
 
@@ -1016,10 +979,10 @@ $\left(\munderbar{x}_n\right)_{n \in \N}$ converges iff for $i \in \{1, \ldots, 
             So if we take the square root we get that
 
             $$
-                \norm{\munderbar{x}_n - \munderbar{a}} \geq \abs{x_{i, n} - a_i}
+                \norm{\vec{x}_n - \vec{a}} \geq \abs{x_{i, n} - a_i}
             $$
 
-            So since $\norm{\munderbar{x}_n - \munderbar{a}}$ converges to 0 we have that $\abs{x_{i, n} - a_i}$ converges to 0 as well, thus $x_{i, n}$ converges to $a_i$.
+            So since $\norm{\vec{x}_n - \vec{a}}$ converges to 0 we have that $\abs{x_{i, n} - a_i}$ converges to 0 as well, thus $x_{i, n}$ converges to $a_i$.
         \item[$\impliedby$]
             Assume that $\left(x_{n, i}\right)_{n \in \N}$ converges to $a_i$ for $i \in \{1, \ldots, d\}$.
             Let $u_{i, n} = x_{i, n} - a_i$, then $u_{i, n}$ converges to 0.
@@ -1027,7 +990,7 @@ $\left(\munderbar{x}_n\right)_{n \in \N}$ converges iff for $i \in \{1, \ldots, 
             We want to prove that
 
             $$
-                \norm{\munderbar{x}_n - \munderbar{a}} = \sqrt{\sum_{i=1}^d \left(x_{i, n} - a_i\right)^2} = \sqrt{\sum_{i=1}^d \left(u_{i, n}\right)^2}
+                \norm{\vec{x}_n - \vec{a}} = \sqrt{\sum_{i=1}^d \left(x_{i, n} - a_i\right)^2} = \sqrt{\sum_{i=1}^d \left(u_{i, n}\right)^2}
             $$
             converges to 0.
 
@@ -1037,15 +1000,15 @@ $\left(\munderbar{x}_n\right)_{n \in \N}$ converges iff for $i \in \{1, \ldots, 
 \end{proof}
 
 \textbf{\underline{Definition} (operations on limits)}:
-Let $\left(\munderbar{x}_n\right)_{n \in \N}$ and $\left(\munderbar{y}_n\right)_{n \in \N}$ be sequences in $\R^d$ converging to $\munderbar{a}$ and $\munderbar{b}$ respectively.
+Let $\left(\vec{x}_n\right)_{n \in \N}$ and $\left(\vec{y}_n\right)_{n \in \N}$ be sequences in $\R^d$ converging to $\vec{a}$ and $\vec{b}$ respectively.
 Then
 
 \begin{enumerate}
 
-    \item $\left(\munderbar{x}_n + \munderbar{y}_n\right)_{n \in \N}$ converges to $\munderbar{a} + \munderbar{b}$.
-    \item $\left(\munderbar{x}_n \cdot \munderbar{y}_n\right)_{n \in \N}$ converges to $\munderbar{a} \cdot \munderbar{b}$.
-    \item If $d = 3$ then $\left(\munderbar{x}_n \times \munderbar{y}_n\right)_{n \in \N}$ converges to $\munderbar{a} \times \munderbar{b}$.
-    \item $\norm{\munderbar{x}_n}$ converges to $\norm{\munderbar{a}}$.
+    \item $\left(\vec{x}_n + \vec{y}_n\right)_{n \in \N}$ converges to $\vec{a} + \vec{b}$.
+    \item $\left(\vec{x}_n \cdot \vec{y}_n\right)_{n \in \N}$ converges to $\vec{a} \cdot \vec{b}$.
+    \item If $d = 3$ then $\left(\vec{x}_n \times \vec{y}_n\right)_{n \in \N}$ converges to $\vec{a} \times \vec{b}$.
+    \item $\norm{\vec{x}_n}$ converges to $\norm{\vec{a}}$.
 \end{enumerate}
 
 \begin{proof}
@@ -1057,15 +1020,15 @@ Then
 \subsection{Interior}
 
 \textbf{\underline{Definition} (ball)}:
-Let $\munderbar{a} \in \R^d$ and $r \geq 0$.
+Let $\vec{a} \in \R^d$ and $r \geq 0$.
 \begin{itemize}
-    \item The open ball of radius $r$ centered at $\munderbar{a}$ is
+    \item The open ball of radius $r$ centered at $\vec{a}$ is
           $$
-              B_o(\munderbar{a}, r) = \left\{ \munderbar{x} \in \R^d : \norm{\munderbar{x} - \munderbar{a}} < r \right\}
+              B_o(\vec{a}, r) = \left\{ \vec{x} \in \R^d : \norm{\vec{x} - \vec{a}} < r \right\}
           $$
-    \item The closed ball of radius $r$ centered at $\munderbar{a}$ is
+    \item The closed ball of radius $r$ centered at $\vec{a}$ is
           $$
-              B_c(\munderbar{a}, r) = \left\{ \munderbar{x} \in \R^d : \norm{\munderbar{x} - \munderbar{a}} \leq r \right\}
+              B_c(\vec{a}, r) = \left\{ \vec{x} \in \R^d : \norm{\vec{x} - \vec{a}} \leq r \right\}
           $$
 \end{itemize}
 
@@ -1074,15 +1037,15 @@ If $V \subseteq \R^d$, we call interior of $V$, written $\mathring{V}$, the set 
 
 $$
     \exists \varepsilon > 0, \enspace
-    \forall \munderbar{y} \in B_c(\munderbar{x}, \varepsilon), \enspace
-    \munderbar{y} \in V
+    \forall \vec{y} \in B_c(\vec{x}, \varepsilon), \enspace
+    \vec{y} \in V
 $$
 
 then
 
 $$
-    \munderbar{x} \in \mathring{V} \iff \exists \varepsilon > 0, \enspace
-    B_o(\munderbar{x}, \varepsilon) \subseteq V
+    \vec{x} \in \mathring{V} \iff \exists \varepsilon > 0, \enspace
+    B_o(\vec{x}, \varepsilon) \subseteq V
 $$
 
 \subsubsection{Theorem: interior means removing the boundary}
@@ -1132,7 +1095,7 @@ Then $\mathring{V} = \{ (x, y) \in \R^2 : x^2 + y^2 < 1 \}$.
 \subsubsection{Neighborhoods}
 
 \textbf{\underline{Definition} (neighborhood)}:
-If $\munderbar{n} \in \R^d$, a set $V$ is said the neighborhood of $\munderbar{n}$ iff $\munderbar{n} \in \mathring{V}$.
+If $\vec{n} \in \R^d$, a set $V$ is said the neighborhood of $\vec{n}$ iff $\vec{n} \in \mathring{V}$.
 
 The idea is that when we speak about the interior we fix the set and look at the points inside, while when we speak about neighborhoods we fix the point and look at the sets around it.
 
@@ -1149,54 +1112,54 @@ Then
 \begin{proof}
     \skiplineafterproof
     \begin{enumerate}
-        \item Let $\munderbar{x} \in \mathring{V}$.
-              Since $\munderbar{x} \in \mathring{V}$ then $\exists \varepsilon > 0$ such that $B_c(\munderbar{x}, \varepsilon) \subseteq V$.
-              Thus, since $\munderbar{x} \in B_c(\munderbar{x}, \varepsilon)$ we have that $\munderbar{x} \in V$.
-        \item Let $V, W$ such that $V \subseteq W$ let and $\munderbar{x} \in \mathring{V}$.
-              Then, by definition, $\exists \varepsilon > 0$ such that $B_c(\munderbar{x}, \varepsilon) \subseteq V$.
-              As $V \subseteq W$ then $B_c(\munderbar{x}, \varepsilon) \subseteq V \subseteq W$.
-              Therefore $\exists \varepsilon > 0$ such that $B_c(\munderbar{x}, \varepsilon) \subseteq W$.
-              Thus $\munderbar{x} \in \mathring{W}$.
+        \item Let $\vec{x} \in \mathring{V}$.
+              Since $\vec{x} \in \mathring{V}$ then $\exists \varepsilon > 0$ such that $B_c(\vec{x}, \varepsilon) \subseteq V$.
+              Thus, since $\vec{x} \in B_c(\vec{x}, \varepsilon)$ we have that $\vec{x} \in V$.
+        \item Let $V, W$ such that $V \subseteq W$ let and $\vec{x} \in \mathring{V}$.
+              Then, by definition, $\exists \varepsilon > 0$ such that $B_c(\vec{x}, \varepsilon) \subseteq V$.
+              As $V \subseteq W$ then $B_c(\vec{x}, \varepsilon) \subseteq V \subseteq W$.
+              Therefore $\exists \varepsilon > 0$ such that $B_c(\vec{x}, \varepsilon) \subseteq W$.
+              Thus $\vec{x} \in \mathring{W}$.
     \end{enumerate}
 \end{proof}
 
 \subsection{Closure}
 
 \textbf{\underline{Definition} (closure)}:
-Let $V \subseteq \R^d$. The closure of $V$, written $\overline{V}$, is the set of $\munderbar{x} \in \R^d$ such that there exists a sequence $\left(\munderbar{x}_n\right)_{n \in \N}$ of elements of $V$ converging to $\munderbar{x}$.
+Let $V \subseteq \R^d$. The closure of $V$, written $\overline{V}$, is the set of $\vec{x} \in \R^d$ such that there exists a sequence $\left(\vec{x}_n\right)_{n \in \N}$ of elements of $V$ converging to $\vec{x}$.
 
 For example on $\R$ the closure of $(0, +\infty)$ is $[0, +\infty)$.
 
                 \subsubsection{Theorem: closure adds the boundary}
 
-                \underline{Statement}: Let $\munderbar{a} \in \R^d$ and $r > 0$.
-                Then the closure of $B_o(\munderbar{a}, r)$ is $B_c(\munderbar{a}, r)$.
+                \underline{Statement}: Let $\vec{a} \in \R^d$ and $r > 0$.
+                Then the closure of $B_o(\vec{a}, r)$ is $B_c(\vec{a}, r)$.
 
                 \begin{proof}
                     We have 3 cases
 
                     \begin{enumerate}
-                        \item $\norm{\munderbar{x} - \munderbar{a}} < r$
-                        \item $\norm{\munderbar{x} - \munderbar{a}} = r$
-                        \item $\norm{\munderbar{x} - \munderbar{a}} > r$
+                        \item $\norm{\vec{x} - \vec{a}} < r$
+                        \item $\norm{\vec{x} - \vec{a}} = r$
+                        \item $\norm{\vec{x} - \vec{a}} > r$
                     \end{enumerate}
 
                     Then
 
                     \begin{enumerate}
-                        \item Since $\munderbar{x} \in V$ then $\munderbar{x} \in \overline{V}$. See next proposition for the proof.
-                        \item Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} = r$.
-                              Let $\munderbar{x}_n = \munderbar{x} + t_n(\munderbar{a} - \munderbar{x})$, where we want that $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x}_n \in V \enspace \forall n$.
-                              The first condition is equivalent to saying that $\norm{\munderbar{x}_n - \munderbar{x}} = \norm{t_n(\munderbar{a} - \munderbar{x})} = t_n \norm{\munderbar{a} - \munderbar{x}} \to 0$, therefore we want $t_n \to 0$.
-                              For the second condition we want that $\norm{\munderbar{x}_n - \munderbar{a}} < r$, which is
-                              $\norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} + t_n(\munderbar{a} - \munderbar{x}) - \munderbar{a}} = \norm{(\munderbar{x} - \munderbar{a})(1 - t_n)} = r \abs{1 - t_n} < r$. Then this is $< r$ if $t_n \in [0, 1]$.
+                        \item Since $\vec{x} \in V$ then $\vec{x} \in \overline{V}$. See next proposition for the proof.
+                        \item Let $\vec{x}$ s.t. $\norm{\vec{x} - \vec{a}} = r$.
+                              Let $\vec{x}_n = \vec{x} + t_n(\vec{a} - \vec{x})$, where we want that $\vec{x}_n \to \vec{x}$ and $\vec{x}_n \in V \enspace \forall n$.
+                              The first condition is equivalent to saying that $\norm{\vec{x}_n - \vec{x}} = \norm{t_n(\vec{a} - \vec{x})} = t_n \norm{\vec{a} - \vec{x}} \to 0$, therefore we want $t_n \to 0$.
+                              For the second condition we want that $\norm{\vec{x}_n - \vec{a}} < r$, which is
+                              $\norm{\vec{x}_n - \vec{a}} = \norm{\vec{x} + t_n(\vec{a} - \vec{x}) - \vec{a}} = \norm{(\vec{x} - \vec{a})(1 - t_n)} = r \abs{1 - t_n} < r$. Then this is $< r$ if $t_n \in [0, 1]$.
                               We can take $t_n = \frac{1}{2^n}$.
-                        \item We will prove this one by contradiction. Let $\munderbar{x}$ s.t. $\norm{\munderbar{x} - \munderbar{a}} > r$.
-                              Take a sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in V$ converging to $\munderbar{x}$.
-                              This means that $\norm{\munderbar{x}_n - \munderbar{a}} < r$ for any $n$.
-                              As $\munderbar{x}_n \to \munderbar{x}$ we have that $(\munderbar{x}_n - \munderbar{a}) \to (\munderbar{x} - \munderbar{a})$.
-                              Then $\norm{\munderbar{x}_n - \munderbar{a}} \to \norm{\munderbar{x} - \munderbar{a}}$.
-                              So $\lim_{n \to +\infty} \norm{\munderbar{x}_n - \munderbar{a}} = \norm{\munderbar{x} - \munderbar{a}}$, thus $\norm{\munderbar{x} - \munderbar{a}} \leq r$ and we have a contradiction.
+                        \item We will prove this one by contradiction. Let $\vec{x}$ s.t. $\norm{\vec{x} - \vec{a}} > r$.
+                              Take a sequence $\left(\vec{x}_n\right)_{n \in \N} \in V$ converging to $\vec{x}$.
+                              This means that $\norm{\vec{x}_n - \vec{a}} < r$ for any $n$.
+                              As $\vec{x}_n \to \vec{x}$ we have that $(\vec{x}_n - \vec{a}) \to (\vec{x} - \vec{a})$.
+                              Then $\norm{\vec{x}_n - \vec{a}} \to \norm{\vec{x} - \vec{a}}$.
+                              So $\lim_{n \to +\infty} \norm{\vec{x}_n - \vec{a}} = \norm{\vec{x} - \vec{a}}$, thus $\norm{\vec{x} - \vec{a}} \leq r$ and we have a contradiction.
                     \end{enumerate}
                 \end{proof}
 
@@ -1213,12 +1176,12 @@ For example on $\R$ the closure of $(0, +\infty)$ is $[0, +\infty)$.
                 \begin{proof}
                     \skiplineafterproof
                     \begin{enumerate}
-                        \item Let $\munderbar{x} \in V$.
-                              Then let $\left(\munderbar{x}_n\right)_{n \in \N} = \munderbar{x}$ be a constant sequence of elements of $V$.
-                              Then $\munderbar{x}_n \to \munderbar{x}$ and $\munderbar{x} \in \overline{V}$.
-                        \item Let $V, W$ such that $V \subseteq W$ let and $\munderbar{x} \in \overline{V}$.
-                              Then, by definition, $\exists \left(\munderbar{x}_n\right)_{n \in \N} \in V$ such that $\munderbar{x}_n \to \munderbar{x}$.
-                              As $V \subseteq W$ then $\munderbar{x}_n \in W$ and $\munderbar{x} \in \overline{W}$.
+                        \item Let $\vec{x} \in V$.
+                              Then let $\left(\vec{x}_n\right)_{n \in \N} = \vec{x}$ be a constant sequence of elements of $V$.
+                              Then $\vec{x}_n \to \vec{x}$ and $\vec{x} \in \overline{V}$.
+                        \item Let $V, W$ such that $V \subseteq W$ let and $\vec{x} \in \overline{V}$.
+                              Then, by definition, $\exists \left(\vec{x}_n\right)_{n \in \N} \in V$ such that $\vec{x}_n \to \vec{x}$.
+                              As $V \subseteq W$ then $\vec{x}_n \in W$ and $\vec{x} \in \overline{W}$.
                     \end{enumerate}
                 \end{proof}
 
@@ -1237,7 +1200,7 @@ For example on $\R$ the closure of $(0, +\infty)$ is $[0, +\infty)$.
                                                             & Interior                                   & Closure                                       & Boundary                                   \\
                         \hline
                         $V_1 = \{ (x, y) : x + y \geq 1 \}$ & $x + y > 1$                                & $x + y \geq 1$                                & $x + y = 1$                                \\
-                        $V_2 = B_o(\munderbar{a}, r)$       & $\norm{\munderbar{x} - \munderbar{a}} < r$ & $\norm{\munderbar{x} - \munderbar{a}} \leq r$ & $\norm{\munderbar{x} - \munderbar{a}} = r$ \\
+                        $V_2 = B_o(\vec{a}, r)$       & $\norm{\vec{x} - \vec{a}} < r$ & $\norm{\vec{x} - \vec{a}} \leq r$ & $\norm{\vec{x} - \vec{a}} = r$ \\
                         $V_3 = \R^d$                        & $\R^d$                                     & $\R^d$                                        & $\varnothing$                              \\
                         $V_4 = \varnothing$                 & $\varnothing$                              & $\varnothing$                                 & $\varnothing$                              \\
                         $V_5 = \Q \subseteq \R$             & $\varnothing$                              & $\R$                                          & $\R$                                       \\
@@ -1272,24 +1235,24 @@ For example on $\R$ the closure of $(0, +\infty)$ is $[0, +\infty)$.
 
                     \begin{itemize}
                         \item
-                              First we prove that $\mathring{V} \cup \overline{V^c} = \R^d$. That is to show that if $\munderbar{x} \notin \mathring{V}$ then $\munderbar{x} \in \overline{V^c}$.
-                              Let $\munderbar{x} \notin \mathring{V}$, that is
-                              $\forall \varepsilon > 0, \enspace \exists \munderbar{y} \in B_o(\munderbar{x}, \varepsilon) : \munderbar{y} \notin V$, which is the same as saying that $\munderbar{y} \in V^c$.
+                              First we prove that $\mathring{V} \cup \overline{V^c} = \R^d$. That is to show that if $\vec{x} \notin \mathring{V}$ then $\vec{x} \in \overline{V^c}$.
+                              Let $\vec{x} \notin \mathring{V}$, that is
+                              $\forall \varepsilon > 0, \enspace \exists \vec{y} \in B_o(\vec{x}, \varepsilon) : \vec{y} \notin V$, which is the same as saying that $\vec{y} \in V^c$.
 
-                              Then for $\varepsilon = \frac{1}{n}$ we can find a $y_n \in B_0 \left(\munderbar{x}, \frac{1}{n} \right)$ such that $y_n \in V^c$.
-                              By the definition of $B_o$ we have that $\norm{\munderbar{y} - \munderbar{x}} < \frac{1}{n}$, so $\lim_{n \to +\infty} \munderbar{y}_n = \munderbar{x}$.
+                              Then for $\varepsilon = \frac{1}{n}$ we can find a $y_n \in B_0 \left(\vec{x}, \frac{1}{n} \right)$ such that $y_n \in V^c$.
+                              By the definition of $B_o$ we have that $\norm{\vec{y} - \vec{x}} < \frac{1}{n}$, so $\lim_{n \to +\infty} \vec{y}_n = \vec{x}$.
 
-                              Then the sequence $y_n$ is converging to $\munderbar{x}$, thus $\munderbar{x} \in \overline{V^c}$.
+                              Then the sequence $y_n$ is converging to $\vec{x}$, thus $\vec{x} \in \overline{V^c}$.
 
                         \item
-                              To prove that the union is disjoint (i.e. $\mathring{V} \cap \overline{V^c} = \varnothing$), we take $\munderbar{x} \in \mathring{V} \cap \overline{V^c}$ and show that this leads to a contradiction.
+                              To prove that the union is disjoint (i.e. $\mathring{V} \cap \overline{V^c} = \varnothing$), we take $\vec{x} \in \mathring{V} \cap \overline{V^c}$ and show that this leads to a contradiction.
 
-                              We have that if $\munderbar{x} \in \mathring{V}$ then $\exists \varepsilon > 0$ such that $B_o(\munderbar{x}, \varepsilon) \subseteq V$.
+                              We have that if $\vec{x} \in \mathring{V}$ then $\exists \varepsilon > 0$ such that $B_o(\vec{x}, \varepsilon) \subseteq V$.
 
-                              We also have that since $\munderbar{x} \in \overline{V^c}$ then $\exists \left(\munderbar{x}_n\right)_{n \in \N} \in V^c$ such that $\munderbar{x}_n \to \munderbar{x}$.
-                              As $\lim_{n \to +\infty} \munderbar{x}_n = \munderbar{x}$ then $\exists N$ such that $\munderbar{x_n} \in B_o(\munderbar{x}, \varepsilon)$ for $n \geq N$.
+                              We also have that since $\vec{x} \in \overline{V^c}$ then $\exists \left(\vec{x}_n\right)_{n \in \N} \in V^c$ such that $\vec{x}_n \to \vec{x}$.
+                              As $\lim_{n \to +\infty} \vec{x}_n = \vec{x}$ then $\exists N$ such that $\vec{x_n} \in B_o(\vec{x}, \varepsilon)$ for $n \geq N$.
 
-                              So $\munderbar{x}_n \in V^c$ (by assumption) and $\munderbar{x}_n \in B_o(\munderbar{x}, \varepsilon) \subseteq V$, which is a contradiction.
+                              So $\vec{x}_n \in V^c$ (by assumption) and $\vec{x}_n \in B_o(\vec{x}, \varepsilon) \subseteq V$, which is a contradiction.
                     \end{itemize}
 
                     Now we are left to prove the consequences.
@@ -1341,17 +1304,17 @@ Also $\overline{V}$ is closed and its the smallest closed set containing $V$.
     \skiplineafterproof
     \begin{itemize}
         \item
-              Let $V$ and $\mathring V$ be its interior. We want to prove that $\mathring V$ is open, that is $\forall \munderbar{x} \in \mathring V, \exists \varepsilon > 0 : B_o(\munderbar{x}, \varepsilon) \subseteq \mathring V$ (which is exactly the same as saying $\munderbar{x} \in \mathring{\mathring{V}}$)
+              Let $V$ and $\mathring V$ be its interior. We want to prove that $\mathring V$ is open, that is $\forall \vec{x} \in \mathring V, \exists \varepsilon > 0 : B_o(\vec{x}, \varepsilon) \subseteq \mathring V$ (which is exactly the same as saying $\vec{x} \in \mathring{\mathring{V}}$)
 
-              Let $x \in \mathring V$, then $\exists \varepsilon > 0 : B_o(\munderbar{x}, \varepsilon) \subseteq V$.
-              But we know that $\mathring{B_o(\munderbar{x}, \varepsilon)} \subseteq \mathring{V}$.
-              But $B_o(\munderbar{x}, \varepsilon)$ is open, so $\mathring{B_o(\munderbar{x}, \varepsilon)} \subseteq \mathring{V}$, thus $\mathring{V}$ is open.
+              Let $x \in \mathring V$, then $\exists \varepsilon > 0 : B_o(\vec{x}, \varepsilon) \subseteq V$.
+              But we know that $\mathring{B_o(\vec{x}, \varepsilon)} \subseteq \mathring{V}$.
+              But $B_o(\vec{x}, \varepsilon)$ is open, so $\mathring{B_o(\vec{x}, \varepsilon)} \subseteq \mathring{V}$, thus $\mathring{V}$ is open.
 
               Moreover, let $W$ be an open set such that $W \subseteq V$.
               Then $\mathring{W} \subseteq \mathring{V}$, but $W$ is open so $\mathring{W} \subseteq \mathring{V}$. Thus any open set contained in $V$ is contained in $\mathring{V}$.
 
         \item
-              Let $V$ and $\overline V$ be its closure. We want to prove that $\overline V$ is closed, that is if we take a sequence $\left(\munderbar{x}_n\right) \in \overline{V}$ converging, we need to prove that it converges to a $\munderbar{x} \in \overline V$.
+              Let $V$ and $\overline V$ be its closure. We want to prove that $\overline V$ is closed, that is if we take a sequence $\left(\vec{x}_n\right) \in \overline{V}$ converging, we need to prove that it converges to a $\vec{x} \in \overline V$.
 
               We could prove it this way but it's quite involved, we will use a different (simpler) approach.
 
@@ -1407,47 +1370,47 @@ $$
 
 The definition of continuity for functions of several variables is the same, but we replace the absolute value with the norm where needed.
 
-\textbf{\underline{Definition} (continuity)}: A function $f: D \subseteq \R^2 \to \R$ is continuous at $\munderbar{x}_0 \in D$ if
+\textbf{\underline{Definition} (continuity)}: A function $f: D \subseteq \R^2 \to \R$ is continuous at $\vec{x}_0 \in D$ if
 
 $$
-    \forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \forall \munderbar{x} \in D, \enspace \norm{\munderbar{x} - \munderbar{x}_0} < \delta \implies \abs{f(\munderbar{x}) - f(\munderbar{x}_0)} < \varepsilon
+    \forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \forall \vec{x} \in D, \enspace \norm{\vec{x} - \vec{x}_0} < \delta \implies \abs{f(\vec{x}) - f(\vec{x}_0)} < \varepsilon
 $$
 
-That is, for every $\varepsilon > 0$ we can find a ball of radius $\delta$ around $\munderbar{x}_0$ such that $f(B_o(\munderbar{x}_0, \delta)) \subseteq B_o(f(\munderbar{x}_0), \varepsilon)$.
+That is, for every $\varepsilon > 0$ we can find a ball of radius $\delta$ around $\vec{x}_0$ such that $f(B_o(\vec{x}_0, \delta)) \subseteq B_o(f(\vec{x}_0), \varepsilon)$.
 
 \textbf{\underline{Propostion} (transference principle)}:
-Let $f: D \subseteq \R^2 \to \R$, then $f$ is continuous at $\munderbar{x}_0 \in D$ iff for every sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in D$ converging to $\munderbar{x}_0$ there holds $\lim_{n \to +\infty} f(\munderbar{x}_n) = f(\munderbar{x}_0)$.
+Let $f: D \subseteq \R^2 \to \R$, then $f$ is continuous at $\vec{x}_0 \in D$ iff for every sequence $\left(\vec{x}_n\right)_{n \in \N} \in D$ converging to $\vec{x}_0$ there holds $\lim_{n \to +\infty} f(\vec{x}_n) = f(\vec{x}_0)$.
 
 \begin{proof}
     \skiplineafterproof
     \begin{description}
         \item[$\implies$]
-            Assume $f$ continous at $x_0$ and let $\left(\munderbar{x}_n\right)_{n \in \N} \in D$ converging to $\munderbar{x}_0$.
+            Assume $f$ continous at $x_0$ and let $\left(\vec{x}_n\right)_{n \in \N} \in D$ converging to $\vec{x}_0$.
             Let $\varepsilon > 0$.
-            As $f$ is continuous there is a $\delta > 0$ with $\abs{f(\munderbar{x}) - f(\munderbar{x}_0)} < \varepsilon$ if $\norm{\munderbar{x} - \munderbar{x}_0} < \delta$.
+            As $f$ is continuous there is a $\delta > 0$ with $\abs{f(\vec{x}) - f(\vec{x}_0)} < \varepsilon$ if $\norm{\vec{x} - \vec{x}_0} < \delta$.
 
-            As $\munderbar{x}_n \to \munderbar{x}_0$ then $\exists N$ such that $\norm{\munderbar{x}_n - \munderbar{x}_0} < \delta$ for $n \geq N$.
-            Then $\abs{f(\munderbar{x}_n) - f(\munderbar{x}_0)} < \varepsilon$ for $n \geq N$, thus $\lim_{n \to +\infty} f(\munderbar{x}_n) = f(\munderbar{x}_0)$.
+            As $\vec{x}_n \to \vec{x}_0$ then $\exists N$ such that $\norm{\vec{x}_n - \vec{x}_0} < \delta$ for $n \geq N$.
+            Then $\abs{f(\vec{x}_n) - f(\vec{x}_0)} < \varepsilon$ for $n \geq N$, thus $\lim_{n \to +\infty} f(\vec{x}_n) = f(\vec{x}_0)$.
 
         \item[$\impliedby$]
-            We will argue by contraposition and say that if $f$ is not continuous, then there exists a sequence $\left(\munderbar{x}_n\right)_{n \in \N} \in D$ converging to $\munderbar{x}_0$ such that $\lim_{n \to +\infty} f(\munderbar{x}_n) \neq f(\munderbar{x}_0)$.
+            We will argue by contraposition and say that if $f$ is not continuous, then there exists a sequence $\left(\vec{x}_n\right)_{n \in \N} \in D$ converging to $\vec{x}_0$ such that $\lim_{n \to +\infty} f(\vec{x}_n) \neq f(\vec{x}_0)$.
 
-            Since $f$ is not continuous $\exists \varepsilon > 0$ such that $\forall \delta > 0, \exists \munderbar{x} \in D$ such that $\norm{\munderbar{x} - \munderbar{x}_0} < \delta$ but $\abs{f(\munderbar{x}) - f(\munderbar{x}_0)} > \varepsilon$.
+            Since $f$ is not continuous $\exists \varepsilon > 0$ such that $\forall \delta > 0, \exists \vec{x} \in D$ such that $\norm{\vec{x} - \vec{x}_0} < \delta$ but $\abs{f(\vec{x}) - f(\vec{x}_0)} > \varepsilon$.
 
-            Fix such $\varepsilon > 0$. For $\delta = 1/n$ we can find $\munderbar{x}_n \in D$ such that $\norm{\munderbar{x}_n - \munderbar{x}_0} < 1/n$ but $\abs{f(\munderbar{x}_n) - f(\munderbar{x}_0)} > \varepsilon$.
+            Fix such $\varepsilon > 0$. For $\delta = 1/n$ we can find $\vec{x}_n \in D$ such that $\norm{\vec{x}_n - \vec{x}_0} < 1/n$ but $\abs{f(\vec{x}_n) - f(\vec{x}_0)} > \varepsilon$.
 
-            Then $\munderbar{x}_n \to \munderbar{x}_0$ but $\lim_{n \to +\infty} f(\munderbar{x}_n) \neq f(\munderbar{x}_0)$.
+            Then $\vec{x}_n \to \vec{x}_0$ but $\lim_{n \to +\infty} f(\vec{x}_n) \neq f(\vec{x}_0)$.
     \end{description}
 
     This proof is very similar to the one seen in analysis 1 for functions of one variable.
 \end{proof}
 
 \textbf{\underline{Proposition} (operations on continuous functions)}:
-If $f, g: D \subseteq \R^2 \to \R$ are continuous at $\munderbar{x}_0 \in D$ then
+If $f, g: D \subseteq \R^2 \to \R$ are continuous at $\vec{x}_0 \in D$ then
 \begin{enumerate}[label=\roman*.]
-    \item $f + g$ is continuous at $\munderbar{x}_0$.
-    \item $f \cdot g$ is continuous at $\munderbar{x}_0$.
-    \item If $g(\munderbar{x}_0) \neq 0$ then $1/g$ is continuous at $\munderbar{x}_0$.
+    \item $f + g$ is continuous at $\vec{x}_0$.
+    \item $f \cdot g$ is continuous at $\vec{x}_0$.
+    \item If $g(\vec{x}_0) \neq 0$ then $1/g$ is continuous at $\vec{x}_0$.
 \end{enumerate}
 
 \begin{proof}
@@ -1518,16 +1481,16 @@ $$
 
 These are basically the normal derivatives but we fix one variable and let the other vary. Therefore when, for example, we take the partial derivative with respect to $x$ we consider the function $f(x, y_0)$ and we consider $y$ as a constant.
 
-\textbf{\underline{Definition}(directional derivative)}: Let $f: D \subseteq \R^2 \to \R$, $(x_0, y_0) \in D$ and $\munderbar{u} = (u_1, u_2) \in \R^2$ be a vector with norm $\norm{\munderbar{u}} = 1$.
-The directional derivative in the direction $\munderbar{u}$ is, if exists,
+\textbf{\underline{Definition}(directional derivative)}: Let $f: D \subseteq \R^2 \to \R$, $(x_0, y_0) \in D$ and $\vec{u} = (u_1, u_2) \in \R^2$ be a vector with norm $\norm{\vec{u}} = 1$.
+The directional derivative in the direction $\vec{u}$ is, if exists,
 
 $$
-    \pdv{f}{\munderbar{u}}(x_0, y_0) = \lim_{h \to 0} \frac{f(x_0 + h u_1, y_0 + h u_2) - f(x_0, y_0)}{h}
+    \pdv{f}{\vec{u}}(x_0, y_0) = \lim_{h \to 0} \frac{f(x_0 + h u_1, y_0 + h u_2) - f(x_0, y_0)}{h}
 $$
 
-This is just a generalization of the partial derivative, in fact, if $\munderbar{u} = (1, 0)$ then we get the partial derivative with respect to $x$ and if $\munderbar{u} = (0, 1)$ then we get the partial derivative with respect to $y$.
+This is just a generalization of the partial derivative, in fact, if $\vec{u} = (1, 0)$ then we get the partial derivative with respect to $x$ and if $\vec{u} = (0, 1)$ then we get the partial derivative with respect to $y$.
 
-Note that to compute partial derivatives we almost never have to compute limits. If we consider $\gamma: t \in \R \mapsto (x_0, y_0) + t\munderbar{u} = (x_0 + t u_1, y_0 + t u_2)$ then $\pdv{f}{\munderbar{u}}() (x_0, y_0)$ is the derivative at $t = 0$ of $t \mapsto f(\gamma(t))$.
+Note that to compute partial derivatives we almost never have to compute limits. If we consider $\gamma: t \in \R \mapsto (x_0, y_0) + t\vec{u} = (x_0 + t u_1, y_0 + t u_2)$ then $\pdv{f}{\vec{u}}() (x_0, y_0)$ is the derivative at $t = 0$ of $t \mapsto f(\gamma(t))$.
 
 \subsubsection{Resolving confusing cases}
 
@@ -1535,7 +1498,7 @@ Consider $f(x, y) = xy^2$. We what to understand what the following expressions 
 
 \begin{itemize}
     \item $\pdv{f}{x}()(y,x)$: here we have that we take the derivative with respect to the first variable and then we evaluate it at $(y, x)$.
-    \item $\pdv{f}{x}()(x,x)$: here we have that we take the derivative with respect to the first variable and then we evaluate it at $(x, x)$. It could be clearer to use $\pdv{f}{\munderbar{u}}()(x,x)$ with $\munderbar{u} = (1, 0)$.
+    \item $\pdv{f}{x}()(x,x)$: here we have that we take the derivative with respect to the first variable and then we evaluate it at $(x, x)$. It could be clearer to use $\pdv{f}{\vec{u}}()(x,x)$ with $\vec{u} = (1, 0)$.
     \item $\dv{f}{x}()(x,x)$: here we substitute $y$ with $x$ first and then we take the (normal) derivative with respect to $x$.
 \end{itemize}
 
@@ -1583,7 +1546,7 @@ as we saw in the previous class, the directional derivatives of this function at
 
 This is the worst case scenario and it can be hard to spot it.
 
-We proceed by computing the directional derivative with respect to $\munderbar{u} = (u_1, u_2)$.
+We proceed by computing the directional derivative with respect to $\vec{u} = (u_1, u_2)$.
 
 \begin{align*}
     f(x_0 + hu_1, y_0 + hu_2) & = f(hu_1, hu_2)                         \\
@@ -1593,7 +1556,7 @@ We proceed by computing the directional derivative with respect to $\munderbar{u
 and we can also calculate the limit as $h \to 0$.
 
 \begin{align*}
-    \pdv{f}{\munderbar{u}}()(0, 0) & = \dv{h} \left[ f(hu_1, hu_2) \right]_{h = 0} \\
+    \pdv{f}{\vec{u}}()(0, 0) & = \dv{h} \left[ f(hu_1, hu_2) \right]_{h = 0} \\
                                    & = \frac{u_2^2}{u_1}                           \\
 \end{align*}
 
@@ -1726,36 +1689,36 @@ Note that
 And we can write the taylor expansion as
 
 $$
-    f(\munderbar{x_0} + \munderbar{h}) = f(\munderbar{x_0}) + \nabla f(\munderbar{x_0}) \cdot \munderbar{h} + o(\munderbar{h})
+    f(\vec{x_0} + \vec{h}) = f(\vec{x_0}) + \nabla f(\vec{x_0}) \cdot \vec{h} + o(\vec{h})
 $$
 
 \textbf{\underline{Remark} (the gradient is the direction of maximum increase)}:
-If we choose $\munderbar{u} = \nabla f(\munderbar{x_0})$ then we have that the directional derivative is the maximum possible.
-Moreover if we choose $\munderbar{u} = -\nabla f(\munderbar{x_0})$ then we have that the directional derivative is the minimum possible.
+If we choose $\vec{u} = \nabla f(\vec{x_0})$ then we have that the directional derivative is the maximum possible.
+Moreover if we choose $\vec{u} = -\nabla f(\vec{x_0})$ then we have that the directional derivative is the minimum possible.
 
-Instead, if we choose $\munderbar{u}$ orthogonal to $\nabla f(\munderbar{x_0})$ then we have that the directional derivative is 0 and we find a level set of the function.
+Instead, if we choose $\vec{u}$ orthogonal to $\nabla f(\vec{x_0})$ then we have that the directional derivative is 0 and we find a level set of the function.
 
 \textbf{\underline{Proposition} (differentiability implies continuity)}:
 Let $f: D \subseteq \R^2 \to \R$ be differentiable at $(x_0, y_0)$.
 Then $f$ is continuous at $(x_0, y_0)$.
 
 \begin{proof}
-    We want to prove that $\munderbar{x_0} = (x_0, y_0)$, $\munderbar{h} \mapsto f(\munderbar{x_0} + \munderbar{h})$ is continuous at $\munderbar{h} = \munderbar{0}$.
+    We want to prove that $\vec{x_0} = (x_0, y_0)$, $\vec{h} \mapsto f(\vec{x_0} + \vec{h})$ is continuous at $\vec{h} = \vec{0}$.
 
     Since $f$ is differentiable we have that
 
     $$
-        f(\munderbar{x_0} + \munderbar{h}) =
-        \underbrace{f(\munderbar{x_0})}_{\text{constant}}
-        + \underbrace{\nabla f(\munderbar{x_0}) \cdot \munderbar{h}}_{\text{continuous and } \to 0}
-        + \underbrace{o(\munderbar{h})}_{\to 0 \text{ by definition}}
+        f(\vec{x_0} + \vec{h}) =
+        \underbrace{f(\vec{x_0})}_{\text{constant}}
+        + \underbrace{\nabla f(\vec{x_0}) \cdot \vec{h}}_{\text{continuous and } \to 0}
+        + \underbrace{o(\vec{h})}_{\to 0 \text{ by definition}}
     $$
 
-    For $g(\munderbar{h}) o(\munderbar{h})$ we say $\forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \norm{\munderbar{h}} \leq \delta \implies \abs{g(\munderbar{h})} \leq \varepsilon \norm{\munderbar{h}}$.
+    For $g(\vec{h}) o(\vec{h})$ we say $\forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \norm{\vec{h}} \leq \delta \implies \abs{g(\vec{h})} \leq \varepsilon \norm{\vec{h}}$.
 
     If we set $\varepsilon = 1$ we have that there exists some $\delta > 0$ such that
-    $\norm{\munderbar{h}} \leq \delta \implies \abs{o(\munderbar{h})} \leq \norm{\munderbar{h}}$.
-    Then $\lim_{\munderbar{h} \to \munderbar{0}} g(\munderbar{h}) = 0$.
+    $\norm{\vec{h}} \leq \delta \implies \abs{o(\vec{h})} \leq \norm{\vec{h}}$.
+    Then $\lim_{\vec{h} \to \vec{0}} g(\vec{h}) = 0$.
 
 \end{proof}
 

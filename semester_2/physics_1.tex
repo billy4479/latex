@@ -1,47 +1,9 @@
-\documentclass[10pt]{extarticle}
+\documentclass[12pt]{extarticle}
 \title{Physics 1 Notes}
 \author{Giacomo Ellero}
 \date{Semester 2 - 2023/2024}
 
-\usepackage{amsfonts}
-\usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{mathtools}
-\usepackage{commath}
-\usepackage{dirtytalk}
-\usepackage{parskip}
-\usepackage{mathrsfs}
-\usepackage[many]{tcolorbox}
-\usepackage{xparse}
-\usepackage[a4paper,margin=1.5cm]{geometry}
-\usepackage{bookmark}
-\usepackage{physics}
-\usepackage{cancel}
-\usepackage{siunitx}
-\usepackage{capt-of}
-\usepackage{float}
-\usepackage{enumitem}
-
-\usepackage{tikz}
-\usetikzlibrary{patterns,decorations.pathreplacing,calligraphy}
-
-\newcommand{\C}{\mathbb{C}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\F}{\mathcal{F}}
-\renewcommand{\Re}{\operatorname{Re}}
-\renewcommand{\Im}{\operatorname{Im}}
-
-\newenvironment{absolutelynopagebreak}
-  {\par\nobreak\vfil\penalty0\vfilneg
-   \vtop\bgroup}
-  {\par\xdef\tpd{\the\prevdepth}\egroup
-   \prevdepth=\tpd}
-
-\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{notebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
+\usepackage{preamble}
    
 \begin{document}
 
@@ -227,7 +189,7 @@ $$
 Multiple observers may have different reference frames,
 we need a way to convert from a reference frame to the other.
 
-\begin{center}
+\begin{figure}[H]
     \begin{tikzpicture}
         % Normal axis
         \draw[black, ->] (-3,0) -- (5,0) node[anchor=north]{$\hat{i}$};
@@ -243,9 +205,9 @@ we need a way to convert from a reference frame to the other.
         % Angle between axis
         \draw[red, thick] (0.5,0) arc (0:31:0.5) node[right]{$\theta$};
     \end{tikzpicture}
-    \captionof{figure}{Rotated frame of reference}
+    \caption{Rotated frame of reference}
     \label{fig:rotated_frame}
-\end{center}
+\end{figure}
 
 We can write $\hat{i}$ and $\hat{j}$ in terms of $\hat{i'}$ and $\hat{j'}$:
 
@@ -450,7 +412,8 @@ We note that this function is a bijection between the two coordinate spaces.
 Moreover, we denote the have that the angle vector $\vec \theta$
 and the radius vector $\vec r$ are orthogonal. This makes the polar coordinates \textbf{orthonormal}.
 
-\begin{center}
+\begin{figure}[H]
+    \centering
     \begin{tikzpicture}
         \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
         \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
@@ -469,9 +432,9 @@ and the radius vector $\vec r$ are orthogonal. This makes the polar coordinates 
         \draw[green, ->] (2.82,2.82) -- (2,3.66) node[anchor=south]{$\hat \theta$};
     \end{tikzpicture}
 
-    \captionof{figure}{Polar frame of reference}
+    \caption{Polar frame of reference}
     \label{fig:polar_frame}
-\end{center}
+\end{figure}
 
 We can write the position vector in polar coordinates as follows
 
@@ -667,7 +630,8 @@ There is not much more to say regarding this law.
 
 Consider the following system:
 
-\begin{center}
+\begin{figure}[H]
+    \centering
     \begin{tikzpicture}
         \draw[black, ->] (0,0) -- (5,0) node[anchor=north]{$x$};
         \draw[black, ->] (0,0) -- (0,5) node[anchor=west]{$y$};
@@ -681,9 +645,9 @@ Consider the following system:
 
     \end{tikzpicture}
 
-    \captionof{figure}{Two masses in space}
+    \caption{Two masses in space}
     \label{fig:gravforce_masses}
-\end{center}
+\end{figure}
 
 We have that the gravitational force is given by
 
@@ -1959,5 +1923,92 @@ $$
         v_2' & = \frac{m_2 - m_1}{m_1 + m_2} v_2 + \frac{2 m_1}{m_1 + m_2} v_1
     \end{cases}
 $$
+
+\section{Class of 05/03/2024 - Introduction to special relativity}
+
+Recall that in Galilean relativity we use the following equations:
+
+$$
+    \begin{cases}
+        x' = x - vt \\
+        t' = t
+    \end{cases}
+$$
+
+And this was all well and good until Maxwell came along and realized that electromagnetic waves travel at the speed of light $c$.
+
+$$
+    c \approx 3 \times 10^8 \si{\meter \per \second}
+$$
+
+This speed is incredibly high, and the theory of waves says that the speed of the wave is given by the material properties of the medium.
+
+Therefore electromagnetic waves should travel in some kind of extremely dense medium which is everywhere but we cannot see or interact with.
+They called this medium the \textbf{ether}.
+
+\subsection{Michelson-Morley experiment}
+
+This experiment was designed to measure the speed of the Earth with respect to the ether.
+
+To calculate this speed they used an instrument called interferometer.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{assets/physics/michelson-morley-experiment.jpg}
+
+    \caption{Michelson-Morley experiment}
+    \label{fig:michelson-morley-experiment}
+\end{figure}
+
+If the ether moves, then the speed of light should be different in the two directions of the interferometer and we should be able to see the difference in the interference pattern.
+
+Let the distance that the light travels in the $y$ direction be $T_y$ and in the $x$ direction be $T_x$ while $L$ is the distance between the mirror and the center.
+
+Suppose that the ether moves along the $x$ axis in the negative direction.
+
+On the $y$ axis the light will have to travel along a triangle to reach the mirror, since in the meanwhile the ether has moved.
+
+\begin{align*}
+    cT_y & = 2\sqrt{L^2 + \left(\frac{vT_y}{2}\right)^2} \\
+    T_y  & = \frac{2L}{\sqrt{c^2 - v^2}}
+\end{align*}
+
+On the $x$ axis the light will travel first against the ether and then with the ether.
+
+$$
+    \begin{cases}
+        cT_x^{(1)} = L + v T_x^{(1)} \\
+        cT_x^{(2)} = L - v T_x^{(2)}
+    \end{cases}
+$$
+
+And we get that
+
+$$
+    T_x = T^{(1)} + T^{(2)} = \frac{L}{c - v} + \frac{L}{c + v} = \frac{2Lc}{c^2 - v^2}
+$$
+
+As we see $T_x \neq T_y$. The difference will cancel out if we get that the speed of ether $v$ is 0.
+
+The experiment was repeated many times in different parts of the Earth orbit and the result was always the same: $v = 0$.
+
+This meant that there was a fundamental flaw with the theory of the ether.
+
+\subsubsection{Lorentz transformations}
+
+Before Einstein arrived at the theory of special relativity, Lorentz had already derived some equations that would explain mathematically the results of the Michelson-Morley experiment.
+
+Lorentz thought that, if we allow the space to contract and the time to dilate, we can explain the results of the experiment.
+
+\subsection{Special relativity}
+
+The theory of special relativity is based on two postulates:
+
+\begin{enumerate}
+    \item Principle of inertia: the laws of physics are the same in all inertial frames of reference
+    \item The speed of light in vacuum $c$ is an universal constant
+\end{enumerate}
+
+Note that the principle of inertia implies that straight lines in one frame of reference are straight lines in all frames of reference (because otherwise we would have an acceleration).
 
 \end{document}

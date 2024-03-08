@@ -1922,7 +1922,7 @@ The algorithm works as follows:
 
             # If `e` connects two previously disconnected components
             if not S.connects(u, v):
-                S.add_edge(e)
+                S = S.union(e)
 
         return S
 \end{minted}
@@ -2051,6 +2051,70 @@ This is quite a tricky thing to prove and we will proceed by saying that there e
 \begin{proof}
     This is true by the definition of the algorithm itself, if $S \subsetneqq T^*$ then the cost of $T^*$ would be higher than the cost of $S$, but this is a contradiction of the fact that $T^*$ is a minimum spanning tree.
 \end{proof}
+
+\subsection{Time complexity}
+
+The sorting part is easy to understand, we need to analyze the for loop, specifically what it means to check if two vertices were already connected.
+
+Note that \texttt{S} is a forest. Two vertices are connected if they belong to the same tree in \texttt{S}, that is, they belong to the same connected component.
+
+To solve this problem we can use the \textbf{union-find} data structure.
+
+\subsubsection {Union-find data structure}
+
+We will start defining the data structure by the operations we want to perform on it. This is a very common way to define data structures and we call them \textit{abstract data types}.
+
+We can rewrite the algorithm as follows
+
+\begin{minted}{python}
+    def Kruskal(G, c):
+        S = {}
+        U = UnionFind()
+        sorted_edges = sort_edges(G, c)
+        for e in sorted_edges:
+            (u, v) = e
+            if U.find(u) != U.find(v):
+                S = S.union(e)
+                U.union(u, v)
+\end{minted}
+
+The \texttt{find} method returns the connected component of the vertex and the \texttt{union} method merges two connected components.
+
+When we call \texttt{union} we want to keep the trees the less deep as possible. To do so we assign to each node a \textit{rank} representing the depth of its children and we choose as the root the node with the biggest rank.
+
+Then, \texttt{find} can just check if the root of the two nodes is the same.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{assets/computer_science_2/union_find.png}
+    \caption{An example of the union operation on some nodes}
+    \label{fig:union_find}
+\end{figure}
+
+Now we can look at the time complexity of these two operations:
+\begin{itemize}
+    \item \texttt{find} has a time complexity of $O(\log n)$
+    \item \texttt{union} has a time complexity of $O(1)$ because we are just creating an edge
+\end{itemize}
+
+\subsubsection{Summarizing}
+
+We can put the operations in a table:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Operation} & \textbf{Times} & \textbf{Time complexity} \\
+        \hline
+        Sort               & 1              & $O(|E| \log |E|)$        \\
+        Find               & $|E|$          & $O(\log |V|)$            \\
+        Union              & $|E|$          & $O(1)$                   \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Therefore we get a total complexity of $O(|E| \log |E| + |E| \log |V|)$.
 
 \section{Prim's algorithm}
 
@@ -2306,9 +2370,56 @@ Although the optimal solution has not been achieved yet we can use a greedy algo
 
 \subsubsection{How bad is the approximation?}
 
-Suppose that the optimal solution is $k^*$. We want to find, in the worst case, how many sets the greedy algorithm will return as a function of $k^*$.
+Suppose that the optimal solution is $k^*$, that is it takes $k^*$ steps and uses $k^*$ subsets.
+We want to find, in the worst case, how many sets the greedy algorithm will return as a function of $k^*$.
 
 At least one of the subsets in $k^*$ must be of size at least $\abs{\Omega} / k^*$ (by the pigeonhole principle).
 Hence the greedy algorithm will choose at least a set of size $\abs{\Omega} / k^*$.
+
+% Class of 08/03/2024
+
+Let us denote $S_i$ the set chosen by the greedy algorithm at the $i$-th step and $U_i$ the set of elements that are not yet covered at the $i$-th step.
+
+We have that
+$$
+    \abs{U_1} = \abs{\Omega} - \abs{S_1} \leq \abs{\Omega} - \frac{\abs{\Omega}}{k^*} = \abs{\Omega} \left(1 - \frac{1}{k^*}\right)
+$$
+
+Then we can repeat the reasoning for each step and we get
+
+$$
+    \abs{U_2} \leq \abs{U_1} - \abs{U_1} \frac{1}{k^*} = \abs{\Omega} \left(1 - \frac{1}{k^*}\right)^2
+$$
+
+And, generalizing,
+
+$$
+    \abs{U_t} \leq \abs{\Omega} \left(1 - \frac{1}{k^*}\right)^t
+$$
+
+The algorithm will stop when $\left(1-\frac{1}{k^*}\right)^t \abs{\Omega} < 1$.
+
+Recall from analysis that since $e^x$ is convex the inequality $1+x \leq e^x$ holds for all $x$.
+With $x = -\frac{1}{k^*}$ we get
+
+\begin{align*}
+    1-\frac{1}{k^*}                        & \leq e^{-\frac{1}{k^*}} \\
+    \left(1-\frac{1}{k^*}\right)^t         & \leq e^{-\frac{t}{k^*}} \\
+    e^{-\frac{t}{k^*}} \abs{\Omega}        & < 1                     \\
+    e^{-\frac{t}{k^*} + \log \abs{\Omega}} & < 1                     \\
+    -\frac{t}{k^*} + \log \abs{\Omega}     & < 0                     \\
+    t                                      & > k^* \log \abs{\Omega}
+\end{align*}
+
+This is not a very good approximation, but even with this estimate we get that the solution that the greedy algorithm returns is at most $k^* \log \abs{\Omega}$ times worse than the optimal solution, which is not too bad.
+
+\subsubsection{Incidence matrix}
+
+To represent the problem we can use an incident matrix $A$ such that the columns represent the elements of $\Omega$ and the rows represent the sets $S_1, S_2, \ldots, S_n$.
+
+The entry $A_{ij}$ is 1 if the element $j$ is in the set $i$, 0 otherwise.
+Then the problem becomes finding the smallest number of rows such that the sum of all the columns is 1.
+
+This is an useful representation of the problem because it allows to shift the problem to a linear algebra problem.
 
 \end{document}

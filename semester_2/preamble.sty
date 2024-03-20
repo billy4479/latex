@@ -33,7 +33,7 @@
 
 \hypersetup{
     colorlinks=true,
-    linkcolor=green,
+    linkcolor=cyan,
     urlcolor=blue,
 }
 \urlstyle{same}
@@ -43,6 +43,7 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\indep}{\perp \!\!\! \perp}
 
 \newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
 
@@ -64,5 +65,17 @@
 \newtcolorbox{notebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
 \newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
 \newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
+
+% I don't really like the `plain` style, I use `definition` even for theorems
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
 
 \endinput

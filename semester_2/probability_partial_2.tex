@@ -1,0 +1,199 @@
+\documentclass[12pt]{extarticle}
+
+\usepackage{preamble}
+
+\title{Probability Notes, Partial 2}
+\date{Semester 2, 2023/2024}
+
+\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+% Class of 20/03/2024
+\section{Introduction to continuous random variables}
+
+In the last partial we studied discrete random variables, which are random variables that can take a finite or countably infinite number of values.
+Now we will consider random variables that take values in an interval of the real line, which are called \emph{continuous random variables}.
+
+\begin{definition}[Continuous random variable]
+    \label{def:continuous_random_variable}
+
+    A random variable $X$ is said to be \emph{continuous} if $\exists f(x) : \forall a, b \in \R, a < b$,
+
+    $$
+        P(a \leq X \leq b) = \int_a^b f(x) \dd{x}
+    $$
+
+    where $f(x)$ is called the \emph{probability density function} (pdf) of $X$.
+\end{definition}
+
+Note that $f$ is not unique, and in fact, any function $f$ that satisfies the above equation is a valid pdf for $X$. Usually we will choose the simplest function that satisfies the equation, for example, a continuous one.
+
+Moreover, we also note that if $f(x)$ is negative in an interval, then it is possible to have $P(a \leq X \leq b) < 0$, which is not possible.
+Therefore we will consider only non-negative functions as pdfs.
+
+\begin{proposition}[Properties of the pdf]
+    \label{prop:properties_of_pdf}
+    Let $X$ be a continuous random variable with pdf $f(x)$, then
+
+    \begin{enumerate}[label=\roman*)]
+        \item $\forall x \in \R, P(X = x) = 0$
+        \item $F(x) = \int_{-\infty}^x f(u) \dd{u}$ \item $\int_{-\infty}^{+\infty} f(x) \dd{x} = 1$
+        \item if $f$ is continuous at $x$, then $F'(x) = f(x)$
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}[label=\roman*)]
+        \item
+              \begin{align*}
+                  P(X = x) & = P(\bigcap_{n=1}^\infty (x \leq X \leq x + \frac{1}{n}))      \\
+                           & = \lim_{n \to \infty} P(x \leq X \leq x + \frac{1}{n})         \\
+                           & = \lim_{n \to \infty} \int_x^{x + \frac{1}{n}} f(u) \dd{u} = 0
+              \end{align*}
+
+        \item
+              \begin{align*}
+                  F(x) & = P(X \leq x)                                  \\
+                       & = P (\bigcup_{n=1}^\infty (x-n \leq X \leq x)) \\
+                       & = \lim_{n \to \infty} P(x-n \leq X \leq x)     \\
+                       & = \lim_{n \to \infty} \int_{x-n}^x f(u) \dd{u} \\
+                       & = \int_{-\infty}^x f(u) \dd{u}
+              \end{align*}
+
+        \item
+              \begin{align*}
+                  \int_{-\infty}^{+\infty} f(x) \dd{x} & = \int_{-\infty}^x f(x) \dd{x}  \\
+                                                       & = \lim_{x \to -\infty} F(x) = 1
+              \end{align*}
+        \item This is a direct consequence of ii) and the fundamental theorem of calculus.
+    \end{enumerate}
+\end{proof}
+
+\begin{remark}
+    The pdf $f(x)$ can be interpreted as the \emph{density} of the random variable $X$ at the point $x$, that is
+
+    $$
+        P(x \leq X \leq x + h) \sim f(x) h \quad \text{as } h \to 0
+    $$
+\end{remark}
+
+\begin{lemma}[Indipendent random variables]
+    \label{lem:independent_random_variables}
+    Let $X$ and $Y$ be continuous random variables such that $X \indep Y$, and let $B_1, B_2$ be any borel sets, then
+
+    $$
+        P\left((X \in B_1) \cap (Y \in B_2)\right) = P(X \in B_1) P(Y \in B_2)
+    $$
+
+    This is equivalent to saying
+
+    $$
+        P\left((X \in x) \cap (Y \in y)\right) = P(X \in x) P(Y \in y)
+    $$
+\end{lemma}
+
+\begin{proof}
+    We will not prove this as it is quite hard and not very useful.
+\end{proof}
+
+\begin{example}
+    Our experiment is extracting random numbers from the interval $[0, 1]$.
+    Let $X, Y$ such that $X \indep Y$.
+
+    We want to calculate $P\left((0.5 \leq X \leq 0.75) \cap (0.5 \leq Y \leq 0.75)\right)$.
+
+    Since they are independent we can use the lemma to get $P(0.5 \leq X \leq 0.75) P(0.5 \leq Y \leq 0.75)$.
+
+    Note, by the nature of the experiment, that $P(a \leq X \leq b) = b - a$, then we get
+    $P(0.5 \leq X \leq 0.75) P(0.5 \leq Y \leq 0.75) = 0.25 \cdot 0.25 = 0.0625$.
+
+    Moreover we note that
+
+    $$
+        P(a \leq X \leq b) = \int_a^b I_{[0,1]}(x) \dd{x} = b - a
+    $$
+
+    where $I_{[0,1]}(x)$ is the indicator function of the interval $[0, 1]$.
+\end{example}
+
+\subsection{Transformation of random variables}
+
+\begin{proposition}[Transformation of independent random variables]
+    \label{prop:transformation_indep_crv}
+
+    If $X \indep Y$, then $g(X) \indep h(Y)$.
+\end{proposition}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{align*}
+        P\left(
+        (g(X) \in B_1) \cap (h(Y) \in B_2)
+        \right) & = P\left(
+        (X \in g^{-1}(B_1)) \cap (Y \in h^{-1}(B_2))
+        \right)                                               \\
+                & = P(X \in g^{-1}(B_1)) P(Y \in h^{-1}(B_2)) \\
+                & = P(g(X) \in B_1) P(h(Y) \in B_2)
+    \end{align*}
+
+    where $B_1, B_2$ are borel sets and $g^{-1}(B_1), h^{-1}(B_2)$ are the preimages of $B_1, B_2$ under $g, h$ respectively.
+\end{proof}
+
+\begin{remark}
+    Let $X$ be a continuous random variable with pdf $f_X(x)$ and let $Y = g(X)$,
+    then $Y$ could be either continuous, discrete, or neither.
+\end{remark}
+
+\begin{theorem}[Transformation of random variables]
+    \label{thm:transformation_crv}
+
+    Let $X$ be a continuous random variable, $f_X(x)$ its pdf, such that $X$ takes values in an open interval $U$.
+    Let $g: U \to V$ be a one-to-one, strictly increasing or strictly decreasing function continuously differentiable in $U$.
+
+    Then $Y = g(X)$ is a continuous random variable with pdf $f_Y(y)$ given by
+
+    $$
+        f_Y(y) = f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}}
+    $$
+\end{theorem}
+
+\begin{proof}
+    Let $a, b \in V$, such that $a < b$.
+    Then
+    \begin{align*}
+        P(a \leq Y \leq b) & = P(a \leq g(X) \leq b)                                  \\
+                           & = P(g^{-1}(a) \leq X \leq g^{-1}(b))                     \\
+                           & = \int_{g^{-1}(a)}^{g^{-1}(b)} f_X(x) \dd{x}             \\
+                           & = \int_a^b f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}} \dd{y}
+    \end{align*}
+
+    where we used the change of variables $x = g^{-1}(y)$.
+    Note that the inverse of $g$ exists because $g$ is one-to-one.
+
+    We need the absolute value because if $g$ is decreasing, then we get a minus sign from the change of variables that we don't want.
+\end{proof}
+
+\begin{example}
+    Let $X$ a random variable representing the radius of a circle, and let $Y$ be the area of such circle.
+    Let $f_X(x) = 6x(1-x)I_{(0,1)}(x)$, then we want to find $f_Y(y)$.
+
+    We have that $Y = \pi X^2$, that is $g(x) = \pi x^2$ and its inverse is $g^{-1}(y) = \sqrt{\frac{y}{\pi}}$.
+
+    Moreover $\dv{g^{-1}(y)}{y} = \frac{1}{2} \frac{1}{\sqrt{\pi y}}$.
+
+    We use the theorem \ref{thm:transformation_crv} to get
+
+    \begin{align*}
+        f_Y & = 6\sqrt{\frac{y}{\pi}} \left(1- \sqrt{\frac{y}{\pi}}\right) \frac{1}{2} \frac{1}{\sqrt{\pi y}} I_{(0, 1)}\left(\frac{y}{\pi}\right) \\
+            & = \frac{3}{\pi} \left(1- \frac{y}{\pi}\right) I_{(0, \pi)}(y)
+    \end{align*}
+
+\end{example}
+
+\end{document}

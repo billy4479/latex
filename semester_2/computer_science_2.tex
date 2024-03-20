@@ -646,7 +646,7 @@ We can represent this graph using the following adjacency matrix:
             \bitboxes{1}{1000} \\
         \end{bytefield}
     $$
-    \caption{The adjacency matrix of the graph in (\ref{fig:repr:graph1})}
+    \caption{The adjacency matrix of the graph in \ref{fig:repr:graph1}}
     \label{fig:repr:adjmatrix1}
 \end{figure}
 
@@ -664,7 +664,7 @@ Let $G = (V, E)$ be a graph with $|V| = n$.
 
 An \textbf{adjacency list} is a list of $n$ lists where the $i$-th list contains all the vertices adjacent to the $i$-th vertex.
 
-\textbf{Example}: The graph in (\ref{fig:repr:graph1}) can be represented using the following adjacency list:
+\textbf{Example}: The graph in \ref{fig:repr:graph1} can be represented using the following adjacency list:
 
 \begin{figure}[H]
     \centering
@@ -676,7 +676,7 @@ An \textbf{adjacency list} is a list of $n$ lists where the $i$-th list contains
         3      & 1                 \\
         4      & 1
     \end{tabular}
-    \caption{The adjacency list of the graph in (\ref{fig:repr:graph1})}
+    \caption{The adjacency list of the graph in \ref{fig:repr:graph1}}
     \label{fig:repr:adjlist1}
 \end{figure}
 
@@ -908,7 +908,7 @@ In this way we can build a tree that represents the exploration of the graph, th
     \label{fig:directedgraph}
 \end{figure}
 
-By looking at the graph in (\ref{fig:directedgraph}) and performing a DFS in our head we can see that, starting from $A$, we can reach all the other nodes.
+By looking at the graph in \ref{fig:directedgraph} and performing a DFS in our head we can see that, starting from $A$, we can reach all the other nodes.
 We also note that this is not true for every node, for example $G$ cannot reach any other node.
 
 If we construct the DFS tree of this graph starting from $A$ and breaking ties in alphabetical order we get the following tree:
@@ -933,7 +933,7 @@ If we construct the DFS tree of this graph starting from $A$ and breaking ties i
         \draw[->, very thick] (F) -- (G);
         \draw[->, very thick] (E) -- (H);
     \end{tikzpicture}
-    \caption{The DFS tree of the graph in (\ref{fig:directedgraph})}
+    \caption{The DFS tree of the graph in \ref{fig:directedgraph}}
     \label{fig:dfs-tree}
 \end{figure}
 
@@ -978,7 +978,7 @@ We can define the following for DFS trees:
         \draw[->, very thick, green] (H) to [bend right] (G);
 
     \end{tikzpicture}
-    \caption{The DFS tree of the graph in (\ref{fig:directedgraph}) with forward (red), back (blue), and cross edges (green)} \label{fig:dfs-tree-fbg}
+    \caption{The DFS tree of the graph in \ref{fig:directedgraph} with forward (red), back (blue), and cross edges (green)} \label{fig:dfs-tree-fbg}
 \end{figure}
 
 We note that if we consider the pre and post variable for each node as an \say{interval},
@@ -1024,7 +1024,7 @@ and nodes connected with a cross edge have disjoint intervals.
 
 \textbf{\underline{Definition} (topological sort)}: If $G = (V, E)$ is a directed graph we say that an ordered list $L$ of the vertices in $V$ is a topological sort of $G$ if for every edge $(u, v) \in E$, the vertex $u$ comes before $v$ in $L$.
 
-\underline{Example}: Consider the graph in Figure (\ref{fig:directedgraph}). A topological sort of this graph is $[A, C, D, B, E, F, H, G]$.
+\underline{Example}: Consider the graph in Figure \ref{fig:directedgraph}. A topological sort of this graph is $[A, C, D, B, E, F, H, G]$.
 Note that topological sorts are not unique.
 
 % Class of 16/02/2024
@@ -1523,7 +1523,7 @@ Let $G(V, E)$, $s \in V$, and $l(u, v) > 0 \forall (u, v) \in E$. Let $d(v)$ be 
     \label{fig:weighted_directedgraph}
 \end{figure}
 
-In the graph in Figure (\ref{fig:weighted_directedgraph}) we would start from $A$ which is the start vertex and we apply the algorithm.
+In the graph in Figure \ref{fig:weighted_directedgraph} we would start from $A$ which is the start vertex and we apply the algorithm.
 
 We can make a table of the distances at each step of the algorithm:
 
@@ -1545,7 +1545,7 @@ We can make a table of the distances at each step of the algorithm:
     \label{tab:dijsktra_distances}
 \end{table}
 
-In the Table (\ref{tab:dijsktra_distances}) we have highlighted the vertices that have been updated.
+In the Table \ref{tab:dijsktra_distances} we have highlighted the vertices that have been updated.
 
 At each step we extract the vertex with the smallest distance from the queue and we update the distances of its neighbors if we can reach them in a shorter path.
 
@@ -1575,7 +1575,7 @@ Sometimes having a negative length edge can be useful, therefore we need to adju
     \label{fig:negative_edges}
 \end{figure}
 
-In the graph in Figure (\ref{fig:negative_edges}) we have a cycle containing a negative edge, which means that we can go around the cycle as many times as we want and we will always decrease the distance.
+In the graph in Figure \ref{fig:negative_edges} we have a cycle containing a negative edge, which means that we can go around the cycle as many times as we want and we will always decrease the distance.
 
 This is a problem which is not solvable with Dijkstra's algorithm, a graph with \textbf{negative cycles} is not solvable with this algorithm.
 
@@ -1934,7 +1934,7 @@ We will prove this later.
 
 \subsubsection{Example}
 
-Consider the graph in Figure (\ref{fig:minimum_spanning_tree}).
+Consider the graph in Figure \ref{fig:minimum_spanning_tree}.
 
 The algorithm will connect the vertices starting from the cheapest ones.
 
@@ -1946,7 +1946,7 @@ The algorithm will connect the vertices starting from the cheapest ones.
         \textbf{Cost} & 1      & 1      & 1      & 2      & 2      & 3      & 4      & 5      & 5      \\
         \hline
     \end{tabular}
-    \caption{The edges of the graph in Figure (\ref{fig:minimum_spanning_tree}) sorted by cost}
+    \caption{The edges of the graph in Figure \ref{fig:minimum_spanning_tree} sorted by cost}
     \label{tab:kruskal_edges}
 \end{table}
 
@@ -1966,7 +1966,7 @@ The algorithm will connect the vertices starting from the cheapest ones.
         \draw[thick, red] (E) -- node[below] {1} (F);
         \draw[thick, red] (B) -- node[midway, anchor=south east] {1} (D);
     \end{tikzpicture}
-    \caption{The minimum spanning tree of the graph in Figure (\ref{fig:minimum_spanning_tree}). Red edges are added first, then blue, then green.}
+    \caption{The minimum spanning tree of the graph in Figure \ref{fig:minimum_spanning_tree}. Red edges are added first, then blue, then green.}
     \label{fig:minimum_spanning_tree_kruskal}
 \end{figure}
 
@@ -2421,5 +2421,200 @@ The entry $A_{ij}$ is 1 if the element $j$ is in the set $i$, 0 otherwise.
 Then the problem becomes finding the smallest number of rows such that the sum of all the columns is 1.
 
 This is an useful representation of the problem because it allows to shift the problem to a linear algebra problem.
+
+% After first partial exam
+% Class of 20/03/2024
+\section{Dynamic programming}
+
+This is a general technique to constructing algorithms, it is not a specific solution to a specific problem but a way to think about problems.
+
+\subsection{Shortest path in DAGs}
+
+We saw this problem before but now we will approach it in a different way.
+
+In unweighted graphs we used BFS to compute the path from a \textit{single source} to all the other vertices and takes $O(|V| + |E|)$, while in weighted graphs we used Dijkstra's algorithm which also works for \textit{single source} shortest path and takes $O(|E| \log |V|)$ when implemented using fibonacci heaps.
+
+But if we know that the graph is acyclic we can do better: nodes are removed from the queue in a topological order, then we can write the following algorithm:
+
+\begin{minted}{python}
+    def shortest_path_dag(G, cost, s):
+        d = {}
+        for v in G.vertices():
+            d[v] = float('inf')
+
+        # Calculate the topological sort
+        topological_sort = topological_sort(G)
+
+        # We will only be able to explore the nodes that
+        # come after s in the topological sort
+        index_of_s = topological_sort.index(s)
+        topological_sort = topological_sort[index_of_s:]
+
+        # The distance of the starting node to itself is 0
+        d[s] = 0
+
+        # We iterate in topological order
+        for u in topological_sort:
+
+            # We check all the neighbors of v
+            for v in u.neighbors():
+                # If the cost of getting to v from u is less than
+                # the current cost of getting to v, we update it
+                
+                d[u] = min(d[u], d[v] + cost((u, v)))
+
+        return d
+\end{minted}
+
+Note that this algorithm works only for acyclic graphs, but also in the case of negative weights.
+
+\subsubsection{Time complexity}
+
+We saw before that the time complexity of the topological sort is $O(|V| + |E|)$, the loop is also $O(|V| + |E|)$, therefore the total time complexity is $O(|V| + |E|)$.
+
+\subsubsection{Longest path on DAGs}
+
+We can solve this problem in the same way as the shortest path problem but we negate the cost of the edges.
+
+In this way the longest path problem becomes a shortest path problem and we can use the same algorithm.
+
+Alternatively we could replace the \texttt{min} with a \texttt{max} in the algorithm and get the same result.
+
+\subsubsection{Adding a sink to the graph}
+
+Consider a DAG where we know already the distances from a starting node to all the other nodes, and we want to add a sink $v$ to the graph.
+
+We create edges $(u_i, v)$ where $u_i$ are the nodes that are already in the graph that we connect to $v$, then we add $v$ to the topological sort as the last element (since it is a sink).
+
+Now we can compute the shortest path from the source to $v$ by iterating all the $u_i$ and choosing the one such that $d[u_i] + c(u_i, v)$ is the smallest.
+
+We can use this method to create a new algorithm where we add each node to the graph one by one and compute the shortest path to the new node.
+
+\begin{minted}{python}
+    def shortest_path_dag(G, cost, s):
+        # The setup is the same as before
+
+        d = {}
+        for v in G.vertices():
+            d[v] = float('inf')
+
+        topological_sort = topological_sort(G)
+        index_of_s = topological_sort.index(s)
+        topological_sort = topological_sort[index_of_s:]
+
+        d[s] = 0
+
+        for u in topological_sort:
+            for v in u.neighbors():
+                d[u] = min(d[u], d[v] + cost((v, u)))
+
+\end{minted}
+
+\subsection{The knapsack problem}
+
+\subsubsection{The problem}
+
+In this problem we have a set of $n$ items, each with a weight $w_i$ and a value $v_i$, and we have to put them in a backpack with a maximum capacity $W$.
+
+The problem is to find the best combination of items that maximizes the value of the backpack.
+
+\subsubsection{Example}
+
+Suppose we have a maximum weight $W = 20$ and the following items
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ |c|c|c|c|c| }
+        \hline
+        \textbf{Item}   & 1  & 2  & 3 & 4  \\
+        \hline
+        \textbf{Value}  & 4  & 7  & 1 & 5  \\
+        \textbf{Weight} & 10 & 12 & 9 & 10 \\
+        \hline
+    \end{tabular}
+
+    \label{tab:knapsack_example}
+    \caption{An example set of items}
+\end{table}
+
+Then the solution is to take item 1 and item 4, which have a total weight of 20 and a total value of 9.
+
+As we can see this problem cannot be solved using a greedy algorithm, because such an algorithm would choose item 2 first and then stop because we are already at the maximum weight.
+
+\subsubsection{Recursive formulation}
+
+Consider the situation where we have a backpack with a maximum weight $W$ and a set of $n$ items $I$.
+
+We already have the solution for the problem with $n-1$ items provided as a function $f : [0, W] \in \N \to A \subseteq I$ that maps the maximum weight of the backpack to the set of items that we can put in the backpack.
+
+Now we consider the $n$-th item, we have two possibilities: either we take it or we don't.
+\begin{itemize}
+    \item If we don't take it we already have the best solution, that is $f(W)$.
+    \item If we take it, the weight we have left in the backpack is $W - w_n$, therefore the best solution is $f(W - w_n) \cup \{n\}$.
+\end{itemize}
+
+We can now write a matrix $M$ of size $(n + 1) \times (W + 1)$ where $M_{ij}$ is the maximum value that we can get with the first $i$ items and a maximum weight of $j$.
+
+We note that in the first row of the matrix we will always have 0, because if we have 0 items we can't have any value.
+
+Moreover we note that when we choose whether to take the $i$-th item or not we have to check if the $w_i$ is greater than the maximum weight we have left, if it is we can't take it.
+In particular, in the first column of the matrix we will always have 0, because if we have 0 weight we can't have any value.
+
+At last, note that the to compute $M_{ij}$ we need to know $M_{i-1, j}$ and $M_{i-1, j - w_i}$ which are both values that come before $M_{ij}$ in the matrix.
+Therefore we can compute the matrix row by row, from left to right and be sure that we have already computed the values we need.
+
+\subsubsection{The algorithm}
+
+We can now use the recursive definition to formalize the algorithm.
+
+\begin{minted}{python}
+    def knapsack(W, I):
+        # Initialize the matrix with all 0s
+        M = [[0 for _ in range(W + 1)] for _ in range(len(I) + 1)]
+
+        # The iteration starts from 1 because the first row is all 0s
+        for i in range(1, len(I) + 1):
+            item = I[i - 1]
+
+            # Same as before, we start from 1 because the first column is all 0s
+            for max_weight in range(1, W + 1):
+                # If the item is too heavy we can't take it
+                # and we just copy the previous value
+                if item.weight > max_weight:
+                    M[i][max_weight] = M[i - 1][max_weight]
+                else:
+                    # Otherwise we need to choose the maximum value between:
+                    # - The value of the previous item
+                    # - The value of the current item plus the value of the
+                    #   best solution for the remaining weight
+                    M[i][max_weight] = max(
+                        M[i - 1][max_weight],
+                        M[i - 1][max_weight - item.weight] + item.value
+                    )
+
+        return reconstruct(W, I, M)
+\end{minted}
+
+Now that we computed the matrix we need to reconstruct the solution, that is, the set of items that we put in the backpack.
+
+\begin{minted}{python}
+    def reconstruct(W, I, M):
+        solution = []
+        weight = W
+
+        # Iterate the rows of the matrix in reverse order
+        for i in range(len(I), 1, -1):
+            # If the value of the last item of the current row is different
+            # from the one of the previous row it means 
+            # that we took the (i-1)-th item
+            if M[i][weight] != M[i - 1][weight]:
+                solution.append(I[i - 1])
+
+                # Reduce the weight that we are left with
+                # for the next iteration
+                weight -= I[i - 1].weight
+        
+        return solution
+\end{minted}
 
 \end{document}

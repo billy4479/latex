@@ -1,0 +1,199 @@
+\documentclass[12pt]{extarticle}
+
+\usepackage{preamble}
+
+\title{Mathematical Analysis 2 Notes, Partial 2}
+\date{Semester 2, 2023/2024}
+
+\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+% Class of 21/03/2024
+\section{Rotational Dynamics}
+
+\subsection{Introduction}
+
+We define a \emph{rigid body} as an object that never changes its shape.
+Mathematically we can say that given any $i, j$ inside the body, the distance $d_{ij}$ will stay constant no matter what.
+
+\subsubsection{Types of rigid bodies}
+
+We can differentiate between continuos rigid body and discrete rigid bodies:
+\begin{itemize}
+    \item Continuous rigid bodies have a density mass function of the form $\rho(\vec{r})$.
+    \item Discrete rigid bodies have a finite number of particles, each with a mass $m_i$ and a position $\vec{r}_i$, which might all be connected by some massless structure.
+\end{itemize}
+
+\subsubsection{Decomposing displacements}
+
+We want to describe the motion of a rigid body in space. This is usually a hard task.
+
+It turns out that a general displacement of a rigid body can be decomposed into the sum of two motions: a \textbf{translation} of the center of mass and a \textbf{rotation} around the center of mass.
+This means that we need 6 parameters to describe any displacement: 3 for the translation and 3 for the rotation.
+
+\subsubsection{The simplest case: 2D}
+
+The simplest case we will consider is a 2D rigid body that lies on the $xy$ plane and can rotate around the $z$ axis.
+
+\subsection{Angular variables}
+
+Consider a simple case of a 2D rigid body that can rotate around the $z$ axis and has its center of mass fixed at the origin.
+
+In this case we can describe the position of any point $p$ in the RB in polar coordinates as $(r, \theta)$. Now, knowing $r$ and $\theta$ we can compute the \textbf{arc length} $s = r\theta$.
+
+Note that specifying $\theta$ is enough to get the position of all the points in the RB because $r$ will stay constant.
+
+\subsubsection{Angular velocity}
+
+Let $\omega_{\text{avg}} \coloneq \frac{\theta(t_2) - \theta(t_1)}{t_2 - t_1}$ be the \textbf{average angular velocity} between times $t_1$ and $t_2$. As $\Delta t = t_2 - t_1 \to 0$, we define the \textbf{instantaneous angular velocity} as
+
+$$
+    \omega \coloneq \lim_{\Delta t \to 0} \omega_{\text{avg}} = \dv{\theta}{t}
+$$
+
+The angular velocity is a vector, therefore we can decompose it in direction and magnitude. We have $\vec{\omega} = \omega \hat{\omega}$, where $\hat{\omega}$ is either $\hat{z}$ if the motion is counterclockwise or $-\hat{z}$ if the motion is clockwise.
+
+Moreover note that the angular velocity stays constant for every point in the RB, but the linear velocity does not, in fact $v = r\omega$.
+
+\subsubsection{Angular acceleration}
+
+We define the \textbf{average angular acceleration} as $\alpha_{\text{avg}} \coloneq \frac{\omega(t_2) - \omega(t_1)}{t_2 - t_1}$ and the \textbf{instantaneous angular acceleration} as
+
+$$
+    \alpha \coloneq \lim_{\Delta t \to 0} \alpha_{\text{avg}} = \dv{\omega}{t} = \dv[2]{\theta}{t}
+$$
+
+If we want to calculate the linear acceleration of a point in the RB, we have to combine the centripetal acceleration and the tangential acceleration, that is
+
+$$
+    a = \begin{cases}
+        a_c = \frac{v^2}{r} = r\omega^2 \\
+        a_t = \dv{v}{t} = \dv{t}(\omega r) = r \dv{\omega}{t} = r\alpha
+    \end{cases}
+$$
+
+\subsubsection{Summary}
+
+We can compile a table with all the variables we have defined so far:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Variable     & 1D                 & 2D rotation                  \\
+        \hline
+        Position     & $x$                & $\theta$                     \\
+        Velocity     & $v = \dv{x}{t}$    & $\omega = \dv{\theta}{t}$    \\
+        Acceleration & $a = \dv[2]{x}{t}$ & $\alpha = \dv[2]{\theta}{t}$ \\
+        \hline
+    \end{tabular}
+    \caption{Summary of angular variables}
+    \label{tab:angular-variables}
+\end{table}
+
+and if $\alpha = \text{const}$ we have
+
+$$
+    \begin{cases}
+        \theta(t) & = \theta_0 + \omega_0 t + \frac{1}{2}\alpha t^2 \\
+        \omega(t) & = \omega_0 + \alpha t
+    \end{cases}
+$$
+
+\subsection{Rotational kinetic energy}
+
+First we will consider a simpler case of a discrete rigid body of $n$ masses connected by a stick around a pivot which also happens to be the center of mass.
+
+Then the kinetic energy $K = \sum_{i=1}^n K_i$ where
+
+\begin{align*}
+    K_i & = \frac{1}{2}m_i v_i^2          \\
+        & = \frac{1}{2}m_i r_i^2 \omega^2
+\end{align*}
+
+note that the $i$ subscript is only present in the mass and the radius, but not in the angular velocity, then we can write
+
+\begin{align*}
+    K & = \frac{1}{2} \omega^2 \sum_{i=1}^n m_i r_i^2 \\
+      & = \frac{1}{2} I \omega^2
+\end{align*}
+
+where $I \coloneq \sum_{i=1}^n m_i r_i^2$ is the \textbf{moment of inertia} of the rigid body.
+
+We can make some trivial observations about the moment of inertia:
+
+\begin{itemize}
+    \item It depends on $m_i$ and $r_i$: if the RB is heavier or more spread out, the moment of inertia will be bigger.
+    \item It depends on the axis of rotation: if we change the pivot point the moment of inertia will change because the $r_i$ will change.
+\end{itemize}
+
+In the case of a continuous rigid body, we can see it just as a sum of an infinite number of masses, so we can write
+
+\begin{align*}
+    K & = \int_{RB} \dd{K}                          \\
+      & = \int_{RB} \frac{1}{2} v^2 \dd{m}          \\
+      & = \int_{RB} \frac{1}{2} r^2 \omega^2 \dd{m} \\
+      & = \frac{1}{2} I \omega^2
+\end{align*}
+
+where
+
+$$
+    I \coloneq \int_{RB} r^2 \dd{m} = \int_{RB} r^2 \sigma \dd{S}
+$$
+
+where $\sigma$ is the density mass function on a surface.
+
+Note that $r$ and $\sigma$ are functions of the position, even if we dropped the notation this does not mean that $I$ is a constant.
+
+\begin{remark}
+    For a matter of notation, we will use the symbol $\lambda$ to denote the linear density mass function, $\sigma$ to denote the surface density mass function and $\rho$ to denote the volume density mass function.
+\end{remark}
+
+\begin{example}[Moment of inertia of a ring]
+    Consider a ring of radius $R$ and mass $M$ with uniform density. We want to calculate the moment of inertia with respect to the center of the ring.
+
+    Since the density is uniform, we can write $\lambda = \frac{M}{2\pi R}$, then
+
+    \begin{align*}
+        I & = \int_{\text{ring}} r^2 \dd{m}         \\
+          & = \int_{\text{ring}} R^2 \lambda \dd{r} \\
+          & =  R^2 \int_{\text{ring}} \dd{m}        \\
+          & = R^2 M
+    \end{align*}
+\end{example}
+
+\begin{example}[Moment of inertia of a disk]
+    Consider a disk of radius $R$ and mass $M$ with uniform density. We want to calculate the moment of inertia with respect to the center of the disk.
+
+    Since the density is uniform, we can write $\sigma = \frac{M}{\pi R^2}$.
+
+    We have two ways to compute $I$. The first one is to brute force the definition of $I$, passing to polar coordinates and solving the integral.
+
+    With this method we get that $\dd{S} = r \dd{r} \dd{\theta}$, then
+
+    \begin{align*}
+        I & = \int r^2 \dd{m} = \int r^2 \sigma \dd{S}             \\
+          & = \int r^2 \sigma r \dd{r} \dd{\theta}                 \\
+          & = \sigma \int_0^{2\pi} \dd{\theta} \int_0^R r^3 \dd{r} \\
+          & = 2 \pi \sigma \frac{R^4}{4} = \frac{1}{2} M R^2
+    \end{align*}
+
+    Alternatively we can sum the moment of inertia of a ring of radius $r$ and width $\dd{r}$ and use the result we got in the previous example.
+    We have
+
+    \begin{align*}
+        I & = \int \dd{I_\text{ring}} = \int r^2 \dd{m_\text{ring}}             \\
+          & = \int r^2 \sigma \dd{S_\text{ring}}= \int r^2 \sigma 2\pi r \dd{r} \\
+          & = 2\pi \sigma \int r^3 \dd{r} = 2\pi \sigma \frac{R^4}{4}           \\
+    \end{align*}
+
+    which indeed is the same result as before at the expense of a much simpler integral.
+\end{example}
+
+\end{document}

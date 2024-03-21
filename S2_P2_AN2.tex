@@ -1,0 +1,223 @@
+\documentclass[12pt]{extarticle}
+
+\usepackage{preamble}
+
+\title{Mathematical Analysis 2 Notes, Partial 2}
+\date{Semester 2, 2023/2024}
+
+\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
+
+\renewcommand{\vec}[1]{\underbar{\ensuremath{#1}}}
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Functions from \texorpdfstring{$\R^d$}{Rd} to \texorpdfstring{$\R^p$}{Rp}}
+
+\subsection{Continuity}
+
+\begin{definition}[continuity]
+    A function $f: D \subseteq \R^d \to \R^p$ is continuous at $\vec{x}_0$ if
+
+    $$
+        \forall \varepsilon > 0,
+        \quad
+        \exists \delta > 0,
+        \quad
+        \forall \vec{x} \in D,
+        \quad
+        \underbrace{\norm{\vec{x} - \vec{x}_0}}_{\text{norm in } \R^d} < \delta
+        \implies
+        \underbrace{\norm{f(\vec{x}) - f(\vec{x}_0)}}_{\text{norm in } \R^p} < \varepsilon
+    $$
+\end{definition}
+
+\begin{proposition}[sequential characterization]
+    A function $f: D \subseteq \R^d \to \R^p$ is continuous at $\vec{x}_0$ iff for every sequence $\vec{x}_n \in D$ which converges to $\vec{x}_0$, the sequence $f(\vec{x}_n)$ converges to $f(\vec{x}_0)$.
+\end{proposition}
+
+\begin{proposition}[composition of continuous functions]
+    Let $f: D \subseteq \R^d \to \R^p$ and $g: U \subseteq \R^p \to \R^q$ be continuous at $\vec{x}_0$ and $f(\vec{x}_0)$ respectively such that if $\vec{x} \in D$ then $f(\vec{x}) \in U$ and $g \circ f$ is well defined.
+    Then $g \circ f$ is continuous at $\vec{x}_0$.
+\end{proposition}
+
+\begin{proof}
+    Informally we can say
+
+    \begin{align*}
+        g(f(\lim \vec{x}_n)) = g(\lim f(\vec{x}_n)) = \lim g(f(\vec{x}_n))
+    \end{align*}
+
+    For a more formal proof you can see the proof we did for parametric curves in the first partial.
+\end{proof}
+
+\begin{proposition}[componentwise continuity]
+    Let $f: D \subseteq \R^d \to \R^p$ and write
+
+    $$
+        f = \begin{pmatrix}
+            f_1    \\
+            f_2    \\
+            \vdots \\
+            f_p
+        \end{pmatrix}
+    $$
+
+    where each $f_j : D \subseteq \R^d \to \R$.
+
+    Then $f$ is continuous at $\vec{x}_0$ iff each $f_j$ is continuous at $\vec{x}_0$.
+\end{proposition}
+
+\begin{remark}
+    This is more or less the definition of continuity for parametric curves.
+\end{remark}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[$\implies$] ($f$ continuous at $\vec{x}_0 \implies \forall j, \enspace f_j$ continuous at $\vec{x}_0$)
+
+            Fix $j$ and let $\left(\vec{y}_n\right)$ be a sequence that converges to $\vec{x}_0$.
+            Since $f$ is continuous $f(\vec{y}_n) = \left(f_1(\vec{y}_n), f_2(\vec{y}_n), \ldots, f_p(\vec{y}_n)\right)$ converges to $f(\vec{x}_0) = \left(f_1(\vec{x}_0), f_2(\vec{x}_0), \ldots, f_p(\vec{x}_0)\right)$.
+
+            In particular, the sequence $\left(f_j(\vec{y}_n)\right)$ converges to $f_j(\vec{x}_0)$.
+
+        \item[$\impliedby$] ($\forall j, \enspace f_j$ continuous at $\vec{x}_0 \implies f$ continuous at $\vec{x}_0$)
+
+            Let $\left(\vec{y}_n\right)$ be a sequence that converges to $\vec{x}_0$. Then, since $f_j$ is continuous, for every $j$, the sequence $f_j(\vec{y}_n)$ converges to $f_j(\vec{x}_0)$.
+
+            So the sequence $f(\vec{y}_n) = \left(f_1(\vec{y}_n), \ldots, f_p(\vec{y}_n)\right)$ converges to $f(\vec{x}_0) = \left(f_1(\vec{x}_0), \ldots, f_p(\vec{x}_0)\right)$.
+    \end{description}
+\end{proof}
+
+\subsection{Differentiability}
+
+\begin{definition}[partial derivatives]
+    Let $f: D \subseteq \R^d \to \R^p$ and $\vec{x} = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_d \end{pmatrix} \in D$.
+
+    We define, if exists,
+
+    $$
+        \pdv{f_j}{x_i}()(\vec{x}) = \lim_{h \to 0} \frac{f_j(x_1, \ldots, x_{i-1}, x_i + h, x_{i+1}, \ldots, x_d) - f_j(x_1, \ldots, x_d)}{h} \in \R
+    $$
+
+    for all $i = 1, 2, \ldots, d$ and $j = 1, 2, \ldots, p$.
+
+    Moreover we define $\pdv{f}{x_i}()(\vec{x})$, if exists, as
+
+    $$
+        \pdv{f}{x_i}()(\vec{x}) = \begin{pmatrix}
+            \pdv{f_1}{x_i}()(\vec{x}) \\
+            \pdv{f_2}{x_i}()(\vec{x}) \\
+            \vdots                    \\
+            \pdv{f_p}{x_i}()(\vec{x})
+        \end{pmatrix} \in \R^p
+    $$
+\end{definition}
+
+\begin{definition}[Jacobian matrix]
+    Let $f: D \subseteq \R^d \to \R^p$ and $\vec{x} \in D$ such that all the partial derivatives exist at $\vec{x}$.
+    Then the Jacobian matrix of $f$ at $\vec{x}$, written as $J_f(\vec{x})$, is the $p \times d$ matrix such that
+
+    $$
+        J_f(\vec{x})_{ij} = \pdv{f_j}{x_i}()(\vec{x})
+    $$
+
+    That is
+
+    $$
+        J_f(\vec{x}) = \begin{pmatrix}
+            \pdv{f_1}{x_1}()(\vec{x}) & \pdv{f_1}{x_2}()(\vec{x}) & \cdots & \pdv{f_1}{x_d}()(\vec{x}) \\
+            \pdv{f_2}{x_1}()(\vec{x}) & \pdv{f_2}{x_2}()(\vec{x}) & \cdots & \pdv{f_2}{x_d}()(\vec{x}) \\
+            \vdots                    & \vdots                    & \ddots & \vdots                    \\
+            \pdv{f_p}{x_1}()(\vec{x}) & \pdv{f_p}{x_2}()(\vec{x}) & \cdots & \pdv{f_p}{x_d}()(\vec{x})
+        \end{pmatrix}
+    $$
+
+    Note that the $i$-th column of the matrix is $\pdv{f}{x_i}()(\vec{x}) \in \R^p$.
+\end{definition}
+
+\begin{example}[change of variables to polar coordinates]
+    Let $f: \R^2 \to \R^2$ be
+
+    $$
+        f(x, y) = \begin{pmatrix}
+            x \cos y \\
+            x \sin y
+        \end{pmatrix}
+    $$
+
+    that is $f_1(x, y) = x \cos y$ and $f_2(x, y) = x \sin y$.
+
+    Then the Jacobian matrix of $f$ is
+
+    $$
+        J_f(x, y) = \begin{pmatrix}
+            \pdv{f_1}{x}() & \pdv{f_1}{y}() \\
+            \pdv{f_2}{x}() & \pdv{f_2}{y}()
+        \end{pmatrix} = \begin{pmatrix}
+            \cos y & -x \sin y \\
+            \sin y & x \cos y
+        \end{pmatrix}
+    $$
+\end{example}
+
+\begin{example}[Jacobian of $f: \R^2 \to \R$]
+    If $f: \R^2 \to \R$ then the Jacobian matrix of $f$ is a $1 \times 2$ matrix, that is a row vector.
+
+    Moreover, $J_f(x, y) = \left(\nabla f(x, y)\right)'$, that is, the Jacobian is the transpose of the gradient.
+\end{example}
+
+\begin{lemma}[linear applications]
+    If $L: \R^d \to \R^p$ is a linear application then $L$ then there exists an unique matrix $M$ of size $p \times d$ such that $L(\vec{x}) = M \vec{x}$ for all $\vec{x} \in \R^d$.
+
+    If we write $M = \begin{pmatrix} \vec{m}_1 & \vec{m}_2 & \cdots & \vec{m}_d \end{pmatrix}$ where $\vec{m}_i \in \R^p$ is the $i$-th column of $M$ for all $i = 1, 2, \ldots, d$, then
+
+    $$
+        L(\vec{x} = M\vec{x} = M \begin{pmatrix}
+            x_1    \\
+            x_2    \\
+            \vdots \\
+            x_d
+        \end{pmatrix} = h_1 \vec{m}_1 + h_2 \vec{m}_2 + \cdots + h_d \vec{m}_d
+    $$
+
+    Moreover, $\vec{m}_i = L(\vec{e}_i)$ where $\vec{e}_i$ is the $i$-th vector of the canonical basis of $\R^d$ for all $i = 1, 2, \ldots, d$.
+\end{lemma}
+
+\begin{definition}[differentiability]
+    Just by extending the definition of differentiability of functions from $\R^2$ to $\R$ we can define the Taylor expansion as follows:
+
+    For $d \geq 2, p = 1$ we get
+    $$
+        f(\vec{x} + \vec{h}) = f(\vec{x}) + h_1 \pdv{f}{x_1}()(\vec{x}) + h_2 \pdv{f}{x_2}()(\vec{x}) + \cdots + h_d \pdv{f}{x_d}()(\vec{x}) + o(\vec{h})
+    $$
+
+    Then to go to $p \geq 1$ we just repeat the process for each component of $f$.
+    That is, for each $j = 1, 2, \ldots, p$ we have
+
+    $$
+        f_j(\vec{x} + \vec{h}) = f_j(\vec{x}) + \sum_{i=1}^d h_i \pdv{f_j}{x_i}()(\vec{x}) + o(\vec{h})
+    $$
+
+    This is the fully-expanded first order Taylor polynomial of $f$ at $\vec{x}$.
+
+    Now we can combine everything in matrix form and we get that the derivative part becomes
+
+    $$
+        \sum_{i = 1}^d h_i \pdv{f}{x_i}()(\vec{x}) = M \vec{h}
+    $$
+
+    but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}$, so we can write
+
+    \label{def:differentiability_Rd_Rp}
+    $$
+        f(\vec{x} + \vec{h}) = f(\vec{x}) + J_f(\vec{x}) \vec{h} + o(\vec{h})
+    $$
+\end{definition}
+
+\end{document}

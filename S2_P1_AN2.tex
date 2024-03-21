@@ -66,9 +66,9 @@ $$
     We apply some algebraic manipulation to $f(t)$ according to the proprieties of the dot product and the norm:
 
     \begin{align*}
-        f(t) & = \norm{\vec{x} + t \vec{y}}^2                                                                                                              \\
-             & = (\vec{x} + t \vec{y}) \cdot (\vec{x} + t \vec{y})                                                                             \\
-             & = \vec{x} \cdot (\vec{x} + t \vec{y}) + t \vec{y} \cdot (\vec{x} + t \vec{y})                                       \\
+        f(t) & = \norm{\vec{x} + t \vec{y}}^2                                                                          \\
+             & = (\vec{x} + t \vec{y}) \cdot (\vec{x} + t \vec{y})                                                     \\
+             & = \vec{x} \cdot (\vec{x} + t \vec{y}) + t \vec{y} \cdot (\vec{x} + t \vec{y})                           \\
              & = \vec{x} \cdot \vec{x} + t \vec{x} \cdot \vec{y} + t \vec{y} \cdot \vec{x} + t^2 \vec{y} \cdot \vec{y} \\
              & = \norm{\vec{x}}^2 + 2t \vec{x} \cdot \vec{y} + t^2 \norm{\vec{y}}^2
     \end{align*}
@@ -127,10 +127,10 @@ $$
     We have that
 
     \begin{align*}
-        \norm{\vec{x} + \vec{y}}^2 & = (\vec{x} + \vec{y}) \cdot (\vec{x} + \vec{y})                                                                         \\
-                                               & = \vec{x} \cdot (\vec{x} + \vec{y}) + \vec{y} \cdot (\vec{x} + \vec{y})                                     \\
-                                               & = \vec{x} \cdot \vec{x} + \vec{x} \cdot \vec{y} + \vec{y} \cdot \vec{x} + \vec{y} \cdot \vec{y} \\
-                                               & = \norm{\vec{x}}^2 + 2 \vec{x} \cdot \vec{y} + \norm{\vec{y}}^2
+        \norm{\vec{x} + \vec{y}}^2 & = (\vec{x} + \vec{y}) \cdot (\vec{x} + \vec{y})                                                 \\
+                                   & = \vec{x} \cdot (\vec{x} + \vec{y}) + \vec{y} \cdot (\vec{x} + \vec{y})                         \\
+                                   & = \vec{x} \cdot \vec{x} + \vec{x} \cdot \vec{y} + \vec{y} \cdot \vec{x} + \vec{y} \cdot \vec{y} \\
+                                   & = \norm{\vec{x}}^2 + 2 \vec{x} \cdot \vec{y} + \norm{\vec{y}}^2
     \end{align*}
 
     We apply the Cauchy-Schwarz inequality and we get
@@ -629,10 +629,10 @@ We call this an \textbf{ordinary cusp} (formal definition later).
 \begin{figure}[H]
     \centering
     \subfloat[\centering Image]{{
-                \includegraphics[width=0.35\textwidth]{assets/analysis_2/ordinary_cusp_image.png}
+                \includegraphics[width=0.35\textwidth]{assets/S2_P1_AN2/ordinary_cusp_image.png}
             }}
     \subfloat[\centering Graph]{{
-                \includegraphics[width=0.35\textwidth]{assets/analysis_2/ordinary_cusp_graph.png}
+                \includegraphics[width=0.35\textwidth]{assets/S2_P1_AN2/ordinary_cusp_graph.png}
             }}
     \caption{Ordinary cusp}
     \label{fig:ordinary_cusp}
@@ -686,10 +686,10 @@ $t_0$ is an ordinary cusp if $\gamma'(t_0) = \vec{0}$ but $\gamma''(t_0), \gamma
 \begin{figure}[H]
     \centering
     \subfloat[\centering Inflection point]{{
-                \includegraphics[width=0.35\textwidth]{assets/analysis_2/inflection_point.png}
+                \includegraphics[width=0.35\textwidth]{assets/S2_P1_AN2/inflection_point.png}
             }}
     \subfloat[\centering Ordinary cusp]{{
-                \includegraphics[width=0.35\textwidth]{assets/analysis_2/ordinary_cusp.png}
+                \includegraphics[width=0.35\textwidth]{assets/S2_P1_AN2/ordinary_cusp.png}
             }}
     \caption{Inflection point and ordinary cusp}
     \label{fig:inflection_point_and_ordinary_cusp}
@@ -807,7 +807,7 @@ Then the curve $\gamma: \theta \mapsto g(\theta) e_r(\theta)$ is of class $C^2$ 
                                                     g'(\theta_0) \\ g(\theta_0)
                                                 \end{pmatrix} \ne \begin{pmatrix}
                                                                       0 \\ 0
-                                                                  \end{pmatrix}                                              \\
+                                                                  \end{pmatrix}                                        \\
                                          & \iff g'(\theta_0) \ne 0
 \end{align*}
 
@@ -843,7 +843,7 @@ By convention $t$ is in $[0, 1]$. We will look at the cases for 2 and 3 control 
         Then $\gamma_{0,1,2}$ will be the interpolation between $\gamma_{0,1}$ and $\gamma_{12}$.
 
         \begin{align*}
-            \gamma_{0,1,2}(t) & = (1 - t) \gamma_{0,1}(t) + t \gamma_{1,2}(t)                                                                                   \\
+            \gamma_{0,1,2}(t) & = (1 - t) \gamma_{0,1}(t) + t \gamma_{1,2}(t)                                                           \\
                               & = (1 - t) \left((1 - t) \vec{P_0} + t \vec{P_1}\right) + t \left((1 - t) \vec{P_1} + t \vec{P_2}\right)
         \end{align*}
 
@@ -901,9 +901,9 @@ Consider the force vector field:
 
 \begin{align*}
     \vec{F}: \R^d & \to \R^d                \\
-    F(x,y)              & = \begin{pmatrix}
-                                F_1(x, y) \\ F_2(x, y)
-                            \end{pmatrix}
+    F(x,y)        & = \begin{pmatrix}
+                          F_1(x, y) \\ F_2(x, y)
+                      \end{pmatrix}
 \end{align*}
 
 \textbf{\underline{Definition} (path integral)}:
@@ -1197,14 +1197,14 @@ For example on $\R$ the closure of $(0, +\infty)$ is $[0, +\infty)$.
                 \begin{center}
                     \begin{tabular}{ |c|c|c|c| }
                         \hline
-                                                            & Interior                                   & Closure                                       & Boundary                                   \\
+                                                            & Interior                       & Closure                           & Boundary                       \\
                         \hline
-                        $V_1 = \{ (x, y) : x + y \geq 1 \}$ & $x + y > 1$                                & $x + y \geq 1$                                & $x + y = 1$                                \\
-                        $V_2 = B_o(\vec{a}, r)$       & $\norm{\vec{x} - \vec{a}} < r$ & $\norm{\vec{x} - \vec{a}} \leq r$ & $\norm{\vec{x} - \vec{a}} = r$ \\
-                        $V_3 = \R^d$                        & $\R^d$                                     & $\R^d$                                        & $\varnothing$                              \\
-                        $V_4 = \varnothing$                 & $\varnothing$                              & $\varnothing$                                 & $\varnothing$                              \\
-                        $V_5 = \Q \subseteq \R$             & $\varnothing$                              & $\R$                                          & $\R$                                       \\
-                        $V_6 = (a, b] \subset \R$           & $(a, b)$                                   & $[a, b]$                                      & $\{a, b\}$                                 \\
+                        $V_1 = \{ (x, y) : x + y \geq 1 \}$ & $x + y > 1$                    & $x + y \geq 1$                    & $x + y = 1$                    \\
+                        $V_2 = B_o(\vec{a}, r)$             & $\norm{\vec{x} - \vec{a}} < r$ & $\norm{\vec{x} - \vec{a}} \leq r$ & $\norm{\vec{x} - \vec{a}} = r$ \\
+                        $V_3 = \R^d$                        & $\R^d$                         & $\R^d$                            & $\varnothing$                  \\
+                        $V_4 = \varnothing$                 & $\varnothing$                  & $\varnothing$                     & $\varnothing$                  \\
+                        $V_5 = \Q \subseteq \R$             & $\varnothing$                  & $\R$                              & $\R$                           \\
+                        $V_6 = (a, b] \subset \R$           & $(a, b)$                       & $[a, b]$                          & $\{a, b\}$                     \\
                         \hline
                     \end{tabular}
                 \end{center}
@@ -1557,7 +1557,7 @@ and we can also calculate the limit as $h \to 0$.
 
 \begin{align*}
     \pdv{f}{\vec{u}}()(0, 0) & = \dv{h} \left[ f(hu_1, hu_2) \right]_{h = 0} \\
-                                   & = \frac{u_2^2}{u_1}                           \\
+                             & = \frac{u_2^2}{u_1}                           \\
 \end{align*}
 
 \subsection{Differentiability}

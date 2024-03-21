@@ -1,5 +1,12 @@
 /.direnv
-/semester_*/*
-!/semester_*/*.tex
-!assets
-!preamble.sty
+/.ruff_cache
+*.pdf
+*.aux
+*.log
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.fdb_latexmk
+*.fls
+*.pyg
+**/_minted-*

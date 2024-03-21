@@ -65,6 +65,10 @@ Note that this algorithm works only for acyclic graphs, but also in the case of 
 
 We saw before that the time complexity of the topological sort is $O(|V| + |E|)$, the loop is also $O(|V| + |E|)$, therefore the total time complexity is $O(|V| + |E|)$.
 
+Moreover the space complexity is $O(|V|)$ because we need to store the distances from the source to all the other nodes.
+
+There is really no way to optimize this further, at least on a theoretical level.
+
 \subsubsection{Longest path on DAGs}
 
 We can solve this problem in the same way as the shortest path problem but we negate the cost of the edges.
@@ -209,5 +213,123 @@ Now that we computed the matrix we need to reconstruct the solution, that is, th
         
         return solution
 \end{minted}
+
+% Class of 21/03/2024
+
+\begin{remark}
+    In class we covered also a slight variation of this algorithm that uses recursion but the idea is the same and I think that this formulation is more clear.
+    Moreover the recursive function that was presented in class is a \emph{tail recursive function}, therefore it can be easily transformed into a loop like the one presented here.
+\end{remark}
+
+\subsection{Edit distance}
+
+The edit distance is a way to measure the difference between two strings.
+
+We define three operations:
+\begin{enumerate}
+    \item Insertion
+    \item Deletion
+    \item Substitution
+\end{enumerate}
+
+Given two strings $A, B$ we want to find the minimum number of operations to transform $A$ into $B$.
+
+Consider two strings such that $\abs{A}, \abs{B} \leq n$ and the function \texttt{ed} that computes the edit distance between two strings.
+
+We can translate the three operations into a recursive formulation:
+
+\begin{align*}
+    \texttt{ed}(A, B) & \leq \texttt{ed}(A[0:n-1], B) + 1                                                      \\
+    \texttt{ed}(A, B) & \leq \texttt{ed}(A, B[0:n-1]) + 1                                                      \\
+    \texttt{ed}(A, B) & \leq \texttt{ed}(A[0:n-1], B[0:n-1]) + (0 \text{ if } A[n-1] = B[n-1] \text{ else } 1)
+\end{align*}
+
+where the first one is deletion, the second one is insertion and the third one is substitution.
+Now we note that the $\texttt{ed}(A, B)$ is the minimum of the three values above.
+
+We can use this to write a recursive algorithm to compute the edit distance.
+
+\subsubsection{The algorithm}
+
+The idea is that we can compute a matrix $M$ of the various edit distances between the substrings of $A$ and $B$: each element $M_{ij}$ is the edit distance between $A[0:i]$ and $B[0:j]$.
+
+Moreover we note that the first row and the first column of the matrix are just the numbers from 0 to the length of the string, because the difference between an empty string and a string of length $i$ is $i$.
+
+\begin{minted}{python}
+    def edit_distance(A, B):
+        # Initialize the matrix with all 0s
+        M = [[0 for _ in range(len(B))] for _ in range(len(A))]
+
+        for i in range(len(A)):
+            for j in range(len(B)):
+                if i == 0:
+                    # The difference between an empty string
+                    # and a string of length j is j
+                    M[i][j] = j
+                elif j == 0:
+                    # Same as before, the difference between
+                    # a string of length i and an empty string is i
+                    M[i][j] = i
+                else:
+                    # We use the formulas we found before and we take the minimum value
+                    M[i][j] = min(
+                        M[i - 1][j] + 1,
+                        M[i][j - 1] + 1,
+                        M[i - 1][j - 1] + (0 if A[i - 1] == B[j - 1] else 1)
+                    )
+        return reconstruct(A, B, M)
+\end{minted}
+
+As in the previous algorithm we need to reconstruct the solution from the matrix, that is, to find the sequence of operations that transform $A$ into $B$.
+
+\begin{minted}{python}
+    def reconstruct(A, B, M):
+        solution = []
+        i, j = len(A) - 1, len(B) - 1
+
+        while i > 0 and j > 0:
+            # If the value of the current cell is the same as the one
+            # of the cell above it means that we deleted a character
+            if M[i][j] == M[i - 1][j] + 1:
+                solution.append(f"Delete {A[i]}")
+                i -= 1
+            # If the value of the current cell is the same as the one
+            # of the cell on the left it means that we inserted a character
+            elif M[i][j] == M[i][j - 1] + 1:
+                solution.append(f"Insert {B[j]}")
+                j -= 1
+            # If the value of the current cell is the same as the one
+            # of the cell on the top left it means that we substituted a character
+            elif M[i][j] == M[i - 1][j - 1] + 1:
+                solution.append(f"Substitute {A[i]} with {B[j]}")
+                i -= 1
+                j -= 1
+            else:
+                # If the value of the current cell is the same as the one
+                # of the cell on the top left it means that we didn't do anything
+                i -= 1
+                j -= 1
+
+\end{minted}
+
+\subsubsection{Time complexity}
+
+We have $n \times n$ subproblems and each subproblem takes $O(1)$ to compute, therefore the time complexity is $O(n^2)$.
+
+Moreover the space complexity is also $O(n^2)$, because that's the size of the matrix.
+
+Note that this is a very expensive algorithm in terms of computational cost. If we consider binary strings and assume each character takes 1 bit, the table would be $4 n^2 $ bytes, which for an input of $n \approx 10^5$ would be $4 \times 10^{10}$ bytes, which is 40 GB.
+Time complexity is also very high but usually the limiting factor of this algorithm is the space complexity.
+
+\subsubsection{Optimization}
+
+Note that to compute the $i$-th row we only need the $i-1$-th row and the $i$-th row itself.
+Therefore we can store just two rows of the matrix, one for the even indices and one for the odd indices.
+
+In this way we reduced the memory complexity to $O(n)$ but we lost the information about the sequence of operations that transform $A$ into $B$, we get just the edit distance as a number.
+
+\begin{remark}
+    There exists an algorithm that computes the edit distance in $O(n^2)$ time and $O(n)$ space and is able to reconstruct the sequence of operations. This is called \emph{Hirschberg's algorithm} but it is quite complex and we won't cover it in this course.
+\end{remark}
 
 \end{document}

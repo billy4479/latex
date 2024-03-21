@@ -20,3 +20,5 @@ jobs:
         with:
           path: |
             **/*.pdf
+            LICENSE
+            README.md

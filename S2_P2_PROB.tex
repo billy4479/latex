@@ -14,12 +14,12 @@
 \clearpage
 
 % Class of 20/03/2024
-\section{Introduction to continuous random variables}
+\section{Continuous random variables}
 
 In the last partial we studied discrete random variables, which are random variables that can take a finite or countably infinite number of values.
 Now we will consider random variables that take values in an interval of the real line, which are called \emph{continuous random variables}.
 
-\begin{definition}[Continuous random variable]
+\begin{definition}[continuous random variable]
     \label{def:continuous_random_variable}
 
     A random variable $X$ is said to be \emph{continuous} if $\exists f(x) : \forall a, b \in \R, a < b$,
@@ -36,7 +36,7 @@ Note that $f$ is not unique, and in fact, any function $f$ that satisfies the ab
 Moreover, we also note that if $f(x)$ is negative in an interval, then it is possible to have $P(a \leq X \leq b) < 0$, which is not possible.
 Therefore we will consider only non-negative functions as pdfs.
 
-\begin{proposition}[Properties of the pdf]
+\begin{proposition}[properties of the pdf]
     \label{prop:properties_of_pdf}
     Let $X$ be a continuous random variable with pdf $f(x)$, then
 
@@ -83,7 +83,7 @@ Therefore we will consider only non-negative functions as pdfs.
     $$
 \end{remark}
 
-\begin{lemma}[Indipendent random variables]
+\begin{lemma}[indipendent random variables]
     \label{lem:independent_random_variables}
     Let $X$ and $Y$ be continuous random variables such that $X \indep Y$, and let $B_1, B_2$ be any borel sets, then
 
@@ -124,7 +124,7 @@ Therefore we will consider only non-negative functions as pdfs.
 
 \subsection{Transformation of random variables}
 
-\begin{proposition}[Transformation of independent random variables]
+\begin{proposition}[transformation of independent random variables]
     \label{prop:transformation_indep_crv}
 
     If $X \indep Y$, then $g(X) \indep h(Y)$.
@@ -150,7 +150,7 @@ Therefore we will consider only non-negative functions as pdfs.
     then $Y$ could be either continuous, discrete, or neither.
 \end{remark}
 
-\begin{theorem}[Transformation of random variables]
+\begin{theorem}[transformation of random variables]
     \label{thm:transformation_crv}
 
     Let $X$ be a continuous random variable, $f_X(x)$ its pdf, such that $X$ takes values in an open interval $U$.
@@ -195,5 +195,216 @@ Therefore we will consider only non-negative functions as pdfs.
     \end{align*}
 
 \end{example}
+
+% Class of 22/03/2024
+\subsection{Expectation and variance}
+
+\begin{definition}[expectation]
+    Let $X$ be a continuous random variable with pdf $f(x)$, then the \emph{expectation} of $X$ exists if one at least of the following integrals is finite
+
+    $$
+        E(X) = \int_{-\infty}^{0} x f(x) \dd{x} + \int_{0}^{+\infty} x f(x) \dd{x}
+    $$
+
+    If $E(X)$ exists and is finite we say that $X$ is \emph{integrable}.
+\end{definition}
+
+\begin{lemma}[condition for integrability]
+    $X$ is integrable iff
+
+    $$
+        \int_{-\infty}^{+\infty} \abs{x} f(x) \dd{x} < +\infty
+    $$
+\end{lemma}
+
+\begin{example}
+    Let $X$ have a pdf $f(x) = \frac{1}{\pi (1+x^2)}$.
+    We want to find $E(X)$.
+
+    We have that
+    $$
+        \int_0^{+\infty} x \frac{1}{\pi (1+x^2)} \dd{x} \quad \text{and} \quad \int_{-\infty}^0 x \frac{1}{\pi (1+x^2)} \dd{x}
+    $$
+
+    Note that as $x \to +\infty$, $x \frac{1}{\pi (1+x^2)} \sim \frac{1}{\pi x}$, which diverges to $+\infty$.
+    For $x \to -\infty$ we use the same argument to get that the integral diverges to $-\infty$.
+
+    Therefore $E(X)$ does not exist.
+\end{example}
+
+\begin{theorem}
+    Let $X$ be a continuous random variable with pdf $f(x)$ continuous defined on a support $[a, b]$, with $a < 0, b > 0$, and $f(x) = 0$ outside $[a, b]$.
+
+    Then
+
+    $$
+        E(X) = -\int_{a}^0 F(x) \dd{x} + \int_0^b (1 - F(x)) \dd{x}
+    $$
+    with $F'(x) = f(x)$.
+\end{theorem}
+
+\begin{proof}
+    We have
+    \begin{align*}
+        E(X) & = \int_{-\infty}^0 x f(x) \dd{x} + \int_0^{+\infty} x f(x) \dd{x}           \\
+             & = \int_{a}^0 x f(x) \dd{x} + \int_0^{b} x f(x) \dd{x}                       \\
+             & = [x F(x)]_a^0 - \int_a^0 F(x) \dd{x} + [x F(x)]_0^b - \int_0^b F(x) \dd{x} \\
+             & = -\int_a^0 F(x) \dd{x} + b \int_0^b F(x) \dd{x}                            \\
+             & = -\int_a^0 F(x) \dd{x} + \int_0^b (1-F(x)) \dd{x}
+    \end{align*}
+    by applying integration by parts.
+\end{proof}
+
+\begin{remark}
+    This is true even for $a = -\infty$ and $b = +\infty$.
+\end{remark}
+
+\begin{proposition}[transformation of expectation]
+    Let $X$ be a continuous random variable with pdf $f(x)$ and $Y = g(X)$, then
+
+    $$
+        E(Y) = \int_{-\infty}^{+\infty} g(x) f(x) \dd{x}
+    $$
+
+    Moreover $Y$ is integrable iff
+
+    $$
+        \int_{-\infty}^{+\infty} \abs{g(x)} f(x) \dd{x} < +\infty
+    $$
+\end{proposition}
+
+\begin{example}
+    Let $X$ be a random variable with pdf $f(x) = 6x(1-x) I_{(0, 1)}(x)$, and $Y = X^2$.
+    Then
+
+    \begin{align*}
+        E(Y) & = \int_{-\infty}^{+\infty} x^2 f(x) \dd{x} \\
+             & = \int_0^1 x^2 6x(1-x) \dd{x}              \\
+             & = 6 \int_0^1 (x^3 - x^4) \dd{x}            \\
+             & = \frac{6}{20}
+    \end{align*}
+\end{example}
+
+\begin{remark}
+    In general we cannot say that $E(g(X)) = g(E(X))$.
+\end{remark}
+
+\begin{theorem}[linearity of expectation]
+    Let $X$ be a random variable, $a, b \in \R$, then
+
+    $$
+        E(aX + b) = aE(X) + b
+    $$
+\end{theorem}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{align*}
+        E(aX + b) & = \int_{-\infty}^{+\infty} (ax + b) f(x) \dd{x}                                     \\
+                  & = a \int_{-\infty}^{+\infty} x f(x) \dd{x} + b \int_{-\infty}^{+\infty} f(x) \dd{x} \\
+                  & = aE(X) + b
+    \end{align*}
+\end{proof}
+
+\begin{definition}[moment]
+    Let $X$ be an integrable random variable, then we can define the following
+
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{moment}       & \textbf{symbol} & \textbf{definition} \\
+            \hline
+            first moment          & $\mu$           & $E(X)$              \\
+            $k$-th moment         &                 & $E(X^k)$            \\
+            $k$-th central moment &                 & $E((X - E(X))^k)$   \\
+            variance              & $\sigma^2$      & $E((X - E(X))^2)$   \\
+            \hline
+        \end{tabular}
+
+        \caption{Moments of a random variable}
+        \label{tab:moments}
+    \end{table}
+
+    The even $k$-th moment have the propriety that $\int_{-\infty}^0 x^k f(x) \dd{x} = 0$.
+\end{definition}
+
+\begin{theorem}
+    Let $X$ be a random variable with finite $k$-th moment.
+    Then $\forall j < k$, the $j$-th moment exists and is finite.
+
+    Moreover the $k$-th central moment exists and is finite.
+\end{theorem}
+
+\begin{proof}
+    We know that $E(X^k)$ exists iff $E(\abs{X}^k)$ exists, we want to prove that $E(\abs{X}^j)$ exists $\forall j < k$.
+
+    $$
+        E(\abs{X}^j) = \int_{-\infty}^{+\infty} \abs{x}^j f(x) \dd{x}
+    $$
+
+    We would like to say that $\abs{x}^j \leq \abs{x}^k$, but this is not always true, for instance, this is true only if $\abs{x} \geq 1$.
+
+    Then we can write $E(\abs{X}^j)$ as
+    \begin{align*}
+        E(\abs{X}^j) & \leq \int_{-\infty}^{+\infty} \max(\abs{x}^j, 1) f(x) \dd{x}                                      \\
+                     & \leq \int_{-\infty}^{+\infty} \max(\abs{x}^k, 1) f(x) \dd{x}                                      \\
+                     & \leq \int_{-\infty}^{+\infty} (\abs{x}^k + 1) f(x) \dd{x}                                         \\
+                     & = \int_{-\infty}^{+\infty} \abs{x}^k f(x) \dd{x} + \int_{-\infty}^{+\infty} f(x) \dd{x} < +\infty
+    \end{align*}
+
+    For the second part we can write
+
+    \begin{align*}
+        E(\abs{X - \mu}^k) & = \int_{-\infty}^{+\infty} \abs{x - \mu} f(x) \dd{x}                                                 \\
+                           & \leq \int_{-\infty}^{+\infty} (\abs{x} + \abs{\mu}) f(x) \dd{x}                                      \\
+                           & = \int_{-\infty}^{+\infty} \sum_{j=0}^k \binom{k}{j} \abs{x}^j \abs{\mu}^{k-j} f(x) \dd{x}           \\
+                           & = \sum_{j=0}^k \binom{k}{j} \abs{\mu}^{k-j} \int_{-\infty}^{+\infty} \abs{x}^j f(x) \dd{x} < +\infty
+    \end{align*}
+\end{proof}
+
+\begin{definition}[variance]
+    Let $X$ be a random variable, then the \emph{variance} of $X$ is defined as
+
+    \begin{align*}
+        V(X) & = \sigma^2 = E((X - \mu)^2)                        \\
+             & = \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \dd{x}
+    \end{align*}
+\end{definition}
+
+\begin{theorem}[properties of variance]
+    \begin{enumerate}
+        \item $V(X) = E(X^2) - E(X)^2$
+        \item $V(X + b) = V(X)$
+        \item $V(aX) = a^2 V(X)$
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}
+        \item
+              \begin{align*}
+                  V(X) = \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \dd{x} & = \int_{-\infty}^{+\infty} (x^2 - 2x\mu + \mu^2) f(x) \dd{x}                                                                          \\
+                                                                          & = \int_{-\infty}^{+\infty} x^2 f(x) \dd{x} - 2\mu \int_{-\infty}^{+\infty} x f(x) \dd{x} + \mu^2 \int_{-\infty}^{+\infty} f(x) \dd{x} \\
+                                                                          & = E(X^2) - 2\mu E(X) + \mu^2 = E(X^2) - E(X)^2
+              \end{align*}
+
+        \item \begin{align*}
+                  V(X + b) & = E((X + b)^2) - E(X + b)^2                     \\
+                           & = E(X^2 + 2bX + b^2) - (E(X) + b)^2             \\
+                           & = E(X^2) + 2bE(X) + b^2 - E(X)^2 - 2bE(X) - b^2 \\
+                           & = V(X)
+              \end{align*}
+
+        \item \begin{align*}
+                  V(aX) & = E((aX)^2) - E(aX)^2     \\
+                        & = E(a^2 X^2) - (aE(X))^2  \\
+                        & = a^2 E(X^2) - a^2 E(X)^2 \\
+                        & = a^2 (E(X^2) - E(X)^2)   \\
+                        & = a^2 V(X)
+              \end{align*}
+    \end{enumerate}
+\end{proof}
 
 \end{document}

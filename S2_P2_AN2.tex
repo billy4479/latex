@@ -168,13 +168,14 @@
 
 \begin{example}[Jacobian of $f: \R^2 \to \R$]
     If $f: \R^2 \to \R$ then the Jacobian matrix of $f$ is a $1 \times 2$ matrix, that is a row vector.
-
-    Moreover, $J_f(x, y) = \left(\nabla f(x, y)\right)'$, that is, the Jacobian is the transpose of the gradient.
 \end{example}
+
+\begin{remark}
+    The Jacobian is the transpose of the gradient, that is, $J_f(x, y) = \left(\nabla f(x, y)\right)'$.
+\end{remark}
 
 \begin{lemma}[linear applications]
     If $L: \R^d \to \R^p$ is a linear application then $L$ then there exists an unique matrix $M$ of size $p \times d$ such that $L(\vec{x}) = M \vec{x}$ for all $\vec{x} \in \R^d$.
-
     If we write $M = \begin{pmatrix} \vec{m}_1 & \vec{m}_2 & \cdots & \vec{m}_d \end{pmatrix}$ where $\vec{m}_i \in \R^p$ is the $i$-th column of $M$ for all $i = 1, 2, \ldots, d$, then
 
     $$
@@ -185,39 +186,156 @@
             x_d
         \end{pmatrix} = h_1 \vec{m}_1 + h_2 \vec{m}_2 + \cdots + h_d \vec{m}_d
     $$
-
-    Moreover, $\vec{m}_i = L(\vec{e}_i)$ where $\vec{e}_i$ is the $i$-th vector of the canonical basis of $\R^d$ for all $i = 1, 2, \ldots, d$.
 \end{lemma}
+\begin{remark}
+    We can calculate $\vec{m}_i = L(\vec{e}_i)$ where $\vec{e}_i$ is the $i$-th vector of the canonical basis of $\R^d$ for all $i = 1, 2, \ldots, d$.
+\end{remark}
+
+We can now intuitively define what differentiability means before giving a formal definition.
+Just by extending the definition of differentiability of functions from $\R^2$ to $\R$ we can define the Taylor expansion as follows:
+
+For $d \geq 2, p = 1$ we get
+$$
+    f(\vec{x} + \vec{h}) = f(\vec{x}) + h_1 \pdv{f}{x_1}()(\vec{x}) + h_2 \pdv{f}{x_2}()(\vec{x}) + \cdots + h_d \pdv{f}{x_d}()(\vec{x}) + \o(\vec{h})
+$$
+
+Then to go to $p \geq 1$ we just repeat the process for each component of $f$.
+That is, for each $j = 1, 2, \ldots, p$ we have
+
+$$
+    f_j(\vec{x} + \vec{h}) = f_j(\vec{x}) + \sum_{i=1}^d h_i \pdv{f_j}{x_i}()(\vec{x}) + \o(\vec{h})
+$$
+
+This is the fully-expanded first order Taylor polynomial of $f$ at $\vec{x}$.
+Now we can combine everything in matrix form and we get that the derivative part (which is just a linear transformation) becomes
+
+$$
+    \sum_{i = 1}^d h_i \pdv{f}{x_i}()(\vec{x}) = M \vec{h}
+$$
+for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}$, so we can write
+
+$$
+    f(\vec{x} + \vec{h}) = f(\vec{x}) + J_f(\vec{x}) \vec{h} + \o(\vec{h})
+$$
 
 \begin{definition}[differentiability]
-    Just by extending the definition of differentiability of functions from $\R^2$ to $\R$ we can define the Taylor expansion as follows:
-
-    For $d \geq 2, p = 1$ we get
+    Let $f: D \subseteq \R^d \to \R^p$, with $D$ open, and $\vec{x}_0 \in D$.
+    We say that $f$ is differentiable at $\vec{x}_0$ if all the partial derivatives exist at $\vec{x}_0$
+    and $\exists r > 0$ such that for all $\vec{h} \in B_c(\vec{0}, r)$ we have $\vec{x}_0 + \vec{h} \in D$ and
     $$
-        f(\vec{x} + \vec{h}) = f(\vec{x}) + h_1 \pdv{f}{x_1}()(\vec{x}) + h_2 \pdv{f}{x_2}()(\vec{x}) + \cdots + h_d \pdv{f}{x_d}()(\vec{x}) + o(\vec{h})
-    $$
-
-    Then to go to $p \geq 1$ we just repeat the process for each component of $f$.
-    That is, for each $j = 1, 2, \ldots, p$ we have
-
-    $$
-        f_j(\vec{x} + \vec{h}) = f_j(\vec{x}) + \sum_{i=1}^d h_i \pdv{f_j}{x_i}()(\vec{x}) + o(\vec{h})
-    $$
-
-    This is the fully-expanded first order Taylor polynomial of $f$ at $\vec{x}$.
-
-    Now we can combine everything in matrix form and we get that the derivative part becomes
-
-    $$
-        \sum_{i = 1}^d h_i \pdv{f}{x_i}()(\vec{x}) = M \vec{h}
-    $$
-
-    but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}$, so we can write
-
-    \label{def:differentiability_Rd_Rp}
-    $$
-        f(\vec{x} + \vec{h}) = f(\vec{x}) + J_f(\vec{x}) \vec{h} + o(\vec{h})
+        f(\vec{x}_0 + \vec{h}) = f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h} + \o(\vec{h})
     $$
 \end{definition}
+
+\begin{remark}
+    This is an equality in $\R^p$, $\o(\vec{h})$ means that each component is $\o(h)$, and $J_f(\vec{x}_0) \vec{h}$ is the matrix-vector product.
+\end{remark}
+
+\begin{definition}[differential]
+    We call differential of $f$ at $\vec{x}_0$ (if exists) the linear transformation
+
+    $$
+        \vec{h} \mapsto J_f(\vec{x}_0) \vec{h}
+    $$
+    we denote it as $Df_{\vec{x}_0}(\vec{h})$.
+\end{definition}
+
+\begin{proposition}[differentiability, second definition]
+    Let $f: D \subseteq \R^d \to \R^p$, with $D$ open, and $\vec{x}_0 \in D$.
+    $f$ is differentiable iff there exists a linear transformation $L: \R^d \to \R^p$ such that $\exists r > 0$ such that for all $\vec{h} \in B_c(\vec{0}, r)$ we have $\vec{x}_0 + \vec{h} \in D$ and
+
+    $$
+        f(\vec{x}_0 + \vec{h}) = f(\vec{x}_0) + L(\vec{h}) + \o(\vec{h})
+    $$
+    in this case necessarily $L = Df_{\vec{x}_0}$.
+\end{proposition}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[$\implies$] (differentiability $\implies$ linear transformation)
+            This is the easy part, just take $L = Df_{\vec{x}_0}$.
+        \item[$\impliedby$] (linear transformation $\implies$ differentiability)
+            Let $L(\vec{h}) = M \vec{h}$ for some matrix $M$.
+            We saw before that the column $m_i = L(\vec{e}_i)$, then let $\vec{h} = h \vec{e}_i$ and by linearity we have
+
+            $$
+                f(\vec{x}_0 + h \vec{e}_i) = f(\vec{x}_0) + h L(\vec{e}_i) + \o(h)
+            $$
+            dividing by $h$ we get
+
+            $$
+                \frac{f(\vec{x}_0 + h \vec{e}_i) - f(\vec{x}_0)}{h} = L(\vec{e}_i) + \frac{\o(h)}{h}
+            $$
+            and taking the limit as $h \to 0$ we get that $\pdv{f}{x_i}()(\vec{x}_0)$ exists and is equal to $L(\vec{e}_i)$.
+            Then the matrix representing $L$ has columns that are the partial derivatives of $f$ at $\vec{x}_0$, that is $M = J_f(\vec{x}_0)$.
+    \end{description}
+\end{proof}
+
+\begin{proposition}[differentiability implies continuity]
+    If $f: D \subseteq \R^d \to \R^p$ is differentiable at $\vec{x}_0$ then $f$ is continuous at $\vec{x}_0$.
+\end{proposition}
+
+\begin{theorem}[sufficient condition for differentiability]
+    Let $f: D \subseteq \R^d \to \R^p$, $D$ open. If $\pdv{f_j}{x_i}()$ exist and are continuous in $D$ for all $i = 1, 2, \ldots, d$ and $j = 1, 2, \ldots, p$ then $f$ is differentiable in $D$.
+    In this case we say that $f$ is of class $C^1$.
+\end{theorem}
+\begin{remark}
+    This is a sufficient condition, but not a necessary one.
+\end{remark}
+
+\begin{proof}
+    We will not prove these results because the proof is quite long and we already did it in the case of functions from $\R^2$ to $\R$.
+\end{proof}
+
+\begin{example}
+    Consider a function $f: \R \to \R^p$ (a parametric curve) defined as
+
+    $$
+        f : t \mapsto \begin{pmatrix}
+            f_1(t) \\
+            f_2(t) \\
+            \vdots \\
+            f_p(t)
+        \end{pmatrix}
+    $$
+    Then
+    $$
+        J_f(t) = \begin{pmatrix}
+            f'_1(t) \\
+            f'_2(t) \\
+            \vdots  \\
+            f'_p(t)
+        \end{pmatrix} = f'(t)
+    $$
+    and the Taylor expansion of $f$ is
+    $$
+        f(t + h) = f(t) + h f'(t) + \o(h)
+    $$
+    which looks a lot like what we saw in Analysis 1.
+\end{example}
+\begin{remark}
+    Let $\vec{a}, \vec{b} \in \R^d$, then $\vec{a} \cdot \vec{b} = \vec{a}^T \vec{b}$, where the first one is a dot product and the second one is a matrix multiplication.
+\end{remark}
+
+\begin{example}[tangent plane to a parametric surface]
+    Let $f: \R^2 \to \R^3$ be a parametric surface, then its image is
+    $$
+        f = \{ f(u, v) : \R^2 \}
+    $$
+
+    The tangent plane is the plane passing through $f(u_0, v_0)$ and normal to
+    $$
+        \pdv{f}{u}() \times \pdv{f}{v}()
+    $$
+    if the cross product is not zero.
+
+    The equation of the plane is
+
+    $$
+        (\vec{x} - f(u_0, v_0)) \cdot \left( \pdv{f}{u}() \times \pdv{f}{v}() \right) = 0
+    $$
+
+\end{example}
 
 \end{document}

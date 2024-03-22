@@ -4,7 +4,6 @@
 \usepackage{bytefield}
 \usepackage{minted}
 
-
 \title{Computer Science 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
 
@@ -25,7 +24,7 @@ This is a general technique to constructing algorithms, it is not a specific sol
 
 We saw this problem before but now we will approach it in a different way.
 
-In unweighted graphs we used BFS to compute the path from a \textit{single source} to all the other vertices and takes $O(|V| + |E|)$, while in weighted graphs we used Dijkstra's algorithm which also works for \textit{single source} shortest path and takes $O(|E| \log |V|)$ when implemented using fibonacci heaps.
+In unweighted graphs we used BFS to compute the path from a \textit{single source} to all the other vertices and takes $\O(|V| + |E|)$, while in weighted graphs we used Dijkstra's algorithm which also works for \textit{single source} shortest path and takes $\O(|E| \log |V|)$ when implemented using fibonacci heaps.
 
 But if we know that the graph is acyclic we can do better: nodes are removed from the queue in a topological order, then we can write the following algorithm:
 
@@ -63,9 +62,9 @@ Note that this algorithm works only for acyclic graphs, but also in the case of 
 
 \subsubsection{Time complexity}
 
-We saw before that the time complexity of the topological sort is $O(|V| + |E|)$, the loop is also $O(|V| + |E|)$, therefore the total time complexity is $O(|V| + |E|)$.
+We saw before that the time complexity of the topological sort is $\O(|V| + |E|)$, the loop is also $\O(|V| + |E|)$, therefore the total time complexity is $\O(|V| + |E|)$.
 
-Moreover the space complexity is $O(|V|)$ because we need to store the distances from the source to all the other nodes.
+Moreover the space complexity is $\O(|V|)$ because we need to store the distances from the source to all the other nodes.
 
 There is really no way to optimize this further, at least on a theoretical level.
 
@@ -314,9 +313,9 @@ As in the previous algorithm we need to reconstruct the solution from the matrix
 
 \subsubsection{Time complexity}
 
-We have $n \times n$ subproblems and each subproblem takes $O(1)$ to compute, therefore the time complexity is $O(n^2)$.
+We have $n \times n$ subproblems and each subproblem takes $\O(1)$ to compute, therefore the time complexity is $\O(n^2)$.
 
-Moreover the space complexity is also $O(n^2)$, because that's the size of the matrix.
+Moreover the space complexity is also $\O(n^2)$, because that's the size of the matrix.
 
 Note that this is a very expensive algorithm in terms of computational cost. If we consider binary strings and assume each character takes 1 bit, the table would be $4 n^2 $ bytes, which for an input of $n \approx 10^5$ would be $4 \times 10^{10}$ bytes, which is 40 GB.
 Time complexity is also very high but usually the limiting factor of this algorithm is the space complexity.
@@ -326,10 +325,10 @@ Time complexity is also very high but usually the limiting factor of this algori
 Note that to compute the $i$-th row we only need the $i-1$-th row and the $i$-th row itself.
 Therefore we can store just two rows of the matrix, one for the even indices and one for the odd indices.
 
-In this way we reduced the memory complexity to $O(n)$ but we lost the information about the sequence of operations that transform $A$ into $B$, we get just the edit distance as a number.
+In this way we reduced the memory complexity to $\O(n)$ but we lost the information about the sequence of operations that transform $A$ into $B$, we get just the edit distance as a number.
 
 \begin{remark}
-    There exists an algorithm that computes the edit distance in $O(n^2)$ time and $O(n)$ space and is able to reconstruct the sequence of operations. This is called \emph{Hirschberg's algorithm} but it is quite complex and we won't cover it in this course.
+    There exists an algorithm that computes the edit distance in $\O(n^2)$ time and $\O(n)$ space and is able to reconstruct the sequence of operations. This is called \emph{Hirschberg's algorithm} but it is quite complex and we won't cover it in this course.
 \end{remark}
 
 \end{document}

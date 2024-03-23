@@ -331,4 +331,58 @@ In this way we reduced the memory complexity to $\O(n)$ but we lost the informat
     There exists an algorithm that computes the edit distance in $\O(n^2)$ time and $\O(n)$ space and is able to reconstruct the sequence of operations. This is called \emph{Hirschberg's algorithm} but it is quite complex and we won't cover it in this course.
 \end{remark}
 
+% Class of 22/03/2024
+\subsection{Floyd-Warshall algorithm}
+
+This algorithm is used to compute the shortest path between all pairs of vertices in a graph.
+
+Let the input be the $n \times n$ matrix $A$ where $A_{ij}$ is the weight of the edge between $i$ and $j$ if it exists, otherwise it is $\infty$.
+
+\begin{minted}{python}
+    def floyd_warshall(A):
+        D = A
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    D[i][j] = min(D[i][j], D[i][k] + D[k][j])
+
+        return D
+\end{minted}
+
+The algorithm works by considering an increasing number of vertices that we can use to go from $i$ to $j$.
+
+\subsubsection{Time complexity}
+
+It is trivial to see that this algorithm is $\O(n^3)$.
+
+\subsubsection{Proof of correctness}
+
+First we prove that $D_{ij}$ is an upper bound of the shortest path between $i$ and $j$, then we prove that it is also the lower bound, that is, the shortest path.
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[Upper bound]
+        \item[Lower bound]
+            We want to prove that $D_{ij} \leq$ the length of the shortest path between $i$ and $j$.
+
+            We will proceed by induction on $k$ and argue that if $D_{ij} \leq$ the length of the shortest path between $i$ and $j$ that uses only the vertices $1, 2, \ldots, k-1$ then $D_{ij} \leq$ the length of the shortest path between $i$ and $j$ that uses only the vertices $1, 2, \ldots, k$.
+
+            \begin{description}
+                \item[Base case] The shortest path between $i$ and $j$ that uses only the vertices $1$ is the edge between $i$ and $j$ if it exists, otherwise it is $\infty$. Therefore the base case holds.
+                \item[Inductive step]
+                    We have two cases: either the shortest path uses the vertex $k$ or it doesn't.
+
+                    \begin{enumerate}[label=(\roman*)]
+                        \item If $k$ is not on this path then the path can be constructed using only the vertices $1, 2, \ldots, k-1$ which we knew was $\leq D_{ij}$.
+                        \item ($k$ is on this path) assuming that in the last iteration the path from $i$ to $k$ is
+                    \end{enumerate}
+
+                    Note that $k$ can only occur once in the shortest path, otherwise we could have a cycle and the path wouldn't be the shortest.
+            \end{description}
+
+    \end{description}
+
+\end{proof}
+
 \end{document}

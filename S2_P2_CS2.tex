@@ -349,7 +349,7 @@ Let the input be the $n \times n$ matrix $A$ where $A_{ij}$ is the weight of the
         return D
 \end{minted}
 
-The algorithm works by considering an increasing number of vertices that we can use to go from $i$ to $j$.
+The idea of the algorithm is to check first if we can get from $i$ to $j$ directly, by using no other edges, then we check if by adding a vertex $k$ we can get a shorter path, therefore we need to check all the $i, j$ to see if the old result is better than the new one.
 
 \subsubsection{Time complexity}
 
@@ -360,25 +360,37 @@ It is trivial to see that this algorithm is $\O(n^3)$.
 First we prove that $D_{ij}$ is an upper bound of the shortest path between $i$ and $j$, then we prove that it is also the lower bound, that is, the shortest path.
 
 \begin{proof}
-    \skiplineafterproof
-    \begin{description}
-        \item[Upper bound]
-        \item[Lower bound]
-            We want to prove that $D_{ij} \leq$ the length of the shortest path between $i$ and $j$.
+    Let $P_{ij}$ be the shortest path between $i$ and $j$ and $|P_{ij}|$ its length.
 
-            We will proceed by induction on $k$ and argue that if $D_{ij} \leq$ the length of the shortest path between $i$ and $j$ that uses only the vertices $1, 2, \ldots, k-1$ then $D_{ij} \leq$ the length of the shortest path between $i$ and $j$ that uses only the vertices $1, 2, \ldots, k$.
+    We will prove that for each $D_{ij}$ it holds that $D_{ij}$ is both an upper and a lower bound of $|P_{ij}|$, which is equivalent to saying that $D_{ij} = |P_{ij}|$.
+    \begin{description}
+        \item[Upper bound] ($D_{ij} \geq |P_{ij}|$)
+            This is trivial since we are looking for the shortest path, therefore any valid path is $\geq |P_{ij}|$.
+        \item[Lower bound] ($D_{ij} \leq |P_{ij}|$)
+            Let $P_{ij}(k)$ be the shortest path between $i$ and $j$ that uses only the vertices $1, 2, \ldots, k$.
+            Then we have that $P_{ij}(v) = P_{ij}$.
+
+            Consider the path $P_{ij}(k)$.
+            We will proceed by induction on $k$ and argue that if $D_{ij} \leq P_{ij}(k-1)$ then $D_{ij} \leq P_{ij}(k)$.
 
             \begin{description}
                 \item[Base case] The shortest path between $i$ and $j$ that uses only the vertices $1$ is the edge between $i$ and $j$ if it exists, otherwise it is $\infty$. Therefore the base case holds.
                 \item[Inductive step]
-                    We have two cases: either the shortest path uses the vertex $k$ or it doesn't.
+                    We have two cases: either the shortest path $P_{ij}(k)$ uses the vertex $k$ or it doesn't.
 
-                    \begin{enumerate}[label=(\roman*)]
-                        \item If $k$ is not on this path then the path can be constructed using only the vertices $1, 2, \ldots, k-1$ which we knew was $\leq D_{ij}$.
-                        \item ($k$ is on this path) assuming that in the last iteration the path from $i$ to $k$ is
+                    \begin{enumerate}[label=\roman*.]
+                        \item ($k \notin P_{ij}(k)$)
+                              The path can be constructed using only the vertices $1, 2, \ldots, k-1$, then $P_{ij}(k) = P_{ij}(k-1)$ and by the inductive hypothesis we have that $D_{ij} \leq |P_{ij}(k)|$.
+
+                        \item ($k \in P_{ij}(k)$)
+                              We have that $P_{ij}(k) = P_{ik}(k-1) + P_{kj}(k-1)$, but we have already calculated the shortest path between $i$ and $k$ and between $k$ and $j$ that use $k-1$ vertices, therefore we have that $D_{ik} \leq |P_{ik}(k-1)|$ and $D_{kj} \leq |P_{kj}(k-1)|$.
+                              Then we have that $D_{ij} \leq D_{ik} + D_{kj} \leq |P_{ik}(k-1)| + |P_{kj}(k-1)| = |P_{ij}(k)|$.
+
                     \end{enumerate}
 
-                    Note that $k$ can only occur once in the shortest path, otherwise we could have a cycle and the path wouldn't be the shortest.
+                    Then the algorithm will choose the minimum between the two cases and we have that $D_{ij} \leq |P_{ij}(k)|$.
+
+                    Note that $k$ can only occur once in the shortest path, otherwise we could have a cycle and the path wouldn't be the shortest (we are assuming no negative cycles).
             \end{description}
 
     \end{description}

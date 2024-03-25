@@ -407,4 +407,132 @@ Therefore we will consider only non-negative functions as pdfs.
     \end{enumerate}
 \end{proof}
 
+% Class of 25/03/2024
+
+\subsection{Noteworthy continuous distributions}
+
+\subsubsection{Uniform continuous distribution}
+
+Let $a, b \in \R$ with $a < b$. $X$ is said to have a \emph{uniform continuous distribution} in the interval $[a, b]$ if its pdf is constant in the interval.
+
+\begin{itemize}
+    \item PDF:
+          $$
+              f(x) = \frac{1}{b-a} I_{[a, b]}(x)
+          $$
+    \item CDF:
+          $$
+              F(x) = \int_{-\infty}^x f(u) \dd{u} = \begin{cases}
+                  0               & x < a        \\
+                  \frac{x-a}{b-a} & a \leq x < b \\
+                  1               & x \geq b
+              \end{cases}
+          $$
+
+    \item Expectation:
+          $$
+              E(X) = \int_{-\infty}^{+\infty} x f(x) \dd{x} = \int_a^b \frac{x}{b-a} \dd{x} = \frac{1}{b-a} \left[\frac{x^2}{2}\right]_a^b = \frac{a+b}{2}
+          $$
+    \item Variance:
+          $$
+              V(X) = E(X^2) - E(X)^2 = \frac{b^2 + ab + a^2}{3} - \frac{(a+b)^2}{4} = \frac{(b-a)^2}{12}
+          $$
+\end{itemize}
+
+\subsubsection{Exponential distribution}
+
+We have one parameter $\lambda > 0$.
+
+\begin{itemize}
+    \item PDF:
+          $$
+              f(x) = \lambda e^{-\lambda x} I_{[0, +\infty)}(x)
+          $$
+    \item CDF:
+          $$
+              F(x) = \int_{-\infty}^x f(u) \dd{u} = (1 - e^{-\lambda x})I_{[0, +\infty)}(x)
+          $$
+
+          We know that $F(x) = P(X \leq x)$, then it's easy to remember that $P(X > x) = e^{-\lambda x}$.
+    \item Expectation:
+          $$
+              E(X) = \int_{-\infty}^{+\infty} (1 - F(x)) \dd{x} = \int_0^{+\infty} \lambda e^{-\lambda x} \dd{x} = \frac{1}{\lambda}
+          $$
+    \item Variance:
+          $$
+              V(X) = E(X^2) - E(X)^2 = \frac{1}{\lambda^2}
+          $$
+
+          $E(X)^2$ can be computed by integrating by parts.
+\end{itemize}
+
+The exponential distribution is related to some discrete distributions:
+\begin{itemize}
+    \item Similarly to the geometric distribution, the exponential distribution is \emph{memoryless}, that is
+
+          $$
+              P(X > x + z | X > z) = P(X > x)
+          $$
+
+          We can also prove that the exponential distribution is the continuous counterpart of the geometric distribution.
+
+    \item
+          The exponential distribution is also the distribution of the time between two events in a Poisson distribution.
+
+          \begin{proof}
+              We can prove this by considering $X$ the time of the next arrival and $N_t$ the number of arrivals in an interval of length $t$.
+              Then $X \sim \text{Exponential}(\lambda)$ and $N_t \sim \text{Poisson}(t \lambda)$.
+              Moreover, $P(X > t) = P(N_t = 0)$, that is, the probability of the next visit being after $t$ is the same as the probability of having no visits in the interval $t$.
+              Then $P(X > t) = e^{-\lambda t}$.
+          \end{proof}
+\end{itemize}
+
+\begin{example}
+    We have a rate of 20 people per hour.
+
+    Let $N_t$ be the number of people entering in a certain time interval $t$, then $N_t \sim Poisson(t \lambda)$.
+    We want to find the probability that the time between two arrivals is less than 3 minutes.
+
+    Note that $N_{60} \sim \text{Poisson}(20)$, that is, $\lambda = \frac{1}{3}$.
+
+    Then the time between two arrivals $X \sim \text{Exponential}\left(\frac{1}{3}\right)$, and $P(X < 3) = 1 - e^{-\lambda \cdot 3} = 1 - e^{-1}$.
+\end{example}
+
+\subsubsection{Normal or Gaussian distribution}
+
+We have two parameters $\mu \in \R$ and $\sigma > 0$.
+
+\begin{itemize}
+    \item PDF:
+          $$
+              f(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
+          $$
+    \item CDF:
+          $$
+              F(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(u-\mu)^2}{2\sigma^2}} \dd{u}
+          $$
+          It is possible to prove that this is not a primitive function, hence it is not possible to express it in terms of elementary functions, but it is possible to compute that $\lim_{x \to +\infty} F(x) = 1$, but we will cover this in Analysis.
+    \item Expectation:
+          \begin{align*}
+              E(X) & = \int_{-\infty}^{+\infty} x \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \dd{x}                                                                                         \\
+                   & = \int_{-\infty}^{+\infty} (z + x) \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                         \\
+                   & = \int_{-\infty}^{+\infty} z \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} + \int_{-\infty}^{+\infty} \mu \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} \\
+                   & = 0 + \mu = \mu
+          \end{align*}
+          where $z = x - \mu$.
+
+          The last simplification is due to the fact that the first integral contains an odd function, and the second integral is the pdf of a normal distribution hence it is equal to 1.
+
+    \item Variance:
+          \begin{align*}
+              V(X) & = \int_{-\infty}^{+\infty} (x - \mu)^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \dd{x}                                                                 \\
+                   & = \int_{-\infty}^{+\infty} z^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                               \\
+                   & = \frac{1}{\sqrt{2\pi} \sigma}(-\sigma^2) \int_{-\infty}^{+\infty} z \left(- \frac{z}{\sigma^2}\right) e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                    \\
+                   & = -\frac{\sigma}{\sqrt{2\pi}} \left\{ \left[ z e^{-\frac{z^2}{2\sigma^2}} \right]_{-\infty}^{+\infty} - \int_{-\infty}^{+\infty} e^{-\frac{z^2}{2\sigma^2}} \dd{z} \right\} \\
+                   & = \frac{\sigma}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                     \\
+                   & = \sigma^2 \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                          \\
+                   & = \sigma^2
+          \end{align*}
+\end{itemize}
+
 \end{document}

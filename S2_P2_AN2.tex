@@ -338,4 +338,145 @@ $$
 
 \end{example}
 
+% Class of 25/03/2024
+
+\begin{remark}
+    Remember that if $L: \R^d \to \R^p$ and $A: \R^p \to \R^q$ are linear transformations represented by the matrices $M_L$ and $M_A$ respectively, then the composition $A \circ L$ is a linear map represented by the matrix $M_A M_L$.
+\end{remark}
+
+\begin{theorem}[chain rule]
+    Let $f: D \subseteq \R^d \to \R^p$ and $g: U \subseteq \R^p \to \R^q$ such that $D, U$ are open, and $f(D) \subseteq U$ so that $g \circ f$ is well defined.
+    If $f$ is differentiable at $\vec{x}_0$ and $g$ is differentiable at $f(\vec{x}_0)$ then $g \circ f$ is differentiable at $\vec{x}_0$ and
+
+    $$
+        \underbrace{J_{g \circ f}(\vec{x}_0)}_{q \times d \approx (g \circ f)'} =
+        \underbrace{J_g(f(\vec{x}_0))}_{q \times p \approx g' \circ f}
+        \underbrace{J_f(\vec{x}_0)}_{p \times d \approx f'}
+    $$
+
+    which is quite similar to the chain rule for functions from $\R$ to $\R$.
+
+    For the differential we get
+
+    $$
+        D(g \circ f)_{\vec{x}_0} = Dg_{f(\vec{x}_0)} \circ Df_{\vec{x}_0}
+    $$
+
+    the equivalence of the two formulas is given by the remark above.
+\end{theorem}
+
+\begin{proof}
+    This is just the idea of the proof, for a more rigorous one check the book.
+
+    We have
+    \begin{enumerate}[label=(\roman*)]
+        \item $f(\vec{x}_0 + \vec{h}) \approx f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h}$
+        \item $g(f(\vec{x}_0 + \vec{k})) \approx g(f(\vec{x}_0)) + J_g(f(\vec{x}_0)) J_f(\vec{x}_0) \vec{k}$
+    \end{enumerate}
+
+    then
+
+    \begin{align*}
+        g(f(\vec{x}_0 + \vec{h})) & \stackrel{\text{(i)}}{\approx} g(f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h})                           \\
+                                  & \stackrel{\text{(ii)}}{\approx} g(f(\vec{x}_0)) + J_g(f(\vec{x}_0)) (J_f(\vec{x}_0) \vec{h})      \\
+                                  & = g(f(\vec{x}_0)) + \underbrace{(J_g(f(\vec{x}_0)) J_f(\vec{x}_0)) \vec{h}}_{\text{differential}}
+    \end{align*}
+
+    In the rigorous proof we will remove the $\approx$ and deal with the $\o$ terms.
+\end{proof}
+
+\begin{example}[fully expanded form]
+    Let $f: \R^p \to \R^q$ and $g: \R^d \to \R^p$ be differentiable functions.
+    Then $J_{g \circ f}(\vec{x})$ is a $q \times d$ matrix where
+
+    $$
+        J_{g \circ f}(\vec{x})_{ki} =
+        \pdv{(g \circ f)_k}{x_i}() = \sum_{j=1}^p \pdv{g_k}{y_j}()(f(\vec{x})) \cdot \pdv{f_j}{x_i}()(\vec{x})
+    $$
+\end{example}
+
+\begin{example}{polar coordinates}
+    Let $f: \R^2 \to \R$ and $g(r, \theta) = f(r \cos \theta, r \sin \theta)$.
+    Then $g = f \circ h$ where $h: \R^2 \to \R^2$ is $h(r, \theta) = (r \cos \theta, r \sin \theta)$.
+
+    We can compute $\nabla g$, or equivalently $J_g$, by the chain rule:
+
+    We have
+
+    \begin{align*}
+        J_f & = \begin{pmatrix}
+                    \pdv{f}{x}() & \pdv{f}{y}()
+                \end{pmatrix}  \\
+        J_h & = \begin{pmatrix}
+                    \cos \theta & -r \sin \theta \\
+                    \sin \theta & r \cos \theta
+                \end{pmatrix}
+    \end{align*}
+
+    then
+
+    \begin{align*}
+        J_g & = J_f(h) \cdot J_h                  \\
+            & = \begin{pmatrix}
+                    \pdv{f}{x}()(h) & \pdv{f}{y}()(h)
+                \end{pmatrix}
+        \begin{pmatrix}
+            \cos \theta & -r \sin \theta \\
+            \sin \theta & r \cos \theta
+        \end{pmatrix}
+    \end{align*}
+
+    That is
+    \begin{align*}
+        \pdv{g}{r}()(r, \theta)      & = \cos \theta \pdv{f}{x}()(r \cos \theta, r \sin \theta) + \sin \theta \pdv{f}{y}()(r \cos \theta, r \sin \theta)      \\
+        \pdv{g}{\theta}()(r, \theta) & = -r \sin \theta \pdv{f}{x}()(r \cos \theta, r \sin \theta) + r \cos \theta \pdv{f}{y}()(r \cos \theta, r \sin \theta)
+    \end{align*}
+
+\end{example}
+
+\begin{proposition}[class of composition]
+    Let $f: D \subseteq \R^d \to \R^p$ and $g: U \subseteq \R^p \to \R^q$ be of class $C^1$.
+    Then $g \circ f$ is of class $C^1$.
+\end{proposition}
+
+\begin{proposition}[invariant of the dimension by diffeomorphism]
+    Let $f: U \subseteq \R^d \to V \subseteq \R^p$ be a bijective function with $U, V$ open. We want to check whether $d = p$.
+
+    \begin{itemize}
+        \item If $f$ is \emph{linear}, then $d = p$.
+        \item If $f$ is \emph{continuous}, bijective, and $f^{-1}$ is continuous then $d = p$.
+        \item If $f$ is bijective and $f$ and $f^{-1}$ are \emph{differentiable} then $d = p$.
+        \item In \emph{general} $d \neq p$.
+    \end{itemize}
+\end{proposition}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[General case]
+            Let $f : (0,1) \to (0,1)^2$ such that $f$ maps the the even decimal digits of $x$ to the first component and the odd decimal digits to the second component.
+            Then $f$ is bijective but $d = 1$ and $p = 2$.
+
+        \item[Linearity]
+            See linear algebra, any invertible matrix is also a square matrix.
+
+        \item[Continuity]
+            This proof is quite hard and we will not do it here.
+
+        \item[Differentiability]
+            Let $g = f^{-1}$ so that $f(g(\vec{y})) = \vec{y}$ for $\vec{y} \in V$ and $g(f(\vec{x})) = \vec{x}$ for $\vec{x} \in U$.
+            Then fix a point $\vec{x} \in U$ and let $\vec{y} = f(\vec{x})$.
+            Now apply the chain rule to get
+
+            \begin{align*}
+                J_f(\vec{x}) \cdot J_g(f(\vec{x})) & = I_{p\times p} \\
+                J_g(\vec{y}) \cdot J_f(g(\vec{y})) & = I_{d\times d}
+            \end{align*}
+
+            Then $J_f(\vec{x})$ and $J_g(\vec{y})$ are the inverse of each other, so they must be square matrices of the same size.
+
+            Moreover, if we have the proof for the continuity case we can just use the fact that differentiability implies continuity.
+    \end{description}
+\end{proof}
+
 \end{document}

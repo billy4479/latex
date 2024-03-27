@@ -1,4 +1,4 @@
-\documentclass[12pt]{extarticle}
+\documentclass[12pt]{report}
 
 \usepackage{preamble}
 
@@ -16,9 +16,9 @@
 \tableofcontents
 \clearpage
 
-\section{Functions from \texorpdfstring{$\R^d$}{Rd} to \texorpdfstring{$\R^p$}{Rp}}
+\chapter{Functions from \texorpdfstring{$\R^d$}{Rd} to \texorpdfstring{$\R^p$}{Rp}}
 
-\subsection{Continuity}
+\section{Continuity}
 
 \begin{definition}[continuity]
     A function $f: D \subseteq \R^d \to \R^p$ is continuous at $\vec{x}_0$ if
@@ -94,7 +94,7 @@
     \end{description}
 \end{proof}
 
-\subsection{Differentiability}
+\section{Differentiability}
 
 \begin{definition}[partial derivatives]
     Let $f: D \subseteq \R^d \to \R^p$ and $\vec{x} = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_d \end{pmatrix} \in D$.
@@ -478,5 +478,91 @@ $$
             Moreover, if we have the proof for the continuity case we can just use the fact that differentiability implies continuity.
     \end{description}
 \end{proof}
+
+\section{Intro to integration}
+
+\subsubsection{Motivation}
+
+We are anticipating some results of this topic because we will need them in other classes, such as probability and physics.
+For example:
+\begin{itemize}
+    \item Let $f(x, y)$ be the probability density function of a pair of random variables, then
+          $$
+              \iint_D f(x, y) \dd{x} \dd{y} = P((X, Y) \in D)
+          $$
+    \item Computing the gaussian integral by using double integrals
+          $$
+              \int_{-\infty}^{+\infty} e^{-x^2} \dd{x} = \sqrt{\pi}
+          $$
+\end{itemize}
+
+\subsection{Definition}
+
+The intuition is that we want to calculate the volume under the graph of a function $f: D \subseteq \R^2 \to \R$.
+We write it as
+$$
+    \iint_D f(x, y) \dd{x} \dd{y}
+$$
+where $D$ is a region in the plane in which we want to calculate the volume.
+
+As with normal integrals, if $f$ takes negative values we will subtract the volume under the graph from the volume above the graph.
+
+Note that $D$ is not always a rectangle, so even defining the domain of integration is not trivial.
+
+\subsubsection{Proprieties}
+
+We have the following properties of double integrals:
+
+\begin{itemize}
+    \item Linearity:
+          $$
+              \iint_D (af + bg) \dd{x} \dd{y} = a \iint_D f \dd{x} \dd{y} + b \iint_D g \dd{x} \dd{y}
+          $$
+    \item Domain decomposition: if $D = D_1 \cup D_2$ and $D_1 \cap D_2 = \varnothing$ then
+          $$
+              \iint_D f \dd{x} \dd{y} = \iint_{D_1} f \dd{x} \dd{y} + \iint_{D_2} f \dd{x} \dd{y}
+          $$
+    \item Monotonicity: if $f \leq g$ then
+          $$
+              \iint_D f \dd{x} \dd{y} \leq \iint_D g \dd{x} \dd{y}
+          $$
+    \item If $f = 1$ then
+          $$
+              \iint_D 1 \dd{x} \dd{y} = \operatorfont{area}(D)
+          $$
+\end{itemize}
+
+\subsection{Computational techniques}
+
+\subsubsection{Fubini's iterated integrals}
+
+The idea is to slice the volume in an infinite number of 2D areas and sum them up.
+
+\begin{theorem}[Fubini]
+    Let $D = [a, b] \times [c, d]$ and $f: D \to \R$ be continuous.
+    Then
+    $$
+        \iint_D f = \int_c^d \left( \int_{b}^{a} f(x, y) \dd{x} \right) \dd{y}
+    $$
+
+    If $D$ is not a rectangle the bound of integrations of the inner integral will be functions of $y$.
+    $$
+        \iint_D f = \int_{c}^{d} \left( \int_{g(y)}^{h(y)} f(x, y) \dd{x} \right) \dd{y}
+    $$
+\end{theorem}
+
+\begin{remark}
+    We can also switch the order of integration, but we need to be careful with the bounds.
+\end{remark}
+
+\subsubsection{Change of variables}
+
+Let $f: D \subseteq \R^2 \to \R$ and $\varphi: U \subseteq \R^2 \to \R^2$ be a bijective function such that $\varphi(D) = U$.
+
+$$
+    \iint_D f(x, y) \dd{x} \dd{y} = \iint_U f(\varphi(u, v)) \abs{\det J_{\varphi}(u, v)} \dd{u} \dd{v}
+$$
+
+A common change of variables is to polar coordinates, where we have $\varphi(r, \theta) = (r \cos \theta, r \sin \theta)$, and $\det J_{\varphi}(r, \theta) = r$.
 
 \end{document}

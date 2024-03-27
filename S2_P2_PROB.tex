@@ -1,4 +1,4 @@
-\documentclass[12pt]{extarticle}
+\documentclass[12pt]{report}
 
 \usepackage{preamble}
 
@@ -14,7 +14,8 @@
 \clearpage
 
 % Class of 20/03/2024
-\section{Continuous random variables}
+\chapter{Continuous random variables}
+\section{Introduction}
 
 In the last partial we studied discrete random variables, which are random variables that can take a finite or countably infinite number of values.
 Now we will consider random variables that take values in an interval of the real line, which are called \emph{continuous random variables}.
@@ -409,9 +410,9 @@ Therefore we will consider only non-negative functions as pdfs.
 
 % Class of 25/03/2024
 
-\subsection{Noteworthy continuous distributions}
+\section{Noteworthy distributions}
 
-\subsubsection{Uniform continuous distribution}
+\subsection{Uniform continuous distribution}
 
 Let $a, b \in \R$ with $a < b$. $X$ is said to have a \emph{uniform continuous distribution} in the interval $[a, b]$ if its pdf is constant in the interval.
 
@@ -439,7 +440,7 @@ Let $a, b \in \R$ with $a < b$. $X$ is said to have a \emph{uniform continuous d
           $$
 \end{itemize}
 
-\subsubsection{Exponential distribution}
+\subsection{Exponential distribution}
 
 We have one parameter $\lambda > 0$.
 
@@ -498,7 +499,7 @@ The exponential distribution is related to some discrete distributions:
     Then the time between two arrivals $X \sim \operatorfont{Exponential}\left(\frac{1}{3}\right)$, and $P(X < 3) = 1 - e^{-\lambda \cdot 3} = 1 - e^{-1}$.
 \end{example}
 
-\subsubsection{Normal or Gaussian distribution}
+\subsection{Normal or Gaussian distribution}
 
 We have two parameters $\mu \in \R$ and $\sigma > 0$.
 
@@ -534,6 +535,8 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
                    & = \sigma^2
           \end{align*}
 \end{itemize}
+
+\subsubsection{Proprieties of the normal distribution}
 
 % Class of 27/03/2024
 
@@ -594,7 +597,7 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
     and from the table we get that $P(Z \leq 1) = 0.8413$, hence $P(X > 170) = 1 - 0.8413 = 0.1587$.
 \end{example}
 
-\subsubsection{Gamma distribution}
+\subsection{Gamma distribution}
 
 Before defining the gamma distribution we need to define the gamma function:
 $$
@@ -626,6 +629,8 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
               V(X) = E(X^2) - E(X)^2 = \frac{k}{\lambda^2}
           $$
 \end{itemize}
+
+\subsubsection{Proprieties of the gamma distribution}
 
 \begin{theorem}
     Let $X \sim \operatorfont{Gamma}(k, \lambda)$, then $Y = \lambda X \sim \operatorfont{Gamma}(k, 1)$.

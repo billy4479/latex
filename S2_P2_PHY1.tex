@@ -363,23 +363,82 @@ $$
 \subsection{Translation and rotation}
 
 We are interested in the motion of a rigid body that is both rotating and translating, for example a wheel.
+
 We will consider only the case in which the wheel is rolling without slipping, that is, after a full rotation the wheel has moved of a distance equal to its circumference.
+We can express this condition as follows:
 
-Let $f$ be the frequency of the rotation, then the velocity of the center of mass is
-
+$$
+    s_{\text{cm}} = R \theta
+$$
+or, let $f$ be the frequency of the rotation, then the velocity of the center of mass is
 $$
     v_{\text{cm}} = 2 \pi R f = \omega R
 $$
 
-We can also calculate the total kinetic energy using the parallel axis theorem \ref{thm:parallel_axis}:
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \node at (-7.5, 0) {};
 
+        \draw[thick] (-4, 0) circle (1.5);
+        \draw[thick, ->, blue] (-4, 1.5) -- (-2.5, 1.5);
+        \filldraw[blue] (-4, 1.5) circle (0.05);
+        \node[anchor=south] at (-4, 1.5) {$T$};
+
+        \filldraw[blue] (-4, 0) circle (0.05) node[anchor=north] {$cm$};
+
+        \draw[thick, ->, blue] (-4, -1.5) -- (-5.5, -1.5);
+        \filldraw[blue] (-4, -1.5) circle (0.05);
+        \node[anchor=north] at (-4, -1.5) {$P$};
+
+        \node at (-2, 0) {$+$};
+
+        \draw[thick] (0, 0) circle (1.5);
+
+        \draw[thick, ->, green] (0, 1.5) -- (1.5, 1.5);
+        \filldraw[green] (0, 1.5) circle (0.05);
+        \node[anchor=south] at (0, 1.5) {$T$};
+
+        \draw[thick, ->, green] (0, 0) -- (1.5, 0);
+        \filldraw[green] (0, 0) circle (0.05) node[anchor=north] {$cm$};
+
+        \draw[thick, ->, green] (0, -1.5) -- (1.5, -1.5);
+        \filldraw[green] (0, -1.5) circle (0.05);
+        \node[anchor=north] at (0, -1.5) {$P$};
+
+        \node at (2, 0) {$=$};
+
+        \draw[thick] (4, 0) circle (1.5);
+
+        \draw[thick, ->, red] (4, 1.5) -- (7.5, 1.5);
+        \filldraw[red] (4, 1.5) circle (0.05);
+        \node[anchor=south] at (4, 1.5) {$T$};
+
+        \draw[thick, ->, red] (4, 0) -- (5.5, 0);
+        \filldraw[red] (4, 0) circle (0.05) node[anchor=north] {$cm$};
+
+        \filldraw[red] (4, -1.5) circle (0.05);
+        \node[anchor=north] at (4, -1.5) {$P$};
+    \end{tikzpicture}
+
+    \caption{Constructing rolling without slipping motion from pure rotation and pure translation.}
+    \label{fig:rolling-without-slipping}
+\end{figure}
+
+We can obtain this kind of motion by \say{summing} a pure rotation and a pure translation:
+\begin{itemize}
+    \item In the pure rotation $v_{\text{cm}} = 0$, $v_{P} = - \omega R \hat x$ and $v_{T} = \omega R \hat x$.
+    \item In the pure translation $v_{\text{cm}} = v_{P} = v_{T} = \omega R \hat x$.
+\end{itemize}
+then by summing the two motions we get that $v_{\text{cm}} = \omega R \hat x$, $v_{P} = 0$ and $v_{T} = 2 \omega R \hat x$.
+
+We can also calculate the total kinetic energy using the parallel axis theorem \ref{thm:parallel_axis}:
 \begin{align*}
     K & = \frac{1}{2} I_{\text{cm}} \omega^2 + \frac{1}{2} M v_{\text{cm}}^2 \\
       & = \frac{1}{2} M \omega^2 R^2 + \frac{1}{2} \frac{M R^2}{2} \omega^2  \\
       & = \frac{1}{2} \frac{3M R^2}{2} \omega^2                              \\
       & = \frac{1}{2} I_{\text{edge}} \omega^2
 \end{align*}
-
 where the first $I_{\text{cm}}$ is the inertia of a disk and the second $I_{\text{edge}}$ is the inertia of a disk, that is, the edge of the wheel.
 
 This is an interesting result because it tells us that we can view the translation-rotation motion as a pure rotation motion around the point of contact $P$ between the wheel and the ground.
@@ -395,7 +454,6 @@ If we consider a system where $\tau = 0$ we have that since $\tau = \dv{L}{t}$ t
     Disk 2 touches disk 1 and they start rotating together around the stick.
 
     We can calculate the final angular velocity $\omega$ of the system as follows:
-
     \begin{align*}
         I_1 \omega_1 + \cancel{I_2 \omega_2} & = (I_1 + I_2) \omega             \\
         \omega                               & = \frac{I_1 \omega_1}{I_1 + I_2}
@@ -410,12 +468,77 @@ If we consider a system where $\tau = 0$ we have that since $\tau = \dv{L}{t}$ t
     Let $I_1$ be the moment of inertia with the arms outstretched and $I_2 = \frac{1}{2} I_1$ the moment of inertia with the arms pulled in and applying the conservation of momentum we get $\omega_2 = 2 \omega_1$.
 
     Moreover, we can calculate the kinetic energy of the system as
-
     $$
         K_2 = \frac{1}{2} I_2 \omega_2^2 = \frac{1}{2} \left(\frac{1}{2} I_1\right) (2 \omega_1)^2 = 2 K_1
     $$
 
     This additional energy comes from the fact that the skater has to do work to pull her arms in.
 \end{example}
+
+When applying conservation of momentum choosing the right point to calculate the moment of inertia is crucial.
+In fact, it is possible to have systems where the torque is zero only if we choose the right reference frame, usually choosing the center of mass as the origin of such reference frame is a good guess.
+
+% Class of 27/03/2024
+
+\subsection{Tensor of inertia}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{assets/S2_P2_PHY1/skew.png}
+    \caption{A system where the angular momentum is not parallel to the angular velocity.}
+    \label{fig:tensor-of-inertia}
+\end{figure}
+
+We can write the angular velocity as $\vec{\omega} = \vec{r} \times \vec{v}$, then in this case we have $\hat \omega = \hat z$.
+
+We can calculate the momentum as
+$$
+    \abs{\vec L} = \abs{\vec{L}_{\text{top}} + \vec{L}_{\text{bottom}}} = dmv = md\omega R
+$$
+then
+\begin{align*}
+    L_z & = L \cos \alpha = L \sin \theta                       \\
+        & = md\omega R \sin \theta                              \\
+        & = 2 m \omega R \left( \frac{d}{2} \sin \theta \right) \\
+        & = 2m R^2 \omega
+\end{align*}
+
+We see that in this case $\vec{L}$ and $\vec{\omega}$ don't point in the same direction.
+
+This is because $I$ is not just a scalar but we have to specify it for all the three directions, expressing it as a matrix:
+$$
+    I = \begin{pmatrix}
+        I_{xx} & I_{xy} & I_{xz} \\
+        I_{yx} & I_{yy} & I_{yz} \\
+        I_{zx} & I_{zy} & I_{zz}
+    \end{pmatrix}
+$$
+this matrix is symmetric, that is $I_{ij} = I_{ji}$. We call this matrix \emph{tensor of inertia}.
+
+In order to compute the elements of the matrix it can be shown that
+$$
+    \begin{cases}
+        I_{zz} = \sum_i m_i (x_i^2 + y_i^2) \\
+        I_{yz} = - \sum_i m_i x_i y_i       \\
+        I_{xz} = - \sum_i m_i x_i z_i       \\
+    \end{cases}
+$$
+and for $\vec{L}$ we have
+$$
+    \vec{L} = \begin{pmatrix}
+        L_x \\
+        L_y \\
+        L_z
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        I_{xz} \omega \\
+        I_{yz} \omega \\
+        I_{zz} \omega
+    \end{pmatrix}
+$$
+
+With some linear algebra sorcery (spectral theorem), it is possible to show that it is always possible to find such a reference frame where the tensor of inertia is diagonal and the angular momentum is parallel to the angular velocity for any object.
+This only happens when the object is rotating around one of its principal axes (one of its axes of symmetry).
 
 \end{document}

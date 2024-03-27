@@ -207,6 +207,8 @@ Before staring with the theorem, we need this remark:
     $$
         I_O = I_{\text{cm}} + M d^2
     $$
+
+    \label{thm:parallel_axis}
 \end{theorem}
 
 \begin{proof}
@@ -316,6 +318,14 @@ $$
     \tau = \int_{RB} \dd{\tau} = \int_{RB} \dd{m} g r_x = g \int_{RB} \dd{m} r_x = M g x_{\text{cm}}
 $$
 
+\subsubsection{Work}
+
+We know by the definition of work that $\dd{W} = F \cdot \dd{s}$. In the case of torque we have that the radial component of the force is \say{useless} and doesn't produce any work. Then
+
+$$
+    \dd{W} = F_t \dd{s} = F_t r \dd{\theta} = \tau \dd{\theta}
+$$
+
 \subsection{Summary table}
 
 We can keep track of the variables we have defined in a table.
@@ -324,14 +334,16 @@ We can keep track of the variables we have defined in a table.
     \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        \textbf{Variable} & \textbf{1D}        & \textbf{2D rotation}         \\
+        \textbf{Variable} & \textbf{1D}             & \textbf{2D rotation}         \\
         \hline
-        Position          & $x$                & $\theta$                     \\
-        Velocity          & $v = \dv{x}{t}$    & $\omega = \dv{\theta}{t}$    \\
-        Acceleration      & $a = \dv[2]{x}{t}$ & $\alpha = \dv[2]{\theta}{t}$ \\
-        Inertia           & $m$                & $I$                          \\
-        Force/Torque      & $F = ma$           & $\tau = I \alpha$            \\
-        Momentum          & $p = mv$           & $L = I \omega$               \\
+        Position          & $x$                     & $\theta$                     \\
+        Velocity          & $v = \dv{x}{t}$         & $\omega = \dv{\theta}{t}$    \\
+        Acceleration      & $a = \dv[2]{x}{t}$      & $\alpha = \dv[2]{\theta}{t}$ \\
+        Inertia           & $m$                     & $I$                          \\
+        Force/Torque      & $F = ma$                & $\tau = I \alpha$            \\
+        Momentum          & $p = mv$                & $L = I \omega$               \\
+        Kinetic energy    & $K = \frac{1}{2} m v^2$ & $K = \frac{1}{2} I \omega^2$ \\
+        Work              & $\dd{W} = F \dd{x}$     & $\dd{W} = \tau \dd{\theta}$  \\
         \hline
     \end{tabular}
     \caption{Summary of angular variables}
@@ -346,5 +358,64 @@ $$
         \omega(t) & = \omega_0 + \alpha t
     \end{cases}
 $$
+
+
+\subsection{Translation and rotation}
+
+We are interested in the motion of a rigid body that is both rotating and translating, for example a wheel.
+We will consider only the case in which the wheel is rolling without slipping, that is, after a full rotation the wheel has moved of a distance equal to its circumference.
+
+Let $f$ be the frequency of the rotation, then the velocity of the center of mass is
+
+$$
+    v_{\text{cm}} = 2 \pi R f = \omega R
+$$
+
+We can also calculate the total kinetic energy using the parallel axis theorem \ref{thm:parallel_axis}:
+
+\begin{align*}
+    K & = \frac{1}{2} I_{\text{cm}} \omega^2 + \frac{1}{2} M v_{\text{cm}}^2 \\
+      & = \frac{1}{2} M \omega^2 R^2 + \frac{1}{2} \frac{M R^2}{2} \omega^2  \\
+      & = \frac{1}{2} \frac{3M R^2}{2} \omega^2                              \\
+      & = \frac{1}{2} I_{\text{edge}} \omega^2
+\end{align*}
+
+where the first $I_{\text{cm}}$ is the inertia of a disk and the second $I_{\text{edge}}$ is the inertia of a disk, that is, the edge of the wheel.
+
+This is an interesting result because it tells us that we can view the translation-rotation motion as a pure rotation motion around the point of contact $P$ between the wheel and the ground.
+
+\subsection{Angular momentum}
+
+We have defined the angular momentum as $L = I \omega$. We can also define the torque as $\tau = \dv{L}{t}$.
+
+If we consider a system where $\tau = 0$ we have that since $\tau = \dv{L}{t}$ the momentum $L$ is constant.
+
+\begin{example}
+    Consider two disks with inertia $I_1$ and $I_2$ and angular velocities $\omega_1 \ne 0$ and $\omega_2 = 0$, both of them have a stick going through their centers and they are free to rotate around the stick.
+    Disk 2 touches disk 1 and they start rotating together around the stick.
+
+    We can calculate the final angular velocity $\omega$ of the system as follows:
+
+    \begin{align*}
+        I_1 \omega_1 + \cancel{I_2 \omega_2} & = (I_1 + I_2) \omega             \\
+        \omega                               & = \frac{I_1 \omega_1}{I_1 + I_2}
+    \end{align*}
+\end{example}
+
+\begin{example}[ice skater]
+    An ice skater is spinning with her arms outstretched, then she pulls her arms in.
+    We want to calculate how does her angular velocity change.
+
+    The difference between the two positions causes the moment of inertia to change because the mass is less spread out.
+    Let $I_1$ be the moment of inertia with the arms outstretched and $I_2 = \frac{1}{2} I_1$ the moment of inertia with the arms pulled in and applying the conservation of momentum we get $\omega_2 = 2 \omega_1$.
+
+    Moreover, we can calculate the kinetic energy of the system as
+
+    $$
+        K_2 = \frac{1}{2} I_2 \omega_2^2 = \frac{1}{2} \left(\frac{1}{2} I_1\right) (2 \omega_1)^2 = 2 K_1
+    $$
+
+    This additional energy comes from the fact that the skater has to do work to pull her arms in.
+\end{example}
 
 \end{document}

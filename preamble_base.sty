@@ -1,0 +1,45 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{preamble_base}
+[2024/03/05 Preamble Base]
+
+\author{Giacomo Ellero}
+
+\RequirePackage{parskip} % for no indentation
+\RequirePackage[a4paper,margin=1.5cm]{geometry} % to adjust margins
+\RequirePackage{bookmark} % for pdf bookmarks
+
+\RequirePackage{float} % for H in figures
+\RequirePackage{graphicx} % for images
+\RequirePackage{subfig} % for subfigures
+
+\RequirePackage{dirtytalk} % for quotes
+\RequirePackage[many]{tcolorbox} % for boxes
+\RequirePackage{tikz} % for drawings
+\RequirePackage{enumitem} % for custom lists
+\RequirePackage{hyperref} % for hyperlinks
+
+% Use sans-serif font
+\renewcommand{\familydefault}{\sfdefault}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cyan,
+    urlcolor=blue,
+}
+\urlstyle{same}
+
+\newenvironment{absolutelynopagebreak}
+{\par\nobreak\vfil\penalty0\vfilneg
+    \vtop\bgroup}
+{\par\xdef\tpd{\the\prevdepth}\egroup
+    \prevdepth=\tpd}
+
+\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{notebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
+\newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
+
+\numberwithin{table}{section}
+\numberwithin{figure}{section}
+
+\endinput

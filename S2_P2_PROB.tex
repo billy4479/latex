@@ -481,7 +481,7 @@ The exponential distribution is related to some discrete distributions:
 
           \begin{proof}
               We can prove this by considering $X$ the time of the next arrival and $N_t$ the number of arrivals in an interval of length $t$.
-              Then $X \sim \text{Exponential}(\lambda)$ and $N_t \sim \text{Poisson}(t \lambda)$.
+              Then $X \sim \operatorfont{Exponential}(\lambda)$ and $N_t \sim \operatorfont{Poisson}(t \lambda)$.
               Moreover, $P(X > t) = P(N_t = 0)$, that is, the probability of the next visit being after $t$ is the same as the probability of having no visits in the interval $t$.
               Then $P(X > t) = e^{-\lambda t}$.
           \end{proof}
@@ -493,9 +493,9 @@ The exponential distribution is related to some discrete distributions:
     Let $N_t$ be the number of people entering in a certain time interval $t$, then $N_t \sim Poisson(t \lambda)$.
     We want to find the probability that the time between two arrivals is less than 3 minutes.
 
-    Note that $N_{60} \sim \text{Poisson}(20)$, that is, $\lambda = \frac{1}{3}$.
+    Note that $N_{60} \sim \operatorfont{Poisson}(20)$, that is, $\lambda = \frac{1}{3}$.
 
-    Then the time between two arrivals $X \sim \text{Exponential}\left(\frac{1}{3}\right)$, and $P(X < 3) = 1 - e^{-\lambda \cdot 3} = 1 - e^{-1}$.
+    Then the time between two arrivals $X \sim \operatorfont{Exponential}\left(\frac{1}{3}\right)$, and $P(X < 3) = 1 - e^{-\lambda \cdot 3} = 1 - e^{-1}$.
 \end{example}
 
 \subsubsection{Normal or Gaussian distribution}
@@ -525,14 +525,161 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 
     \item Variance:
           \begin{align*}
-              V(X) & = \int_{-\infty}^{+\infty} (x - \mu)^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \dd{x}                                                                 \\
-                   & = \int_{-\infty}^{+\infty} z^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                               \\
-                   & = \frac{1}{\sqrt{2\pi} \sigma}(-\sigma^2) \int_{-\infty}^{+\infty} z \left(- \frac{z}{\sigma^2}\right) e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                    \\
-                   & = -\frac{\sigma}{\sqrt{2\pi}} \left\{ \left[ z e^{-\frac{z^2}{2\sigma^2}} \right]_{-\infty}^{+\infty} - \int_{-\infty}^{+\infty} e^{-\frac{z^2}{2\sigma^2}} \dd{z} \right\} \\
-                   & = \frac{\sigma}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                     \\
-                   & = \sigma^2 \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                          \\
+              V(X) & = \int_{-\infty}^{+\infty} (x - \mu)^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \dd{x}                                                               \\
+                   & = \int_{-\infty}^{+\infty} z^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                             \\
+                   & = \frac{1}{\sqrt{2\pi} \sigma}(-\sigma^2) \int_{-\infty}^{+\infty} z \left(- \frac{z}{\sigma^2}\right) e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                  \\
+                   & = -\frac{\sigma}{\sqrt{2\pi}} \left( \left[ z e^{-\frac{z^2}{2\sigma^2}} \right]_{-\infty}^{+\infty} - \int_{-\infty}^{+\infty} e^{-\frac{z^2}{2\sigma^2}} \dd{z} \right) \\
+                   & = \frac{\sigma}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                   \\
+                   & = \sigma^2 \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                        \\
                    & = \sigma^2
           \end{align*}
 \end{itemize}
+
+% Class of 27/03/2024
+
+\begin{theorem}[transformation of normal random variables]
+    Let $X \sim \operatorfont{Normal}(\mu, \sigma^2)$, $a, b \in \R$ with $a \neq 0$, then
+
+    $$
+        Y = aX + b \sim \operatorfont{Normal}(a\mu + b, a^2 \sigma^2)
+    $$
+\end{theorem}
+
+\begin{proof}
+    Let $g(x) = ax + b$ such that $Y = g(X)$.
+    Then $g^{-1}(y) = \frac{y - b}{a}$, and $\dv{g^{-1}(y)}{y} = \frac{1}{a}$.
+
+    By \ref{thm:transformation_crv} we have that
+    \begin{align*}
+        f_Y(y) & = f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}}                                                                                \\
+               & = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{1}{2} \frac{\left(\frac{1}{a}(y-b)- \mu\right)^2}{\sigma^2}} \abs{\frac{1}{a}} \\
+               & = \frac{1}{\sqrt{2\pi} a \sigma} e^{-\frac{1}{2} \frac{(y - a\mu - b)^2}{a^2 \sigma^2}}
+    \end{align*}
+    which is the pdf of a Normal distribution with parameters $a\mu + b$ and $a^2 \sigma^2$.
+\end{proof}
+
+\begin{definition}[standard normal distribution]
+    The \emph{standard normal distribution} is a normal distribution with parameters $\mu = 0$ and $\sigma = 1$. It is denoted as $Z \sim \operatorfont{Normal}(0, 1)$.
+\end{definition}
+
+\begin{lemma}
+    For any $X \sim \operatorfont{Normal}(\mu, \sigma^2)$, then $Z = \frac{X - \mu}{\sigma} \sim \operatorfont{Normal}(0, 1)$.
+\end{lemma}
+
+\begin{proof}
+    \skiplineafterproof
+
+    \begin{itemize}
+        \item $$
+                  E(Z) = E\left(\frac{X - \mu}{\sigma}\right) = \frac{1}{\sigma} (E(X) - \mu) = 0
+              $$
+        \item $$
+                  V(Z) = V\left(\frac{X - \mu}{\sigma}\right) = \frac{1}{\sigma^2} V(X) = 1
+              $$
+    \end{itemize}
+\end{proof}
+
+\begin{remark}[calculating the CDF of a normal distribution]
+    We will need to use tables to get the value of the CDF of a normal distribution, as it is not possible to express it in terms of elementary functions.
+    The tables are usually given for the standard normal distribution, where $\varphi(x)$ is the PDF and $\Phi(x)$ is the CDF of the standard normal distribution.
+    Usually these table only contains the values of $\Phi(x)$ for $x \geq 0$, to get the value for $x < 0$ we use the symmetry of the normal distribution: $\Phi(x) = 1 - \Phi(-x)$.
+\end{remark}
+
+\begin{example}
+    Let $X \sim \operatorfont{Normal}(167, \sigma = 3)$, we want to find $P(X > 170)$.
+
+    $$
+        P(X>170) = P(\frac{X - 167}{3} > \frac{170 - 167}{3}) = P(Z > 1) = 1 - P(Z \leq 1)
+    $$
+    and from the table we get that $P(Z \leq 1) = 0.8413$, hence $P(X > 170) = 1 - 0.8413 = 0.1587$.
+\end{example}
+
+\subsubsection{Gamma distribution}
+
+Before defining the gamma distribution we need to define the gamma function:
+$$
+    \Gamma(k) = \int_0^{+\infty}x^{k-1}e^{-x} \dd{x}
+$$
+this function is constructed in such way to be basically an extension of the factorial function to real numbers.
+
+The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and $\lambda > 0$.
+
+\begin{itemize}
+    \item PDF:
+          $$
+              f(x) = \frac{\lambda^k}{\Gamma(k)} x^{k-1} e^{-\lambda x} I_{(0, +\infty)}(x)
+          $$
+          note that if $k = 1$ we get the exponential distribution.
+    \item Expectation:
+          \begin{align*}
+              E(X) & = \int_{-\infty}^{+\infty} x \frac{\lambda^k}{\Gamma(k)} x^{k-1} e^{-\lambda x} I_{(0, +\infty)}(x) \dd{x}               \\
+                   & = \int_{0}^{+\infty} \frac{\lambda^k}{\Gamma(k)} x^{k} e^{-\lambda x} \dd{x}                                             \\
+                   & = \frac{\Gamma(k+1)}{\Gamma(k) \lambda} \int_{0}^{+\infty} \frac{\lambda^{k+1}}{\Gamma(k+1)} x^{k} e^{-\lambda x} \dd{x} \\
+                   & = \frac{k}{\lambda}
+          \end{align*}
+          where we used the propriety of the $\Gamma$ function that $\Gamma(k) = (k-1) \Gamma(k-1)$, and reconstructed the PDF of a gamma distribution with parameters $k+1, \lambda$.
+
+          By the same calculations we can find that $E(X^2) = \frac{k(k+1)}{\lambda^2}$.
+
+    \item Variance:
+          $$
+              V(X) = E(X^2) - E(X)^2 = \frac{k}{\lambda^2}
+          $$
+\end{itemize}
+
+\begin{theorem}
+    Let $X \sim \operatorfont{Gamma}(k, \lambda)$, then $Y = \lambda X \sim \operatorfont{Gamma}(k, 1)$.
+\end{theorem}
+
+\begin{proof}
+    Let $g(x) = \lambda x$ such that $Y = g(X)$.
+    Then $g^{-1}(y) = \frac{y}{\lambda}$, and $\dv{g^{-1}(y)}{y} = \frac{1}{\lambda}$.
+
+    \begin{align*}
+        f_Y(y) & = f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}}                                                                                           \\
+               & = \frac{1}{\Gamma(k)} \left(\frac{y}{\lambda}\right)^{k-1} e^{-y} I_{(0, +\infty)}\left(\frac{y}{\lambda}\right) \frac{1}{\lambda} \\
+               & = \frac{1}{\Gamma(k)} y^{k-1} e^{-y} I_{(0, +\infty)}(y)                                                                           \\
+    \end{align*}
+    which is the PDF of a gamma distribution with parameters $k, 1$.
+\end{proof}
+
+\begin{theorem}
+    Let $X \indep Y$ with $X \sim \operatorfont{Gamma}(k_X, \lambda)$ and $Y \sim \operatorfont{Gamma}(k_Y, \lambda)$, then $X + Y \sim \operatorfont{Gamma}(k_X + k_Y, \lambda)$.
+\end{theorem}
+
+\begin{example}
+    We have 20 customers per hour, we want to find the waiting time in minutes for the third customer.
+
+    Let $N_{60} \sim \operatorfont{Poisson(60\lambda)}$ be the number of customers in an hour, then $\lambda = \frac{1}{3}$.
+    We have that $X \sim \operatorfont{Gamma}(3, \lambda)$, and the $E(x) = \frac{3}{\lambda} = 9$ minutes.
+\end{example}
+
+\begin{theorem}
+    Let $Z \sim \operatorfont{Normal}(0, 1)$, then $Z^2 \sim \operatorfont{Gamma}\left(\frac{1}{2}, \frac{1}{2}\right)$.
+\end{theorem}
+
+\begin{proof}
+    We start by calculating the CDF of $Z^2$.
+    \begin{align*}
+        P(X \leq x) & = P(Z^2 \leq x) = P(-\sqrt{x} \leq Z \leq \sqrt{x})                  \\
+                    & = 2P(0 \leq Z \leq \sqrt{x})                                         \\
+                    & = 2\int_0^{\sqrt{x}} \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}} \dd{z} \\
+    \end{align*}
+
+    Then we differentiate the CDF with respect to $x$ to get the PDF of $Z^2$.
+
+    \begin{align*}
+        f_X(x) & = \frac{2}{\sqrt{2\pi}} e^{-\frac{x}{2}} \frac{1}{2\sqrt{x}}                                                                          \\
+               & = \frac{1}{\sqrt{2\pi}} x^{-\frac{1}{2}} e^{-\frac{x}{2}}                                                                             \\
+               & = \left(\frac{1}{2}\right)^\frac{1}{2} \frac{1}{\Gamma\left(\frac{1}{2}\right)} x^{-\frac{1}{2}} e^{-\frac{x}{2}} I_{(0, +\infty)}(x)
+    \end{align*}
+    where we used the propriety of the $\Gamma$ function that $\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$.
+
+    This is the PDF of a gamma distribution with parameters $\frac{1}{2}, \frac{1}{2}$.
+\end{proof}
+
+\begin{lemma}
+    Let $Z_1, \ldots, Z_n \indep \operatorfont{Normal}(0, 1)$, then $Z_1^2 + \ldots + Z_n^2 \sim \operatorfont{Gamma}\left(\frac{n}{2}, \frac{1}{2}\right)$.
+\end{lemma}
 
 \end{document}

@@ -52,9 +52,9 @@ Note that specifying $\theta$ is enough to get the position of all the points in
 
 Let $\omega_{\text{avg}} \coloneq \frac{\theta(t_2) - \theta(t_1)}{t_2 - t_1}$ be the \textbf{average angular velocity} between times $t_1$ and $t_2$. As $\Delta t = t_2 - t_1 \to 0$, we define the \textbf{instantaneous angular velocity} as
 
-$$
+\begin{equation}
     \omega \coloneq \lim_{\Delta t \to 0} \omega_{\text{avg}} = \dv{\theta}{t}
-$$
+\end{equation}
 
 The angular velocity is a vector, therefore we can decompose it in direction and magnitude. We have $\vec{\omega} = \omega \hat{\omega}$, where $\hat{\omega}$ is either $\hat{z}$ if the motion is counterclockwise or $-\hat{z}$ if the motion is clockwise.
 
@@ -64,9 +64,9 @@ Moreover note that the angular velocity stays constant for every point in the RB
 
 We define the \textbf{average angular acceleration} as $\alpha_{\text{avg}} \coloneq \frac{\omega(t_2) - \omega(t_1)}{t_2 - t_1}$ and the \textbf{instantaneous angular acceleration} as
 
-$$
+\begin{equation}
     \alpha \coloneq \lim_{\Delta t \to 0} \alpha_{\text{avg}} = \dv{\omega}{t} = \dv[2]{\theta}{t}
-$$
+\end{equation}
 
 If we want to calculate the linear acceleration of a point in the RB, we have to combine the centripetal acceleration and the tangential acceleration, that is
 
@@ -83,17 +83,17 @@ First we will consider a simpler case of a discrete rigid body of $n$ masses con
 
 Then the kinetic energy $K = \sum_{i=1}^n K_i$ where
 
-\begin{align*}
+\begin{align}
     K_i & = \frac{1}{2}m_i v_i^2          \\
         & = \frac{1}{2}m_i r_i^2 \omega^2
-\end{align*}
+\end{align}
 
 note that the $i$ subscript is only present in the mass and the radius, but not in the angular velocity, then we can write
 
-\begin{align*}
+\begin{align}
     K & = \frac{1}{2} \omega^2 \sum_{i=1}^n m_i r_i^2 \\
       & = \frac{1}{2} I \omega^2
-\end{align*}
+\end{align}
 
 where $I \coloneq \sum_{i=1}^n m_i r_i^2$ is the \textbf{moment of inertia} of the rigid body.
 
@@ -108,18 +108,18 @@ We can make some trivial observations about the moment of inertia:
 
 In the case of a continuous rigid body, we can see it just as a sum of an infinite number of masses, so we can write
 
-\begin{align*}
+\begin{align}
     K & = \int_{RB} \dd{K}                          \\
       & = \int_{RB} \frac{1}{2} v^2 \dd{m}          \\
       & = \int_{RB} \frac{1}{2} r^2 \omega^2 \dd{m} \\
       & = \frac{1}{2} I \omega^2
-\end{align*}
+\end{align}
 
 where
 
-$$
+\begin{equation}
     I \coloneq \int_{RB} r^2 \dd{m} = \int_{RB} r^2 \sigma \dd{S}
-$$
+\end{equation}
 
 where $\sigma$ is the density mass function on a surface.
 
@@ -134,12 +134,12 @@ Note that $r$ and $\sigma$ are functions of the position, even if we dropped the
 
     Since the density is uniform, we can write $\lambda = \frac{M}{2\pi R}$, then
 
-    \begin{align*}
+    \begin{align}
         I & = \int_{\text{ring}} r^2 \dd{m}         \\
           & = \int_{\text{ring}} R^2 \lambda \dd{r} \\
           & =  R^2 \int_{\text{ring}} \dd{m}        \\
           & = R^2 M
-    \end{align*}
+    \end{align}
 \end{example}
 
 \begin{example}[moment of inertia of a disk]
@@ -151,21 +151,21 @@ Note that $r$ and $\sigma$ are functions of the position, even if we dropped the
 
     With this method we get that $\dd{S} = r \dd{r} \dd{\theta}$, then
 
-    \begin{align*}
+    \begin{align}
         I & = \int r^2 \dd{m} = \int r^2 \sigma \dd{S}             \\
           & = \int r^2 \sigma r \dd{r} \dd{\theta}                 \\
           & = \sigma \int_0^{2\pi} \dd{\theta} \int_0^R r^3 \dd{r} \\
           & = 2 \pi \sigma \frac{R^4}{4} = \frac{1}{2} M R^2
-    \end{align*}
+    \end{align}
 
     Alternatively we can sum the moment of inertia of a ring of radius $r$ and width $\dd{r}$ and use the result we got in the previous example.
     We have
 
-    \begin{align*}
+    \begin{align}
         I & = \int \dd{I_\text{ring}} = \int r^2 \dd{m_\text{ring}}             \\
           & = \int r^2 \sigma \dd{S_\text{ring}}= \int r^2 \sigma 2\pi r \dd{r} \\
           & = 2\pi \sigma \int r^3 \dd{r} = 2\pi \sigma \frac{R^4}{4}           \\
-    \end{align*}
+    \end{align}
 
     which indeed is the same result as before at the expense of a much simpler integral.
 \end{example}
@@ -177,15 +177,16 @@ Note that $r$ and $\sigma$ are functions of the position, even if we dropped the
 
     If we calculate the moment of inertia at the point $x = 0$ we get
 
-    $$
+    \begin{equation}
         I_0 = \int_0^L x^2 \dd{m} = \int_0^L x^2 \lambda \dd{x} = \left[ \lambda frac{x^3}{3} \right]_0^L = \frac{1}{3} ML^2
-    $$
+    \end{equation}
 
     Note that the moment of inertia depends on the point we calculate it on, for instance, if we calculate it at the center of mass we get
 
-    $$
+    \begin{equation}
         I_{\text{cm}} = \int_{-L/2}^{L/2} x^2 \lambda \dd{m} = \left[ \lambda \frac{x^3}{3} \right]_{-L/2}^{L/2} = \frac{1}{12} ML^2
-    $$
+    \end{equation}
+
 
     that is, $I_0 > I_{\text{cm}}$, in particular, $I_0 = I_{\text{cm}} + M \left(\frac{L}{2}\right)^2$.
     We note that $L/2$ is the distance between the two points, so can think about generalizing this result to any two points, which is what we are going to do in the next section.
@@ -196,17 +197,17 @@ Note that $r$ and $\sigma$ are functions of the position, even if we dropped the
 Before staring with the theorem, we need this remark:
 \begin{remark}
     Let $\vec{A}, \vec{B}$, then
-    $$
+    \begin{equation}
         \left( \vec{A} + \vec{B} \right) \cdot \left( \vec{A} + \vec{B} \right) = \abs{\vec{A} + \vec{B}}^2 = A^2 + 2 \vec{A} \cdot \vec{B} + B^2
-    $$
+    \end{equation}
 \end{remark}
 
 \begin{theorem}[parallel axis theorem]
     Consider a rigid body with moment of inertia $I_{\text{cm}}$ with respect to the center of mass and mass $M$. Then the moment of inertia $I$ with respect to any other point $O$ at a distance $d$ from the center of mass is
 
-    $$
+    \begin{equation}
         I_O = I_{\text{cm}} + M d^2
-    $$
+    \end{equation}
 
     \label{thm:parallel_axis}
 \end{theorem}
@@ -222,10 +223,10 @@ Before staring with the theorem, we need this remark:
 
     We want to write the moment of inertia as
 
-    \begin{align*}
+    \begin{align}
         I_O & = \sum^N_{i = 1} m_i r_i^2 = \sum^N_{i = 1} m_i (r_i')^2 + \sum^N_{i = 1} m_i d^2 + 2 \sum^N_{i = 1} m_i \vec{r'}_i \cdot \vec{d} \\
             & = \sum^N_{i = 1} m_i (r_i')^2 + M d^2 + 2 \vec{d} \cdot \sum^N_{i = 1} m_i \vec{r'}_i
-    \end{align*}
+    \end{align}
 
     and in order to prove the theorem we need to show that the last term is zero.
     Indeed we have that
@@ -238,22 +239,22 @@ Before staring with the theorem, we need this remark:
 This is very useful to compute the kinetic energy of a rigid body that is rotating around a point that is not the center of mass.
 We have that
 
-\begin{align*}
+\begin{align}
     K & = \frac{1}{2} I_O \omega^2                                           \\
       & = \frac{1}{2} (I_{\text{cm}} + M d^2) \omega^2                       \\
       & = \frac{1}{2} I_{\text{cm}} \omega^2 + \frac{1}{2} M (d \omega)^2    \\
       & = \frac{1}{2} I_{\text{cm}} \omega^2 + \frac{1}{2} M v_{\text{cm}}^2
-\end{align*}
+\end{align}
 
 \subsection{Torque}
 
 Torque is the equivalent of force in rotational dynamics. It is defined as
 
-\begin{align*}
+\begin{align}
     \vec{\tau} & \coloneq \vec{r} \times \vec{F} \\
                & = r F \sin(\theta)              \\
                & = r F_t
-\end{align*}
+\end{align}
 
 where $F_t$ is the tangential component of the force.
 Note that $\tau > 0$ if the rotation it causes is counterclockwise.
@@ -263,9 +264,9 @@ Note that $\tau > 0$ if the rotation it causes is counterclockwise.
 As we said before, torque is the equivalent of force in rotational dynamics. Then
 
 \begin{theorem}
-    $$
+    \begin{equation}
         \tau = I \alpha
-    $$
+    \end{equation}
 \end{theorem}
 
 \begin{proof}
@@ -273,10 +274,10 @@ As we said before, torque is the equivalent of force in rotational dynamics. The
 
     Now if we multiply both sides by $r$
 
-    \begin{align*}
+    \begin{align}
         r F_t & = m r^2 \alpha \\
         \tau  & = I \alpha
-    \end{align*}
+    \end{align}
 \end{proof}
 
 This works even if there are multiple forces actin on multiple points:
@@ -287,44 +288,39 @@ This works even if there are multiple forces actin on multiple points:
 
 Even though these could look like two different cases, they are actually the same thing:
 
-$$
+\begin{equation}
     \tau = \sum_i \tau_i = \sum_i m_i r_i^2 \alpha = \alpha \sum_i m_i r_i^2 = I \alpha
-$$
+\end{equation}
 
 that is because $\alpha$ is the same for all the points in the rigid body.
 
 Moreover, if we define the \emph{angular momentum} as
-$$
+\begin{equation}
     L \coloneq I \omega
-$$
-
+\end{equation}
 we can write Newton's law for rotation as
-
-$$
+\begin{equation}
     \tau = I \alpha = I \dv{\omega}{t} = \dv{L}{t}
-$$
+\end{equation}
 
 \subsubsection{Torque due to gravity}
 
 If we have a rigid body with mass $M$ and center of mass at the origin, we can calculate the torque due to gravity as the integral of the torque due to the force of gravity acting on each point of the rigid body.
-
-$$
+\begin{equation}
     \dd{\tau} = \dd{F} r \sin \theta = \dd{m} g r \sin \theta = \dd{m} g r_x
-$$
+\end{equation}
 
 Then
-
-$$
+\begin{equation}
     \tau = \int_{RB} \dd{\tau} = \int_{RB} \dd{m} g r_x = g \int_{RB} \dd{m} r_x = M g x_{\text{cm}}
-$$
+\end{equation}
 
 \subsubsection{Work}
 
 We know by the definition of work that $\dd{W} = F \cdot \dd{s}$. In the case of torque we have that the radial component of the force is \say{useless} and doesn't produce any work. Then
-
-$$
+\begin{equation}
     \dd{W} = F_t \dd{s} = F_t r \dd{\theta} = \tau \dd{\theta}
-$$
+\end{equation}
 
 \subsection{Summary table}
 
@@ -351,14 +347,12 @@ We can keep track of the variables we have defined in a table.
 \end{table}
 
 and if $\alpha = \text{const}$ we have
-
-$$
+\begin{equation}
     \begin{cases}
         \theta(t) & = \theta_0 + \omega_0 t + \frac{1}{2}\alpha t^2 \\
         \omega(t) & = \omega_0 + \alpha t
     \end{cases}
-$$
-
+\end{equation}
 
 \subsection{Translation and rotation}
 
@@ -366,14 +360,13 @@ We are interested in the motion of a rigid body that is both rotating and transl
 
 We will consider only the case in which the wheel is rolling without slipping, that is, after a full rotation the wheel has moved of a distance equal to its circumference.
 We can express this condition as follows:
-
-$$
+\begin{equation}
     s_{\text{cm}} = R \theta
-$$
+\end{equation}
 or, let $f$ be the frequency of the rotation, then the velocity of the center of mass is
-$$
+\begin{equation}
     v_{\text{cm}} = 2 \pi R f = \omega R
-$$
+\end{equation}
 
 \begin{figure}[H]
     \centering
@@ -433,12 +426,12 @@ We can obtain this kind of motion by \say{summing} a pure rotation and a pure tr
 then by summing the two motions we get that $v_{\text{cm}} = \omega R \hat x$, $v_{P} = 0$ and $v_{T} = 2 \omega R \hat x$.
 
 We can also calculate the total kinetic energy using the parallel axis theorem \ref{thm:parallel_axis}:
-\begin{align*}
+\begin{align}
     K & = \frac{1}{2} I_{\text{cm}} \omega^2 + \frac{1}{2} M v_{\text{cm}}^2 \\
       & = \frac{1}{2} M \omega^2 R^2 + \frac{1}{2} \frac{M R^2}{2} \omega^2  \\
       & = \frac{1}{2} \frac{3M R^2}{2} \omega^2                              \\
       & = \frac{1}{2} I_{\text{edge}} \omega^2
-\end{align*}
+\end{align}
 where the first $I_{\text{cm}}$ is the inertia of a disk and the second $I_{\text{edge}}$ is the inertia of a disk, that is, the edge of the wheel.
 
 This is an interesting result because it tells us that we can view the translation-rotation motion as a pure rotation motion around the point of contact $P$ between the wheel and the ground.
@@ -454,10 +447,10 @@ If we consider a system where $\tau = 0$ we have that since $\tau = \dv{L}{t}$ t
     Disk 2 touches disk 1 and they start rotating together around the stick.
 
     We can calculate the final angular velocity $\omega$ of the system as follows:
-    \begin{align*}
+    \begin{align}
         I_1 \omega_1 + \cancel{I_2 \omega_2} & = (I_1 + I_2) \omega             \\
         \omega                               & = \frac{I_1 \omega_1}{I_1 + I_2}
-    \end{align*}
+    \end{align}
 \end{example}
 
 \begin{example}[ice skater]
@@ -468,9 +461,9 @@ If we consider a system where $\tau = 0$ we have that since $\tau = \dv{L}{t}$ t
     Let $I_1$ be the moment of inertia with the arms outstretched and $I_2 = \frac{1}{2} I_1$ the moment of inertia with the arms pulled in and applying the conservation of momentum we get $\omega_2 = 2 \omega_1$.
 
     Moreover, we can calculate the kinetic energy of the system as
-    $$
+    \begin{equation}
         K_2 = \frac{1}{2} I_2 \omega_2^2 = \frac{1}{2} \left(\frac{1}{2} I_1\right) (2 \omega_1)^2 = 2 K_1
-    $$
+    \end{equation}
 
     This additional energy comes from the fact that the skater has to do work to pull her arms in.
 \end{example}
@@ -492,39 +485,39 @@ In fact, it is possible to have systems where the torque is zero only if we choo
 We can write the angular velocity as $\vec{\omega} = \vec{r} \times \vec{v}$, then in this case we have $\hat \omega = \hat z$.
 
 We can calculate the momentum as
-$$
+\begin{equation}
     \abs{\vec L} = \abs{\vec{L}_{\text{top}} + \vec{L}_{\text{bottom}}} = dmv = md\omega R
-$$
+\end{equation}
 then
-\begin{align*}
+\begin{align}
     L_z & = L \cos \alpha = L \sin \theta                       \\
         & = md\omega R \sin \theta                              \\
         & = 2 m \omega R \left( \frac{d}{2} \sin \theta \right) \\
         & = 2m R^2 \omega
-\end{align*}
+\end{align}
 
 We see that in this case $\vec{L}$ and $\vec{\omega}$ don't point in the same direction.
 
 This is because $I$ is not just a scalar but we have to specify it for all the three directions, expressing it as a matrix:
-$$
+\begin{equation}
     I = \begin{pmatrix}
         I_{xx} & I_{xy} & I_{xz} \\
         I_{yx} & I_{yy} & I_{yz} \\
         I_{zx} & I_{zy} & I_{zz}
     \end{pmatrix}
-$$
+\end{equation}
 this matrix is symmetric, that is $I_{ij} = I_{ji}$. We call this matrix \emph{tensor of inertia}.
 
 In order to compute the elements of the matrix it can be shown that
-$$
+\begin{equation}
     \begin{cases}
         I_{zz} = \sum_i m_i (x_i^2 + y_i^2) \\
         I_{yz} = - \sum_i m_i x_i y_i       \\
         I_{xz} = - \sum_i m_i x_i z_i       \\
     \end{cases}
-$$
+\end{equation}
 and for $\vec{L}$ we have
-$$
+\begin{equation}
     \vec{L} = \begin{pmatrix}
         L_x \\
         L_y \\
@@ -536,9 +529,53 @@ $$
         I_{yz} \omega \\
         I_{zz} \omega
     \end{pmatrix}
-$$
+\end{equation}
 
 With some linear algebra sorcery (spectral theorem), it is possible to show that it is always possible to find such a reference frame where the tensor of inertia is diagonal and the angular momentum is parallel to the angular velocity for any object.
 This only happens when the object is rotating around one of its principal axes (one of its axes of symmetry).
+
+% Class of ???
+
+\subsection{Static equilibrium}
+
+We say that a system is in static equilibrium when we have the following conditions:
+\begin{align}
+    \sum F    & = ma = 0        \\
+    \sum \tau & = \dv{L}{t} = 0 \\
+    L         & = 0
+\end{align}
+that is, the sum of the forces is $0$, the sum of the torques is $0$, and the angular momentum (and therefore the angular velocity) is also $0$.
+
+\subsubsection{The seesaw}
+
+Consider the example of a seesaw with two kids of mass $m_1$ and $m_2$.
+We have that
+\begin{align}
+    0                 & = 0 \quad \text{on the $x$ axis} \\
+    N + m_1 g + m_2 g & = 0 \quad \text{on the $y$ axis}
+\end{align}
+where $N$ is the normal force exerted by the pivot.
+
+We now want to add the fact that the seesaw is not rotating, but where should we compute the torque?
+Since it is not rotating around any axis we could write an infinite amount of equations which all equate the torque to $0$ around some axis.
+We need to show that all these possible equations are equivalent.
+
+We can write the equation of the equilibrium for the torque as
+\begin{equation}
+    \tau = \sum_i \tau_i = \sum_i F_{i \perp} x_i = 0
+\end{equation}
+in a different axis the equation will be
+\begin{equation}
+    \tau' = \sum_i F_{i \perp} (x_i - d) = \sum_i F_{i \perp} x_i - d \sum_i F_{i \perp} = 0 + 0
+\end{equation}
+
+In our example a good point to pivot around would be the center of the seesaw, the point where $N$ is acting.
+This allows us to drop $N$ from the equation fo the torque since $r_N = 0$.
+In general it is a good choice to pivot around some point where an unknown force is acting, because then the unknown force will not contribute to the torque.
+
+We get, in our example
+\begin{equation}
+    m_1 g x_1 + m_2 g x_2 = 0
+\end{equation}
 
 \end{document}

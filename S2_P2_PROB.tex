@@ -1,4 +1,4 @@
-\documentclass[12pt]{report}
+\documentclass[12pt]{extarticle}
 
 \usepackage{preamble}
 
@@ -14,8 +14,7 @@
 \clearpage
 
 % Class of 20/03/2024
-\chapter{Continuous random variables}
-\section{Introduction}
+\section{Introduction - Continuous random variables}
 
 In the last partial we studied discrete random variables, which are random variables that can take a finite or countably infinite number of values.
 Now we will consider random variables that take values in an interval of the real line, which are called \emph{continuous random variables}.
@@ -24,11 +23,9 @@ Now we will consider random variables that take values in an interval of the rea
     \label{def:continuous_random_variable}
 
     A random variable $X$ is said to be \emph{continuous} if $\exists f(x) : \forall a, b \in \R, a < b$,
-
-    $$
+    \begin{equation}
         P(a \leq X \leq b) = \int_a^b f(x) \dd{x}
-    $$
-
+    \end{equation}
     where $f(x)$ is called the \emph{probability density function} (pdf) of $X$.
 \end{definition}
 
@@ -52,51 +49,48 @@ Therefore we will consider only non-negative functions as pdfs.
     \skiplineafterproof
     \begin{enumerate}[label=\roman*)]
         \item
-              \begin{align*}
+              \begin{align}
                   P(X = x) & = P(\bigcap_{n=1}^\infty (x \leq X \leq x + \frac{1}{n}))      \\
                            & = \lim_{n \to \infty} P(x \leq X \leq x + \frac{1}{n})         \\
                            & = \lim_{n \to \infty} \int_x^{x + \frac{1}{n}} f(u) \dd{u} = 0
-              \end{align*}
+              \end{align}
 
         \item
-              \begin{align*}
+              \begin{align}
                   F(x) & = P(X \leq x)                                  \\
                        & = P (\bigcup_{n=1}^\infty (x-n \leq X \leq x)) \\
                        & = \lim_{n \to \infty} P(x-n \leq X \leq x)     \\
                        & = \lim_{n \to \infty} \int_{x-n}^x f(u) \dd{u} \\
                        & = \int_{-\infty}^x f(u) \dd{u}
-              \end{align*}
+              \end{align}
 
         \item
-              \begin{align*}
+              \begin{align}
                   \int_{-\infty}^{+\infty} f(x) \dd{x} & = \int_{-\infty}^x f(x) \dd{x}  \\
                                                        & = \lim_{x \to -\infty} F(x) = 1
-              \end{align*}
+              \end{align}
         \item This is a direct consequence of ii) and the fundamental theorem of calculus.
     \end{enumerate}
 \end{proof}
 
 \begin{remark}
     The pdf $f(x)$ can be interpreted as the \emph{density} of the random variable $X$ at the point $x$, that is
-
-    $$
+    \begin{equation}
         P(x \leq X \leq x + h) \sim f(x) h \quad \text{as } h \to 0
-    $$
+    \end{equation}
 \end{remark}
 
 \begin{lemma}[indipendent random variables]
     \label{lem:independent_random_variables}
     Let $X$ and $Y$ be continuous random variables such that $X \indep Y$, and let $B_1, B_2$ be any borel sets, then
-
-    $$
+    \begin{equation}
         P\left((X \in B_1) \cap (Y \in B_2)\right) = P(X \in B_1) P(Y \in B_2)
-    $$
+    \end{equation}
 
     This is equivalent to saying
-
-    $$
+    \begin{equation}
         P\left((X \in x) \cap (Y \in y)\right) = P(X \in x) P(Y \in y)
-    $$
+    \end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -115,11 +109,9 @@ Therefore we will consider only non-negative functions as pdfs.
     $P(0.5 \leq X \leq 0.75) P(0.5 \leq Y \leq 0.75) = 0.25 \cdot 0.25 = 0.0625$.
 
     Moreover we note that
-
-    $$
+    \begin{equation}
         P(a \leq X \leq b) = \int_a^b I_{[0,1]}(x) \dd{x} = b - a
-    $$
-
+    \end{equation}
     where $I_{[0,1]}(x)$ is the indicator function of the interval $[0, 1]$.
 \end{example}
 
@@ -133,7 +125,7 @@ Therefore we will consider only non-negative functions as pdfs.
 
 \begin{proof}
     \skiplineafterproof
-    \begin{align*}
+    \begin{align}
         P\left(
         (g(X) \in B_1) \cap (h(Y) \in B_2)
         \right) & = P\left(
@@ -141,8 +133,7 @@ Therefore we will consider only non-negative functions as pdfs.
         \right)                                               \\
                 & = P(X \in g^{-1}(B_1)) P(Y \in h^{-1}(B_2)) \\
                 & = P(g(X) \in B_1) P(h(Y) \in B_2)
-    \end{align*}
-
+    \end{align}
     where $B_1, B_2$ are borel sets and $g^{-1}(B_1), h^{-1}(B_2)$ are the preimages of $B_1, B_2$ under $g, h$ respectively.
 \end{proof}
 
@@ -158,21 +149,20 @@ Therefore we will consider only non-negative functions as pdfs.
     Let $g: U \to V$ be a one-to-one, strictly increasing or strictly decreasing function continuously differentiable in $U$.
 
     Then $Y = g(X)$ is a continuous random variable with pdf $f_Y(y)$ given by
-
-    $$
+    \begin{equation}
         f_Y(y) = f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}}
-    $$
+    \end{equation}
 \end{theorem}
 
 \begin{proof}
     Let $a, b \in V$, such that $a < b$.
     Then
-    \begin{align*}
+    \begin{align}
         P(a \leq Y \leq b) & = P(a \leq g(X) \leq b)                                  \\
                            & = P(g^{-1}(a) \leq X \leq g^{-1}(b))                     \\
                            & = \int_{g^{-1}(a)}^{g^{-1}(b)} f_X(x) \dd{x}             \\
                            & = \int_a^b f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}} \dd{y}
-    \end{align*}
+    \end{align}
 
     where we used the change of variables $x = g^{-1}(y)$.
     Note that the inverse of $g$ exists because $g$ is one-to-one.
@@ -190,10 +180,10 @@ Therefore we will consider only non-negative functions as pdfs.
 
     We use the theorem \ref{thm:transformation_crv} to get
 
-    \begin{align*}
+    \begin{align}
         f_Y & = 6\sqrt{\frac{y}{\pi}} \left(1- \sqrt{\frac{y}{\pi}}\right) \frac{1}{2} \frac{1}{\sqrt{\pi y}} I_{(0, 1)}\left(\frac{y}{\pi}\right) \\
             & = \frac{3}{\pi} \left(1- \frac{y}{\pi}\right) I_{(0, \pi)}(y)
-    \end{align*}
+    \end{align}
 
 \end{example}
 
@@ -202,20 +192,18 @@ Therefore we will consider only non-negative functions as pdfs.
 
 \begin{definition}[expectation]
     Let $X$ be a continuous random variable with pdf $f(x)$, then the \emph{expectation} of $X$ exists if one at least of the following integrals is finite
-
-    $$
+    \begin{equation}
         E(X) = \int_{-\infty}^{0} x f(x) \dd{x} + \int_{0}^{+\infty} x f(x) \dd{x}
-    $$
+    \end{equation}
 
     If $E(X)$ exists and is finite we say that $X$ is \emph{integrable}.
 \end{definition}
 
 \begin{lemma}[condition for integrability]
     $X$ is integrable iff
-
-    $$
+    \begin{equation}
         \int_{-\infty}^{+\infty} \abs{x} f(x) \dd{x} < +\infty
-    $$
+    \end{equation}
 \end{lemma}
 
 \begin{example}
@@ -223,9 +211,9 @@ Therefore we will consider only non-negative functions as pdfs.
     We want to find $E(X)$.
 
     We have that
-    $$
+    \begin{equation}
         \int_0^{+\infty} x \frac{1}{\pi (1+x^2)} \dd{x} \quad \text{and} \quad \int_{-\infty}^0 x \frac{1}{\pi (1+x^2)} \dd{x}
-    $$
+    \end{equation}
 
     Note that as $x \to +\infty$, $x \frac{1}{\pi (1+x^2)} \sim \frac{1}{\pi x}$, which diverges to $+\infty$.
     For $x \to -\infty$ we use the same argument to get that the integral diverges to $-\infty$.
@@ -237,22 +225,21 @@ Therefore we will consider only non-negative functions as pdfs.
     Let $X$ be a continuous random variable with pdf $f(x)$ continuous defined on a support $[a, b]$, with $a < 0, b > 0$, and $f(x) = 0$ outside $[a, b]$.
 
     Then
-
-    $$
+    \begin{equation}
         E(X) = -\int_{a}^0 F(x) \dd{x} + \int_0^b (1 - F(x)) \dd{x}
-    $$
+    \end{equation}
     with $F'(x) = f(x)$.
 \end{theorem}
 
 \begin{proof}
     We have
-    \begin{align*}
+    \begin{align}
         E(X) & = \int_{-\infty}^0 x f(x) \dd{x} + \int_0^{+\infty} x f(x) \dd{x}           \\
              & = \int_{a}^0 x f(x) \dd{x} + \int_0^{b} x f(x) \dd{x}                       \\
              & = [x F(x)]_a^0 - \int_a^0 F(x) \dd{x} + [x F(x)]_0^b - \int_0^b F(x) \dd{x} \\
              & = -\int_a^0 F(x) \dd{x} + b \int_0^b F(x) \dd{x}                            \\
              & = -\int_a^0 F(x) \dd{x} + \int_0^b (1-F(x)) \dd{x}
-    \end{align*}
+    \end{align}
     by applying integration by parts.
 \end{proof}
 
@@ -262,28 +249,25 @@ Therefore we will consider only non-negative functions as pdfs.
 
 \begin{proposition}[transformation of expectation]
     Let $X$ be a continuous random variable with pdf $f(x)$ and $Y = g(X)$, then
-
-    $$
+    \begin{equation}
         E(Y) = \int_{-\infty}^{+\infty} g(x) f(x) \dd{x}
-    $$
+    \end{equation}
 
     Moreover $Y$ is integrable iff
-
-    $$
+    \begin{equation}
         \int_{-\infty}^{+\infty} \abs{g(x)} f(x) \dd{x} < +\infty
-    $$
+    \end{equation}
 \end{proposition}
 
 \begin{example}
     Let $X$ be a random variable with pdf $f(x) = 6x(1-x) I_{(0, 1)}(x)$, and $Y = X^2$.
     Then
-
-    \begin{align*}
+    \begin{align}
         E(Y) & = \int_{-\infty}^{+\infty} x^2 f(x) \dd{x} \\
              & = \int_0^1 x^2 6x(1-x) \dd{x}              \\
              & = 6 \int_0^1 (x^3 - x^4) \dd{x}            \\
              & = \frac{6}{20}
-    \end{align*}
+    \end{align}
 \end{example}
 
 \begin{remark}
@@ -292,19 +276,18 @@ Therefore we will consider only non-negative functions as pdfs.
 
 \begin{theorem}[linearity of expectation]
     Let $X$ be a random variable, $a, b \in \R$, then
-
-    $$
+    \begin{equation}
         E(aX + b) = aE(X) + b
-    $$
+    \end{equation}
 \end{theorem}
 
 \begin{proof}
     \skiplineafterproof
-    \begin{align*}
+    \begin{align}
         E(aX + b) & = \int_{-\infty}^{+\infty} (ax + b) f(x) \dd{x}                                     \\
                   & = a \int_{-\infty}^{+\infty} x f(x) \dd{x} + b \int_{-\infty}^{+\infty} f(x) \dd{x} \\
                   & = aE(X) + b
-    \end{align*}
+    \end{align}
 \end{proof}
 
 \begin{definition}[moment]
@@ -340,71 +323,71 @@ Therefore we will consider only non-negative functions as pdfs.
 \begin{proof}
     We know that $E(X^k)$ exists iff $E(\abs{X}^k)$ exists, we want to prove that $E(\abs{X}^j)$ exists $\forall j < k$.
 
-    $$
+    \begin{equation}
         E(\abs{X}^j) = \int_{-\infty}^{+\infty} \abs{x}^j f(x) \dd{x}
-    $$
+    \end{equation}
 
     We would like to say that $\abs{x}^j \leq \abs{x}^k$, but this is not always true, for instance, this is true only if $\abs{x} \geq 1$.
 
     Then we can write $E(\abs{X}^j)$ as
-    \begin{align*}
+    \begin{align}
         E(\abs{X}^j) & \leq \int_{-\infty}^{+\infty} \max(\abs{x}^j, 1) f(x) \dd{x}                                      \\
                      & \leq \int_{-\infty}^{+\infty} \max(\abs{x}^k, 1) f(x) \dd{x}                                      \\
                      & \leq \int_{-\infty}^{+\infty} (\abs{x}^k + 1) f(x) \dd{x}                                         \\
                      & = \int_{-\infty}^{+\infty} \abs{x}^k f(x) \dd{x} + \int_{-\infty}^{+\infty} f(x) \dd{x} < +\infty
-    \end{align*}
+    \end{align}
 
     For the second part we can write
 
-    \begin{align*}
+    \begin{align}
         E(\abs{X - \mu}^k) & = \int_{-\infty}^{+\infty} \abs{x - \mu} f(x) \dd{x}                                                 \\
                            & \leq \int_{-\infty}^{+\infty} (\abs{x} + \abs{\mu}) f(x) \dd{x}                                      \\
                            & = \int_{-\infty}^{+\infty} \sum_{j=0}^k \binom{k}{j} \abs{x}^j \abs{\mu}^{k-j} f(x) \dd{x}           \\
                            & = \sum_{j=0}^k \binom{k}{j} \abs{\mu}^{k-j} \int_{-\infty}^{+\infty} \abs{x}^j f(x) \dd{x} < +\infty
-    \end{align*}
+    \end{align}
 \end{proof}
 
 \begin{definition}[variance]
     Let $X$ be a random variable, then the \emph{variance} of $X$ is defined as
-
-    \begin{align*}
+    \begin{align}
         V(X) & = \sigma^2 = E((X - \mu)^2)                        \\
              & = \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \dd{x}
-    \end{align*}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[properties of variance]
-    \begin{enumerate}
-        \item $V(X) = E(X^2) - E(X)^2$
-        \item $V(X + b) = V(X)$
-        \item $V(aX) = a^2 V(X)$
-    \end{enumerate}
+    The following equations hold:
+    \begin{align}
+         & V(X) = E(X^2) - E(X)^2 \label{eq:prop_variance:1} \\
+         & V(X + b) = V(X)        \label{eq:prop_variance:2} \\
+         & V(aX) = a^2 V(X) \label{eq:prop_variance:3}
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \skiplineafterproof
     \begin{enumerate}
-        \item
-              \begin{align*}
-                  V(X) = \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \dd{x} & = \int_{-\infty}^{+\infty} (x^2 - 2x\mu + \mu^2) f(x) \dd{x}                                                                          \\
-                                                                          & = \int_{-\infty}^{+\infty} x^2 f(x) \dd{x} - 2\mu \int_{-\infty}^{+\infty} x f(x) \dd{x} + \mu^2 \int_{-\infty}^{+\infty} f(x) \dd{x} \\
-                                                                          & = E(X^2) - 2\mu E(X) + \mu^2 = E(X^2) - E(X)^2
-              \end{align*}
+        \item[\ref{eq:prop_variance:1}.]
+            \begin{align}
+                V(X) = \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \dd{x} & = \int_{-\infty}^{+\infty} (x^2 - 2x\mu + \mu^2) f(x) \dd{x}                                                                          \\
+                                                                        & = \int_{-\infty}^{+\infty} x^2 f(x) \dd{x} - 2\mu \int_{-\infty}^{+\infty} x f(x) \dd{x} + \mu^2 \int_{-\infty}^{+\infty} f(x) \dd{x} \\
+                                                                        & = E(X^2) - 2\mu E(X) + \mu^2 = E(X^2) - E(X)^2
+            \end{align}
 
-        \item \begin{align*}
-                  V(X + b) & = E((X + b)^2) - E(X + b)^2                     \\
-                           & = E(X^2 + 2bX + b^2) - (E(X) + b)^2             \\
-                           & = E(X^2) + 2bE(X) + b^2 - E(X)^2 - 2bE(X) - b^2 \\
-                           & = V(X)
-              \end{align*}
+        \item[\ref{eq:prop_variance:2}.] \begin{align}
+                V(X + b) & = E((X + b)^2) - E(X + b)^2                     \\
+                         & = E(X^2 + 2bX + b^2) - (E(X) + b)^2             \\
+                         & = E(X^2) + 2bE(X) + b^2 - E(X)^2 - 2bE(X) - b^2 \\
+                         & = V(X)
+            \end{align}
 
-        \item \begin{align*}
-                  V(aX) & = E((aX)^2) - E(aX)^2     \\
-                        & = E(a^2 X^2) - (aE(X))^2  \\
-                        & = a^2 E(X^2) - a^2 E(X)^2 \\
-                        & = a^2 (E(X^2) - E(X)^2)   \\
-                        & = a^2 V(X)
-              \end{align*}
+        \item[\ref{eq:prop_variance:3}.] \begin{align}
+                V(aX) & = E((aX)^2) - E(aX)^2     \\
+                      & = E(a^2 X^2) - (aE(X))^2  \\
+                      & = a^2 E(X^2) - a^2 E(X)^2 \\
+                      & = a^2 (E(X^2) - E(X)^2)   \\
+                      & = a^2 V(X)
+            \end{align}
     \end{enumerate}
 \end{proof}
 
@@ -418,26 +401,25 @@ Let $a, b \in \R$ with $a < b$. $X$ is said to have a \emph{uniform continuous d
 
 \begin{itemize}
     \item PDF:
-          $$
+          \begin{equation}
               f(x) = \frac{1}{b-a} I_{[a, b]}(x)
-          $$
+          \end{equation}
     \item CDF:
-          $$
+          \begin{equation}
               F(x) = \int_{-\infty}^x f(u) \dd{u} = \begin{cases}
                   0               & x < a        \\
                   \frac{x-a}{b-a} & a \leq x < b \\
                   1               & x \geq b
               \end{cases}
-          $$
-
+          \end{equation}
     \item Expectation:
-          $$
+          \begin{equation}
               E(X) = \int_{-\infty}^{+\infty} x f(x) \dd{x} = \int_a^b \frac{x}{b-a} \dd{x} = \frac{1}{b-a} \left[\frac{x^2}{2}\right]_a^b = \frac{a+b}{2}
-          $$
+          \end{equation}
     \item Variance:
-          $$
+          \begin{equation}
               V(X) = E(X^2) - E(X)^2 = \frac{b^2 + ab + a^2}{3} - \frac{(a+b)^2}{4} = \frac{(b-a)^2}{12}
-          $$
+          \end{equation}
 \end{itemize}
 
 \subsection{Exponential distribution}
@@ -446,23 +428,23 @@ We have one parameter $\lambda > 0$.
 
 \begin{itemize}
     \item PDF:
-          $$
+          \begin{equation}
               f(x) = \lambda e^{-\lambda x} I_{[0, +\infty)}(x)
-          $$
+          \end{equation}
     \item CDF:
-          $$
+          \begin{equation}
               F(x) = \int_{-\infty}^x f(u) \dd{u} = (1 - e^{-\lambda x})I_{[0, +\infty)}(x)
-          $$
+          \end{equation}
 
           We know that $F(x) = P(X \leq x)$, then it's easy to remember that $P(X > x) = e^{-\lambda x}$.
     \item Expectation:
-          $$
+          \begin{equation}
               E(X) = \int_{-\infty}^{+\infty} (1 - F(x)) \dd{x} = \int_0^{+\infty} \lambda e^{-\lambda x} \dd{x} = \frac{1}{\lambda}
-          $$
+          \end{equation}
     \item Variance:
-          $$
+          \begin{equation}
               V(X) = E(X^2) - E(X)^2 = \frac{1}{\lambda^2}
-          $$
+          \end{equation}
 
           $E(X)^2$ can be computed by integrating by parts.
 \end{itemize}
@@ -470,10 +452,9 @@ We have one parameter $\lambda > 0$.
 The exponential distribution is related to some discrete distributions:
 \begin{itemize}
     \item Similarly to the geometric distribution, the exponential distribution is \emph{memoryless}, that is
-
-          $$
+          \begin{equation}
               P(X > x + z | X > z) = P(X > x)
-          $$
+          \end{equation}
 
           We can also prove that the exponential distribution is the continuous counterpart of the geometric distribution.
 
@@ -491,7 +472,7 @@ The exponential distribution is related to some discrete distributions:
 \begin{example}
     We have a rate of 20 people per hour.
 
-    Let $N_t$ be the number of people entering in a certain time interval $t$, then $N_t \sim Poisson(t \lambda)$.
+    Let $N_t$ be the number of people entering in a certain time interval $t$, then $N_t \sim \operatorfont{Poisson}(t \lambda)$.
     We want to find the probability that the time between two arrivals is less than 3 minutes.
 
     Note that $N_{60} \sim \operatorfont{Poisson}(20)$, that is, $\lambda = \frac{1}{3}$.
@@ -505,27 +486,28 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 
 \begin{itemize}
     \item PDF:
-          $$
+          \begin{equation}
               f(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
-          $$
+          \end{equation}
     \item CDF:
-          $$
+          \begin{equation}
               F(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(u-\mu)^2}{2\sigma^2}} \dd{u}
-          $$
+          \end{equation}
+
           It is possible to prove that this is not a primitive function, hence it is not possible to express it in terms of elementary functions, but it is possible to compute that $\lim_{x \to +\infty} F(x) = 1$, but we will cover this in Analysis.
     \item Expectation:
-          \begin{align*}
+          \begin{align}
               E(X) & = \int_{-\infty}^{+\infty} x \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \dd{x}                                                                                         \\
                    & = \int_{-\infty}^{+\infty} (z + x) \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                         \\
                    & = \int_{-\infty}^{+\infty} z \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} + \int_{-\infty}^{+\infty} \mu \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} \\
                    & = 0 + \mu = \mu
-          \end{align*}
+          \end{align}
           where $z = x - \mu$.
 
           The last simplification is due to the fact that the first integral contains an odd function, and the second integral is the pdf of a normal distribution hence it is equal to 1.
 
     \item Variance:
-          \begin{align*}
+          \begin{align}
               V(X) & = \int_{-\infty}^{+\infty} (x - \mu)^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \dd{x}                                                               \\
                    & = \int_{-\infty}^{+\infty} z^2 \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                             \\
                    & = \frac{1}{\sqrt{2\pi} \sigma}(-\sigma^2) \int_{-\infty}^{+\infty} z \left(- \frac{z}{\sigma^2}\right) e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                  \\
@@ -533,7 +515,7 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
                    & = \frac{\sigma}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                   \\
                    & = \sigma^2 \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                        \\
                    & = \sigma^2
-          \end{align*}
+          \end{align}
 \end{itemize}
 
 \subsubsection{Proprieties of the normal distribution}
@@ -542,10 +524,9 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 
 \begin{theorem}[transformation of normal random variables]
     Let $X \sim \operatorfont{Normal}(\mu, \sigma^2)$, $a, b \in \R$ with $a \neq 0$, then
-
-    $$
+    \begin{equation}
         Y = aX + b \sim \operatorfont{Normal}(a\mu + b, a^2 \sigma^2)
-    $$
+    \end{equation}
 \end{theorem}
 
 \begin{proof}
@@ -553,11 +534,11 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
     Then $g^{-1}(y) = \frac{y - b}{a}$, and $\dv{g^{-1}(y)}{y} = \frac{1}{a}$.
 
     By \ref{thm:transformation_crv} we have that
-    \begin{align*}
+    \begin{align}
         f_Y(y) & = f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}}                                                                                \\
                & = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{1}{2} \frac{\left(\frac{1}{a}(y-b)- \mu\right)^2}{\sigma^2}} \abs{\frac{1}{a}} \\
                & = \frac{1}{\sqrt{2\pi} a \sigma} e^{-\frac{1}{2} \frac{(y - a\mu - b)^2}{a^2 \sigma^2}}
-    \end{align*}
+    \end{align}
     which is the pdf of a Normal distribution with parameters $a\mu + b$ and $a^2 \sigma^2$.
 \end{proof}
 
@@ -570,16 +551,10 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 \end{lemma}
 
 \begin{proof}
-    \skiplineafterproof
-
-    \begin{itemize}
-        \item $$
-                  E(Z) = E\left(\frac{X - \mu}{\sigma}\right) = \frac{1}{\sigma} (E(X) - \mu) = 0
-              $$
-        \item $$
-                  V(Z) = V\left(\frac{X - \mu}{\sigma}\right) = \frac{1}{\sigma^2} V(X) = 1
-              $$
-    \end{itemize}
+    \begin{align}
+        E(Z) & = E\left(\frac{X - \mu}{\sigma}\right) = \frac{1}{\sigma} (E(X) - \mu) = 0 \\
+        V(Z) & = V\left(\frac{X - \mu}{\sigma}\right) = \frac{1}{\sigma^2} V(X) = 1
+    \end{align}
 \end{proof}
 
 \begin{remark}[calculating the CDF of a normal distribution]
@@ -591,43 +566,43 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 \begin{example}
     Let $X \sim \operatorfont{Normal}(167, \sigma = 3)$, we want to find $P(X > 170)$.
 
-    $$
+    \begin{equation}
         P(X>170) = P(\frac{X - 167}{3} > \frac{170 - 167}{3}) = P(Z > 1) = 1 - P(Z \leq 1)
-    $$
+    \end{equation}
     and from the table we get that $P(Z \leq 1) = 0.8413$, hence $P(X > 170) = 1 - 0.8413 = 0.1587$.
 \end{example}
 
 \subsection{Gamma distribution}
 
 Before defining the gamma distribution we need to define the gamma function:
-$$
+\begin{equation}
     \Gamma(k) = \int_0^{+\infty}x^{k-1}e^{-x} \dd{x}
-$$
+\end{equation}
 this function is constructed in such way to be basically an extension of the factorial function to real numbers.
 
 The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and $\lambda > 0$.
 
 \begin{itemize}
     \item PDF:
-          $$
+          \begin{equation}
               f(x) = \frac{\lambda^k}{\Gamma(k)} x^{k-1} e^{-\lambda x} I_{(0, +\infty)}(x)
-          $$
+          \end{equation}
           note that if $k = 1$ we get the exponential distribution.
     \item Expectation:
-          \begin{align*}
+          \begin{align}
               E(X) & = \int_{-\infty}^{+\infty} x \frac{\lambda^k}{\Gamma(k)} x^{k-1} e^{-\lambda x} I_{(0, +\infty)}(x) \dd{x}               \\
                    & = \int_{0}^{+\infty} \frac{\lambda^k}{\Gamma(k)} x^{k} e^{-\lambda x} \dd{x}                                             \\
                    & = \frac{\Gamma(k+1)}{\Gamma(k) \lambda} \int_{0}^{+\infty} \frac{\lambda^{k+1}}{\Gamma(k+1)} x^{k} e^{-\lambda x} \dd{x} \\
                    & = \frac{k}{\lambda}
-          \end{align*}
+          \end{align}
           where we used the propriety of the $\Gamma$ function that $\Gamma(k) = (k-1) \Gamma(k-1)$, and reconstructed the PDF of a gamma distribution with parameters $k+1, \lambda$.
 
           By the same calculations we can find that $E(X^2) = \frac{k(k+1)}{\lambda^2}$.
 
     \item Variance:
-          $$
+          \begin{equation}
               V(X) = E(X^2) - E(X)^2 = \frac{k}{\lambda^2}
-          $$
+          \end{equation}
 \end{itemize}
 
 \subsubsection{Proprieties of the gamma distribution}
@@ -640,11 +615,11 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
     Let $g(x) = \lambda x$ such that $Y = g(X)$.
     Then $g^{-1}(y) = \frac{y}{\lambda}$, and $\dv{g^{-1}(y)}{y} = \frac{1}{\lambda}$.
 
-    \begin{align*}
+    \begin{align}
         f_Y(y) & = f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}}                                                                                           \\
                & = \frac{1}{\Gamma(k)} \left(\frac{y}{\lambda}\right)^{k-1} e^{-y} I_{(0, +\infty)}\left(\frac{y}{\lambda}\right) \frac{1}{\lambda} \\
                & = \frac{1}{\Gamma(k)} y^{k-1} e^{-y} I_{(0, +\infty)}(y)                                                                           \\
-    \end{align*}
+    \end{align}
     which is the PDF of a gamma distribution with parameters $k, 1$.
 \end{proof}
 
@@ -665,19 +640,19 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
 
 \begin{proof}
     We start by calculating the CDF of $Z^2$.
-    \begin{align*}
+    \begin{align}
         P(X \leq x) & = P(Z^2 \leq x) = P(-\sqrt{x} \leq Z \leq \sqrt{x})                  \\
                     & = 2P(0 \leq Z \leq \sqrt{x})                                         \\
                     & = 2\int_0^{\sqrt{x}} \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}} \dd{z} \\
-    \end{align*}
+    \end{align}
 
     Then we differentiate the CDF with respect to $x$ to get the PDF of $Z^2$.
 
-    \begin{align*}
+    \begin{align}
         f_X(x) & = \frac{2}{\sqrt{2\pi}} e^{-\frac{x}{2}} \frac{1}{2\sqrt{x}}                                                                          \\
                & = \frac{1}{\sqrt{2\pi}} x^{-\frac{1}{2}} e^{-\frac{x}{2}}                                                                             \\
                & = \left(\frac{1}{2}\right)^\frac{1}{2} \frac{1}{\Gamma\left(\frac{1}{2}\right)} x^{-\frac{1}{2}} e^{-\frac{x}{2}} I_{(0, +\infty)}(x)
-    \end{align*}
+    \end{align}
     where we used the propriety of the $\Gamma$ function that $\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$.
 
     This is the PDF of a gamma distribution with parameters $\frac{1}{2}, \frac{1}{2}$.

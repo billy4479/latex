@@ -402,6 +402,7 @@ Let $a, b \in \R$ with $a < b$. $X$ is said to have a \emph{uniform continuous d
 \begin{itemize}
     \item PDF:
           \begin{equation}
+              \label{eq:uniform:pdf}
               f(x) = \frac{1}{b-a} I_{[a, b]}(x)
           \end{equation}
     \item CDF:
@@ -661,5 +662,65 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
 \begin{lemma}
     Let $Z_1, \ldots, Z_n \indep \operatorfont{Normal}(0, 1)$, then $Z_1^2 + \ldots + Z_n^2 \sim \operatorfont{Gamma}\left(\frac{n}{2}, \frac{1}{2}\right)$.
 \end{lemma}
+
+\subsection{Cauchy distribution}
+
+The Cauchy distribution looks similar to the Normal distribution even though it goes to $0$ more slowly.
+
+\begin{itemize}
+    \item PDF:
+          \begin{equation}
+              f(x) = \frac{1}{\pi (1 + x^2)}
+          \end{equation}
+          We see that as $x \to \pm \infty$, $f(x) \sim x^{-2}$, hence $\varphi(x) = \o(f(x))$, where $\varphi(x)$ is the gaussian density.
+    \item CDF:
+          \begin{equation}
+              F(X) = \int_{-\infty}^{x} \frac{1}{\pi(1+u^2)} \dd{u} = \frac{1}{\pi} \left[\arctan u\right]_{-\infty}^x = \frac{1}{2} + \frac{\arctan x}{\pi}
+          \end{equation}
+    \item Expectation and variance: since $x f(x) \sim x^{-1}$ as $x \to \pm \infty$ the expectation does not exist. All the absolute moments $E(\abs{X}^k)$ are also infinite and and the variance also does not exist.
+\end{itemize}
+
+\subsection{Beta distribution}
+
+The beta distribution is used for random variables that take values in $[0, 1]$.
+It has two parameters $a, b \gt 0$.
+
+\begin{itemize}
+    \item PDF:
+          \begin{equation}
+              f(x) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}x^{a-1}(1-x)^{b-1}I_{(0,1)}(x)
+          \end{equation}
+    \item CDF: It can be proven that
+          \begin{equation}
+              \int_0^1 x^{a -1}(1-x)^{b-1} \dd{x} = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)}
+          \end{equation}
+          which implies that
+          \begin{equation}
+              \int_0^1 \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}x^{a-1}(1-x)^{b-1} \dd{x}= 0
+          \end{equation}
+    \item Expectation:
+          \begin{align}
+              E(X) & = \int_0^1 x \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}x^{a-1}(1-x)^{b-1} \dd{x}       \\
+                   & = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \int_0^1 x^a (1-x)^{b-1} \dd{x}           \\
+                   & = \frac{\Gamma(a + b) \Gamma(a+1) \Gamma(b)}{\Gamma(a) \Gamma(b) \Gamma(a + 1+ b)} \\
+                   & = \frac{a}{a+b}
+          \end{align}
+
+          We can similarly compute the second moment to be
+          \begin{equation}
+              \label{eq:beta:second_moment}
+              E(X^2) = \frac{a(a+1)}{(a+b)(a+ b+ 1)}
+          \end{equation}
+    \item Variance: by using \ref{eq:beta:second_moment}
+          \begin{align}
+              V(X) & = \frac{a(a+1)}{(a+b)(a+ b+ 1)} - \frac{a^2}{(a + b)^2}               \\
+                   & = \frac{a}{a+ b} \left(\frac{a + 1}{a + b + 1} - \frac{a}{a+b}\right) \\
+                   & = \frac{a}{a+b} \frac{b}{(a+b)(a + b + 1)}                            \\
+                   & = \frac{ab}{(a+b)^2(a+b+1)}
+          \end{align}
+\end{itemize}
+
+Note that if $a = b = 1$ then the pdf becomes the pdf of the uniform distribution (see \ref{eq:uniform:pdf}).
+In other words, the uniform distribution on $[0, 1]$ is a special case of the beta distribution.
 
 \end{document}

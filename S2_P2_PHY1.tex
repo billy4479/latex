@@ -1,6 +1,7 @@
 \documentclass[12pt]{extarticle}
 
 \usepackage{preamble}
+\usepackage{siunitx}
 
 \title{Mathematical Analysis 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
@@ -576,6 +577,121 @@ In general it is a good choice to pivot around some point where an unknown force
 We get, in our example
 \begin{equation}
     m_1 g x_1 + m_2 g x_2 = 0
+\end{equation}
+
+\section{Fluids}
+
+In this section we will not introduce any new law, we will derive everything from Newton's laws.
+
+\subsection{Introduction}
+
+\subsubsection{Fields}
+
+We will need to use a mathematical tool called field.
+A field $\Phi$ is a function of space and time, that is $\Phi(\vec{r}, t)$.
+Moreover this function could return a scalar as well as a vector; in this second case we call it a \emph{vector field}.
+
+\subsubsection{Definition of fluid}
+
+Remember the four states of matter:
+\begin{itemize}
+    \item Solid
+    \item Liquid
+    \item Gas
+    \item Plasma
+\end{itemize}
+fluids are in the state of liquid and gas.
+Remember also that the difference between liquids and gasses is that liquids are (almost) incompressible.
+
+Also note that fluids deform continuously under the effect of any sheer force, that is, forces parallel to the area.
+
+The surface of a liquid will try to stay at an equipotential line. We can see this phenomena in tides for example.
+
+\subsubsection{Density}
+
+The density a field defined as the ratio between the mass and the volume at a certain point.
+\begin{equation}
+    \rho(\vec r) = \dv{m}{V}
+\end{equation}
+Note that this is the result of a limiting process: we look at a ball centered at $\vec r$ and take the limit as the radius of the ball goes to $0$.
+Also note that this assumes that the molecules are \say{continuous}, because otherwise we could get to some point where we are calculating the density of empty space.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Element} & \textbf{Density}                         \\
+        \hline
+        Water            & $1000 \si{\kilogram \per \meter \cubed}$ \\
+        Air              & $1.2 \si{\kilogram \per \meter \cubed}$  \\
+        \hline
+    \end{tabular}
+    \caption{Common densities}
+\end{table}
+
+\subsubsection{Pressure}
+
+The pressure is defined as
+\begin{equation}
+    p = \frac{F}{A}
+\end{equation}
+where $F$ is the component of the force $\vec{F}$ perpendicular to the area $A$.
+
+In the context of a fluid we define the pressure in a point $\vec r$ inside a fluid as the pressure that the fluid would apply to fill an hypothetical empty ball centered at $\vec r$.
+This is also a limiting process as we want to consider smaller and smaller balls.
+
+The unit of pressure is
+\begin{equation}
+    [p] = \si{\kilogram \per \second \squared \per \meter} = \si {\newton \per \meter \squared} = \si{\pascal}
+\end{equation}
+
+\subsection{Stevino's law}
+
+Consider a cylinder of fluid inside the fluid itself. We know that the fluid is in equilibrium.
+
+\begin{align}
+    F_x^{\text{tot}} & = m a_x = F_1 - F_2                                    \\
+                     & = p (x_0, y_0, z_0) A - p (x_0 + \Delta x, y_0, z_0) A \\
+                     & = 0
+\end{align}
+that is $p (x_0, y_0, z_0) = p (x_0 + \Delta x, y_0, z_0)$.
+By repeating the argument in the $y$ direction we get that the pressure is independent of the $x$ and $y$ component.
+
+For the $z$ axis we need to consider the gravitational force in addition to $F_1$ and $F_2$:
+\begin{align}
+    m a & = F_1 + F_2 + m g                           \\
+        & = p(z_0) A + p(z_0 + \delta z) A - \rho V g \\
+        & = 0
+\end{align}
+which can be written as, after simplifying the areas:
+\begin{equation}
+    p(z_0) = p(z_0 + \Delta z) + \rho g \Delta z
+\end{equation}
+
+This equation is written in a reference frame such that $z$ increases as we get closer to the surface of the fluid.
+It is also common to see it written in the reference frame in which $z = 0$ at the surface of the fluid.
+
+We can calculate the atmospheric pressure as
+\begin{equation}
+    p_\text{atm} \approx 10^5 \si{\pascal}
+\end{equation}
+in standard conditions, that is at sea level at $15 \si{\celsius}$.
+
+\subsection{Pascal's law}
+
+Assume we have a fluid in a container and we apply a force $F$ on top of it over a surface $A$.
+Let $\delta p = F/A$, then the new pressure is
+\begin{eqnarray}
+    p'(\vec r) = p (\vec r) + \delta p
+\end{eqnarray}
+which means that the new pressure is applied homogeneously to the whole fluid.
+
+\subsection{Archimedes principle (buoyancy)}
+
+This law says that if we put a body in a fluid the force exerted by the fluid upwards is
+
+\begin{equation}
+    \vec F = \sum_{\text{surface}} \dd{\vec F}(\vec r) = pgV \hat k
 \end{equation}
 
 \end{document}

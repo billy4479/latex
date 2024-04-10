@@ -7,6 +7,8 @@
 
 \setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
 
+\newcommand{\cov}{{\operatorfont Cov}}
+
 \begin{document}
 
 \maketitle
@@ -178,7 +180,7 @@ Therefore we will consider only non-negative functions as pdfs.
 
     Moreover $\dv{g^{-1}(y)}{y} = \frac{1}{2} \frac{1}{\sqrt{\pi y}}$.
 
-    We use the theorem \ref{thm:transformation_crv} to get
+    We use \autoref{thm:transformation_crv} to get
 
     \begin{align}
         f_Y & = 6\sqrt{\frac{y}{\pi}} \left(1- \sqrt{\frac{y}{\pi}}\right) \frac{1}{2} \frac{1}{\sqrt{\pi y}} I_{(0, 1)}\left(\frac{y}{\pi}\right) \\
@@ -366,28 +368,30 @@ Therefore we will consider only non-negative functions as pdfs.
 
 \begin{proof}
     \skiplineafterproof
-    \begin{enumerate}
-        \item[\ref{eq:prop_variance:1}.]
-            \begin{align}
-                V(X) = \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \dd{x} & = \int_{-\infty}^{+\infty} (x^2 - 2x\mu + \mu^2) f(x) \dd{x}                                                                          \\
-                                                                        & = \int_{-\infty}^{+\infty} x^2 f(x) \dd{x} - 2\mu \int_{-\infty}^{+\infty} x f(x) \dd{x} + \mu^2 \int_{-\infty}^{+\infty} f(x) \dd{x} \\
-                                                                        & = E(X^2) - 2\mu E(X) + \mu^2 = E(X^2) - E(X)^2
-            \end{align}
+    \begin{enumerate}[label=\roman*.]
+        \item (\autoref{eq:prop_variance:1})
+              \begin{align}
+                  V(X) = \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \dd{x} & = \int_{-\infty}^{+\infty} (x^2 - 2x\mu + \mu^2) f(x) \dd{x}                                                                          \\
+                                                                          & = \int_{-\infty}^{+\infty} x^2 f(x) \dd{x} - 2\mu \int_{-\infty}^{+\infty} x f(x) \dd{x} + \mu^2 \int_{-\infty}^{+\infty} f(x) \dd{x} \\
+                                                                          & = E(X^2) - 2\mu E(X) + \mu^2 = E(X^2) - E(X)^2
+              \end{align}
 
-        \item[\ref{eq:prop_variance:2}.] \begin{align}
-                V(X + b) & = E((X + b)^2) - E(X + b)^2                     \\
-                         & = E(X^2 + 2bX + b^2) - (E(X) + b)^2             \\
-                         & = E(X^2) + 2bE(X) + b^2 - E(X)^2 - 2bE(X) - b^2 \\
-                         & = V(X)
-            \end{align}
+        \item (\autoref{eq:prop_variance:2})
+              \begin{align}
+                  V(X + b) & = E((X + b)^2) - E(X + b)^2                     \\
+                           & = E(X^2 + 2bX + b^2) - (E(X) + b)^2             \\
+                           & = E(X^2) + 2bE(X) + b^2 - E(X)^2 - 2bE(X) - b^2 \\
+                           & = V(X)
+              \end{align}
 
-        \item[\ref{eq:prop_variance:3}.] \begin{align}
-                V(aX) & = E((aX)^2) - E(aX)^2     \\
-                      & = E(a^2 X^2) - (aE(X))^2  \\
-                      & = a^2 E(X^2) - a^2 E(X)^2 \\
-                      & = a^2 (E(X^2) - E(X)^2)   \\
-                      & = a^2 V(X)
-            \end{align}
+        \item (\autoref{eq:prop_variance:3})
+              \begin{align}
+                  V(aX) & = E((aX)^2) - E(aX)^2     \\
+                        & = E(a^2 X^2) - (aE(X))^2  \\
+                        & = a^2 E(X^2) - a^2 E(X)^2 \\
+                        & = a^2 (E(X^2) - E(X)^2)   \\
+                        & = a^2 V(X)
+              \end{align}
     \end{enumerate}
 \end{proof}
 
@@ -464,7 +468,7 @@ The exponential distribution is related to some discrete distributions:
 
           \begin{proof}
               We can prove this by considering $X$ the time of the next arrival and $N_t$ the number of arrivals in an interval of length $t$.
-              Then $X \sim \operatorfont{Exponential}(\lambda)$ and $N_t \sim \operatorfont{Poisson}(t \lambda)$.
+              Then $X \sim {\operatorfont Exponential}(\lambda)$ and $N_t \sim {\operatorfont Poisson}(t \lambda)$.
               Moreover, $P(X > t) = P(N_t = 0)$, that is, the probability of the next visit being after $t$ is the same as the probability of having no visits in the interval $t$.
               Then $P(X > t) = e^{-\lambda t}$.
           \end{proof}
@@ -473,12 +477,12 @@ The exponential distribution is related to some discrete distributions:
 \begin{example}
     We have a rate of 20 people per hour.
 
-    Let $N_t$ be the number of people entering in a certain time interval $t$, then $N_t \sim \operatorfont{Poisson}(t \lambda)$.
+    Let $N_t$ be the number of people entering in a certain time interval $t$, then $N_t \sim {\operatorfont Poisson}(t \lambda)$.
     We want to find the probability that the time between two arrivals is less than 3 minutes.
 
-    Note that $N_{60} \sim \operatorfont{Poisson}(20)$, that is, $\lambda = \frac{1}{3}$.
+    Note that $N_{60} \sim {\operatorfont Poisson}(20)$, that is, $\lambda = \frac{1}{3}$.
 
-    Then the time between two arrivals $X \sim \operatorfont{Exponential}\left(\frac{1}{3}\right)$, and $P(X < 3) = 1 - e^{-\lambda \cdot 3} = 1 - e^{-1}$.
+    Then the time between two arrivals $X \sim {\operatorfont Exponential}\left(\frac{1}{3}\right)$, and $P(X < 3) = 1 - e^{-\lambda \cdot 3} = 1 - e^{-1}$.
 \end{example}
 
 \subsection{Normal or Gaussian distribution}
@@ -524,9 +528,9 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 % Class of 27/03/2024
 
 \begin{theorem}[transformation of normal random variables]
-    Let $X \sim \operatorfont{Normal}(\mu, \sigma^2)$, $a, b \in \R$ with $a \neq 0$, then
+    Let $X \sim {\operatorfont Normal}(\mu, \sigma^2)$, $a, b \in \R$ with $a \neq 0$, then
     \begin{equation}
-        Y = aX + b \sim \operatorfont{Normal}(a\mu + b, a^2 \sigma^2)
+        Y = aX + b \sim {\operatorfont Normal}(a\mu + b, a^2 \sigma^2)
     \end{equation}
 \end{theorem}
 
@@ -534,7 +538,7 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
     Let $g(x) = ax + b$ such that $Y = g(X)$.
     Then $g^{-1}(y) = \frac{y - b}{a}$, and $\dv{g^{-1}(y)}{y} = \frac{1}{a}$.
 
-    By \ref{thm:transformation_crv} we have that
+    By \autoref{thm:transformation_crv} we have that
     \begin{align}
         f_Y(y) & = f_X(g^{-1}(y)) \abs{\dv{g^{-1}(y)}{y}}                                                                                \\
                & = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{1}{2} \frac{\left(\frac{1}{a}(y-b)- \mu\right)^2}{\sigma^2}} \abs{\frac{1}{a}} \\
@@ -544,11 +548,11 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 \end{proof}
 
 \begin{definition}[standard normal distribution]
-    The \emph{standard normal distribution} is a normal distribution with parameters $\mu = 0$ and $\sigma = 1$. It is denoted as $Z \sim \operatorfont{Normal}(0, 1)$.
+    The \emph{standard normal distribution} is a normal distribution with parameters $\mu = 0$ and $\sigma = 1$. It is denoted as $Z \sim {\operatorfont Normal}(0, 1)$.
 \end{definition}
 
 \begin{lemma}
-    For any $X \sim \operatorfont{Normal}(\mu, \sigma^2)$, then $Z = \frac{X - \mu}{\sigma} \sim \operatorfont{Normal}(0, 1)$.
+    For any $X \sim {\operatorfont Normal}(\mu, \sigma^2)$, then $Z = \frac{X - \mu}{\sigma} \sim {\operatorfont Normal}(0, 1)$.
 \end{lemma}
 
 \begin{proof}
@@ -565,7 +569,7 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
 \end{remark}
 
 \begin{example}
-    Let $X \sim \operatorfont{Normal}(167, \sigma = 3)$, we want to find $P(X > 170)$.
+    Let $X \sim {\operatorfont Normal}(167, \sigma = 3)$, we want to find $P(X > 170)$.
 
     \begin{equation}
         P(X>170) = P(\frac{X - 167}{3} > \frac{170 - 167}{3}) = P(Z > 1) = 1 - P(Z \leq 1)
@@ -609,7 +613,7 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
 \subsubsection{Proprieties of the gamma distribution}
 
 \begin{theorem}
-    Let $X \sim \operatorfont{Gamma}(k, \lambda)$, then $Y = \lambda X \sim \operatorfont{Gamma}(k, 1)$.
+    Let $X \sim {\operatorfont Gamma}(k, \lambda)$, then $Y = \lambda X \sim {\operatorfont Gamma}(k, 1)$.
 \end{theorem}
 
 \begin{proof}
@@ -625,18 +629,18 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
 \end{proof}
 
 \begin{theorem}
-    Let $X \indep Y$ with $X \sim \operatorfont{Gamma}(k_X, \lambda)$ and $Y \sim \operatorfont{Gamma}(k_Y, \lambda)$, then $X + Y \sim \operatorfont{Gamma}(k_X + k_Y, \lambda)$.
+    Let $X \indep Y$ with $X \sim {\operatorfont Gamma}(k_X, \lambda)$ and $Y \sim {\operatorfont Gamma}(k_Y, \lambda)$, then $X + Y \sim {\operatorfont Gamma}(k_X + k_Y, \lambda)$.
 \end{theorem}
 
 \begin{example}
     We have 20 customers per hour, we want to find the waiting time in minutes for the third customer.
 
-    Let $N_{60} \sim \operatorfont{Poisson(60\lambda)}$ be the number of customers in an hour, then $\lambda = \frac{1}{3}$.
-    We have that $X \sim \operatorfont{Gamma}(3, \lambda)$, and the $E(x) = \frac{3}{\lambda} = 9$ minutes.
+    Let $N_{60} \sim {\operatorfont Poisson(60\lambda)}$ be the number of customers in an hour, then $\lambda = \frac{1}{3}$.
+    We have that $X \sim {\operatorfont Gamma}(3, \lambda)$, and the $E(x) = \frac{3}{\lambda} = 9$ minutes.
 \end{example}
 
 \begin{theorem}
-    Let $Z \sim \operatorfont{Normal}(0, 1)$, then $Z^2 \sim \operatorfont{Gamma}\left(\frac{1}{2}, \frac{1}{2}\right)$.
+    Let $Z \sim {\operatorfont Normal}(0, 1)$, then $Z^2 \sim {\operatorfont Gamma}\left(\frac{1}{2}, \frac{1}{2}\right)$.
 \end{theorem}
 
 \begin{proof}
@@ -660,7 +664,7 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
 \end{proof}
 
 \begin{lemma}
-    Let $Z_1, \ldots, Z_n \indep \operatorfont{Normal}(0, 1)$, then $Z_1^2 + \ldots + Z_n^2 \sim \operatorfont{Gamma}\left(\frac{n}{2}, \frac{1}{2}\right)$.
+    Let $Z_1, \ldots, Z_n \indep {\operatorfont Normal}(0, 1)$, then $Z_1^2 + \ldots + Z_n^2 \sim {\operatorfont Gamma}\left(\frac{n}{2}, \frac{1}{2}\right)$.
 \end{lemma}
 
 \subsection{Cauchy distribution}
@@ -711,7 +715,7 @@ It has two parameters $a, b \gt 0$.
               \label{eq:beta:second_moment}
               E(X^2) = \frac{a(a+1)}{(a+b)(a+ b+ 1)}
           \end{equation}
-    \item Variance: by using \ref{eq:beta:second_moment}
+    \item Variance: by using \autoref{eq:beta:second_moment}
           \begin{align}
               V(X) & = \frac{a(a+1)}{(a+b)(a+ b+ 1)} - \frac{a^2}{(a + b)^2}               \\
                    & = \frac{a}{a+ b} \left(\frac{a + 1}{a + b + 1} - \frac{a}{a+b}\right) \\
@@ -720,7 +724,160 @@ It has two parameters $a, b \gt 0$.
           \end{align}
 \end{itemize}
 
-Note that if $a = b = 1$ then the pdf becomes the pdf of the uniform distribution (see \ref{eq:uniform:pdf}).
+Note that if $a = b = 1$ then the pdf becomes the pdf of the uniform distribution (see \autoref{eq:uniform:pdf}).
 In other words, the uniform distribution on $[0, 1]$ is a special case of the beta distribution.
+
+\section{Joint continuous distributions}
+
+\subsection{Definition}
+
+Let $X, Y$ be continuous random variables.
+Then we call $(X, Y)$ a \emph{random vector} of dimension 2 and it takes values on an open subset of $\R^2$.
+
+\begin{definition}[jointly continuous random variables]
+    Let $X, Y$ be random variables. $X$ and $Y$ are jointly continuous if there exists a function $f(x, y)$ such that for every Borel set $C \subseteq \R^2$ we have
+    \begin{equation}
+        P\left((X,Y) \in C\right) = \iint_C f(x, y) \dd{x} \dd{y} \label{eq:joint:def}
+    \end{equation}
+
+    The function $f(x,y)$ is called the \emph{joint probability density function (pdf)} of $X$ and $Y$.
+\end{definition}
+
+Note that if $C = A \times B$ then \autoref{eq:joint:def} becomes
+\begin{equation}
+    P(X \in A, Y \in B) = \int_{x \in A} \int_{y \in B} f(x, y) \dd{x} \dd{y}
+\end{equation}
+
+\begin{definition}[cumulative distribution function]
+    We define the cumulative distribution function (or cdf) as
+    \begin{equation}
+        F(x, y) = P(X \leq x, Y \leq y) = \int_{-\infty}^x \int_{-\infty}^y f(u, v) \dd{u} \dd{v}
+    \end{equation}
+\end{definition}
+
+Moreover, if the joint pdf is continuous at $(x, y)$, we have
+\begin{equation}
+    f(x, y) = \pdv[2]{F(x,y)}{x}{y}
+\end{equation}
+
+\subsection{Joint marginal distributions}
+
+\begin{definition}[joint marginal distributions]
+    We define the marginal pdf w.r.t. $X$ and w.r.t. $Y$ as
+    \begin{align}
+        f_X(x) & = \int_{-\infty}^{+\infty} f_{X, Y}(x, y) \dd{y} \\
+        f_Y(y) & = \int_{-\infty}^{+\infty} f_{X, Y}(x, y) \dd{x}
+    \end{align}
+\end{definition}
+
+\subsection{Expectation of functions od random vectors}
+
+We give the following theorems without proof.
+On the book you can find the proof for \autoref{thm:joint:linearity_expectation}
+
+\begin{theorem}[transformation of random vectors]
+    Let $X, Y$ be random variables, $f(x,y)$ be their pdf, and $g: \R^2 \to \R$ be a measurable function.
+    Then $g(X, Y)$ is integrable iff
+    \begin{equation}
+        \iint_{R^2} \abs{g(x, y)}f(x, y) \dd{x} \dd{y} < \infty
+    \end{equation}
+
+    In this case
+    \begin{equation}
+        E(g(X, Y)) = \iint_{\R^2} g(x, y)f(x, y) \dd{x} \dd{y}
+    \end{equation}
+\end{theorem}
+
+\begin{remark}
+    In general
+    \begin{equation}
+        E(g(X, Y)) \ne g(E(X), E(Y))
+    \end{equation}
+
+    However this becomes true if $g(x, y)$ is linear.
+\end{remark}
+
+\begin{theorem}[linearity of the expectation]
+    \label{thm:joint:linearity_expectation}
+
+    Let $X, Y$ be integrable jointly continuous random variables.
+    Then $\forall a, b \in \R$, $aX + bY$ is integrable and
+    \begin{equation}
+        E(aX + bY) = aE(X) + bE(Y)
+    \end{equation}
+\end{theorem}
+
+\subsection{Independence}
+
+\begin{definition}[stochastic independence]
+    Let $X, Y$ be random variables.
+    We write $X \indep Y$ and we say $X$ and $Y$ are independent if, for every Borel set $A$ and $B$
+    \begin{equation}
+        P(X \in A, Y \in B) = P(X\in A) \cdot P(Y \in B)
+    \end{equation}
+\end{definition}
+
+It can be proven that $X \indep Y$ iff the joint pdf can be written as
+\begin{equation}
+    f_{X, Y} (x, y) = f_X(x)f_Y(y) \label{eq:joint:pdf_indep}
+\end{equation}
+
+\begin{theorem}[a criterion for independence]
+    Let $X, Y$ be random variables and $f(x,y)$ be their pdf.
+    $X \indep Y$ iff the pdf can be written as
+    \begin{equation}
+        f_{X, Y}(x, y) = g(x)h(y)
+    \end{equation}
+    in this case we say that $f_{X, Y} (x, y)$ \emph{factorizes}.
+
+    This is a more powerful version of \autoref{eq:joint:pdf_indep}.
+\end{theorem}
+
+\begin{proof}
+    % TODO: add proof
+    TODO.
+\end{proof}
+
+\begin{theorem}[transformation of independent variables]
+    Let $X, Y$ be random variables such that $X \indep Y$.
+    For any measurable $g: \R \to R$ and $h: \R \to R$, $g(X) \indep h(Y)$.
+\end{theorem}
+
+\begin{proof}
+    % TODO: add proof
+    TODO.
+\end{proof}
+
+\begin{theorem}[expectation of independent variables]
+    Let $X, Y$ be integrable random variables such that $X \indep Y$. Then
+    \begin{equation}
+        E(XY) = E(X)E(Y)
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    % TODO: add proof
+    TODO.
+\end{proof}
+
+\subsection{Covariance and correlation}
+
+\begin{definition}[covariance]
+    \label{def:joint:covariance}
+    Let $X, Y$ be square-integrable random variables.
+    The covariance of $X$ and $Y$ is defined as
+    \begin{equation}
+        \cov(X, Y) = E((C - \mu_X)(Y- \mu_Y))
+    \end{equation}
+\end{definition}
+
+\begin{definition}[correlation coefficient]
+    With the context of \autoref{def:joint:covariance} we define the correlation coefficient as
+    \begin{equation}
+        \rho(X, Y) = \frac{\cov (X, Y)}{\sqrt{V(X)V(Y)}}
+    \end{equation}
+\end{definition}
+
+% TODO: there's stuff missing here
 
 \end{document}

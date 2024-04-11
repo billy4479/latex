@@ -511,13 +511,13 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
     \item Expectation:
           \begin{align}
               E(X) & = \int_{-\infty}^{+\infty} x \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}} \dd{x}                                                                                         \\
-                   & = \int_{-\infty}^{+\infty} (z + x) \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                         \\
-                   & = \int_{-\infty}^{+\infty} z \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} + \int_{-\infty}^{+\infty} \mu \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} \\
-                   & = 0 + \mu = \mu
+                   & = \int_{-\infty}^{+\infty} (z + \mu) \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z}                                                                                       \\
+                   & = \int_{-\infty}^{+\infty} z \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} + \mu \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{z^2}{2\sigma^2}} \dd{z} \\
+                   & = 0 + \mu = \mu \label{eq:noteworthy:gaussian_1}
           \end{align}
           where $z = x - \mu$.
 
-          The last simplification is due to the fact that the first integral contains an odd function, and the second integral is the pdf of a normal distribution hence it is equal to 1.
+          In \autoref{eq:noteworthy:gaussian_1} we used the fact that the first integral contains an odd function, and the second integral is the pdf of a normal distribution hence it is equal to 1.
 
     \item Variance:
           \begin{align}
@@ -531,7 +531,7 @@ We have two parameters $\mu \in \R$ and $\sigma > 0$.
           \end{align}
 \end{itemize}
 
-\subsubsection{properties of the normal distribution}
+\subsubsection{Properties of the normal distribution}
 
 % Class of 27/03/2024
 
@@ -618,7 +618,7 @@ The gamma distribution has two parameters, $k, \lambda \in \R$, with $k > 0$ and
           \end{equation}
 \end{itemize}
 
-\subsubsection{properties of the gamma distribution}
+\subsubsection{Properties of the gamma distribution}
 
 \begin{theorem}
     Let $X \sim \GammaD(k, \lambda)$, then $Y = \lambda X \sim \GammaD(k, 1)$.
@@ -957,18 +957,21 @@ Moreover, we can also show that $\rho$ is indeed the correlation coefficient:
                & = \frac{E((X - \mu_X)(Y-\mu_Y))}{\sigma_X \sigma_Y}                                                                                                                                                                                                                                                                                \\
                & = E\left(\frac{(X - \mu_X)}{\sigma_X}\frac{(Y-\mu_Y)}{\sigma_Y}\right)                                                                                                                                                                                                                                                             \\
                & = \iint \frac{x - \mu_X}{\sigma_X} \frac{y - \mu_Y}{\sigma_Y} \frac{1}{\sqrt{2 \pi} \sigma_X \sqrt{1- \rho^2}} e^{-\frac{1}{2(1-\rho^2)} \left( \frac{x - \mu_X}{\sigma_X} - \rho \frac{y-\mu_Y}{\sigma_Y} \right)^2} \cdot \frac{1}{\sqrt{2 \pi} \sigma_Y} e^{-\frac{1}{2} \left(\frac{y-\mu_Y}{\sigma_Y}\right)^2} \dd{x} \dd{y} \\
-               & = \iint z w\frac{1}{\sqrt{2 \pi} \sigma_X \sqrt{1- \rho^2}} e^{-\frac{1}{2(1-\rho^2)} \left( z - \rho w \right)^2} \cdot \frac{1}{\sqrt{2 \pi} \sigma_Y} e^{-\frac{1}{2} w^2} \dd{z} \dd{w}                                                                                                                                        \\
-               & = \int w \frac{1}{\sqrt{2 \pi}}e^{-\frac{1}{2} w^2} \underbrace{\left[ \int z \frac{1}{\sqrt{2 \pi} \sigma_X \sqrt{1- \rho^2}} e^{-\frac{1}{2(1-\rho^2)} \left( z - \rho w \right)^2} \dd{z} \right]}_{\rho w} \dd{w} \label{eq:bivariate:1}                                                                                       \\
+               & = \iint z w\frac{1}{\sqrt{2 \pi} \sqrt{1- \rho^2}} e^{-\frac{1}{2(1-\rho^2)} \left( z - \rho w \right)^2} \cdot \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2} w^2} \dd{z} \dd{w}                                                                                                                                                          \\
+               & = \int w \frac{1}{\sqrt{2 \pi}}e^{-\frac{1}{2} w^2} \underbrace{\left[ \int z \frac{1}{\sqrt{2 \pi} \sqrt{1- \rho^2}} e^{-\frac{1}{2(1-\rho^2)} \left( z - \rho w \right)^2} \dd{z} \right]}_{\rho w} \dd{w} \label{eq:bivariate:1}                                                                                                \\
                & = \int \rho w^2 \frac{1}{\sqrt{2 \pi}}e^{-\frac{1}{2} w^2} \dd{w}                                                                                                                                                                                                                                                                  \\
                & = \rho \cdot 1 = \rho \label{eq:bivariate:2}
 \end{align}
-where in \autoref{eq:bivariate:1} we used some sorcery I didn't get
-% TODO: !!!
-and in \autoref{eq:bivariate:2} we used the fact that if we let $W \sim \Normal(0,1)$ then the integral represents $\rho \cdot E(W^2) = V(W) + (E(W))^2 = 1 \cdot \rho$.
+where in \autoref{eq:bivariate:1} we let $Z \sim \Normal(\rho w, 1-\rho^2)$ then we recognize the integral as $E(Z)$;
+in \autoref{eq:bivariate:2} we let $W \sim \Normal(0,1)$ then we recognize the integral as $\rho \cdot E(W^2) = V(W) + \left(E(W)\right)^2 = 1 \cdot \rho$.
 
-Moreover, if $(X, Y) \sim \BivariateNormal$ then $X \indep Y \iff \rho = 0$ (note that this is an if and only if, not only an imply).
+\begin{remark}
+    If $(X, Y) \sim \BivariateNormal$ then $X \indep Y \iff \rho = 0$ (note that this is an if and only if, not only an imply).
+\end{remark}
 
-Furthermore, while $(X, Y) \sim \BivariateNormal \implies X \sim \Normal, Y \sim \Normal$ the converse is not generally true.
+\begin{remark}
+    While $(X, Y) \sim \BivariateNormal \implies X \sim \Normal, Y \sim \Normal$ the converse is not generally true.
+\end{remark}
 
 \subsection{Conditioning}
 

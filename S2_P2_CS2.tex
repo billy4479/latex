@@ -172,17 +172,20 @@ We can now use the recursive definition to formalize the algorithm.
         for i in range(1, len(I) + 1):
             item = I[i - 1]
 
-            # Same as before, we start from 1 because the first column is all 0s
+            # Same as before, we start from 1 because the 
+            # first column is all 0s
             for max_weight in range(1, W + 1):
                 # If the item is too heavy we can't take it
                 # and we just copy the previous value
                 if item.weight > max_weight:
                     M[i][max_weight] = M[i - 1][max_weight]
                 else:
-                    # Otherwise we need to choose the maximum value between:
+                    # Otherwise we need to choose the maximum
+                    # value between:
                     # - The value of the previous item
-                    # - The value of the current item plus the value of the
-                    #   best solution for the remaining weight
+                    # - The value of the current item plus
+                    #   the value of the best solution for
+                    #   the remaining weight
                     M[i][max_weight] = max(
                         M[i - 1][max_weight],
                         M[i - 1][max_weight - item.weight] + item.value
@@ -200,9 +203,9 @@ Now that we computed the matrix we need to reconstruct the solution, that is, th
 
         # Iterate the rows of the matrix in reverse order
         for i in range(len(I), 1, -1):
-            # If the value of the last item of the current row is different
-            # from the one of the previous row it means 
-            # that we took the (i-1)-th item
+            # If the value of the last item of the current row
+            # is different from the one of the previous row
+            # it means that we took the (i-1)-th item
             if M[i][weight] != M[i - 1][weight]:
                 solution.append(I[i - 1])
 
@@ -270,11 +273,13 @@ Moreover we note that the first row and the first column of the matrix are just 
                     # a string of length i and an empty string is i
                     M[i][j] = i
                 else:
-                    # We use the formulas we found before and we take the minimum value
+                    # We use the formulas we found before and
+                    # we take the minimum value
                     M[i][j] = min(
                         M[i - 1][j] + 1,
                         M[i][j - 1] + 1,
-                        M[i - 1][j - 1] + (0 if A[i - 1] == B[j - 1] else 1)
+                        M[i - 1][j - 1] +
+                            (0 if A[i - 1] == B[j - 1] else 1)
                     )
         return reconstruct(A, B, M)
 \end{minted}
@@ -287,25 +292,29 @@ As in the previous algorithm we need to reconstruct the solution from the matrix
         i, j = len(A) - 1, len(B) - 1
 
         while i > 0 and j > 0:
-            # If the value of the current cell is the same as the one
-            # of the cell above it means that we deleted a character
+            # If the value of the current cell is the same as 
+            # the one of the cell above it means that we 
+            # deleted a character
             if M[i][j] == M[i - 1][j] + 1:
                 solution.append(f"Delete {A[i]}")
                 i -= 1
-            # If the value of the current cell is the same as the one
-            # of the cell on the left it means that we inserted a character
+            # If the value of the current cell is the same as 
+            # the one of the cell on the left it means that
+            # we inserted a character
             elif M[i][j] == M[i][j - 1] + 1:
                 solution.append(f"Insert {B[j]}")
                 j -= 1
-            # If the value of the current cell is the same as the one
-            # of the cell on the top left it means that we substituted a character
+            # If the value of the current cell is the same as
+            # the one of the cell on the top left it means 
+            # that we substituted a character
             elif M[i][j] == M[i - 1][j - 1] + 1:
                 solution.append(f"Substitute {A[i]} with {B[j]}")
                 i -= 1
                 j -= 1
             else:
-                # If the value of the current cell is the same as the one
-                # of the cell on the top left it means that we didn't do anything
+                # If the value of the current cell is the 
+                # same as the one of the cell on the top left
+                # it means that we didn't do anything
                 i -= 1
                 j -= 1
 
@@ -414,7 +423,7 @@ Given the source of water $s$ and a sink $t$ we need to find the maximum amount 
 
 \subsubsection{The idea}
 
-Consider the network in figure \ref{fig:flow}.
+Consider the network in \autoref{fig:flow}.
 
 \begin{figure}[H]
     \centering
@@ -517,7 +526,7 @@ Assume that person $t$ wants to borrow from $s$. What is the maximum about $t$ w
         \delta^-(U) & = \{(w, v) \in E : w \notin U u, v \in U\}
     \end{align}
 
-    Note that if $U$ consists of just one element, then we get exactly \ref{eq:flow:delta_plus} and \ref{eq:flow:delta_minus}.
+    Note that if $U$ consists of just one element, then we get exactly \autoref{eq:flow:delta_plus} and \autoref{eq:flow:delta_minus}.
 \end{remark}
 
 \subsection{Algorithm}
@@ -540,17 +549,17 @@ Assume that person $t$ wants to borrow from $s$. What is the maximum about $t$ w
                                & = \sum_{v \in U} \left( \sum_{e \in \delta^+(v)} f(e) - \sum_{e \in \delta^-(v)} f(e)\right)  \label{eq:flow:proof_2}                                                                                                 \\
                                & = \sum_{e \in \delta^+(U)} f(e) - \sum_{e \in \delta^-(U)} f(e) \label{eq:flow:proof_3}
     \end{align}
-    where in \ref{eq:flow:proof_1} we added the net flow which we know is $0$ by \ref{def:flow:flow},
-    in \ref{eq:flow:proof_2} we added $s$ back in,
-    and in \ref{eq:flow:proof_3} we noted that if an edges $e \in U$, then
+    where in \autoref{eq:flow:proof_1} we added the net flow which we know is $0$ by \autoref{def:flow:flow},
+    in \autoref{eq:flow:proof_2} we added $s$ back in,
+    and in \autoref{eq:flow:proof_3} we noted that if an edges $e \in U$, then
 
 
-    Now by \ref{def:flow:capacity_constraint} we note that
+    Now by \autoref{def:flow:capacity_constraint} we note that
     \begin{equation}
         \sum_{e \in \delta^+(U)} f(e) \leq \sum_{e \in \delta^+(U)} c(e) = {\operatorfont cap}(U)
     \end{equation}
 
-    Moreover by \ref{def:flow:flow} we have that
+    Moreover by \autoref{def:flow:flow} we have that
     \begin{equation}
         \sum_{e \in \delta^-(U)} f(e) \geq 0
     \end{equation}
@@ -593,10 +602,13 @@ An idea of an algorithm could be the following, note that it will NOT work as if
                 break
 
             # Find the edge of minimum capacity
-            epsilon = min(P.edges(), key=lamda e_i: c(e_i) - f(e_i))
+            epsilon = min(
+                P.edges(),
+                key=lambda e_i: c(e_i) - f(e_i)
+            )
 
-            # Update the flow of all the edges in the path by adding
-            # the minimum
+            # Update the flow of all the edges in the path by
+            # adding the minimum
             for e_i in P.edges:
                 f[e_i] = f[e_i] + epsilon
 \end{minted}

@@ -535,9 +535,136 @@ Assume that person $t$ wants to borrow from $s$. What is the maximum about $t$ w
     Given a directed graph $G(V, E)$, $s, t \in V$, and a capacity function $c$ find an $s$-$t$ flow respecting $c$ of maximum value.
 \end{definition}
 
+\begin{definition}[flipping edges]
+    For any edge $e = (u,v)$ let $e^{-1} = (v,u)$.
+\end{definition}
+
+\begin{definition}[saturated edge]
+    We say that an edge is saturated if its residual capacity is $0$.
+\end{definition}
+
+\subsubsection{A (non working) idea}
+
+\autoref{thm:flow:upper_bound} could be useful to understand the idea of the algorithm.
+
+The idea is to start with a flow of $0$. Then we start iterating and at each iteration we increase the value of the flow by checking if there are paths with some residual capacity.
+We will be able to do this efficiently by using cuts.
+
+\begin{enumerate}
+    \item Set $f(e) = 0 \enspace \forall e \in E$
+    \item \label{itm:flow:alg1_iter} Construct an auxiliary graph $D_f = (V, E_f)$ where $e \in E_f$ if $c(e) - f(e) > 0$, that is, $e$ has some residual capacity
+    \item Find a directed $s$-$t$ path in $D_f$. If such path $P$ exists, then
+          \begin{enumerate}[label*=\arabic*.]
+              \item Let $\{e_1, \ldots, e_k\}$ be the edges in $P$
+              \item Let $\varepsilon$ be the edge that minimizes $c(e_i) - f(e_i)$, that is, the edge with minimum residual capacity
+              \item Set $f(e_i) = f(e_i) + \varepsilon$ for all $i = 1, \ldots, k$
+              \item Go back to \autoref{itm:flow:alg1_iter}
+          \end{enumerate}
+\end{enumerate}
+
+Note that this algorithm will NOT work as if we were to choose the wrong path we would get an incorrect result.
+
+% Class of 12/04/2024
+
+\subsubsection{A (working) idea - Ford \& Fulkerson's algorithm}
+
+To fix this issue at each iteration, if we find that some edges have no residual capacity, we add the flipped copy of that edge back to the graph.
+In this way we give the algorithm the option to go back on its choices if it finds that there could be better paths to be taken.
+
+We can modify the previous algorithm to get the right solution:
+
+\begin{enumerate}
+    \item Set $f(e) = 0 \enspace \forall e \in E$
+    \item \label{itm:flow:alg2_iter} Construct an auxiliary graph $D_f = (V, E_f)$ where
+          \begin{itemize}
+              \item $e \in E_f$ if $c(e) - f(e) > 0$, that is, $e$ has some residual capacity;
+              \item $e^{-1} \in E_f$ if $f(e) = 0$.
+          \end{itemize}
+    \item Find a directed $s$-$t$ path in $D_f$. If such path $P$ doesn't exists jump to \autoref{itm:flow:alg2_return}, otherwise
+          \begin{enumerate}[label*=\arabic*.]
+              \item Let $\{e_1, \ldots, e_k\}$ be the edges in $P$
+              \item Let $\varepsilon$ be the edge such that it gives the minimum between
+                    \begin{itemize}
+                        \item the edge that minimizes $c(e_i) - f(e_i)$, that is, the edge with minimum residual capacity
+                        \item the flipped edge $e^{-1}_i$ that minimizes $f(e_i)$, that is, the edge that minimizes the amount we can push back
+                    \end{itemize}
+              \item For all $i = 1, \ldots, k$, if $e_i \in P$
+                    \begin{itemize}
+                        \item If $e_i \in P$ and $e_i \in E$ set $f(e_i) = f(e_i) + \varepsilon$
+                        \item If $e_i \in P$ and $e_i^{-1} \in E$ $f(e_i^{-1}) = f(e_i^{-1}) - \varepsilon$
+                    \end{itemize}
+                    % Code to update the graph in-place instead of reconstructing it from scratch
+                    %   \item For each $e_i \in P$
+                    %         \begin{itemize}
+                    %             \item If $e_i \in E$ and $f(e_i) = c(e_i)$ then remove $e_i$ from $E_f$.
+                    %                   Moreover, if $e_i^{-1} \notin E_f$ add $e_i^{-1}$ to $E_f$
+                    %             \item Else, if $e^{-1}_i \in E$ and $f(e_i^{-1}) = 0$ then remove $e^{-1}_i$ from $E_f$.
+                    %                   Moreover if $e_i \notin E_f$ add $e_i$ to $E_f$.
+                    %         \end{itemize}
+              \item Go back to \autoref{itm:flow:alg2_iter}
+          \end{enumerate}
+    \item \label{itm:flow:alg2_return} Return $f$
+\end{enumerate}
+
+\subsubsection{Code}
+
+The algorithm could be written in python as
+\begin{minted}{python}
+def flow(G, s, t, c):
+    # Initialize the flow with 0
+    f = {}
+    for e in G.edges():
+        f[e] = 0
+
+    while True:
+        # Construct the auxiliary graph
+        E = []
+        for e in G.edges():
+            if c(e) - f[e] > 0:
+                E.append(e)
+            
+            rev_e = e.flip()
+            if f[e] > 0:
+                E.append(rev_e)
+
+        D = Graph(G.vertices(), E)
+
+        # Find a path from s to t
+        P = find_path(s, t, D)
+
+        # If such path does not exist we stop
+        if P is None:
+            break
+
+        # Find epsilon
+        epsilon = min(
+            [min(
+                P.edges()
+                    .filter(lambda e_i: E.contains(e_i)),
+                key=lambda e_i: c(e_i) - f(e_i)
+            ),
+            min(
+                P.edges()
+                    .filter(lambda e_i: E.contains(e_i.flipped())),
+                key=lambda e_i: f(e_i)
+            )]
+        )
+
+        # Update the flow of all the edges in the path
+        for e_i in P.edges:
+            if E.contains(e_i):
+                f[e_i] = f[e_i] + epsilon
+            if E.contains(e_i.flipped()):
+                f[e_i.flipped()] = f[e_i.flipped()] - epsilon
+\end{minted}
+
+Note that instead of reconstructing the graph at each iteration it would be more efficient (as we will see in \autoref{sec:flow:time_complexity}) to update it by adding or removing edges.
+I have chosen not to report this solution as it complicates the code quite a bit but it can be a good exercise.
+
 \subsubsection{Proof of correctness}
 
 \begin{theorem}[upper bound of the value of a flow]
+    \label{thm:flow:upper_bound}
     For any $s$-$t$ flow $f$ respecting $c$ and for any $s$-$t$ cut $U$ it holds that ${\operatorfont val}(f) \leq {\operatorfont cap}(U)$.
 \end{theorem}
 
@@ -552,7 +679,7 @@ Assume that person $t$ wants to borrow from $s$. What is the maximum about $t$ w
     where in \autoref{eq:flow:proof_1} we added the net flow which we know is $0$ by \autoref{def:flow:flow},
     in \autoref{eq:flow:proof_2} we added $s$ back in,
     and in \autoref{eq:flow:proof_3} we noted that if an edges $e \in U$, then
-
+    % TODO: AAA WHAT DID WE DO HERE
 
     Now by \autoref{def:flow:capacity_constraint} we note that
     \begin{equation}
@@ -566,53 +693,63 @@ Assume that person $t$ wants to borrow from $s$. What is the maximum about $t$ w
 
     Therefore
     \begin{equation}
-        {\operatorfont val}(U) \leq \sum_{e \in \delta^+(U)} f(e) - \sum_{e \in \delta^-(U)} f(e) \leq {\operatorfont cap}(U)
+        {\operatorfont val}(U) = \sum_{e \in \delta^+(U)} f(e) - \sum_{e \in \delta^-(U)} f(e) \leq {\operatorfont cap}(U)
     \end{equation}
-
 \end{proof}
 
-\subsubsection{Code}
+\begin{theorem}[proof of correctness]
+    The flow $f$ output at the end of the algorithm is the maximum value.
+\end{theorem}
 
-The idea is to start with a flow of $0$. Then we start iterating and at each iteration we increase the value of the flow by checking if there are paths with some residual capacity.
-We will be able to do this efficiently by using cuts.
+\begin{proof}
+    By construction, $f$ is an $s$-$t$ flow respecting $c$ as:
+    \begin{itemize}
+        \item At the beginning $f$ is a feasible flow respecting $c$;
+        \item After each step the flow updates $f(e) \geq 0$ and $f(e) \leq c(e)$ by our choice of $\varepsilon$.
+    \end{itemize}
 
-An idea of an algorithm could be the following, note that it will NOT work as if we were to choose the wrong path we would get an incorrect result.
+    Since our algorithm stopped we know that the residual graph $D_f$ does not have an $s$-$t$ directed path.
+    Let $U = \{ w \in V: \exists s\text{-}t \text{ path} \in D_f \}$.
+    Note that $U$ is an $s$-$t$ cut, since $s \in U, t \notin U$.
+    \begin{itemize}
+        \item If $(v, w) \in \delta^+(U)$, since $(v, w) \notin E_f$ we have that $f(v, w) = c(v, w)$
+        \item If $(v, w) \in \delta^-(U)$, since $(v, w)^{-1} \notin E_f$ we have that $f(v, w) = 0$
+    \end{itemize}
+    by the definition of the algorithm.
 
-\begin{minted}{python}
-    def flow(G, s, t, c):
-        # Initialize the flow with 0
-        f = {}
-        for e in G.edges():
-            f[e] = 0
+    Then $f$ is a flow whose value is equal to the capacity of an $s$-$t$ cut $U$, which means $f$ is maximum.
+\end{proof}
 
-        while True:
-            # Construct a graph with the edges with some
-            # residual capacity
-            E = []
-            for e in G.edges():
-                if c(e) - f(e) > 0:
-                    E.append(e)
-            D = Graph(G.vertices(), E)
-
-            # Find a path from s to t
-            P = find_path(s, t, D)
-
-            # If such path does not exist we stop
-            if P is None:
-                break
-
-            # Find the edge of minimum capacity
-            epsilon = min(
-                P.edges(),
-                key=lambda e_i: c(e_i) - f(e_i)
-            )
-
-            # Update the flow of all the edges in the path by
-            # adding the minimum
-            for e_i in P.edges:
-                f[e_i] = f[e_i] + epsilon
-\end{minted}
+\begin{corollary}[max flow, min cut]
+    The maximum value of an $s$-$t$ flow equals the minimum capacity of an $s$-$t$ cut.
+\end{corollary}
 
 \subsubsection{Time complexity}
+\label{sec:flow:time_complexity}
+
+At each iteration we are using $\O(\abs{V})$ to update the values in the graph (if instead we reconstruct it every time we would have $\O(\abs{E})$), and $\O(\abs{E})$ to find the path.
+
+In the worst case, if we always choose the worse path we do $\O(\max{c(e)})$ iterations, which could be a very big value.
+Fortunately we can do much better: we can use BFS to find the path.
+
+\begin{theorem}[BFS iterations upper bound]
+    If we use BFS to find the path, then the algorithm has a running time of $\O(\abs{V} \abs{E} \left( \abs{V} + \abs{E} \right))$.
+\end{theorem}
+
+\begin{proof}
+    We want to put a bound on how many times, during the execution of our algorithm, an edge can get saturated.
+
+    Let $d_t(u)$ be the distance from $s$ to $u$ in the residual graph in iteration $t$.
+    We note that $d_t(u) \leq d_{t+1}(u)$.
+
+    Assume that $e = (u, v)$ gets saturated at $t$ and in iteration $t''$.
+    This means that $e^{-1}$ appears in a BFS tree at some iteration $t'$ such that $t < t' < t''$.
+    But then
+    \begin{equation}
+        d_t(u) = d_t(v)-1 \leq d_{t'}(v)-1 = d_{t'}(u)-2 \leq d_{t''}(u)-2
+    \end{equation}
+    which means that an edge cannot be saturated more than $\abs{V}/2$ times,
+    thus the number of iterations is $\O(\abs{V}\abs{E})$ because each edge ($\O(\abs{E})$) can be updated $\O(\abs{V})$ times at maximum.
+\end{proof}
 
 \end{document}

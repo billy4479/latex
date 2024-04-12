@@ -988,4 +988,92 @@ This is similar to the definition in the discrete case, but now we need to pass 
 \end{equation}
 this can be proven by substituting the definition of $f_{X, Y}(x,y)$ and $f_X(x)$ in \autoref{eq:joint:conditioning}.
 
+% Class of 12/04/24
+
+As we saw in the discrete case \autoref{eq:joint:conditioning} is a pdf as it respects $f_{Y|X}(y | x) \geq 0$ and $\int f_{Y|X}(y|x) \dd{y}$.
+Note that this is a function of $y$ only, as $x$ is fixed.
+
+Then we have
+\begin{equation}
+    P(Y \in A | X = x) = \int_A f_{Y|X}(y|x) \dd{y}
+\end{equation}
+and we can calculate the conditional cdf of $Y$ given $X = x$ as
+\begin{equation}
+    P(Y \leq y | X = x) = \int_{-\infty}^y f_{Y|X}(u|x) \dd{u}
+\end{equation}
+
+\subsubsection{Conditional expectation and variance}
+
+\begin{definition}[conditional expectation]
+    \begin{equation}
+        E(Y|X = x) = \int y f_{Y | X}(y | x) \dd{y} = m_Y(x)
+    \end{equation}
+    where by $m_Y(x)$ we mean the regression function of $Y$ over $X$, which is a random variable.
+\end{definition}
+
+\begin{theorem}[properties of conditional expectation]
+    \begin{align}
+         & E(E(Y|X)) = E(Y) \label{eq:joint:expectation_1}         \\
+         & E(g(X)E(Y|X)) = E(g(X)Y) \label{eq:joint:expectation_2}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}[label=\roman*.]
+        \item (\autoref{eq:joint:expectation_1})
+              \begin{align}
+                  E(E(Y|X)) & = E(m_Y(X))                                 \\
+                            & = \int m_Y(x) f_X(x) \dd{x}                 \\
+                            & = \iint y f_{Y|X}(y|x) \dd{y} f_X(x) \dd{x} \\
+                            & = \iint y f_{X, Y}(x, y) \dd{x} \dd{y}      \\
+                            & = E(Y)
+              \end{align}
+        \item (\autoref{eq:joint:expectation_2}) The proof is basically the same as above.
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}[conditional variance]
+    \begin{equation}
+        V(Y | X = x) = v_Y(x) = \int \left(y - m_Y(x) \right)^2 f_{Y|X}(y|x) \dd{y}
+    \end{equation}
+\end{definition}
+
+\begin{theorem}[properties of the variance]
+    \skiplineafterproof
+    \begin{enumerate}[label=\roman*.]
+        \item \begin{equation}
+                  V(Y|X) = E(Y^2 | X) - E\left((Y|X)\right)^2
+              \end{equation}
+
+        \item (variance decomposition)
+              \begin{equation}
+                  V(Y) = E(V(Y|X)) + V(E(Y|X))
+              \end{equation}
+    \end{enumerate}
+\end{theorem}
+
+\begin{example}[bivariate normal distribution]
+    Given $(X, Y) \sim \BivariateNormal$ we want to compute $f_{Y|X}(y|x)$.
+
+    As we saw, we can factorize the marginal pdf from the joint pdf of a bivariate normal.
+    Then, by the definition of conditional probability we have that
+    \begin{equation}
+        f_{Y|X}(y|x) = \frac{1}{\sqrt{2 \pi} \sigma_Y \sqrt{1-\rho^2}} e^{-\frac{1}{2(1-\rho^2)}\left( \frac{y-\mu_y}{\sigma_Y} - \rho \frac{x-\mu_X}{\sigma_X} \right)^2}
+    \end{equation}
+    which we can recognize as the pdf of a normal distribution:
+    \begin{equation}
+        Y|X \sim \Normal\left(\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X), \sigma_Y^2\left(1-\rho^2\right)\right)
+    \end{equation}
+
+    Moreover, the regression function is linear:
+    \begin{equation}
+        m_Y(x) = E(Y|X = x) = \mu_Y + \rho \frac{\sigma_Y}{\sigma_X} (x - \mu_X)
+    \end{equation}
+    and the conditional variance is
+    \begin{equation}
+        v_Y(x) = \left(1- \rho^2\right) \sigma_Y^2 < \sigma_Y^2
+    \end{equation}
+\end{example}
+
 \end{document}

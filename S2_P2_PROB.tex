@@ -1076,4 +1076,61 @@ and we can calculate the conditional cdf of $Y$ given $X = x$ as
     \end{equation}
 \end{example}
 
+\subsection{Transformations of random vectors}
+
+\subsubsection{Transformations preserving dimension}
+
+Let $Z = g(X, Y)$ and $W = h(X, Y)$, therefore we are going from 2 dimensions to 2 dimensions.
+We will only consider the case in which $Z, W$ are continuous.
+Let $T: \R^2 \to \R^2$ with components $g, h$.
+
+\begin{equation}
+    \label{eq:joint:transformation}
+    P\left(T(X, Y) \in A\right) = P \left((X, Y) \in T^{-1}(A)\right) = \iint_{(x,y) \in T^{-1}(A)} f_{X, Y}(x, y) \dd{x} \dd{y}
+\end{equation}
+
+\begin{theorem}
+    Let $X, Y$ be jointly continuous random variables taking values in an open set $U \subset R^2$ and with joint pdf $f_{X, Y}(x, y)$.
+    Let $T:U \to V$ be a one-to-one mapping and let $T^{-1}$ be its inverse functions.
+    Assume that $T^{-1}$ has continuous partial derivatives in $V$ and that the determinant of the Jacobian matrix of $T^{-1}$ is $\ne 0 \enspace \forall (z, w) \in V$.
+
+    Then $(Z, W)$ is a continuous random vector with pdf
+    \begin{equation}
+        f_{Z, W}(z, w) = f_{X, Y}\left(T^{-1}(z, w)\right) \abs{\det J_{T^{-1}}(z, w)} I_V(z, w)
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    The result follows from a change of variable in \autoref{eq:joint:transformation}.
+    We won't prove it as we haven't seen it in Analysis yet.
+\end{proof}
+
+\subsubsection{Transformations with less dimensions}
+
+If we are given just one transformation $Z = g(X, Y)$ doing the full procedure with double integrals may be more complicated than necessary.
+Instead we can expand the transformation with some $W = h(X, Y)$ and then marginalize:
+\begin{equation}
+    f_Z(z) = \int f_{Z, W}(z, w) \dd{w}
+\end{equation}
+we have to choose $W$ in such a way that helps us do the calculations.
+
+\begin{theorem}
+    Let $X, Y$ be continuous random variables with joint pdf $f_{X, Y}(x, y)$ and let $Z = X + Y$.
+    Then
+    \begin{equation}
+        f_Z(z) = \int_{-\infty}^{+\infty} f_{X, Y} (x, z-x) \dd{x}
+    \end{equation}
+
+    In particular, if $X \indep Y$
+    \begin{equation}
+        f_Z(z) = \int_{-\infty}^{+\infty} f_X(x) f_Y(z-x) \dd{x} = f_X \ast f_Y
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    TODO: formalize this.
+
+    We get this result by applying what we wrote above where $Z = X + Y$ and $W = X$
+\end{proof}
+
 \end{document}

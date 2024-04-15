@@ -1,4 +1,4 @@
-\documentclass[12pt]{report}
+\documentclass[12pt]{extarticle}
 
 \usepackage{preamble}
 
@@ -7,8 +7,8 @@
 
 \setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
 
-\renewcommand{\vec}[1]{\underbar{\ensuremath{#1}}}
-
+\renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
+\newcommand{\Hg}{{\operatorfont Hg}}
 
 \begin{document}
 
@@ -16,14 +16,13 @@
 \tableofcontents
 \clearpage
 
-\chapter{Functions from \texorpdfstring{$\R^d$}{Rd} to \texorpdfstring{$\R^p$}{Rp}}
+% \chapter{Functions from \texorpdfstring{$\R^d$}{Rd} to \texorpdfstring{$\R^p$}{Rp}}
 
 \section{Continuity}
 
 \begin{definition}[continuity]
     A function $f: D \subseteq \R^d \to \R^p$ is continuous at $\vec{x}_0$ if
-
-    $$
+    \begin{equation}
         \forall \varepsilon > 0,
         \quad
         \exists \delta > 0,
@@ -33,7 +32,7 @@
         \underbrace{\norm{\vec{x} - \vec{x}_0}}_{\text{norm in } \R^d} < \delta
         \implies
         \underbrace{\norm{f(\vec{x}) - f(\vec{x}_0)}}_{\text{norm in } \R^p} < \varepsilon
-    $$
+    \end{equation}
 \end{definition}
 
 \begin{proposition}[sequential characterization]
@@ -48,25 +47,23 @@
 \begin{proof}
     Informally we can say
 
-    \begin{align*}
+    \begin{align}
         g(f(\lim \vec{x}_n)) = g(\lim f(\vec{x}_n)) = \lim g(f(\vec{x}_n))
-    \end{align*}
+    \end{align}
 
     For a more formal proof you can see the proof we did for parametric curves in the first partial.
 \end{proof}
 
 \begin{proposition}[componentwise continuity]
     Let $f: D \subseteq \R^d \to \R^p$ and write
-
-    $$
+    \begin{equation}
         f = \begin{pmatrix}
             f_1    \\
             f_2    \\
             \vdots \\
             f_p
         \end{pmatrix}
-    $$
-
+    \end{equation}
     where each $f_j : D \subseteq \R^d \to \R$.
 
     Then $f$ is continuous at $\vec{x}_0$ iff each $f_j$ is continuous at $\vec{x}_0$.
@@ -100,62 +97,54 @@
     Let $f: D \subseteq \R^d \to \R^p$ and $\vec{x} = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_d \end{pmatrix} \in D$.
 
     We define, if exists,
-
-    $$
+    \begin{equation}
         \pdv{f_j}{x_i}()(\vec{x}) = \lim_{h \to 0} \frac{f_j(x_1, \ldots, x_{i-1}, x_i + h, x_{i+1}, \ldots, x_d) - f_j(x_1, \ldots, x_d)}{h} \in \R
-    $$
-
+    \end{equation}
     for all $i = 1, 2, \ldots, d$ and $j = 1, 2, \ldots, p$.
 
     Moreover we define $\pdv{f}{x_i}()(\vec{x})$, if exists, as
-
-    $$
+    \begin{equation}
         \pdv{f}{x_i}()(\vec{x}) = \begin{pmatrix}
             \pdv{f_1}{x_i}()(\vec{x}) \\
             \pdv{f_2}{x_i}()(\vec{x}) \\
             \vdots                    \\
             \pdv{f_p}{x_i}()(\vec{x})
         \end{pmatrix} \in \R^p
-    $$
+    \end{equation}
 \end{definition}
 
 \begin{definition}[Jacobian matrix]
     Let $f: D \subseteq \R^d \to \R^p$ and $\vec{x} \in D$ such that all the partial derivatives exist at $\vec{x}$.
     Then the Jacobian matrix of $f$ at $\vec{x}$, written as $J_f(\vec{x})$, is the $p \times d$ matrix such that
-
-    $$
+    \begin{equation}
         J_f(\vec{x})_{ij} = \pdv{f_j}{x_i}()(\vec{x})
-    $$
+    \end{equation}
 
     That is
-
-    $$
+    \begin{equation}
         J_f(\vec{x}) = \begin{pmatrix}
             \pdv{f_1}{x_1}()(\vec{x}) & \pdv{f_1}{x_2}()(\vec{x}) & \cdots & \pdv{f_1}{x_d}()(\vec{x}) \\
             \pdv{f_2}{x_1}()(\vec{x}) & \pdv{f_2}{x_2}()(\vec{x}) & \cdots & \pdv{f_2}{x_d}()(\vec{x}) \\
             \vdots                    & \vdots                    & \ddots & \vdots                    \\
             \pdv{f_p}{x_1}()(\vec{x}) & \pdv{f_p}{x_2}()(\vec{x}) & \cdots & \pdv{f_p}{x_d}()(\vec{x})
         \end{pmatrix}
-    $$
+    \end{equation}
 
     Note that the $i$-th column of the matrix is $\pdv{f}{x_i}()(\vec{x}) \in \R^p$.
 \end{definition}
 
 \begin{example}[change of variables to polar coordinates]
     Let $f: \R^2 \to \R^2$ be
-
-    $$
+    \begin{equation}
         f(x, y) = \begin{pmatrix}
             x \cos y \\
             x \sin y
         \end{pmatrix}
-    $$
-
+    \end{equation}
     that is $f_1(x, y) = x \cos y$ and $f_2(x, y) = x \sin y$.
 
     Then the Jacobian matrix of $f$ is
-
-    $$
+    \begin{equation}
         J_f(x, y) = \begin{pmatrix}
             \pdv{f_1}{x}() & \pdv{f_1}{y}() \\
             \pdv{f_2}{x}() & \pdv{f_2}{y}()
@@ -163,7 +152,7 @@
             \cos y & -x \sin y \\
             \sin y & x \cos y
         \end{pmatrix}
-    $$
+    \end{equation}
 \end{example}
 
 \begin{example}[Jacobian of $f: \R^2 \to \R$]
@@ -177,15 +166,14 @@
 \begin{lemma}[linear applications]
     If $L: \R^d \to \R^p$ is a linear application then $L$ then there exists an unique matrix $M$ of size $p \times d$ such that $L(\vec{x}) = M \vec{x}$ for all $\vec{x} \in \R^d$.
     If we write $M = \begin{pmatrix} \vec{m}_1 & \vec{m}_2 & \cdots & \vec{m}_d \end{pmatrix}$ where $\vec{m}_i \in \R^p$ is the $i$-th column of $M$ for all $i = 1, 2, \ldots, d$, then
-
-    $$
+    \begin{equation}
         L(\vec{x} = M\vec{x} = M \begin{pmatrix}
             x_1    \\
             x_2    \\
             \vdots \\
             x_d
         \end{pmatrix} = h_1 \vec{m}_1 + h_2 \vec{m}_2 + \cdots + h_d \vec{m}_d
-    $$
+    \end{equation}
 \end{lemma}
 \begin{remark}
     We can calculate $\vec{m}_i = L(\vec{e}_i)$ where $\vec{e}_i$ is the $i$-th vector of the canonical basis of $\R^d$ for all $i = 1, 2, \ldots, d$.
@@ -195,36 +183,33 @@ We can now intuitively define what differentiability means before giving a forma
 Just by extending the definition of differentiability of functions from $\R^2$ to $\R$ we can define the Taylor expansion as follows:
 
 For $d \geq 2, p = 1$ we get
-$$
+\begin{equation}
     f(\vec{x} + \vec{h}) = f(\vec{x}) + h_1 \pdv{f}{x_1}()(\vec{x}) + h_2 \pdv{f}{x_2}()(\vec{x}) + \cdots + h_d \pdv{f}{x_d}()(\vec{x}) + \o(\vec{h})
-$$
+\end{equation}
 
 Then to go to $p \geq 1$ we just repeat the process for each component of $f$.
 That is, for each $j = 1, 2, \ldots, p$ we have
-
-$$
+\begin{equation}
     f_j(\vec{x} + \vec{h}) = f_j(\vec{x}) + \sum_{i=1}^d h_i \pdv{f_j}{x_i}()(\vec{x}) + \o(\vec{h})
-$$
+\end{equation}
 
 This is the fully-expanded first order Taylor polynomial of $f$ at $\vec{x}$.
 Now we can combine everything in matrix form and we get that the derivative part (which is just a linear transformation) becomes
-
-$$
+\begin{equation}
     \sum_{i = 1}^d h_i \pdv{f}{x_i}()(\vec{x}) = M \vec{h}
-$$
+\end{equation}
 for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}$, so we can write
-
-$$
+\begin{equation}
     f(\vec{x} + \vec{h}) = f(\vec{x}) + J_f(\vec{x}) \vec{h} + \o(\vec{h})
-$$
+\end{equation}
 
 \begin{definition}[differentiability]
     Let $f: D \subseteq \R^d \to \R^p$, with $D$ open, and $\vec{x}_0 \in D$.
     We say that $f$ is differentiable at $\vec{x}_0$ if all the partial derivatives exist at $\vec{x}_0$
     and $\exists r > 0$ such that for all $\vec{h} \in B_c(\vec{0}, r)$ we have $\vec{x}_0 + \vec{h} \in D$ and
-    $$
+    \begin{equation}
         f(\vec{x}_0 + \vec{h}) = f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h} + \o(\vec{h})
-    $$
+    \end{equation}
 \end{definition}
 
 \begin{remark}
@@ -233,20 +218,18 @@ $$
 
 \begin{definition}[differential]
     We call differential of $f$ at $\vec{x}_0$ (if exists) the linear transformation
-
-    $$
+    \begin{equation}
         \vec{h} \mapsto J_f(\vec{x}_0) \vec{h}
-    $$
+    \end{equation}
     we denote it as $Df_{\vec{x}_0}(\vec{h})$.
 \end{definition}
 
 \begin{proposition}[differentiability, second definition]
     Let $f: D \subseteq \R^d \to \R^p$, with $D$ open, and $\vec{x}_0 \in D$.
     $f$ is differentiable iff there exists a linear transformation $L: \R^d \to \R^p$ such that $\exists r > 0$ such that for all $\vec{h} \in B_c(\vec{0}, r)$ we have $\vec{x}_0 + \vec{h} \in D$ and
-
-    $$
+    \begin{equation}
         f(\vec{x}_0 + \vec{h}) = f(\vec{x}_0) + L(\vec{h}) + \o(\vec{h})
-    $$
+    \end{equation}
     in this case necessarily $L = Df_{\vec{x}_0}$.
 \end{proposition}
 
@@ -258,15 +241,13 @@ $$
         \item[$\impliedby$] (linear transformation $\implies$ differentiability)
             Let $L(\vec{h}) = M \vec{h}$ for some matrix $M$.
             We saw before that the column $m_i = L(\vec{e}_i)$, then let $\vec{h} = h \vec{e}_i$ and by linearity we have
-
-            $$
+            \begin{equation}
                 f(\vec{x}_0 + h \vec{e}_i) = f(\vec{x}_0) + h L(\vec{e}_i) + \o(h)
-            $$
+            \end{equation}
             dividing by $h$ we get
-
-            $$
+            \begin{equation}
                 \frac{f(\vec{x}_0 + h \vec{e}_i) - f(\vec{x}_0)}{h} = L(\vec{e}_i) + \frac{\o(h)}{h}
-            $$
+            \end{equation}
             and taking the limit as $h \to 0$ we get that $\pdv{f}{x_i}()(\vec{x}_0)$ exists and is equal to $L(\vec{e}_i)$.
             Then the matrix representing $L$ has columns that are the partial derivatives of $f$ at $\vec{x}_0$, that is $M = J_f(\vec{x}_0)$.
     \end{description}
@@ -290,28 +271,28 @@ $$
 
 \begin{example}
     Consider a function $f: \R \to \R^p$ (a parametric curve) defined as
-
-    $$
+    \begin{equation}
         f : t \mapsto \begin{pmatrix}
             f_1(t) \\
             f_2(t) \\
             \vdots \\
             f_p(t)
         \end{pmatrix}
-    $$
+    \end{equation}
+
     Then
-    $$
+    \begin{equation}
         J_f(t) = \begin{pmatrix}
             f'_1(t) \\
             f'_2(t) \\
             \vdots  \\
             f'_p(t)
         \end{pmatrix} = f'(t)
-    $$
+    \end{equation}
     and the Taylor expansion of $f$ is
-    $$
+    \begin{equation}
         f(t + h) = f(t) + h f'(t) + \o(h)
-    $$
+    \end{equation}
     which looks a lot like what we saw in Analysis 1.
 \end{example}
 \begin{remark}
@@ -320,21 +301,20 @@ $$
 
 \begin{example}[tangent plane to a parametric surface]
     Let $f: \R^2 \to \R^3$ be a parametric surface, then its image is
-    $$
+    \begin{equation}
         f = \{ f(u, v) : \R^2 \}
-    $$
+    \end{equation}
 
     The tangent plane is the plane passing through $f(u_0, v_0)$ and normal to
-    $$
+    \begin{equation}
         \pdv{f}{u}() \times \pdv{f}{v}()
-    $$
+    \end{equation}
     if the cross product is not zero.
 
     The equation of the plane is
-
-    $$
+    \begin{equation}
         (\vec{x} - f(u_0, v_0)) \cdot \left( \pdv{f}{u}() \times \pdv{f}{v}() \right) = 0
-    $$
+    \end{equation}
 
 \end{example}
 
@@ -347,21 +327,17 @@ $$
 \begin{theorem}[chain rule]
     Let $f: D \subseteq \R^d \to \R^p$ and $g: U \subseteq \R^p \to \R^q$ such that $D, U$ are open, and $f(D) \subseteq U$ so that $g \circ f$ is well defined.
     If $f$ is differentiable at $\vec{x}_0$ and $g$ is differentiable at $f(\vec{x}_0)$ then $g \circ f$ is differentiable at $\vec{x}_0$ and
-
-    $$
+    \begin{equation}
         \underbrace{J_{g \circ f}(\vec{x}_0)}_{q \times d \approx (g \circ f)'} =
         \underbrace{J_g(f(\vec{x}_0))}_{q \times p \approx g' \circ f}
         \underbrace{J_f(\vec{x}_0)}_{p \times d \approx f'}
-    $$
-
+    \end{equation}
     which is quite similar to the chain rule for functions from $\R$ to $\R$.
 
     For the differential we get
-
-    $$
+    \begin{equation}
         D(g \circ f)_{\vec{x}_0} = Dg_{f(\vec{x}_0)} \circ Df_{\vec{x}_0}
-    $$
-
+    \end{equation}
     the equivalence of the two formulas is given by the remark above.
 \end{theorem}
 
@@ -369,18 +345,18 @@ $$
     This is just the idea of the proof, for a more rigorous one check the book.
 
     We have
-    \begin{enumerate}[label=(\roman*)]
-        \item $f(\vec{x}_0 + \vec{h}) \approx f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h}$
-        \item $g(f(\vec{x}_0 + \vec{k})) \approx g(f(\vec{x}_0)) + J_g(f(\vec{x}_0)) J_f(\vec{x}_0) \vec{k}$
+    \begin{enumerate}[label=(\roman*.)]
+        \item \label{itm:diff:chain_rule_1} $f(\vec{x}_0 + \vec{h}) \approx f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h}$
+        \item \label{itm:diff:chain_rule_2} $g(f(\vec{x}_0 + \vec{k})) \approx g(f(\vec{x}_0)) + J_g(f(\vec{x}_0)) J_f(\vec{x}_0) \vec{k}$
     \end{enumerate}
 
     then
 
-    \begin{align*}
-        g(f(\vec{x}_0 + \vec{h})) & \stackrel{\text{(i)}}{\approx} g(f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h})                           \\
-                                  & \stackrel{\text{(ii)}}{\approx} g(f(\vec{x}_0)) + J_g(f(\vec{x}_0)) (J_f(\vec{x}_0) \vec{h})      \\
+    \begin{align}
+        g(f(\vec{x}_0 + \vec{h})) & \stackrel{\text{\ref{itm:diff:chain_rule_1}}}{\approx} g(f(\vec{x}_0) + J_f(\vec{x}_0) \vec{h})                     \\
+                                  & \stackrel{\text{\ref{itm:diff:chain_rule_2}}}{\approx} g(f(\vec{x}_0)) + J_g(f(\vec{x}_0)) (J_f(\vec{x}_0) \vec{h}) \\
                                   & = g(f(\vec{x}_0)) + \underbrace{(J_g(f(\vec{x}_0)) J_f(\vec{x}_0)) \vec{h}}_{\text{differential}}
-    \end{align*}
+    \end{align}
 
     In the rigorous proof we will remove the $\approx$ and deal with the $\o$ terms.
 \end{proof}
@@ -388,11 +364,10 @@ $$
 \begin{example}[fully expanded form]
     Let $f: \R^p \to \R^q$ and $g: \R^d \to \R^p$ be differentiable functions.
     Then $J_{g \circ f}(\vec{x})$ is a $q \times d$ matrix where
-
-    $$
+    \begin{equation}
         J_{g \circ f}(\vec{x})_{ki} =
         \pdv{(g \circ f)_k}{x_i}() = \sum_{j=1}^p \pdv{g_k}{y_j}()(f(\vec{x})) \cdot \pdv{f_j}{x_i}()(\vec{x})
-    $$
+    \end{equation}
 \end{example}
 
 \begin{example}{polar coordinates}
@@ -402,8 +377,7 @@ $$
     We can compute $\nabla g$, or equivalently $J_g$, by the chain rule:
 
     We have
-
-    \begin{align*}
+    \begin{align}
         J_f & = \begin{pmatrix}
                     \pdv{f}{x}() & \pdv{f}{y}()
                 \end{pmatrix}  \\
@@ -411,11 +385,9 @@ $$
                     \cos \theta & -r \sin \theta \\
                     \sin \theta & r \cos \theta
                 \end{pmatrix}
-    \end{align*}
-
+    \end{align}
     then
-
-    \begin{align*}
+    \begin{align}
         J_g & = J_f(h) \cdot J_h                  \\
             & = \begin{pmatrix}
                     \pdv{f}{x}()(h) & \pdv{f}{y}()(h)
@@ -424,13 +396,13 @@ $$
             \cos \theta & -r \sin \theta \\
             \sin \theta & r \cos \theta
         \end{pmatrix}
-    \end{align*}
+    \end{align}
 
     That is
-    \begin{align*}
+    \begin{align}
         \pdv{g}{r}()(r, \theta)      & = \cos \theta \pdv{f}{x}()(r \cos \theta, r \sin \theta) + \sin \theta \pdv{f}{y}()(r \cos \theta, r \sin \theta)      \\
         \pdv{g}{\theta}()(r, \theta) & = -r \sin \theta \pdv{f}{x}()(r \cos \theta, r \sin \theta) + r \cos \theta \pdv{f}{y}()(r \cos \theta, r \sin \theta)
-    \end{align*}
+    \end{align}
 
 \end{example}
 
@@ -468,15 +440,114 @@ $$
             Then fix a point $\vec{x} \in U$ and let $\vec{y} = f(\vec{x})$.
             Now apply the chain rule to get
 
-            \begin{align*}
+            \begin{align}
                 J_f(\vec{x}) \cdot J_g(f(\vec{x})) & = I_{p\times p} \\
                 J_g(\vec{y}) \cdot J_f(g(\vec{y})) & = I_{d\times d}
-            \end{align*}
+            \end{align}
 
             Then $J_f(\vec{x})$ and $J_g(\vec{y})$ are the inverse of each other, so they must be square matrices of the same size.
 
             Moreover, if we have the proof for the continuity case we can just use the fact that differentiability implies continuity.
     \end{description}
+\end{proof}
+
+\begin{theorem}[schwartz]
+    \label{thm:diff:schwartz}
+    If $f$ is of class $C^k$, the order in which you take derivatives does not matter.
+\end{theorem}
+
+% TODO: there is something missing here
+
+\begin{proof}
+    TODO
+\end{proof}
+
+% Class of 15/04/2024
+\begin{definition}[Hessian matrix]
+    Let $f: D \subseteq \R^d \to \R$, with $D$ open and $f$ of class $C^2$.
+    The Hessian matrix of $f$ at $\vec{x}_0 \in D$, written $\Hg(\vec{x}_0)$, is the $\vec{d} \times \vec{d}$ matrix in which the $(i, j)$ entry is $\pdv[2]{f}{x_i}{x_j}()(\vec{x}_0)$.
+    By \autoref{thm:diff:schwartz} this is a symmetric matrix.
+\end{definition}
+
+\subsection{Taylor expansions of second order}
+
+\begin{theorem}[second order taylor expansions]
+    Let $f: D \subseteq \R^d \to \R$, with $D$ open and $f$ of class $C^2$. Let $\vec x_0 \in D$.
+    Then
+    \begin{equation}
+        f(\vec x_0 + \vec h) = f(\vec x_0) + \left( \sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0) \right) + \left(\frac{1}{2} \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_i}{x_j}()(\vec x_0) \right) + \o\left(\norm{\vec h}^2\right)
+    \end{equation}
+
+    Here a function $g = \o\left(\norm{\vec h}^2\right)$ if
+    \begin{equation}
+        \lim_{h \to \vec 0} \frac{g(\vec h)}{\norm{\vec h}^2} = 0
+    \end{equation}
+\end{theorem}
+
+\begin{example}[$d = 2$]
+    All the partial derivatives are evaluated at $(x_0, y_0)$.
+    \begin{align}
+        f(x_0 + h, y_0 + k) & = f(x_0, y_0) + h \pdv{f}{x} + k \pdv{f}{y}                                                                              \\
+                            & + \frac{1}{2} \left( h^2 \pdv[2]{f}{x} + 2hk \pdv[2]{f}{x}{y} + k^2 \pdv[2]{f}{y} \right) \label{eq:taylor:second_order} \\
+                            & + \o \left( \norm{(h, k)}^2 \right)
+    \end{align}
+\end{example}
+
+\begin{remark}
+    The second order term (\autoref{eq:taylor:second_order}) can be written as
+    \begin{equation}
+        \frac{1}{2} \vec{h} \cdot \left( \Hg (\vec x_0) \vec h\right) = \frac{1}{2} \vec h^T \Hg(\vec x_0) \vec h
+    \end{equation}
+
+    Therefore the second order expansion could be written \say{compactly} as
+    \begin{equation}
+        f(\vec x_0 + \vec h) = f(\vec x_0) + \vec h \cdot \nabla f(\vec x_0) + \frac{1}{2} \vec h^T \Hg(\vec x_0) \vec h + \o(\norm{\vec h}^2)
+    \end{equation}
+\end{remark}
+
+\begin{proof}
+    Let $g(t) = f(\vec x_0 + t \vec h)$, so that $g(0) = f(\vec x_0)$ and $g(1) = f(\vec x_0 + \vec h)$.
+    Then
+    \begin{align}
+        g'(t)  & = \sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0 + t \vec h)                                                                                                                         \\
+        g''(t) & = \sum^d_{i = 1} h_i \underbrace{\left[ \sum^d_{j = 1} h_j \pdv{x_j}\left( \pdv{f}{x_i}()(\vec x_0 + t\vec h) \right) \right]}_{\dv{t}\left( \pdv{f}{x_i} ()(x_0 + t h) \right)} \\
+               & = \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)
+    \end{align}
+
+    Using the fact that $g(1) = g(0) + g'(0) + \frac{1}{2} g''(t)$ we have
+    \begin{equation}
+        \underbrace{f(\vec x_0 + \vec h)}_{g(1)} = \underbrace{f(\vec x_0)}_{g(0)} + \underbrace{\sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0)}_{g'(0)} + \frac{1}{2} \underbrace{\sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)}_{g''(t)}
+    \end{equation}
+    for some $t \in (0, 1)$.
+
+    Then we call the \textit{reminder} the function
+    \begin{equation}
+        \Delta(\vec h) = f(\vec x_0 + \vec h) - f(\vec x_0) + \sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0) - \frac{1}{2} \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}()(\vec x_0)
+    \end{equation}
+
+    We now want to prove that $\Delta(\vec h) = \o(\norm {\vec h}^2)$. But $\Delta(\vec h)$ can be written as
+    \begin{equation}
+        \Delta(\vec h) = \frac{1}{2}  \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \left( \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)- \pdv[2]{f}{x_j}{x_i}()(\vec x_0)\right)
+    \end{equation}
+    for some $t \in (0, 1)$.
+
+    Now we fix $\varepsilon > 0$. By continuity of the second derivatives, we can find $\delta > 0$ such that if $\norm {\vec{h}} \leq \delta$ then $ \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)- \pdv[2]{f}{x_j}{x_i}()(\vec x_0) \leq \varepsilon$ for any $i, j$.
+    So we have that
+    \begin{equation}
+        \abs{\Delta(\vec h)} \leq \frac{1}{2}  \sum^d_{i = 1} \sum^d_{j = 1} \abs{h_i h_j} \varepsilon
+    \end{equation}
+
+    Finally, $h_i \leq \norm{\vec{h}}$, $h_j \leq \norm{\vec{h}}$ so $h_i h_j \leq \norm{\vec{h}}^2$.
+
+    We conclude that if $\norm{h} \leq \delta$, then
+    \begin{equation}
+        \abs{\Delta(\vec h)} \leq^2 \frac{d}{2} \norm{h}^2 \varepsilon
+    \end{equation}
+    where the $d^2$ term comes from the fact that we have a sum of $d^2$ terms.
+    This is enough to conclude that
+    \begin{equation}
+        \lim_{h \to 0} \frac{\abs{\Delta(\vec h)}}{\norm{\vec h}^2}
+    \end{equation}
 \end{proof}
 
 \section{Intro to integration}
@@ -487,22 +558,22 @@ We are anticipating some results of this topic because we will need them in othe
 For example:
 \begin{itemize}
     \item Let $f(x, y)$ be the probability density function of a pair of random variables, then
-          $$
+          \begin{equation}
               \iint_D f(x, y) \dd{x} \dd{y} = P((X, Y) \in D)
-          $$
+          \end{equation}
     \item Computing the gaussian integral by using double integrals
-          $$
+          \begin{equation}
               \int_{-\infty}^{+\infty} e^{-x^2} \dd{x} = \sqrt{\pi}
-          $$
+          \end{equation}
 \end{itemize}
 
 \subsection{Definition}
 
 The intuition is that we want to calculate the volume under the graph of a function $f: D \subseteq \R^2 \to \R$.
 We write it as
-$$
+\begin{equation}
     \iint_D f(x, y) \dd{x} \dd{y}
-$$
+\end{equation}
 where $D$ is a region in the plane in which we want to calculate the volume.
 
 As with normal integrals, if $f$ takes negative values we will subtract the volume under the graph from the volume above the graph.
@@ -515,21 +586,21 @@ We have the following properties of double integrals:
 
 \begin{itemize}
     \item Linearity:
-          $$
+          \begin{equation}
               \iint_D (af + bg) \dd{x} \dd{y} = a \iint_D f \dd{x} \dd{y} + b \iint_D g \dd{x} \dd{y}
-          $$
+          \end{equation}
     \item Domain decomposition: if $D = D_1 \cup D_2$ and $D_1 \cap D_2 = \varnothing$ then
-          $$
+          \begin{equation}
               \iint_D f \dd{x} \dd{y} = \iint_{D_1} f \dd{x} \dd{y} + \iint_{D_2} f \dd{x} \dd{y}
-          $$
+          \end{equation}
     \item Monotonicity: if $f \leq g$ then
-          $$
+          \begin{equation}
               \iint_D f \dd{x} \dd{y} \leq \iint_D g \dd{x} \dd{y}
-          $$
+          \end{equation}
     \item If $f = 1$ then
-          $$
+          \begin{equation}
               \iint_D 1 \dd{x} \dd{y} = \operatorfont{area}(D)
-          $$
+          \end{equation}
 \end{itemize}
 
 \subsection{Computational techniques}
@@ -541,14 +612,14 @@ The idea is to slice the volume in an infinite number of 2D areas and sum them u
 \begin{theorem}[Fubini]
     Let $D = [a, b] \times [c, d]$ and $f: D \to \R$ be continuous.
     Then
-    $$
+    \begin{equation}
         \iint_D f = \int_c^d \left( \int_{b}^{a} f(x, y) \dd{x} \right) \dd{y}
-    $$
+    \end{equation}
 
     If $D$ is not a rectangle the bound of integrations of the inner integral will be functions of $y$.
-    $$
+    \begin{equation}
         \iint_D f = \int_{c}^{d} \left( \int_{g(y)}^{h(y)} f(x, y) \dd{x} \right) \dd{y}
-    $$
+    \end{equation}
 \end{theorem}
 
 \begin{remark}
@@ -559,9 +630,9 @@ The idea is to slice the volume in an infinite number of 2D areas and sum them u
 
 Let $f: D \subseteq \R^2 \to \R$ and $\varphi: U \subseteq \R^2 \to \R^2$ be a bijective function such that $\varphi(D) = U$.
 
-$$
+\begin{equation}
     \iint_D f(x, y) \dd{x} \dd{y} = \iint_U f(\varphi(u, v)) \abs{\det J_{\varphi}(u, v)} \dd{u} \dd{v}
-$$
+\end{equation}
 
 A common change of variables is to polar coordinates, where we have $\varphi(r, \theta) = (r \cos \theta, r \sin \theta)$, and $\det J_{\varphi}(r, \theta) = r$.
 

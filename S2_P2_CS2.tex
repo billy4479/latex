@@ -9,6 +9,8 @@
 
 \setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
 
+\renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
+
 \begin{document}
 
 \maketitle
@@ -578,7 +580,7 @@ We can modify the previous algorithm to get the right solution:
     \item \label{itm:flow:alg2_iter} Construct an auxiliary graph $D_f = (V, E_f)$ where
           \begin{itemize}
               \item $e \in E_f$ if $c(e) - f(e) > 0$, that is, $e$ has some residual capacity;
-              \item $e^{-1} \in E_f$ if $f(e) = 0$.
+              \item $e^{-1} \in E_f$ if $f(e) > 0$.
           \end{itemize}
     \item Find a directed $s$-$t$ path in $D_f$. If such path $P$ doesn't exists jump to \autoref{itm:flow:alg2_return}, otherwise
           \begin{enumerate}[label*=\arabic*.]
@@ -751,5 +753,76 @@ Fortunately we can do much better: we can use BFS to find the path.
     which means that an edge cannot be saturated more than $\abs{V}/2$ times,
     thus the number of iterations is $\O(\abs{V}\abs{E})$ because each edge ($\O(\abs{E})$) can be updated $\O(\abs{V})$ times at maximum.
 \end{proof}
+
+% Class of 16/04/2024
+\section{Linear programming}
+
+Consider an industry that produces $n$ products.
+Each product sells for some price $p_1, \ldots, p_n$, therefore the total profit is $z = x_1 p_1 + \dots + x_n p_n$.
+We are also given $c$ constraints, for example the machinery available, given as the form of some other linear functions $l_i(x_1, \ldots, x_n)$ for $i = 1, \ldots, c$.
+Moreover, the constraint $x_1, \ldots, x_n \geq 0$ is always present.
+
+By plotting the constraints on a graph we get an area bounded by the constraints given by the problem: this is the space of feasible solutions.
+Within this area we have to choose the point that maximizes $z$.
+The optimal point will be on the boundary of this area, therefore there will be some constraints that will be used up to the very limit: we call those \say{maxed out} constraints \textit{binding}.
+
+\subsection{Mathematical represenation}
+
+This whole problem can be expressed in terms of of linear algebra and matrix multiplications (yay).
+
+Consider the following objects:
+\begin{align}
+    \vec x & = \begin{pmatrix}
+                   x_1    \\
+                   \vdots \\
+                   x_n
+               \end{pmatrix}                        \\
+    \vec p & = \begin{pmatrix}
+                   p_1    \\
+                   \vdots \\
+                   p_n
+               \end{pmatrix}                        \\
+    A      & = \begin{pmatrix}
+                   a_{1,1} & \dots  & a_{1, n} \\
+                   \vdots  & \ddots & \vdots   \\
+                   a_{c,1} & \dots  & a_{c, n} \\
+               \end{pmatrix} \label{eq:linear:a_mat} \\
+    \vec b & = \begin{pmatrix}
+                   b_1    \\
+                   \vdots \\
+                   b_c
+               \end{pmatrix} \label{eq:linear:b_vec}
+\end{align}
+where \autoref{eq:linear:a_mat} is the matrix containing the coefficient each constraint function $i = 1, \ldots, c$, we can do this because constraint are always linear functions;
+\autoref{eq:linear:b_vec} is the vector of the actual constraint, each constraint $l_i(\vec{x}) \leq b_i$.
+
+Then the problem can be rewritten as
+\begin{equation}
+    \max \vec p^T \vec x \quad \text{s.t.} \enspace A \vec x \leq \vec b, \vec x \geq 0
+\end{equation}
+
+\subsubsection{Slack variables}
+
+We can simplify the problem even further by substituting the inequalities with equalities:
+we introduce the slack vector $\vec s = (s_1, \ldots, s_c)$ which contains a value for each constraint function.
+For each $l_i$ we write
+\begin{equation}
+    l_i: \lambda_1 x_1 + \dots + \lambda_n x_n + s_i = b_i
+\end{equation}
+
+\subsection{Algorithm}
+
+In this section we will give for granted the fact that the solution is in the intersection of two constraint lines, we will prove it in more advanced courses.
+
+\subsubsection{Bruteforce approach}
+
+We can just solve the linear system in each intersection and then take the maximum between all those values.
+While this works this is not efficient at all since there are $\binom{c+n}{n}$ intersections we would have to do this $\O(2^{c+n})$ times.
+
+\subsubsection{Simplex algorithm}
+
+In this algorithm we will exploit the fact that the feasible set is convex to \say{go around} the intersections and we will stop when we should \say{go down}.
+
+This is not very formal and it was given just as an introduction.
 
 \end{document}

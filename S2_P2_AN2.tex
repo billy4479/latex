@@ -550,6 +550,113 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     \end{equation}
 \end{proof}
 
+\subsection{Minimum and maximum}
+
+\begin{definition}[minimum and maximum]
+    Let $f: D\subseteq \R^d \to \R$ then
+    \begin{itemize}
+        \item $\vec x_0$ is a \emph{global minimum} if $\forall \vec x \in D$, $f(\vec x) \geq f(\vec x_0)$
+        \item $\vec x_0$ is a \emph{global maximum} if $\forall \vec x \in D$, $f(\vec x) \leq f(\vec x_0)$
+        \item $\vec x_0$ is a \emph{local minimum} if $\exists r > 0$ such that $\forall \vec x \in D \cap B_c(\vec x_0, r)$, $f(\vec x) \geq f(\vec x_0)$
+        \item $\vec x_0$ is a \emph{local maximum} if $\exists r > 0$ such that $\forall \vec x \in D \cap B_c(\vec x_0, r)$, $f(\vec x) \leq f(\vec x_0)$
+    \end{itemize}
+
+    We can also define the \emph{strict} version of these points which have a $<$ instead of $\leq$ and a $>$ instead of $\geq$.
+\end{definition}
+
+\begin{definition}[critical point]
+    A point $\vec x_0 \in \mathring{D}$ where $f$ is differentiable and $\nabla f(\vec x_0)= \vec 0$ is called a critical point.
+\end{definition}
+
+\subsubsection{Necessary condition}
+
+\begin{proposition}[necessary contidion for local extrema]
+    Let $f: D\subseteq \R^d \to \R$, $x_0 \in \mathring{D}$.
+    If $\vec x_0$ is a point of local extremum and the directional derivative in the direction $\vec u \in \R^d$ exists, then $\pdv{f}{u}()(\vec x_0) = 0$.
+    In particular if $f$ is differentiable at $x_0$, then $\nabla f(\vec x_0) = 0$.
+\end{proposition}
+
+\begin{remark}
+    This is the extension of Fermat's theorem to higher dimension.
+\end{remark}
+
+\begin{proof}
+    If $x_0$ is a local minimum and $\pdv{f}{u}()(\vec x_0)$ exists consider $g: t \mapsto f(\vec x_0, t \vec u)$.
+    Then $g$ has a local minimum at $t = 0$ so $g'(0) = 0$ (by Fermat's theorem in 1D),
+    but $g'(0) = \pdv{f}{u}()(\vec x_0) = 0$
+
+    If $f$ is differentiable $\pdv{f}{u}()(\vec x_0) = \nabla f (\vec x_0) \cdot \vec u$, therefore $\nabla f(\vec x_0)$ should be equal to $\vec 0$.
+
+    We have just proven that local extrema are critical points.
+\end{proof}
+
+\subsubsection{Sufficient condition}
+
+In 1D we used to check second derivatives, so now we have to check the Hessian matrix.
+
+Since we are in a critical point second order Taylor expansion looks like
+\begin{equation}
+    f(\vec x_0 + \vec h) = f(\vec x_0) + \frac{1}{2} \vec h^T H \vec h + \o(\norm{\vec h}^2)
+\end{equation}
+where $H = \Hg(\vec x_0)$.
+Then $f(\vec x_0 + \vec h) - f(\vec x_0) \sim \vec h^T H \vec h$ so it should have the sign of $\vec h^T H \vec h$.
+
+\begin{definition}[\say{sign} of a matrix]
+    Let $H$ be a $d\times d$ symmetric matrix. We say $H$ is
+    \begin{itemize}
+        \item \emph{positive definite} if $\vec h^T H \vec h > 0$ for $\vec h \in \R^d \setminus \{0\}$;
+        \item \emph{negative definite} if $\vec h^T H \vec h < 0$ for $\vec h \in \R^d \setminus \{0\}$;
+        \item \emph{indefinite} if $\vec h^T H \vec h$ takes both strictly negative and strictly positive values.
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}[spectral theorem (yay!)]
+    Let $H$ be a symmetric matrix with real (not in $\C$) coefficients.
+    Then $H$ is diagonalizable in an orthonormal basis.
+    Moreover:
+    \begin{enumerate}[label=\roman*.]
+        \item $H$ is positive definite if all the eigenvalues are strictly positive
+        \item $H$ is negative definite if all the eigenvalues are strictly negative
+        \item $H$ is indefinite if some eigenvalues are strictly positive and some are strictly negative
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    See linear algebra D:
+\end{proof}
+
+\begin{theorem}[sufficient condition for local extrema]
+    Let $f: D\subseteq \R^d \to \R$ of class $C^2$ and $\vec x_0$ a critical point.
+    Let $H = \Hg(\vec x_0)$.
+    Then
+    \begin{enumerate}[label=\roman*.]
+        \item If $H$ is positive definite then $\vec x_0$ is a strict local minimum
+        \item If $H$ is negative definite then $\vec x_0$ is a strict local maximum
+        \item If $H$ is indefinite then $\vec x_0$ is not a local minimum nor a local maximum: we call it a \say{saddle point}
+    \end{enumerate}
+\end{theorem}
+
+\begin{lemma}[$d = 2$]
+    Let $H$ be a $2 \times 2$ matrix:
+    \begin{enumerate}[label=\roman*.]
+        \item If $\det(H) > 0$ and $\tr(H) > 0$ then $H$ is positive definite
+        \item If $\det(H) > 0$ and $\tr(H) < 0$ then $H$ is negative definite
+        \item If $\det(H) < 0$ then $H$ is indefinite
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    Let $\lambda, \nu$ be eigenvalues of $H$, then
+    \begin{equation}
+        \begin{cases}
+            \det(H) = \lambda \nu \\
+            \tr(H) = \lambda + \nu
+        \end{cases}
+    \end{equation}
+
+    If $\det(H) > 0$ both eigenvalues have the same sign and the sign is the same as $\tr{H} = \lambda + \nu$.
+    If $\det(H) < 0$ then one of the eigenvalues is $> 0$ and the other one is $< 0$.
+\end{proof}
+
 \section{Intro to integration}
 
 \subsubsection{Motivation}

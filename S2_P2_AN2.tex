@@ -743,4 +743,89 @@ Let $f: D \subseteq \R^2 \to \R$ and $\varphi: U \subseteq \R^2 \to \R^2$ be a b
 
 A common change of variables is to polar coordinates, where we have $\varphi(r, \theta) = (r \cos \theta, r \sin \theta)$, and $\det J_{\varphi}(r, \theta) = r$.
 
+% Class of 18/04/2024
+
+\section{Path integrals}
+
+Let $f: D \subseteq \R^d \to R^p$, $\gamma: I:\subseteq \R \to \R^d$.
+Then we write
+\begin{eqnarray}
+    \int_\gamma f
+\end{eqnarray}
+which is the path integral of $f$ along the path $\gamma$.
+This could represent a length if $p = 1$ or a work along a trajectory with $p = d = 3$.
+
+Note that the path integrals do not depend on the speed at which the path is traveled.
+
+Moreover we can extend the fundamental theorem of calculus: $g = \int_\gamma \nabla g$.
+
+\subsection{Scalar fields}
+
+\begin{definition}[path integral over a scalar field]
+    \label{def:integrals:path_over_scalar}
+    Let $f: D \subseteq \R^d \to \R$ continuous, $\gamma: I \subseteq \R \to \R^d$ of class $C^1$, $I = [a, b]$ is an interval and $\gamma(I) \subseteq D$.
+    Then we define
+    \begin{equation}
+        \int_\gamma f \dd{s} = \int_a^b f(\gamma(t)) \norm{\gamma'(t)} \dd{t}
+    \end{equation}
+
+    If $\gamma$ is continuous and piecewise $C^1$ we can split the interval in $a = a_1 \leq a_2 \leq \dots \leq a_n = b$ such that in each interval $[a_i, a_{i+1}]$ $\gamma$ is of class $C^1$.
+    Then we can write
+    \begin{equation}
+        \int_{\gamma} f \dd{s} = \sum^{n -1}_{i = 1} \int^{a_{i+1}}_{a_i} f(\gamma(t)) \norm{\gamma'(t)} \dd{t}
+    \end{equation}
+\end{definition}
+
+\begin{remark}
+    The function $t \mapsto f(\gamma(t)) \norm{\gamma'(t)}$ is continuous if $f$ is continuous and $\gamma$ is $C^1$.
+\end{remark}
+
+The meaning of the $\norm{\gamma'(t)}$ is that we are splitting the path into many small linear segments and use $\gamma'$ to find the directions of these segments.
+
+\begin{proposition}
+    Let $f, \gamma$ as in \autoref{def:integrals:path_over_scalar}.
+    For $N \in \N^+$ we look at the partition $[a, b]$ in $N$ intervals of the same length.
+
+    Let $t_i = a + \frac{i}{N}(a-b)$
+    then
+    \begin{equation}
+        \int_\gamma f \dd{s} = \lim_{N \to +\infty} \sum_{i = 0}^{N-1} f(\gamma(t_i)) \norm{\gamma(t_{i+1}) - \gamma(t_i)}
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    From Analysis 1 we can use the definition of Riemann sum to get
+    \begin{equation}
+        \int_a^b f(\gamma(t)) \norm{\gamma'(t)} \dd{t} = \lim_{N \to +\infty} \sum_{i = 0}^{N-1} f(\gamma(t_i)) \norm{\gamma(t_i)} (t_{i+1} - t_i)
+    \end{equation}
+    but as $t_{i+1} - t_{i}$ goes to $0$ we have that $\gamma'(t_i) \approx \frac{\gamma(t_{i+1}) - \gamma{t_i}}{t_{i+1} - t_i}$ so
+    $\norm{\gamma'(t_i)} (t_{i+1} - t_i) \approx \norm{\gamma(t_{i+1}) - \gamma(t_i)}$.
+
+    In lecture notes there is a more formal proof where we use $\varepsilon$ instead of $\approx$.
+\end{proof}
+
+Moreover the $\dd{s}$ is
+\begin{equation}
+    \dd{s} = \norm{\gamma'(t)} \dd{t}
+\end{equation}
+which can be read as the change of speed times the increase in time, which is what makes the integral invariant to the speed.
+
+\subsubsection{Independance of the parametrization}
+
+\begin{definition}[diffeomorphism]
+    Let $I, J \subseteq \R$ and $k \geq 1$.
+    $\varphi$ is a $C^k$-diffeomorphism if it is a function $\varphi: I \to J$ which is bijective, of class $C^k$, with an inverse of class $C^k$.
+\end{definition}
+
+\begin{proposition}
+    If $\varphi: I \to J$ is bijective and of class $C^k$, then $\varphi$ is a $C^k$-diffeomorphism if and only if $\varphi'$ does not vanish.
+\end{proposition}
+
+\begin{definition}
+    Let $\gamma: I \to \R^d$, $\omega: J \to \R^d$ both of class $C^k$.
+    We say that $(I, \gamma)$ and $(J, \omega)$ represent the same $C^k$-oriented curve id there exists a $C^k$-diffeomorphism $\varphi: I \to J$ increasing, with $\forall t \in I, \gamma(t) = \omega(\varphi(t))$.
+
+    That is, a $C^k$-oriented curve is an equivalence class of $(I, \gamma)$ with $\gamma: I \to \R^d$ of class $C^k$.
+\end{definition}
+
 \end{document}

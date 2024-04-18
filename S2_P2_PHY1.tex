@@ -1,12 +1,19 @@
-\documentclass[12pt]{extarticle}
+\documentclass[14pt]{extarticle}
 
 \usepackage{preamble}
 \usepackage{siunitx}
 
-\title{Mathematical Analysis 2 Notes, Partial 2}
+\title{Physics 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
 
-\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
+\setlength{\headheight}{17pt} % ??? we do what fancyhdr tells us to do
+
+% Redefine it as it got deprecated
+\DeclareSIUnit\angstrom{Å}
+
+\newcommand{\anglebraces}[1]{
+    \langle #1 \rangle
+}
 
 \begin{document}
 
@@ -704,5 +711,113 @@ TODO
     \item
           as homework prove Bernoulli theorem.
 \end{itemize}
+
+% Class od 18/04/2024
+\section{Kinetic theory of gasses}
+
+\url{https://www.feynmanlectures.caltech.edu/}
+
+Let us introduce the Angstrom: $1 \si{\angstrom} = 10^{-8} \si{\meter}$. This is the usual scale of things we will be dealing with.
+
+\subsection{Particle collisions}
+
+Lets start by rewriting the force for a particle $i$:
+\begin{equation}
+    \vec F^{(i)} = m \vec a^{(i)} = m \dv[2]{\vec r^{(i)}}{t} = - \vec \nabla \sum_{j \ne i} V(\vec r^{(i)} - \vec r^{(j)})
+\end{equation}
+where $V(\vec r)$ is the \emph{Lenard-Jones potential}:
+\begin{equation}
+    V(\vec r) = \frac{c_1}{r^{12}} - \frac{c_2}{r^6}
+\end{equation}
+the first term represents the force attracting the atoms to each other and the second term represents the force that repels the atoms when they get too close.
+
+This approach presents some problems:
+\begin{enumerate}
+    \item \emph{Unfeasibility}: it is likely unfeasible to compute a sum with so many particles: in a volume of $1 \si{\liter}$ there are $\sim 10^{23}$ particles;
+    \item \emph{Ineffectiveness}: the system is deterministically chaotic, which means that even small perturbations get amplified exponentially.
+\end{enumerate}
+
+Assume that atoms are \emph{hard spheres}, that is the centers of the two atoms cannot get closer than $2r$.
+
+To compute the angle of reflection when two particles collide we fix one particle and draw a circle of $2r$ around it.
+Then when another particle's center enters the circle we have a collision: we extend the radius of the first particle in the direction of the collision point and we get a perfect reflection along that axis:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{assets/S2_P2_PHY1/particle_collision.png}
+    \caption{Two particles colliding and the resulting angle $\alpha$}
+\end{figure}
+
+If we now consider a small perturbation $\delta \theta$ in the incoming particle's angle.
+We get a small perturbation $\delta \alpha$ in the final angle, we now want to find $\delta \alpha(\delta \theta)$.
+It can be proven (we did it in class, it's a lot of trigonometry) that
+\begin{equation}
+    \delta \alpha \sim \frac{d}{r} \delta \theta
+\end{equation}
+where $d$ is the mean free path of a particle, that is, the distance that a particle travels before hitting another one.
+
+We now want to calculate the mean $d$.
+We can assume that a particle when it travels occupies a cylinder of $2r \cross d$, while the total volume $V = \mathscr{N} V_\text{particle}$, but we know that $V_\text{particle} = (2r)^2 \pi d$ and we can get an estimate of $\frac{d}{r}$:
+\begin{equation}
+    \frac{d}{r} = \frac{V}{\mathscr{N}} \frac{1}{4 \pi r^3} \approx 10^3
+\end{equation}
+
+This is an issue because it means that $\dd{\alpha}$ is increasing at every collision and we have chaos.
+This means that we are not able to apply newtonian physics in this situation because the error in the measurement will get out of hand too quickly,
+instead we can use statistical physics to get an estimate of some of the properties of the system.
+
+\subsection{Velocity}
+
+We can now ask ourselves what is the probability that the $x$ component of the velocity falls in the interval $[v_x, v_x + \dd{v_x}]$.
+We can write the velocity after $n$ collisions as
+\begin{equation}
+    v_x^{(n)} = v_x^{(0)} + \delta v_x^{(1)} + \delta v_x^{(2)} + \dots +\delta v_x^{(n)}
+\end{equation}
+which can be seen as a sum of many random variables.
+Then $v_x \sim {\operatorfont Normal}(0, \sigma^2)$, that is
+\begin{equation}
+    p(v_x) = \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{v_x^2}{2 \sigma^2}}
+\end{equation}
+
+Then we can apply some probability:
+\begin{equation}
+    \anglebraces{v_x^2} = E(X^2) = V(X) - (E(X))^2 = V(X) - 0 = \sigma^2
+\end{equation}
+and $\abs{v_x} = \sqrt{\anglebraces{v_x^2}} = \sigma$, which in real systems this is approximately $300 \si{\meter \per \second}$.
+
+Now we can extend this reasoning to find the distribution of a particle being in a certain position at a certain velocity:
+\begin{align}
+    \rho(\vec r, \vec v) & = \rho(\vec r) \rho(v_x) \rho(v_y) \rho(v_z)                                                           \\
+                         & = \frac{1}{V} \left(\frac{1}{\sqrt{2 \pi} \sigma}\right) e^{-\frac{v_x^2 + v_y^2 + v_z^2}{2 \sigma^2}}
+\end{align}
+this means that if we want to calculate the probability of the position and velocity being in some range we would have to compute
+\begin{equation}
+    P(\cdot) = \iiint_{\vec r \in \substack{[r_x, r_x']                                                             \\ [r_y, r_y'] \\ [r_z, r_z']}} \dd{V} \iiint_{\vec v \in \substack{[v_x, v_x']                                                             \\ [v_y, v_y'] \\ [v_z, v_z']}} \dd{v_x} \dd{v_y} \dd{v_z} \rho(\vec r, \vec v)
+\end{equation}
+
+\subsection{Pressure}
+
+First we look at what is the momentum change that is caused by the collision of a particle with the wall.
+That is
+\begin{align}
+    \delta p^\text{particle} & = -2 m v_x \\
+    \delta p^\text{wall}     & = 2 m v_x
+\end{align}
+
+However we don't have to integrate over all the volume, if we consider a $\Delta t$ we can exclude all the volume where the particles are not fast enough to reach the wall in such time $\Delta t$: we call this volume $\Delta V$.
+
+\begin{equation}
+    \text{\# collision } = \mathscr{N} \int_{\Delta V} \frac{\dd{V}}{V} = \mathscr{N} \frac{1}{V} \underbrace{A v_x \Delta t}_{\Delta V}
+\end{equation}
+
+Then we can calculate teh total momentum change in one direction:
+\begin{align}
+    \Delta p_x & = \int_0^\infty \dd{v_x} \rho(v_x) \delta p(v_x) (\text{\# collision for }v_x) \\
+               & =\frac{2m \mathscr{N}}{V} A \Delta t \int_0^\infty \dd{v_x} v_x^2 \rho(v_x)    \\
+\end{align}
+then the pressure is
+\begin{align}
+    p = \frac{F}{A} = \frac{\Delta p / \Delta t}{A} = m \mathscr{N} \anglebraces{v_x^2}
+\end{align}
 
 \end{document}

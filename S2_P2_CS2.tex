@@ -757,6 +757,10 @@ Fortunately we can do much better: we can use BFS to find the path.
 % Class of 16/04/2024
 \section{Linear programming}
 
+This probably explains it better:
+\url{https://www.youtube.com/watch?v=E72DWgKP_1Y}
+
+
 Consider an industry that produces $n$ products.
 Each product sells for some price $p_1, \ldots, p_n$, therefore the total profit is $z = x_1 p_1 + \dots + x_n p_n$.
 We are also given $c$ constraints, for example the machinery available, given as the form of some other linear functions $l_i(x_1, \ldots, x_n)$ for $i = 1, \ldots, c$.
@@ -810,9 +814,11 @@ For each $l_i$ we write
     l_i: \lambda_1 x_1 + \dots + \lambda_n x_n + s_i = b_i
 \end{equation}
 
-\subsection{Algorithm}
+\subsection{Ideas}
 
 In this section we will give for granted the fact that the solution is in the intersection of two constraint lines, we will prove it in more advanced courses.
+
+Note that we will not be asked to solve this problem manually, but instead to represent it graphically.
 
 \subsubsection{Bruteforce approach}
 
@@ -823,6 +829,15 @@ While this works this is not efficient at all since there are $\binom{c+n}{n}$ i
 
 In this algorithm we will exploit the fact that the feasible set is convex to \say{go around} the intersections and we will stop when we should \say{go down}.
 
-This is not very formal and it was given just as an introduction.
+\subsection{Simplex algorithm}
+
+First we rewrite the constraint as equations using slack variables.
+Then we set all the $x_i = 0$ and the slack variables to the right amount to satisfy the equations.
+
+We proceed by choosing between the $x_i$s the one with the larger $p_i$ and we add a $\delta$ to it: we want then to choose the largest $\delta$ such that all the variables are still positive and we replace such $x_i$ with the equation that gives us the constraint.
+
+Then we continue by choosing another variable in the equation we want to max:
+if all the variables in such equation have negative coefficient then the algorithm is done and the solution is optimal;
+otherwise we repeat the steps with another variable with positive coefficient.
 
 \end{document}

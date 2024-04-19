@@ -38,6 +38,11 @@
     {\scalebox{.6}{$\scriptscriptstyle\mathcal{O}$}}%\scriptscriptstyle
 }
 
+% Sorcery taken from https://tex.stackexchange.com/a/163284
+\makeatletter
+\def\munderbar#1{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
+\makeatother
+
 % I don't really like the `plain` style, I use `definition` even for theorems
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[section]

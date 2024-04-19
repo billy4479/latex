@@ -1,11 +1,11 @@
-\documentclass[12pt]{extarticle}
+\documentclass[14pt]{extarticle}
 
 \usepackage{preamble}
 
 \title{Probability Notes, Partial 2}
 \date{Semester 2, 2023/2024}
 
-\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
+\setlength{\headheight}{17pt} % ??? we do what fancyhdr tells us to do
 
 \newcommand{\cov}{{\operatorfont Cov}}
 % Distributions
@@ -15,7 +15,7 @@
 \newcommand{\Exponential}{{\operatorfont Exponential}}
 \newcommand{\BivariateNormal}{{\operatorfont BivariateNormal}}
 
-\renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
+\renewcommand{\vec}[1]{\munderbar{\bm{#1}}}
 
 \begin{document}
 
@@ -1159,7 +1159,7 @@ This holds even if $Y|X = x$ is discrete and $X$ is continuous (\autoref{eq:mixi
 
 Moreover, the proprieties of the conditional expectation (\autoref{thm:condition:prop_expectation}) are still valid in both cases.
 
-\subsection{Generalizing}
+\subsection{Random vectors}
 
 We define a random vector as $\vec X =
     \begin{bmatrix}
@@ -1263,6 +1263,70 @@ Its expectation is
 \begin{proof}
     These properties both come from expanding \autoref{prop:gen:variance_mat} and performing some linear algebra properties such as $(AB)^T = B^T A^T$.
     I will not write the full proof here, check the book.
+\end{proof}
+
+\begin{proposition}[sign of the variance]
+    Let $\vec X$ be a random vector and $\vec a$ a number vector.
+    We know that
+    \begin{equation}
+        V(\vec a^T \vec X) = \vec a^T V(\vec X) \vec a \geq 0 \quad \forall \vec a
+    \end{equation}
+    since the variance is always positive.
+
+    We say that the variance matrix is always \emph{positive semi-definite}.
+    Moreover, $V(\vec X)$ is not positive definite only if there exists some vector $\vec a$ such that $\vec a^T \vec X = c$ constant and $P(\vec a^T \vec X) \ne 1$.
+\end{proposition}
+
+\begin{proposition}
+    Let $\vec X$, $U \subseteq \R^k$ open, $P(\vec X \in U) = 1$, $T: U \to V$ be a one-to-one \emph{linear} transformation such that $T^{-1}$ is its inverse and $T^{-1}$ is of class $C^1$, and $\det J_{T^{-1}}(\vec y) \ne 0$ for all $\vec y \in V$.
+
+    Then we know that in general
+    \begin{equation}
+        f_{\vec Y} = f_{\vec X}(T^{-1}(\vec y)) \abs{\det J_{T^{-1}}(\vec y)}
+    \end{equation}
+    but since $T$ is linear we can find its matrix $A$, and $J_{T^{-1}}(\vec y) = A^{-1} \ne 0$.
+    This means that we can rewrite the general equation as
+    \begin{align}
+        f_{\vec Y} & = f_{\vec X}(A^{-1}(\vec y - \vec b)) \abs{\det A^{-1}}      \\
+                   & = f_{\vec X}(A^{-1}(\vec y - \vec b)) \frac{1}{\abs{\det A}}
+    \end{align}
+\end{proposition}
+
+\subsubsection{Multivariate normal distribution}
+
+We write $\Normal(\vec \mu, \Sigma)$, where $\vec \mu \in \R^d$ and $\Sigma$ is a $k \times k$ matrix.
+
+The pdf of this distribution is
+\begin{equation}
+    f_{\vec X}(\vec x) = (2 \pi)^{-\frac{k}{2}} (\det \Sigma)^{-\frac{1}{2}} e^{-\frac{1}{2}(\vec x - \vec \mu)^T \Sigma^{-1} (\vec x - \vec \mu)}
+\end{equation}
+
+We call $\Normal(\vec 0, I)$ the \emph{standard multivariate normal} and its pdf becomes
+\begin{align}
+    f_{\vec X}(\vec x) & = (2 \pi)^{-\frac{k}{2}} (1)^{-\frac{1}{2}} e^{-\frac{1}{2}(\vec x - \vec \mu)^T (\vec x - \vec \mu)} \\
+                       & = \frac{1}{(\sqrt{2 \pi})^k} e^{-\frac{1}{2} \sum_{i = 1}^k x_i^2}                                    \\
+                       & = \prod_{i = 1}^k \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}x_i^2}
+\end{align}
+that is, $X_1, \ldots, X_k \indep$ and $X_i \sim \Normal(0,1)$.
+
+\begin{lemma}
+    $X_1, \ldots, X_k \indep$ if and only if $\Sigma$ is diagonal.
+\end{lemma}
+
+\begin{proposition}
+    Let $\vec X \sim \Normal(\vec \mu, \Sigma)$ and $\vec Y = A \vec X + \vec b$.
+    Then
+    \begin{equation}
+        \vec Y \sim \Normal(A \vec \mu + \vec b, A \Sigma A^T)
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    \begin{align}
+        f_{\vec Y}(\vec y) & = (2 \pi)^{-\frac{k}{2}} (\det \Sigma)^{-\frac{1}{2}} e^{-\frac{1}{2}(A^{-1}(\vec y - \vec b) - \vec \mu)^T \Sigma^{-1} (A^{-1}(\vec y - \vec b) - \vec \mu)} \frac{1}{\abs{\det A}} \\
+                           & = \frac{1}{\sqrt{(\det \Sigma)(\det A)(\det A)}} e^{-\frac{1}{2}(A^{-1}(\vec y - \vec b) - \vec \mu)^T \Sigma^{-1} (A^{-1}(\vec y - \vec b) - \vec \mu)} \frac{1}{\abs{\det A}}      \\
+                           & = \frac{1}{\sqrt{\det(A \Sigma A^T)}} e^{-\frac{1}{2}(A^{-1}(\vec y - \vec b) - \vec \mu)^T (A \Sigma A^T)^{-1} (\vec y - \vec b) - \vec \mu)}
+    \end{align}
 \end{proof}
 
 \end{document}

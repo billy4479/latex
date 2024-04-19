@@ -1,4 +1,4 @@
-\documentclass[12pt]{extarticle}
+\documentclass[14pt]{extarticle}
 
 \usepackage{preamble}
 \usepackage{bytefield}
@@ -7,7 +7,7 @@
 \title{Computer Science 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
 
-\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
+\setlength{\headheight}{17pt} % ??? we do what fancyhdr tells us to do
 
 \renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
 
@@ -31,33 +31,33 @@ In unweighted graphs we used BFS to compute the path from a \textit{single sourc
 But if we know that the graph is acyclic we can do better: nodes are removed from the queue in a topological order, then we can write the following algorithm:
 
 \begin{minted}{python}
-    def shortest_path_dag(G, cost, s):
-        d = {}
-        for v in G.vertices():
-            d[v] = float('inf')
+def shortest_path_dag(G, cost, s):
+    d = {}
+    for v in G.vertices():
+        d[v] = float('inf')
 
-        # Calculate the topological sort
-        topological_sort = topological_sort(G)
+    # Calculate the topological sort
+    topological_sort = topological_sort(G)
 
-        # We will only be able to explore the nodes that
-        # come after s in the topological sort
-        index_of_s = topological_sort.index(s)
-        topological_sort = topological_sort[index_of_s:]
+    # We will only be able to explore the nodes that
+    # come after s in the topological sort
+    index_of_s = topological_sort.index(s)
+    topological_sort = topological_sort[index_of_s:]
 
-        # The distance of the starting node to itself is 0
-        d[s] = 0
+    # The distance of the starting node to itself is 0
+    d[s] = 0
 
-        # We iterate in topological order
-        for u in topological_sort:
+    # We iterate in topological order
+    for u in topological_sort:
 
-            # We check all the neighbors of v
-            for v in u.neighbors():
-                # If the cost of getting to v from u is less than
-                # the current cost of getting to v, we update it
-                
-                d[u] = min(d[u], d[v] + cost((u, v)))
+        # We check all the neighbors of v
+        for v in u.neighbors():
+            # If the cost of getting to v from u is less than
+            # the current cost of getting to v, we update it
+            
+            d[u] = min(d[u], d[v] + cost((u, v)))
 
-        return d
+    return d
 \end{minted}
 
 Note that this algorithm works only for acyclic graphs, but also in the case of negative weights.
@@ -89,23 +89,22 @@ Now we can compute the shortest path from the source to $v$ by iterating all the
 We can use this method to create a new algorithm where we add each node to the graph one by one and compute the shortest path to the new node.
 
 \begin{minted}{python}
-    def shortest_path_dag(G, cost, s):
-        # The setup is the same as before
+def shortest_path_dag(G, cost, s):
+    # The setup is the same as before
 
-        d = {}
-        for v in G.vertices():
-            d[v] = float('inf')
+    d = {}
+    for v in G.vertices():
+        d[v] = float('inf')
 
-        topological_sort = topological_sort(G)
-        index_of_s = topological_sort.index(s)
-        topological_sort = topological_sort[index_of_s:]
+    topological_sort = topological_sort(G)
+    index_of_s = topological_sort.index(s)
+    topological_sort = topological_sort[index_of_s:]
 
-        d[s] = 0
+    d[s] = 0
 
-        for u in topological_sort:
-            for v in u.neighbors():
-                d[u] = min(d[u], d[v] + cost((v, u)))
-
+    for u in topological_sort:
+        for v in u.neighbors():
+            d[u] = min(d[u], d[v] + cost((v, u)))
 \end{minted}
 
 \subsection{The knapsack problem}
@@ -166,56 +165,56 @@ Therefore we can compute the matrix row by row, from left to right and be sure t
 We can now use the recursive definition to formalize the algorithm.
 
 \begin{minted}{python}
-    def knapsack(W, I):
-        # Initialize the matrix with all 0s
-        M = [[0 for _ in range(W + 1)] for _ in range(len(I) + 1)]
+def knapsack(W, I):
+    # Initialize the matrix with all 0s
+    M = [[0 for _ in range(W + 1)] for _ in range(len(I) + 1)]
 
-        # The iteration starts from 1 because the first row is all 0s
-        for i in range(1, len(I) + 1):
-            item = I[i - 1]
+    # The iteration starts from 1 because the first row is all 0s
+    for i in range(1, len(I) + 1):
+        item = I[i - 1]
 
-            # Same as before, we start from 1 because the 
-            # first column is all 0s
-            for max_weight in range(1, W + 1):
-                # If the item is too heavy we can't take it
-                # and we just copy the previous value
-                if item.weight > max_weight:
-                    M[i][max_weight] = M[i - 1][max_weight]
-                else:
-                    # Otherwise we need to choose the maximum
-                    # value between:
-                    # - The value of the previous item
-                    # - The value of the current item plus
-                    #   the value of the best solution for
-                    #   the remaining weight
-                    M[i][max_weight] = max(
-                        M[i - 1][max_weight],
-                        M[i - 1][max_weight - item.weight] + item.value
-                    )
+        # Same as before, we start from 1 because the 
+        # first column is all 0s
+        for max_weight in range(1, W + 1):
+            # If the item is too heavy we can't take it
+            # and we just copy the previous value
+            if item.weight > max_weight:
+                M[i][max_weight] = M[i - 1][max_weight]
+            else:
+                # Otherwise we need to choose the maximum
+                # value between:
+                # - The value of the previous item
+                # - The value of the current item plus
+                #   the value of the best solution for
+                #   the remaining weight
+                M[i][max_weight] = max(
+                    M[i - 1][max_weight],
+                    M[i - 1][max_weight - item.weight] + item.value
+                )
 
-        return reconstruct(W, I, M)
+    return reconstruct(W, I, M)
 \end{minted}
 
 Now that we computed the matrix we need to reconstruct the solution, that is, the set of items that we put in the backpack.
 
 \begin{minted}{python}
-    def reconstruct(W, I, M):
-        solution = []
-        weight = W
+def reconstruct(W, I, M):
+    solution = []
+    weight = W
 
-        # Iterate the rows of the matrix in reverse order
-        for i in range(len(I), 1, -1):
-            # If the value of the last item of the current row
-            # is different from the one of the previous row
-            # it means that we took the (i-1)-th item
-            if M[i][weight] != M[i - 1][weight]:
-                solution.append(I[i - 1])
+    # Iterate the rows of the matrix in reverse order
+    for i in range(len(I), 1, -1):
+        # If the value of the last item of the current row
+        # is different from the one of the previous row
+        # it means that we took the (i-1)-th item
+        if M[i][weight] != M[i - 1][weight]:
+            solution.append(I[i - 1])
 
-                # Reduce the weight that we are left with
-                # for the next iteration
-                weight -= I[i - 1].weight
-        
-        return solution
+            # Reduce the weight that we are left with
+            # for the next iteration
+            weight -= I[i - 1].weight
+    
+    return solution
 \end{minted}
 
 % Class of 21/03/2024
@@ -260,66 +259,65 @@ The idea is that we can compute a matrix $M$ of the various edit distances betwe
 Moreover we note that the first row and the first column of the matrix are just the numbers from 0 to the length of the string, because the difference between an empty string and a string of length $i$ is $i$.
 
 \begin{minted}{python}
-    def edit_distance(A, B):
-        # Initialize the matrix with all 0s
-        M = [[0 for _ in range(len(B))] for _ in range(len(A))]
+def edit_distance(A, B):
+    # Initialize the matrix with all 0s
+    M = [[0 for _ in range(len(B))] for _ in range(len(A))]
 
-        for i in range(len(A)):
-            for j in range(len(B)):
-                if i == 0:
-                    # The difference between an empty string
-                    # and a string of length j is j
-                    M[i][j] = j
-                elif j == 0:
-                    # Same as before, the difference between
-                    # a string of length i and an empty string is i
-                    M[i][j] = i
-                else:
-                    # We use the formulas we found before and
-                    # we take the minimum value
-                    M[i][j] = min(
-                        M[i - 1][j] + 1,
-                        M[i][j - 1] + 1,
-                        M[i - 1][j - 1] +
-                            (0 if A[i - 1] == B[j - 1] else 1)
-                    )
-        return reconstruct(A, B, M)
+    for i in range(len(A)):
+        for j in range(len(B)):
+            if i == 0:
+                # The difference between an empty string
+                # and a string of length j is j
+                M[i][j] = j
+            elif j == 0:
+                # Same as before, the difference between
+                # a string of length i and an empty string is i
+                M[i][j] = i
+            else:
+                # We use the formulas we found before and
+                # we take the minimum value
+                M[i][j] = min(
+                    M[i - 1][j] + 1,
+                    M[i][j - 1] + 1,
+                    M[i - 1][j - 1] +
+                        (0 if A[i - 1] == B[j - 1] else 1)
+                )
+    return reconstruct(A, B, M)
 \end{minted}
 
 As in the previous algorithm we need to reconstruct the solution from the matrix, that is, to find the sequence of operations that transform $A$ into $B$.
 
 \begin{minted}{python}
-    def reconstruct(A, B, M):
-        solution = []
-        i, j = len(A) - 1, len(B) - 1
+def reconstruct(A, B, M):
+    solution = []
+    i, j = len(A) - 1, len(B) - 1
 
-        while i > 0 and j > 0:
-            # If the value of the current cell is the same as 
-            # the one of the cell above it means that we 
-            # deleted a character
-            if M[i][j] == M[i - 1][j] + 1:
-                solution.append(f"Delete {A[i]}")
-                i -= 1
-            # If the value of the current cell is the same as 
-            # the one of the cell on the left it means that
-            # we inserted a character
-            elif M[i][j] == M[i][j - 1] + 1:
-                solution.append(f"Insert {B[j]}")
-                j -= 1
-            # If the value of the current cell is the same as
-            # the one of the cell on the top left it means 
-            # that we substituted a character
-            elif M[i][j] == M[i - 1][j - 1] + 1:
-                solution.append(f"Substitute {A[i]} with {B[j]}")
-                i -= 1
-                j -= 1
-            else:
-                # If the value of the current cell is the 
-                # same as the one of the cell on the top left
-                # it means that we didn't do anything
-                i -= 1
-                j -= 1
-
+    while i > 0 and j > 0:
+        # If the value of the current cell is the same as 
+        # the one of the cell above it means that we 
+        # deleted a character
+        if M[i][j] == M[i - 1][j] + 1:
+            solution.append(f"Delete {A[i]}")
+            i -= 1
+        # If the value of the current cell is the same as 
+        # the one of the cell on the left it means that
+        # we inserted a character
+        elif M[i][j] == M[i][j - 1] + 1:
+            solution.append(f"Insert {B[j]}")
+            j -= 1
+        # If the value of the current cell is the same as
+        # the one of the cell on the top left it means 
+        # that we substituted a character
+        elif M[i][j] == M[i - 1][j - 1] + 1:
+            solution.append(f"Substitute {A[i]} with {B[j]}")
+            i -= 1
+            j -= 1
+        else:
+            # If the value of the current cell is the 
+            # same as the one of the cell on the top left
+            # it means that we didn't do anything
+            i -= 1
+            j -= 1
 \end{minted}
 
 \subsubsection{Time complexity}
@@ -350,14 +348,14 @@ This algorithm is used to compute the shortest path between all pairs of vertice
 Let the input be the $n \times n$ matrix $A$ where $A_{ij}$ is the weight of the edge between $i$ and $j$ if it exists, otherwise it is $\infty$.
 
 \begin{minted}{python}
-    def floyd_warshall(A):
-        D = A
-        for k in range(n):
-            for i in range(n):
-                for j in range(n):
-                    D[i][j] = min(D[i][j], D[i][k] + D[k][j])
+def floyd_warshall(A):
+    D = A
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                D[i][j] = min(D[i][j], D[i][k] + D[k][j])
 
-        return D
+    return D
 \end{minted}
 
 The idea of the algorithm is to check first if we can get from $i$ to $j$ directly, by using no other edges, then we check if by adding a vertex $k$ we can get a shorter path, therefore we need to check all the $i, j$ to see if the old result is better than the new one.

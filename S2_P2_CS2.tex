@@ -755,13 +755,9 @@ Fortunately we can do much better: we can use BFS to find the path.
 % Class of 16/04/2024
 \section{Linear programming}
 
-This probably explains it better:
-\url{https://www.youtube.com/watch?v=E72DWgKP_1Y}
-
-
 Consider an industry that produces $n$ products.
-Each product sells for some price $p_1, \ldots, p_n$, therefore the total profit is $z = x_1 p_1 + \dots + x_n p_n$.
-We are also given $c$ constraints, for example the machinery available, given as the form of some other linear functions $l_i(x_1, \ldots, x_n)$ for $i = 1, \ldots, c$.
+Each product sells for some price $c_1, \ldots, c_n$, therefore the total profit is $z = x_1 c_1 + \dots + x_n c_n$.
+We are also given $c$ constraints, for example the machinery available, given as the form of some other linear functions $l_i(x_1, \ldots, x_n)$ for $i = 1, \ldots, k$.
 Moreover, the constraint $x_1, \ldots, x_n \geq 0$ is always present.
 
 By plotting the constraints on a graph we get an area bounded by the constraints given by the problem: this is the space of feasible solutions.
@@ -774,42 +770,47 @@ This whole problem can be expressed in terms of of linear algebra and matrix mul
 
 Consider the following objects:
 \begin{align}
-    \vec x & = \begin{pmatrix}
+    \vec x & = \begin{bmatrix}
                    x_1    \\
                    \vdots \\
                    x_n
-               \end{pmatrix}                        \\
-    \vec p & = \begin{pmatrix}
-                   p_1    \\
+               \end{bmatrix}                        \\
+    \vec c & = \begin{bmatrix}
+                   c_1    \\
                    \vdots \\
-                   p_n
-               \end{pmatrix}                        \\
-    A      & = \begin{pmatrix}
+                   c_n
+               \end{bmatrix}                        \\
+    A      & = \begin{bmatrix}
                    a_{1,1} & \dots  & a_{1, n} \\
                    \vdots  & \ddots & \vdots   \\
-                   a_{c,1} & \dots  & a_{c, n} \\
-               \end{pmatrix} \label{eq:linear:a_mat} \\
-    \vec b & = \begin{pmatrix}
+                   a_{k,1} & \dots  & a_{k, n} \\
+               \end{bmatrix} \label{eq:linear:a_mat} \\
+    \vec b & = \begin{bmatrix}
                    b_1    \\
                    \vdots \\
-                   b_c
-               \end{pmatrix} \label{eq:linear:b_vec}
+                   b_k
+               \end{bmatrix} \label{eq:linear:b_vec}
 \end{align}
 where \autoref{eq:linear:a_mat} is the matrix containing the coefficient each constraint function $i = 1, \ldots, c$, we can do this because constraint are always linear functions;
 \autoref{eq:linear:b_vec} is the vector of the actual constraint, each constraint $l_i(\vec{x}) \leq b_i$.
+Each constraint can be written as
+\begin{equation}
+    \label{eq:linear:constraint}
+    l_i: a_{i1} x_1 + \dots + a_{in} x_n \leq b_i
+\end{equation}
 
 Then the problem can be rewritten as
 \begin{equation}
-    \max \vec p^T \vec x \quad \text{s.t.} \enspace A \vec x \leq \vec b, \vec x \geq 0
+    \max \vec c^T \vec x \quad \text{s.t.} \enspace A \vec x \leq \vec b, \vec x \geq 0
 \end{equation}
 
 \subsubsection{Slack variables}
 
 We can simplify the problem even further by substituting the inequalities with equalities:
-we introduce the slack vector $\vec s = (s_1, \ldots, s_c)$ which contains a value for each constraint function.
+we introduce the slack vector $\vec s = (s_1, \ldots, s_k)$ which contains a value for each constraint function.
 For each $l_i$ we write
 \begin{equation}
-    l_i: \lambda_1 x_1 + \dots + \lambda_n x_n + s_i = b_i
+    l_i: a_{i1} x_1 + \dots + a_{in} x_n + s_i = b_i
 \end{equation}
 
 \subsection{Ideas}
@@ -821,13 +822,16 @@ Note that we will not be asked to solve this problem manually, but instead to re
 \subsubsection{Bruteforce approach}
 
 We can just solve the linear system in each intersection and then take the maximum between all those values.
-While this works this is not efficient at all since there are $\binom{c+n}{n}$ intersections we would have to do this $\O(2^{c+n})$ times.
+While this works this is not efficient at all since there are $\binom{k+n}{n}$ intersections we would have to do this $\O(2^{k+n})$ times.
 
 \subsubsection{Simplex algorithm}
 
 In this algorithm we will exploit the fact that the feasible set is convex to \say{go around} the intersections and we will stop when we should \say{go down}.
 
 \subsection{Simplex algorithm}
+
+This probably explains it better:
+\url{https://www.youtube.com/watch?v=E72DWgKP_1Y}
 
 First we rewrite the constraint as equations using slack variables.
 Then we set all the $x_i = 0$ and the slack variables to the right amount to satisfy the equations.
@@ -837,5 +841,33 @@ We proceed by choosing between the $x_i$s the one with the larger $p_i$ and we a
 Then we continue by choosing another variable in the equation we want to max:
 if all the variables in such equation have negative coefficient then the algorithm is done and the solution is optimal;
 otherwise we repeat the steps with another variable with positive coefficient.
+
+% 19/04/2024
+\subsection{Duality}
+
+Consider the constraints $l_i$: if we do Gauss transformations on those equations we are able to obtain upper bounds for $z$.
+We will show a method to find the Gauss transformations needed to get the least upper bound.
+
+With the notation of \autoref{eq:linear:constraint}, let $y_1, \ldots, y_k > 0$ be the coefficient of each $l_i$ and then sum up all the inequalities:
+\begin{equation}
+    \vec x (\vec a_1 y_1 + \dots + \vec a_k y_k) \leq b_1 y_1 + \dots + b_n y_n
+\end{equation}
+
+Then we actually created a new linear programming problem, in fact we will now want to minimize $b_1 y_1 + \dots + b_n y_n$ such that
+the coefficient of each $x_i \geq k_i$.
+We have can now use some fancy linear algebra to rearrange this situation as a new minimization problem of the form of
+\begin{equation}
+    \min \vec y^T \vec b \quad \text{s.t.} \enspace A \vec y^T \geq \vec k, \vec y \geq 0
+\end{equation}
+
+We call this problem the \emph{dual}, while the original one is the \emph{primal}.
+
+\subsubsection{Why would I want to use this?}
+
+We will use this method to solve problems that have 3 variables and 2 constraint (which we are not able to solve graphically).
+In the dual though we get a problem with 2 variables and 3 constraint that we are able to solve graphically without using the simplex algorithm.
+
+Moreover, some algorithms use the fact that these problems are linked to get the solution faster:
+they might for example partially solve both the primal and the dual and combine the solution in some clever way in order to get the optimal solution.
 
 \end{document}

@@ -83,9 +83,10 @@ It is easy to see that the time complexity of this algorithm is $\O(nL)$ as we a
 \subsection*{Exercise 2}
 
 \begin{enumerate}
-    \item The maximum flow is 5 and one of the minimum cuts is $\left(\{T, F\}, \{S, B, E, C\}\right)$;
-    \item No, we can find also $\left(\{T\}, \{S, B, E, C,F\}\right)$ and $\left(\{T,  E, C,F\}, \{S, B\}\right)$ for example which also have capacity 5; \label{2:point_2}
-    \item No. Consider the two cuts presented in point \ref{2:point_2}: the $\delta^+$ of these cuts have no intersection, therefore even if we were to increase the capacity of one one of these cuts the other would still bound the maximum flow to 5.
+    \item The maximum flow is 5 and one of the minimum cuts is $U = \{S, B, E, C\}$. It is enough to specify the vertices in one of the partitions of the graph as the other will be $V\setminus U = \{T, F\}$;
+    \item No, we can find also $U_1 = \{S, B, E, C,F\}$ and $U_2 = \{S, B\}$ for example which also have capacity 5; \label{2:point_2}
+    \item No. Consider the two cuts presented in point \ref{2:point_2}: $\delta^+(U_1) \cap \delta^+(U_1) = \varnothing$, that is, the sets of edges going out of each have no elements in common,
+          therefore even if we were to increase the capacity of one one of these cuts the other would still bound the maximum flow to 5.
 \end{enumerate}
 
 \end{document}

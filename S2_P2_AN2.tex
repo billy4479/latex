@@ -1,13 +1,13 @@
-\documentclass[12pt]{extarticle}
+\documentclass[14pt]{extarticle}
 
 \usepackage{preamble}
 
 \title{Mathematical Analysis 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
 
-\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
+\setlength{\headheight}{17pt} % ??? we do what fancyhdr tells us to do
 
-\renewcommand{\vec}[1]{\underline{\mathbf{#1}}}
+\renewcommand{\vec}[1]{\munderbar{\mathbf{#1}}}
 \newcommand{\Hg}{{\operatorfont Hg}}
 
 \begin{document}
@@ -827,5 +827,95 @@ which can be read as the change of speed times the increase in time, which is wh
 
     That is, a $C^k$-oriented curve is an equivalence class of $(I, \gamma)$ with $\gamma: I \to \R^d$ of class $C^k$.
 \end{definition}
+
+\begin{proposition}
+    If $(I, \gamma)$ and $(J, \omega)$ represent the same $C^1$-oriented curve and if $f: D \subset \R^d \to \R$  is a continuous function with $\Im(\gamma) \subseteq D$, then
+    \begin{equation}
+        \int_\gamma f \dd{s} = \int_\omega f \dd{s}
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    Let $I = [a, b]$, $\varphi: I \to J$ a $C^1$ diffeomorphism such that $\gamma = \omega \circ \varphi$. Then $J = [\varphi(a), \varphi(b)]$.
+    Note that
+    \begin{equation}
+        \gamma'(t) = \varphi'(t)\omega'(\varphi(t))
+    \end{equation}
+
+    We substitute into the integral
+    \begin{align}
+        \int_\gamma f \dd{s} & = \int_a^b f(\gamma (t)) \norm{\gamma'(t)} \dd{t}                                                                                        \\
+                             & =\int_a^b f\left(\omega\left(\varphi (t)\right)\right) \norm{\omega'\left(\varphi(t)\right)} \varphi'(t) \dd{t} \label{eq:path_int:norm} \\
+                             & = \int_{\varphi(a)}^{\varphi(b)} f\left(\omega (r)\right) \norm{\omega'(r)} \dd{r} \label{eq:path_int:change_var}                        \\
+                             & = \int_\omega f \dd{s}
+    \end{align}
+
+    Where in \autoref{eq:path_int:change_var} we performed a change of variable with $r = \varphi(t)$ and $\dd{r} = \varphi'(t) \dd{t}$.
+
+    Moreover, we used the fact that $\varphi'(t) > 0$ both in \autoref{eq:path_int:norm} (in order to take it out of the norm) and when we defined the interval $J$ (otherwise it would be inverted).
+    Note that if $\varphi'(t) < 0$ the result would still be valid since the two minus signs would cancel.
+\end{proof}
+
+\subsubsection{Length of a curve}
+
+\begin{definition}[lentgth of a curve]
+    If $\gamma: I \to \R^d$ of class $C^1$, the length of $\phi$ is
+    \begin{equation}
+        \int_\gamma 1 \dd{s} = \int_I \norm{\gamma'(t)} \dd{t}
+    \end{equation}
+\end{definition}
+
+\begin{lemma}
+    If $(I, \gamma)$ and $(J, \omega)$ represent the same oriented curve they have the same length.
+\end{lemma}
+
+\begin{example}[length of $y = x^2$ between $(0,0)$ and $(1,1)$]
+    Let $\gamma(t) = \begin{pmatrix}
+            t \\ t^2
+        \end{pmatrix}, t \in [0, 1]$,
+    then $\gamma'(t) = \begin{pmatrix}
+            1 \\ 2t
+        \end{pmatrix}$
+    so $\norm{\gamma'(t)} = \sqrt{1+(2t)^2}$.
+    Then the length of $\gamma$ is
+    \begin{align}
+        {\operatorfont length}(\gamma) & = \int_0^1 \sqrt{1 + 4t^2} \dd{t}                                        \\
+                                       & = \frac{1}{2} \int_0^2 \sqrt{1+x^2} \dd{x}                               \\
+                                       & = \frac{1}{2} \int_0^{\sinh^{-1}(2)} \sqrt{1+\sinh^2(u)} \cosh(u) \dd{u} \\
+                                       & = \frac{1}{2} \int_0^{\sinh^{-1}(2)} \cosh^2(u) \dd{u}                   \\
+                                       & = \frac{1}{8} \int_0^{\sinh^{-1}(2)} (e^{2u} + e^{-2u} + 2) \dd{u}       \\
+                                       & = \text{something}
+    \end{align}
+
+    As you can see, shit gets hard.
+\end{example}
+
+\begin{example}[length of ellipse]
+    Let $\gamma(t) = \begin{pmatrix}
+            a \cos (t) \\
+            b \cos (t)
+        \end{pmatrix}, t \in[0, 2\pi]$.
+    Then
+    \begin{equation}
+        {\operatorfont length}(\gamma) = \int_0^{2\pi} \sqrt{(a \sin(t))^2 + (b \cos (t))^2} \dd{t}
+    \end{equation}
+    this is very hard and it's even possible to prove that this integral cannot be expressed with usual functions
+\end{example}
+
+\begin{definition}[normal parametrization]
+    A $C^1$ parametric curve $(I, \gamma)$ has a normal parametrization if $\norm{\gamma'(t)} = 1$ for any $t \in I$.
+\end{definition}
+
+\begin{proposition}
+    Let $(I, \gamma)$ be a $C^k$ parametric curve with $k \geq 1$ such that all points are regular ($\gamma'(t) \neq \vec 0$ for all $t \in I$).
+    Then there exists a $(J, \omega)$ with a normal parametrization representing $\gamma$.
+\end{proposition}
+
+\begin{proof}
+    To simplify let $I = [a, b]$. Let $\varphi(t) = \int_a^t \norm{\gamma'(t)}\dd{t}$ which is the length of the curve between $\gamma(a)$ and $\gamma(t)$.
+    Then $\varphi$ is of class $C^1$ and $\varphi'(t) = \norm{\gamma'(t)} > 0$ and $\varphi$ is a $C^1$ diffeomorphism (it is possible to prove that if $\gamma$ is $C^k$ then also $\varphi$ is $C^k$).
+
+    TODO: complete here
+\end{proof}
 
 \end{document}

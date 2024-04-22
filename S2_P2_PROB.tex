@@ -9,11 +9,11 @@
 
 \newcommand{\cov}{{\operatorfont Cov}}
 % Distributions
-\newcommand{\Normal}{{\operatorfont Normal}}
+\newcommand{\Normal}{{\operatorfont N}}
 \newcommand{\GammaD}{{\operatorfont Gamma}}
 \newcommand{\Poisson}{{\operatorfont Poisson}}
 \newcommand{\Exponential}{{\operatorfont Exponential}}
-\newcommand{\BivariateNormal}{{\operatorfont BivariateNormal}}
+\newcommand{\BivariateNormal}{{\operatorfont BivariateN}}
 
 \renewcommand{\vec}[1]{\munderbar{\bm{#1}}}
 
@@ -466,7 +466,7 @@ The exponential distribution is related to some discrete distributions:
 \begin{itemize}
     \item Similarly to the geometric distribution, the exponential distribution is \emph{memoryless}, that is
           \begin{equation}
-              P(X > x + z | X > z) = P(X > x)
+              P(X > x + z \mid X > z) = P(X > x)
           \end{equation}
 
           We can also prove that the exponential distribution is the continuous counterpart of the geometric distribution.
@@ -979,35 +979,35 @@ in \autoref{eq:bivariate:2} we let $W \sim \Normal(0,1)$ then we recognize the i
 \begin{definition}[conditional probability]
     We define the conditional pdf as
     \begin{equation}
-        f_{Y | X}(y | x) = \frac{f_{X, Y}(x, y)}{f_X(x)} \label{eq:joint:conditioning}
+        f_{Y \mid X}(y \mid x) = \frac{f_{X, Y}(x, y)}{f_X(x)} \label{eq:joint:conditioning}
     \end{equation}
 \end{definition}
 
 This is similar to the definition in the discrete case, but now we need to pass to the limit:
 \begin{equation}
-    f_{Y|X}(y|x) = \lim_{\substack{\Delta x \to 0 \\ \Delta y \to 0}} \frac{P\left(y \leq Y \leq y + \Delta y \big| x \leq X \leq x + \Delta x\right)}{\Delta y}
+    f_{Y \mid X}(y\ mid x) = \lim_{\substack{\Delta x \to 0 \\ \Delta y \to 0}} \frac{P\left(y \leq Y \leq y + \Delta y \bigm| x \leq X \leq x + \Delta x\right)}{\Delta y}
 \end{equation}
 this can be proven by substituting the definition of $f_{X, Y}(x,y)$ and $f_X(x)$ in \autoref{eq:joint:conditioning}.
 
 % Class of 12/04/24
 
-As we saw in the discrete case \autoref{eq:joint:conditioning} is a pdf as it respects $f_{Y|X}(y | x) \geq 0$ and $\int f_{Y|X}(y|x) \dd{y}$.
+As we saw in the discrete case \autoref{eq:joint:conditioning} is a pdf as it respects $f_{Y \mid X}(y \mid x) \geq 0$ and $\int f_{Y \mid X}(y \mid x) \dd{y}$.
 Note that this is a function of $y$ only, as $x$ is fixed.
 
 Then we have
 \begin{equation}
-    P(Y \in A | X = x) = \int_A f_{Y|X}(y|x) \dd{y}
+    P(Y \in A \mid X = x) = \int_A f_{Y \mid X}(y \mid x) \dd{y}
 \end{equation}
 and we can calculate the conditional cdf of $Y$ given $X = x$ as
 \begin{equation}
-    P(Y \leq y | X = x) = \int_{-\infty}^y f_{Y|X}(u|x) \dd{u}
+    P(Y \leq y  \mid  X = x) = \int_{-\infty}^y f_{Y \mid X}(u \mid x) \dd{u}
 \end{equation}
 
 \subsubsection{Conditional expectation and variance}
 
 \begin{definition}[conditional expectation]
     \begin{equation}
-        E(Y|X = x) = \int y f_{Y | X}(y | x) \dd{y} = m_Y(x)
+        E(Y \mid X = x) = \int y f_{Y  \mid  X}(y  \mid  x) \dd{y} = m_Y(x)
     \end{equation}
     where by $m_Y(x)$ we mean the regression function of $Y$ over $X$, which is a random variable.
 \end{definition}
@@ -1015,8 +1015,8 @@ and we can calculate the conditional cdf of $Y$ given $X = x$ as
 \begin{theorem}[properties of conditional expectation]
     \label{thm:condition:prop_expectation}
     \begin{align}
-         & E(E(Y|X)) = E(Y) \label{eq:joint:expectation_1}         \\
-         & E(g(X)E(Y|X)) = E(g(X)Y) \label{eq:joint:expectation_2}
+         & E(E(Y \mid X)) = E(Y) \label{eq:joint:expectation_1}         \\
+         & E(g(X)E(Y \mid X)) = E(g(X)Y) \label{eq:joint:expectation_2}
     \end{align}
 \end{theorem}
 
@@ -1025,11 +1025,11 @@ and we can calculate the conditional cdf of $Y$ given $X = x$ as
     \begin{enumerate}[label=\roman*.]
         \item (\autoref{eq:joint:expectation_1})
               \begin{align}
-                  E(E(Y|X)) & = E(m_Y(X))                                 \\
-                            & = \int m_Y(x) f_X(x) \dd{x}                 \\
-                            & = \iint y f_{Y|X}(y|x) \dd{y} f_X(x) \dd{x} \\
-                            & = \iint y f_{X, Y}(x, y) \dd{x} \dd{y}      \\
-                            & = E(Y)
+                  E(E(Y \mid X)) & = E(m_Y(X))                                           \\
+                                 & = \int m_Y(x) f_X(x) \dd{x}                           \\
+                                 & = \iint y f_{Y \mid X}(y \mid x) \dd{y} f_X(x) \dd{x} \\
+                                 & = \iint y f_{X, Y}(x, y) \dd{x} \dd{y}                \\
+                                 & = E(Y)
               \end{align}
         \item (\autoref{eq:joint:expectation_2}) The proof is basically the same as above.
     \end{enumerate}
@@ -1037,7 +1037,7 @@ and we can calculate the conditional cdf of $Y$ given $X = x$ as
 
 \begin{definition}[conditional variance]
     \begin{equation}
-        V(Y | X = x) = v_Y(x) = \int \left(y - m_Y(x) \right)^2 f_{Y|X}(y|x) \dd{y}
+        V(Y  \mid  X = x) = v_Y(x) = \int \left(y - m_Y(x) \right)^2 f_{Y \mid X}(y \mid x) \dd{y}
     \end{equation}
 \end{definition}
 
@@ -1045,32 +1045,32 @@ and we can calculate the conditional cdf of $Y$ given $X = x$ as
     \skiplineafterproof
     \begin{enumerate}[label=\roman*.]
         \item \begin{equation}
-                  V(Y|X) = E(Y^2 | X) - E\left((Y|X)\right)^2
+                  V(Y \mid X) = E(Y^2  \mid  X) - E\left((Y \mid X)\right)^2
               \end{equation}
 
         \item (variance decomposition)
               \begin{equation}
-                  V(Y) = E(V(Y|X)) + V(E(Y|X))
+                  V(Y) = E(V(Y \mid X)) + V(E(Y \mid X))
               \end{equation}
     \end{enumerate}
 \end{theorem}
 
 \begin{example}[bivariate normal distribution]
-    Given $(X, Y) \sim \BivariateNormal$ we want to compute $f_{Y|X}(y|x)$.
+    Given $(X, Y) \sim \BivariateNormal$ we want to compute $f_{Y \mid X}(y \mid x)$.
 
     As we saw, we can factorize the marginal pdf from the joint pdf of a bivariate normal.
     Then, by the definition of conditional probability we have that
     \begin{equation}
-        f_{Y|X}(y|x) = \frac{1}{\sqrt{2 \pi} \sigma_Y \sqrt{1-\rho^2}} e^{-\frac{1}{2(1-\rho^2)}\left( \frac{y-\mu_y}{\sigma_Y} - \rho \frac{x-\mu_X}{\sigma_X} \right)^2}
+        f_{Y \mid X}(y \mid x) = \frac{1}{\sqrt{2 \pi} \sigma_Y \sqrt{1-\rho^2}} e^{-\frac{1}{2(1-\rho^2)}\left( \frac{y-\mu_y}{\sigma_Y} - \rho \frac{x-\mu_X}{\sigma_X} \right)^2}
     \end{equation}
     which we can recognize as the pdf of a normal distribution:
     \begin{equation}
-        Y|X \sim \Normal\left(\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X), \sigma_Y^2\left(1-\rho^2\right)\right)
+        Y \mid X \sim \Normal\left(\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X), \sigma_Y^2\left(1-\rho^2\right)\right)
     \end{equation}
 
     Moreover, the regression function is linear:
     \begin{equation}
-        m_Y(x) = E(Y|X = x) = \mu_Y + \rho \frac{\sigma_Y}{\sigma_X} (x - \mu_X)
+        m_Y(x) = E(Y \mid X = x) = \mu_Y + \rho \frac{\sigma_Y}{\sigma_X} (x - \mu_X)
     \end{equation}
     and the conditional variance is
     \begin{equation}
@@ -1138,23 +1138,23 @@ we have to choose $W$ in such a way that helps us do the calculations.
 % Class of 17/04/2024
 \subsection{Mixing continuous and discrete}
 
-Consider the case in which we know $f_X(x)$ and $f_{Y|X}(y|x)$.
+Consider the case in which we know $f_X(x)$ and $f_{Y \mid X}(y \mid x)$.
 Then we can write the joint probability as
 \begin{equation}
-    P(X\in A, Y \in B) = \int_A f_X(x) \left[\int_B f_{Y|X}(y|x) \dd{y} \right] \dd{x} = \int_A f_X(x) P(Y\in B| X = x)
+    P(X\in A, Y \in B) = \int_A f_X(x) \left[\int_B f_{Y \mid X}(y \mid x) \dd{y} \right] \dd{x} = \int_A f_X(x) P(Y\in B \mid  X = x)
 \end{equation}
 just by applying the definition of conditioning and Fubini's theorem.
 
 Applying the same reasoning we can get that this result holds even in the case of a general surface $C$, therefore
 \begin{equation}
-    P((X, Y) \in C) = \int P(Y \in C_x | X = x) f_X(x) \dd{x}
+    P((X, Y) \in C) = \int P(Y \in C_x  \mid  X = x) f_X(x) \dd{x}
 \end{equation}
-where $P(Y \in C_x | X = x) = P((X, Y) \in C | X = x)$.
+where $P(Y \in C_x  \mid  X = x) = P((X, Y) \in C  \mid  X = x)$.
 
-This holds even if $Y|X = x$ is discrete and $X$ is continuous (\autoref{eq:mixing:x_cont}), or if $X$ is discrete and $Y|X = x$ is continuous (\autoref{eq:mixing:x_disc}).
+This holds even if $Y \mid X = x$ is discrete and $X$ is continuous (\autoref{eq:mixing:x_cont}), or if $X$ is discrete and $Y \mid X = x$ is continuous (\autoref{eq:mixing:x_disc}).
 \begin{align}
-    P(X \in A, Y \in B) & = \int_A \left[\sum_{y \in B} f_{Y | X}(y| x)\right] f_X(x) \dd{x} \label{eq:mixing:x_cont} \\
-    P(X \in A, Y \in B) & = \sum_{x \in A} \left[ \int_B f_{Y|X}(y|x) \dd{y} \right] f_X(x) \label{eq:mixing:x_disc}
+    P(X \in A, Y \in B) & = \int_A \left[\sum_{y \in B} f_{Y  \mid  X}(y \mid  x)\right] f_X(x) \dd{x} \label{eq:mixing:x_cont} \\
+    P(X \in A, Y \in B) & = \sum_{x \in A} \left[ \int_B f_{Y \mid X}(y \mid x) \dd{y} \right] f_X(x) \label{eq:mixing:x_disc}
 \end{align}
 
 Moreover, the proprieties of the conditional expectation (\autoref{thm:condition:prop_expectation}) are still valid in both cases.
@@ -1294,7 +1294,7 @@ Its expectation is
 
 \subsubsection{Multivariate normal distribution}
 
-We write $\Normal(\vec \mu, \Sigma)$, where $\vec \mu \in \R^d$ and $\Sigma$ is a $k \times k$ matrix.
+We write $\Normal(\vec \mu, \Sigma)$, where $\vec \mu \in \R^d$ and $\Sigma$ is a positive definite, symmetric $k \times k$ matrix.
 
 The pdf of this distribution is
 \begin{equation}
@@ -1327,6 +1327,68 @@ that is, $X_1, \ldots, X_k \indep$ and $X_i \sim \Normal(0,1)$.
                            & = \frac{1}{\sqrt{(\det \Sigma)(\det A)(\det A)}} e^{-\frac{1}{2}(A^{-1}(\vec y - \vec b) - \vec \mu)^T \Sigma^{-1} (A^{-1}(\vec y - \vec b) - \vec \mu)} \frac{1}{\abs{\det A}}      \\
                            & = \frac{1}{\sqrt{\det(A \Sigma A^T)}} e^{-\frac{1}{2}(A^{-1}(\vec y - \vec b) - \vec \mu)^T (A \Sigma A^T)^{-1} (\vec y - \vec b) - \vec \mu)}
     \end{align}
+\end{proof}
+
+\begin{proposition}[properties of the multivariate normal]
+    \label{prop:multivariate:prop}
+    Define $\begin{bmatrix} \vec X \\ \vec Y \end{bmatrix}$ as
+    \begin{equation}
+        \begin{bmatrix}
+            \vec X \\ \vec Y
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            X_1 \\ \vdots \\ X_k \\ Y_1 \\ \vdots\\ Y_j
+        \end{bmatrix}
+        \sim \Normal\left(
+        \begin{bmatrix}
+            \vec \mu_x \\ \vec \mu_y
+        \end{bmatrix},
+        \begin{bmatrix}
+            \Sigma_{XX} & \Sigma_{XY} \\
+            \Sigma_{YX} & \Sigma_{YY}
+        \end{bmatrix}
+        \right)
+    \end{equation}
+
+    We give the following properties without proof:
+    \begin{enumerate}[label=\roman*.]
+        \item \begin{align}
+                  X & \sim \Normal(\vec \mu_x, \Sigma_{XX}) \\
+                  Y & \sim \Normal(\vec \mu_y, \Sigma_{YY})
+              \end{align}
+        \item \begin{equation}
+                  \left( \vec Y \mid \vec X = \vec x \right) \sim \Normal \left( \vec \mu_Y + \Sigma_{YX} \Sigma_{XX}^{-1}(\vec x - \vec \mu x), \Sigma_{YY} \Sigma_{YX} \Sigma_{XX}^{-1} \Sigma_{XY} \right)
+              \end{equation}
+    \end{enumerate}
+\end{proposition}
+
+\begin{proposition}
+    Let $\vec X \sim \Normal(\vec \mu, \Sigma)$ of length $k$ and $Y = A \vec X + \vec b$ where $A$ is a non-singular $k \times h$ matrix with $h < k$.
+    Then
+    \begin{equation}
+        \vec Y \sim \Normal(A \vec \mu + \vec b, A \Sigma A^T)
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    Since the first $h$ rows are linearly independent we can construct a space of dimension $k$ and complete the matrix with rows $k-h$ such that all of the rows are independent.
+
+    Then we can write
+    \begin{equation}
+        \begin{bmatrix}
+            \vec Y \\ \vec W
+        \end{bmatrix} =
+        \begin{bmatrix}
+            A \\ B
+        \end{bmatrix} \vec X +
+        \begin{bmatrix}
+            \vec b \\ \vec o
+        \end{bmatrix}
+    \end{equation}
+    such that $\begin{bmatrix}
+            A \\ B
+        \end{bmatrix}$ is non-singular and applying \autoref{prop:multivariate:prop} we get the result.
 \end{proof}
 
 \end{document}

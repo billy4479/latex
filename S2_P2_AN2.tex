@@ -741,7 +741,7 @@ Let $f: D \subseteq \R^2 \to \R$ and $\varphi: U \subseteq \R^2 \to \R^2$ be a b
     \iint_D f(x, y) \dd{x} \dd{y} = \iint_U f(\varphi(u, v)) \abs{\det J_{\varphi}(u, v)} \dd{u} \dd{v}
 \end{equation}
 
-A common change of variables is to polar coordinates, where we have $\varphi(r, \theta) = (r \cos \theta, r \sin \theta)$, and $\det J_{\varphi}(r, \theta) = r$.
+A common change of variables is to polar coordinates, where we have $\varphi(r, \theta) = (r \cos \theta, \allowbreak r \sin \theta)$, and $\det J_{\varphi}(r, \theta) = r$.
 
 % Class of 18/04/2024
 
@@ -829,6 +829,7 @@ which can be read as the change of speed times the increase in time, which is wh
 \end{definition}
 
 \begin{proposition}
+    \label{prop:path_int:scalar_indep_speed}
     If $(I, \gamma)$ and $(J, \omega)$ represent the same $C^1$-oriented curve and if $f: D \subset \R^d \to \R$  is a continuous function with $\Im(\gamma) \subseteq D$, then
     \begin{equation}
         \int_\gamma f \dd{s} = \int_\omega f \dd{s}
@@ -916,6 +917,138 @@ which can be read as the change of speed times the increase in time, which is wh
     Then $\varphi$ is of class $C^1$ and $\varphi'(t) = \norm{\gamma'(t)} > 0$ and $\varphi$ is a $C^1$ diffeomorphism (it is possible to prove that if $\gamma$ is $C^k$ then also $\varphi$ is $C^k$).
 
     TODO: complete here
+\end{proof}
+
+\subsection{Vector fields}
+
+\begin{definition}[path integrals of a vector field]
+    \label{def:path_int:vec_field}
+    Let $f: D \subseteq \R^d \to \R^d$ be a continuous vector field, $\gamma: I \subseteq \R \to \R^d$ of class $C^1$ with $\gamma(I) \subseteq D$, where $I = [a, b]$.
+    Then we define
+    \begin{equation}
+        \int_\gamma f \cdot \dd{\vec{s}} = \int_a^b f(\gamma(t)) \cdot \gamma'(t) \dd{t}
+    \end{equation}
+\end{definition}
+
+\begin{remark}
+    By expanding the dot product we get
+    \begin{equation}
+        \int_\gamma f \cdot \dd{\vec{s}} = \sum_{i = 0}^d \int_a^b f_i(\gamma(t))\gamma_i'(t) \dd{t}
+    \end{equation}
+\end{remark}
+
+\begin{proposition}
+    Let $f, \gamma$ as in \autoref{def:path_int:vec_field}.
+    Let $t_0 = a, t_1, \dots, t_N = b$ be a partition of $[a, b]$ with constant time step.
+    Then
+    \begin{equation}
+        \int_\gamma f \cdot \dd{\vec s} = \lim_{N \to \infty} \sum_{i = 0}^{N -1} f(\gamma(t_i)) \cdot \left( \gamma(t_{i+1} - \gamma_{t_i}) \right)
+    \end{equation}
+\end{proposition}
+
+\begin{remark}
+    In physics we could have that $f$ is a force, $\gamma$ is the position, and the path integral is the work of the force.
+\end{remark}
+
+\begin{proposition}
+    Let $f: D \subseteq \R^d \to \R^d$, with $f$ of class $C^0$.
+    Let $(I, \gamma)$, $(J, \omega)$ representing the same $C^1$-oriented curve with $\gamma(I) \subseteq D$.
+    Then
+    \begin{equation}
+        \int_\gamma f \cdot \dd{\vec s} = \int_\omega f \cdot \dd{\vec s}
+    \end{equation}
+\end{proposition}
+
+\begin{remark}
+    The orientation of $\gamma$ and $\omega$ matters: if the orientation is different the sign of the integral will be different.
+\end{remark}
+
+\begin{proof}
+    This is just an adaptation of the proof of \autoref{prop:path_int:scalar_indep_speed}.
+\end{proof}
+
+\begin{proposition}[triangle inequality for path integrals]
+    \label{prop:path_int:triangle_ineq}
+    Let $f, \gamma$ as in \autoref{def:path_int:vec_field}, then
+    \begin{equation}
+        \abs{\int_\gamma f \cdot \dd{\vec s}} = \leq \int_\gamma \norm{f} \dd{s} \leq {\operatorfont Length}(\gamma) \sup_D \norm{f}
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    \begin{align}
+        \abs{\int_\gamma f \cdot \dd{\vec s}} & = \abs{\int_a^b f(\gamma(t)) \cdot \gamma'(t) \dd{t}}                                          \\
+                                              & \leq \int_a^b \abs{f(\gamma(t)) \cdot \gamma'(t) \dd{t}} \label{eq:path_int:triangle_triangle} \\
+                                              & \leq \int_a^b \norm{f(\gamma(t))} \norm{\gamma'(t)} \dd{t} \label{eq:path_int:triangle_cauchy} \\
+                                              & \leq \sup_D \norm{f} \int_a^b \norm{\gamma'(t)} \dd{t} \label{eq:path_int:triangle_bound}
+    \end{align}
+    where in \autoref{eq:path_int:triangle_triangle} we used the triangle inequality for integrals, in \autoref{eq:path_int:triangle_cauchy} we used Cauchy-Schwartz inequality, and in \autoref{eq:path_int:triangle_bound} we bounded $\norm{f(\gamma(t))}$ by $\sup_D \norm{f}$.
+\end{proof}
+
+\begin{theorem}[fundamental theorem of calculus for path integrals]
+    Let $g: D \subseteq \R^d \to \R$, with $D$ open and $g$ of class $C^1$.
+    Let $\gamma: I \subseteq \R \to \R^d$, with $I = [a, b]$, $\gamma$ of class $C^1$ and $\gamma(I) \subseteq D$
+    Then
+    \begin{equation}
+        \int_\gamma \nabla g \cdot \dd{\vec s} = g(\gamma(b))-g(\gamma(a))
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    \begin{align}
+        \int_\gamma g \cdot \dd{\vec s} & = \int_a^b \nabla g(\gamma(t)) \cdot \gamma'(t) \dd{t}                                                \\
+                                        & = \int_a^b h'(t) \dd{t} \quad \text{where } h(t) = g(\gamma(t)) \label{eq:path_int:fundamental_chain} \\
+                                        & = h(b) - h(a) \label{eq:path_int:fundamental_fundamental}                                             \\
+                                        & = g(\gamma(b)) - g(\gamma(a))
+    \end{align}
+    where in \autoref{eq:path_int:fundamental_chain} we applied the chain rule, and in \autoref{eq:path_int:fundamental_fundamental} we applied the fundamental theorem of calculus for 1D integrals.
+\end{proof}
+
+\begin{corollary}
+    If $\gamma$ is a closed curve, that is $\gamma(a) = \gamma(b)$, then
+    \begin{equation}
+        \int_\gamma \nabla g \cdot \dd{\vec s} = 0
+    \end{equation}
+
+    If this condition holds we can let $f = \nabla g$ and we say that $f$ is a \emph{gradient field}.
+\end{corollary}
+
+\begin{proof}
+    As $\gamma(a) = \gamma(b)$ then $g(\gamma(b)) - g(\gamma(a)) = 0$.
+\end{proof}
+
+\begin{corollary}
+    If $g: D \subseteq \R^d \to \R$, with $g$ of class $C^1$ and $\sup_D \norm{\nabla g} < +\infty$ and $D$ convex then $g$ is Lipchitz:
+    \begin{equation}
+        \abs{g(\vec y) - g(\vec x)} \leq L \norm{\vec x - \vec y} \quad \text{with } L = \sup_D \norm{\nabla g}
+    \end{equation}
+\end{corollary}
+
+\begin{proof}
+    Let $\gamma$ be a parametrization of the straight line from $\vec x$ to $\vec y$.
+    Then $g(\vec y) - g(\vec x) = \int_\gamma \nabla g \cdot \dd{\vec s}$
+    So
+    \begin{equation}
+        \abs{g(\vec y) - g(\vec x)} = \abs{\int_\gamma \nabla g \cdot \dd{\vec s}} \leq L \cdot {\operatorfont Length}(\gamma) = \norm{\vec x - \vec y}
+    \end{equation}
+    by \autoref{prop:path_int:triangle_ineq}.
+\end{proof}
+
+\begin{lemma}
+    Let $f$ be a constant function equal to $\vec u \in \R^d$.
+    Then for any $\gamma$ of class $C^1$, $\gamma: [a, b] \to \R^d$,
+    \begin{equation}
+        \int_\gamma f \cdot \dd{\vec s} = \vec u \cdot (\gamma(b) - \gamma(a))
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    We have that $f: \vec x \mapsto \vec u$ so $f = \nabla g$ with $g: \vec x \mapsto \vec u \cdot \vec x$.
+    Then
+    \begin{equation}
+        \int_\gamma f \cdot \dd{\vec s} = g(\gamma(b)) - g(\gamma(a)) = \vec u \cdot \gamma(b) - \vec u \gamma(a) = \vec u \cdot (\gamma(b) - \gamma(a))
+    \end{equation}
+
+    Note that we had to find the right $g$ such that the vector field is the gradient of this potential $g$.
 \end{proof}
 
 \end{document}

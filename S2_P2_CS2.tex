@@ -857,7 +857,7 @@ Then we actually created a new linear programming problem, in fact we will now w
 the coefficient of each $x_i \geq k_i$.
 We have can now use some fancy linear algebra to rearrange this situation as a new minimization problem of the form of
 \begin{equation}
-    \min \vec y^T \vec b \quad \text{s.t.} \enspace A \vec y^T \geq \vec k, \vec y \geq 0
+    \min \vec y^T \vec b \quad \text{s.t.} \enspace \vec y^T A \geq \vec c^T, \vec y \geq 0
 \end{equation}
 
 We call this problem the \emph{dual}, while the original one is the \emph{primal}.
@@ -869,5 +869,75 @@ In the dual though we get a problem with 2 variables and 3 constraint that we ar
 
 Moreover, some algorithms use the fact that these problems are linked to get the solution faster:
 they might for example partially solve both the primal and the dual and combine the solution in some clever way in order to get the optimal solution.
+
+\subsubsection{Duality theorems}
+
+\begin{theorem}[weak duality]
+    For any pair $\vec x, \vec y$ of feasible solutions to the primal and the dual we have $\vec c^T \vec x \leq \vec y^T \vec b$.
+\end{theorem}
+
+\begin{proof}
+    Since $\vec y$ is a feasible solution to the dual then $\vec y^T A \geq \vec c^T$.
+    Since $\vec x \geq \vec 0$ we can multiply the above equation to get
+    \begin{equation}
+        \vec y^T A \vec x \geq \vec c^T \vec x
+    \end{equation}
+
+    But $\vec x$ is a solution to the primal, which means that $A \vec x \leq \vec b$, and since $\vec y \geq \vec 0$ we can multiply by $\vec y^T$ to get
+    \begin{equation}
+        \vec y^T A \vec x \leq \vec y^T \vec b
+    \end{equation}
+
+    Then by combining the two inequalities we get
+    \begin{equation}
+        \vec c^T \vec x \leq \vec y^T A \vec x \leq \vec y^T \vec b
+    \end{equation}
+\end{proof}
+
+\begin{theorem}
+    If the optimal value in the primal is $+\infty$ then the dual must be infeasible.
+    If the optimal value in the dual is $-\infty$ then the primal must be infeasible.
+\end{theorem}
+
+\begin{theorem}[strong duality]
+    \label{thm:linear:strong_duality}
+    The dual has an optimal solution if and only if the primal does.
+    If $\vec x^*$ and $\vec y^*$ are optimal solutions for the primal and the dual then
+    \begin{equation}
+        \vec c^T \vec x^* = \left(\vec y^*\right)^T \vec b
+    \end{equation}
+\end{theorem}
+
+\subsection{Sensitivity}
+
+Suppose we have a linear problem and we want to see how the result changes when we add a $\vec \Delta$ to $\vec b$.
+
+Let $z(0)$ be the solution to the initial problem and $z(\Delta)$ be the solution to the new problem.
+Suppose that the solution ot the primal and the dual exist and are unique.
+
+If $\vec \Delta$ is \say{small enough} the optimal solution to the dual does not change and the optimal value changes by
+\begin{equation}
+    z(\Delta) - z(0) = \vec y^T \vec b + \vec y^T \vec \Delta - \vec y^T \vec b = \vec y^T \vec \Delta
+\end{equation}
+which means that $\vec y^T$ has somewhat the same meaning of the derivative.
+
+\begin{theorem}[complementrary slackness]
+    Let $\vec x$ and $\vec y$ be feasible solutions to the primal and the dual.
+    Then $\vec x$ and $\vec y$ are optimal if and only if
+    \begin{equation}
+        \vec y^T (\vec b - A \vec x) = 0 \quad \text{and} \quad (\vec y^T A - \vec c^T) \vec x = 0
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Since the solutions are feasible we have that $\vec y^T (\vec b - A \vec x) \geq 0$ and $(\vec y^T A - \vec c^T) \vec x \geq 0$.
+    By summing the inequalities we get
+    \begin{equation}
+        \vec y^T \vec b - \cancel{\vec y^T A} \vec x + \cancel{\vec y^T A \vec x} - \vec c^T \vec x \geq 0
+    \end{equation}
+
+    But by \autoref{thm:linear:strong_duality} $\vec y^T \vec b = \vec c^T \vec x$, that is $\vec y^T \vec b - \vec c^T \vec x = 0$.
+    Moreover, since both $\vec y^T \vec b \geq 0$ and $-\vec c^T \vec x \geq 0$ the only way that their sum is $0$ is that they are both $0$.
+\end{proof}
 
 \end{document}

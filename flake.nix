@@ -13,9 +13,6 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in {
       devShells.default = pkgs.mkShell {
-        packages = with pkgs; [
-          act
-        ];
         nativeBuildInputs = with pkgs; [
           texliveFull # TODO: This can probably be reduced
 

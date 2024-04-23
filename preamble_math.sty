@@ -43,6 +43,8 @@
 \def\munderbar#1{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
 \makeatother
 
+\newcommand{\uvec}[1]{\munderbar{\bm{#1}}}
+
 % I don't really like the `plain` style, I use `definition` even for theorems
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[section]

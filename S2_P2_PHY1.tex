@@ -8,8 +8,9 @@
 
 \setlength{\headheight}{17pt} % ??? we do what fancyhdr tells us to do
 
-% Redefine it as it got deprecated
-\DeclareSIUnit\angstrom{Å}
+% Units
+\DeclareSIUnit\angstrom{Å} % Redefine it as it got deprecated
+\DeclareSIUnit\atm{atm}
 
 \newcommand{\anglebraces}[1]{
     \langle #1 \rangle
@@ -843,8 +844,92 @@ and we can calculate the pressure as
 \end{align}
 where $U$ is the internal energy. We then get the famous relationship
 \begin{equation}
+    \label{eq:gas:internal_energy}
     pV = \frac{2}{3}U
 \end{equation}
+
+\section{Thermodynamics}
+
+If we consider a moving box with some gas inside we can write the velocity of a particle as
+\begin{equation}
+    \vec v^{\text{(particle)}} = \vec c_{\text{CM}} + \vec u
+\end{equation}
+where $\vec u$ is the maxwell-distributed velocity relative to the center of mass.
+Moreover we can write the energy for $\mathscr{N}$ particles as
+\begin{equation}
+    E = \frac{1}{2} \mathscr{N} m v_{\text{CM}}^2 + U
+\end{equation}
+
+Thermodynamics is all about converting macroscopic energies (like kinetic energy, potential energy, or work) to microscopic energies (like internal energy or thermal agitation).
+
+This internal energy can be transferred, we call this \emph{energy in motion} \textbf{heat}.
+Heat can be transferred in three main ways: conduction, convection and radiation.
+For example, if we put together a hot and a cold container after a while they will reach thermal equilibrium, that is the macroscopic observables do not change anymore.
+This is an example of conduction, which is the way of transferring heat we will focus on.
+
+\subsection{Temperature}
+
+Consider an isolated system with $\mathscr{N}_1$ particles of mass $m_1$ and $\mathscr{N}_2$ particles of mass $m_2$.
+Both gasses start in equilibrium within themselves at time $(i)$ and they are combined together.
+At time $(f)$ the combined gasses reach equilibrium with each other.
+
+Since the system is isolated the energy is conserved:
+\begin{equation}
+    U_1^{(i)} + U_2^{(i)} = U_1^{(f)} + U_2^{(f)}
+\end{equation}
+which we can write as
+\begin{equation}
+    \mathscr{N}_1 \anglebraces{\frac{1}{2} m_1 v^2}_{\sigma_1^{(i)}} + \mathscr{N}_2 \anglebraces{\frac{1}{2} m_2 v^2}_{\sigma_2^{(i)}} = \mathscr{N}_1 \anglebraces{\frac{1}{2} m_1 v^2}_{\sigma_1^{(f)}} + \mathscr{N}_2 \anglebraces{\frac{1}{2} m_2 v^2}_{\sigma_2^{(f)}}
+\end{equation}
+and simplifying we get
+\begin{equation}
+    \mathscr{N}_1 m_1 \left(\sigma_1^{(i)}\right)^2 + \mathscr{N}_2 m_2 \left(\sigma_2^{(i)}\right)^2 = \mathscr{N}_1 m_1 \left(\sigma_1^{(f)}\right)^2 + \mathscr{N}_2 m_2 \left(\sigma_2^{(f)}\right)^2
+\end{equation}
+
+By this equation we get that at time $(t)$ the $\sigma$ have changed.
+
+By conducting an experiment we can note the following fact
+\begin{equation}
+    \frac{p_1 V_1}{\mathscr{N}_1} = \frac{p_2 V_2}{\mathscr{N}_2}
+\end{equation}
+and by substituting \autoref{eq:gas:internal_energy} we get that
+\begin{equation}
+    m_1 \left( \sigma_1^{(f)} \right) = m_2 \left(\sigma_2^{(f)}\right) = K_b T
+\end{equation}
+where $K_B = 1.38 \cdot 10^{-23} \si{\joule \per \kelvin}$ is the Boltzmann constant and $T$ is the temperature, measured in kelvin ($\si{\kelvin}$).
+
+We can now explicit the pdf of the velocity:
+\begin{equation}
+    \rho(\vec v) = \frac{\sqrt{m}}{\sqrt{2 \pi K_b T}} e^{- \frac{m v^2}{2 K_B T}}
+\end{equation}
+and we can write
+\begin{equation}
+    \label{eq:gas:initial_perfect}
+    p V = \frac{2}{3}U = \frac{2}{3}\mathscr{N} \anglebraces{\frac{1}{2}mv^2} = \mathscr{N}K_B T
+\end{equation}
+but $\mathscr{N}$ is very big and $K_B$ is very small, so we can define a few more things to make this better.
+
+The Avogadro number $N_A$ is the number of atoms of hydrogen in $1 \si{\gram}$ and it is equal to $N_A = 6.02 \cdot 10^{23}$ (pure number).
+Moreover we define $1 \si{\mole}$ of some gas as $1 \cdot N_A$ of this gas.
+
+Then we can write \autoref{eq:gas:initial_perfect} as
+\begin{equation}
+    pV = n \underbrace{N_A K_B}_{\text{constant } = R} T
+\end{equation}
+where we noted that $N_A K_B$ are both constant, therefore we can define the constant of ideal gasses as $R = 8.32 \si{\joule \per \kelvin}$ and we write the law of perfect gasses in the final form:
+\begin{equation}
+    \label{eq:gas:perfect}
+    pV = nRT
+\end{equation}
+
+\subsubsection{Unit of measure of temperature}
+
+We measure the temperature in $\si{\kelvin}$ where $0 \si{\celsius} = 273.15 \si{\kelvin}$.
+The celsius is a more historical unit that was measured by looking at the phase shift points of water at $1 \si{\atm}$ which is a quite reliable way to measure temperature.
+
+We chose the $0 \si{\kelvin}$ to be where it is because at that temperature all gasses have so little kinetic energy that they basically don't move anymore and create no pressure.
+
+\subsection{Transformations}
 
 \subsubsection{Adiabatic compression}
 
@@ -852,8 +937,12 @@ We compress the gas of some $\dd{V} < 0$ very slowly such that at every step we 
 In this way the gas does not lose energy.
 
 We will call $W$ the work done \emph{on} the gas and we have that $\dd{W} = \dd{U}$.
+Moreover the work done on the gas can also be written as
+\begin{equation}
+    \dd{W} = F \dd{x} = p A \dd{x} = p \dd{V}
+\end{equation}
 
-Differentiating $U = \frac{3}{2} pV$ we get
+Differentiating \autoref{eq:gas:internal_energy} we get
 \begin{equation}
     \dd{U} = \frac{3}{2} (\dd{p} V + p \dd{V}) = -p\dd{V}
 \end{equation}
@@ -876,5 +965,30 @@ Moreover, somehow the following relationship holds
 \begin{equation}
     pV = (\gamma - 1) U
 \end{equation}
+
+\subsubsection{Isothermic compression}
+
+In this transformation the temperature of the gas is constant.
+To do this we use a thermal reservoir whose temperature is always $T$ and we move the piston slow enough such that the temperature is always in equilibrium.
+
+We start by defining the work done by the piston:
+\begin{equation}
+    \dd{W} = - p \dd{V}
+\end{equation}
+and the total work will be
+\begin{equation}
+    W = \int_\text{initial}^\text{final} \dd{W} = \int_{V_i}^{V_f} p(V) \dd{V} = -nRT \int_{V_i}^{V_f} \frac{\dd{V}}{V} = n R T \log \frac{V_i}{V_f}
+\end{equation}
+where we applied \autoref{eq:gas:perfect}.
+
+Moreover, note that the work we are doing on the gas is \say{leaking} to the reservoir, that is the gas is releasing some heat $Q$.
+
+We can now define the first principle of thermodynamics:
+\begin{equation}
+    \label{eq:gas:first_principle}
+    \Delta U = W + Q
+\end{equation}
+
+Since in this transformation $\Delta U = 0$ we have that $W = -Q$.
 
 \end{document}

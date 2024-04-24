@@ -1391,4 +1391,123 @@ that is, $X_1, \ldots, X_k \indep$ and $X_i \sim \Normal(0,1)$.
         \end{bmatrix}$ is non-singular and applying \autoref{prop:multivariate:prop} we get the result.
 \end{proof}
 
+\begin{definition}[standard multivariate normal distribution]
+    If $\vec \mu = \vec 0$ and $\Sigma = I$ we say that $\Normal(\vec \mu, \Sigma)$ is standard.
+\end{definition}
+
+\begin{proposition}[standardizing]
+    If $\Sigma$ is positive definite we can find a $\Sigma^{\frac{1}{2}}$ symmetric such that $\Sigma = \Sigma^{\frac{1}{2}} \Sigma^{\frac{1}{2}}$ and $\left(\Sigma^{\frac{1}{2}}\right)^{-1} = \Sigma^{-\frac{1}{2}}$.
+
+    Let $\vec Z = \Sigma^{-\frac{1}{2}} (\vec X -\vec \mu)$, then $\vec Z \sim \Normal(\vec 0, I)$.
+    Moreover each $Z_i \sim \Normal(0, 1)$.
+\end{proposition}
+
+\begin{proof}
+    For the expectation we have
+    \begin{equation}
+        E(\vec Z) = E(\Sigma^{-\frac{1}{2}} (\vec X -\vec \mu)) = \Sigma^{-\frac{1}{2}} E(\vec X -\vec \mu) = \vec 0
+    \end{equation}
+    and for the variance
+    \begin{align}
+        V(\vec Z) & = V(\Sigma^{-\frac{1}{2}} \vec X - \cancel{\Sigma^{-\frac{1}{2}} \vec \mu})                 \\
+                  & = \Sigma^{-\frac{1}{2}} V(\vec X) \Sigma^{-\frac{1}{2}}                                     \\
+                  & = \Sigma^{-\frac{1}{2}} \Sigma \Sigma^{-\frac{1}{2}}                                        \\
+                  & = \Sigma^{-\frac{1}{2}} \Sigma^{\frac{1}{2}} \Sigma^{\frac{1}{2}} \Sigma^{-\frac{1}{2}} = I
+    \end{align}
+
+    Note that $\Sigma^{\frac{1}{2}}$ may not be unique.
+\end{proof}
+
+\section{Moment generating function}
+
+\begin{definition}[moment generating function]
+    Let $X$ be a random variable.
+    Let $I = \{t \in \R : E(e^{tX}) < + \infty \}$.
+
+    Then we can define $M_X(t): I \to \R$ as
+    \begin{equation}
+        M_X(t) = E(e^{tX})
+    \end{equation}
+    as a function of $t$.
+    Note that this expectation always exist.
+
+    In every case $0 \in I$ and it can be proven that $I$ is convex.
+\end{definition}
+
+\subsubsection{MGF of noteworthy distributions}
+
+For the proof see the book.
+\begin{itemize}
+    \item ($X \sim {\operatorfont Bernoulli}(p)$)
+          \begin{align}
+              M_X(t) & = e^{0t} P(X = 0) + e^{1t} P(X = 1) \\
+                     & = q + e^t p
+          \end{align}
+          where $I = \R$
+    \item ($X \sim {\operatorfont Binomial}(n, p)$)
+          \begin{equation}
+              M_X(t) = (1-p + p e^t)^n
+          \end{equation}
+          where $I = \R$
+    \item ($X \sim \Poisson(\lambda)$)
+          \begin{equation}
+              M_X(t) = e^{\lambda (e^t -1)}
+          \end{equation}
+          where $I = \R$
+    \item ($X \sim \Gamma(k, \lambda)$)
+          \begin{equation}
+              M_X(t) = \frac{\lambda^k}{(\lambda - t)^k}
+          \end{equation}
+          where $I = (-\infty, \lambda)$
+    \item ($X \sim \Normal(\mu, \sigma)$)
+          \begin{equation}
+              M_X(t) = e^{t \mu + \frac{t^2 \sigma^2}{2}}
+          \end{equation}
+          where $I = \R$
+\end{itemize}
+
+\subsection{Properties of the MGF}
+
+\begin{align}
+    E(e^{tX}) & = E(\sum_{k = 0}^\infty \frac{(tX)^k}{k!})    \\
+              & = \sum_{k = 0}^{\infty} \frac{t^k E(X^k)}{k!} \\
+              & = \sum_{k = 0}^{\infty} \frac{t^k m_k}{k!}
+\end{align}
+
+Note that this only works if we can \say{take out} the expectation from the sum.
+
+\begin{theorem}
+    If $\exists a > 0$ such that $(-a, a) \subset I$, then $E(\abs{X}^k) < +\infty$ $\forall k$ and
+    \begin{equation}
+        \label{eq:mgf:taylor}
+        M_X(t) = \sum_{k = 0}^{\infty} \frac{t^k m_k}{k!}
+    \end{equation}
+    for all $t \in (-a, a)$.
+
+\end{theorem}
+
+Moreover, the coefficient of the power series are unique by the properties of the power series itself.
+With these properties we can compute all the $k$ moments for any distribution.
+
+Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)$ centered at $0$. Then $m_k = M^{(k)}(0)$.
+
+\begin{proposition}[the mgf characterizes the distribution]
+    If $I \subset (-a, a)$ then there is a one-to-one mapping between $F_X$ (the cdf of $X$) and $M_X$.
+
+    This means that if $M_X = M_Y$ then $X$ and $Y$ have the same distribution.
+    We can say that the $M_X$ characterize the distribution of $X$.
+\end{proposition}
+
+\begin{proposition}[properties of the mgf]
+    \skiplineafterproof
+    \begin{enumerate}
+        \item $M_{aX + b}(t) = e^{tb} M_X (at)$
+        \item If $X \indep Y$ then $M_{X+Y}(t) = M_X(t) M_Y(t)$
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    These follow quite easily from the substituting into the definition and the properties of the expectation.
+    See the book for the full proof.
+\end{proof}
+
 \end{document}

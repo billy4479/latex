@@ -1,11 +1,11 @@
-\documentclass[14pt]{extarticle}
+\documentclass[12pt]{extarticle}
 
 \usepackage{preamble}
 
 \title{Mathematical Analysis 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
 
-\setlength{\headheight}{17pt} % ??? we do what fancyhdr tells us to do
+\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
 
 \renewcommand{\vec}[1]{\uvec{#1}}
 \newcommand{\Hg}{{\operatorfont Hg}}
@@ -76,16 +76,16 @@
     \begin{description}
         \item[$\implies$] ($f$ continuous at $\vec{x}_0 \implies \forall j, \enspace f_j$ continuous at $\vec{x}_0$)
 
-            Fix $j$ and let $\left(\vec{y}_n\right)$ be a sequence that converges to $\vec{x}_0$.
-            Since $f$ is continuous $f(\vec{y}_n) = \left(f_1(\vec{y}_n), f_2(\vec{y}_n), \ldots, f_p(\vec{y}_n)\right)$ converges to $f(\vec{x}_0) = \left(f_1(\vec{x}_0), f_2(\vec{x}_0), \ldots, f_p(\vec{x}_0)\right)$.
+              Fix $j$ and let $\left(\vec{y}_n\right)$ be a sequence that converges to $\vec{x}_0$.
+              Since $f$ is continuous $f(\vec{y}_n) = \left(f_1(\vec{y}_n), f_2(\vec{y}_n), \ldots, f_p(\vec{y}_n)\right)$ converges to $f(\vec{x}_0) = \left(f_1(\vec{x}_0), f_2(\vec{x}_0), \ldots, f_p(\vec{x}_0)\right)$.
 
-            In particular, the sequence $\left(f_j(\vec{y}_n)\right)$ converges to $f_j(\vec{x}_0)$.
+              In particular, the sequence $\left(f_j(\vec{y}_n)\right)$ converges to $f_j(\vec{x}_0)$.
 
         \item[$\impliedby$] ($\forall j, \enspace f_j$ continuous at $\vec{x}_0 \implies f$ continuous at $\vec{x}_0$)
 
-            Let $\left(\vec{y}_n\right)$ be a sequence that converges to $\vec{x}_0$. Then, since $f_j$ is continuous, for every $j$, the sequence $f_j(\vec{y}_n)$ converges to $f_j(\vec{x}_0)$.
+              Let $\left(\vec{y}_n\right)$ be a sequence that converges to $\vec{x}_0$. Then, since $f_j$ is continuous, for every $j$, the sequence $f_j(\vec{y}_n)$ converges to $f_j(\vec{x}_0)$.
 
-            So the sequence $f(\vec{y}_n) = \left(f_1(\vec{y}_n), \ldots, f_p(\vec{y}_n)\right)$ converges to $f(\vec{x}_0) = \left(f_1(\vec{x}_0), \ldots, f_p(\vec{x}_0)\right)$.
+              So the sequence $f(\vec{y}_n) = \left(f_1(\vec{y}_n), \ldots, f_p(\vec{y}_n)\right)$ converges to $f(\vec{x}_0) = \left(f_1(\vec{x}_0), \ldots, f_p(\vec{x}_0)\right)$.
     \end{description}
 \end{proof}
 
@@ -235,19 +235,19 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     \skiplineafterproof
     \begin{description}
         \item[$\implies$] (differentiability $\implies$ linear transformation)
-            This is the easy part, just take $L = Df_{\vec{x}_0}$.
+              This is the easy part, just take $L = Df_{\vec{x}_0}$.
         \item[$\impliedby$] (linear transformation $\implies$ differentiability)
-            Let $L(\vec{h}) = M \vec{h}$ for some matrix $M$.
-            We saw before that the column $m_i = L(\vec{e}_i)$, then let $\vec{h} = h \vec{e}_i$ and by linearity we have
-            \begin{equation}
-                f(\vec{x}_0 + h \vec{e}_i) = f(\vec{x}_0) + h L(\vec{e}_i) + \o(h)
-            \end{equation}
-            dividing by $h$ we get
-            \begin{equation}
-                \frac{f(\vec{x}_0 + h \vec{e}_i) - f(\vec{x}_0)}{h} = L(\vec{e}_i) + \frac{\o(h)}{h}
-            \end{equation}
-            and taking the limit as $h \to 0$ we get that $\pdv{f}{x_i}()(\vec{x}_0)$ exists and is equal to $L(\vec{e}_i)$.
-            Then the matrix representing $L$ has columns that are the partial derivatives of $f$ at $\vec{x}_0$, that is $M = J_f(\vec{x}_0)$.
+              Let $L(\vec{h}) = M \vec{h}$ for some matrix $M$.
+              We saw before that the column $m_i = L(\vec{e}_i)$, then let $\vec{h} = h \vec{e}_i$ and by linearity we have
+              \begin{equation}
+                  f(\vec{x}_0 + h \vec{e}_i) = f(\vec{x}_0) + h L(\vec{e}_i) + \o(h)
+              \end{equation}
+              dividing by $h$ we get
+              \begin{equation}
+                  \frac{f(\vec{x}_0 + h \vec{e}_i) - f(\vec{x}_0)}{h} = L(\vec{e}_i) + \frac{\o(h)}{h}
+              \end{equation}
+              and taking the limit as $h \to 0$ we get that $\pdv{f}{x_i}()(\vec{x}_0)$ exists and is equal to $L(\vec{e}_i)$.
+              Then the matrix representing $L$ has columns that are the partial derivatives of $f$ at $\vec{x}_0$, that is $M = J_f(\vec{x}_0)$.
     \end{description}
 \end{proof}
 
@@ -424,28 +424,28 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     \skiplineafterproof
     \begin{description}
         \item[General case]
-            Let $f : (0,1) \to (0,1)^2$ such that $f$ maps the the even decimal digits of $x$ to the first component and the odd decimal digits to the second component.
-            Then $f$ is bijective but $d = 1$ and $p = 2$.
+              Let $f : (0,1) \to (0,1)^2$ such that $f$ maps the the even decimal digits of $x$ to the first component and the odd decimal digits to the second component.
+              Then $f$ is bijective but $d = 1$ and $p = 2$.
 
         \item[Linearity]
-            See linear algebra, any invertible matrix is also a square matrix.
+              See linear algebra, any invertible matrix is also a square matrix.
 
         \item[Continuity]
-            This proof is quite hard and we will not do it here.
+              This proof is quite hard and we will not do it here.
 
         \item[Differentiability]
-            Let $g = f^{-1}$ so that $f(g(\vec{y})) = \vec{y}$ for $\vec{y} \in V$ and $g(f(\vec{x})) = \vec{x}$ for $\vec{x} \in U$.
-            Then fix a point $\vec{x} \in U$ and let $\vec{y} = f(\vec{x})$.
-            Now apply the chain rule to get
+              Let $g = f^{-1}$ so that $f(g(\vec{y})) = \vec{y}$ for $\vec{y} \in V$ and $g(f(\vec{x})) = \vec{x}$ for $\vec{x} \in U$.
+              Then fix a point $\vec{x} \in U$ and let $\vec{y} = f(\vec{x})$.
+              Now apply the chain rule to get
 
-            \begin{align}
-                J_f(\vec{x}) \cdot J_g(f(\vec{x})) & = I_{p\times p} \\
-                J_g(\vec{y}) \cdot J_f(g(\vec{y})) & = I_{d\times d}
-            \end{align}
+              \begin{align}
+                  J_f(\vec{x}) \cdot J_g(f(\vec{x})) & = I_{p\times p} \\
+                  J_g(\vec{y}) \cdot J_f(g(\vec{y})) & = I_{d\times d}
+              \end{align}
 
-            Then $J_f(\vec{x})$ and $J_g(\vec{y})$ are the inverse of each other, so they must be square matrices of the same size.
+              Then $J_f(\vec{x})$ and $J_g(\vec{y})$ are the inverse of each other, so they must be square matrices of the same size.
 
-            Moreover, if we have the proof for the continuity case we can just use the fact that differentiability implies continuity.
+              Moreover, if we have the proof for the continuity case we can just use the fact that differentiability implies continuity.
     \end{description}
 \end{proof}
 

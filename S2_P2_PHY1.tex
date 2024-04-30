@@ -1071,4 +1071,84 @@ But if instead the deck is made of just 2 cards and we shuffle them the probabil
 The same happens with particles:
 the likelihood of a macrostate to happen is dependent on the number of particles in the system.
 
+\subsection{Entropy}
+
+This is another state variable which depends just on the state of the system.
+We do not prove it exist, entropy is postulated as follows:
+
+\begin{definition}[entropy]
+    For any thermodynamic process $p: i \to f$ where $i$ is the initial state and $f$ is the final state. We have that the difference in entropy between the two states is
+    \begin{equation}
+        \Delta S = \int_i^t \frac{\dd{Q}}{T} = S_f - S_i
+    \end{equation}
+    where $S$ is path independent.
+
+    Note that the thermodynamic process $p$ must be reversible otherwise we wouldn't have a function to describe it and wouldn't be able to take the integral.
+\end{definition}
+
+\begin{example}
+    Consider a transformation of an ideal gas.
+    We know that $\dd{U} = \delta W + \delta Q$, but we also know that $\dd{U} = \frac{3}{2} n R \dd{T}$ and $\delta W = -p \dd{V}$.
+    Then we can write $\delta Q = \dd{U} - \delta W$.
+    We can compute the entropy by using $pV = nRT$ as
+    \begin{align}
+        \Delta S & = \int_i^t \frac{\frac{3}{2} n R \dd{T}}{T} + \int_i^t \frac{p \dd{V}}{T}                   \\
+                 & = \frac{3}{2} nR \log \frac{T_f}{T_i} + \int_i^t \frac{(nR\cancel{T}/V) \dd{V}}{\cancel{T}} \\
+                 & = \frac{3}{2} nR \log \frac{T_f}{T_i} + nR \log \frac{V_f}{V_i}
+    \end{align}
+    which is indeed a state variable.
+\end{example}
+
+Now that we saw that this works for ideal gasses we postulate that this also works for real cases:
+
+\begin{theorem}[second principle of thermodynamics]
+    \label{thm:gas:second_principle}
+    In a closed system if we apply a thermodynamic process $p: i \to f$ we will have that
+    \begin{equation}
+        \Delta S \geq 0
+    \end{equation}
+    and if $\Delta S = 0$ then the process is reversible.
+\end{theorem}
+
+\begin{example}[isothermal expasion]
+    Consider an isothermal expansion where the gas goes from $V$ to $2V$ and it is in contact with a reservoir of temperature $T$.
+
+    Since $T$ is not changing we can calculate the entropy of the gas as
+    \begin{equation}
+        \Delta S^{\text{(gas)}} = n R \log 2
+    \end{equation}
+    but from the point of view of the reservoir we will have a entropy change of $\Delta S^{\text{(reservoir)}} = - \Delta S^{\text{(gas)}}$, which confirms that isothermal transformations are reversible.
+\end{example}
+
+Boltzmann calculated the entropy of a system as
+\begin{equation}
+    S = K_b \log W
+\end{equation}
+where $W$ is the volume of the macrostate.
+This basically tells us that the gasses always want to occupy as volume as possible.
+
+\subsection{Efficiency of engines}
+
+We define the efficiency as
+\begin{equation}
+    \label{eq:gas:efficiency}
+    \eta = \frac{W}{Q_H}
+\end{equation}
+where $W$ is the work and $Q_H$ is the heat absorbed from the hot reservoir.
+
+We will have an engine that produces work $W$ using some heat $Q_H$ and dumbing some heat $Q_C$ in some cold reservoir.
+The engine will be cyclical.
+
+We will have that the entropy change is given just by the exchange in temperature and heat in the reservoirs which is just
+\begin{equation}
+    \Delta S = - \frac{Q_H}{T_H} + \frac{Q_C}{T_C} \geq 0
+\end{equation}
+and by substituting into \autoref{eq:gas:efficiency} we get that
+\begin{equation}
+    \eta = \frac{Q_H - Q_C}{Q_H} = 1 - \frac{Q_C}{Q_H} \leq 1 - \frac{T_C}{T_H}
+\end{equation}
+which means that the efficiency is never $1$.
+
+We can then express the second principle of thermodynamics as the Kelvin's or Clausius' principle that state respectively that there exists no engine that has $Q_C > 0$ and that a \say{perfect fridge} does not exist.
+
 \end{document}

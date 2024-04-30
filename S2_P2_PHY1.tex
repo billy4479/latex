@@ -2,6 +2,7 @@
 
 \usepackage{preamble}
 \usepackage{siunitx}
+\usepackage{svg}
 
 \title{Physics 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
@@ -11,6 +12,7 @@
 % Units
 \DeclareSIUnit\angstrom{Å} % Redefine it as it got deprecated
 \DeclareSIUnit\atm{atm}
+\DeclareSIUnit{\calorie}{cal}
 
 \newcommand{\anglebraces}[1]{
     \langle #1 \rangle
@@ -988,5 +990,85 @@ We can now define the first principle of thermodynamics:
 \end{equation}
 
 Since in this transformation $\Delta U = 0$ we have that $W = -Q$.
+
+\subsubsection{Isocloric transformation}
+
+We keep the volume the same and change the temperature and pressure.
+
+Since the volume is constant there is no work being done by the gas, therefore all the heat goes into the internal energy, according to \autoref{eq:gas:first_principle}.
+
+In the case of ideal gasses we will have that
+\begin{equation}
+    Q = \frac{3}{2}nR\Delta T
+\end{equation}
+
+\subsection{Heat}
+
+\subsubsection{Specific heat}
+
+We want to extend the relationship between heat and temperature.
+We already saw the following relationships:
+\begin{align}
+    pV & = (\gamma - 1)U \\
+    pV & = nRT
+\end{align}
+where $\gamma$ depends on the gas and in the case of a monoatomic ideal gas $\gamma = 5/3$.
+
+If we put these two relationships together we get
+\begin{equation}
+    \label{eq:gas:internal_energy_2}
+    U = \frac{3}{2}nRT
+\end{equation}
+
+Now consider \autoref{eq:gas:first_principle} where $W = 0$, which means $\Delta U = Q$ and combining with \autoref{eq:gas:internal_energy_2} we get
+\begin{equation}
+    \Delta U = Q = \underbrace{\left(\frac{3}{2} n R \right)}_{C_H} \Delta T
+\end{equation}
+where $C_H$ is the specific heat: in the case of ideal monoatomic gasses it is the one written in the equation but for other gasses it can change.
+
+Note that this quantity depends on the amount of gas we have, we can therefore define the specific heat $C$ and the molar specific heat.
+\begin{equation}
+    C = \frac{C_H}{m} = \si{\joule \per \kelvin \per \kilogram}
+\end{equation}
+
+Moreover we define the calorie ($1 \si{\calorie}$) as the heat necessary to raise from $14.5 \si{\celsius}$ to $15.5 \si{\celsius}$ $1 \si{\gram}$ of water.
+
+\subsubsection{Latent heat}
+When a substance changes state, during the phase transition all the energy goes into the phase transition itself without raising the temperature of the substance.
+The energy needed for the full phase transition is dependent on the mass and we write it as
+\begin{equation}
+    \delta Q = L m
+\end{equation}
+where $L$ is the latent heat which depends on the substance itself; it is measured in $\si{\joule \per \kilogram}$.
+
+\subsubsection{State variables}
+
+Consider two transformations $A$ and $B$:
+\begin{figure}[H]
+    \centering
+    {
+        \virgil
+        \includesvg[width=0.75\textwidth]{assets/S2_P2_PHY1/work_in_transformation.svg}
+    }
+    \caption{Two transformations $A$ and $B$}
+\end{figure}
+
+Before we computed the work as $\int p \dd{V}$ but note that this integral is not path independent: if we choose a different transformation we will get a different result.
+
+We have that $\dd{U}$ is path independent but $\delta W$ and $\delta Q$ are not, therefore we can have a system that goes back to the original state but can still do work.
+
+\subsection{Irreversibility}
+
+Consider a container divided by a wall where all the particles are all on one side of the wall. Now open a little hole on the wall: the particles will distribute between the two parts of the container.
+
+In theory there is nothing preventing the particles to go back to the initial position all in the same side of the wall, but this is so unlikely that it never happens.
+
+We have that each microstate (that is the exact position and velocity of the particles) are equally likely, but some macrostates (that is the amount of particles in each side) are much much much more likely than others.
+
+If you sort a deck of cards and then you shuffle it the probability of it being sorted after some time is so low that it actually never happens.
+But if instead the deck is made of just 2 cards and we shuffle them the probability that they stay sorted is actually $1/2$.
+
+The same happens with particles:
+the likelihood of a macrostate to happen is dependent on the number of particles in the system.
 
 \end{document}

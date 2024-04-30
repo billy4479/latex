@@ -12,3 +12,4 @@
 *.ps
 *.pyg
 **/_minted-*
+svg-inkscape/

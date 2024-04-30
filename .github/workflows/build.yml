@@ -18,6 +18,7 @@ jobs:
       - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
+          extra_system_packages: "inkscape" # For svg
           path: |
             **/*.pdf
             LICENSE

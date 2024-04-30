@@ -11,38 +11,72 @@
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
+      fonts = with pkgs; [
+        fira-code
+        ubuntu_font_family
+        fg-virgil # excalidraw font
+      ];
+
+      # https://discourse.nixos.org/t/project-local-fonts/22174/2?u=billy4479
+      # https://github.com/Leixb/latex-template/blob/274df8a3cf8641906f32eef114f8fcf2d496936e/build-document.nix#L34
+      fontDir = pkgs.symlinkJoin {
+        name = "fonts";
+        paths = fonts;
+      };
+
+      nativeBuildInputs = with pkgs;
+        [
+          texliveFull # TODO: This can probably be reduced
+
+          git # for the date of last commit
+
+          # `minted` dependencies
+          python3
+          python3Packages.pygments
+          which
+
+          inkscape # `svg` dependencies
+        ]
+        ++ fonts;
+
+      OSFONTDIR = "${fontDir}/share/fonts";
+      FONTCONFIG_FILE = pkgs.makeFontsConf {
+        fontDirectories = fonts;
+      };
+
+      OUTDIR = "build"; # This is not optimal as it needs to be changed manually in minted and svg preamble
     in {
-      devShells.default = let
-        fonts = with pkgs; [
-          fira-code
-          ubuntu_font_family
-          fg-virgil # excalidraw font
-        ];
+      devShells.default = pkgs.mkShell {
+        inherit nativeBuildInputs OSFONTDIR FONTCONFIG_FILE;
+      };
+      packages = rec {
+        document = pkgs.stdenvNoCC.mkDerivation rec {
+          name = "latex-documents";
+          src = ./.;
 
-        # https://discourse.nixos.org/t/project-local-fonts/22174/2?u=billy4479
-        # https://github.com/Leixb/latex-template/blob/274df8a3cf8641906f32eef114f8fcf2d496936e/build-document.nix#L34
-        fontDir = pkgs.symlinkJoin {
-          name = "fonts";
-          paths = fonts;
+          inherit nativeBuildInputs OSFONTDIR FONTCONFIG_FILE;
+
+          TEXMFVAR = "./cache/var";
+          TEXMFHOME = "./cache";
+
+          buildPhase = ''
+            runHook preBuild
+
+            latexmk -lualatex -shell-escape -auxdir=${OUTDIR}/aux -outdir=${OUTDIR} -interaction=nonstopmode *.tex
+
+            runHook postBuild
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir -p $out
+            cp ${OUTDIR}/*.pdf $out
+
+            runHook postInstall
+          '';
         };
-      in
-        pkgs.mkShell {
-          nativeBuildInputs = with pkgs;
-            [
-              texliveFull # TODO: This can probably be reduced
-
-              # `minted` dependencies
-              python3
-              python3Packages.pygments
-
-              inkscape # `svg` dependencies
-            ]
-            ++ fonts;
-
-          OSFONTDIR = "${fontDir}/share/fonts";
-          FONTCONFIG_FILE = pkgs.makeFontsConf {
-            fontDirectories = fonts;
-          };
-        };
+        default = document;
+      };
     });
 }

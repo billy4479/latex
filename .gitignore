@@ -1,6 +1,8 @@
 /.direnv
 /.ruff_cache
 
+/result
+
 **/_minted-*
 /svg-inkscape/
 /build/

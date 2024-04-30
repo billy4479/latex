@@ -39,6 +39,8 @@
                 "-synctex=1",
                 "-interaction=nonstopmode",
                 "-file-line-error",
+                "-auxdir=build/aux",
+                "-outdir=build",
                 "-shell-escape",
                 "%DOC%"
             ]

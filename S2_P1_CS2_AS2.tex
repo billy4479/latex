@@ -17,7 +17,7 @@
 \usepackage[a4paper,margin=1.5cm]{geometry}
 \usepackage{bookmark}
 \usepackage{bytefield}
-\usepackage{minted}
+\usepackage{preamble_code}
 \usepackage{capt-of}
 \usepackage{tikz}
 \usepackage{enumitem}
@@ -164,19 +164,19 @@ def number_of_platforms(arrivals, departures):
           \begin{description}
               \item[Base case] At $t = 0$ the number of platforms needed is indeed 0, and \texttt{max\_platforms} is also 0.
               \item[Induction step] Assuming that at time $t$ \texttt{max\_platforms} is the maximum number of platforms needed, we want to show that the same is true at $t + 1$.
-                  Let $p_t$ be the number of platforms needed at time $t$.
-                  Moreover, note that at $\texttt{max\_platforms} \geq p_t$ at the end of each iteration, because at each iteration we update \texttt{max\_platforms} to be the maximum of the current number of platforms and the previous maximum.
+                    Let $p_t$ be the number of platforms needed at time $t$.
+                    Moreover, note that at $\texttt{max\_platforms} \geq p_t$ at the end of each iteration, because at each iteration we update \texttt{max\_platforms} to be the maximum of the current number of platforms and the previous maximum.
 
-                  At each iteration we have the following cases:
-                  \begin{enumerate}[label=\alph*)]
-                      \item The next arrival is before the next departure, this means that the number of platforms $p_t$ is insufficient, therefore the algorithm will set $p_{t + 1} = p_t + 1$.
-                      \item The next departure is before the next arrival, this means that the number of platforms we needed at $t$ is more than the trains in the station at $t+1$, therefore the algorithm can reduce it and set $p_{t + 1} = p_t - 1$.
-                  \end{enumerate}
+                    At each iteration we have the following cases:
+                    \begin{enumerate}[label=\alph*)]
+                        \item The next arrival is before the next departure, this means that the number of platforms $p_t$ is insufficient, therefore the algorithm will set $p_{t + 1} = p_t + 1$.
+                        \item The next departure is before the next arrival, this means that the number of platforms we needed at $t$ is more than the trains in the station at $t+1$, therefore the algorithm can reduce it and set $p_{t + 1} = p_t - 1$.
+                    \end{enumerate}
 
-                  Now the algorithm will update \texttt{max\_platforms}.
-                  Note that the maximum number of platforms needed at time $t + 1$ changes from what was needed at time $t$ only if we are in case a) and $p_{t + 1} > \texttt{max\_platforms}$. If the maximum number of platforms needed doesn't change the \texttt{max} function will keep the previous value, otherwise it will update it to $p_{t + 1}$.
+                    Now the algorithm will update \texttt{max\_platforms}.
+                    Note that the maximum number of platforms needed at time $t + 1$ changes from what was needed at time $t$ only if we are in case a) and $p_{t + 1} > \texttt{max\_platforms}$. If the maximum number of platforms needed doesn't change the \texttt{max} function will keep the previous value, otherwise it will update it to $p_{t + 1}$.
 
-                  Thus the invariant is preserved at each iteration.
+                    Thus the invariant is preserved at each iteration.
           \end{description}
 
     \item The algorithm does the following operations:

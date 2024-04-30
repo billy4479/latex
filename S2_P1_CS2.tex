@@ -2,7 +2,7 @@
 
 \usepackage{preamble}
 \usepackage{bytefield}
-\usepackage{minted}
+\usepackage{preamble_code}
 
 
 \title{Computer Science 2 Notes, Partial 1}
@@ -201,29 +201,29 @@ The algorithm has the following parts:
 
 \begin{description}
     \item[Part 1]
-        Let $(s_n)$ be the sequence of the shifted values of $x$ and $p_n$ be the sequence of the partial products.
+          Let $(s_n)$ be the sequence of the shifted values of $x$ and $p_n$ be the sequence of the partial products.
 
 
-        \begin{align*}
-            s_0 & = x                         \\
-            s_n & = s_{n-1} \ll 1             \\
-            p_n & = \begin{cases*}
-                        0   & \text{if } y[n] = 0 \\
-                        s_n & \text{if } y[n] = 1
-                    \end{cases*}
-        \end{align*}
+          \begin{align*}
+              s_0 & = x                         \\
+              s_n & = s_{n-1} \ll 1             \\
+              p_n & = \begin{cases*}
+                          0   & \text{if } y[n] = 0 \\
+                          s_n & \text{if } y[n] = 1
+                      \end{cases*}
+          \end{align*}
 
-        Choosing the right $p_n$ is $O(1)$, but computing $s_n$ is $O(n)$ hence this part is $O(n)$.
+          Choosing the right $p_n$ is $O(1)$, but computing $s_n$ is $O(n)$ hence this part is $O(n)$.
 
-        Note that we are \say{storing} the result of the previous shifts, so if we want to compute $s_5$, for example, we don't need to compute $s_4$ again.
-        Without this optimization the time complexity of this part would be $O(n^2)$.
+          Note that we are \say{storing} the result of the previous shifts, so if we want to compute $s_5$, for example, we don't need to compute $s_4$ again.
+          Without this optimization the time complexity of this part would be $O(n^2)$.
 
     \item[Part 2]
-        In this step we are computing $\sum_{i = 0}^n p_n$.
-        These are sums of numbers of at most $2n$ bits, hence this part is $O(n)$.
+          In this step we are computing $\sum_{i = 0}^n p_n$.
+          These are sums of numbers of at most $2n$ bits, hence this part is $O(n)$.
 
     \item[Conclusion]
-        The time complexity of the multiplication algorithm is $O(n) \cdot O(n) = O(n^2)$.
+          The time complexity of the multiplication algorithm is $O(n) \cdot O(n) = O(n^2)$.
 
 \end{description}
 
@@ -585,18 +585,18 @@ These are some other useful definitions we will use:
     \item[Cycle] a cycle is a path in which the first and last vertices are the same.
     \item[Acyclic] a graph is acyclic if it has no cycles.
     \item[Connectedness] we have two definition depending if the graph is directed or undirected:
-        \begin{itemize}
-            \item An \underline{undirected graph} is connected if every vertex is reachable from all other vertices.
-            \item A \underline{directed graph} is \textit{strongly connected} if every vertex is reachable from all other vertices. We use the word \textit{strongly} because some nodes may have edges connecting to it but not going out of it.
-        \end{itemize}
+          \begin{itemize}
+              \item An \underline{undirected graph} is connected if every vertex is reachable from all other vertices.
+              \item A \underline{directed graph} is \textit{strongly connected} if every vertex is reachable from all other vertices. We use the word \textit{strongly} because some nodes may have edges connecting to it but not going out of it.
+          \end{itemize}
 
-        We call each connected part of the graph a \textbf{connected component} of $G$. In \textit{undirected graphs} this is an equivalence relation on the set of vertices.
+          We call each connected part of the graph a \textbf{connected component} of $G$. In \textit{undirected graphs} this is an equivalence relation on the set of vertices.
     \item[Bipartite graph] a bipartite graph is an undirected graph $G = (V, E)$ where $V$ can be partitioned into two sets $V_1, V_2$ such that every edge $(u, v) \in E$ is such that $u \in V_1$ and $v \in V_2$.
-        This means that there are no edges between vertices in the same set.
+          This means that there are no edges between vertices in the same set.
 
     \item[Tree] a tree is a connected acyclic undirected graph, or a connected forest.
-        In every tree it is possible to identify a node a the \underline{root}, every node can be seen as the root of the tree.
-        We call \underline{descendant} of a node $v$ every node that is reachable from $v$ going downwards and \underline{ancestor} every node that is reachable from $v$ going upwards.
+          In every tree it is possible to identify a node a the \underline{root}, every node can be seen as the root of the tree.
+          We call \underline{descendant} of a node $v$ every node that is reachable from $v$ going downwards and \underline{ancestor} every node that is reachable from $v$ going upwards.
     \item[Forest] a forest is an acyclic undirected graph, or a union of trees.
 \end{description}
 
@@ -757,14 +757,14 @@ This is equivalent to
 
     \begin{description}
         \item[$\impliedby$] Since we started from \texttt{visited} containing only \texttt{False} values,
-            the only way \texttt{visited[u]} can be \texttt{True} is if $u$ was part of the exploration of some other node $w$.
-            If $W = v$ we are done, otherwise we can repeat the argument for $w$.
-            We know this procedure will terminate since the graph is finite.
+              the only way \texttt{visited[u]} can be \texttt{True} is if $u$ was part of the exploration of some other node $w$.
+              If $W = v$ we are done, otherwise we can repeat the argument for $w$.
+              We know this procedure will terminate since the graph is finite.
         \item[$\implies$] We prove this by contradiction.
-            Suppose that $u$ is reachable from $v$ and that there is a run of \texttt{explore} that misses $u$.
-            Since $u$ is reachable from $v$ there is a path from $v$ to $u$.
-            Let $w$ be the first vertex on this path that is not visited by the run of \texttt{explore} and let $z$ be the vertex that precedes $w$.
-            This is a contradiction, by the way the algorithm is defined, since $w$ is a neighbor of $z$ and it is not visited we visit it.
+              Suppose that $u$ is reachable from $v$ and that there is a run of \texttt{explore} that misses $u$.
+              Since $u$ is reachable from $v$ there is a path from $v$ to $u$.
+              Let $w$ be the first vertex on this path that is not visited by the run of \texttt{explore} and let $z$ be the vertex that precedes $w$.
+              This is a contradiction, by the way the algorithm is defined, since $w$ is a neighbor of $z$ and it is not visited we visit it.
     \end{description}
 \end{proof}
 
@@ -1015,8 +1015,8 @@ and nodes connected with a cross edge have disjoint intervals.
     \begin{description}
         \item[$\impliedby$] If $(u, v)$ is a back edge then there is a cycle consisting of the edge $(u, v)$ and the path from $v$ to $u$ in the DFS tree. We know such path exists since to have a back edge we have to get to $v$ with $u$ already being discovered.
         \item[$\implies$] If $G$ has a cycle, then we can write it as $v_0 \to v_1 \to \dots \to v_k \to v_0$.
-            Let $v_i$ be the first vertex in the cycle that is discovered.
-            When we enter the cycle all the other nodes of the cycle are undiscovered since $v_i$ is the first one by definition. Since DFS visits all the \say{legal} edges the algorithm will visit all edges of the cycle, hence eventually it will reach the edge $(v_{i-1}, v_i)$, which is a back edge.
+              Let $v_i$ be the first vertex in the cycle that is discovered.
+              When we enter the cycle all the other nodes of the cycle are undiscovered since $v_i$ is the first one by definition. Since DFS visits all the \say{legal} edges the algorithm will visit all edges of the cycle, hence eventually it will reach the edge $(v_{i-1}, v_i)$, which is a back edge.
     \end{description}
 \end{proof}
 
@@ -1289,23 +1289,23 @@ Note that since the conditions (1), (2), and (3) have to be true for any $t$ we 
 
     \begin{description}
         \item[Base case] $t = 0$.
-            This is trivially true since the only vertex in the queue is $s$ and $d[s] = 0$.
+              This is trivially true since the only vertex in the queue is $s$ and $d[s] = 0$.
 
         \item[Inductive step] We assume that the statements are true for $t = \tau$.
 
-            At this time, some vertices have been already removed from \texttt{queue}, others are still in it, and some have yet to be explored.
+              At this time, some vertices have been already removed from \texttt{queue}, others are still in it, and some have yet to be explored.
 
-            At this point of time we know the following facts:
-            \begin{itemize}
-                \item By (3), all vertices removed from \texttt{queue} have $d[u] \leq \tau - 1$
-                \item By (2) the distances are correct.
-                \item By (1), all vertices in \texttt{queue} have $d[v] = \tau$.
-            \end{itemize}
+              At this point of time we know the following facts:
+              \begin{itemize}
+                  \item By (3), all vertices removed from \texttt{queue} have $d[u] \leq \tau - 1$
+                  \item By (2) the distances are correct.
+                  \item By (1), all vertices in \texttt{queue} have $d[v] = \tau$.
+              \end{itemize}
 
-            At the next round $\tau + 1$, BFS will go through as many iterations as the number of vertices in \texttt{queue}: the algorithm will remove those vertices.
-            Note that these vertices vertices have all distance $\tau$ and their distance is no longer going to change. This implies that (2) and (3) are true.
+              At the next round $\tau + 1$, BFS will go through as many iterations as the number of vertices in \texttt{queue}: the algorithm will remove those vertices.
+              Note that these vertices vertices have all distance $\tau$ and their distance is no longer going to change. This implies that (2) and (3) are true.
 
-            Moreover, all vertices not yet seen that are neighbor of the ones that were in \texttt{queue} at $\tau$ have their distances set to $\tau + 1$, thus (1) is true.
+              Moreover, all vertices not yet seen that are neighbor of the ones that were in \texttt{queue} at $\tau$ have their distances set to $\tau + 1$, thus (1) is true.
     \end{description}
 \end{proof}
 
@@ -1774,99 +1774,99 @@ Moreover, at the end of the execution, all nodes are black, and the invariants i
 
     \begin{description}
         \item[Base case]
-            At the beginning of the algorithm, $s$ is the only black node and $d(s) = 0$.
+              At the beginning of the algorithm, $s$ is the only black node and $d(s) = 0$.
 
-            Indeed the shortest path from $s$ to $s$ is of length 0, therefore (i) is true.
-            Moreover, for all $v \in V$ if $v = s$ then $d(v) = 0$ and (ii) is true; if $v \neq s$ then either it is a neighbor of $s$ and $d(v) = l(s, v)$ or $d(v) = \infty$ which is again correct.
+              Indeed the shortest path from $s$ to $s$ is of length 0, therefore (i) is true.
+              Moreover, for all $v \in V$ if $v = s$ then $d(v) = 0$ and (ii) is true; if $v \neq s$ then either it is a neighbor of $s$ and $d(v) = l(s, v)$ or $d(v) = \infty$ which is again correct.
 
         \item[Inductive step 1]
-            In this step we assume that (i), (ii) are true at $t$ and we want to show that (i) at $t+1$.
-            Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration. We need to argue that $d(v)$ is the length of the shortest path from $s$ to $v$.
+              In this step we assume that (i), (ii) are true at $t$ and we want to show that (i) at $t+1$.
+              Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration. We need to argue that $d(v)$ is the length of the shortest path from $s$ to $v$.
 
-            Notice that the algorithm does not  change $d(v)$ after $v$ is removed from the queue, therefore we just need to show that at time $t$ $d(v)$ is the length of the shortest path from $s$ to $v$.
+              Notice that the algorithm does not  change $d(v)$ after $v$ is removed from the queue, therefore we just need to show that at time $t$ $d(v)$ is the length of the shortest path from $s$ to $v$.
 
-            We argue by contradiction: suppose that at time $t$ there exists a path from $s$ to $v$ of length $L < d(v)$. By (ii) this path must contain a white vertex, let $u$ be the first white vertex along such path. Then, the length of this path up to $u$ is $\geq d(u)$ since (ii) guarantees that $d(u)$ is the shortest path from $s$ to $u$.
-            Moreover the length of this path up to $u$ is $\leq L$ since $u$ is a vertex along that path.
-            Combining all these facts we get
+              We argue by contradiction: suppose that at time $t$ there exists a path from $s$ to $v$ of length $L < d(v)$. By (ii) this path must contain a white vertex, let $u$ be the first white vertex along such path. Then, the length of this path up to $u$ is $\geq d(u)$ since (ii) guarantees that $d(u)$ is the shortest path from $s$ to $u$.
+              Moreover the length of this path up to $u$ is $\leq L$ since $u$ is a vertex along that path.
+              Combining all these facts we get
 
-            $$
-                d(u) \leq L < d(v)
-            $$
+              $$
+                  d(u) \leq L < d(v)
+              $$
 
-            which is a contradiction of the algorithm itself, since $v$ was chosen to be the white vertex with the smallest $d(.)$ at the end of the $t$-th iteration.
+              which is a contradiction of the algorithm itself, since $v$ was chosen to be the white vertex with the smallest $d(.)$ at the end of the $t$-th iteration.
 
         \item[Inductive step 2]
-            In this step we assume that (i), (ii) are true at $t$ and (i) is true at $t+1$ (as we have just shown) and we want to show that (ii) is true at $t+1$.
-            Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration and denote $d_t(\cdot)$ the value of $d(\cdot)$ at time $t$ and $d_{t+1}(\cdot)$ the value of $d(\cdot)$ at time $t+1$.
+              In this step we assume that (i), (ii) are true at $t$ and (i) is true at $t+1$ (as we have just shown) and we want to show that (ii) is true at $t+1$.
+              Let $v$ be the vertex that is removed from the queue during the $t+1$-th iteration and denote $d_t(\cdot)$ the value of $d(\cdot)$ at time $t$ and $d_{t+1}(\cdot)$ the value of $d(\cdot)$ at time $t+1$.
 
-            At time $t$ every vertex $x$ is in one of the following states:
-            \begin{enumerate}
-                \item $x$ is black
-                \item $x = v$ (and therefore is white)
-                \item $x$ is white and $x \neq v$
-            \end{enumerate}
+              At time $t$ every vertex $x$ is in one of the following states:
+              \begin{enumerate}
+                  \item $x$ is black
+                  \item $x = v$ (and therefore is white)
+                  \item $x$ is white and $x \neq v$
+              \end{enumerate}
 
-            If we are in case (1) then $d_t(x)$ was the length of the shortest path from $s$ to $x$ at time $t$ (because of (i)) and $d_t(x) = d_{t+1}(x)$.
-            Then, by (ii) at $t$, there is an \textit{all-black} path from $s$ to $x$ of length $d_t(x)$ and this path is still valid at time $t+1$ since the distance is the same. Then (ii) is true at $t+1$.
+              If we are in case (1) then $d_t(x)$ was the length of the shortest path from $s$ to $x$ at time $t$ (because of (i)) and $d_t(x) = d_{t+1}(x)$.
+              Then, by (ii) at $t$, there is an \textit{all-black} path from $s$ to $x$ of length $d_t(x)$ and this path is still valid at time $t+1$ since the distance is the same. Then (ii) is true at $t+1$.
 
-            If we are in case (2) the proof is very similar to the case of (1).
-            This is because we also have that $d_t(v) = d_{t+1}(v)$ and, since $v$ is turning black at this iteration, by (i) at $t+1$ $d_{t+1}(v)$ is the length of the shortest path from $s$ to $v$.
-            Then by (ii) at time $t$ there is an \textit{all-black} path from $s$ to $v$ of length $d_t(v)$ and this path is still valid at time $t+1$ since the distance is the same. Then (ii) is true at $t+1$.
+              If we are in case (2) the proof is very similar to the case of (1).
+              This is because we also have that $d_t(v) = d_{t+1}(v)$ and, since $v$ is turning black at this iteration, by (i) at $t+1$ $d_{t+1}(v)$ is the length of the shortest path from $s$ to $v$.
+              Then by (ii) at time $t$ there is an \textit{all-black} path from $s$ to $v$ of length $d_t(v)$ and this path is still valid at time $t+1$ since the distance is the same. Then (ii) is true at $t+1$.
 
-            If we are in case (3) we will argue by contradiction and suppose that there is an \textit{all-black} path $P$ from $s$ to $x$ of length $L < d_{t+1}(x)$.
-            We have 3 cases:
-            \begin{enumerate}[label=\alph*.]
-                \item
-                      $P$ does not contain $v$.
-                      But then
-                      $$
-                          L < d_{t+1}(x) \leq d_t(x)$$
-                      because if there is an all-black path at $t+1$ and $x \neq v$ then there is also one at $t$.
-                      But this is a contradiction since, because of (ii) at $t$, $d_t(x)$ is the length of the shortest all-black path from $s$ to $x$. Therefore such path $P$ cannot exist, and (ii) is true at $t+1$.
+              If we are in case (3) we will argue by contradiction and suppose that there is an \textit{all-black} path $P$ from $s$ to $x$ of length $L < d_{t+1}(x)$.
+              We have 3 cases:
+              \begin{enumerate}[label=\alph*.]
+                  \item
+                        $P$ does not contain $v$.
+                        But then
+                        $$
+                            L < d_{t+1}(x) \leq d_t(x)$$
+                        because if there is an all-black path at $t+1$ and $x \neq v$ then there is also one at $t$.
+                        But this is a contradiction since, because of (ii) at $t$, $d_t(x)$ is the length of the shortest all-black path from $s$ to $x$. Therefore such path $P$ cannot exist, and (ii) is true at $t+1$.
 
-                \item
-                      $P$ contains $v$ as the last intermediate vertex before $x$.
-                      Then, the length of the path from $s$ to $v$ is
+                  \item
+                        $P$ contains $v$ as the last intermediate vertex before $x$.
+                        Then, the length of the path from $s$ to $v$ is
 
-                      $$
-                          L_v = L - l(v, x)
-                      $$
+                        $$
+                            L_v = L - l(v, x)
+                        $$
 
-                      But $d_t(v) \leq L_v$ since, because of (ii) at $t$, $d_t(v)$ was already the length of the shortest path from $s$ to $v$, and we get that
+                        But $d_t(v) \leq L_v$ since, because of (ii) at $t$, $d_t(v)$ was already the length of the shortest path from $s$ to $v$, and we get that
 
-                      $$
-                          d_t(v) + l(v,x) \leq L
-                      $$
+                        $$
+                            d_t(v) + l(v,x) \leq L
+                        $$
 
-                      Now the algorithm updates $d_{t+1}(x)$ to some value $L' \leq d_t(v) + l(v, x)$.
-                      Combining the assumptions with all the statements we get
+                        Now the algorithm updates $d_{t+1}(x)$ to some value $L' \leq d_t(v) + l(v, x)$.
+                        Combining the assumptions with all the statements we get
 
-                      $$
-                          d_t(v) + l(v, x) \leq L < d_{t+1} \leq d_t(v) + l(v, x)
-                      $$
+                        $$
+                            d_t(v) + l(v, x) \leq L < d_{t+1} \leq d_t(v) + l(v, x)
+                        $$
 
-                      which is a contradiction.
+                        which is a contradiction.
 
-                \item
-                      The path from $s$ to $x$ contains $v$ as an intermediate vertex but not as the last one.
-                      Let $y$ be the last intermediate vertex before $x$.
-                      So that $P$ is made of a path from $s$ to $v$, a path from $v$ to $y$, and the edge $(y, x)$.
+                  \item
+                        The path from $s$ to $x$ contains $v$ as an intermediate vertex but not as the last one.
+                        Let $y$ be the last intermediate vertex before $x$.
+                        So that $P$ is made of a path from $s$ to $v$, a path from $v$ to $y$, and the edge $(y, x)$.
 
-                      We have that $y$ must be black (since we are considering \textit{all-black} paths), therefore $y$ must have been taken out of the queue at some time $t' \leq t$. We have
+                        We have that $y$ must be black (since we are considering \textit{all-black} paths), therefore $y$ must have been taken out of the queue at some time $t' \leq t$. We have
 
-                      $$
-                          d_{t'}(y) + l(y, x) \leq L
-                      $$
+                        $$
+                            d_{t'}(y) + l(y, x) \leq L
+                        $$
 
-                      since, by (ii) at $t'$, $d_{t'}(y)$ is the length of the shortest \textit{all-black} from $s$ to $y$.
-                      Moreover, by the definition of algorithm, distances can only get shorter, therefore
+                        since, by (ii) at $t'$, $d_{t'}(y)$ is the length of the shortest \textit{all-black} from $s$ to $y$.
+                        Moreover, by the definition of algorithm, distances can only get shorter, therefore
 
-                      $$
-                          d_{t+1}(x) \leq d_{t'}(x) \leq d_{t'}(y) + l(y, x) \leq L
-                      $$
+                        $$
+                            d_{t+1}(x) \leq d_{t'}(x) \leq d_{t'}(y) + l(y, x) \leq L
+                        $$
 
-                      but by assumption $L < d_{t+1}(x)$, which is a contradiction.
-            \end{enumerate}
+                        but by assumption $L < d_{t+1}(x)$, which is a contradiction.
+              \end{enumerate}
     \end{description}
 \end{proof}
 
@@ -2018,31 +2018,31 @@ This is quite a tricky thing to prove and we will proceed by saying that there e
 
     \begin{description}
         \item[Temp assumption]
-            We will temporary assume that all the costs are distinct.
-            This is just to make the proof easier, we will remove this assumption at the end of the proof.
+              We will temporary assume that all the costs are distinct.
+              This is just to make the proof easier, we will remove this assumption at the end of the proof.
         \item[Base case]
-            The base case is trivial, since at the beginning \texttt{S} is empty and there is an optimal solution that includes all the edges in $S$.
+              The base case is trivial, since at the beginning \texttt{S} is empty and there is an optimal solution that includes all the edges in $S$.
         \item[Inductive step]
-            Suppose at some iteration $t$ the invariant is true, therefore there exists an optimal solution $T^*$ that includes all the edges in $S \subseteq T^*$ at that step. Let $e = (u, v)$ be the edge added at the $t+1$-th iteration.
-            We now want to show that $S \cup \{e\} \subseteq T^*$.
+              Suppose at some iteration $t$ the invariant is true, therefore there exists an optimal solution $T^*$ that includes all the edges in $S \subseteq T^*$ at that step. Let $e = (u, v)$ be the edge added at the $t+1$-th iteration.
+              We now want to show that $S \cup \{e\} \subseteq T^*$.
 
-            If $e \in T^*$ there is nothing to prove.
-            If $e \notin T^*$ then consider $T^* \cup \{e\}$: this graph must contain a cycle $C$.
-            We will now prove that this cannot happen since it is a contradiction.
+              If $e \in T^*$ there is nothing to prove.
+              If $e \notin T^*$ then consider $T^* \cup \{e\}$: this graph must contain a cycle $C$.
+              We will now prove that this cannot happen since it is a contradiction.
 
-            In $C$ there must be a vertex that is in $T^*$ and is not in $S$ because otherwise the algorithm would not have added $e$ because we already have a path that connects $u$ and $v$.
-            Moreover, let $u \in S$, then $v \notin S$ because otherwise the algorithm would not have added $e$.
+              In $C$ there must be a vertex that is in $T^*$ and is not in $S$ because otherwise the algorithm would not have added $e$ because we already have a path that connects $u$ and $v$.
+              Moreover, let $u \in S$, then $v \notin S$ because otherwise the algorithm would not have added $e$.
 
-            This means that on the path $P \subset T^*$ that connects $u$ and $v$ there is an edge $e' = (x,y) \in C, T^*$ and $e' \neq e$ that connects $x \in S$ and $y \notin S$.
-            We have that $c(e) < c(e') \enspace (*)$ because of the way we sorted the edges at the beginning of the algorithm.
-            But this implies that $T^* \cup \{e\} \setminus \{e'\}$ is a better solution than $T^*$, which is a contradiction.
+              This means that on the path $P \subset T^*$ that connects $u$ and $v$ there is an edge $e' = (x,y) \in C, T^*$ and $e' \neq e$ that connects $x \in S$ and $y \notin S$.
+              We have that $c(e) < c(e') \enspace (*)$ because of the way we sorted the edges at the beginning of the algorithm.
+              But this implies that $T^* \cup \{e\} \setminus \{e'\}$ is a better solution than $T^*$, which is a contradiction.
 
-            Thus $e$ must be in $T^*$ and the invariant is true at $t+1$.
+              Thus $e$ must be in $T^*$ and the invariant is true at $t+1$.
         \item[Removing temp assumption]
-            Note that in the inequality $(*)$ we used the fact that all the costs are distinct.
-            If we didn't make this assumption we would have that $c(e) \leq c(e')$.
+              Note that in the inequality $(*)$ we used the fact that all the costs are distinct.
+              If we didn't make this assumption we would have that $c(e) \leq c(e')$.
 
-            This is still fine because it just implies that there are more than one optimal solutions to the problem (for reference in our case $T^*$ and $T^* \cup \{e\} \setminus \{e'\}$) but our algorithm is always one of them.
+              This is still fine because it just implies that there are more than one optimal solutions to the problem (for reference in our case $T^*$ and $T^* \cup \{e\} \setminus \{e'\}$) but our algorithm is always one of them.
     \end{description}
 \end{proof}
 

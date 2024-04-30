@@ -17,7 +17,7 @@
 \usepackage[a4paper,margin=1.5cm]{geometry}
 \usepackage{bookmark}
 \usepackage{bytefield}
-\usepackage{minted}
+\usepackage{preamble_code}
 \usepackage{capt-of}
 
 \newcommand{\C}{\mathbb{C}}
@@ -174,26 +174,26 @@ The graph of the strongly connected components is the following:
     \item We prove each implication separately:
           \begin{description}
               \item[$\implies$] If $G$ is bipartite then we color the vertices in $V_1$ with color 1 and the vertices in $V_2$ with color 2.
-                  Since there are no edges between vertices of the same set (by definition of bipartite),
-                  all the edges go from a vertex of color 1 to a vertex of color 2 and viceversa.
+                    Since there are no edges between vertices of the same set (by definition of bipartite),
+                    all the edges go from a vertex of color 1 to a vertex of color 2 and viceversa.
               \item[$\impliedby$] If we can color the vertices of $G$ with 2 colors such that there are no edges between vertices of the same color,
-                  then we can define $V_1$ as the set of vertices colored with color 1 and $V_2$ as the set of vertices colored with color 2.
-                  Thus $G$ is bipartite with $V_1$ and $V_2$ as the two sets.
+                    then we can define $V_1$ as the set of vertices colored with color 1 and $V_2$ as the set of vertices colored with color 2.
+                    Thus $G$ is bipartite with $V_1$ and $V_2$ as the two sets.
           \end{description}
     \item Note that if there are no cycles of odd length it means that all the cycles are of even length.
           We prove each implication separately:
           \begin{description}
               \item[$\implies$] If $G$ is bipartite then for every cycle $C_1, C_2, \ldots, C_n$ in $G$
-                  we call $V_1$ the set of vertices that contains $C_1$. Note that $C_2$ must be in $V_2$ since $G$ is bipartite.
-                  We repeat the argument for $C_2$ and $C_3$, and so on, and we find that $C_i \in V_1$ if $i$ is odd and $C_i \in V_2$ if $i$ is even.
-                  Consider $C_1$ and $C_n$: since $C_1$ has an odd index $C_1 \in V_1$, then $C_n \in V_2$, since they are adjacent, and $n$ must be even.
+                    we call $V_1$ the set of vertices that contains $C_1$. Note that $C_2$ must be in $V_2$ since $G$ is bipartite.
+                    We repeat the argument for $C_2$ and $C_3$, and so on, and we find that $C_i \in V_1$ if $i$ is odd and $C_i \in V_2$ if $i$ is even.
+                    Consider $C_1$ and $C_n$: since $C_1$ has an odd index $C_1 \in V_1$, then $C_n \in V_2$, since they are adjacent, and $n$ must be even.
               \item[$\impliedby$] Perform a DFS on the graph and assign each vertex to either $V_1$ or $V_2$ based on the set of the parent vertex.
-                  If the parent vertex is in $V_1$ then the current vertex is in $V_2$ and viceversa.
-                  We argument by contradiction: if while exploring $v$ we find an edge $(v, u)$ such that $u$ has already been explored and
-                  has been assigned to the same set as $v$, then we have found a cycle. This means that that there exist a path $p$ from $v$ to $u$ that does not include the edge $(v, u)$.
-                  We backtrack on $p$ and note that a vertex $p_i$ is in the same set of $v$ if $i$ is even and in the opposite set if $i$ is odd.
-                  When we reach $u$ we have that $u$ is in the same set of $v$, hence $u = p_n$ and $n$ is odd.
-                  This means that we found a cycle of odd length but this is a contradiction.
+                    If the parent vertex is in $V_1$ then the current vertex is in $V_2$ and viceversa.
+                    We argument by contradiction: if while exploring $v$ we find an edge $(v, u)$ such that $u$ has already been explored and
+                    has been assigned to the same set as $v$, then we have found a cycle. This means that that there exist a path $p$ from $v$ to $u$ that does not include the edge $(v, u)$.
+                    We backtrack on $p$ and note that a vertex $p_i$ is in the same set of $v$ if $i$ is even and in the opposite set if $i$ is odd.
+                    When we reach $u$ we have that $u$ is in the same set of $v$, hence $u = p_n$ and $n$ is odd.
+                    This means that we found a cycle of odd length but this is a contradiction.
           \end{description}
 
     \item We can use the algorithm described in the previous point in the $\impliedby$ section:

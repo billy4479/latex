@@ -1475,6 +1475,7 @@ For the proof see the book.
 Note that this only works if we can \say{take out} the expectation from the sum.
 
 \begin{theorem}
+    \label{thm:mgf:mgf_expansion}
     If $\exists a > 0$ such that $(-a, a) \subset I$, then $E(\abs{X}^k) < +\infty$ $\forall k$ and
     \begin{equation}
         \label{eq:mgf:taylor}
@@ -1497,6 +1498,7 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 \end{proposition}
 
 \begin{proposition}[properties of the mgf]
+    \label{prop:mgf:props_of_mgf}
     \skiplineafterproof
     \begin{enumerate}
         \item $M_{aX + b}(t) = e^{tb} M_X (at)$
@@ -1506,6 +1508,108 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 \begin{proof}
     These follow quite easily from the substituting into the definition and the properties of the expectation.
     See the book for the full proof.
+\end{proof}
+
+\subsection{Convergence}
+
+\begin{definition}[convergence in distribution]
+    Let $\left(X_n\right)$ be a sequence of random variables.
+    We say that $X_n$ converges in distribution to $X$ if $F_{X_n}(x)$ converges to $F_X(x)$ for all $x$ where $F_X$ is continuous.
+    We write $X_n \stackrel{d}{\to} X$.
+\end{definition}
+
+\begin{example}
+    Let $X_n \sim \Normal(0, \frac{1}{n})$.
+    Then $X_n$ converges $X = 0$.
+\end{example}
+\begin{example}
+    Let $X_n \sim \Normal(0, n)$.
+    Then $X_n$ converges to $\Phi(0) = \frac{1}{2}$ but this is not a CDF.
+    Even if the limit exist we say that $X_n$ does not converge.
+\end{example}
+
+\begin{proposition}
+    Let $X_n \stackrel{d}{\to} X$, $a, b \in \R$ such that $F_X$ is continuous in $a$ and $b$.
+    Then
+    \begin{equation}
+        P(a < X_n \leq b) = F_{X_n}(b) - F_{X_n}(a) \to F_X(b) - F_X(a) = P(a < X \leq b)
+    \end{equation}
+\end{proposition}
+
+\begin{theorem}[port manteau]
+    The following conditions are equivalent:
+    \begin{enumerate}
+        \item $X_n \stackrel{d}{\to} X$
+        \item $P(X_n \in B) \to P(X \in B) \enspace \forall B: P(X \in \partial B) = 0$
+        \item $E(g(X_n)) \to E(g(X)) \enspace \forall g$ bounded and continuous
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+    If $M_{X_n}(t) \to M_X(t)$ for all $t \in (-a, a)$ then $X_n \stackrel{d}{\to} X$
+\end{theorem}
+
+\begin{theorem}[central limit theorem]
+    Let $X_1, X_2, \ldots \indep$ identically distributed and square-integrable.
+    Let $S_n = \sum_{i = 1}^n X_i$.
+    Assume $E(X_i) = \mu$ and $V(X_i) = \sigma^2 > 0$.
+    Now standardize $S_n$:
+    \begin{equation}
+        Z_n = \frac{S_n - E(S_n)}{\sqrt{V(S_n)}}
+    \end{equation}
+    such that $E(Z_n) = 0$ and $V(Z_n) = 1$.
+    Then
+    \begin{equation}
+        Z_n \stackrel{d}{\to} Z \sim \Normal(0, 1)
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    We assume that $\exists a > 0$ such that $\exists M_{X_i}(t) \enspace \forall t \in (-a, a)$.
+    We will use \autoref{prop:mgf:props_of_mgf} and \autoref{thm:mgf:mgf_expansion}.
+    Consider the taylor expansion of the mgf up to the second term for $t \to 0$:
+    \begin{equation}
+        M_X(t) = 1+E(X) t + \frac{E(X^2) t^2}{2} + \o(t^2)
+    \end{equation}
+
+    Now fix $t$ and compute $M(t/ \sqrt{n})$ such that as $n \to \infty \enspace t/ \sqrt{n} \to 0$:
+    \begin{equation}
+        M_X\left(\frac{t}{\sqrt{n}}\right) = 1+E(X) \frac{t}{\sqrt{n}} + \frac{E(X^2) t^2}{2n} + \o\left(\frac{1}{n}\right)
+    \end{equation}
+
+    Now that we have all the tools we can compute $E(S_n)$:
+    \begin{equation}
+        E(S_n) = E\left(\sum_{i = 0}^n X_i\right) = \sum_{i = 0}^n E(X_i) = \sum_{i = 0}^n \mu = n \mu
+    \end{equation}
+    and $V(S_n)$
+    \begin{equation}
+        V(S_n) = V\left(\sum_{i = 0}^n X_i\right) = \sum_{i = 0}^n V(X_i) = \sum_{i = 0}^n \sigma^2 = n \sigma^2
+    \end{equation}
+    then
+    \begin{equation}
+        Z_n = \frac{S_n - E(S_n)}{\sqrt{V(S_n)}}= \frac{S_n - n \mu}{\sigma \sqrt{n}} = \frac{1}{n} \frac{\sum_{i = 0}^n X_i - n \mu}{\sigma} = \frac{1}{n} \sum_{i = 0}^n \underbrace{\frac{X_i - \mu}{\sigma}}_{Y_i}
+    \end{equation}
+    where $Y_i$ is the normalization of $X_i$.
+    Note that $Y_i$ are still independent and identically distributed.
+
+    We now calculate the moment generating function of $Z_n = \frac{1}{n} \sum_{i = 0}^n Y_i$.
+    We have
+    \begin{equation}
+        E\left(e^{t Y_n}\right) = E\left(e^{t \frac{X_n - \mu}{\sigma}}\right) = E\left(e^{\frac{t}{\sigma}X_n} \cdot e^{-t \frac{\mu}{\sigma}}\right) = e^{-\frac{t \mu}{\sigma}} M_{X_n}\left(\frac{t}{\sigma}\right)
+    \end{equation}
+    which means that the mgf of $Y_n$ is well defined in a symmetric interval around 0. We can then write the mgf of $Z_n$ as
+    \begin{equation}
+        M_{Z_n} = \prod_{i = 1}^n M_{Y_i}(t) = \left(M_{Y_1}\left(\frac{t}{\sqrt{n}}\right)\right)^n
+    \end{equation}
+    since $Y_i$ are identically distributed.
+
+    Now we can use the taylor expansion of the mgf to write
+    \begin{align}
+        M_{Z_n}(t) & = \left(1+E(X) \frac{t}{\sqrt{n}} + \frac{E(X^2) t^2}{2n} + \o\left(\frac{1}{n}\right)\right)^n \\
+                   & = \left(1 + 0 + 1 \cdot \frac{t^2}{2n} + \o\left(\frac{1}{n}\right)\right)^n                    \\
+                   & \to e^{t^2 / 2}
+    \end{align}
+    which is the mgf of $\Normal(0, 1)$.
 \end{proof}
 
 \end{document}

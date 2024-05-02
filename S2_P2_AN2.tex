@@ -969,7 +969,7 @@ which can be read as the change of speed times the increase in time, which is wh
     \label{prop:path_int:triangle_ineq}
     Let $f, \gamma$ as in \autoref{def:path_int:vec_field}, then
     \begin{equation}
-        \abs{\int_\gamma f \cdot \dd{\vec s}} = \leq \int_\gamma \norm{f} \dd{s} \leq {\operatorfont Length}(\gamma) \sup_D \norm{f}
+        \abs{\int_\gamma f \cdot \dd{\vec s}}  \leq \int_\gamma \norm{f} \dd{s} \leq {\operatorfont Length}(\gamma) \sup_D \norm{f}
     \end{equation}
 \end{proposition}
 
@@ -1043,10 +1043,86 @@ which can be read as the change of speed times the increase in time, which is wh
     We have that $f: \vec x \mapsto \vec u$ so $f = \nabla g$ with $g: \vec x \mapsto \vec u \cdot \vec x$.
     Then
     \begin{equation}
-        \int_\gamma f \cdot \dd{\vec s} = g(\gamma(b)) - g(\gamma(a)) = \vec u \cdot \gamma(b) - \vec u \gamma(a) = \vec u \cdot (\gamma(b) - \gamma(a))
+        \int_\gamma f \cdot \dd{\vec s} = g(\gamma(b)) - g(\gamma(a)) = \vec u \cdot \gamma(b) - \vec u \cdot \gamma(a) = \vec u \cdot (\gamma(b) - \gamma(a))
     \end{equation}
 
     Note that we had to find the right $g$ such that the vector field is the gradient of this potential $g$.
 \end{proof}
+
+\section{Integral of functions of two variables}
+
+\subsection{Topological preliminaries}
+
+\begin{definition}[compact set]
+    In $\R^d$ a set $K \subseteq \R^d$ is called compact if it is \emph{bounded} and \emph{closed}.
+\end{definition}
+\begin{remark}
+    Bounded means that $\exists R > 0$ such that $\forall \vec x \in K$, $\norm{\vec x} \leq R$.
+\end{remark}
+
+\begin{theorem}[bolzano-weierstrass]
+    Let $K \in \R^d$ be a compact set and let $\left(\vec x_n\right)_{n \in \N}$ be a sequence in $K$.
+    Then there exists $\varphi: \N \to \N$ strictly increasing such that $\left(\vec x_{\varphi(n)}\right)_{n \in \N}$ converges to $\vec x \in K$.
+\end{theorem}
+
+\begin{proof}
+    For simplicity we assume $d = 2$. Let $\varphi_n$ be a sequence with components $x_n$ and $y_n$.
+    Since $K$ is bounded $\norm{(x, y)} \leq R$ and for any $x_n, y_n$ we have that $\abs{x_n} \leq R, \abs{y_n} \leq R$.
+    As $x_n$ is bounded in $\R$ we can use Bolzano-Weierstrass theorem in $\R$ to find a sequence $\varphi_1 : \N \to \N$ strictly increasing such that $x_{\varphi_1(n)}$ converges to $x$.
+    Let $z_n = y_{\varphi_1(n)}$. Then $z_n$ is bounded in $\R$ and we can apply Bolzano-Weierstrass again to find $\varphi_2$.
+    Then $\varphi = \varphi_1 \circ \varphi_2$ is the sequence such that $(x_{\varphi(n)}, y_{\varphi(n)})$ converges to $(x, y)$.
+    As $K$ is closed $(x, y) \in K$.
+\end{proof}
+
+\begin{definition}[uniform conrinuity]
+    Let $f: D \subseteq \R^d \to \R$. We say that $f$ is uniformly continuous in $D$ if
+    \begin{equation}
+        \forall \varepsilon > 0, \enspace \exists \delta > 0, \enspace \forall \vec x, \vec y \in D, \norm{\vec x - \vec y} \leq \delta \implies \abs{f(\vec x) - f(\vec y)} \leq \varepsilon
+    \end{equation}
+
+    The difference with \say{normal} continuity is that it is valid around any $\vec x \in D$, not just around some $\vec x_0$.
+\end{definition}
+
+\begin{proposition}[sequential characterization of uniform continuity]
+    Let $f: D \subseteq \R^d \to \R$. $f$ is uniform continuous if and only if for every pair of $x_n, y_n$ of sequences in $D$, if $\lim_{n \to + \infty} (x_n - y_n) = \vec 0$ then $\lim_{n \to +\infty} [f(x_n) - f(y_n)] = 0$.
+    Note that $x_n, y_n$ don't need to converge.
+\end{proposition}
+
+\begin{example}
+    Consider $f: x \mapsto x^2$ with $x \in \R$. $f$ is continuous but not uniformly continuous.
+    Consider $x_n = n$ and $y_n = n + \frac{1}{n}$, then $\lim (x_n - y_n) = 0$ but $\lim [f(x_n) - f(y_n)] = \lim (n^2 - n^2 - 2 - \frac{1}{n^2}) = -2$.
+\end{example}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{itemize}
+        \item[$\implies$] (assume $f$ is uniformly continuous).
+              Take $x_n, y_n$ such that $(x_n - y_n) \to \vec 0$.
+              Fix $\varepsilon > 0$ and as $f$ is uniform continuous we can find $\delta > 0$ such that $\abs{f(\vec x) - f(\vec y)} \leq \varepsilon$ if $\norm{\vec x - \vec y} \leq \delta$.
+              As $(x_n - y_n) \to \vec 0$ there exists $N$ such that $\abs{\vec x_n - \vec y_n} \leq \delta$ for all the $n \geq N$. So $\abs{f(\vec x_n) - f(\vec y_n)} \leq \varepsilon$ for $n \geq N$.
+        \item[$\impliedby$] (assume that $\forall \vec x_n, \vec y_n$ where $\vec x_n - \vec y_n \to \vec 0$ implies $f(\vec x_n) - f(\vec y_n) \to 0$).
+              By contradiction assume that $f$ is not uniformly continuous, that means we can find some $\varepsilon > 0$ such that for any $\delta$ the difference between the images is more than $\varepsilon$.
+              Fix such $\varepsilon$ and consider $\delta = \frac{1}{n}$, then there exists $(\vec x_n, \vec y_n)$ such that $\norm{\vec x_n - \vec y_n} \leq \frac{1}{n}$ and $\abs{f(\vec x_n) - f(\vec y_n)} > \varepsilon$.
+              But then $\abs{f(\vec x_n) - f(\vec y_n)} > \varepsilon > 0$ for every $n$ which means we cannot have $\lim \abs{f(\vec x_n) - f(\vec y_n)} = 0$ and we have reached a contradiction.
+    \end{itemize}
+\end{proof}
+
+\begin{theorem}[heine]
+    A continuous function defined ove a compact set is uniformly continuous.
+\end{theorem}
+
+\begin{proof}
+    Let $f: K \subseteq \R^d \to \R$ with $K$ compact and $f$ continuous.
+    By contradiction assume that $f$ is not uniformly continuous.
+    This means that there exist two sequences $x_n, y_n$ such that $\lim (\vec x_n - \vec y_n) = \vec 0$ but $f(x_n) - f(y_n)$ does not converge to $0$.
+    As $K$ is compact there exists $\varphi: \N \to \N$ strictly increasing and $\vec x \in K$ such that $\lim \vec x_{\varphi(n)} = \vec x$.
+    We have that $\lim \vec y_{\varphi(n)} = \lim (\vec y_{\varphi(n)} - \vec x_{\varphi(n)} + \vec x_{\varphi(n)}) = \vec 0 + \vec x$.
+    The by continuity of $f$ at $\vec x$ we have that $\lim f(\vec x_{\varphi(n)}) = \vec x = \lim f(\vec y_{\varphi(n)})$ therefore $f(\vec x_{\varphi(n)}) - f(\vec y_{\varphi(n)}) = 0$.
+\end{proof}
+
+\begin{theorem}[weierstrass]
+    Let $f: K \subseteq \R^d \to \R$ with $K$ compact and $f$ continuous.
+    Then $f$ is bounded and there exists $\vec x_\text{min}$ and $\vec x_\text{max}$ such that $f(\vec x_\text{min}) = \inf_K f$ and $f(\vec x_\text{max}) = \sup_K f$, that is, the infimum and supremum are attained.
+\end{theorem}
 
 \end{document}

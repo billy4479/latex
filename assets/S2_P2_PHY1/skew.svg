@@ -51,16 +51,16 @@
   </g>
   <mask></mask>
   <g transform="translate(337.3948695467043 260.7548555026241) rotate(0 7.849999904632568 17.5)">
-    <text x="0" y="24.528" font-family="Virgil, Segoe UI Emoji" font-size="28px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">θ</text>
+    <text x="0" y="24.528" font-family="'Virgil 3 YOFF'" font-size="28px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">θ</text>
   </g>
   <g transform="translate(159.1439460405718 232.95306814555883) rotate(0 10.783333778381348 22.5)">
-    <text x="0" y="31.536" font-family="Virgil, Segoe UI Emoji" font-size="36px" fill="#1971c2" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">L</text>
+    <text x="0" y="31.536" font-family="'Virgil 3 YOFF'" font-size="36px" fill="#1971c2" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">L</text>
   </g>
   <g transform="translate(347.496800894482 104.8451857412939) rotate(0 12.199999809265137 22.5)">
-    <text x="0" y="31.536" font-family="Virgil, Segoe UI Emoji" font-size="36px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">R</text>
+    <text x="0" y="31.536" font-family="'Virgil 3 YOFF'" font-size="36px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">R</text>
   </g>
   <g transform="translate(330.7032915719142 33.99756828671019) rotate(0 11.558333396911621 22.5)">
-    <text x="0" y="31.536" font-family="Virgil, Segoe UI Emoji" font-size="36px" fill="#f08c00" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">ω</text>
+    <text x="0" y="31.536" font-family="'Virgil 3 YOFF'" font-size="36px" fill="#f08c00" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">ω</text>
   </g>
   <g stroke-linecap="round">
     <g transform="translate(307.0874190870527 147.87855338037446) rotate(0 0.7871957494953676 -66.12444295761154)">
@@ -105,6 +105,6 @@
   </g>
   <mask></mask>
   <g transform="translate(533.2635947119625 81.6077924628143) rotate(0 7.324999809265137 17.5)">
-    <text x="0" y="24.528" font-family="Virgil, Segoe UI Emoji" font-size="28px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">v</text>
+    <text x="0" y="24.528" font-family="'Virgil 3 YOFF'" font-size="28px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">v</text>
   </g>
 </svg>

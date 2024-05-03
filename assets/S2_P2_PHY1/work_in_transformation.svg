@@ -25,10 +25,10 @@
   </g>
   <mask></mask>
   <g transform="translate(65.05016377143511 26.65840759335211) rotate(0 8.875 22.5)">
-    <text x="0" y="31.536" font-family="Virgil, Segoe UI Emoji" font-size="36px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">p</text>
+    <text x="0" y="31.536" font-family="'Virgil 3 YOFF'" font-size="36px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">p</text>
   </g>
   <g transform="translate(642.876335461814 418.68838259872103) rotate(0 9.308333396911621 22.5)">
-    <text x="0" y="31.536" font-family="Virgil, Segoe UI Emoji" font-size="36px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">V</text>
+    <text x="0" y="31.536" font-family="'Virgil 3 YOFF'" font-size="36px" fill="#1e1e1e" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">V</text>
   </g>
   <g stroke-linecap="round">
     <g transform="translate(292.90672931860354 60.17738941106603) rotate(0 133.4383143358964 95.79600514132672)">
@@ -67,9 +67,9 @@
   </g>
   <mask></mask>
   <g transform="translate(461.72504369392936 65.45681807952849) rotate(0 13.083333015441895 22.5)">
-    <text x="0" y="31.536" font-family="Virgil, Segoe UI Emoji" font-size="36px" fill="#1971c2" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">B</text>
+    <text x="0" y="31.536" font-family="'Virgil 3 YOFF'" font-size="36px" fill="#1971c2" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">B</text>
   </g>
   <g transform="translate(343.7444587989494 198.30109870930994) rotate(0 11.808333396911621 22.5)">
-    <text x="0" y="31.536" font-family="Virgil, Segoe UI Emoji" font-size="36px" fill="#1971c2" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">A</text>
+    <text x="0" y="31.536" font-family="'Virgil 3 YOFF'" font-size="36px" fill="#1971c2" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">A</text>
   </g>
 </svg>

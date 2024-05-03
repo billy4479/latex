@@ -1125,4 +1125,123 @@ which can be read as the change of speed times the increase in time, which is wh
     Then $f$ is bounded and there exists $\vec x_\text{min}$ and $\vec x_\text{max}$ such that $f(\vec x_\text{min}) = \inf_K f$ and $f(\vec x_\text{max}) = \sup_K f$, that is, the infimum and supremum are attained.
 \end{theorem}
 
+\subsection{Definition of integral}
+
+Consider $f: D \subseteq \R^2 \to \R$, we want to compute the volume under the graph of $f$.
+We write
+\begin{equation}
+    \iint_D f(x, y) \dd{x} \dd{y}
+\end{equation}
+
+Note that even the domain can be complicated, as $D$ could be a rectangle but also some more complex shape.
+We will start by considering rectangular domains of the form $D = [a, b] \times [c, d]$.
+
+\begin{definition}[partition and step size]
+    For an interval $[a, b]$ a partition $\mathcal{P}$ of $[a, b]$ is a set of ordered points
+    \begin{equation}
+        x_0 = a < x_1 < \dots < x_{n-1} < x_n = b
+    \end{equation}
+    Moreover the \emph{step size} of the partition is
+    \begin{equation}
+        \Delta(\mathcal{P}) = \sup_i (x_i - x_{i-1})
+    \end{equation}
+\end{definition}
+
+\begin{definition}[rectangular partition]
+    Let $\mathcal{P}_1$ be a partition of $[a, b]$ of the form of $x_0, \ldots, x_N$ and $\mathcal{P}_2$ be a partition of $[c, d]$ of the form of $y_0, \ldots, y_M$.
+    We call $\mathcal{P}_1 \otimes \mathcal{P}_2$ the partition of $D=[a, b] \times [c, d]$ into rectangles:
+    \begin{equation}
+        R_{ij} = [x_{i-1}, x_i] \times [y_{j-1}, y_j] \enspace \text{for } \substack{i \in \{1, \ldots, N\} \\ j \in \{1, \ldots, M\}}
+    \end{equation}
+\end{definition}
+
+\begin{definition}[upper and lower riemann sums]
+    Let $f : D \to \R$ bounded and partitions $\mathcal{P_1}, \mathcal{P_2}$ of $D$.
+    The upper and lower sums are
+    \begin{align}
+        L(f, \mathcal{P}_1 \otimes \mathcal{P}_2) & = \sum_{i = 1}^N \sum_{j = 1}^M \mathcal{A}(R_{ij}) \left( \inf_{R_{ij}} f \right) \\
+        U(f, \mathcal{P}_1 \otimes \mathcal{P}_2) & = \sum_{i = 1}^N \sum_{j = 1}^M \mathcal{A}(R_{ij}) \left( \sup_{R_{ij}} f \right)
+    \end{align}
+    Note that $L(f, \mathcal{P}_1 \otimes \mathcal{P}_2) \leq U(f, \mathcal{P}_1 \otimes \mathcal{P}_2)$ by definition.
+\end{definition}
+
+\begin{definition}[integral over a rectangle]
+    Let $D=[a, b] \times [c, d]$ and $f : D \to \R$ bounded.
+    We say that $f$ is Riemann integrable if
+    \begin{equation}
+        \sup_{\mathcal P_1, \mathcal P_2}         L(f, \mathcal P_1 \otimes \mathcal P_2) = \inf_{\mathcal P_1, \mathcal P_2} U (f, \mathcal P_1 \otimes \mathcal P_2)
+    \end{equation}
+    in this case the common value of the $\sup$ and the $\inf$ is
+    \begin{equation}
+        \iint_D f(x, y) \dd{x} \dd{y}
+    \end{equation}
+\end{definition}
+
+\begin{remark}[orientation]
+    For 2D integrals there is no notion of orientation of the domain like we had in 1D.
+    We will only consider rectangles with $a \leq b, c \leq d$.
+\end{remark}
+
+\begin{proposition}[continuity implies integrability]
+    Let $D=[a, b] \times [c, d]$ and $f : D \to \R$ continuous.
+    Then $f$ is Riemann integrable over $D$.
+\end{proposition}
+
+\begin{proof}
+    Fix $\varepsilon > 0$, we want to conclude that $U(f, \mathcal P_1 \otimes \mathcal P_2) - L(f, \mathcal P_1 \otimes \mathcal P_2) \leq \varepsilon$.
+    As $D$ is compact, $f$ is uniformly continuous and bounded, so there exists $\delta > 0$ such that if $(x, y), (x', y')$ such that $\norm{(x, y) - (x', y')} \leq \delta$ then $\abs{f(x, y) - f(x', y')}\leq \varepsilon$.
+    Choose $\mathcal P_1, \mathcal P_2$ partitions of $[a, b]$ and $[c, d]$ of step $\leq \delta / \sqrt{2}$. If $R = R_{ij} \in \mathcal P_1 \otimes \mathcal P_2$ then, for $(x, y), (x', y') \in R_{ij}$, we have $\abs{f(x, y) - f(x', y')}\leq \varepsilon$ so that $(\sup_{R_{ij}} f) - (\inf_{R_{ij}} f) \leq \varepsilon$.
+    By multiplying by $\mathcal A(R_{ij})$ and summing we obtain the result.
+\end{proof}
+
+\begin{definition}[integrability in a non-rectangular domain]
+    Let $D\subset \R^2$ bounded and $f:D \to \R$ a bounded function.
+    Define a new function
+    \begin{equation}
+        \widetilde{f} : (x, y) \in \R^2 \mapsto \begin{cases}
+            f(x, y) & \text{if } (x, y) \in D \\
+            0       & \text{otherwise}
+        \end{cases}
+    \end{equation}
+    and let $\widetilde{D}$ be a rectangle large enough to contain $D$.
+    We say that $f$ is Riemann integrable over $D$ if $\widetilde{f}$ is Riemann integral over $\widetilde{D}$. and in this case
+    \begin{equation}
+        \iint_D f(x, y) \dd{x} \dd{y} = \iint_{\widetilde{D}} \widetilde{f}(x, y)\dd{x}\dd{y}
+    \end{equation}
+    Note that $\widetilde{f}$ is almost never continuous.
+\end{definition}
+
+\begin{definition}[Jordan measurable domains]
+    Let $D \subseteq \R^2$ bounded and $I_D$ be the indicator of $D$.
+    Then $D$ is Jordan measurable if $I_D$ is Riemann integrable, and in this case we write the area of $D$ as
+    \begin{equation}
+        \mathcal A(D) = \iint_{\widetilde{D}} I_D(x, y) \dd{x} \dd{y}
+    \end{equation}
+\end{definition}
+
+\begin{proposition}
+    Let $\psi, \varphi: [a, b] \to \R$ continuous such that $\varphi \leq \psi$.
+    Let
+    \begin{equation}
+        D = \left\{(x, y) \in \R \middle| \substack{a \leq x \leq b \\ \varphi(x) \leq y \leq \psi(x)}\right\}
+    \end{equation}
+    Then $D$ is Jordan measurable.
+\end{proposition}
+
+\begin{theorem}
+    Let $D \subseteq \R^2$ be compact and Jordan measurable.
+    Let $f: D \to \R$ be continuous.
+    Then $f$ is Riemann integrable over $D$.
+\end{theorem}
+
+\begin{proposition}
+    Let $D \subseteq \R^2$ be bounded, $f, g : D \to \R$ Riemann integrable and $a, b \in \R$.
+    \begin{enumerate}[label=\roman*.]
+        \item (linearity) $af + bg$ is Riemann integrable and
+              $\iint_D (af + bg) = a \iint_D f + b \iint_D g$
+        \item (positivity) If $f \geq 0$ over $D$ then $\iint_D f \geq 0$
+        \item (monotonicity) If $f \leq g$ over $D$ then $\iint_D f \leq \iint_D g$
+    \end{enumerate}
+\end{proposition}
+
 \end{document}

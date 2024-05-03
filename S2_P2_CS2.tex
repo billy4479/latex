@@ -9,6 +9,8 @@
 
 \setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
 
+\newcommand{\NP}{{\operatorfont NP}}
+
 \renewcommand{\vec}[1]{\uvec{#1}}
 
 \begin{document}
@@ -937,5 +939,86 @@ which means that $\vec y^T$ has somewhat the same meaning of the derivative.
     But by \autoref{thm:linear:strong_duality} $\vec y^T \vec b = \vec c^T \vec x$, that is $\vec y^T \vec b - \vec c^T \vec x = 0$.
     Moreover, since both $\vec y^T \vec b \geq 0$ and $-\vec c^T \vec x \geq 0$ the only way that their sum is $0$ is that they are both $0$.
 \end{proof}
+
+\section{NP-Completeness}
+
+\subsection{Complexity classes}
+
+Given an instance of a particular problem we can measure its size with an integer $p$ which will be the length of the encoded input data in binary notation.
+Then the running time will be a function that depends on $p$, we are usually not interested in the precise formula, we just need the order of growth, that's way we use the big-O notation.
+
+We say that an algorithm is efficient if it runs in polynomial time, that is $\O(p^k)$ with $k \in \R$ fixed.
+
+We can classify problems as follows:
+\begin{itemize}
+    \item \emph{Decision problems}: problems in which the answer is \say{yes} or \say{no}
+    \item \emph{Optimization problems}: problems in which you have to find the best result according to some criteria.
+          Note that most optimization problems can be solved once the associated decision problem is solved just by applying binary search
+\end{itemize}
+
+We call $P$ the class of decision problems that can be solved in polynomial time, in particular we can find a solution and prove it is correct in polynomial time.
+
+We will also define the $\NP$ class which is the class of problems where we can verify the correctness of the solution in polynomial time.
+This doesn't mean we can actual admitting a certificate from which which the correctness to the yes answer can be derived in polynomial timely find the solution in polynomial time.
+
+By definition $P$ is a subset of $\NP$, moreover there is a famous conjecture that says that $P \neq \NP$.
+
+Furthermore there is a subset of $\NP$ of problems called $\NP$-complete: it is possible to prove that if someone were to find an efficient solution to any of these problems they would almost automatically find an efficient solution for all of them.
+
+\subsection{Reductions}
+
+We say that a decision problem $A$ reduces to a decision problem $B$ if:
+\begin{enumerate}[label=\roman*.]
+    \item Given an instance $I$ of a problem $A$, you can construct an instance $I'$ of problem $B$ in time polynomial in $\operatorfont{size}(I)$
+    \item $I$ admits a yes-answer if and only if $I'$ admits a yes-answer
+\end{enumerate}
+
+\begin{remark}
+    $\operatorfont{size}(I')$ is polynomial in $\operatorfont{size}(I)$.
+\end{remark}
+
+Therefore, assume $A$ reduces to $B$, then if $B$ admits an efficient solution, then $A$ does too.
+
+We will use the notation $A \leq B$ to say that \say{$A$ reduces to $B$}.
+
+\begin{definition}[$\NP$-complete problem]
+    A problem $X$ is $\NP$-complete if
+    \begin{itemize}
+        \item $X \in \NP$
+        \item $\forall Y \in \NP, Y \leq X$
+    \end{itemize}
+
+    Moreover we call $\NP$-hard problems those where only the second point is true.
+\end{definition}
+
+When dealing with our own problem $X$ and we don't want to solve it we can either show it reduces to a problem in $P$ or, if we cannot find an efficient algorithm for it, we can reduce an $\NP$-complete problem $Y$ to $X$ showing that $X$ itself is $\NP$-complete.
+
+\subsubsection{Example: matching of maximum size}
+
+\begin{definition}[matching]
+    Let $G(V, E)$ be a graph.
+    We call $M \subseteq E$ a matching if every node in $V$ is the endpoint of at most one edge in $M$.
+\end{definition}
+
+We now consider the problem of finding the matching of maximum cardinality in a bipartite graph $G = (V,E)$, that is, maximize $\abs{M}$.
+We will prove that this problem can be solved efficiently by reducing it to the flow problem.
+
+First we will state the problem in a decision version: given $G = (V, E)$ and $k \in \N$ does $G$ have a matching $M$ with $\abs{M} \geq k$?
+
+Call the two partitions of $G$ $L$ and $R$. Then create a new directed graph $G' = (V', E')$. Let $V' = V \cup \{s, t\}$ and add all the edges in $E$ to $E'$ such that they are of the form of $(l, r)$ with $l \in L, r \in R$; then connect $s$ to all the vertices in $L$ and all the vertices in $R$ to $t$.
+Finally set the capacity of all edges to $1$.
+
+This construction is done in polynomial time of the size of the original input.
+We now claim that there exists an $s$-$t$ flow in $G'$ of size $\geq k$ if and only if there exists a matching in $G$ of value $\geq k$.
+If this is true we have shown that we can solve the original problem in polynomial time.
+
+We can now prove the claim:
+\begin{itemize}
+    \item Given a matching of size $\geq k$ we can construct a flow from $s$ to $t$ of value $\geq k$ by sending 1 unit of flow on $G'$ on the path $s, u, v, t$ for all $(u, v) \in M$.
+    \item Given a flow of value $\geq k$ we know that either $f(u, v) \in \{0, 1\}$: select all the edges $(u, v)$ with $u \in L$ and $v \in R$ and $f(u, v) = 1$ and they will form a matching.
+\end{itemize}
+
+\subsection{Main theorem of NP-completeness}
+
 
 \end{document}

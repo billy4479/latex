@@ -15,9 +15,10 @@
 \newcommand{\Exponential}{{\operatorfont Exponential}}
 \newcommand{\BivariateNormal}{{\operatorfont BivariateN}}
 
-\newcommand{\convas}{\stackrel{\text{a.s.}}{\to}}
-\newcommand{\convdist}{\stackrel{\text{d}}{\to}}
-\newcommand{\convprob}{\stackrel{\text{P}}{\to}}
+\newcommand{\convas}{\xrightarrow{\operatorfont a.s.}}
+\newcommand{\convdist}{\xrightarrow{\operatorfont d}}
+\newcommand{\convprob}{\xrightarrow{\operatorfont P}}
+\newcommand{\convmean}[1]{\xrightarrow{#1}}
 
 \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -1619,7 +1620,7 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 \subsection{Inequalities}
 
 \begin{theorem}[Markuo inequality]
-    \label{thm:mgf:markuo}
+    \label{thm:convergence:markuo}
     Let $X$ be a random variable and $r > 0$ such that $E(\abs{X}^r) < + \infty$.
     Then
     \begin{equation}
@@ -1639,13 +1640,15 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 \end{proof}
 
 \begin{theorem}[Chebyshev inequality]
-    Let $\mu = E(X)$ and apply \autoref{thm:mgf:markuo} with $r = 2$:
+    \label{thm:convergence:chebyshev}
+    Let $\mu = E(X)$ and apply \autoref{thm:convergence:markuo} with $r = 2$:
     \begin{equation}
         P(\abs{X - \mu} \geq k) \leq \frac{E\left((X - \mu)^2\right)}{k^2} = \frac{\sigma^2}{k^2}
     \end{equation}
 \end{theorem}
 
 \begin{theorem}[Jensen inequality]
+    \label{thm:conv:jensen}
     Let $U$ a convex set such that $P(X \in U) = 1$, $g : U \to \R$ convex.
     Then
     \begin{equation}
@@ -1727,11 +1730,11 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 We can now do some more work on almost sure converge.
 We can write that $X_n \convas X$ if and only if $\forall \varepsilon > 0$
 \begin{equation}
-    P(\exists n \geq 1 : \forall k \geq n \abs{X_k - X} \leq \varepsilon) = 1
+    P\left(\exists n \geq 1 : \forall k \geq n, \enspace \abs{X_k - X} \leq \varepsilon\right) = 1
 \end{equation}
 which is equivalent to
 \begin{equation}
-    P\left( \bigcup_{n = 1}^\infty \bigcap_{k = n}^\infty \left(\abs{X_n - X} \leq \varepsilon\right) \right) = 1
+    P\left( \bigcup_{n = 1}^\infty \bigcap_{k = n}^\infty \left(\abs{X_k - X} \leq \varepsilon\right) \right) = 1
 \end{equation}
 but the argument of the union is increasing, hence we can write
 \begin{equation}
@@ -1755,17 +1758,136 @@ From this we can prove that almost sure convergence is stronger than convergence
     \end{equation}
 \end{proof}
 
-\begin{theorem}
-    \skiplineafterproof
-    \begin{enumerate}
-        \item \begin{equation}
-                  \sum_{n = 1}^\infty P(\abs{X_n - X} > \varepsilon) < \infty \implies X_n \convas X
-              \end{equation}
-        \item If $(\abs{X_n - X} > \varepsilon) \indep$ then
-              \begin{equation}
-                  X_n \convas X \iff \sum_{n = 1}^\infty P(\abs{X_n - X} > \varepsilon)
-              \end{equation}
-    \end{enumerate}
+\begin{theorem}(sufficient condition for a.s. converge)
+    \begin{equation}
+        \sum_{n = 1}^\infty P(\abs{X_n - X} > \varepsilon) < \infty \implies X_n \convas X
+    \end{equation}
+
+    If $(\abs{X_n - X} > \varepsilon) \indep$ then it becomes also necessary:
+    \begin{equation}
+        X_n \convas X \implies \sum_{n = 1}^\infty P(\abs{X_n - X} > \varepsilon)
+    \end{equation}
 \end{theorem}
+
+\begin{definition}[convergence in the $r$-th mean]
+    Let $r \geq 1$.
+    The sequence $(X_n)$ converges to $X$ in the $r$-th mean if
+    \begin{equation}
+        \lim_{n \to \infty} E(\abs{X_n - X}^r) = 0
+    \end{equation}
+    We sometimes write convergence in $L^r$.
+\end{definition}
+
+\begin{theorem}
+    Let $(X_n)$ be a sequence converging to $X$ in mean of order $r_2 > 1$.
+    Then if $r_1 < r_2$, $X_n \stackrel{r_1}{\to} X$.
+\end{theorem}
+\begin{proof}
+    We have proved before that if $E(X^{r_2})$ is finite, then $E(X^{r_1})$ is also finite for $r_1 < r_2$.
+    Then we can write
+    \begin{equation}
+        E(\abs{X_n - X}^{r_1}) = E\left(\abs{X_n - X}^{r_2 \frac{r_1}{r_2}}\right)
+    \end{equation}
+
+    Then we can apply \autoref{thm:conv:jensen} to the function $g(x) = x^{r_1/r_2}$, which is concave, to get that
+    \begin{equation}
+        E\left(\abs{X_n - X}^{r_2 \frac{r_1}{r_2}}\right) \leq E(\abs{X_n - X}^{r_2})^\frac{r_1}{r_2} \to 0
+    \end{equation}
+\end{proof}
+
+\begin{theorem}
+    If $X_n \convmean{r} X$ with $r \geq 1$, then $X_n \convprob X$.
+\end{theorem}
+\begin{proof}
+    We apply \autoref{thm:convergence:markuo} to get
+    \begin{equation}
+        P(\abs{X_n - X}^r > \varepsilon) \leq \frac{E(\abs{X_n - X}^r)}{\varepsilon^r} \to 0
+    \end{equation}
+\end{proof}
+
+\begin{theorem}
+    If $X_n \convprob X$ then $X_n \convdist X$.
+    Moreover, if $X_n \convdist c$ then $X_n \convprob X$.
+\end{theorem}
+\begin{proof}
+    Recall the definition of $\limsup$:
+    \begin{equation}
+        \limsup_n a_n = \lim_{n \to \infty} \sup_{k \geq n} a_k
+    \end{equation}
+    then
+    \begin{align}
+        \limsup_n F_{X_n}(x) & = \limsup_n P(X_n \leq X)                                                                                                                      \\
+                             & = \limsup_n P\left( (X_n \leq x \cap \abs{X_n -X} \leq \varepsilon) \cup (X_n \leq x \cap \abs{X_n -X} > \varepsilon)\right)                   \\
+                             & = \limsup_n \left[P(X_n \leq x \cap \abs{X_n -X} \leq \varepsilon) + P(X_n \leq x \cap \abs{X_n -X} > \varepsilon)\right]                      \\
+                             & \leq \limsup_n P(X_n \leq x \cap \abs{X_n -X} \leq \varepsilon) + \underbrace{\limsup_n P(X_n \leq x \cap \abs{X_n -X} > \varepsilon)}_{\to 0} \\
+                             & = \limsup_n P(X_n \leq x \cap \abs{X_n -X} \leq \varepsilon)                                                                                   \\
+                             & \leq \limsup_n P(X \leq x + \varepsilon) \label{eq:conv:prob_implies_dist_1}                                                                   \\
+                             & = P(X \leq x + \varepsilon) = F_X(x + \varepsilon)
+    \end{align}
+    where in \autoref{eq:conv:prob_implies_dist_1} we use the fact that $(X_n \leq x \cap \abs{X_n -X} \leq \varepsilon) \implies (X \leq x + \varepsilon)$.
+    We have obtained that $\limsup_n F_{X_n}(x) \leq F_X(x + \varepsilon)$ then we take the limit as $\varepsilon \to 0$ and we get that $\limsup_n F_{X_n}(x) \leq F_X(x)$.
+
+    We now need to to repeat the process with $P(X_n > x)$. We will not repeat the procedure but we will get that
+    \begin{align}
+        \limsup(1-F_{X_n}(x))           & \leq 1 - F_X(x)          \\
+        \cancel{1} - \liminf F_{X_n}(x) & \leq \cancel{1} - F_X(x) \\
+        \liminf F_{X_n}(x)              & \geq F_X(x)
+    \end{align}
+
+    Now combining everything together we get
+    \begin{equation}
+        F_X(x) \leq \liminf F_{X_n}(x) \leq \limsup F_{X_n} (x) \leq F_X(x)
+    \end{equation}
+    which implies that $\liminf F_{X_n}(x) = \limsup F_{X_n}(x) = F_X(x)$, that means that
+    \begin{equation}
+        \exists \lim_{n \to \infty} F_{X_n}(x) = F_X(x)
+    \end{equation}
+
+    We are just left to show that $X_n \convdist c \implies X_n \convprob c$. This is quite easy as if $X_n \convdist c$ then
+    \begin{equation}
+        F_{X_n} \to \begin{cases}
+            1 & x > c \\
+            0 & x < c
+        \end{cases}
+    \end{equation}
+    we can then write
+    \begin{align}
+        P(\abs{X_n - c} > \varepsilon) & = P(X_n < c - \varepsilon) + P(X_n > c + \varepsilon)       \\
+                                       & \leq P(X_n \leq c - \varepsilon) + P(X_n > c + \varepsilon) \\
+                                       & = F_{X_n}(c - \varepsilon) + 1 - F_{X_n}(c+ \varepsilon)    \\
+                                       & \xrightarrow{n \to \infty} 0 + 1 - 1 = 0
+    \end{align}
+\end{proof}
+
+\subsection{Law of large numbers}
+
+\begin{definition}[law of large number]
+    Let $X_n$ be a sequence of random variables such that $E(X_n) = \mu \in \R$ $\forall n$.
+    Let $S_n = \sum_{k = 1}^n X_k$.
+    \begin{itemize}
+        \item We say that $X_n$ obeys to the \emph{weak} law of large numbers if
+              \begin{equation}
+                  \frac{1}{n} \sum^n_{k = 1} X_k \convprob \mu
+              \end{equation}
+        \item We say that $X_n$ obeys to the \emph{strong} law of large numbers if
+              \begin{equation}
+                  \frac{1}{n} \sum^n_{k = 1} X_k \convas \mu
+              \end{equation}
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}[weak law of large numbers for uncorrelated random variables]
+    Let $X_n$ be square-integrable, $E(X_n) = \mu$, $V(X_n) = \sigma^2 > 0$ $\forall n$; $\cov(X_k, X_n) = 0$ $\forall k \neq n$.
+    Then $X_n$ obeys to the week law of large numbers.
+\end{theorem}
+
+\begin{proof}
+    Let $S_n = \sum_{k = 1}^n X_k$, we want to prove that $S_n/n \convprob \mu$.
+    We have that $E(S_n/n) = \mu$ and $V(S_n/n) = \sigma^2 /n \to 0$.
+    Then apply \autoref{thm:convergence:chebyshev} to get that
+    \begin{equation}
+        P\left(\abs{\frac{S_n}{n} - \mu} > \varepsilon\right) \leq \frac{V\left(\frac{S_n}{n}\right)}{\varepsilon^2} = \frac{\sigma^2}{n \varepsilon^2} \xrightarrow{n \to \infty} 0
+    \end{equation}
+\end{proof}
 
 \end{document}

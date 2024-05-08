@@ -1806,6 +1806,7 @@ From this we can prove that almost sure convergence is stronger than convergence
 \end{proof}
 
 \begin{theorem}
+    \label{thm:conv:prob_implies_dist}
     If $X_n \convprob X$ then $X_n \convdist X$.
     Moreover, if $X_n \convdist c$ then $X_n \convprob X$.
 \end{theorem}
@@ -1876,7 +1877,8 @@ From this we can prove that almost sure convergence is stronger than convergence
     \end{itemize}
 \end{definition}
 
-\begin{theorem}[weak law of large numbers for uncorrelated random variables]
+\begin{theorem}[weak law of large numbers for uncorrelated r.v.]
+    \label{thm:conv:wlln}
     Let $X_n$ be square-integrable, $E(X_n) = \mu$, $V(X_n) = \sigma^2 > 0$ $\forall n$; $\cov(X_k, X_n) = 0$ $\forall k \neq n$.
     Then $X_n$ obeys to the week law of large numbers.
 \end{theorem}
@@ -1889,5 +1891,78 @@ From this we can prove that almost sure convergence is stronger than convergence
         P\left(\abs{\frac{S_n}{n} - \mu} > \varepsilon\right) \leq \frac{V\left(\frac{S_n}{n}\right)}{\varepsilon^2} = \frac{\sigma^2}{n \varepsilon^2} \xrightarrow{n \to \infty} 0
     \end{equation}
 \end{proof}
+
+\begin{definition}[sample mean]
+    Let $\overline X_n$ be the mean of the first $n$ elements of a sequence $X_n$.
+\end{definition}
+
+\begin{proposition}
+    $X_n$ obeys to the weak law of large numbers iff $\overline X_n \convprob \mu$.
+\end{proposition}
+
+\begin{proposition}
+    \label{prop:conv:wlln_rewrite}
+    We can rewrite the weak law of large numbers as
+    \begin{equation}
+        \frac{S_n - n \mu}{n} \convprob 0
+    \end{equation}
+\end{proposition}
+
+Given $X_n$ such that we can apply the central limit theorem (that is, finite expectation and variance, $X_n$ i.i.d.), then, according to \autoref{prop:conv:wlln_rewrite} and \autoref{thm:conv:prob_implies_dist}, we can write
+\begin{equation}
+    \frac{S_n - n \mu}{\sigma n} \convdist 0
+\end{equation}
+which is very close to the central limit theorem formulation.
+
+\begin{theorem}[strong law of large numbers for i.i.d. r.v.]
+    If $X_n$ is a sequence of independent identically distributed integrable random variables then $X_n$ obeys to the strong law of large numbers
+\end{theorem}
+\begin{remark}
+    This is not stronger nor weaker than the assumptions we had in \autoref{thm:conv:wlln} as there we required square-integrability but now we are requiring independence and identical distribution.
+\end{remark}
+
+\begin{proof}
+    For simplicity we will assume that $E(X_k^4) < \infty$.
+    Let $Y_k = \frac{X_k - \mu}{\sigma}$. We have that $Y_n$ are i.i.d. such that $E(Y_k) = 0$ and $V(Y_k) = 1$.
+
+    We want to prove that
+    \begin{equation}
+        \sum_{n = 1}^\infty P\left( \abs{\frac{\sum_{k = 1}^n Y_k}{n}} > \varepsilon \right) < + \infty
+    \end{equation}
+
+    We can now apply \autoref{thm:convergence:markuo} to get
+    \begin{equation}
+        \sum_{n = 1}^\infty P\left( \abs{\frac{\sum_{k = 1}^n Y_k}{n}} > \varepsilon \right) \leq \frac{E\left( \abs{\frac{\sum_{k = 1}^n Y_k}{n}}^4 \right)}{\varepsilon^4} = \frac{E\left( \abs{\sum_{k = 1}^n Y_k}^4 \right)}{n^4 \varepsilon^4}
+    \end{equation}
+
+    We now focus on the nominator:
+    \begin{equation}
+        \begin{split}
+            E\left( \left(\sum_{k = 1}^n Y_k\right)^4 \right) & = E\left( (Y_1 + \dots + Y_n)(Y_1 + \dots + Y_n)(Y_1 + \dots + Y_n)(Y_1 + \dots + Y_n) \right) \\
+                                                              & = \sum_{i, j, k , e} E(Y_i Y_j Y_k Y_e)
+        \end{split}
+    \end{equation}
+    and we can do some sorcery (TODO: read the book) to get that
+    \begin{equation}
+        \sum_{i, j, k , e} E(Y_i Y_j Y_k Y_e) = nm_4 + 3n(n-1)m_2^2
+    \end{equation}
+    where $m_k$ is the $k$-th moment of $Y_k$.
+    But then
+    \begin{equation}
+        \sum_{n = 1}^\infty \frac{1}{n^4 \varepsilon^4}(nm_4 + 3 n(n-1)m_2^2) \sim \frac{1}{n^2} \implies \sum < +\infty
+    \end{equation}
+\end{proof}
+
+\begin{proposition}
+    Let $X_n$ i.i.d. with finite expectation and variance.
+    Then, by the strong law of large numbers,
+    \begin{equation}
+        \overline X_n \convas \mu
+    \end{equation}
+    and, by the central limit theorem,
+    \begin{equation}
+        \sqrt{n} \cdot \frac{\overline X_n - \mu}{\sigma} \convdist Z \sim N(0, 1)
+    \end{equation}
+\end{proposition}
 
 \end{document}

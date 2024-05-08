@@ -1244,4 +1244,93 @@ We will start by considering rectangular domains of the form $D = [a, b] \times 
     \end{enumerate}
 \end{proposition}
 
+\begin{theorem}[Fubini's theorem for rectangles]
+    Let $D = [a, b] \times [c, d]$ and $f: D \subseteq \R^2 \to \R$ continuous.
+    Then $y \mapsto \int_a^b f(x, y) \dd{x}$ and $x \mapsto \int_c^d f(x, y) \dd{y}$ are continuous and
+    \begin{equation}
+        \iint_D f(x, y) \dd{x}\dd{y} = \int_c^d \left(\int_a^b f(x,y) \dd{x}\right) \dd{y} = \int_a^b \left(\int_c^d f(x,y) \dd{y}\right) \dd{x}
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    Let us first prove that $g(y) = \int_a^b f(x, y) \dd{x}$ and $h(x) = \int_c^d f(x, y) \dd{y}$ are continuous.
+
+    Fix $\varepsilon > 0$. As $f$ is uniformly continuous (since $D$ is compact and $f$ is continuous), there is $\delta > 0$ such that
+    \begin{equation}
+        \norm{(x,y)- (x',y')} \leq \delta \implies \abs{f(x, y) - f(x', y')} \leq \varepsilon
+    \end{equation}
+    so if $y, y'$ are such that $\abs{y-y'} \leq \delta$ then $\abs{f(x,y) - f(x,y')} \leq \varepsilon$ for any $x$.
+    We have
+    \begin{align}
+        \abs{g(y) - g(y')} & = \abs{\int_a^b f(x,y) - f(x,y') \dd{x}}             \\
+                           & \leq \int_a^b \abs{f(x, y) - f(x, y')}               \\
+                           & \leq \int_a^b \varepsilon \dd{x} = (b-a) \varepsilon
+    \end{align}
+    that is, if $\abs{y-y'} \leq \delta$ then $\abs{g(y) - g(y')} \leq (b-a)\varepsilon$, which means $g$ is uniformly continuous.
+    We can repeat the argument for $h(x)$.
+
+    Consider now the partitions $\mathcal P_1$ of $[a, b]$ and $\mathcal P_2$ of $[c, d]$.
+    Then consider the rectangles $R_{ij} = [x_{i-1}, x_i] \times [y_{i-1}, y]$: let $l_{ij} = \inf_{R_{ij}} f$, $u_{ij} = \sup_{R_{ij}} f$ and $\mathscr A(R_{ij}) = (y_i -y{i-1}) (x_i - x_{i-1})$.
+
+    We can now write the Riemann sums as
+    \begin{align}
+        L(f, \mathcal P_1 \otimes \mathcal P_2) & = \sum_{j = 1}^M \sum_{i = 1}^N (y_i -y{i-1}) (x_i - x_{i-1}) l_{ij} \\
+                                                & = \sum_{j = 1}^M (y_i -y{i-1}) \sum_{i = 1}^N (x_i - x_{i-1}) l_{ij}
+    \end{align}
+    note that for every $y \in [y{i-1}, y_i]$, $(x_i - x_{i-1}) l_{ij} \leq \int_{x_{i-1}}^{x_i} f(x, y)\dd{y}$ because $f(x, y) \geq l_{ij}$.
+    If we take the sum we get that \begin{equation}
+        \sum_{i = 1}^N (x_i -x_{i-1})l_{ij} \leq \int_a^b f(x, y) \dd{x}
+    \end{equation}
+    As this is valid for any $y$ we can write
+    \begin{equation}
+        \sum_{i = 1}^N (x_i -x_{i-1})l_{ij} \leq \min_{y \in [y_{i-1}, y_i]} \int_a^b f(x, y) \dd{x}
+    \end{equation}
+    but then we can write the lower sum as
+    \begin{align}
+        L(f, \mathcal P_1 \otimes \mathcal P_2) & \leq \sum_{j = 1}^M (y_i -y{i-1}) \sum_{i = 1}^N \min_{y \in [y_{i-1}, y_i]} \int_a^b f(x, y) \dd{x} \\
+                                                & \leq \int_c^d g(y) \dd{y}                                                                            \\
+                                                & = \int_c^d \left( \int_a^b f(x, y) \dd{x} \right) \dd{y}
+    \end{align}
+
+    By a similar argument we can get that
+    \begin{equation}
+        U(f, \mathcal P_1 \otimes \mathcal P_2) \geq \int_c^d \left( \int_a^b f(x, y) \dd{x} \right) \dd{y}
+    \end{equation}
+    therefore, combing the two inequalities we get
+    \begin{equation}
+        L(f, \mathcal P_1 \otimes \mathcal P_2) \leq \int_c^d \left( \int_a^b f(x, y) \dd{x} \right) \dd{y} \leq U(f, \mathcal P_1 \otimes \mathcal P_2)
+    \end{equation}
+    moreover
+    \begin{equation}
+        \sup_{\mathcal P_1, \mathcal P_2} L(f, \mathcal P_1 \otimes \mathcal P_2) \leq \int_c^d \left( \int_a^b f(x, y) \dd{x} \right) \dd{y} \leq \inf_{\mathcal P_1, \mathcal P_2} U(f, \mathcal P_1 \otimes \mathcal P_2)
+    \end{equation}
+    and since $f$ is continuous we get the result.
+\end{proof}
+
+\begin{corollary}
+    Assume that $f(x, y) = g(x)h(y)$ with $g:[a,b] \to \R$ and $h:[c,d] \to \R$.
+    Then
+    \begin{equation}
+        \iint_D f(x, y) \dd{x}\dd{y} = \left(\int_a^b g(x)\dd{x}\right) \left(\int_c ^d g(y)\dd{y}\right)
+    \end{equation}
+
+    This result is particularly useful in probability.
+\end{corollary}
+
+\begin{proof}
+    \begin{align}
+        \iint_D f(x, y) \dd{x}\dd{y} & = \int_a^b \left(\int_c^d g(x)h(y) \dd{y}\right) \dd{x}              \\
+                                     & = \int_a^b g(x) \left(\int_c^d h(y) \dd{y}\right) \dd{x}             \\
+                                     & = \left(\int_a^b g(x)\dd{x}\right) \left(\int_c ^d g(y)\dd{y}\right)
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Fubini general form]
+    Let $\varphi, \phi: [a, b] \to \R$ continuous such that $\varphi \leq \psi$.
+    Let $D = \left\{ (x, y) : a \leq x \leq b, \varphi(x) \leq y \leq \psi(x) \right\}$.
+    Then, if $f: D \to \R$ is continuous we have
+    \begin{equation}
+        \iint_D f(x, y) \dd{x} \dd{y} = \int_a^b \left(\int_{\varphi(x)}^{\psi(x)} f(x, y) \dd{y}\right) \dd{x}
+    \end{equation}
+\end{theorem}
+
 \end{document}

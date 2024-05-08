@@ -10,6 +10,7 @@
 \setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
 
 \newcommand{\NP}{{\operatorfont NP}}
+\newcommand{\NPC}{$\NP$-Complete}
 
 \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -963,7 +964,7 @@ This doesn't mean we can actual admitting a certificate from which which the cor
 
 By definition $P$ is a subset of $\NP$, moreover there is a famous conjecture that says that $P \neq \NP$.
 
-Furthermore there is a subset of $\NP$ of problems called $\NP$-complete: it is possible to prove that if someone were to find an efficient solution to any of these problems they would almost automatically find an efficient solution for all of them.
+Furthermore there is a subset of $\NP$ of problems called \NPC: it is possible to prove that if someone were to find an efficient solution to any of these problems they would almost automatically find an efficient solution for all of them.
 
 \subsection{Reductions}
 
@@ -981,8 +982,8 @@ Therefore, assume $A$ reduces to $B$, then if $B$ admits an efficient solution, 
 
 We will use the notation $A \leq B$ to say that \say{$A$ reduces to $B$}.
 
-\begin{definition}[$\NP$-complete problem]
-    A problem $X$ is $\NP$-complete if
+\begin{definition}[\NPC problem]
+    A problem $X$ is \NPC if
     \begin{itemize}
         \item $X \in \NP$
         \item $\forall Y \in \NP, Y \leq X$
@@ -991,7 +992,7 @@ We will use the notation $A \leq B$ to say that \say{$A$ reduces to $B$}.
     Moreover we call $\NP$-hard problems those where only the second point is true.
 \end{definition}
 
-When dealing with our own problem $X$ and we don't want to solve it we can either show it reduces to a problem in $P$ or, if we cannot find an efficient algorithm for it, we can reduce an $\NP$-complete problem $Y$ to $X$ showing that $X$ itself is $\NP$-complete.
+When dealing with our own problem $X$ and we don't want to solve it we can either show it reduces to a problem in $P$ or, if we cannot find an efficient algorithm for it, we can reduce an \NPC problem $Y$ to $X$ showing that $X$ itself is \NPC.
 
 \subsubsection{Example: matching of maximum size}
 
@@ -1018,7 +1019,92 @@ We can now prove the claim:
     \item Given a flow of value $\geq k$ we know that either $f(u, v) \in \{0, 1\}$: select all the edges $(u, v)$ with $u \in L$ and $v \in R$ and $f(u, v) = 1$ and they will form a matching.
 \end{itemize}
 
-\subsection{Main theorem of NP-completeness}
+\subsection{SAT problems}
 
+\begin{definition}[boolean algebra]
+    Let $x$ be \emph{boolean variables}, i.e. $x \in \{0, 1\}$, and $\lnot x$ be its negation.
+    Let $\land$ denote the \emph{logical AND} operator and $\lor$ denote the \emph{logical OR} operator.
+    Let a \emph{clause} $C$ be the expression given by taking the $\lor$ of a set of literal $l$ $l_1, \ldots, l_n$, where a literal is either $\lnot x$ or $x$.
+    Let a \emph{boolean formula} be the expression given by taking the $\and$ between a set of clauses $C_1, \ldots, C_n$.
+\end{definition}
+
+\begin{definition}[SAT problem]
+    Given a boolean formula we can we find a truth assignment (that is, assigning a value to each $x_i$) such that the resulting expression is true?
+\end{definition}
+
+It is easy to see that SAT is $\NP$ since we can verify a solution in polynomial time.
+Now consider a SAT problem where all the clauses have exactly $k$ variables: we call this a $k$-SAT problem.
+In particular consider the 3-SAT problem.
+
+\begin{definition}
+    3-SAT is \NPC.
+\end{definition}
+
+\begin{theorem}[all SAT problems are \NPC]
+    Given a SAT formula $I$ with $n$ variables and $m$ clauses it is possible to construct a 3-SAT formula $I'$ in polynomial time such that
+    \begin{equation}
+        I \text{ satisfiable } \iff I' \text{ satisfiable }
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Consider a clause $C_i \in I$:
+    \begin{enumerate}[label=\roman*.]
+        \item ($C_i$ has 3 variables). We are fine, keep it as it is.
+        \item ($C_i$ has 2 variables). Let $C_i = (x_i \lor y_i)$, then introduce $z_i$ and substitute $C_i$ with two clauses:
+              \begin{equation}
+                  \label{eq:np:sat_2_to_3}
+                  (x_i \lor y_i \lor z_i) \land (x_i \lor y_i \lor \lnot z_i)
+              \end{equation}
+              then, for every truth assigning that satisfies $C_i$, \autoref{eq:np:sat_2_to_3} will also we be satisfied no matter the choice of $z_i$
+        \item ($C_i$ has 1 variable). Let $C_i = (x_i)$, then introduce $z_i$ and substitute $C_i$ with two clauses:
+              \begin{equation}
+                  \label{eq:np:sat_1_to_2}
+                  (x_i \lor z_i) \land (x_i \lor \lnot z_i)
+              \end{equation}
+              then, again, for every truth assigning that satisfies $C_i$, \autoref{eq:np:sat_1_to_2} will also we be satisfied no matter the choice of $z_i$.
+              Now each clause in \autoref{eq:np:sat_1_to_2} has two variables and we can apply the procedure above to turn it into a 3 variables clause.
+        \item ($C_i$ contains $>$ 3 variables). Let $C_i = (x_1, \lor \dots \lor x_k)$, then introduce $z_i$ and substitute $C_i$ with two clauses:
+              \begin{equation}
+                  (x_1 \lor x_2 \lor z_i) \land (\lnot z_i \lor x_3 \lor \dots \lor x_k)
+              \end{equation}
+              then repeat until these steps until also the second new clause is of length 3.
+    \end{enumerate}
+
+    By construction the number of clauses added in order to construct $I'$ is polynomial and $I$ is satisfiable iff $I'$ is satisfiable,
+    therefore every SAT can be reduced to 3-SAT in polynomial time making it \NPC.
+\end{proof}
+
+\subsection{Common reductions}
+
+\subsubsection{Vertex cover}
+
+\begin{definition}[vertex cover]
+    Let $G = (V,E)$ be a graph. A vertex cover $C \subseteq V$ is a set of vertices such that $\forall (u, v) \in E$ either $u \in C$ or $v \in C$.
+\end{definition}
+
+\begin{definition}[vertex cover decision problem]
+    Our problem is, given $G=(V, E)$ and an integer $k$ such that $0 < k < \abs{V}$, is there a vertex cover $C$ with $\abs{C} \leq k$?
+\end{definition}
+
+\begin{theorem}
+    The vertex cover problem is \NPC.
+\end{theorem}
+
+\begin{proof}
+    We will show that 3-SAT reduces to finding a vertex cover.
+
+    Consider a 3-SAT problem $I$ of $n$ variables and $m$ clauses.
+    Construct a graph $G$ as follows:
+    \begin{itemize}
+        \item For each $x_1, \ldots, x_n$ add two nodes to the graph named $x_i$ and $\lnot x_i$, and connect them with and edge;
+        \item For each $C_1, \ldots, C_m$ add three nodes to the graph, one for each literal $l_1, l_2, l_3$, and connect them in order to get a \say{triangle};
+        \item Create an edge from each $x_i$ or $\lnot x_i$ to each $l_i$ with the corresponding value.
+    \end{itemize}
+
+    % TODO: add an example maybe?
+
+    Let $k = n + 2m$. We claim that a set cover $C$ such that $\abs{C} \leq k = n +2m$ exists if and only if $I$ is satisfiable.
+\end{proof}
 
 \end{document}

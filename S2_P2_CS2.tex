@@ -1105,6 +1105,87 @@ In particular consider the 3-SAT problem.
     % TODO: add an example maybe?
 
     Let $k = n + 2m$. We claim that a set cover $C$ such that $\abs{C} \leq k = n +2m$ exists if and only if $I$ is satisfiable.
+
+    TODO: finish this
+\end{proof}
+
+\subsubsection{Independent set}
+\label{sec:np:independent_set}
+
+\begin{definition}
+    Given a graph $G=(V,E)$ and $k \in \N$ decide whether $\exists S \subseteq V$ such that $\abs{S} \geq k$ and $\forall u, v \in S$ we have $(u, v) \notin E$.
+\end{definition}
+
+\subsubsection{Integer programming}
+TODO
+
+\subsubsection{Subset sum}
+\label{sec:np:subset_sum}
+
+\begin{definition}[subset sum]
+    Given a set of integers $A = \{a_1, \ldots, a_n\}$ and $k \in \R$, does there exist some $I \subseteq \{1, \ldots, n\}$ of indices of $A$ such that $\sum_{i \in I} a_i = k$?
+\end{definition}
+
+\begin{theorem}
+    Subset sum is \NPC.
+\end{theorem}
+
+\begin{proof}
+    First we observe that the problem is $\NP$. We will show that the independent set problem (\autoref{sec:np:independent_set}) reduces to the subset sum.
+
+    Given an instance of the independent set problem defined on $G = (V, E)$ and parameter $k$, we'll construct an instance of subset sum by defining the following integers:
+    \begin{enumerate}
+        \item $a'_v$ for every $v \in V$
+        \item $b'_{uv}$ for every $(u, v) \in E$
+        \item $k'$ a parameter
+    \end{enumerate}
+
+    Eventually, if we have a subset of integers that sum up to $k'$ we want that the subset of $a'_v$ gives us an independent set of cardinality $k'$ and the subset $b_{uv}'$ will correspond to the edges whose endpoints are not in our independent set.
+
+    We will represent the integers in a matrix:
+    \begin{enumerate}
+        \item We have one row for each vertex $a'_v$ and for each edge $b'_{uv}$
+        \item We have one special column which will contain $1$ for every vertex and $0$ otherwise
+        \item We will have one column for each edge $(u, v)$: it will contain $1$ at row $a'_v$, $a'_u$ and $b'_{uv}$ and $0$ otherwise
+        \item Another row that represents $k'$
+    \end{enumerate}
+
+    Look at each row as the base-10 representation of $a'_v$, $b'_{uv}$ and $k'$.
+    Fix an independent set $S$.
+    In the $k'$ row we sum all the rows $a'_v$ where $v \in S$ and $b'_{uv}$ where $u \notin S \land v \notin S$.
+    In this way we obtain in $k$ in the special column and $1$ in all the other columns by construction. Ideally we want
+    \begin{equation}
+        k' = k \cdot 10^{\abs{E}} + \sum^{\abs{E}-1}_{i = 0} 10^i
+    \end{equation}
+
+    Now note that there exist integers summing up to $k$ if and only if there exists an independent set of cardinality $\geq k$.
+    We can use a $\geq$ here instead of exactly $k$ because if it was too much we could just remove one of the vertices.
+
+    As this construction is done in polynomial time the subset sum is \NPC
+\end{proof}
+
+\subsubsection{Knapsack problem}
+
+\begin{definition}[knapsack decision problem]
+    Given $n$ objects with weights $w_1, \ldots, w_n$, a budget $B$, profits $p_1, \ldots, p_n$, and a parameter $k$, is it possible to find $I \subseteq {1, \ldots, n}$ such that $\sum_{i \in I} w_i \leq B$ and $\sum_{i \in I} p_i \geq k$?
+\end{definition}
+\begin{theorem}
+    The knapsack problem is \NPC.
+\end{theorem}
+
+\begin{proof}
+    We observe that the problem is $\NP$.
+    We will show that the subset sum (\autoref{sec:np:subset_sum}) reduces to this problem.
+
+    Given an instance of the subset sum with integers $a_1, \ldots, a_n$ and parameter $\tilde{k}$ we can construct an instance of knapsack as follows:
+    \begin{enumerate}
+        \item Set $w_i = p_i = a_i$
+        \item Set $B = \tilde{k} = k$
+    \end{enumerate}
+
+    Then finding a solution to this knapsack problem would give us a solution to the subset sum problem.
+
+    As the construction is polynomial, we are done.
 \end{proof}
 
 \end{document}

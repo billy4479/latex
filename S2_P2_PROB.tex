@@ -1541,7 +1541,8 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
     \end{equation}
 \end{proposition}
 
-\begin{theorem}[port manteau]
+\begin{theorem}[Portmanteaux]
+    \label{thm:conv:portmanteaux}
     The following conditions are equivalent:
     \begin{enumerate}
         \item $X_n \convdist X$
@@ -1964,5 +1965,32 @@ which is very close to the central limit theorem formulation.
         \sqrt{n} \cdot \frac{\overline X_n - \mu}{\sigma} \convdist Z \sim N(0, 1)
     \end{equation}
 \end{proposition}
+
+\begin{theorem}[continuous mapping]
+    Let $X_n$, $X$ and $U$ an open interval such that $P(X_n \in U) = P(X \in U) = 1$ for every $n$.
+    Let $g: U \to \R$ continuous.
+    Then
+    \begin{enumerate}
+        \item If $X_n \convas X$ then $g(X_n) \convas g(X)$
+        \item If $X_n \convdist X$ then $g(X_n) \convdist g(X)$
+        \item If $X_n \convprob X$ then $g(X_n) \convprob g(X)$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}
+        \item We have that $(X_n \to X) \subset (g(X_n) \to g(X))$.
+              If $X_n(\omega) \to X(\omega)$ then $g(X_n(\omega)) \to g(X(\omega))$ but
+              $1 = P(X_n \to X) \leq P(g(X_n) \to g(X))$ which means $P(g(X_n) \to g(X)) = 1$.
+        \item The thesis is equivalent to $E(h(g(X_n))) \to E(h(g(X)))$ for any $h$ continuous by \autoref{thm:conv:portmanteaux}. But $h \circ g$ is indeed continuous.
+        \item We will use the inequality $P(A) \leq P(A \cap B \cap + C \cap \dots) + P(B^c) + P(C^c) + \dots$.
+              We now want to show that $P(g(X_n) - g(X) > \varepsilon) \to 0$.
+              Fix $\varepsilon, \delta > 0$. There exists $K \in U$ closed, such that $P(X \in K) > 1- \frac{\delta}{2}$.
+              Then $K = [a, b]$ and $P(X = a) = 0$, $P(X = b)$, and $g$ is uniformly continuous over $K$.
+              TODO: There is more, read the book
+    \end{enumerate}
+\end{proof}
+
+TODO: stuff is missing here
 
 \end{document}

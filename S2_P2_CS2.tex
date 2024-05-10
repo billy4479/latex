@@ -1036,18 +1036,109 @@ It is easy to see that SAT is $\NP$ since we can verify a solution in polynomial
 Now consider a SAT problem where all the clauses have exactly $k$ variables: we call this a $k$-SAT problem.
 In particular consider the 3-SAT problem.
 
-\begin{definition}
-    3-SAT is \NPC.
+\subsubsection{SAT is NP-Complete}
+
+\begin{definition}[boolean circuit]
+    A boolean circuit is an abstract device that compute a boolean function of the form
+    \begin{equation}
+        f: \{0, 1\}^n \to \{0, 1\}^m
+    \end{equation}
+
+    Each device is made of \emph{gates} and \emph{wires}.
 \end{definition}
 
-\begin{theorem}[all SAT problems are \NPC]
-    Given a SAT formula $I$ with $n$ variables and $m$ clauses it is possible to construct a 3-SAT formula $I'$ in polynomial time such that
-    \begin{equation}
-        I \text{ satisfiable } \iff I' \text{ satisfiable }
-    \end{equation}
+\begin{definition}[gate]
+    There are 3 types of gates:
+    \begin{itemize}
+        \item \emph{AND} gate: takes 2 inputs $x_1, x_2$ and returns one output $y = x_1 \land x_2$;
+        \item \emph{OR} gate: takes 2 inputs $x_1, x_2$ and returns one output $y = x_1 \lor x_2$;
+        \item \emph{NOT} gate: takes 1 input $x$ and returns one output $y = \lnot x$.
+    \end{itemize}
+\end{definition}
+\begin{remark}
+    It is possible to create an \emph{OR} gate with just \emph{AND}s and \emph{NOT}s.
+\end{remark}
+
+Boolean circuits are then modelled as directed acyclic graphs whose nodes are gates and edges are wires connecting the inputs and outputs of the gates.
+
+If you are curious about boolean circuits and gates consider watching \url{https://www.youtube.com/watch?v=QZwneRb-zqA}.
+
+\begin{theorem}[circuits can simulate algorithms]
+    If $A$ is an algorithm with input of size $n$ and has a running time of $t(n)$, then  $\forall n$ there is a boolean circuit of size $\O(t^2(n))$ such that, $\forall I$ inputs of length $n$, the output of the circuit is the same as the output of the algorithm $A$ on $I$.
+    Furthermore, given the $A$ and $n$ such circuit is computable in polynomial time of $t(n)$.
 \end{theorem}
 
 \begin{proof}
+    Sadly, we don't have the required knowledge to be able to prove this right now :(
+    \phantom{)} % Hack: in this way the syntax highlighting is happy
+\end{proof}
+
+\begin{theorem}[Cook-Levin]
+    SAT is \NPC.
+\end{theorem}
+
+\begin{proof}
+    We want to show that every problem $X \in \NP$ reduces to SAT.
+
+    The only thing we know about $X$ is that we can verify a solution $S$ to an instance $I$ with some algorithm $A_X$ in polynomial time.
+    We imagine $S, I$ as an array of $1$ or $0$s and the output of $A_X$ as $1$ (true) or $0$ false.
+    We want a way to represent this as a SAT problem.
+
+    Let ${\operatorfont Size}(I) = n$. Assume that $A_X$ performs $t(n)$ steps that we will call elementary operations and uses $s(n)$ bits of memory in its execution.
+    The general idea of the proof is as follows:
+    \begin{enumerate}[label=\roman*.]
+        \item The execution of each elementary operation can be simulated with a \emph{boolean circuit} of size $\O(s(n))$;
+        \item The execution of the entire algorithm can be simulated by combining $t(n)$ such circuits yielding a boolean circuit of size $\O(t(n)s(t)) = \O(t^2(n))$ (since each step affects $\O(1)$ memory locations);
+        \item We model such circuit with a sat formula.
+    \end{enumerate}
+
+    For any given $X \in \NP$ and $A_X$ we construct for every instance $I$ a boolean circuit (which has polynomial time of ${\operatorfont Size}(I)$).
+    Suppose that such circuit has $h$ inputs and $m$ gates: we will obtain a boolean formula with $h+m$ variables $g_1, \dots, g_{h+m}$.
+
+    If we arrange each gate in a graph we can call $v_1, \dots, v_n$ the inputs and $v_{n+1}, \dots, v_{h+m}$ the gates.
+    Then for each $i = 1, \dots, n$ we can write a SAT formula for the gate $v_{h+i}$ as follows:
+    \begin{itemize}
+        \item If $v_{h+i}$ is a \emph{NOT} with one incoming edge from $v_j$ we write
+              \begin{equation}
+                  (\lnot g_{h+1} \lor \lnot g_j) \land (g_{h+1} \lor g_j)
+              \end{equation}
+        \item If $v_{h+i}$ is a \emph{AND} with incoming edges from $v_j$ and $v_l$ we write
+              \begin{equation}
+                  (g_{h+i} \lor \lnot g_j \lor \lnot g_l) \land
+                  (\lnot g_{h+i} \lor g_j \lor g_l ) \land
+                  (\lnot g_{h+i} \lor \lnot g_j \lor g_l ) \land
+                  (\lnot g_{h+i} \lor g_j \lor \lnot g_l)
+              \end{equation}
+
+        \item If $v_{h+i}$ is a \emph{OR} with incoming edges from $v_j$ and $v_l$ we write
+              \begin{equation}
+                  (g_{h+i} \lor \lnot g_j \lor \lnot g_l) \land
+                  (\lnot g_{h+i} \lor g_j \lor g_l ) \land
+                  (g_{h+i} \lor \lnot g_j \lor g_l ) \land
+                  (g_{h+i} \lor g_j \lor \lnot g_l)
+              \end{equation}
+    \end{itemize}
+
+    We now observe that if we write
+    \begin{equation}
+        F = (\text{formula for gate } 1) \land \dots (\text{formula for gate } m) \land g_{h+m}
+    \end{equation}
+    and if we find an assigning that satisfies it we have found an input that makes the circuit output $1$, which means we would have a solution to $X$.
+\end{proof}
+
+\subsubsection{3-SAT}
+
+\begin{theorem}
+    3-SAT is \NPC.
+\end{theorem}
+
+\begin{proof}
+    We want to prove that every SAT reduces to a 3-SAT problem:
+    given a SAT formula $I$ with $n$ variables and $m$ clauses it is possible to construct a 3-SAT formula $I'$ in polynomial time such that
+    \begin{equation}
+        I \text{ satisfiable } \iff I' \text{ satisfiable }
+    \end{equation}
+
     Consider a clause $C_i \in I$:
     \begin{enumerate}[label=\roman*.]
         \item ($C_i$ has 3 variables). We are fine, keep it as it is.

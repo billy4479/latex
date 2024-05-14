@@ -9,8 +9,9 @@
 
 \setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do
 
-\newcommand{\NP}{{\operatorfont NP}}
+\newcommand{\NP}{{\mathcal{NP}}}
 \newcommand{\NPC}{$\NP$-Complete}
+\newcommand{\reducesto}{\leq_p}
 
 \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -980,13 +981,13 @@ We say that a decision problem $A$ reduces to a decision problem $B$ if:
 
 Therefore, assume $A$ reduces to $B$, then if $B$ admits an efficient solution, then $A$ does too.
 
-We will use the notation $A \leq B$ to say that \say{$A$ reduces to $B$}.
+We will use the notation $A \reducesto B$ to say that \say{$A$ reduces to $B$}. This is saying that $A$ is not more difficult than $B$.
 
-\begin{definition}[\NPC problem]
-    A problem $X$ is \NPC if
+\begin{definition}[\NPC{} problem]
+    A problem $X$ is \NPC{} if
     \begin{itemize}
         \item $X \in \NP$
-        \item $\forall Y \in \NP, Y \leq X$
+        \item $\forall Y \in \text{\NPC}, Y \reducesto X$
     \end{itemize}
 
     Moreover we call $\NP$-hard problems those where only the second point is true.

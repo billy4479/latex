@@ -1187,7 +1187,7 @@ We will start by considering rectangular domains of the form $D = [a, b] \times 
     We can repeat the argument for $h(x)$.
 
     Consider now the partitions $\mathcal P_1$ of $[a, b]$ and $\mathcal P_2$ of $[c, d]$.
-    Then consider the rectangles $R_{ij} = [x_{i-1}, x_i] \times [y_{i-1}, y]$: let $l_{ij} = \inf_{R_{ij}} f$, $u_{ij} = \sup_{R_{ij}} f$ and $\mathscr A(R_{ij}) = (y_i -y{i-1}) (x_i - x_{i-1})$.
+    Then consider the rectangles $R_{ij} = [x_{i-1}, x_i] \times [y_{i-1}, y]$: let $l_{ij} = \inf_{R_{ij}} f$, $u_{ij} = \sup_{R_{ij}} f$ and $\mathcal A(R_{ij}) = (y_i -y{i-1}) (x_i - x_{i-1})$.
 
     We can now write the Riemann sums as
     \begin{align}
@@ -1269,17 +1269,17 @@ We will start by considering rectangular domains of the form $D = [a, b] \times 
     Consider $R_{ij}$ the rectangles that partition $U$, with $i \in \{1, \ldots,N\}, j \in \{1, \ldots,M\}$.
     We have that
     \begin{equation}
-        \int_D f(x, y) \dd{x} \dd{y} \approx \sum_{i,j} f_{ij} \mathscr A (\varphi(R_{ij}))
+        \int_D f(x, y) \dd{x} \dd{y} \approx \sum_{i,j} f_{ij} \mathcal A (\varphi(R_{ij}))
     \end{equation}
     then each area is approximately equal to the area given by the parallelogram given by the linear approximations.
     We have that the two sides of the parallelogram will be
     \begin{gather}
-        (u_i - u_{i-1}) \pdv{\varphi}{u}()(u_{i-1}, v_{j-1})
-        (v_j, v_{j-1}) \pdv{\varphi}{v}()(u_{i-1}, v_{j-1}) \\
+        (u_i - u_{i-1}) \pdv{\varphi}{u}()(u_{i-1}, v_{j-1}) \\
+        (v_j, v_{j-1}) \pdv{\varphi}{v}()(u_{i-1}, v_{j-1})
     \end{gather}
     and we know that the area of the parallelogram can be calculated with the determinant:
     \begin{align}
-        \mathscr A(\varphi(R_{ij})) & = \abs{\det \begin{pmatrix}
+        \mathcal A(\varphi(R_{ij})) & = \abs{\det \begin{pmatrix}
                                                           (u_i - u_{i-1}) \pdv{\varphi}{u}()(u_{i-1}, v_{j-1}) \\
                                                           (v_j, v_{j-1}) \pdv{\varphi}{v}()(u_{i-1}, v_{j-1})
                                                       \end{pmatrix}}               \\
@@ -1287,14 +1287,14 @@ We will start by considering rectangular domains of the form $D = [a, b] \times 
                                                                                         \pdv{\varphi}{u}()(u_{i-1}, v_{j-1}) \\
                                                                                         \pdv{\varphi}{v}()(u_{i-1}, v_{j-1})
                                                                                     \end{pmatrix}} \\
-                                    & = \mathscr A(R_{ij}) \abs{\det J_\varphi}
+                                    & = \mathcal A(R_{ij}) \abs{\det J_\varphi}
     \end{align}
 
     Then we can write
     \begin{align}
-        \int_D f(x, y) \dd{x} \dd{y} & \approx \sum_{i,j} f_{ij} \mathscr A (\varphi(R_{ij}))                         \\
-                                     & \approx \sum_{i,j} f_{ij} \mathscr A(R_{ij}) \abs{\det J_\varphi}              \\
-                                     & \approx \sum_{i,j} f(\varphi(u_i, v_j)) \abs{\det J_\varphi}\mathscr A(R_{ij}) \\
+        \int_D f(x, y) \dd{x} \dd{y} & \approx \sum_{i,j} f_{ij} \mathcal A (\varphi(R_{ij}))                         \\
+                                     & \approx \sum_{i,j} f_{ij} \mathcal A(R_{ij}) \abs{\det J_\varphi}              \\
+                                     & \approx \sum_{i,j} f(\varphi(u_i, v_j)) \abs{\det J_\varphi}\mathcal A(R_{ij}) \\
                                      & \approx \int_U f(\varphi(u_i, v_j)) \abs{\det J_\varphi} \dd{u} \dd{v}
     \end{align}
 \end{proof}
@@ -1309,7 +1309,7 @@ We will start by considering rectangular domains of the form $D = [a, b] \times 
 \end{corollary}
 \begin{proof}
     Let $\varphi(u, v) = M\begin{pmatrix} u \\ v\end{pmatrix}$. Then $J_\varphi(u, v) = M$ for any $(u, v)$.
-    So $abs{\det J_\varphi (u, v)} = \abs{\det M}$ and we can apply the theorem.
+    So $\abs{\det J_\varphi (u, v)} = \abs{\det M}$ and we can apply the theorem.
 \end{proof}
 
 \end{document}

@@ -1,0 +1,338 @@
+\documentclass[12pt]{extarticle}
+
+\usepackage{preamble_base}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\cfoot{Giacomo Ellero}
+\rhead{}
+\chead{}
+\lhead{}
+\rfoot{\thepage}
+\lfoot{
+    \hyperlink{toc}{$\Leftarrow$ TOC}
+}
+
+
+% Math stuff
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{mathrsfs}
+\usepackage{bm} % for bold math symbols
+\usepackage{physics} % for derivatives
+\usepackage{cancel} % for canceling terms
+
+\newcommand{\gt}{>}
+\newcommand{\lt}{<}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\indep}{\perp \!\!\! \perp}
+
+\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\renewcommand{\O}{\mathcal{O}}
+% https://tex.stackexchange.com/questions/191059/how-to-get-a-small-letter-version-of-mathcalo
+\renewcommand{\o}{
+    \mathchoice
+    {{\scriptstyle\mathcal{O}}}% \displaystyle
+    {{\scriptstyle\mathcal{O}}}% \textstyle
+    {{\scriptscriptstyle\mathcal{O}}}% \scriptstyle
+    {\scalebox{.6}{$\scriptscriptstyle\mathcal{O}$}}%\scriptscriptstyle
+}
+
+% Sorcery taken from https://tex.stackexchange.com/a/163284
+\makeatletter
+\def\munderbar#1{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
+\makeatother
+
+\newcommand{\uvec}[1]{\munderbar{\bm{#1}}}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% autoref stuff
+\def\definitionautorefname{Definition}
+\def\propositionautorefname{Proposition}
+
+\numberwithin{equation}{section}
+
+\title{Analysis 2, Required Proofs}
+\date{2023/2024}
+
+\renewcommand{\vec}[1]{\uvec{#1}}
+\newcommand{\Hg}{{\operatorfont Hg}}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{abstract}
+    This document contains the proofs required for the oral exam, which can all be found in the book with the following numbering:
+    \begin{enumerate}
+        \item Proposition 1.20 (geometric characterization of the cross product),
+        \item Proposition 3.10 (some properties of the closure of a set),
+        \item Proposition 4.34 (expression of a directional derivative, using Proposition 4.33 without proof),
+        \item Example 5.15 (formula for the tangent plane to a surface and how to derive it),
+        \item Theorem 6.12 (necessary condition for being a point of local extremum)
+        \item Proposition 7.14 (existence of a normal parametrization),
+        \item Proposition 7.20 (path integral of a gradient field),
+        \item Proposition 8.7 (sequential characterization of uniform continuity),
+        \item Corollary 8.37 (linear change of variables in the integral of a function of two variables, using Theorem 8.34 without proof).
+    \end{enumerate}
+\end{abstract}
+
+\phantomsection
+\hypertarget{toc}{}
+\tableofcontents
+
+\clearpage
+
+
+\section{Geometric characterization of the cross product}
+
+\begin{theorem}
+    Let $\vec x, \vec y \in \R^3$, then
+    \begin{enumerate}
+        \item $\vec{x} \times \vec{y}$ is orthogonal to $\vec{x}$ and $\vec{y}$;
+        \item $\norm{\vec{x} \times \vec{y}} = \norm{\vec{x}} \norm {\vec{y}} \abs{\sin \theta}$
+              where $\theta$ is the angle between $\vec{x}$ and $\vec{y}$;
+        \item $\det (\vec{x}, \vec{y}, \vec{x} \times \vec{y}) \geq 0$
+              so that the basis $\vec{x}, \vec{y}, \vec{x} \times \vec{y}$ is positively oriented.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Recall that in $\R^3$ it holds that
+    \begin{equation}
+        \label{eq:cross_prod:det}
+        \det(\vec x, \vec y, \vec z) = (\vec x \times \vec y) \cdot \vec z
+    \end{equation}
+
+    \begin{enumerate}
+        \item Take $\vec z = \vec x$ and using \autoref{eq:cross_prod:det} we get
+              \begin{equation}
+                  (\vec{x} \times \vec{y}) \cdot \vec{x} = \det (\vec{x}, \vec{y}, \vec{x}) = 0
+              \end{equation}
+              since the determinant with two identical vectors is $0$.
+              This is enough to conclude since the dot product vanishes iff the vectors are orthogonal.
+              Repeat for $\vec z = \vec y$.
+        \item Take $\vec{z}$ orthogonal to both $\vec{x}$ and $\vec{y}$, with $\norm{\vec{z}} \ne 0$.
+              We know that $\abs{\det(\vec x, \vec y)} = \norm{\vec x}\norm{\vec y}\abs{\sin \theta}$ as it represents the area of the parallelogram spanned by $\vec x, \vec y$;
+              then the volume of prims spanned by $\vec x, \vec y, \vec z$ is given by
+              \begin{equation}
+                  \abs{\det(\vec x, \vec y, \vec z)} = \norm{\vec x}\norm{\vec y} \norm{\vec z} \abs{\sin \theta}
+              \end{equation}
+              by the \say{normal} formula for the volume (area $\times$ height).
+              Moreover, by Cauchy-Schwarz, since $\vec x \times \vec y$ and $\vec z$ are linearly dependent we have that
+              \begin{equation}
+                  \abs{(\vec x \times \vec y) \cdot \vec z} = \norm{\vec x \times \vec y}\norm{\vec z}
+              \end{equation}
+              Finally substituting everything in \autoref{eq:cross_prod:det} we get
+              \begin{equation}
+                  \norm{\vec x}\norm{\vec y} \norm{\vec z} \abs{\sin \theta} = \norm{\vec x \times \vec y}\norm{\vec z}
+              \end{equation}
+              and by dividing by $\norm{\vec z}$ we get the result.
+        \item We have that
+              \begin{align}
+                  \det (\vec{x}, \vec{y}, \vec{x} \times \vec{y}) & =  (\vec x \times \vec y) \cdot (\vec{x} \times \vec{y}) \\
+                                                                  & = \norm{\vec{x} \times \vec{y}}^2 \geq 0
+              \end{align}
+    \end{enumerate}
+\end{proof}
+
+\section{Properties of the closure of a set}
+\begin{theorem}
+    Let $V, W \subseteq \R^d$ and $\overline{V}, \overline{W}$ be their closure.
+    The following holds:
+    \begin{enumerate}
+        \item $V \subseteq \overline{V}$;
+        \item If $V \subseteq W$ then $\overline{V} \subseteq \overline{W}$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}
+        \item Take any $\vec x \in V$ and consider the sequence $\left(\vec y_n\right)_{n \in \N}$ such that $\vec y_n = \vec x \enspace \forall n \in \N$ implying that $\vec x \in \overline{V}$.
+        \item Consider $\vec x \in \overline{V}$, then necessarily there exists a sequence $\left(\vec y_n\right)_{n \in \N} \in V$ that converges to $\vec x$.
+              But then, since $V \subseteq W$, $\vec y_n \in W \enspace \forall n$, therefore $\vec x \in \overline{W}$.
+    \end{enumerate}
+\end{proof}
+
+\section{Expression of a directional derivative}
+
+\begin{theorem}
+    Let $f: D \subseteq \R^2 \to \R$ be a function defined over $D$ \emph{open} and differentiable at $\vec x_0 \in D$.
+    Take $\vec u \in \R^2$ such that $\norm{u} = 1$, then $f$ is differentiable at $\vec x_0$ in the direction $\vec u$ and
+    \begin{equation}
+        \pdv{f}{\vec u}()(\vec x_0) = D f_{\vec x_0} (\vec u) = \nabla f(\vec x_0) \cdot \vec u
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Let $\gamma : I \to \R^2$ such that for any $t \in I$, $\gamma(t) \in D$.
+    Let $\gamma(t) = \vec x_0 + t \vec u$ as in the definition of directional derivatives and note that $\gamma$ is clearly differentiable.
+    Let $g = f(\gamma(t))$ such that $\pdv{f}{\vec u}()(\vec x_0) = g'(0)$
+
+    Recall the chain rule (special case, differentiating a function along a curve, see 4.33):
+    \begin{equation}
+        g'(t_0) = Df_{\gamma(t_0)}(\gamma'(t_0)) = \nabla f(\gamma(t_0)) \cdot \gamma'(t_0)
+    \end{equation}
+    Set $t_0 = 0$ such that
+    \begin{align}
+        g'(0) & = \nabla f(\gamma(0)) \cdot \gamma'(0) \\
+              & = \nabla f(\vec x_0) \cdot \vec u
+    \end{align}
+\end{proof}
+
+\section{Formula for the tangent plane to a surface}
+\begin{theorem}
+    Let $f: D \subseteq \R^2 \to \R^3$ be a parametric surface.
+    Let $(u_0, v_0) \in D$ such that $f$ is differentiable at $(u_0, v_0)$.
+    The equation of the plane tangent to the image of $f$ in $f(u_0, v_0)$ is given by
+    \begin{equation}
+        (\vec x - f(u_0, v_0)) \cdot \left( \pdv{f}{u}()(u_0, v_0) \times \pdv{f}{v}()(u_0, v_0) \right) = 0
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Call $S$ the image of $f$, this will be the set defined as
+    \begin{equation}
+        S = \left\{ (x, y, z) \in \R^3 : \exists (u, v) \in \R^2, f(u, v) = (x, y, z) \right\}
+    \end{equation}
+    The tangent plane at $(u_0, v_0)$ is given by the image of the first order Taylor expansion of $f$ at $(u_0, v_0)$.
+    Explicitly, the tangent plane is the image of the map
+    \begin{equation}
+        (h, k) \in \R^2 \mapsto f(u_0, v_0) + h\pdv{f}{u}()(u_0, v_0) + k\pdv{f}{v}()(u_0, v_0) \in \R^3
+    \end{equation}
+    where $\pdv{f}{u}()(u_0, v_0)$ and $\pdv{f}{v}()(u_0, v_0)$ are vectors in $\R^3$.
+
+    We know that the equation of a plane has the form of
+    \begin{equation}
+        (\vec x - \vec a) \cdot \vec n = 0
+    \end{equation}
+    where $\vec a$ is a passing point and $\vec n$ is the vector normal to the plane.
+
+    We have that the plane contains for sure the point $f(u_0, v_0)$, hence we can set $\vec a = f(u_0, v_0)$.
+    Moreover this plane is spanned by the two partial derivative therefore the normal vector to the plane has to be normal to both partial derivatives.
+    We can choose $\vec n$ to be equal to the cross product of the two:
+    \begin{equation}
+        \vec n = \pdv{f}{u}()(u_0, v_0) \times \pdv{f}{v}()(u_0, v_0)
+    \end{equation}
+\end{proof}
+
+\section{Necessary condition for being a point of local extremum}
+
+\begin{theorem}
+    Let $f: D \subseteq \R^d \to \R$ and $\vec x_0 \in \mathring{D}$ such that $\vec x_0$ is a local extremum of $f$.
+    Let $\vec u \in \R^d$ be a vector of norm $1$. Then if the derivative of $f$ in the direction of $\vec u$ exists it is necessarily equal to $0$.
+\end{theorem}
+
+\begin{proof}
+    If $\vec x_0$ is a local extremum of $f$ then the function $t \mapsto \vec f(x_0 + t \vec u)$ also has a local extremum at $t_0 = 0$, thus its derivative (which coincides by definition to the derivative of $f$) will be equal to $0$.
+\end{proof}
+
+\section{Existence of a normal parametrization}
+
+\begin{theorem}
+    Let $\Gamma$ be a oriented curve of class $C^k$ and $(I, \gamma)$ of of its parametrizations.
+    Assume that $\gamma'(t) \neq \vec 0 \enspace \forall t \in I$.
+    Then there exists $\omega : J \to \R^d$ of class $C^k$ such that $(J, \omega)$ is a normal parametrization of $\Gamma$
+    (that is, $\norm{\omega'(t) } = 1 \enspace \forall t \in J$).
+\end{theorem}
+
+\begin{proof}
+    Fix $t_0 \in I$ and define
+    \begin{equation}
+        \varphi(t) = \int_{t_0}^t \norm{\gamma'(t)} \dd{t}
+    \end{equation}
+    the length of $\gamma$.
+    As $\gamma$ is $C^k$ and $\gamma'$ never vanishes we have that $\norm{\gamma'}$ is $C^{k-1}$, implying that $\varphi$ is $C^k$.
+    Moreover, $\varphi' = \norm{\gamma'}$ which never vanishes, therefore $\varphi$ is a $C^k$ diffeomorphism onto $J = \varphi(I)$.
+
+    Define $\omega : J \to \R^d$ by $\omega = \gamma \circ \varphi^{-1}$ which will also be of class $C^k$, and $\gamma = \omega \circ \varphi$ thus $(I, \gamma)$ and $(J, \omega)$ represent the same oriented curve.
+    Taking the derivatives we get that $\gamma' = \varphi'(\omega' \circ \varphi)$ and taking the norm we get
+    \begin{equation}
+        \norm{\gamma'(t)} = \varphi'(t) \norm{(\omega'(\varphi(t)))} = \norm{\gamma'(t)}\norm{(\omega'(\varphi(t)))}
+    \end{equation}
+    and simplifying the $\norm{\gamma'(t)}$ we get that $\norm{(\omega'(\varphi(t)))} = 1 \enspace \forall t \in I$.
+    By bijectivity of $\varphi$ we have that $\norm{\omega'(r)} = 1 \enspace \forall r \in J$, that is, $(J, \omega)$ is a normal parametrization of $\Gamma$.
+\end{proof}
+
+\section{Path integral of a gradient field}
+
+\begin{theorem}
+    Let $g:\R^d \to \R$ be a scalar function of class $C^1$ and $\gamma : I = [a, b] \to \R^d$ a $C^1$ curve.
+    Then
+    \begin{equation}
+        \int_\gamma \nabla g \cdot \dd{\vec s} = g(\gamma(b)) - g(\gamma(b))
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    By definition we write
+    \begin{equation}
+        \int_\gamma \nabla g \cdot \dd{\vec s} = \int \nabla g(\gamma(t)) \cdot \gamma'(t) \dd{t}
+    \end{equation}
+    but by the chain rule we know that $t \mapsto \nabla g(\gamma(t)) \cdot \gamma'(t)$ is the derivative of $t \mapsto g(\gamma(t))$ and we can apply the fundamental theorem of calculus to get the result.
+\end{proof}
+
+\section{Sequential characterization of uniform continuity}
+
+\begin{theorem}
+    Let $f: D \subseteq \R^d \to \R$. $f$ is uniform continuous if and only if for every pair of $x_n, y_n$ of sequences in $D$, if $\lim_{n \to + \infty} (x_n - y_n) = \vec 0$ then $\lim_{n \to +\infty} [f(x_n) - f(y_n)] = 0$.
+    Note that $x_n, y_n$ don't need to converge.
+\end{theorem}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{itemize}
+        \item[$\implies$] (assume $f$ is uniformly continuous).
+              Take $x_n, y_n$ such that $(x_n - y_n) \to \vec 0$.
+              Fix $\varepsilon > 0$ and as $f$ is uniform continuous we can find $\delta > 0$ such that $\abs{f(\vec x) - f(\vec y)} \leq \varepsilon$ if $\norm{\vec x - \vec y} \leq \delta$.
+              Since $(x_n - y_n) \to \vec 0$ there exists $N$ such that $\abs{\vec x_n - \vec y_n} \leq \delta \enspace \forall n \geq N$. So $\abs{f(\vec x_n) - f(\vec y_n)} \leq \varepsilon$ for $n \geq N$.
+        \item[$\impliedby$] (assume that $\forall \vec x_n, \vec y_n$, with $\vec x_n - \vec y_n \to \vec 0$, implies $f(\vec x_n) - f(\vec y_n) \to 0$).
+              By contradiction assume that $f$ is not uniformly continuous, that means we can find some $\varepsilon > 0$ such that for any $\delta$ the difference between the images is more than $\varepsilon$.
+              Fix such $\varepsilon$ and consider $\delta = \frac{1}{n}$, then there exists $(\vec x_n, \vec y_n)$ such that $\norm{\vec x_n - \vec y_n} \leq \frac{1}{n}$ and $\abs{f(\vec x_n) - f(\vec y_n)} > \varepsilon$.
+              But then $\abs{f(\vec x_n) - f(\vec y_n)} > \varepsilon > 0$ for every $n$ which means we cannot have $\lim \abs{f(\vec x_n) - f(\vec y_n)} = 0$ and we have reached a contradiction.
+    \end{itemize}
+\end{proof}
+
+\section{Linear change of variables in the integral of a function of two variables}
+
+\begin{theorem}
+    Let $M$ be a $2\times 2$ with $\det M \neq 0$ and define $\gamma : \R^2 \to \R^2$ as
+    \begin{equation}
+        \gamma(u, v) = M \begin{pmatrix}
+            u \\ v
+        \end{pmatrix}
+    \end{equation}
+    Let $U \subseteq \R^2$ Jordan measurable and $D = \gamma(U)$.
+    Then for any $f: D \to \R$ continuous
+    \begin{equation}
+        \iint_D f(x, y) \dd{x}\dd{y} = \abs{\det M} \iint_U f\left(M\begin{pmatrix} u \\ v\end{pmatrix}\right) \dd{u} \dd{v}
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Then $J_\varphi(u, v) = M$ for any $(u, v)$.
+    So $\abs{\det J_\varphi (u, v)} = \abs{\det M}$ and we can use the change of variable theorem (without proof).
+\end{proof}
+
+
+\end{document}

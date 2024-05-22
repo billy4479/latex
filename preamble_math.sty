@@ -2,32 +2,35 @@
 \ProvidesPackage{preamble_math}
 [2024/03/27 Preamble Math]
 
-% Math stuff
-\RequirePackage{amsfonts}
-\RequirePackage{amsthm}
-\RequirePackage{amssymb}
-\RequirePackage{amsmath}
-\RequirePackage{mathtools}
-\RequirePackage{commath}
-\RequirePackage{mathrsfs}
-\RequirePackage{bm} % for bold math symbols
-\RequirePackage{physics} % for derivatives
-\RequirePackage{cancel} % for canceling terms
+% *------------------*
+% | *** Packages *** |
+% *------------------*
 
+\RequirePackage{amssymb}   % for varnothing and other weirds symbols
+\RequirePackage{amsmath}   % basically everything
+\RequirePackage{mathtools} % for underbrace, arrows, and a lot of other things
+\RequirePackage{mathrsfs}  % for "mathscr"
+\RequirePackage{bm}        % for bold math symbols
+\RequirePackage{physics}   % for derivatives and lots of operators
+\RequirePackage{cancel}    % for canceling terms
+
+% *-------------------*
+% | *** Shortcuts *** |
+% *-------------------*
+
+% Operators
 \newcommand{\gt}{>}
 \newcommand{\lt}{<}
+\newcommand{\indep}{\perp \!\!\! \perp}
+
+% Sets
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\indep}{\perp \!\!\! \perp}
 
-\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
-
-\renewcommand{\Re}{\operatorname{Re}}
-\renewcommand{\Im}{\operatorname{Im}}
-
+% Big-O and small-o notation
 \renewcommand{\O}{\mathcal{O}}
 % https://tex.stackexchange.com/questions/191059/how-to-get-a-small-letter-version-of-mathcalo
 \renewcommand{\o}{
@@ -38,6 +41,14 @@
     {\scalebox{.6}{$\scriptscriptstyle\mathcal{O}$}}%\scriptscriptstyle
 }
 
+% *-------------------*
+% | *** Utilities *** |
+% *-------------------*
+
+% Skip line after theorem or proof title, useful when using itemize or enumerate
+\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
+
+% Use underbar in math mode to define vectors
 % Sorcery taken from https://tex.stackexchange.com/a/163284
 \makeatletter
 \def\munderbar#1{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
@@ -45,22 +56,169 @@
 
 \newcommand{\uvec}[1]{\munderbar{\bm{#1}}}
 
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
+% *-------------------*
+% | *** Theorems *** |
+% *-------------------*
+
+% yes, i know, the formatting sucks
+
+\RequirePackage{amsthm}    % for theorem styles
+\RequirePackage{thmtools}  % for "declaretheorem"
+\RequirePackage{tcolorbox} % for boxes around theorems
 
 \theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{example}{Example}[section]
+
+% theorem
+\declaretheorem[
+    numberwithin=section,
+    numbered=yes,
+    refname={Thm.},
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{red}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{theorem}
+
+% corollary
+\declaretheorem[
+    numberwithin=theorem,
+    numbered=yes,
+    refname={Cor.},
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{yellow}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{corollary}
+
+% lemma
+\declaretheorem[
+    sibling=theorem,
+    numbered=yes,
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{yellow}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{lemma}
+
+% proposition
+\declaretheorem[
+    sibling=theorem,
+    numbered=yes,
+    refname={Prop.},
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{orange}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{proposition}
+
+% definition
+\declaretheorem[
+    numberwithin=section,
+    numbered=yes,
+    refname={Def.},
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{cyan}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{definition}
+
+% example
+\declaretheorem[
+    numberwithin=section,
+    numbered=yes,
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{green}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{example}
 
 \theoremstyle{remark}
-\newtheorem*{remark}{Remark}
+
+% remark
+\declaretheorem[
+    numbered=no,
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{gray}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{remark}
+
+
+% *-------------------*
+% | *** Equation *** |
+% *-------------------*
 
 \numberwithin{equation}{subsection}
-
-% autoref stuff
-\def\definitionautorefname{Definition}
-\def\propositionautorefname{Proposition}
+\def\equationautorefname{Eq.} % Autoref
 
 \endinput

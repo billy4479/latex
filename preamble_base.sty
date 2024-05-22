@@ -4,6 +4,10 @@
 
 \author{Giacomo Ellero}
 
+% *------------------*
+% | *** Packages *** |
+% *------------------*
+
 \RequirePackage{parskip} % for no indentation
 \RequirePackage[a4paper,margin=1.5cm]{geometry} % to adjust margins
 \RequirePackage{bookmark} % for pdf bookmarks
@@ -18,18 +22,33 @@
 \RequirePackage{enumitem} % for custom lists
 \RequirePackage{hyperref} % for hyperlinks
 
+% *---------------*
+% | *** Fonts *** |
+% *---------------*
+
 \RequirePackage{fontspec}
+
 \setsansfont{Ubuntu}
 \setmonofont{Fira Code}
-% Use sans-serif font
+
+% Use sans-serif by default
 \renewcommand{\familydefault}{\sfdefault}
+
+% *---------------*
+% | *** Links *** |
+% *---------------*
 
 \hypersetup{
     colorlinks=true,
-    linkcolor=red,
+    linkcolor=teal,
     urlcolor=blue,
 }
 \urlstyle{same}
+
+% *----------------*
+% | *** Legacy *** |
+% *----------------*
+% TODO: inline them in the documents that need them
 
 \newenvironment{absolutelynopagebreak}
 {\par\nobreak\vfil\penalty0\vfilneg
@@ -42,11 +61,21 @@
 \newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
 \newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
 
+% *-------------------*
+% | *** Numbering *** |
+% *-------------------*
+
 \numberwithin{table}{section}
 \numberwithin{figure}{section}
 
+% We want numbers on subsections too
 \setcounter{secnumdepth}{3}
 
+% *-------------------*
+% | *** Utilities *** |
+% *-------------------*
+
+% Make the first page, with title, toc and link to toc
 \newcommand{\firstpage}{
     \maketitle
     \phantomsection

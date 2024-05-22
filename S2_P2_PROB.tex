@@ -1471,13 +1471,13 @@ For the proof see the book.
 
 \subsection{Properties of the MGF}
 
+Eventually we want to prove that
 \begin{align}
-    E(e^{tX}) & = E(\sum_{k = 0}^\infty \frac{(tX)^k}{k!})    \\
-              & = \sum_{k = 0}^{\infty} \frac{t^k E(X^k)}{k!} \\
+    E(e^{tX}) & = E\left(\sum_{k = 0}^\infty \frac{(tX)^k}{k!}\right) \\
+              & = \sum_{k = 0}^{\infty} \frac{t^k E(X^k)}{k!}         \\
               & = \sum_{k = 0}^{\infty} \frac{t^k m_k}{k!}
 \end{align}
-
-Note that this only works if we can \say{take out} the expectation from the sum.
+Note that this only works if we can \say{take out} the expectation from the sum, but indeed we will be able to do so in some cases.
 
 \begin{theorem}
     \label{thm:mgf:mgf_expansion}
@@ -1516,6 +1516,8 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 \end{proof}
 
 \section{Convergence}
+
+\subsection{Central limit theorem}
 
 \begin{definition}[convergence in distribution]
     Let $\left(X_n\right)$ be a sequence of random variables.
@@ -1556,10 +1558,8 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 \end{theorem}
 
 \begin{theorem}[central limit theorem]
-    Let $X_1, X_2, \ldots \indep$ identically distributed and square-integrable.
-    Let $S_n = \sum_{i = 1}^n X_i$.
-    Assume $E(X_i) = \mu$ and $V(X_i) = \sigma^2 > 0$.
-    Now standardize $S_n$:
+    Let $X_1, X_2, \ldots$ i.i.d. and square-integrable with $E(X_i) = \mu$ and $V(X_i) = \sigma^2 > 0$.
+    Let $S_n = \sum_{i = 1}^n X_i$ and $Z_n$ its standardization
     \begin{equation}
         Z_n = \frac{S_n - E(S_n)}{\sqrt{V(S_n)}}
     \end{equation}
@@ -1940,31 +1940,36 @@ which is very close to the central limit theorem formulation.
     \begin{equation}
         \begin{split}
             E\left( \left(\sum_{k = 1}^n Y_k\right)^4 \right) & = E\left( (Y_1 + \dots + Y_n)(Y_1 + \dots + Y_n)(Y_1 + \dots + Y_n)(Y_1 + \dots + Y_n) \right) \\
-                                                              & = \sum_{i, j, k , e} E(Y_i Y_j Y_k Y_e)
+                                                              & = \sum_{i, j, k, l = 1} E(Y_i Y_j Y_k Y_l)
         \end{split}
     \end{equation}
-    and we can do some sorcery (TODO: read the book) to get that
+    where the last sum is the sum over all the indices.
+    Moreover, note that since $E(Y_k) = 0$ the only non-zero terms in the sum are those where $i \in {j, k, l}$ (analogously for $j, k, l$),
+    which are
     \begin{equation}
-        \sum_{i, j, k , e} E(Y_i Y_j Y_k Y_e) = nm_4 + 3n(n-1)m_2^2
+        E(Y_i^2 Y_k^2) = E(Y_i^2)E(Y_k^2) = m_2^2 \qquad \text{and} \qquad E(Y_i^4) = m_4
     \end{equation}
     where $m_k$ is the $k$-th moment of $Y_k$.
+    There are $3n(n-1)$ terms of the first kind and $n$ terms of the second kind, hence the sum reduces to
+    \begin{equation}
+        \sum_{i, j, k, l = 1} E(Y_i Y_j Y_k Y_l) = nm_4 + 3n(n-1)m_2^2
+    \end{equation}
     But then
     \begin{equation}
-        \sum_{n = 1}^\infty \frac{1}{n^4 \varepsilon^4}(nm_4 + 3 n(n-1)m_2^2) \sim \frac{1}{n^2} \implies \sum < +\infty
+        \sum_{n = 1}^\infty \frac{1}{n^4 \varepsilon^4}(nm_4 + 3 n(n-1)m_2^2) \sim \frac{1}{n^2}
     \end{equation}
+    implying that the sum converges to a finite number.
 \end{proof}
 
-\begin{proposition}
-    Let $X_n$ i.i.d. with finite expectation and variance.
-    Then, by the strong law of large numbers,
-    \begin{equation}
-        \overline X_n \convas \mu
-    \end{equation}
-    and, by the central limit theorem,
-    \begin{equation}
-        \sqrt{n} \cdot \frac{\overline X_n - \mu}{\sigma} \convdist Z \sim N(0, 1)
-    \end{equation}
-\end{proposition}
+Combining the strong law of large numbers and the central limit theorem we get some interesting results:
+let $X_n$ i.i.d. with finite expectation and variance, then, by the strong law of large numbers,
+\begin{equation}
+    \overline X_n \convas \mu
+\end{equation}
+and, by the central limit theorem,
+\begin{equation}
+    \sqrt{n} \cdot \frac{\overline X_n - \mu}{\sigma} \convdist Z \sim N(0, 1)
+\end{equation}
 
 \begin{theorem}[continuous mapping]
     Let $X_n$, $X$ and $U$ an open interval such that $P(X_n \in U) = P(X \in U) = 1$ for every $n$.

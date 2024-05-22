@@ -96,17 +96,17 @@
 
     We define, if exists,
     \begin{equation}
-        \pdv{f_j}{x_i}()(\vec{x}) = \lim_{h \to 0} \frac{f_j(x_1, \ldots, x_{i-1}, x_i + h, x_{i+1}, \ldots, x_d) - f_j(x_1, \ldots, x_d)}{h} \in \R
+        \pdv{f_j}{x_i}\/(\vec{x}) = \lim_{h \to 0} \frac{f_j(x_1, \ldots, x_{i-1}, x_i + h, x_{i+1}, \ldots, x_d) - f_j(x_1, \ldots, x_d)}{h} \in \R
     \end{equation}
     for all $i = 1, 2, \ldots, d$ and $j = 1, 2, \ldots, p$.
 
-    Moreover we define $\pdv{f}{x_i}()(\vec{x})$, if exists, as
+    Moreover we define $\pdv{f}{x_i}\/(\vec{x})$, if exists, as
     \begin{equation}
-        \pdv{f}{x_i}()(\vec{x}) = \begin{pmatrix}
-            \pdv{f_1}{x_i}()(\vec{x}) \\
-            \pdv{f_2}{x_i}()(\vec{x}) \\
+        \pdv{f}{x_i}\/(\vec{x}) = \begin{pmatrix}
+            \pdv{f_1}{x_i}\/(\vec{x}) \\
+            \pdv{f_2}{x_i}\/(\vec{x}) \\
             \vdots                    \\
-            \pdv{f_p}{x_i}()(\vec{x})
+            \pdv{f_p}{x_i}\/(\vec{x})
         \end{pmatrix} \in \R^p
     \end{equation}
 \end{definition}
@@ -115,20 +115,20 @@
     Let $f: D \subseteq \R^d \to \R^p$ and $\vec{x} \in D$ such that all the partial derivatives exist at $\vec{x}$.
     Then the Jacobian matrix of $f$ at $\vec{x}$, written as $J_f(\vec{x})$, is the $p \times d$ matrix such that
     \begin{equation}
-        J_f(\vec{x})_{ij} = \pdv{f_j}{x_i}()(\vec{x})
+        J_f(\vec{x})_{ij} = \pdv{f_j}{x_i}\/(\vec{x})
     \end{equation}
 
     That is
     \begin{equation}
         J_f(\vec{x}) = \begin{pmatrix}
-            \pdv{f_1}{x_1}()(\vec{x}) & \pdv{f_1}{x_2}()(\vec{x}) & \cdots & \pdv{f_1}{x_d}()(\vec{x}) \\
-            \pdv{f_2}{x_1}()(\vec{x}) & \pdv{f_2}{x_2}()(\vec{x}) & \cdots & \pdv{f_2}{x_d}()(\vec{x}) \\
+            \pdv{f_1}{x_1}\/(\vec{x}) & \pdv{f_1}{x_2}\/(\vec{x}) & \cdots & \pdv{f_1}{x_d}\/(\vec{x}) \\
+            \pdv{f_2}{x_1}\/(\vec{x}) & \pdv{f_2}{x_2}\/(\vec{x}) & \cdots & \pdv{f_2}{x_d}\/(\vec{x}) \\
             \vdots                    & \vdots                    & \ddots & \vdots                    \\
-            \pdv{f_p}{x_1}()(\vec{x}) & \pdv{f_p}{x_2}()(\vec{x}) & \cdots & \pdv{f_p}{x_d}()(\vec{x})
+            \pdv{f_p}{x_1}\/(\vec{x}) & \pdv{f_p}{x_2}\/(\vec{x}) & \cdots & \pdv{f_p}{x_d}\/(\vec{x})
         \end{pmatrix}
     \end{equation}
 
-    Note that the $i$-th column of the matrix is $\pdv{f}{x_i}()(\vec{x}) \in \R^p$.
+    Note that the $i$-th column of the matrix is $\pdv{f}{x_i}\/(\vec{x}) \in \R^p$.
 \end{definition}
 
 \begin{example}[change of variables to polar coordinates]
@@ -144,8 +144,8 @@
     Then the Jacobian matrix of $f$ is
     \begin{equation}
         J_f(x, y) = \begin{pmatrix}
-            \pdv{f_1}{x}() & \pdv{f_1}{y}() \\
-            \pdv{f_2}{x}() & \pdv{f_2}{y}()
+            \pdv{f_1}{x}\/ & \pdv{f_1}{y}\/ \\
+            \pdv{f_2}{x}\/ & \pdv{f_2}{y}\/
         \end{pmatrix} = \begin{pmatrix}
             \cos y & -x \sin y \\
             \sin y & x \cos y
@@ -182,19 +182,19 @@ Just by extending the definition of differentiability of functions from $\R^2$ t
 
 For $d \geq 2, p = 1$ we get
 \begin{equation}
-    f(\vec{x} + \vec{h}) = f(\vec{x}) + h_1 \pdv{f}{x_1}()(\vec{x}) + h_2 \pdv{f}{x_2}()(\vec{x}) + \cdots + h_d \pdv{f}{x_d}()(\vec{x}) + \o(\vec{h})
+    f(\vec{x} + \vec{h}) = f(\vec{x}) + h_1 \pdv{f}{x_1}\/(\vec{x}) + h_2 \pdv{f}{x_2}\/(\vec{x}) + \cdots + h_d \pdv{f}{x_d}\/(\vec{x}) + \o(\vec{h})
 \end{equation}
 
 Then to go to $p \geq 1$ we just repeat the process for each component of $f$.
 That is, for each $j = 1, 2, \ldots, p$ we have
 \begin{equation}
-    f_j(\vec{x} + \vec{h}) = f_j(\vec{x}) + \sum_{i=1}^d h_i \pdv{f_j}{x_i}()(\vec{x}) + \o(\vec{h})
+    f_j(\vec{x} + \vec{h}) = f_j(\vec{x}) + \sum_{i=1}^d h_i \pdv{f_j}{x_i}\/(\vec{x}) + \o(\vec{h})
 \end{equation}
 
 This is the fully-expanded first order Taylor polynomial of $f$ at $\vec{x}$.
 Now we can combine everything in matrix form and we get that the derivative part (which is just a linear transformation) becomes
 \begin{equation}
-    \sum_{i = 1}^d h_i \pdv{f}{x_i}()(\vec{x}) = M \vec{h}
+    \sum_{i = 1}^d h_i \pdv{f}{x_i}\/(\vec{x}) = M \vec{h}
 \end{equation}
 for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}$, so we can write
 \begin{equation}
@@ -246,7 +246,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
               \begin{equation}
                   \frac{f(\vec{x}_0 + h \vec{e}_i) - f(\vec{x}_0)}{h} = L(\vec{e}_i) + \frac{\o(h)}{h}
               \end{equation}
-              and taking the limit as $h \to 0$ we get that $\pdv{f}{x_i}()(\vec{x}_0)$ exists and is equal to $L(\vec{e}_i)$.
+              and taking the limit as $h \to 0$ we get that $\pdv{f}{x_i}\/(\vec{x}_0)$ exists and is equal to $L(\vec{e}_i)$.
               Then the matrix representing $L$ has columns that are the partial derivatives of $f$ at $\vec{x}_0$, that is $M = J_f(\vec{x}_0)$.
     \end{description}
 \end{proof}
@@ -256,7 +256,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
 \end{proposition}
 
 \begin{theorem}[sufficient condition for differentiability]
-    Let $f: D \subseteq \R^d \to \R^p$, $D$ open. If $\pdv{f_j}{x_i}()$ exist and are continuous in $D$ for all $i = 1, 2, \ldots, d$ and $j = 1, 2, \ldots, p$ then $f$ is differentiable in $D$.
+    Let $f: D \subseteq \R^d \to \R^p$, $D$ open. If $\pdv{f_j}{x_i}\/$ exist and are continuous in $D$ for all $i = 1, 2, \ldots, d$ and $j = 1, 2, \ldots, p$ then $f$ is differentiable in $D$.
     In this case we say that $f$ is of class $C^1$.
 \end{theorem}
 \begin{remark}
@@ -305,13 +305,13 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
 
     The tangent plane is the plane passing through $f(u_0, v_0)$ and normal to
     \begin{equation}
-        \pdv{f}{u}() \times \pdv{f}{v}()
+        \pdv{f}{u} \times \pdv{f}{v}
     \end{equation}
     if the cross product is not zero.
 
     The equation of the plane is
     \begin{equation}
-        (\vec{x} - f(u_0, v_0)) \cdot \left( \pdv{f}{u}() \times \pdv{f}{v}() \right) = 0
+        (\vec{x} - f(u_0, v_0)) \cdot \left( \pdv{f}{u}\/ \times \pdv{f}{v}\/ \right) = 0
     \end{equation}
 
 \end{example}
@@ -364,7 +364,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     Then $J_{g \circ f}(\vec{x})$ is a $q \times d$ matrix where
     \begin{equation}
         J_{g \circ f}(\vec{x})_{ki} =
-        \pdv{(g \circ f)_k}{x_i}() = \sum_{j=1}^p \pdv{g_k}{y_j}()(f(\vec{x})) \cdot \pdv{f_j}{x_i}()(\vec{x})
+        \pdv{(g \circ f)_k}{x_i}\/ = \sum_{j=1}^p \pdv{g_k}{y_j}\/(f(\vec{x})) \cdot \pdv{f_j}{x_i}\/(\vec{x})
     \end{equation}
 \end{example}
 
@@ -377,7 +377,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     We have
     \begin{align}
         J_f & = \begin{pmatrix}
-                    \pdv{f}{x}() & \pdv{f}{y}()
+                    \pdv{f}{x}\/ & \pdv{f}{y}\/
                 \end{pmatrix}  \\
         J_h & = \begin{pmatrix}
                     \cos \theta & -r \sin \theta \\
@@ -388,7 +388,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     \begin{align}
         J_g & = J_f(h) \cdot J_h                  \\
             & = \begin{pmatrix}
-                    \pdv{f}{x}()(h) & \pdv{f}{y}()(h)
+                    \pdv{f}{x}\/(h) & \pdv{f}{y}\/(h)
                 \end{pmatrix}
         \begin{pmatrix}
             \cos \theta & -r \sin \theta \\
@@ -398,8 +398,8 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
 
     That is
     \begin{align}
-        \pdv{g}{r}()(r, \theta)      & = \cos \theta \pdv{f}{x}()(r \cos \theta, r \sin \theta) + \sin \theta \pdv{f}{y}()(r \cos \theta, r \sin \theta)      \\
-        \pdv{g}{\theta}()(r, \theta) & = -r \sin \theta \pdv{f}{x}()(r \cos \theta, r \sin \theta) + r \cos \theta \pdv{f}{y}()(r \cos \theta, r \sin \theta)
+        \pdv{g}{r}\/(r, \theta)      & = \cos \theta \pdv{f}{x}\/(r \cos \theta, r \sin \theta) + \sin \theta \pdv{f}{y}\/(r \cos \theta, r \sin \theta)      \\
+        \pdv{g}{\theta}\/(r, \theta) & = -r \sin \theta \pdv{f}{x}\/(r \cos \theta, r \sin \theta) + r \cos \theta \pdv{f}{y}\/(r \cos \theta, r \sin \theta)
     \end{align}
 
 \end{example}
@@ -463,7 +463,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
 % Class of 15/04/2024
 \begin{definition}[Hessian matrix]
     Let $f: D \subseteq \R^d \to \R$, with $D$ open and $f$ of class $C^2$.
-    The Hessian matrix of $f$ at $\vec{x}_0 \in D$, written $\Hg(\vec{x}_0)$, is the $\vec{d} \times \vec{d}$ matrix in which the $(i, j)$ entry is $\pdv[2]{f}{x_i}{x_j}()(\vec{x}_0)$.
+    The Hessian matrix of $f$ at $\vec{x}_0 \in D$, written $\Hg(\vec{x}_0)$, is the $\vec{d} \times \vec{d}$ matrix in which the $(i, j)$ entry is $\pdv[2]{f}{x_i}{x_j}\/(\vec{x}_0)$.
     By \autoref{thm:diff:schwartz} this is a symmetric matrix.
 \end{definition}
 
@@ -473,7 +473,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     Let $f: D \subseteq \R^d \to \R$, with $D$ open and $f$ of class $C^2$. Let $\vec x_0 \in D$.
     Then
     \begin{equation}
-        f(\vec x_0 + \vec h) = f(\vec x_0) + \left( \sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0) \right) + \left(\frac{1}{2} \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_i}{x_j}()(\vec x_0) \right) + \o\left(\norm{\vec h}^2\right)
+        f(\vec x_0 + \vec h) = f(\vec x_0) + \left( \sum^d_{i = 1} h_i \pdv{f}{x_i}\/(\vec x_0) \right) + \left(\frac{1}{2} \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_i}{x_j}\/(\vec x_0) \right) + \o\left(\norm{\vec h}^2\right)
     \end{equation}
 
     Here a function $g = \o\left(\norm{\vec h}^2\right)$ if
@@ -507,29 +507,29 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
     Let $g(t) = f(\vec x_0 + t \vec h)$, so that $g(0) = f(\vec x_0)$ and $g(1) = f(\vec x_0 + \vec h)$.
     Then
     \begin{align}
-        g'(t)  & = \sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0 + t \vec h)                                                                                                                         \\
-        g''(t) & = \sum^d_{i = 1} h_i \underbrace{\left[ \sum^d_{j = 1} h_j \pdv{x_j}\left( \pdv{f}{x_i}()(\vec x_0 + t\vec h) \right) \right]}_{\dv{t}\left( \pdv{f}{x_i} ()(x_0 + t h) \right)} \\
-               & = \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)
+        g'(t)  & = \sum^d_{i = 1} h_i \pdv{f}{x_i}\/(\vec x_0 + t \vec h)                                                                                                                         \\
+        g''(t) & = \sum^d_{i = 1} h_i \underbrace{\left[ \sum^d_{j = 1} h_j \pdv{x_j}\left( \pdv{f}{x_i}\/(\vec x_0 + t\vec h) \right) \right]}_{\dv{t}\left( \pdv{f}{x_i} \/(x_0 + t h) \right)} \\
+               & = \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}\/(\vec x_0 + t \vec h)
     \end{align}
 
     Using the fact that $g(1) = g(0) + g'(0) + \frac{1}{2} g''(t)$ we have
     \begin{equation}
-        \underbrace{f(\vec x_0 + \vec h)}_{g(1)} = \underbrace{f(\vec x_0)}_{g(0)} + \underbrace{\sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0)}_{g'(0)} + \frac{1}{2} \underbrace{\sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)}_{g''(t)}
+        \underbrace{f(\vec x_0 + \vec h)}_{g(1)} = \underbrace{f(\vec x_0)}_{g(0)} + \underbrace{\sum^d_{i = 1} h_i \pdv{f}{x_i}\/(\vec x_0)}_{g'(0)} + \frac{1}{2} \underbrace{\sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}\/(\vec x_0 + t \vec h)}_{g''(t)}
     \end{equation}
     for some $t \in (0, 1)$.
 
     Then we call the \textit{reminder} the function
     \begin{equation}
-        \Delta(\vec h) = f(\vec x_0 + \vec h) - f(\vec x_0) + \sum^d_{i = 1} h_i \pdv{f}{x_i}()(\vec x_0) - \frac{1}{2} \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}()(\vec x_0)
+        \Delta(\vec h) = f(\vec x_0 + \vec h) - f(\vec x_0) + \sum^d_{i = 1} h_i \pdv{f}{x_i}\/(\vec x_0) - \frac{1}{2} \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \pdv[2]{f}{x_j}{x_i}\/(\vec x_0)
     \end{equation}
 
     We now want to prove that $\Delta(\vec h) = \o(\norm {\vec h}^2)$. But $\Delta(\vec h)$ can be written as
     \begin{equation}
-        \Delta(\vec h) = \frac{1}{2}  \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \left( \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)- \pdv[2]{f}{x_j}{x_i}()(\vec x_0)\right)
+        \Delta(\vec h) = \frac{1}{2}  \sum^d_{i = 1} \sum^d_{j = 1} h_i h_j \left( \pdv[2]{f}{x_j}{x_i}\/(\vec x_0 + t \vec h)- \pdv[2]{f}{x_j}{x_i}\/(\vec x_0)\right)
     \end{equation}
     for some $t \in (0, 1)$.
 
-    Now we fix $\varepsilon > 0$. By continuity of the second derivatives, we can find $\delta > 0$ such that if $\norm {\vec{h}} \leq \delta$ then $ \pdv[2]{f}{x_j}{x_i}()(\vec x_0 + t \vec h)- \pdv[2]{f}{x_j}{x_i}()(\vec x_0) \leq \varepsilon$ for any $i, j$.
+    Now we fix $\varepsilon > 0$. By continuity of the second derivatives, we can find $\delta > 0$ such that if $\norm {\vec{h}} \leq \delta$ then $ \pdv[2]{f}{x_j}{x_i}\/(\vec x_0 + t \vec h)- \pdv[2]{f}{x_j}{x_i}\/(\vec x_0) \leq \varepsilon$ for any $i, j$.
     So we have that
     \begin{equation}
         \abs{\Delta(\vec h)} \leq \frac{1}{2}  \sum^d_{i = 1} \sum^d_{j = 1} \abs{h_i h_j} \varepsilon
@@ -570,7 +570,7 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
 
 \begin{proposition}[necessary contidion for local extrema]
     Let $f: D\subseteq \R^d \to \R$, $x_0 \in \mathring{D}$.
-    If $\vec x_0$ is a point of local extremum and the directional derivative in the direction $\vec u \in \R^d$ exists, then $\pdv{f}{u}()(\vec x_0) = 0$.
+    If $\vec x_0$ is a point of local extremum and the directional derivative in the direction $\vec u \in \R^d$ exists, then $\pdv{f}{u}\/(\vec x_0) = 0$.
     In particular if $f$ is differentiable at $x_0$, then $\nabla f(\vec x_0) = 0$.
 \end{proposition}
 
@@ -579,11 +579,11 @@ for some matrix $M$, but this $M$ is just the Jacobian matrix of $f$ at $\vec{x}
 \end{remark}
 
 \begin{proof}
-    If $x_0$ is a local minimum and $\pdv{f}{u}()(\vec x_0)$ exists consider $g: t \mapsto f(\vec x_0, t \vec u)$.
+    If $x_0$ is a local minimum and $\pdv{f}{u}\/(\vec x_0)$ exists consider $g: t \mapsto f(\vec x_0, t \vec u)$.
     Then $g$ has a local minimum at $t = 0$ so $g'(0) = 0$ (by Fermat's theorem in 1D),
-    but $g'(0) = \pdv{f}{u}()(\vec x_0) = 0$
+    but $g'(0) = \pdv{f}{u}\/(\vec x_0) = 0$
 
-    If $f$ is differentiable $\pdv{f}{u}()(\vec x_0) = \nabla f (\vec x_0) \cdot \vec u$, therefore $\nabla f(\vec x_0)$ should be equal to $\vec 0$.
+    If $f$ is differentiable $\pdv{f}{u}\/(\vec x_0) = \nabla f (\vec x_0) \cdot \vec u$, therefore $\nabla f(\vec x_0)$ should be equal to $\vec 0$.
 
     We have just proven that local extrema are critical points.
 \end{proof}
@@ -1274,18 +1274,18 @@ We will start by considering rectangular domains of the form $D = [a, b] \times 
     then each area is approximately equal to the area given by the parallelogram given by the linear approximations.
     We have that the two sides of the parallelogram will be
     \begin{gather}
-        (u_i - u_{i-1}) \pdv{\varphi}{u}()(u_{i-1}, v_{j-1}) \\
-        (v_j, v_{j-1}) \pdv{\varphi}{v}()(u_{i-1}, v_{j-1})
+        (u_i - u_{i-1}) \pdv{\varphi}{u}\/(u_{i-1}, v_{j-1}) \\
+        (v_j, v_{j-1}) \pdv{\varphi}{v}\/(u_{i-1}, v_{j-1})
     \end{gather}
     and we know that the area of the parallelogram can be calculated with the determinant:
     \begin{align}
         \mathcal A(\varphi(R_{ij})) & = \abs{\det \begin{pmatrix}
-                                                          (u_i - u_{i-1}) \pdv{\varphi}{u}()(u_{i-1}, v_{j-1}) \\
-                                                          (v_j, v_{j-1}) \pdv{\varphi}{v}()(u_{i-1}, v_{j-1})
+                                                          (u_i - u_{i-1}) \pdv{\varphi}{u}\/(u_{i-1}, v_{j-1}) \\
+                                                          (v_j, v_{j-1}) \pdv{\varphi}{v}\/(u_{i-1}, v_{j-1})
                                                       \end{pmatrix}}               \\
                                     & = (v_j, v_{j-1})(u_i - u_{i-1}) \abs{\det \begin{pmatrix}
-                                                                                        \pdv{\varphi}{u}()(u_{i-1}, v_{j-1}) \\
-                                                                                        \pdv{\varphi}{v}()(u_{i-1}, v_{j-1})
+                                                                                        \pdv{\varphi}{u}\/(u_{i-1}, v_{j-1}) \\
+                                                                                        \pdv{\varphi}{v}\/(u_{i-1}, v_{j-1})
                                                                                     \end{pmatrix}} \\
                                     & = \mathcal A(R_{ij}) \abs{\det J_\varphi}
     \end{align}

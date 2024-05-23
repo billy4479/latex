@@ -4,15 +4,19 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-  }:
-    flake-utils.lib.eachDefaultSystem (system: let
+  outputs =
+    { self
+    , nixpkgs
+    , flake-utils
+    ,
+    }:
+    flake-utils.lib.eachDefaultSystem (system:
+    let
       pkgs = nixpkgs.legacyPackages.${system};
       fonts = with pkgs; [
-        fira-code
+        (nerdfonts.override {
+          fonts = [ "FiraCode" ];
+        })
         ubuntu_font_family
         fg-virgil # excalidraw font
       ];
@@ -24,7 +28,7 @@
         paths = fonts;
       };
 
-      nativeBuildInputs = with pkgs;
+      nativeBuildInputs = (with pkgs;
         [
           texliveFull # TODO: This can probably be reduced
 
@@ -36,8 +40,8 @@
           which
 
           inkscape # `svg` dependencies
-        ]
-        ++ fonts;
+        ])
+      ++ fonts;
 
       OSFONTDIR = "${fontDir}/share/fonts";
       FONTCONFIG_FILE = pkgs.makeFontsConf {
@@ -45,7 +49,8 @@
       };
 
       OUTDIR = "build"; # This is not optimal as it needs to be changed manually in minted and svg preamble
-    in {
+    in
+    {
       devShells.default = pkgs.mkShell {
         inherit nativeBuildInputs OSFONTDIR FONTCONFIG_FILE;
       };

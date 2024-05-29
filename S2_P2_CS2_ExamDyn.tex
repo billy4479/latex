@@ -1,0 +1,247 @@
+\documentclass[12pt]{extarticle}
+
+\author{Giacomo Ellero}
+
+% *------------------*
+% | *** Packages *** |
+% *------------------*
+
+\usepackage{parskip} % for no indentation
+\usepackage[a4paper,margin=1.5cm]{geometry} % to adjust margins
+\usepackage{bookmark} % for pdf bookmarks
+
+\usepackage{float} % for H in figures
+\usepackage{graphicx} % for images
+\usepackage{subfig} % for subfigures
+
+\usepackage{dirtytalk} % for quotes
+\usepackage[many]{tcolorbox} % for boxes
+% \usepackage{tikz} % for drawings
+\usepackage{enumitem} % for custom lists
+\usepackage{hyperref} % for hyperlinks
+
+% *---------------*
+% | *** Fonts *** |
+% *---------------*
+
+\usepackage{fontspec}
+
+\setsansfont{Ubuntu}
+% \setmonofont{FiraCode Nerd Font} % the normal font doesn't support bold for some reason
+
+% Use sans-serif by default
+\renewcommand{\familydefault}{\sfdefault}
+
+% *---------------*
+% | *** Links *** |
+% *---------------*
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=teal,
+    urlcolor=blue,
+}
+\urlstyle{same}
+
+% *----------------*
+% | *** Legacy *** |
+% *----------------*
+% TODO: inline them in the documents that need them
+
+\newenvironment{absolutelynopagebreak}
+{\par\nobreak\vfil\penalty0\vfilneg
+    \vtop\bgroup}
+{\par\xdef\tpd{\the\prevdepth}\egroup
+    \prevdepth=\tpd}
+
+% *-------------------*
+% | *** Numbering *** |
+% *-------------------*
+
+\numberwithin{table}{section}
+\numberwithin{figure}{section}
+
+% We want numbers on subsections too
+\setcounter{secnumdepth}{3}
+
+% *-------------------*
+% | *** Utilities *** |
+% *-------------------*
+
+% Make the first page, with title, toc and link to toc
+\newcommand{\firstpage}{
+    \maketitle
+    \phantomsection
+    \hypertarget{toc}{}
+    \tableofcontents
+    \clearpage
+}
+
+% *------------------*
+% | *** Packages *** |
+% *------------------*
+
+\usepackage{amssymb}   % for varnothing and other weirds symbols
+\usepackage{amsmath}   % basically everything
+\usepackage{mathtools} % for underbrace, arrows, and a lot of other things
+\usepackage{mathrsfs}  % for "mathscr"
+\usepackage{bm}        % for bold math symbols
+\usepackage{physics}   % for derivatives and lots of operators
+\usepackage{cancel}    % for canceling terms
+
+% *-------------------*
+% | *** Shortcuts *** |
+% *-------------------*
+
+% Operators
+\newcommand{\gt}{>}
+\newcommand{\lt}{<}
+\newcommand{\indep}{\perp \!\!\! \perp}
+
+% Sets
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+
+% Big-O and small-o notation
+\renewcommand{\O}{\mathcal{O}}
+% https://tex.stackexchange.com/questions/191059/how-to-get-a-small-letter-version-of-mathcalo
+\renewcommand{\o}{
+    \mathchoice
+    {{\scriptstyle\mathcal{O}}}% \displaystyle
+    {{\scriptstyle\mathcal{O}}}% \textstyle
+    {{\scriptscriptstyle\mathcal{O}}}% \scriptstyle
+    {\scalebox{.6}{$\scriptscriptstyle\mathcal{O}$}}%\scriptscriptstyle
+}
+
+% *-------------------*
+% | *** Utilities *** |
+% *-------------------*
+
+% Skip line after theorem or proof title, useful when using itemize or enumerate
+\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
+
+% Use underbar in math mode to define vectors
+% Sorcery taken from https://tex.stackexchange.com/a/163284
+\makeatletter
+\def\munderbar#1{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
+\makeatother
+
+\newcommand{\uvec}[1]{\munderbar{\bm{#1}}}
+
+% *-------------------*
+% | *** Theorems *** |
+% *-------------------*
+
+% yes, i know, the formatting sucks
+
+\usepackage{amsthm}    % for theorem styles
+\usepackage{thmtools}  % for "declaretheorem"
+\usepackage{tcolorbox} % for boxes around theorems
+
+\theoremstyle{definition}
+
+% theorem
+\declaretheorem[
+    numberwithin=section,
+    numbered=no,
+    refname={Thm.},
+    title={Theorem},
+]{theorem*}
+
+
+% *-------------------*
+% | *** Equation *** |
+% *-------------------*
+
+% \numberwithin{equation}{subsection}
+\def\equationautorefname{Eq.} % Autoref
+
+\usepackage{preamble_code}
+
+\begin{document}
+
+\section*{Dynamic programming exercise}
+
+\textbf{Prompt}: Given a sequence $a_n$ of length $N$ find the length $L$ of the longest strictly increasing subsequence.
+
+\subsection*{Algorithm description}
+
+Let $b_n$ be another sequence of length $N$, where each element $b_i$ represents the length of the longest strictly increasing subsequence that has $a_i$ as first item.
+
+We will assigning values to $b_n$ starting from $b_N$ going back to $b_1$ using the following criterion:
+\begin{equation}
+    \label{main_eq}
+    b_i = \max \{ b_{j} : i < j \leq N \land a_j > a_i \} + 1
+\end{equation}
+
+Then $L = \max b_n$.
+
+\subsection*{Code}
+
+Note that this is real python code that can be run, therefore both \texttt{a[i]} and \texttt{b[i]} are $0$ indexed,
+unlike the description provided above, where they start from $1$.
+
+\begin{minted}{python}
+def longest_increasing_subsequence(a):
+    # Here a[N] is out of bound because the first element of a
+    # is a[0] and the last one is a[N-1]
+    N = len(a)
+    b = [0 for _ in range(len(a))]
+
+    # Loop from N-1 (inclusive) to -1 (non-inclusive) decreasing i at each step.
+    # This is equivalent to looping from N-1 to 0 inclusive.
+    for i in range(N-1, -1, -1):
+        if i == N-1:
+            # If we are at the last item in the list the longest
+            # increasing subsequence just contains a_i itself, therefore
+            # it has length 1
+            b[i] = 1
+            continue
+
+        m = 0
+
+        # Loop from i+1 (inclusive) to N (non-inclusive),
+        # this time increasing j at each step.
+        for j in range(i+1, N, +1):
+            # This if imposes the strictly increasing condition
+            if a[j] > a[i]:
+                # Store the maximum length of the sequence that can be 
+                # started from some j > i
+                m = max(m, b[j])
+
+        # Add 1 since we need to count a[i]
+        b[i] = m + 1
+
+    L = max(b)
+    return L
+\end{minted}
+
+\subsection*{Proof of correctness}
+
+\emph{In this section lists start from $1$ and end at $N$ as in the description.}
+
+\textbf{Claim}: At each iteration of the algorithm $b_n$ contains the length of the longest strictly increasing of $a_n$ which has as first element the element of $a_n$ with corresponding index (i.e. $b_5$ has the length of the sequence that starts from $a_5$).
+Then $L = \max b_n$.
+
+\begin{proof}
+    We will proceed by induction on $t$.
+    Let $i = N - t$.
+    \begin{description}
+        \item[Base case] We have $t = 0$ and $i = N$. The longest strictly increasing subsequence that starts from $a_N$ is the subsequence that contains just $a_N$, therefore it has length $1$.
+        \item[Indutive step] Assume the claim is true at iteration $t$ and at all the previous iterations; we want to show that it will be true at $t+1$. At $t+1$ we have that $i = N - t - 1$.
+
+              Call $c^*_n$ the longest strictly increasing subsequence that has $a_i$ as the first element, that is $c^*_1 = a_i$.
+              Now consider $c^*_2$: this will be equal to $a_j$ for some $i < j \leq N$ with $a_j > a_i$.
+
+              It is possible that there will be more than one choice of $j$ respecting these constraints but in order to maximize the length of $c^*_n$ we have to choose the one from which there starts the longest subsequence: this information is contained in $b_j$ which we know it contains the right value because $j$ has been set during some iteration $t' < t$.
+    \end{description}
+
+    Notice that \autoref{main_eq} chooses $b_i$ according to the proof.
+
+    Moreover, since the set of all the increasing subsequences of $a_n$ can be partitioned by starting element of each subsequence, and since $b_n$ contains the length of the sequence with maximum length over each partition, $L = \max b_n$ is the solution to the problem.
+\end{proof}
+
+\end{document}

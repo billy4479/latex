@@ -14,33 +14,35 @@
     \hyperlink{toc}{$\Leftarrow$ TOC}
 }
 
+% *------------------*
+% | *** Packages *** |
+% *------------------*
 
-% Math stuff
-\usepackage{amsfonts}
-\usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{mathtools}
-\usepackage{commath}
-\usepackage{mathrsfs}
-\usepackage{bm} % for bold math symbols
-\usepackage{physics} % for derivatives
-\usepackage{cancel} % for canceling terms
+\usepackage{amssymb}   % for varnothing and other weirds symbols
+\usepackage{amsmath}   % basically everything
+\usepackage{mathtools} % for underbrace, arrows, and a lot of other things
+\usepackage{mathrsfs}  % for "mathscr"
+\usepackage{bm}        % for bold math symbols
+\usepackage{physics}   % for derivatives and lots of operators
+\usepackage{cancel}    % for canceling terms
 
+% *-------------------*
+% | *** Shortcuts *** |
+% *-------------------*
+
+% Operators
 \newcommand{\gt}{>}
 \newcommand{\lt}{<}
+\newcommand{\indep}{\perp \!\!\! \perp}
+
+% Sets
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\indep}{\perp \!\!\! \perp}
 
-\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
-
-\renewcommand{\Re}{\operatorname{Re}}
-\renewcommand{\Im}{\operatorname{Im}}
-
+% Big-O and small-o notation
 \renewcommand{\O}{\mathcal{O}}
 % https://tex.stackexchange.com/questions/191059/how-to-get-a-small-letter-version-of-mathcalo
 \renewcommand{\o}{
@@ -51,6 +53,14 @@
     {\scalebox{.6}{$\scriptscriptstyle\mathcal{O}$}}%\scriptscriptstyle
 }
 
+% *-------------------*
+% | *** Utilities *** |
+% *-------------------*
+
+% Skip line after theorem or proof title, useful when using itemize or enumerate
+\newcommand{\skiplineafterproof}{$ $\par\nobreak\ignorespaces}
+
+% Use underbar in math mode to define vectors
 % Sorcery taken from https://tex.stackexchange.com/a/163284
 \makeatletter
 \def\munderbar#1{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
@@ -58,18 +68,67 @@
 
 \newcommand{\uvec}[1]{\munderbar{\bm{#1}}}
 
+% *-------------------*
+% | *** Theorems *** |
+% *-------------------*
+
+% yes, i know, the formatting sucks
+
+\RequirePackage{amsthm}    % for theorem styles
+\RequirePackage{thmtools}  % for "declaretheorem"
+\RequirePackage{tcolorbox} % for boxes around theorems
+
 \theoremstyle{definition}
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
+
+% theorem
+\declaretheorem[
+    % numberwithin=section,
+    numbered=no,
+    refname={Thm.},
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{red}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{theorem}
 
 \theoremstyle{remark}
-\newtheorem*{remark}{Remark}
 
-% autoref stuff
-\def\definitionautorefname{Definition}
-\def\propositionautorefname{Proposition}
+% remark
+\declaretheorem[
+    numbered=no,
+    preheadhook={
+            \begin{tcolorbox}[
+                    parbox=false,
+                    arc=0mm,
+                    blanker,
+                    left=1em,
+                    top=0.5em,
+                    bottom=0.5em,
+                    borderline west={0.25em}{0pt}{gray}
+                ]
+                },
+                postfoothook={
+            \end{tcolorbox}
+        }
+]{remark}
+
+
+% *-------------------*
+% | *** Equation *** |
+% *-------------------*
 
 \numberwithin{equation}{section}
+\def\equationautorefname{Eq.} % Autoref
 
 \title{Analysis 2, Required Proofs}
 \date{2023/2024}
@@ -260,7 +319,7 @@
 \begin{proof}
     Fix $t_0 \in I$ and define
     \begin{equation}
-        \varphi(t) = \int_{t_0}^t \norm{\gamma'(t)} \dd{t}
+        \varphi(t) = \int_{t_0}^t \norm{\gamma'(u)} \dd{u}
     \end{equation}
     the length of $\gamma$.
     As $\gamma$ is $C^k$ and $\gamma'$ never vanishes we have that $\norm{\gamma'}$ is $C^{k-1}$, implying that $\varphi$ is $C^k$.

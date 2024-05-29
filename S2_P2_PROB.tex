@@ -988,7 +988,7 @@ in \autoref{eq:bivariate:2} we let $W \sim \Normal(0,1)$ then we recognize the i
 
 This is similar to the definition in the discrete case, but now we need to pass to the limit:
 \begin{equation}
-    f_{Y \mid X}(y\ mid x) = \lim_{\substack{\Delta x \to 0 \\ \Delta y \to 0}} \frac{P\left(y \leq Y \leq y + \Delta y \bigm| x \leq X \leq x + \Delta x\right)}{\Delta y}
+    f_{Y \mid X}(y \mid x) = \lim_{\substack{\Delta x \to 0 \\ \Delta y \to 0}} \frac{P\left(y \leq Y \leq y + \Delta y \bigm| x \leq X \leq x + \Delta x\right)}{\Delta y}
 \end{equation}
 this can be proven by substituting the definition of $f_{X, Y}(x,y)$ and $f_X(x)$ in \autoref{eq:joint:conditioning}.
 
@@ -1572,42 +1572,38 @@ Moreover, we see that \autoref{eq:mgf:taylor} is the taylor expansion of $M_X(t)
 
 \begin{proof}
     We assume that $\exists a > 0$ such that $\exists M_{X_i}(t) \enspace \forall t \in (-a, a)$.
-    We will use \autoref{prop:mgf:props_of_mgf} and \autoref{thm:mgf:mgf_expansion}.
-    Consider the taylor expansion of the mgf up to the second term for $t \to 0$:
-    \begin{equation}
-        M_X(t) = 1+E(X) t + \frac{E(X^2) t^2}{2} + \o(t^2)
-    \end{equation}
 
-    Now fix $t$ and compute $M(t/ \sqrt{n})$ such that as $n \to \infty \enspace t/ \sqrt{n} \to 0$:
-    \begin{equation}
-        M_X\left(\frac{t}{\sqrt{n}}\right) = 1+E(X) \frac{t}{\sqrt{n}} + \frac{E(X^2) t^2}{2n} + \o\left(\frac{1}{n}\right)
-    \end{equation}
-
-    Now that we have all the tools we can compute $E(S_n)$:
-    \begin{equation}
-        E(S_n) = E\left(\sum_{i = 0}^n X_i\right) = \sum_{i = 0}^n E(X_i) = \sum_{i = 0}^n \mu = n \mu
-    \end{equation}
-    and $V(S_n)$
-    \begin{equation}
-        V(S_n) = V\left(\sum_{i = 0}^n X_i\right) = \sum_{i = 0}^n V(X_i) = \sum_{i = 0}^n \sigma^2 = n \sigma^2
-    \end{equation}
+    First, we will compute $Z_n$ explicitly. We have
+    \begin{align}
+        E(S_n) & = E\left(\sum_{i = 0}^n X_i\right) = \sum_{i = 0}^n E(X_i) = \sum_{i = 0}^n \mu = n \mu           \\
+        V(S_n) & = V\left(\sum_{i = 0}^n X_i\right) = \sum_{i = 0}^n V(X_i) = \sum_{i = 0}^n \sigma^2 = n \sigma^2
+    \end{align}
     then
     \begin{equation}
-        Z_n = \frac{S_n - E(S_n)}{\sqrt{V(S_n)}}= \frac{S_n - n \mu}{\sigma \sqrt{n}} = \frac{1}{n} \frac{\sum_{i = 0}^n X_i - n \mu}{\sigma} = \frac{1}{n} \sum_{i = 0}^n \underbrace{\frac{X_i - \mu}{\sigma}}_{Y_i}
+        Z_n = \frac{S_n - E(S_n)}{\sqrt{V(S_n)}}= \frac{S_n - n \mu}{\sigma \sqrt{n}} = \frac{1}{\sqrt {n}} \frac{\sum_{i = 0}^n X_i - n \mu}{\sigma} = \frac{1}{\sqrt{n}} \sum_{i = 0}^n \underbrace{\frac{X_i - \mu}{\sigma}}_{Y_i} = \sum_{i = 0}^n \frac{Y_i}{\sqrt{n}}
     \end{equation}
     where $Y_i$ is the normalization of $X_i$.
     Note that $Y_i$ are still independent and identically distributed.
 
-    We now calculate the moment generating function of $Z_n = \frac{1}{n} \sum_{i = 0}^n Y_i$.
-    We have
+    We now want to show that the mgf of $Z_n$ is the one of a normal distribution.
+    Start by considering the taylor expansion of the mgf up to the second term for $t \to 0$
+    \begin{equation}
+        M_X(t) = 1+E(X) t + \frac{E(X^2) t^2}{2} + \o(t^2)
+    \end{equation}
+    and fix $t$ and compute $M(t/ \sqrt{n})$ such that as $n \to \infty$, $t/ \sqrt{n} \to 0$:
+    \begin{equation}
+        M_X\left(\frac{t}{\sqrt{n}}\right) = 1+E(X) \frac{t}{\sqrt{n}} + \frac{E(X^2) t^2}{2n} + \o\left(\frac{1}{n}\right)
+    \end{equation}
+
+    We now calculate the moment generating function of $Z_n = \sum_{i = 0}^n \frac{Y_i}{\sqrt{n}}$: we have
     \begin{equation}
         E\left(e^{t Y_n}\right) = E\left(e^{t \frac{X_n - \mu}{\sigma}}\right) = E\left(e^{\frac{t}{\sigma}X_n} \cdot e^{-t \frac{\mu}{\sigma}}\right) = e^{-\frac{t \mu}{\sigma}} M_{X_n}\left(\frac{t}{\sigma}\right)
     \end{equation}
-    which means that the mgf of $Y_n$ is well defined in a symmetric interval around 0. We can then write the mgf of $Z_n$ as
+    which means that the mgf of $Y_n$ is well defined in a symmetric interval around 0, implying we can use \autoref{prop:mgf:props_of_mgf} to write the mgf of $Z_n$ as
     \begin{equation}
-        M_{Z_n} = \prod_{i = 1}^n M_{Y_i}(t) = \left(M_{Y_1}\left(\frac{t}{\sqrt{n}}\right)\right)^n
+        M_{Z_n}(t) = \prod_{i = 1}^n M_{Y_i}\left(\frac{t}{\sqrt{n}}\right) = \left(M_{Y_1}\left(\frac{t}{\sqrt{n}}\right)\right)^n
     \end{equation}
-    since $Y_i$ are identically distributed.
+    since $Y_i$ are i.i.d..
 
     Now we can use the taylor expansion of the mgf to write
     \begin{align}

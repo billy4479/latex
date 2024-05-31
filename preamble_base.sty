@@ -22,6 +22,12 @@
 \RequirePackage{enumitem} % for custom lists
 \RequirePackage{hyperref} % for hyperlinks
 
+\RequirePackage[
+    type={CC},
+    modifier={by-sa},
+    version={4.0},
+]{doclicense} % licence notice
+
 % *---------------*
 % | *** Fonts *** |
 % *---------------*
@@ -78,6 +84,7 @@
 % Make the first page, with title, toc and link to toc
 \newcommand{\firstpage}{
     \maketitle
+    \doclicenseThis
     \phantomsection
     \hypertarget{toc}{}
     \tableofcontents

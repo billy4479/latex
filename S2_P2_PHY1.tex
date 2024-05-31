@@ -3,6 +3,7 @@
 \usepackage{preamble}
 \usepackage{preamble_svg}
 \usepackage{siunitx}
+\usepackage{esint} % for closed integrals
 
 \title{Physics 2 Notes, Partial 2}
 \date{Semester 2, 2023/2024}
@@ -654,6 +655,7 @@ The unit of pressure is
 \end{equation}
 
 \subsection{Stevino's law}
+\label{sec:stevino}
 
 Consider a cylinder of fluid inside the fluid itself. We know that the fluid is in equilibrium.
 
@@ -694,24 +696,177 @@ Let $\delta p = F/A$, then the new pressure is
 \end{eqnarray}
 which means that the new pressure is applied homogeneously to the whole fluid.
 
-\subsection{Archimedes principle (buoyancy)}
+\subsection{Buoyancy}
 
-This law says that if we put a body in a fluid the force exerted by the fluid upwards is
+Before going to the Archimedes' principle we need to discuss a preliminary result, called the divergence theorem.
 
-\begin{equation}
-    \vec F = \sum_{\text{surface}} \dd{\vec F}(\vec r) = pgV \hat k
-\end{equation}
+\subsubsection{Divergence theorem}
 
-% TODO: Class of 12/04/24
-TODO
-\begin{itemize}
-    \item
-          Proof of Archimedes theorem using the divergence theorem,
-    \item
-          proof of divergence theorem in the case of a cube,
-    \item
-          as homework prove Bernoulli theorem.
-\end{itemize}
+\begin{definition}[divergence]
+    \label{def:divergence}
+    Given a continuously differentiable vector field $\vec F : \R^3 \to \R^3$ we define it's divergence as
+    \begin{equation}
+        \div \vec F = \pdv{F_x}{x} + \pdv{F_y}{y} + \pdv{F_z}{z}
+    \end{equation}
+
+    This is a function of the form $\R^3 \to \R$.
+\end{definition}
+
+The divergence indicates how much the vector field is going \say{into} a certain point or how much is it going \say{out} of it.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.5\textwidth]{assets/S2_P2_PHY1/divergence.svg}
+    \caption{Example of a vector field $\vec V$ with positive, negative, and zero divergence.}
+\end{figure}
+
+\begin{theorem}[divergence theorem]
+    \label{thm:divergence}
+    Let $V$ be a volume and $S = \partial V$ its boundary. $S$ is closed and piecewise smooth.
+    The following equation holds
+    \begin{equation}
+        \iiint_V (\div \bm{F}) \dd{V} = \oiint_{S} \bm{F} \cdot \dd{\vec S}
+    \end{equation}
+    where $\dd{\vec S} = \hat n \dd{S}$ is the outwards unit normal vector scaled by the differential of the surface.
+\end{theorem}
+
+This theorem, despite being very intimidating, is saying one simple thing:
+the sum of all the flow moving inside a volume is equal to the amount of flow passing through the boundary of the volume itself.
+
+The proof of this theorem is way too hard for this course, but we will instead prove it in the case of a cube.
+\begin{proof}[Proof (in the case of a cube)]
+    Assume $V$ is a cube with side length $l$.
+    The six faces of the cube are given by the planes $x=0, x=a, y=0, y=a, z=0, z=a$ and the corresponding normal vectors are $(-1,0,0), (1,0,0), (0,-1,0), (0,1,0), (0,0,-1), (0,0,1)$.
+    For example, for the face $x = 0$ we have
+    \begin{equation}
+        \iint_{x = 0} \bm{F} \cdot \dd{S} = \iint_{x = 0} \bm{F} \cdot (-1, 0, 0) \dd{y} \dd{z} = - \int_0^l \int_0^l F_x(0, y, z) \dd{y} \dd{z}
+    \end{equation}
+    we can repeat the process for the other faces. By summing all these result we get
+    \begin{equation}
+        \label{eq:div:double_int}
+        \begin{split}
+            \oiint_{S} \bm{F} \cdot \dd{\vec S} & = \int_0^l \int_0^l F_x(l, y, z)-F_x(0, y, z) \dd{y} \dd{z} \\
+                                                & + \int_0^l \int_0^l F_y(l, y, z)-F_y(x, 0, z) \dd{y} \dd{z} \\
+                                                & + \int_0^l \int_0^l F_z(l, y, z)-F_z(x, y, 0) \dd{y} \dd{z}
+        \end{split}
+    \end{equation}
+
+    Now consider the triple integral, we have
+    \begin{equation}
+        \iiint_V (\div \bm{F}) \dd{V} = \int_0^l \int_0^l \int_0^l \pdv{F_x}{x} + \pdv{F_y}{y} + \pdv{F_z}{z} \dd{x} \dd{y} \dd{z}
+    \end{equation}
+    where we used \autoref{def:divergence}, furthermore by splitting it and using the fundamental theorem of calculus we get a result equivalent to \autoref{eq:div:double_int}.
+\end{proof}
+
+The general proof is similar but considers infinitesimal cubes, for additional details see \href{https://people.math.harvard.edu/~knill/teaching/summer2011/handouts/64-divergence.pdf}{this document}, for example.
+
+\subsubsection{Archimedes' principle}
+
+\begin{theorem}[Archimedes' principle]
+    Let $V$ be a volume and $S = \partial V$ as in the assumptions of \autoref{thm:divergence}.
+    If we put $V$ in a fluid the force exerted by the fluid upwards is
+    \begin{equation}
+        \vec F = \oiint_S \dd{\vec F} = pgV \hat k
+    \end{equation}
+    where $\hat k$ is the direction opposite to gravity.
+\end{theorem}
+
+\begin{proof}
+    Let $p_0$ be the atmospheric pressure, then the vector field of the pressure is given by
+    \begin{equation}
+        p(x, y, z) = - \rho g z + p_0
+    \end{equation}
+    as seen in \autoref{sec:stevino}.
+
+    Then let $\bm{F} = -p \hat k$ so that $\div F = \rho g \hat k$.
+    Then
+    \begin{equation}
+        \label{eq:archimedes:triple}
+        \iiint_V (\div F) \dd{V} = \rho g \hat k \iiint_V \dd{V} = \rho g V \hat k
+    \end{equation}
+
+    The force that the fluid applies on each $\dd{\vec S}$ is given by $\dd{\vec F} = p \dd{\vec S}$ by the definition of pressure
+    and the buoyancy will be given by
+    \begin{equation}
+        \label{eq:archimedes:double}
+        \oiint_S - p \hat k \dd{\vec S} = \oiint_S \bm{F} \dd{\vec S}
+    \end{equation}
+
+    By \autoref{thm:divergence} we conclude that \autoref{eq:archimedes:triple} is equivalent to \autoref{eq:archimedes:double}.
+\end{proof}
+
+\subsection{Bernoulli theorem}
+
+For this section referencing \autoref{fig:bernoulli} could be useful to understand what's going on.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{assets/S2_P2_PHY1/bernoulli.png}
+    \caption{A pipe with different cross sections $A_1, A_2$, starting at $h_1$ and ending at $h_2$.}
+    \label{fig:bernoulli}
+\end{figure}
+
+\begin{theorem}[continuity equation]
+    \label{thm:continuity_equation}
+    Under the assumption that a fluid is incompressible, at any pair of points $P_1, P_2$ of a pipe, where the cross section in each point is $A_1, A_2$ respectively, there holds
+    \begin{equation}
+        A_1 v_1 = A_2 v_2
+    \end{equation}
+    where $v_1, v_2$ are the velocities of the fluid in those points.
+\end{theorem}
+
+\begin{proof}
+    If the fluid is incompressible, in the same time $\dd{t}$ we would have pushed the same volume of fluid through both $A_1$ and $A_2$.
+    We can write this volume as
+    \begin{equation}
+        \dd{V} = A \dd{x} = A v \dd{t}
+    \end{equation}
+    and equating this quantity at $A_1$ and at $A_2$ we get the result.
+\end{proof}
+
+\begin{theorem}[Bernoulli equation]
+    At any point in the fluid the following value is constant
+    \begin{equation}
+        p + \frac{1}{2} \rho v^2 + \rho g h = \mathrm{const.}
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Let us write the mass of a fluid that gets pushed in a time $\dd{t}$ as
+    \begin{equation}
+        \dd{m} = \rho \dd{V} = \rho A \dd{x} = \rho A v \dd{t}
+    \end{equation}
+
+    We have that the change of kinetic energy due to the push is
+    \begin{equation}
+        \dd{K} = \frac{1}{2} v_2^2 (\rho A_2 v_2 \dd{t}) - \frac{1}{2} v_1^2 (\rho A_1 v_1 \dd{t})
+    \end{equation}
+    the change in potential energy is
+    \begin{equation}
+        \dd{U} = (\rho A_2 v_2 \dd{t})gh_2 - (\rho A_1 v_1 \dd{t})gh_1
+    \end{equation}
+    and finally the work done to actually push the liquid is
+    \begin{equation}
+        \dd{W} = p_1 A_1 v_1 \dd{t} - p_2 A_2 v_2 \dd{t}
+    \end{equation}
+
+    Now we can combine all these results:
+    \begin{multline}
+        \frac{1}{2} v_2^2 (\rho A_2 v_2 \dd{t}) - \frac{1}{2} v_1^2 (\rho A_1 v_1 \dd{t}) +
+        (\rho A_2 v_2 \dd{t})gh_2 - (\rho A_1 v_1 \dd{t})gh_1 \\
+        = p_1 A_1 v_1 \dd{t} - p_2 A_2 v_2 \dd{t}
+    \end{multline}
+    and by using \autoref{thm:continuity_equation} we get
+    \begin{equation}
+        \frac{1}{2} v_2^2 \rho \dd{t} - \frac{1}{2} v_1^2 \rho \dd{t} +
+        \rho \dd{t} gh_2 - \rho \dd{t} gh_1 \\
+        = p_1 \dd{t} - p_2 \dd{t}
+    \end{equation}
+    where we can simplify the $\dd{t}$ and rearrange to get
+    \begin{equation}
+        p_1 + \frac{1}{2} \rho v_1^2 + \rho g h_1 = p_2 + \frac{1}{2} \rho v_2^2 + \rho g h_2
+    \end{equation}
+\end{proof}
 
 % Class od 18/04/2024
 \section{Kinetic theory of gasses}

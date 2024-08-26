@@ -17,7 +17,7 @@
 \RequirePackage{subfig} % for subfigures
 
 \RequirePackage{dirtytalk} % for quotes
-\RequirePackage[many]{tcolorbox} % for boxes
+\RequirePackage[many, skins]{tcolorbox} % for boxes
 \RequirePackage{tikz} % for drawings
 \RequirePackage{enumitem} % for custom lists
 \RequirePackage{hyperref} % for hyperlinks
@@ -50,22 +50,6 @@
     urlcolor=blue,
 }
 \urlstyle{same}
-
-% *----------------*
-% | *** Legacy *** |
-% *----------------*
-% TODO: inline them in the documents that need them
-
-\newenvironment{absolutelynopagebreak}
-{\par\nobreak\vfil\penalty0\vfilneg
-    \vtop\bgroup}
-{\par\xdef\tpd{\the\prevdepth}\egroup
-    \prevdepth=\tpd}
-
-\newtcolorbox{examplebox}[1]{colback=green!5!white,colframe=green!40!black,title={#1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{notebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={Note: #1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{bluebox}[1]{colback=blue!5!white,colframe=blue!40!black,title={#1},fonttitle=\bfseries,parbox=false}
-\newtcolorbox{warningbox}[1]{colback=orange!5!white,colframe=orange!90!black,title={Warning: #1},fonttitle=\bfseries,parbox=false}
 
 % *-------------------*
 % | *** Numbering *** |

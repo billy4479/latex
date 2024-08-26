@@ -11,3 +11,5 @@ File names have the following scheme:
 - Course name
 
 Example: "Computer Science 2, Semester 2, Partial 1" would become "S2_P1_CS2".
+
+For stuff done in past years see releases.

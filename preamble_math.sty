@@ -62,179 +62,105 @@
 % | *** Theorems *** |
 % *-------------------*
 
-% yes, i know, the formatting sucks
-
 \RequirePackage{amsthm}    % for theorem styles
-\RequirePackage{thmtools}  % for "declaretheorem"
 \RequirePackage{tcolorbox} % for boxes around theorems
 
-\theoremstyle{definition}
+\tcbset{
+    theoremstyle/.style={
+            enhanced,
+            parbox=false,
+            sharp corners,
+            boxrule=0pt,
+            left=1em,
+            top=0.5em,
+            bottom=0.5em,
+            toptitle=0.25em,
+            bottomtitle=0.25em,
+            separator sign={\   $\blacktriangleright$},
+            coltitle=black,
+            fonttitle=\bfseries,
+        },
+}
 
 % theorem
-\declaretheorem[
-    numberwithin=section,
-    numbered=yes,
-    refname={Thm.},
-    preheadhook={
-            \begin{tcolorbox}[
-                    enhanced,
-                    parbox=false,
-                    sharp corners,
-                    frame hidden,
-                    boxrule = 0pt,
-                    left=1em,
-                    top=0.5em,
-                    bottom=0.5em,
-                    borderline west={0.25em}{0pt}{red},
-                    colback=red!10!white,
-                ]
-                },
-                postfoothook={
-            \end{tcolorbox}
-        }
-]{theorem}
+\newtcbtheorem[
+    number within=section,
+]{theorem}{Theorem}{
+    theoremstyle,
+    colback=red!10!white,
+    colframe=red!20!white,
+    borderline west={0.25em}{0pt}{red},
+    label type=theorem,
+}{thm}
 
 % corollary
-\declaretheorem[
-    numberwithin=theorem,
-    numbered=yes,
-    refname={Cor.},
-    preheadhook={
-            \begin{tcolorbox}[
-                    enhanced,
-                    parbox=false,
-                    sharp corners,
-                    frame hidden,
-                    boxrule = 0pt,
-                    left=1em,
-                    top=0.5em,
-                    bottom=0.5em,
-                    borderline west={0.25em}{0pt}{yellow},
-                    colback=yellow!10!white,
-                ]
-                },
-                postfoothook={
-            \end{tcolorbox}
-        }
-]{corollary}
+\newtcbtheorem[
+    number within=tcb@cnt@theorem,
+]{corollary}{Corollary}{
+    theoremstyle,
+    colback=yellow!10!white,
+    colframe=yellow!20!white,
+    borderline west={0.25em}{0pt}{yellow},
+    label type=corollary,
+}{cor}
 
 % lemma
-\declaretheorem[
-    sibling=theorem,
-    numbered=yes,
-    preheadhook={
-            \begin{tcolorbox}[
-                    enhanced,
-                    parbox=false,
-                    sharp corners,
-                    frame hidden,
-                    boxrule = 0pt,
-                    left=1em,
-                    top=0.5em,
-                    bottom=0.5em,
-                    borderline west={0.25em}{0pt}{yellow},
-                    colback=yellow!10!white,
-                ]
-                },
-                postfoothook={
-            \end{tcolorbox}
-        }
-]{lemma}
+\newtcbtheorem[
+    use counter from=theorem,
+    number within=section,
+]{lemma}{Lemma}{
+    theoremstyle,
+    colback=yellow!10!white,
+    colframe=yellow!20!white,
+    borderline west={0.25em}{0pt}{yellow},
+    label type=lemma,
+}{lemma}
 
 % proposition
-\declaretheorem[
-    sibling=theorem,
-    numbered=yes,
-    refname={Prop.},
-    preheadhook={
-            \begin{tcolorbox}[
-                    enhanced,
-                    parbox=false,
-                    sharp corners,
-                    frame hidden,
-                    boxrule = 0pt,
-                    left=1em,
-                    top=0.5em,
-                    bottom=0.5em,
-                    borderline west={0.25em}{0pt}{orange},
-                    colback=orange!10!white,
-                ]
-                },
-                postfoothook={
-            \end{tcolorbox}
-        }
-]{proposition}
+\newtcbtheorem[
+    use counter from=theorem,
+    number within=section,
+]{proposition}{Proposition}{
+    theoremstyle,
+    colback=orange!10!white,
+    colframe=orange!20!white,
+    borderline west={0.25em}{0pt}{orange},
+    label type=proposition,
+}{prop}
 
 % definition
-\declaretheorem[
-    numberwithin=section,
-    numbered=yes,
-    refname={Def.},
-    preheadhook={
-            \begin{tcolorbox}[
-                    enhanced,
-                    parbox=false,
-                    sharp corners,
-                    frame hidden,
-                    boxrule = 0pt,
-                    left=1em,
-                    top=0.5em,
-                    bottom=0.5em,
-                    borderline west={0.25em}{0pt}{cyan},
-                    colback=cyan!10!white,
-                ]
-                },
-                postfoothook={
-            \end{tcolorbox}
-        }
-]{definition}
+\newtcbtheorem[
+    use counter from=theorem,
+    number within=section,
+]{definition}{Definition}{
+    theoremstyle,
+    colback=cyan!10!white,
+    colframe=cyan!20!white,
+    borderline west={0.25em}{0pt}{cyan},
+    label type=definition,
+}{def}
+
 
 % example
-\declaretheorem[
-    numberwithin=section,
-    numbered=yes,
-    preheadhook={
-            \begin{tcolorbox}[
-                    enhanced,
-                    parbox=false,
-                    sharp corners,
-                    frame hidden,
-                    boxrule = 0pt,
-                    left=1em,
-                    top=0.5em,
-                    bottom=0.5em,
-                    borderline west={0.25em}{0pt}{green},
-                    colback=green!10!white,
-                ]
-                },
-                postfoothook={
-            \end{tcolorbox}
-        }
-]{example}
+\newtcbtheorem[
+    use counter from=theorem,
+    number within=section,
+]{example}{Example}{
+    theoremstyle,
+    colback=green!10!white,
+    colframe=green!20!white,
+    borderline west={0.25em}{0pt}{green},
+    label type=example,
+}{ex}
 
-\theoremstyle{remark}
 
-% remark
-\declaretheorem[
-    numbered=no,
-    preheadhook={
-            \begin{tcolorbox}[
-                    enhanced,
-                    parbox=false,
-                    sharp corners,
-                    frame hidden,
-                    boxrule = 0pt,
-                    left=1em,
-                    top=0.5em,
-                    bottom=0.5em,
-                    borderline west={0.25em}{0pt}{gray},
-                    colback=gray!10!white,
-                ]
-                },
-                postfoothook={
-            \end{tcolorbox}
-        }
-]{remark}
+\newtcbtheorem[]{remark}{Remark}{
+    theoremstyle,
+    colback=gray!10!white,
+    colframe=gray!20!white,
+    borderline west={0.25em}{0pt}{gray},
+    theorem name,
+}{rem}
 
 
 % *-------------------*
@@ -242,6 +168,5 @@
 % *-------------------*
 
 \numberwithin{equation}{subsection}
-\def\equationautorefname{Eq.} % Autoref
 
 \endinput

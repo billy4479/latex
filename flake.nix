@@ -33,6 +33,7 @@
         texPkgs = pkgs.texliveSmall.withPackages (
           ps: with ps; [
             latexmk
+            latexindent
 
             # Direct dependencies
             dirtytalk
@@ -41,11 +42,12 @@
             enumitem
             doclicense
             cancel
-            thmtools
             minted
             svg
             physics
             rsfs
+            lipsum
+            cleveref
 
             # Indirect dependencies
             environ

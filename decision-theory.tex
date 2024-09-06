@@ -1,0 +1,146 @@
+\documentclass[12pt]{extarticle}
+
+\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do  
+
+\title{Decision Theory and Human Behavior}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble}
+
+\renewcommand{\vec}[1]{\uvec{#1}}
+
+\begin{document}
+
+\firstpage
+
+\section{Binary relations}
+
+\begin{definition}{Proposition}{proposition}
+    A proposition is a statement that can be either true or false.
+\end{definition}
+
+\begin{definition}{Logical predicate}{predicate}
+    A logical predicate $p(x)$ is an expression that contains an argument $x$ that varies in a given domain $X$.
+\end{definition}
+
+Note that if we take a predicate and choose an $x$ and fix it we get a proposition.
+
+To turn a predicate into a proposition we can use the universal $\forall$ and existential $\exists$ quantifier.
+
+We can also identify a predicate with the set $A$ of all the elements $x \in X$ such that the proposition $p(x)$ is true.
+\begin{equation}
+    \label{eq:extension_set}
+    A = \{ x \in X : p(x) \text{ is true} \}
+\end{equation}
+
+Moreover we can also have predicates with two or more variables that may have different domains.
+We call a predicate with two variables a \textbf{binary predicate}. We can again define a set like the one in \cref{eq:extension_set}:
+\begin{equation}
+    R = \{ (x,y) \in X \times Y : p(x,y) \text{ is true} \}
+\end{equation}
+we call this the \textbf{extension set} of $p$.
+
+For our purposes we will always consider $X = Y$.
+
+\begin{definition}{Binary relation}{binary-relation}
+    Let $X$ be a domain. A binary relation is a subset $R$ of $X \times X$.
+\end{definition}
+
+Therefore a binary relation is the extension of a binary predicate.
+
+\begin{remark}{Set-theoretic notation}{set-theoretic-notation}
+    Instead of $(x, y) \in R$ we will instead just write
+    \begin{equation}
+        xRy
+    \end{equation}
+    It reads as \say{$x$ is in the relation $R$ with $y$}.
+\end{remark}
+
+\begin{proposition}{Properties of binary relations}{prop-binary-relations}
+    Given a binary relation $R$ on a set $X$ we say that $R$ is
+    \begin{enumerate}[label=\roman*.]
+        \item \textbf{Reflexive} if $xRx \enspace \forall x \in X$
+        \item \textbf{Transitive} if $xRy \land yRz \implies xRz$
+        \item \textbf{Complete} if $\forall x, y \in R$ either $xRy$ or $yRx$ or both
+        \item \textbf{Symmetric} if $xRy \implies yRx \enspace \forall x,y \in X$
+        \item \textbf{Asymmetric} if $xRy \implies \lnot yRn \enspace \forall x,y \in X$
+        \item \textbf{Antisymmetric} if $xRy \land yRx \implies x = y \enspace \forall x,y \in X$
+    \end{enumerate}
+\end{proposition}
+
+\begin{definition}{The $I$ relation}{i-relation}
+    Given a binary relation $R$ and $x, y \in X$ we define $I$ as
+    \begin{equation}
+        xIy \iff xRy \land yRx
+    \end{equation}
+\end{definition}
+
+\begin{proposition}{Properties of $I$}{props-i}
+    Let $R$ be reflexive and transitive (a \textit{preorder}) on a set $X$.
+    Then the induced binary relation $I$ is reflexive, symmetric and transitive.
+\end{proposition}
+
+\begin{proof}
+    We want to show that $I$ is transitive.
+    Let $xIy$ and $yIz$, this is equivalent, by definition, to $xRy \land yRx$ and $yRz \land zRy$.
+    By transitivity of $R$ we have that $xRy \land yRz \implies xRz$ and $yRx \land zRy \implies zRx$, meaning $xIz$.
+\end{proof}
+
+\begin{definition}{Equivalence relation}{equivalence-relation}
+    A binary relation $R$ is an equivalence relation if it satisfies \textit{reflexivity}, \textit{symmetry}, and \textit{transitivity}.
+\end{definition}
+
+\begin{corollary}{}{}
+    $I$ is an equivalence relation.
+\end{corollary}
+
+\begin{definition}{Equivalence class}{equivalence-class}
+    Given an equivalence relation $R$ and $x \in X$ we define the equivalence class of $x$ as
+    \begin{equation}
+        [x] = \{y \in X : xRy\}
+    \end{equation}
+    that is, the set of all elements of $X$ equivalent to $x$ according to $R$.
+\end{definition}
+
+\begin{lemma}{}{}
+    If $y \in [x]$, then $[y] = [x]$.
+\end{lemma}
+
+\begin{proposition}{Equivalence classes a partition}{eq-classes-partition}
+    If $R$ is an equivalence relation on $X$ define
+    \begin{equation}
+        X/R = \{ [x] : x\in X \}
+    \end{equation}
+    as the set all equivalence classes in $X$ w.r.t. $R$.
+
+    $X/R$ form a partition on $X$.
+\end{proposition}
+
+\begin{definition}{Partial order}{partial-order}
+    A binary relation $R$ is a partial order if it satisfies \textit{reflexivity}, \textit{transitivity}, and \textit{antisymmetry}.
+\end{definition}
+
+A partial order is a preorder (as seen in \cref{prop:props-i}) with antisymmetry added on top.
+
+\begin{example}{Partial order for functions}{}
+    Consider the set $\R^\Omega$, the set of functions $f: \Omega \to \R$.
+    One can define a partial order on $\R^\Omega$ as
+    \begin{equation}
+        f \geq g \implies f(\omega) \geq g(\omega) \enspace \forall \omega \in \Omega
+    \end{equation}
+
+\end{example}
+
+\begin{example}{Partial order for sets}{}
+    The easiest partial order for sets is inclusion:
+    \begin{equation}
+        A \geq B \iff A \subseteq B
+    \end{equation}
+\end{example}
+
+If we are able to define a partial order $\geq$ on $X$ we call $(X, \geq)$ a \textbf{partially ordered set}.
+
+Moreover, if $\forall x, y \in X$ either $x \geq y$ or $y \geq x$ we say that $\geq$ is a \textbf{total order}.
+
+\end{document}

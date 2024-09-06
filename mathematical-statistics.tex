@@ -1,0 +1,106 @@
+\documentclass[12pt]{extarticle}
+
+\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do  
+
+\title{Mathematical Statistics}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble}
+\usepackage{preamble_code}
+\usepackage{preamble_svg}
+
+\newcommand{\cov}{{\operatorfont Cov}}
+% Distributions
+\newcommand{\Bernoulli}{{\operatorfont Bernoulli}}
+\newcommand{\Normal}{{\operatorfont N}}
+\newcommand{\GammaD}{{\operatorfont Gamma}}
+\newcommand{\Poisson}{{\operatorfont Poisson}}
+\newcommand{\Exponential}{{\operatorfont Exponential}}
+\newcommand{\BivariateNormal}{{\operatorfont BivariateN}}
+
+\newcommand{\convas}{\xrightarrow{\operatorfont a.s.}}
+\newcommand{\convdist}{\xrightarrow{\operatorfont d}}
+\newcommand{\convprob}{\xrightarrow{\operatorfont P}}
+\newcommand{\convmean}[1]{\xrightarrow{#1}}
+
+\renewcommand{\vec}[1]{\uvec{#1}}
+
+\begin{document}
+
+\firstpage
+
+\section{Descriptive statistics}
+
+\begin{definition}{Statistics}{statistics}
+    Statistics is the art of modelling situations in which probability plays a role and draw conclusions based on data observed in such situations.
+\end{definition}
+
+\textbf{Descriptive statistics} on the other hand will just try to summarize the data in a meaningful way.
+
+\begin{definition}{Statistical model}{statistical-model}
+    A statistical model is a collection of probability distributions on a given sample space.
+\end{definition}
+
+\begin{example}{Coin toss}
+    We have $\Omega = \{ H, T \}$ and assume $P(H) = p$. We have that $X \sim \Bernoulli(p)$. The statistical model of this setup will be
+    \begin{equation}
+        M = \{ \Bernoulli(p) : p \in [0, 1] \}
+    \end{equation}
+\end{example}
+
+The meaning of the model is to collect all the possible probability distributions of $X$.
+
+\begin{remark}{Collections of random variables}{}
+    Often $X$ is the collection of many observations, hence $X = (X_1, \dots, X_n)$.
+    When the $X_i$s are IID we say $X$ is a \textbf{sample}.
+\end{remark}
+
+If the $X_i$s are IID we can focus on the marginal $X_i$ and compute $X$ later.
+
+\begin{example}{Sample from population}{}
+    Let $N$ be a large number of people composing a population.
+    Some proportion $p$ of $N$ has a characteristic $A$.
+
+    We want to estimate $p$ without asking all the $N$ people.
+
+    To do so we choose $n$ people randomly, \textit{without replacement}.
+    This type of sampling allows us to assume that $X_i$s are IID.
+    Our $X_i$ can be either $1$ (if the person has $A$) or $0$ (if they do not).
+    We have that $M$ is a collection of $\Bernoulli$.
+
+    An easy way to estimate $p$ would be
+    \begin{equation}
+        \hat p = \frac{\# A}{n}
+    \end{equation}
+\end{example}
+
+We just saw in the example if we sample without replacement $X_i$s are IID.
+If we sample \textit{with} replacement we can only approximate IID variables if $N$ is very large.
+
+\begin{example}{Measurement errors}{}
+    Assume we have $X_n$ observations and let $c$ be the actual result.
+    Let $e_i = X_i - c$ be the error for each measurement.
+
+    We will assume that the experiments are done in the same conditions, independently from the past (giving us IID random variables) and with an expected error equal to $0$.
+
+    In this case $M$ would be the ser of all distributions with expected value $c$ but this is not very useful as it doesn't give us any information.
+    A better solution would be to use the $\Normal(c, \sigma^2)$.
+\end{example}
+
+After we created a model we have to do a process called \textbf{model validation} to make sure that we found a good model.
+This is because the model we came up with is based on previous observations and we have to verify it still works.
+
+We proceed by repeating the experiment, therefore our random variables become just numbers. We want to measure two properties of these numbers and compare them with the distribution ones:
+\begin{itemize}
+    \item \textbf{Location}, usually summarized by the \textit{expectation} or the \textit{median};
+    \item \textbf{Dispersion}, usually summarized by the \textit{variance} or the \textit{interquartile range}.
+\end{itemize}
+
+\begin{remark}{Interquartile range}{}
+    The sample interquartile range is the distance between the upper and lower quartiles of the data.
+\end{remark}
+
+Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample mean} and the \textit{variance}; while if the distribution is \textbf{asymmetric} we prefer the \textit{median} and the \textit{interquartile range}.
+
+\end{document}

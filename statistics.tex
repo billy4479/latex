@@ -30,6 +30,8 @@
 
 \section{Descriptive statistics}
 
+\subsection{Introduction}
+
 \begin{definition}{Statistics}{statistics}
     Statistics is the art of modelling situations in which probability plays a role and draw conclusions based on data observed in such situations.
 \end{definition}
@@ -99,6 +101,96 @@ We proceed by repeating the experiment, therefore our random variables become ju
     The sample interquartile range is the distance between the upper and lower quartiles of the data.
 \end{remark}
 
+\begin{definition}{Sample variance}{sample-variance}
+    \begin{equation}
+        S_X^2 = \frac{1}{n-1} \sum^n_{i = 1}(X_i - \overline X)
+    \end{equation}
+\end{definition}
+
 Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample mean} and the \textit{variance}; while if the distribution is \textbf{asymmetric} we prefer the \textit{median} and the \textit{interquartile range}.
+
+\subsection{Graphical representation of samples}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{assets/statistics/histogram.png}
+    \caption{A histogram and the graph of the distribution of the samples}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{assets/statistics/boxplot.png}
+    \caption{A boxplot with indication on what the lines mean}
+\end{figure}
+
+\subsection{Location-Scale family of distributions}
+
+\begin{definition}{Location-Scale family}{location-scale-family}
+    Let $X$ be a random variable with distribution $F$ and $Y = a + bX$ with $b>0$.
+    Then the distribution of $Y$ is
+    \begin{equation}
+        F_{a, b}(y) = F\left( \frac{y-a}{b} \right)
+    \end{equation}
+\end{definition}
+
+\begin{example}{Normal distribution}{}
+    $F$ is in the same location-scale family as the standard normal $\iff$ $F$ is a normal distribution
+\end{example}
+
+\subsection{Quantiles}
+
+\begin{definition}{$\alpha$-quantiles}{alpha-quantiles}
+    The $\alpha$-quantile of a distribution $F$ is given by
+    \begin{equation}
+        F^{-1}(\alpha) = \inf\{ x: F(x) \geq \alpha \}, \quad \alpha \in (0, 1)
+    \end{equation}
+\end{definition}
+
+The quantile function of a location-scale family is
+$F_{a, b}^{-1}(\alpha) = a + bF^{-1}(\alpha)$.
+
+\begin{definition}{QQ-plot}{qq-plot}
+    The QQ-plot for the realizations $x_1, \dots, x_n$ for a distribution function $F$ is a plot of the points
+    \begin{equation}
+        \left\{ \left( F^{-1}\left( \frac{i}{n+1} \right), x_i \right) : i = 1, \dots, n \right\}
+    \end{equation}
+    where $i$ is the order of the indices of $x_i$ such that they are in \textit{increasing order}.
+\end{definition}
+
+If the points $x_1, \dots, x_n$ come from $F$ then the points will approximately align to the $y = x$ line.
+This is because we expect the sample quantile $x_i$ to be close to the theoretical quantile given by the formula.
+
+\subsection{Correlation and independence}
+
+As we know from Probability, we define the correlation coefficient as
+\begin{equation}
+    \rho_{A,B} = \frac{\cov(A, B)}{\sigma_A \sigma_B} \in [-1, 1]
+\end{equation}
+
+Recall that independence implies $\rho = 0$, but not viceversa (except for the normal distribution).
+
+\begin{definition}{Sample correlation coefficient}{sample-correlation-coeff}
+    Consider a sample of pairs $(X_1, Y_1), \dots, (X_n, Y_n)$.
+    Then we define the sample correlation coefficient as
+    \begin{equation}
+        r_{X, Y} = \frac{\sum^n_{i = 1} (X_i - \overline{X})(Y_i - \overline{Y})}{(n-1)\sqrt{S^2_X} \sqrt{S^2_Y}}
+    \end{equation}
+\end{definition}
+
+In the definition we use the following notation:
+\begin{itemize}
+    \item $\overline X$ is the sample mean
+    \item $\sqrt{S^2_X}$ is the sample variance
+\end{itemize}
+
+We observe the following from $r_{X, Y}$:
+\begin{itemize}
+    \item $r_{X, Y} \in [-1, 1]$.
+    \item If $r_{X, Y} = 1$ all the samples lie on the line $y = \overline y + \frac{S_y}{S_x}(x-\overline x)$.
+    \item If $r_{X, Y} = -1$ all the samples lie on the line $y = \overline y - \frac{S_y}{S_x}(x-\overline x)$.
+    \item If $X_1, \dots, X_n$ and $Y_1, \dots, Y_n$ are independent then $r_{X, Y}$ will be close to $0$.
+\end{itemize}
+
+Graphically we can observe correlation or independence using \textbf{scatter plots}: if the graph of $\{ (x_i, x_{i+1}) : i = 1, \dots, n-1 \}$ should show not much of a structure if the samples are independent.
 
 \end{document}

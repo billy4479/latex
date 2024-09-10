@@ -6,6 +6,7 @@
         "Bilinearity",
         "biregular",
         "Borel",
+        "boxplot",
         "cofactor",
         "diagonalizable",
         "diffeomorphism",
@@ -25,6 +26,7 @@
         "Parametrizing",
         "parbox",
         "preorder",
+        "Quantiles",
         "reparametrize",
         "Riesz",
         "Schwarz",
@@ -32,7 +34,8 @@
         "solenoidals",
         "struct",
         "subproblems",
-        "surjective"
+        "surjective",
+        "viceversa"
     ],
     "latex-workshop.latex.tools": [
         {

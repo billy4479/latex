@@ -2,10 +2,11 @@
 
 \setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do  
 
-\title{Physics 2    }
+\title{Physics 2}
 \author{Giacomo Ellero}
 \date{a.y. 2024/2025}
 
+\usepackage[arrowdel]{physics}
 \usepackage{preamble}
 
 % \renewcommand{\vec}[1]{\uvec{#1}}
@@ -48,6 +49,7 @@ We will always work with \say{well behaved} fields: this means the functions are
         \centering
         \includegraphics[width=0.6\textwidth]{assets/physics-2/vector-field-example.png}
         \caption{The arrow representation of $\vec g$ when $z = 0$.}
+        \label{fig:field_source_0}
     \end{figure}
 \end{example}
 
@@ -63,12 +65,12 @@ It is possible for some vector fields to have no sources or sinks. Some patterns
 \begin{definition}{Gradient of a scalar field}{gradient-scalar}
     We define the gradient as
     \begin{equation}
-        \vec \nabla f = \pdv{f}{x} \hat{x} + \pdv{f}{y} \hat{y} + \pdv{f}{z} \hat{z}
+        \grad f = \pdv{f}{x} \hat{x} + \pdv{f}{y} \hat{y} + \pdv{f}{z} \hat{z}
     \end{equation}
 
     We can also define the differential of a field as follows (where $\dd{l} = \dd{x} \hat{x} + \dd{y} \hat{y} + \dd{z} \hat{z} $):
     \begin{equation}
-        \dd{f} = \pdv{f}{x} \dd{x} + \pdv{f}{y} \dd{y} + \pdv{f}{z} \dd{z} = \vec \nabla f \cdot \dd{\vec l}
+        \dd{f} = \pdv{f}{x} \dd{x} + \pdv{f}{y} \dd{y} + \pdv{f}{z} \dd{z} = \grad f \cdot \dd{\vec l}
     \end{equation}
 \end{definition}
 
@@ -76,26 +78,90 @@ The gradient of a field is somewhat the equivalent of the derivative for 1D func
 
 \begin{proposition}{Properties of the gradient}{props-gradient}
     \begin{enumerate}[label=\roman*.]
-        \item $\vec \nabla f$ is orthogonal to the level curves;
-        \item $\vec \nabla f$ points in the direction of the steepest ascent;
+        \item $\grad f$ is orthogonal to the level curves;
+        \item $\grad f$ points in the direction of the steepest ascent;
     \end{enumerate}
 \end{proposition}
 
 \begin{definition}{Directional derivative}{directional-derivative}
     The directional derivative is the slope of the field in the direction $\vec l$.
     \begin{equation}
-        \dv{f}{l} = \vec \nabla \cdot \dd{\vec l}
+        \dv{f}{l} = \grad \cdot \dd{\vec l}
     \end{equation}
 \end{definition}
 
 \begin{definition}{Gradient (nabla) operator}{nabla-operator}
     We define the nabla operator as
     \begin{equation}
-        \vec \nabla  = \pdv{}{x} \hat{x} + \pdv{}{y} \hat{y} + \pdv{}{z} \hat{z}
+        \grad = \pdv{}{x} \hat{x} + \pdv{}{y} \hat{y} + \pdv{}{z} \hat{z}
     \end{equation}
 \end{definition}
 
-This operator is particularly useful because we can treat it basically like a vector and it gives the gradient of the gradient field we apply it to.
+This operator is particularly useful because we can treat it basically like a vector: when we multiply the $\grad$ with a vector field $f$ we get the gradient field of $f$.
+
+\begin{definition}{Divergence}{divergence}
+    Let $\vec f$. Then
+    \begin{align}
+        \div \vec f & = \left( \pdv{}{x} \hat{x} + \pdv{}{y} \hat{y} + \pdv{}{z} \hat{z} \right) \cdot \left( f_x \hat x + f_y \hat y + f_z \hat z\right) \\
+                    & = \pdv{f_x}{x} + \pdv{f_y}{y} + \pdv{f_z}{z}
+    \end{align}
+\end{definition}
+
+The intuition behind divergence is to measure how much a field \say{spreads out} from the point where it si measured.
+
+\begin{example}{}{}
+    Take $\vec f$ as in \Cref{fig:field_source_0}. Then
+    \begin{equation}
+        \div \vec f = \pdv{x}{x} + \pdv{y}{y} + \pdv{z}{z} = 3
+    \end{equation}
+
+    We have that the divergence for this field is always positive therefore the arrows always go further away from each other.
+\end{example}
+
+\begin{example}{Solenoidal field}{solenoidal-field}
+    Let $\vec f = \hat z$. We have $\div \vec f = 0$.
+
+    Fields with zero divergence are called solenoidals.
+\end{example}
+
+\begin{definition}{Curl}{curl}
+    Let $\vec v$ be a vector field. Then
+    \begin{equation}
+        \curl \vec f = \det\begin{vmatrix}
+            \hat x    & \hat y    & \hat z    \\
+            \pdv{}{x} & \pdv{}{y} & \pdv{}{z} \\
+            v_x       & v_y       & v_z
+        \end{vmatrix}
+    \end{equation}
+\end{definition}
+
+The intuition behind curl is to measure how much a vector field rotates or spins around the point where we compute it.
+
+\begin{proposition}{Linearity of $\grad$}{linearity-of-grad}
+    $\grad$, $\div$, and $\curl$ are linear operators.
+\end{proposition}
+
+\begin{proposition}{Leibniz rule}{leibniz-rule}
+    \begin{equation}
+        \grad{fg} = (\grad f)g + f (\grad g)
+    \end{equation}
+\end{proposition}
+
+\subsubsection{Higher order derivatives}
+
+\begin{enumerate}
+    \item \textbf{Divergence of gradient} $\div (\grad \vec f)$:
+
+          Also called \textbf{laplacian}.
+          \begin{equation}
+              \div (\grad \vec f) = \pdv[2]{f}{x}
+          \end{equation}
+
+    \item \textbf{Curl of gradient} $\curl(\grad \vec f)$:
+    \item \textbf{Gradient of divergence} $\grad (\div \vec f)$:
+    \item \textbf{Divergence of curl} $\div (\curl \vec f)$:
+    \item \textbf{Curl of curl} $\curl (\curl \vec f)$:
+\end{enumerate}
 
 \section{Electric phenomena}
 

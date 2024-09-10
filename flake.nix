@@ -59,6 +59,8 @@
             csquotes
             upquote
             transparent
+            hyperxmp
+            luacode
           ]
         );
 

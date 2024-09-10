@@ -1,6 +1,6 @@
 \documentclass[12pt]{extarticle}
 
-\setlength{\headheight}{15pt} % ??? we do what fancyhdr tells us to do  
+\setlength{\headheight}{16pt} % ??? we do what fancyhdr tells us to do  
 
 \title{Physics 2}
 \author{Giacomo Ellero}
@@ -35,20 +35,20 @@ Some examples of scalar fields are temperature or pressure.
 
 
 \begin{definition}{Vector field}{vector-field}
-    A vector field is a function of type $\vec g: \R^d \to \R^d$.
+    A vector field is a function of type $\vec v: \R^d \to \R^d$.
 \end{definition}
 
 Some examples of vector fields are gravitational fields or the velocity field of fluids.
 
 We will always work with \say{well behaved} fields: this means the functions are \say{almost always infinite} (of class $C^\infty$ with only some points as exceptions).
 
-\begin{example}{}{vec-field}
-    Let $\vec g(x, y, z) = x \hat x + y \hat y + z \hat z$.
+\begin{example}{Vector field}{vec-field}
+    Let $\vec v(x, y, z) = x \hat x + y \hat y + z \hat z$.
 
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.6\textwidth]{assets/physics-2/vector-field-example.png}
-        \caption{The arrow representation of $\vec g$ when $z = 0$.}
+        \caption{The arrow representation of $\vec v$ when $z = 0$.}
         \label{fig:field_source_0}
     \end{figure}
 \end{example}
@@ -56,7 +56,7 @@ We will always work with \say{well behaved} fields: this means the functions are
 Some vector fields have \say{special points} where there are an infinite number of field lines going through it:
 \begin{itemize}
     \item If all the lines go into that point we call such point \textbf{source} (the point $(0,0,0)$ is a source for \Cref{ex:vec-field});
-    \item If all the lines go out of that point we call such point \textbf{sink} (use the field $\vec g(x, y, z) = -x \hat x - y \hat y - z \hat z$ as an example).
+    \item If all the lines go out of that point we call such point \textbf{sink} (use the field $\vec v(x, y, z) = -x \hat x - y \hat y - z \hat z$ as an example).
 \end{itemize}
 It is possible for some vector fields to have no sources or sinks. Some patterns that can arise are \textit{loops} or \textit{straight lines}.
 
@@ -100,26 +100,26 @@ The gradient of a field is somewhat the equivalent of the derivative for 1D func
 This operator is particularly useful because we can treat it basically like a vector: when we multiply the $\grad$ with a vector field $f$ we get the gradient field of $f$.
 
 \begin{definition}{Divergence}{divergence}
-    Let $\vec f$. Then
+    Let $\vec v$. Then
     \begin{align}
-        \div \vec f & = \left( \pdv{}{x} \hat{x} + \pdv{}{y} \hat{y} + \pdv{}{z} \hat{z} \right) \cdot \left( f_x \hat x + f_y \hat y + f_z \hat z\right) \\
-                    & = \pdv{f_x}{x} + \pdv{f_y}{y} + \pdv{f_z}{z}
+        \div \vec v & = \left( \pdv{}{x} \hat{x} + \pdv{}{y} \hat{y} + \pdv{}{z} \hat{z} \right) \cdot \left( v_x \hat x + v_y \hat y + v_z \hat z\right) \\
+                    & = \pdv{v_x}{x} + \pdv{v_y}{y} + \pdv{v_z}{z}
     \end{align}
 \end{definition}
 
-The intuition behind divergence is to measure how much a field \say{spreads out} from the point where it si measured.
+The intuition behind divergence is to measure how much a field \say{spreads out} from the point where it is measured.
 
 \begin{example}{}{}
-    Take $\vec f$ as in \Cref{fig:field_source_0}. Then
+    Take $\vec v$ as in \Cref{fig:field_source_0}. Then
     \begin{equation}
-        \div \vec f = \pdv{x}{x} + \pdv{y}{y} + \pdv{z}{z} = 3
+        \div \vec v = \pdv{x}{x} + \pdv{y}{y} + \pdv{z}{z} = 3
     \end{equation}
 
     We have that the divergence for this field is always positive therefore the arrows always go further away from each other.
 \end{example}
 
 \begin{example}{Solenoidal field}{solenoidal-field}
-    Let $\vec f = \hat z$. We have $\div \vec f = 0$.
+    Let $\vec v = \hat z$. We have $\div \vec v = 0$.
 
     Fields with zero divergence are called solenoidals.
 \end{example}
@@ -151,28 +151,65 @@ The intuition behind curl is to measure how much a vector field rotates or spins
 \label{sec:higher-order-derivatives}
 
 \begin{enumerate}
-    \item \textit{Divergence of gradient} $\div (\grad \vec f)$:
+    \item \textit{Divergence of gradient}
+          (also called \textit{laplacian}):
 
-          Also called \textit{laplacian}.
+          \begin{align}
+              \div (\grad \vec f) & = \left( \pdv{}{x} \hat{x} + \pdv{}{y} \hat{y} + \pdv{}{z} \hat{z} \right) \cdot \left( \pdv{f}{x} \hat{x} + \pdv{f}{y} \hat{y} + \pdv{f}{z} \hat{z} \right) \\
+                                  & = \pdv[2]{f}{x} + \pdv[2]{f}{y} + \pdv[2]{f}{z} = \grad^2(f)
+          \end{align}
+
+    \item \textit{Curl of gradient}: $\curl(\grad f) = 0$ (Schwartz theorem holds).
+    \item \textit{Gradient of divergence}: $\grad (\div \vec V)$ is usually not useful.
+    \item \textit{Divergence of curl}: $\div (\curl \vec v) = 0$
+    \item \textit{Curl of curl}: (not so frequent)
           \begin{equation}
-              \div (\grad \vec f) = \pdv[2]{f}{x}
+              \curl (\curl \vec f) = \grad (\div \vec v) - \grad^2(\vec v)
           \end{equation}
-
-    \item \textit{Curl of gradient} $\curl(\grad \vec f)$:
-    \item \textit{Gradient of divergence} $\grad (\div \vec f)$:
-    \item \textit{Divergence of curl} $\div (\curl \vec f)$:
-    \item \textit{Curl of curl} $\curl (\curl \vec f)$:
+          where $\grad^2(\vec v) = (\grad^2 v_x \hat x + \grad^2 v_y \hat y + \grad^2 v_z \hat z)$ is called the laplacian vector operator.
 \end{enumerate}
 
 \subsection{Integrals}
 
+\subsubsection{Line integrals}
+
 \begin{definition}{Line integral}{line-integral}
-
+    Let $f$ be a scalar field and $\vec v$ a vector field.
+    \begin{enumerate}
+        \item $\int_C f \dd{s}$
+        \item $\int_C \vec v \dd{\vec l}$
+    \end{enumerate}
+    where $\dd{\vec l}$ is tangent to $C$ at every point.
 \end{definition}
 
-\begin{definition}{Surface integral}{surgace-integral}
+Note that if $C$ is closed we will write $\oint$ instead of $\int$.
 
+Moreover, some fields $\vec v$ are such that $\int_C \vec v \dd{\vec l}$ does not depend on $C$ but only on its endpoints.
+These are called \textbf{conservative fields}.
+
+\subsubsection{Surface integral}
+
+Let a vector field $\vec v$ and an open surface $S$.
+We define $\dd{\vec S}$ the infinitesimal area oriented normal to $S$: $\dd{\vec S} = \dd{S} \vec n$.
+
+Then define the \textit{infinitesimal flux} over $S$ as
+\begin{equation}
+    \dd{\Phi_S(\vec v)} = \vec v \cdot \dd{\vec S}
+\end{equation}
+
+\begin{definition}{Flux}{flux}
+    The flux of $\vec v$ over $S$ is defined as
+    \begin{equation}
+        \Phi_S(\vec v) = \int_S \dd{\Phi_S(\vec v)} = \int \vec v \cdot \dd{\vec S}
+    \end{equation}
 \end{definition}
+
+Again, if $S$ is a closed surface (like a sphere) we use $\oint$ instead of $\int$.
+By convention, if $S$ is closed $\vec n$ goes outwards.
+
+Moreover, we will commonly refer to $C$ as the boundary of $S$.
+
+\subsubsection{Volume integral}
 
 \begin{definition}{Volume integral}{volume-integral}
     Let $f$ be a scalar field and $V \in \R^3$.
@@ -185,6 +222,8 @@ The intuition behind curl is to measure how much a vector field rotates or spins
 \end{definition}
 
 \subsection{Theorems for \texorpdfstring{$\grad(\mathord{\cdot})$, $\div(\mathord{\cdot})$, and $\curl(\mathord{\cdot}) $}{gradient, divergence and curl}}
+
+\subsubsection{Gradient}
 
 \begin{theorem}{Fundamental theorem of gradient}{fundamental-gradient}
     Let $f$ be a gradient field and $C$ be a path. We have
@@ -203,6 +242,8 @@ The intuition behind curl is to measure how much a vector field rotates or spins
         \oint \vec v \cdot \dd{\vec l} = \oint \grad f \cdot \dd{l} = 0
     \end{equation}
 \end{corollary}
+
+\subsubsection{Divergence}
 
 \begin{theorem}{Divergence theorem}{divergence-theorem}
     Let $V$ be a volume, $S$ be a surface corresponding to that volume and $\vec v$ a vector field.
@@ -240,6 +281,8 @@ The intuition behind curl is to measure how much a vector field rotates or spins
         \item This is a consequence of the theorem and the results of \cref{sec:higher-order-derivatives}.
     \end{enumerate}
 \end{proof}
+
+\subsubsection{Curl}
 
 \begin{theorem}{Stokes' theorem}{stokes}
     Let $\vec v$ be a vector field, $S$ an open surface, $C$ the boundary line of $S$.
@@ -298,13 +341,21 @@ The intuition behind the theorem is that if we consider the total \say{rotation}
 
 \subsection{Dirac delta function}
 
-Let $\vec v = \frac{\vec r}{r^3}$. We want to compute its divergence.
+\subsubsection{Motivation}
+
+Let $\vec v$ be a vector field defined as
 \begin{equation}
     \vec v = \frac{\vec r}{r^3} = \frac{x \hat x + y \hat y + z \hat z}{\left( x^2 + y^2 + z^2\right)^{\frac{3}{2}}} \in \R^3 \setminus (0,0,0)
 \end{equation}
+
+We want to compute its divergence.
+\begin{equation}
+    \pdv{v_x}{x} = \frac{1}{\left( x^2 + y^2 + z^2\right)^{\frac{3}{2}}} - \frac{3}{2}\frac{2 x^2}{\left( x^2 + y^2 + z^2\right)^{\frac{5}{2}}} = \frac{-2x^2 + y^2 + z^2}{\left( x^2 + y^2 + z^2\right)^{\frac{5}{2}}}
+\end{equation}
+
+Similarly we get
 \begin{align}
-    \pdv{v_x}{x} & = \frac{1}{\left( x^2 + y^2 + z^2\right)^{\frac{3}{2}}} - \frac{3}{2}\frac{2 x^2}{\left( x^2 + y^2 + z^2\right)^{\frac{5}{2}}} = \frac{-2x^2 + y^2 + z^2}{\left( x^2 + y^2 + z^2\right)^{\frac{5}{2}}} \\
-    \pdv{v_x}{x} & = \frac{x^2 - 2y^2 + z^2}{\left( x^2 + y^2 + z^2\right)^{\frac{5}{2}}}                                                                                                                                 \\
+    \pdv{v_x}{x} & = \frac{x^2 - 2y^2 + z^2}{\left( x^2 + y^2 + z^2\right)^{\frac{5}{2}}} \\
     \pdv{v_x}{x} & = \frac{x^2 + y^2 - 2z^2}{\left( x^2 + y^2 + z^2\right)^{\frac{5}{2}}}
 \end{align}
 and by adding up all the partial derivatives we get that $\div \vec v = 0$.
@@ -321,12 +372,14 @@ Using spherical coordinates we write
 \end{equation}
 Now we notice that $\dd{S}$ is always at the same distance from the center of the sphere and
 \begin{equation}
-    \oint_S \vec v \cdot \dd{\vec S} = \int \frac{R}{R^3} \dd{S} = \frac{1}{R^2} \int \dd{S}
+    \oint_S \vec v \cdot \dd{\vec S} = \int \frac{R}{R^3} \dd{S} = \frac{1}{R^2} \int \dd{S} = \frac{1}{R^2} 4 \pi R^2
 \end{equation}
-which is equal to the area of the sphere, therefore we get a result of $4\pi$ which conflicts with the result we got from the divergence theorem.
+where $\int \dd{S}$ is the area of the sphere, therefore we get a result of $4\pi$ which conflicts with the result we got from the divergence theorem.
 
+
+% Just allocating the titles
+\clearpage
 \section{Electric phenomena}
-
 \section{Magnetic phenomena}
 
 \end{document}

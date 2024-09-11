@@ -107,7 +107,6 @@
 % lemma
 \newtcbtheorem[
     use counter from=theorem,
-    number within=section,
 ]{lemma}{Lemma}{
     theoremstyle,
     colback=yellow!10!white,
@@ -119,7 +118,6 @@
 % proposition
 \newtcbtheorem[
     use counter from=theorem,
-    number within=section,
 ]{proposition}{Proposition}{
     theoremstyle,
     colback=orange!10!white,
@@ -131,7 +129,6 @@
 % definition
 \newtcbtheorem[
     use counter from=theorem,
-    number within=section,
 ]{definition}{Definition}{
     theoremstyle,
     colback=cyan!10!white,
@@ -144,7 +141,6 @@
 % example
 \newtcbtheorem[
     use counter from=theorem,
-    number within=section,
 ]{example}{Example}{
     theoremstyle,
     colback=green!10!white,
@@ -154,12 +150,13 @@
 }{ex}
 
 
-\newtcbtheorem[]{remark}{Remark}{
+\newtcbtheorem[
+    number within=tcb@cnt@theorem,
+]{remark}{Remark}{
     theoremstyle,
     colback=gray!10!white,
     colframe=gray!20!white,
     borderline west={0.25em}{0pt}{gray},
-    theorem name,
 }{rem}
 
 

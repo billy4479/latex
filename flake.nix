@@ -48,6 +48,7 @@
             rsfs
             lipsum
             cleveref
+            thmtools
 
             # Indirect dependencies
             environ

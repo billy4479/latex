@@ -58,12 +58,21 @@
 
 \newcommand{\uvec}[1]{\munderbar{\bm{#1}}}
 
+
 % *-------------------*
 % | *** Theorems *** |
 % *-------------------*
 
 \RequirePackage{amsthm}    % for theorem styles
 \RequirePackage{tcolorbox} % for boxes around theorems
+
+\let\oldfirstpage\firstpage
+\renewcommand{\firstpage}{
+    \oldfirstpage
+    \tcblistof[\section*]{thms}{List of Theorems}
+    \tcblistof[\section*]{defs}{List of Definitions}
+    \clearpage
+}
 
 \tcbset{
     theoremstyle/.style={
@@ -85,6 +94,7 @@
 % theorem
 \newtcbtheorem[
     number within=section,
+    list inside=thms,
 ]{theorem}{Theorem}{
     theoremstyle,
     colback=red!10!white,
@@ -118,6 +128,7 @@
 % proposition
 \newtcbtheorem[
     use counter from=theorem,
+    list inside=thms,
 ]{proposition}{Proposition}{
     theoremstyle,
     colback=orange!10!white,
@@ -129,6 +140,7 @@
 % definition
 \newtcbtheorem[
     use counter from=theorem,
+    list inside=defs,
 ]{definition}{Definition}{
     theoremstyle,
     colback=cyan!10!white,
@@ -149,7 +161,7 @@
     label type=example,
 }{ex}
 
-
+% remark
 \newtcbtheorem[
     number within=tcb@cnt@theorem,
 ]{remark}{Remark}{

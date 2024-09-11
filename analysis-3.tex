@@ -1,0 +1,180 @@
+\documentclass[12pt]{extarticle}
+
+\setlength{\headheight}{16pt} % ??? we do what fancyhdr tells us to do  
+
+\title{Analysis 3}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble}
+
+\renewcommand{\vec}[1]{\uvec{#1}}
+
+\begin{document}
+
+\firstpage
+
+\section{Ordinary differential equations}
+
+\subsection{Introduction: What are differential equations}
+
+Differential equations are equations where the unknown is a function (usually $u(t)$).
+The equation usually involves regular functions, $u$ and its derivatives up to an arbitrary order $k$.
+
+If $u$ is a function of more than one variable we call this type of equation \textbf{Partial Differential Equations (PDE)}.
+In this course we will focus on \textbf{Ordinary Differential Equations (ODE)}:
+in these equations $u$ is a functions of only one variable which is evaluated at the same point $t$, with a finite number of derivatives involved.
+
+We will focus on ODEs in \textbf{normal form}:
+\begin{equation}
+    \label{eq:normal-form}
+    \dv[k]{u(t)}{t} = f\left( t, u(t), u'(t), \dots, \dv[k-1]{u(t)}{t} \right)
+\end{equation}
+where $f$ is a known function with some properties we will describe later.
+For this kind of equation there exists a general theory on how to solve them.
+
+Note that we don't really have to worry about the domain: the solution itself will tell us what its natural domain is.
+Moreover, not all ODEs have a nice explicit formula for their solution.
+
+In order to get a unique solution for a given ODE we need so specify some \textbf{initial conditions}, that is, we need to be given the values of $u(t_0)$ up to $u^{(k-1)}(t_0)$.
+
+We will use $u(t)$ when we want to represent something that varies in time and $u(x)$ when something varies in space.
+Moreover, sometimes, for brevity, I will write $u$ instead of $u(t)$, $u'$ instead of $u'(t)$ and so on.
+
+\subsubsection{Separation of variable}
+
+This is the easiest type of differential equation. We have seen them in physics before, now we will prove how to solve them.
+
+\begin{definition}{Separable differential equation}{separable}
+    Let $f: \R^2 \to \R$.
+    We say a that a differential equation is separable if it is of the form
+    \begin{equation}
+        u' = f(t, u) = g(t) \cdot h(u)
+    \end{equation}
+    for some functions $g(t)$ and $h(u)$.
+\end{definition}
+
+\begin{proof}[Solution]
+    First, separate the variables:
+    \begin{equation}
+        \frac{u'}{h(u)} = g(t)
+    \end{equation}
+
+    Let $H$ be the primitive of $\frac{1}{h}$ and $G$ the primitive of $g$.
+    Now let's differentiate $H(u(t))$ using the chain rule:
+    \begin{equation}
+        \dv{t} H(u(t)) = H'(u(t)) \cdot u'(t) = \frac{u'}{h(u)}
+    \end{equation}
+    which we know to be equal to $g(t) = G'(t)$.
+    Therefore, by integrating both sides w.r.t. $t$ we get the solution.
+\end{proof}
+
+\section{Existence and uniqueness of the solution}
+
+\subsection{Reminder of old courses}
+
+For this section we will need to recall a few tools from topology.
+
+\begin{definition}{Euclidean space and norm}{euclidean-space-norm}
+    An euclidean space is a vector space where an operator called \textit{inner product} is defined.
+    Then norm is defined as $\norm{\vec x} = \langle \vec x, \vec x \rangle$.
+
+    If $\vec x \in \R^n$, given the definition of inner product in $\R^n$, we get that
+    \begin{equation}
+        \norm{\vec x} = \sqrt{x_1^2 + \dots + x_n^2}
+    \end{equation}
+\end{definition}
+
+For a complete list of properties of the inner product or the norm see the Linear Algebra notes.
+For our purposes we will recall the following ones:
+
+\begin{proposition}{Notable properties of the norm}{norm-props}
+    Let $\lambda \in \mathbb F$ and $\vec x, \vec y \in \R^n$. Then
+    \begin{itemize}
+        \item $\norm{\lambda \vec x} = \abs{\lambda}\norm{\vec x}$ (\textit{homogeneity}).
+        \item $\norm{\vec x + \vec y} \leq \norm{\vec x} + \norm{\vec y}$ (\textit{triangle inequality}).
+    \end{itemize}
+\end{proposition}
+
+The following definitions will also result useful. These were covered in Analysis 2.
+
+\begin{definition}{Open set}{open-set}
+    Let the ball $B_r(p)$ be defined as
+    \begin{equation}
+        B_r(p) = \{ q \in \R^n : \norm{q - p} < r \}
+    \end{equation}
+    with $p \in \R^n$ and $r \in \R$.
+
+    A set $A \in \R^n$ is open if for all points $p \in A$ there exists a ball $B_r(p)$ with $r > 0$ such that $B_r(p) \subseteq A$.
+\end{definition}
+
+\begin{proposition}{Properties of open sets}{props-open-set}
+    \begin{itemize}
+        \item The union of open sets is still an open set.
+        \item The intersection of finitely many open sets is an open set.
+        \item A set is open iff it can be written as the union of open balls.
+        \item Given a function $f:A \to \R^n$ with $A \subseteq \R^m$ open, $f$ is continuous iff for any $U \subseteq \R^n$ the preimage $f^{-1}(U)$ is an open set (in $\R^m$).
+    \end{itemize}
+\end{proposition}
+
+The following definitions and properties where covered in detail in Analysis 1.
+
+\begin{definition}{Lipschitz functions}{lipschitz-functions}
+    A function $f: S \to \R^n$ with $S\in \R^m$ is Lipschitz if $\forall a, b \in S$ there exists $C \in \R$ such that
+    \begin{equation}
+        \norm{f(a) - f(b)} \leq C \norm{a - b}
+    \end{equation}
+
+    Moreover, a function is \textbf{locally Lipschitz} if, assuming this time $S$ open,
+    for any $p \in S$ there exists a ball $B_r(p) \in S$ with $r > 0$ where the function is Lipschitz.
+\end{definition}
+
+\begin{proposition}{Properties of Lipschitz functions}{props-lipschitz}
+    \begin{itemize}
+        \item Lipschitz functions are also locally Lipschitz.
+        \item Locally Lipschitz functions are also continuous.
+        \item A function is Lipschitz iff all its partial derivatives are bounded.
+        \item If a functions is differentiable with continuous partial derivatives then it is locally Lipschitz
+    \end{itemize}
+\end{proposition}
+
+\subsection{Main result of ODE theory}
+
+We will present this theorem in various forms, from the most basic one to the most sophisticated one.
+This theorem comes with different names such as Peano-Picard theorem, Picard-Lindelöf theorem, or Cauchy-Lipschitz.
+
+\begin{theorem}{Picard–Lindelöf theorem}{picard-lindelof}
+    Let $f: A \to \R$ with $A \in \R^2$ open and $f$ locally Lipschitz.
+    Then, for any $t_0, \lambda_0 \in \R$ there exists a unique \emph{maximal solution}
+    \begin{equation}
+        u: I \to \R
+    \end{equation}
+    where $I$ is an open interval called the \emph{interval of maximal existence} such that $t_0 \in I$ and
+    \begin{equation}
+        \begin{cases}
+            u'(t) = f(t, u(t)) \\
+            u(t_0) = \lambda_0
+        \end{cases}
+    \end{equation}
+\end{theorem}
+
+\begin{remark}{Meaning of unique}{}
+    In this context \say{unique} means that if $v: J \to \R$ is another solution defined on another interval $J$ containing $t_0$ then $J \subseteq I$ and $v = u|_J$.
+\end{remark}
+
+\begin{remark}{Existance if not locally Lipschitz}{}
+    Peano proved that the existence of a solution is guaranteed even if the function is continuous but not locally Lipschitz.
+    Uniqueness is not guaranteed though.
+\end{remark}
+
+\begin{corollary}
+    Let $u$ and $v$ be solutions for the same ODE with different initial conditions, $t_0$ and $t_1$ respectively.
+    Then $u$ and $v$ never cross.
+\end{corollary}
+
+\begin{proof}
+    We have that $u(t_0) \neq v(t_0)$ hence we cannot have that $u(t_i) = v(t_i)$ at some other point $t_i$ because otherwise we could apply uniqueness with initial point $t_i$ and we would have that are the same function on a restricted domain,
+    contradicting that $u(t_0) \neq v(t_0)$.
+\end{proof}
+
+\end{document}

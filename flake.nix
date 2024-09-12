@@ -34,6 +34,7 @@
           ps: with ps; [
             latexmk
             latexindent
+            texcount
 
             # Direct dependencies
             dirtytalk

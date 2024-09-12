@@ -123,6 +123,15 @@ Therefore a binary relation is the extension of a binary predicate.
 
 A partial order is a preorder (as seen in \cref{prop:props-i}) with antisymmetry added on top.
 
+\begin{remark}{Partially ordered set}{partially-ordered-set}
+    If we are able to define a partial order $\geq$ on $X$ we call $(X, \geq)$ a \emph{partially ordered set}.
+\end{remark}
+
+
+\begin{remark}{Total order}{total-order}
+    If $R$ is a partial order and also satisfies \emph{completeness} we call it a total order.
+\end{remark}
+
 \begin{example}{Partial order for functions}{}
     Consider the set $\R^\Omega$, the set of functions $f: \Omega \to \R$.
     One can define a partial order on $\R^\Omega$ as
@@ -133,14 +142,78 @@ A partial order is a preorder (as seen in \cref{prop:props-i}) with antisymmetry
 \end{example}
 
 \begin{example}{Partial order for sets}{}
+    Let $\Omega$ be a set and $\mathcal P(\Omega)$ the power set of $\Omega$.
     The easiest partial order for sets is inclusion:
+    let $A, B \in \mathcal P(\Omega)$, then
     \begin{equation}
-        A \geq B \iff A \subseteq B
+        A \leq B \iff A \subseteq B
     \end{equation}
 \end{example}
 
-If we are able to define a partial order $\geq$ on $X$ we call $(X, \geq)$ a \textbf{partially ordered set}.
+\begin{definition}{Ordered vector space}{ordered-vector-space}
+    Let $V$ be a vector space and $\leq$ a partial order on $V$.
+    If $\leq$ satisfies the following properties we call $(V, \leq)$ an ordered vector space:
+    \begin{itemize}
+        \item $v \leq w \implies v + z \leq w + z \enspace \forall v, w, z \in V$.
+        \item $v \leq w \implies \alpha v \leq \alpha w \enspace \forall \alpha \geq 0$ and $\forall v, w \in V$.
+    \end{itemize}
+\end{definition}
 
-Moreover, if $\forall x, y \in X$ either $x \geq y$ or $y \geq x$ we say that $\geq$ is a \textbf{total order}.
+Some examples of ordered vector spaces are $(\R^n, \leq)$, $(\mathscr F(\Omega, \R), \leq)$, while $(\mathcal P(\Omega), \leq)$ is not.
+
+\begin{remark}{Order in the limit for sequences}{}
+    Let $x_n$ be a sequence converging to $x$.
+    Let $y \in \R$ such that $x_n \geq y \enspace \forall n \in \N^+$.
+    Then, in the limit the order is preserved, therefore $x \geq y$.
+\end{remark}
+
+\section{Preference}
+
+In this section we will have a \emph{decision maker} (DM), a set of alternatives $X$ and a binary relation $\succsim_X$ called \emph{preference}.
+We write
+\begin{equation}
+    x \succsim_X y
+\end{equation}
+if DM prefers $x$ to $y$ or it is indifferent.
+
+We can also define $\sim_X$ for indifference ($x \succsim_X y \land y \succsim_X x$) and $\succ_X$ for strict preference ($x \succsim_X y \land \lnot (y \succsim_X x)$).
+
+We say two alternatives are \emph{comparable} if DM can have a preference, therefore either $x \succsim_X y$ or $y \succsim_X x$ or both.
+
+\begin{proposition}{Assumptions on preference}{assumptions-preference}
+    \begin{itemize}
+        \item
+              \emph{Extensibility}: if $X = X'$ then
+              \begin{equation}
+                  x \succsim_X y \iff x \succsim_{X'} y
+              \end{equation}
+        \item \emph{Reflexiveness}, \emph{Transitivity} and \emph{Completeness} as defined in \Cref{prop:prop-binary-relations}.
+        \item \emph{Strong monotonicity}: $x \gg y \implies x \succ y$, this means that all the goods in $x$ are greater than in $y$.
+        \item \emph{Archimedean}: Let $x, y, z \in X$ s.t. $x \succ y \succ z$.
+              Then there exist $\alpha, \beta \in (0, 1)$ such that
+              \begin{equation}
+                  \alpha x + (1-\alpha) z \succ y \succ \beta x + (1-\beta)z
+              \end{equation}
+    \end{itemize}
+\end{proposition}
+
+Extensibility is saying that preference does not depend on how the sets $X$ and $X'$ are described but only on the elements in them.
+During this course we will assume that preference is extensional even though this is a non-trivial assumption, see the example on budget sets in the book.
+
+Moreover, we will assume that preference relations are \emph{reflexive} and \emph{transitive}.
+Transitivity is especially useful to prevent cycles and therefore allow \emph{optimization}.
+
+\begin{corollary}{}{}
+    If $\succsim$ is reflexive and transitive, then $\sim$ is an equivalence relation.
+\end{corollary}
+
+Transitivity is not a trivial assumption either because of the \emph{threshold effect} in perception:
+perception usually reacts in a discrete way, even to continuous effects.
+
+We require strong monotonicity and not just strict monotonicity because otherwise we would be assuming that we give a value to every good individually, which is sometimes not true (see the example on shoes).
+
+\begin{corollary}{}{}
+    Strong monotonicity implies strict monotonicity.
+\end{corollary}
 
 \end{document}

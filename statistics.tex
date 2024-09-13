@@ -88,6 +88,8 @@ If we sample \textit{with} replacement we can only approximate IID variables if 
     A better solution would be to use the $\Normal(c, \sigma^2)$.
 \end{example}
 
+\subsection{Validation}
+
 After we created a model we have to do a process called \textbf{model validation} to make sure that we found a good model.
 This is because the model we came up with is based on previous observations and we have to verify it still works.
 
@@ -109,7 +111,7 @@ We proceed by repeating the experiment, therefore our random variables become ju
 
 Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample mean} and the \textit{variance}; while if the distribution is \textbf{asymmetric} we prefer the \textit{median} and the \textit{interquartile range}.
 
-\subsection{Graphical representation of samples}
+\subsubsection{Graphical representation of samples}
 
 \begin{figure}[H]
     \centering
@@ -123,7 +125,9 @@ Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample m
     \caption{A boxplot with indication on what the lines mean}
 \end{figure}
 
-\subsection{Location-Scale family of distributions}
+Boxplots are very useful to check the symmetry of a sample.
+
+\subsubsection{Location-Scale family of distributions}
 
 \begin{definition}{Location-Scale family}{location-scale-family}
     Let $X$ be a random variable with distribution $F$ and $Y = a + bX$ with $b>0$.
@@ -137,7 +141,7 @@ Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample m
     $F$ is in the same location-scale family as the standard normal $\iff$ $F$ is a normal distribution
 \end{example}
 
-\subsection{Quantiles}
+\subsubsection{Quantiles}
 
 \begin{definition}{$\alpha$-quantiles}{alpha-quantiles}
     The $\alpha$-quantile of a distribution $F$ is given by
@@ -160,7 +164,7 @@ $F_{a, b}^{-1}(\alpha) = a + bF^{-1}(\alpha)$.
 If the points $x_1, \dots, x_n$ come from $F$ then the points will approximately align to the $y = x$ line.
 This is because we expect the sample quantile $x_i$ to be close to the theoretical quantile given by the formula.
 
-\subsection{Correlation and independence}
+\subsubsection{Correlation and independence}
 
 As we know from Probability, we define the correlation coefficient as
 \begin{equation}
@@ -192,5 +196,95 @@ We observe the following from $r_{X, Y}$:
 \end{itemize}
 
 Graphically we can observe correlation or independence using \textbf{scatter plots}: if the graph of $\{ (x_i, x_{i+1}) : i = 1, \dots, n-1 \}$ should show not much of a structure if the samples are independent.
+
+\subsection{Estimation}
+
+Estimation is the process of finding the best fitting distribution from the statistical model.
+
+Suppose the model depends on an unknown parameter $\theta \in \Theta$:
+\begin{equation}
+    \mathcal M = \{ P_\theta : \theta \in \Theta \}
+\end{equation}
+Now we assume that $X = (X_1, \dots, X_n)$ has distribution $P_\theta$ for some $\theta \in \Theta$.
+Then we want to find the $\theta$ that makes $P_\theta$ best fit the observed data.
+We call this the \emph{true value of $\theta$}.
+Sometimes it is even useful to compute the true value of some $g(\theta)$.
+
+\begin{definition}{Estimator}{estimator}
+    An \emph{estimator} is a random vector $T(X)$ that depends only on the observation $X$.
+
+    The corresponding \emph{estimate} for a realization $x$ is $T(x)$.
+\end{definition}
+
+Note that estimators \emph{do not} depend on $\theta$.
+The estimate will give us our value of $\theta$.
+
+First, lets define some notation:
+\begin{itemize}
+    \item $T$ is the estimator $T(X)$.
+    \item $t$ is the estimate $T(x)$.
+    \item $\hat \theta$ is used for both the estimator and estimate of a unknown $\theta$ of interest
+\end{itemize}
+
+We could use as an estimator the distance between $T$ and $g(\theta)$
+\begin{equation}
+    \norm{T - g(\theta)}
+\end{equation}
+
+We want this difference to be as small as possible, that is, to be as concentrated as possible towards $0$.
+Since $\norm{T - g(\theta)}$ is a random variable we can consider the one more concentrated around $0$.
+
+\newcommand{\MSE}{{\operatorfont MSE}}
+
+\begin{definition}{Mean squared error}{mean-squared-error}
+    The mean squared error MSE of an estimator $T$ for the value of $g(\theta)$ is defined as
+    \begin{equation}
+        \MSE(\theta, T) = E_\theta\left(\norm{T - g(\theta)}^2\right)
+    \end{equation}
+    where $E_\theta$ is the expectation of $P_\theta$
+\end{definition}
+
+\begin{proposition}{MSE decomposition}{mse-decomposition}
+    If a $T$ is real-valued estimator we can decompose the $\MSE$ as
+    \begin{equation}
+        \MSE(\theta, T) = V_\theta(T) + (E_\theta(T) - g(\theta))^2
+    \end{equation}
+\end{proposition}
+\begin{proof}
+    \begin{align}
+        E_\theta\left((T - g(\theta))^2\right) & = E_\theta\left((T -E_\theta(T) + E_\theta(T) - g(\theta))^2\right)                                                            \\
+                                               & = E_\theta(T-E_\theta(T))^2 - 2E_\theta(T-E_\theta(T))(E_\theta(T) - g(\theta)) + \cancel{E_\theta}(E_\theta(T) - g(\theta))^2 \\
+                                               & = V_\theta(T) - 2 (E_\theta(T) - g(\theta)) \cancelto{0}{E_\theta(T-E_\theta(T))} - (E_\theta(T) - g(\theta))^2                \\
+                                               & = V_\theta(T) - (E_\theta(T) - g(\theta))^2
+    \end{align}
+\end{proof}
+
+We say that an estimator is \emph{biased} if it's expectation is not centered around $g(\theta)$.
+
+\begin{definition}{Likelihood function}{likelihood-function}
+    Let $X$ be a random vector with pdf $p_0$ that depends on a parameter $\theta \in Theta$.
+    For a fixed $x$ the likelihood function is defined as
+    \begin{equation}
+        \theta \mapsto L(\theta, x) = p_\theta(x)
+    \end{equation}
+\end{definition}
+
+\begin{lemma}{IID variables}{}
+    If $X_1, \dots, X_n$ IID then
+    \begin{equation}
+        L(\theta; X_1, \dots, X_n) = \prod_{i = 1}^{n} L(\theta, X_i)
+    \end{equation}
+\end{lemma}
+
+\begin{definition}{Maximum likelihood estimator}
+    The maximum likelihood estimate of $\theta$ is the value $T(x) \in \Theta$ that maximizes the likelihood function $L(\theta; x)$.
+
+    The maximum likelihood estimator is $T(X)$.
+\end{definition}
+
+An useful trick we can use to find the maximum likelihood estimate is to apply the $\log$ to the likelihood function.
+In this way we are left to deal with sums and not products (by the properties of logarithms), and, since $\log$ is monotone, the maximum of the transformation will be the maximum of the original function.
+
+We will call \textbf{score function} the derivative of the likelihood function (or its log transformation).
 
 \end{document}

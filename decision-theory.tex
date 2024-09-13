@@ -194,6 +194,15 @@ We say two alternatives are \emph{comparable} if DM can have a preference, there
               \begin{equation}
                   \alpha x + (1-\alpha) z \succ y \succ \beta x + (1-\beta)z
               \end{equation}
+        \item \emph{Convexity}: Let $x, y \in X$ s.t $x \sim y$ then, $\forall \alpha$
+              \begin{equation}
+                  \alpha x + (1-\alpha) y \succsim x
+              \end{equation}
+              Moreover, this axiom could be extended to one of the following:
+              \begin{itemize}
+                  \item \emph{Strict convexity}: $\alpha x + (1-\alpha) y \succ x$
+                  \item \emph{Affinity}: $\alpha x + (1-\alpha) y \sim x$
+              \end{itemize}
     \end{itemize}
 \end{proposition}
 
@@ -215,5 +224,137 @@ We require strong monotonicity and not just strict monotonicity because otherwis
 \begin{corollary}{}{}
     Strong monotonicity implies strict monotonicity.
 \end{corollary}
+
+Convexity means that in general we will likely want to differentiate more.
+Strict convexity is needed in order to make sure there exists a best bundle.
+Affinity is not always valid but it can be useful in some scenarios.
+
+\section{Utility}
+
+\begin{definition}{Utility function}{utility-function}
+    A function $u: X \to \R$ is a (Paretian) utility function for the preference $\succsim$ if, $\forall x, y \in X$
+    \begin{equation}
+        x \succsim y \iff u(x) \geq u(y)
+    \end{equation}
+\end{definition}
+
+We can write indifference curves as the level curves of the utility function:
+\begin{equation}
+    [x] = \{ y \in X : u(x) = u(y) \}
+\end{equation}
+
+\begin{proposition}{Ordinality}{ordinality-ic}
+    Let $u: X \to \R$ be an utility function for $\succsim$.
+    Another function $\tilde{u}: X \to \R$ is also an utility function for $\succsim$ iff
+    $\exists f: \Im u \to \R$ \emph{strictly increasing} s.t.
+    \begin{equation}
+        \tilde{u} = f \circ u
+    \end{equation}
+\end{proposition}
+
+\begin{remark}{Strictly increasing}{strictly-increasing}
+    Note that strictly increasing means that
+    \begin{equation}
+        x \geq y \iff f(x) \geq f(y)
+    \end{equation}
+    The important part here is the $\iff$.
+
+    (No typos.)
+\end{remark}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[$\implies$] Let $u$ be an utility function for $\succsim$.
+              Then, according to \cref{rk:strictly-increasing}, we have
+              \begin{equation}
+                  x \succsim y \iff u(x) \geq u(y) \iff f(u(x)) \geq f(u(y))
+              \end{equation}
+        \item[$\impliedby$] Trivial from the definition of $\tilde{u}$.
+    \end{description}
+\end{proof}
+
+A very common problem in economics is to maximize the utility function:
+\begin{equation}
+    \max_x u(x) \quad {\operatorfont sub} \enspace  x \in C
+\end{equation}
+
+\subsection{Existence}
+
+\begin{theorem}{Existence of utility functions}{exisence-utility}
+    A preference relation has a utility representation only if it is
+    \emph{complete} and \emph{transitive}.
+\end{theorem}
+
+\begin{proof}
+    Let $\succsim$ be a preference and $u$ one of its utility function.
+
+    First let's show that $\succsim$ is transitive.
+    Let $x, y, z \in X$ s.t. $x \succsim y$ and $y \succsim z$. By hypothesis $u(x) \geq u(y)$ and $u(y) \geq u(z)$ hence $u(x) \geq u(z)$, which implies, again by hypothesis, that $x \succsim z$.
+
+    Completeness can be proved similarly by going to scalars and back.
+\end{proof}
+
+\begin{theorem}{Quotient space of preference}{quotient-space-preference}
+    Let $\succsim$ be a preference relation on $X$. Then an utility function function exists if $X/\sim$ has at most the cardinality of $\R$.
+\end{theorem}
+
+\subsubsection{Cantor properties}
+
+\begin{definition}{$\succsim$-order dense}{order-dense}
+    Let $\succsim$ be binary relation on $X$, then $Z \subseteq X$ is $\succsim$-order dense if, $forall x, y \in X$ with $x \succ y$, there exists $z \in Z$ s.t.
+    \begin{equation}
+        x \succsim z \succsim y
+    \end{equation}
+\end{definition}
+
+\begin{theorem}{Cantor-Debreau theorem}{cantor-debreau}
+    Let $\succsim$ be a complete and transitive preference on $X$.
+    Then, the following conditions are equivalent:
+    \begin{enumerate}[label=\roman*.]
+        \item $\succsim$ has an $\succsim$-order dense $Z \subseteq X$ which is at most countable.
+        \item $\succsim$ admits an utility function.
+    \end{enumerate}
+\end{theorem}
+
+\begin{definition}{Quasiconvexity and quasiconcavity}{quasiconcavity}
+    Let $V$ be a vector space and $f: V \to \R$.
+    $f$ is quasiconcave if
+    \begin{equation}
+        f(\alpha \vec x + (1- \alpha) \vec y) \geq \min \{ f(\vec x), f(\vec y) \}
+    \end{equation}
+    for $\vec x, \vec y \in V$ and $\alpha \in (0,1)$.
+
+    Similarly quasiconvexity is defined as
+    \begin{equation}
+        f(\alpha \vec x + (1- \alpha) \vec y) \leq \max \{ f(\vec x), f(\vec y) \}
+    \end{equation}
+\end{definition}
+
+\begin{remark}{}{}
+    Concavity implies quasiconcavity.
+\end{remark}
+\begin{remark}{}{}
+    Increasing implies quasiconcavity.
+\end{remark}
+
+\begin{proposition}{}{}
+    For a function $f: C \to \R$ the following conditions are equivalent:
+    \begin{enumerate}[label=\roman*.]
+        \item $f$ is quasi concave
+        \item The sets $U(t) = \{ x \in C : f(x) \geq t \}$ are (strictly) convex for all $t \in \R$
+    \end{enumerate}
+\end{proposition}
+
+\begin{theorem}{}{}
+    Let $\succsim$ be a preference on $\R^n_+$.
+    Then, the following conditions are equivalent:
+    \begin{enumerate}[label=\roman*.]
+        \item $\succsim$ is transitive, complete, strongly monotone and Archimedean.
+        \item There exists a strongly monotone and continuous function $u: \R^n_+ \to \R$ which is an utility function for $\succsim$.
+    \end{enumerate}
+
+    Moreover, $\succsim$ is (strictly) convex iff $u$ is (strictly) quasiconcave.
+\end{theorem}
 
 \end{document}

@@ -7,7 +7,9 @@
 \date{a.y. 2024/2025}
 
 \usepackage[arrowdel]{physics}
+\usepackage{siunitx}
 \usepackage{preamble}
+\usepackage{preamble_svg}
 
 % \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -362,7 +364,8 @@ and by adding up all the partial derivatives we get that $\div \vec v = 0$.
 
 Now let's use the divergence theorem to compute the flux of $\vec v$ over a sphere:
 \begin{equation}
-    \oint_S \vec v \cdot \dd{\vec S} = \int_V \div \cdot \vec v \dd{\tau} {\color{red}= 0}
+    \oint_S \vec v \cdot \dd{\vec S} = \int_V \div \vec v \dd{\tau} {\color{red}= 0}
+    \label{eq:dirac-wrong}
 \end{equation}
 
 This would look correct but let's also compute this without the divergence theorem.
@@ -372,14 +375,186 @@ Using spherical coordinates we write
 \end{equation}
 Now we notice that $\dd{S}$ is always at the same distance from the center of the sphere and
 \begin{equation}
-    \oint_S \vec v \cdot \dd{\vec S} = \int \frac{R}{R^3} \dd{S} = \frac{1}{R^2} \int \dd{S} = \frac{1}{R^2} 4 \pi R^2
+    \oint_S \vec v \cdot \dd{\vec S} = \int \frac{R}{R^3} \dd{S} = \frac{1}{R^2} \int \dd{S} = \frac{1}{R^2} \cdot 4 \pi R^2
 \end{equation}
 where $\int \dd{S}$ is the area of the sphere, therefore we get a result of $4\pi$ which conflicts with the result we got from the divergence theorem.
 
+The issue is that we have a singularity at $(0,0,0)$ where the divergence is not $0$.
 
-% Just allocating the titles
-\clearpage
-\section{Electric phenomena}
-\section{Magnetic phenomena}
+\subsubsection{1D Dirac delta function}
+
+To simplify we start by the 1D case.
+\begin{definition}{1D Dirac delta function}{1d-dirac-delta}
+    \begin{equation}
+        \delta(x) = \begin{cases}
+            0      & x \ne 0          \\
+            \infty & \text{if } x = 0
+        \end{cases}  \quad, \quad \int_{-\infty}^{\infty} \delta(x) \dd{x} = 1
+    \end{equation}
+\end{definition}
+
+A way to obtain this function is as the limit of a sequence of functions. Define
+\begin{equation}
+    R_n(x) = n \cdot 1_{[-\frac{1}{2n}, \frac{1}{2n}]}(x)
+\end{equation}
+the rectangle of width $\frac{1}{n}$ and height $n$.
+Indeed the integral of this function is $1$ and as we take $\lim_{n \to \infty} R_n(x) = \delta(x)$.
+
+Another way to obtain $\delta(x)$ is taking a gaussian distribution with $\mu = 0$ and take $\lim_{\sigma^2 \to 0}$.
+
+\begin{proposition}{Properties of the Dirac delta functions}{prop-1D-dirac-delta}
+    We have that $f(x)\delta(x) = f(0) \delta(x)$.
+    Moreover, under the integral we get
+    \begin{equation}
+        \int_{-\infty}^{\infty} f(x) \delta(x - x_0) \dd{x} = \int_{-\infty}^{\infty} f(x_0) \delta(x) \dd{x} = f(x_0)
+    \end{equation}
+    for a fixed $x_0$.
+\end{proposition}
+
+To be able to apply this property we have to make sure that the \say{spike} is within the boundary of integration.
+
+\subsubsection{3D Dirac delta function}
+
+Now we are ready to go back to the 3D version:
+\begin{definition}{3D Dirac delta function}{dirac-delta}
+    \begin{equation}
+        \delta^{(3)}(\vec r) = \delta(\vec r) = \delta(x) \delta(y) \delta(z)
+    \end{equation}
+    that is, the product of the 1D version of the dirac delta as in \cref{def:1d-dirac-delta}.
+\end{definition}
+
+Here we have as well that the integral is $1$:
+\begin{equation}
+    \int_{\R^3} \delta(\vec r) \dd{x} \dd{y} \dd{z} = \int_{\R^3} \delta(x) \delta(y) \delta(z) \dd{x} \dd{y} \dd{z} = 1 \cdot 1 \cdot 1 = 1
+\end{equation}
+
+Now we can solve the mystery of \cref{eq:dirac-wrong}
+\begin{equation}
+    \label{eq:dirac-delta-ok}
+    \div \left( \frac{\hat r}{r^3} \right) = 4 \pi \delta(\vec r)
+\end{equation}
+
+\subsection{Change of coordinates}
+
+\subsubsection{Spherical coordiante}
+
+\begin{definition}{Spherical coordinates}{spherical-coordiantes}
+    Let $\vec r = x \hat x + y \hat y + z \hat z$.
+    We use the following transformation:
+    \begin{equation}
+        \begin{cases}
+            x = r \sin \theta \cos \varphi & r \in [0, \infty)     \\
+            y = r \sin \theta \sin \varphi & \theta \in [0, \pi]   \\
+            z = r \cos \theta              & \varphi \in [0, 2\pi]
+        \end{cases}
+    \end{equation}
+    where $r$ is the distance of the point with the origin, $\theta$ is the angle that $\vec r$ makes with the $z$ axis, and $\varphi$ is the angle on the $xy$-plane that the projection makes with the $y$ axis.
+\end{definition}
+
+To define directions in this coordinate system we fix two coordinates and we slightly increase the other: the \say{movement} we obtain is the direction we want:
+\begin{itemize}
+    \item $\hat r$ is the radial direction, obtained by slightly increasing $r$
+    \item $\hat \theta$ is obtained by increasing $\theta$
+    \item $\hat \varphi$ is obtained by increasing $\varphi$
+\end{itemize}
+
+\begin{proposition}{Jacobian of spherical change of coordinates}{jacobian-spherical}
+    We want to compute $\dd{\vec l}$ given $\dd{x} + \dd{y} + \dd{z}$:
+    \begin{itemize}
+        \item $\dd{l}_r = \dd{r}$
+        \item $\dd{l}_\theta = r \dd{\theta}$
+        \item $\dd{l}_\varphi = r \sin \theta \dd{\varphi}$
+    \end{itemize}
+
+    Therefore
+    \begin{equation}
+        \dd{\tau} = \dd{x} \dd{y} \dd{z} = r^2 \sin \theta \dd{r} \dd{\theta} \dd{\varphi}
+    \end{equation}
+\end{proposition}
+
+\subsubsection{Cylindircal coordinates}
+
+\begin{definition}{Cylindircal coordinates}
+    Let $\vec r = x \hat x + y \hat y + z \hat z$.
+    We use the following transformation:
+    \begin{equation}
+        \begin{cases}
+            x = s \cos \varphi & s \in [0, \infty)       \\
+            y = s \sin \varphi & \varphi \in [0, \pi]    \\
+            z = z              & z \in (-\infty, \infty)
+        \end{cases}
+    \end{equation}
+\end{definition}
+
+\begin{proposition}{Jacobian of cylindircal change of coordinates}{jacobian-cylindircal}
+    \begin{equation}
+        \dd{\tau} = \dd{x} \dd{y} \dd{z} = s \dd{s} \dd{\varphi} \dd{z}
+    \end{equation}
+\end{proposition}
+
+\section{Electrostatics}
+
+\subsubsection{Introduction}
+
+Franklin was the first one to show that rubbing a piece of glass with fur you get a positive charge, while if you do it with amber you get a negative charge.
+Fur would always get the opposite charge (\emph{conservation of charge}).
+He noticed that same charge repel while different charges attract.
+
+Charge is measured in Coulomb ($\si{\coulomb}$).
+To measure charge we use the \emph{electroscope}:
+this instrument will get charged by contact and since alike charges repel we can measure the angle the gold foil create to measure the charge.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.4\textwidth]{assets/physics-2/electroscope.svg}
+    \caption{Drawing of an electroscope}
+\end{figure}
+
+The \textbf{general problem of electrostatics} is to compute the force due to some \emph{source charges} $q_1, \dots, q_n$ on a \emph{test charge} $Q$.
+
+\begin{proposition}{Charge is quantized}{quantization-charge}
+    The smallest charge possible is the charge of an electron:
+    \begin{equation}
+        Q_e = 1.6 \cdot 10^{-19} \si{\coulomb}
+    \end{equation}
+\end{proposition}
+
+\begin{proposition}{Superposition principle}{superposition-principle}
+    If we have $n$ charges, the total force applied by those particles is
+    \begin{equation}
+        \vec F = \vec F_1 + \dots + \vec F_n
+    \end{equation}
+\end{proposition}
+
+But even in the case of $n = 1$ it is not easy to compute $\vec F$ because it not only depends on $\vec r$ but also $\vec v_q$ and $\vec a_q$.
+This is why we invented electrostatics, where charges do not move.
+
+\subsection{Coulomb's law}
+
+\begin{theorem}{Coulomb's law}{coulomb-law}
+    Let the distance between the two charges be $ \vec{\Delta r} = \vec r_q - \vec r_Q$.
+    Then the force applied on the two charges is
+    \begin{equation}
+        \vec F = k \frac{qQ}{\Delta r^2} \hat{\Delta r}
+    \end{equation}
+    where $k$ is a constant:
+    \begin{equation}
+        k = \frac{1}{4\pi \varepsilon_0} \simeq 9 \cdot 10^9 \si{\newton \meter \squared \per \coulomb \squared}
+    \end{equation}
+    and $\varepsilon_0$ is another constant called \textbf{permittivity in vacuum}.
+\end{theorem}
+
+Note that, compared to gravity, electric force is in the order of $10^{39}$ times stronger.
+
+\begin{definition}{Electric field (of a point charge)}{electric-field}
+    \begin{equation}
+        \vec E(\vec r) = \frac{\vec F}{Q} = k \frac{q}{\Delta r^2} \hat{\Delta r}
+    \end{equation}
+
+    This is particularly useful because it is independent of the test charge.
+\end{definition}
+
+If the charge is positive the field will have positive divergence, if negative it will have negative divergence.
+Moreover, note that the electric field gets its field lines from $\frac{r^2}{\hat r}$ as in \Cref{eq:dirac-delta-ok}.
 
 \end{document}

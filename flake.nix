@@ -50,6 +50,7 @@
             lipsum
             cleveref
             thmtools
+            siunitx
 
             # Indirect dependencies
             environ

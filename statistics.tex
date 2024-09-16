@@ -16,6 +16,7 @@
 \newcommand{\Poisson}{{\operatorfont Poisson}}
 \newcommand{\Exponential}{{\operatorfont Exponential}}
 \newcommand{\BivariateNormal}{{\operatorfont BivariateN}}
+\newcommand{\Uniform}{{\operatorfont Uniform}}
 
 \newcommand{\convas}{\xrightarrow{\operatorfont a.s.}}
 \newcommand{\convdist}{\xrightarrow{\operatorfont d}}
@@ -28,9 +29,7 @@
 
 \firstpage
 
-\section{Descriptive statistics}
-
-\subsection{Introduction}
+\section{Introduction}
 
 \begin{definition}{Statistics}{statistics}
     Statistics is the art of modelling situations in which probability plays a role and draw conclusions based on data observed in such situations.
@@ -88,7 +87,7 @@ If we sample \textit{with} replacement we can only approximate IID variables if 
     A better solution would be to use the $\Normal(c, \sigma^2)$.
 \end{example}
 
-\subsection{Validation}
+\section{Validation}
 
 After we created a model we have to do a process called \textbf{model validation} to make sure that we found a good model.
 This is because the model we came up with is based on previous observations and we have to verify it still works.
@@ -111,7 +110,7 @@ We proceed by repeating the experiment, therefore our random variables become ju
 
 Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample mean} and the \textit{variance}; while if the distribution is \textbf{asymmetric} we prefer the \textit{median} and the \textit{interquartile range}.
 
-\subsubsection{Graphical representation of samples}
+\subsection{Graphical representation of samples}
 
 \begin{figure}[H]
     \centering
@@ -127,7 +126,7 @@ Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample m
 
 Boxplots are very useful to check the symmetry of a sample.
 
-\subsubsection{Location-Scale family of distributions}
+\subsection{Location-Scale family of distributions}
 
 \begin{definition}{Location-Scale family}{location-scale-family}
     Let $X$ be a random variable with distribution $F$ and $Y = a + bX$ with $b>0$.
@@ -141,7 +140,7 @@ Boxplots are very useful to check the symmetry of a sample.
     $F$ is in the same location-scale family as the standard normal $\iff$ $F$ is a normal distribution
 \end{example}
 
-\subsubsection{Quantiles}
+\subsection{Quantiles}
 
 \begin{definition}{$\alpha$-quantiles}{alpha-quantiles}
     The $\alpha$-quantile of a distribution $F$ is given by
@@ -164,7 +163,7 @@ $F_{a, b}^{-1}(\alpha) = a + bF^{-1}(\alpha)$.
 If the points $x_1, \dots, x_n$ come from $F$ then the points will approximately align to the $y = x$ line.
 This is because we expect the sample quantile $x_i$ to be close to the theoretical quantile given by the formula.
 
-\subsubsection{Correlation and independence}
+\subsection{Correlation and independence}
 
 As we know from Probability, we define the correlation coefficient as
 \begin{equation}
@@ -197,7 +196,7 @@ We observe the following from $r_{X, Y}$:
 
 Graphically we can observe correlation or independence using \textbf{scatter plots}: if the graph of $\{ (x_i, x_{i+1}) : i = 1, \dots, n-1 \}$ should show not much of a structure if the samples are independent.
 
-\subsection{Estimation}
+\section{Estimation}
 
 Estimation is the process of finding the best fitting distribution from the statistical model.
 
@@ -262,7 +261,7 @@ Since $\norm{T - g(\theta)}$ is a random variable we can consider the one more c
 We say that an estimator is \emph{biased} if it's expectation is not centered around $g(\theta)$.
 
 \begin{definition}{Likelihood function}{likelihood-function}
-    Let $X$ be a random vector with pdf $p_0$ that depends on a parameter $\theta \in Theta$.
+    Let $X$ be a random vector with pdf $p_0$ that depends on a parameter $\theta \in \Theta$.
     For a fixed $x$ the likelihood function is defined as
     \begin{equation}
         \theta \mapsto L(\theta, x) = p_\theta(x)
@@ -276,7 +275,7 @@ We say that an estimator is \emph{biased} if it's expectation is not centered ar
     \end{equation}
 \end{lemma}
 
-\begin{definition}{Maximum likelihood estimator}
+\begin{definition}{Maximum likelihood estimator}{}
     The maximum likelihood estimate of $\theta$ is the value $T(x) \in \Theta$ that maximizes the likelihood function $L(\theta; x)$.
 
     The maximum likelihood estimator is $T(X)$.
@@ -286,5 +285,141 @@ An useful trick we can use to find the maximum likelihood estimate is to apply t
 In this way we are left to deal with sums and not products (by the properties of logarithms), and, since $\log$ is monotone, the maximum of the transformation will be the maximum of the original function.
 
 We will call \textbf{score function} the derivative of the likelihood function (or its log transformation).
+
+The idea behind the likelihood function is that this is a function that, given an observation $x$, gives us the probability that the $\theta$ we chose was good.
+
+\begin{example}{Exponential distribution}{mle-exponential}
+    Let $X = (X_1, \dots, X_n)$ be a sample from the exponential distribution with unknown parameter $\lambda \in (0, \infty)$.
+
+    The sample space is
+    \begin{equation}
+        \mathcal{M} = \{ p_\lambda(x) = \lambda e^{-\lambda x}, x > 0 \}
+    \end{equation}
+    then we compute the pmf
+    \begin{equation}
+        p_\lambda (x_1, \dots, x_n) = \prod_{i = 1}^n (\lambda e^{-\lambda x}) = \lambda^n e^{-\lambda \sum_{i = 1}^n x_i}
+    \end{equation}
+    therefore, the likelihood function is
+    \begin{equation}
+        L(\lambda; x_1, \dots, x_n) = \lambda^n e^{-\lambda \sum_{i = 1}^n x_i}
+    \end{equation}
+
+    Now we want to maximize $L$ but it is easier to take the $\log$ first:
+    \begin{equation}
+        l(\lambda; x_1, \dots, x_n) = n\log(\lambda) + \lambda \sum_{i = 1}^n x_i
+    \end{equation}
+    and by differentiating we get the score equation to be
+    \begin{equation}
+        \frac{n}{\lambda} - \sum_{i = 1}^{n} x_i = 0
+        \implies \hat \lambda = \frac{1}{\overline{x}}
+    \end{equation}
+
+    The last thing we are left to do is to make sure this is a maximum point, therefore we have to take the second derivative:
+    \begin{equation}
+        \dv{}{\lambda} \left( \frac{n}{\lambda} - \sum_{i = 1}^{n} x_i \right) = -\frac{n}{\lambda^2} < 0
+    \end{equation}
+    hence it is indeed a point of maximum.
+
+    We conclude that $\hat \lambda = \frac{1}{\overline{x}}$ is the maximum likelihood estimate.
+\end{example}
+
+\begin{example}{Coin tosses}{mle-bernoulli}
+    A coin with unknown $p = P(\text{HEAD})$ is tossed $n = 100$ times and shows heads $60$ times.
+    Intuitively we would say that $p = 0.6$.
+    Let's check it.
+
+    We have that $X_1, \dots, X_n$ IID $\sim \Bernoulli(p)$ therefore
+    \begin{align}
+        L(p; X_1, \dots, X_n)         & = \prod_{i = 1}^n \left( p^{X_i} (1 - p)^{1-X_i} \right)   \\
+                                      & = p ^{\sum_{i = 1}^n X_i} (1-p) ^{\sum_{i = 1}^n (1- X_i)} \\
+                                      & = p^{n \overline X} (1-p)^{n(1-\overline{X})}              \\
+        l(p; X_1, \dots, X_n)         & = n \overline X \log p + n(1- \overline{X}) \log(1-p)      \\
+        \dv{l(p; X_1, \dots, X_n)}{p} & = \frac{n \overline x}{p} - \frac{n(1-\overline{x})}{1-p}
+    \end{align}
+
+    Now we have our score function that we want to maximize:
+    \begin{align}
+        \max_p                           & \frac{n \overline x}{p} - \frac{n(1-\overline{X})}{1-p}                             \\
+                                         & \implies \frac{\cancel {n} \overline X}{p} = \frac{\cancel{n}(1-\overline{X})}{1-p} \\
+                                         & \implies \overline{X} (1-p) = p (1-\overline X)                                     \\
+                                         & \implies \overline{X} -\cancel{p\overline{X}} = p -\cancel{p\overline{X}}
+        \implies \hat p = \overline{X}                                                                                         \\
+        \dv[2]{l(p; X_1, \dots, X_n)}{p} & = -\frac{n \overline{X}}{p^2} - \frac{n(1-\overline X)}{(1-p)^2} < 0                \\
+                                         & \implies \hat p \text{ is the MLE.}
+    \end{align}
+    which indeed corresponds to the intuitive result.
+\end{example}
+
+\begin{example}{Uniform distribution}{mle-uniform}
+    Let $X_1, \dots, X_n \stackrel{\text{IID}}{\sim} \Uniform(0,\theta)$ with $\theta$ unknown.
+
+    \begin{align}
+        L(\theta; X_1, \dots, X_n) & = \prod_{i = 1}^n \frac{1}{n} 1_{[0, \theta]}(x_i)                \\
+                                   & =\theta^{-n} \prod_{i = 1}^n 1_{[x_i, \infty)} (\theta)           \\ % TODO: explain this better
+                                   & = \theta^{-n} 1_{[x_1; \infty) \cap \dots \cap [x_n; \infty)}     \\
+                                   & = \theta^{-n} 1_{\left[\max_n \{x_1, \dots, x_n\}; \infty\right)}
+    \end{align}
+
+    Now we can look at the two cases of the indicator function and we see that the maximum occurs at $\hat \theta = \max_n x_n$.
+\end{example}
+
+\begin{example}{Normal distribution}{mle-normal}
+    Let $X_1, \dots, X_n \stackrel{\text{IID}}{\sim} \Normal(\mu,\sigma^2)$ with $\mu,\sigma^2$ unknown.
+
+    \begin{align}
+        L(\mu,\sigma^2; X_1, \dots, X_n)                   & = \prod_{i = 1}^n \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(X_i - \mu)^2}{2 \sigma^2}}                                 \\
+                                                           & = (2 \pi \sigma^2)^{-\frac{n}{2}} e^{- \sum_{i = 1}^n \frac{(X_i - \mu)^2}{2 \sigma^2}}                                 \\
+        l(\mu,\sigma^2; X_1, \dots, X_n)                   & = -\frac{n}{2}\log(2 \pi \sigma^2) - \sum_{i = 1}^n \frac{(X_i - \mu)^2}{2 \sigma^2}                                    \\
+        \pdv{l(\mu,\sigma^2; X_1, \dots, X_n)}{\mu}        & = \cancel{-1 }\cdot \cancel{-} \sum_{i = 1}^n \frac{\cancel{2}(X_i - \mu)}{\cancel{2} \sigma^2}  \label{eq:mle-n-seq-1} \\
+        \pdv{l(\mu,\sigma^2; X_1, \dots, X_n)}{(\sigma^2)} & = -\frac{n}{2 \sigma^2} + \sum_{i = 1}^n \frac{(X_i - \mu)^2}{2 \sigma^4} \label{eq:mle-n-seq-2}
+    \end{align}
+
+    Now we have that \cref{eq:mle-n-seq-1} and \cref{eq:mle-n-seq-2} are our score functions which we want to maximize.
+    \begin{align}
+        \sum_{i = 0}^{n} \frac{(X_i - \hat \mu)}{\sigma^2} = 0                      & \implies \hat \mu = \overline X                                            \\
+        -\frac{n}{2 \sigma^2} + \sum_{i = 1}^n \frac{(X_i - \mu)^2}{2 \sigma^4} = 0 & \implies \hat{\sigma}^2 = \frac{1}{n} \sum_{i = 1}^n (X_1 - \overline X)^2
+    \end{align}
+    where we substituted the first result into the second equation in order to solve it.
+    It can be shown that $\hat \mu$ and $\hat \sigma$ are maximizers but we'll omit it here.
+
+    We see that $\hat \mu$ is unbiased while $\hat \sigma ^2$ is.
+\end{example}
+
+\subsection{Method of moments estimators}
+
+\begin{definition}{Moment and sample moment}{moment-sample-moment}
+    Let $X \sim p_\theta$. The $j$-th moment of $X$ is given by
+    \begin{equation}
+        E_\theta(X^j),
+    \end{equation}
+    assuming the expectation exists.
+
+    Similarly, the $j$-th sample moment of $X_1,\dots, X_n$ IID random variables is defined as
+    \begin{equation}
+        \overline{X_j} = \frac{1}{n} \sum_{i = 1}^n X_i^j \convas E_\theta(X^j)
+    \end{equation}
+    by the law of large numbers.
+\end{definition}
+
+The idea is that we compute the moment and the sample moment, then we choose the parameter such that the moment and the sample moment coincides.
+This is very simple and most times it coincides with the MLE.
+We repeat the process until the $k$-th moment, where $k$ is the smallest number such that the system has a unique solution.
+
+\begin{example}{Common distributions}{}
+    \begin{itemize}
+        \item \emph{Exponential}: same result as MLE;
+        \item \emph{Uniform}: $\hat \theta = 2 \overline X$ which is a worse result than the MLE.
+    \end{itemize}
+\end{example}
+
+Note that in this way we are summarizing the distribution in $k$ values. A best method is to find the $\hat \theta$ that minimizes the distance between the two moments.
+For example, if we use $l$ moments, we define the \emph{generalized method of moments} as
+\begin{equation}
+    \sum_{i = 0}^l \left( \frac{1}{n} \sum_{i = 0}^n X^j_i - E(X_i^j) \right)^2
+\end{equation}
+or, even more generally, for some fixed $g_1, \dots, g_n$,
+\begin{equation}
+    \sum_{i = 0}^l \left( \frac{1}{n} \sum_{i = 0}^n g_j(X_i) - E(g_j(X_i)) \right)^2
+\end{equation}
 
 \end{document}

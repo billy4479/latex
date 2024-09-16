@@ -144,7 +144,7 @@ We will present this theorem in various forms, from the most basic one to the mo
 This theorem comes with different names such as Peano-Picard theorem, Picard-Lindelöf theorem, or Cauchy-Lipschitz.
 
 \begin{theorem}{Picard–Lindelöf theorem}{picard-lindelof}
-    Let $f: A \to \R$ with $A \in \R^2$ open and $f$ locally Lipschitz.
+    Let $f: A \to \R$ with $A \subseteq \R^2$ open and $f$ jointly continuous on both inputs and locally Lipschitz in the second input.
     Then, for any $t_0, \lambda_0 \in \R$ there exists a unique \emph{maximal solution}
     \begin{equation}
         u: I \to \R
@@ -167,7 +167,7 @@ This theorem comes with different names such as Peano-Picard theorem, Picard-Lin
     Uniqueness is not guaranteed though.
 \end{remark}
 
-\begin{corollary}
+\begin{corollary}{}{}
     Let $u$ and $v$ be solutions for the same ODE with different initial conditions, $t_0$ and $t_1$ respectively.
     Then $u$ and $v$ never cross.
 \end{corollary}
@@ -176,5 +176,79 @@ This theorem comes with different names such as Peano-Picard theorem, Picard-Lin
     We have that $u(t_0) \neq v(t_0)$ hence we cannot have that $u(t_i) = v(t_i)$ at some other point $t_i$ because otherwise we could apply uniqueness with initial point $t_i$ and we would have that are the same function on a restricted domain,
     contradicting that $u(t_0) \neq v(t_0)$.
 \end{proof}
+
+\begin{theorem}{Peano theorem}{peano}
+    Let $f: A \to \R$ with $A \subseteq \R^2$ open and $f$ continuous.
+    Then, for any $t_0, \lambda_0 \in \R$ there exists a solution
+    \begin{equation}
+        u: I \to \R
+    \end{equation}
+    where $I$ is an open interval such that $t_0 \in I$ and
+    \begin{equation}
+        \begin{cases}
+            u'(t) = f(t, u(t)) \\
+            u(t_0) = \lambda_0
+        \end{cases}
+    \end{equation}
+
+    Note that uniqueness is not implied.
+\end{theorem}
+
+\subsection{System of ODEs}
+
+\begin{definition}{First order system of ODEs in normal form}{system-odes}
+    A first order system of ODEs in normal form is a system of $n$ equations
+    \begin{equation}
+        \begin{cases}
+            u_1' = f(t, u_1, \dots, u_n) \\
+            \vdots                       \\
+            u_n' = f(t, u_1, \dots, u_n) \\
+        \end{cases}
+    \end{equation}
+    where $f_1, \dots, f_n: A \to \R$ and $A \in \R^{n+1}$ open.
+\end{definition}
+
+A solution to a system of ODEs consists of $u_1, \dots, u_n: I \to \R$, with $I \subseteq \R$ is an interval.
+
+An initial value problem for a system of ODEs is in the form of
+\begin{equation}
+    {\operatorfont IVP:}
+    \begin{cases}
+        u_1' = \ldots             \\
+        u_1(t_0) = \lambda_{0, 1} \\
+        \vdots                    \\
+        u_n' = \ldots             \\
+        u_n(t_0) = \lambda_{0, n} \\
+    \end{cases}
+\end{equation}
+with $(t_0, \lambda_{0,1}, \dots, \lambda_{0,n}) \in A$.
+
+These systems can be thought as a ODE with vector-valued functions:
+\begin{theorem}{Picard–Lindelöf theorem - second formulation}{picard-lindelof-2nd}
+    Let $f: A \to \R^n$ with $A \subseteq \R^{n+1}$ open and $f$ of class $C^1$.
+    Then, for any $t_0 \in \R$ and $\lambda_0 \in \R^n$ s.t. $(t_0, \lambda_0) \in A$ there exists a unique \emph{maximal solution}
+    $u: I \to \R^n$
+    where $I$ is an open interval called the \emph{interval of maximal existence} such that $t_0 \in I$ and
+    \begin{equation}
+        \begin{cases}
+            u'(t) = f(t, u(t)) \\
+            u(t_0) = \lambda_0
+        \end{cases}
+    \end{equation}
+\end{theorem}
+
+\begin{theorem}{Escape from compacts}{escape-from-compacts}
+    Let $K \in A$ compact, the maximal solution $u: I \to \R^n$ to IVP is s.t. $I$ is open and $\exists [a, b] \in I$ s.t. $(t, u(t)) \notin K$ for $t \notin [a, b]$.
+\end{theorem}
+
+\begin{corollary}{}{}
+    Let $A = \R^{n+1}$. If $u: I \to \R^n$ is the maximal solution and $u$ is bounded, then $I = \R$.
+\end{corollary}
+
+\begin{theorem}{}{}
+    Let $A, f$ as in \Cref{thm:picard-lindelof-2nd}.
+    Assume $\abs{f(t, \lambda) - f(t, \lambda')} \leq c(t)\abs{\lambda - \lambda'}$, where $c: \R \to [0, \infty)$.
+    Then any IVP has solution defined on $I = \R$.
+\end{theorem}
 
 \end{document}

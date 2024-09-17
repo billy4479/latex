@@ -494,7 +494,7 @@ To define directions in this coordinate system we fix two coordinates and we sli
 
 \section{Electrostatics}
 
-\subsubsection{Introduction}
+\subsection{Introduction}
 
 Franklin was the first one to show that rubbing a piece of glass with fur you get a positive charge, while if you do it with amber you get a negative charge.
 Fur would always get the opposite charge (\emph{conservation of charge}).
@@ -532,7 +532,7 @@ This is why we invented electrostatics, where charges do not move.
 \subsection{Coulomb's law}
 
 \begin{theorem}{Coulomb's law}{coulomb-law}
-    Let the distance between the two charges be $ \vec{\Delta r} = \vec r_q - \vec r_Q$.
+    Let the distance between the two charges be $ \vec{\Delta r} = \vec {r'} - \vec r$.
     Then the force applied on the two charges is
     \begin{equation}
         \vec F = k \frac{qQ}{\Delta r^2} \hat{\Delta r}
@@ -546,7 +546,7 @@ This is why we invented electrostatics, where charges do not move.
 
 Note that, compared to gravity, electric force is in the order of $10^{39}$ times stronger.
 
-\begin{definition}{Electric field (of a point charge)}{electric-field}
+\begin{definition}{Electric field (of a point charge)}{electric-field-point}
     \begin{equation}
         \vec E(\vec r) = \frac{\vec F}{Q} = k \frac{q}{\Delta r^2} \hat{\Delta r}
     \end{equation}
@@ -556,5 +556,139 @@ Note that, compared to gravity, electric force is in the order of $10^{39}$ time
 
 If the charge is positive the field will have positive divergence, if negative it will have negative divergence.
 Moreover, note that the electric field gets its field lines from $\frac{r^2}{\hat r}$ as in \Cref{eq:dirac-delta-ok}.
+
+\begin{definition}{Electric field (continuous charge distribution)}{electric-field-cont}
+    Consider a small $\dd{\tau}$ where we can consider to have a constant point charge of $\dd{q}$.
+    Then
+    \begin{align}
+        \dd{\vec E} & = \frac{1}{4\pi \varepsilon_0} \frac{\dd{q}}{\Delta r^2} \hat{\Delta r}                             \\
+        \vec E      & = \int_R \dd{\vec E} = \frac{1}{4\pi \varepsilon_0} \int_R \frac{\dd{q}}{\Delta r^2} \hat{\Delta r}
+    \end{align}
+    where $R$ is the region where the charge is.
+\end{definition}
+
+We now have three cases.
+\begin{enumerate}
+    \item \emph{$R$ is one-dimensional}.
+          Let $\lambda$ be the 1D density of charge:
+          \begin{equation}
+              \lambda(\vec {r'}) = \dv{q}{l} \implies \dd{q} = \lambda (\vec {r'}) \dd{l}
+          \end{equation}
+    \item \emph{$R$ is a surface of charge}.
+          \begin{equation}
+              \sigma(\vec {r'}) = \dv{q}{S}
+          \end{equation}
+    \item \emph{$R$ is a volume density of charge}.
+          \begin{equation}
+              \rho(\vec {r'}) = \dv{q}{\tau}
+          \end{equation}
+\end{enumerate}
+Similarly to the first case, in the other two we define the density of charge in the respective dimension and substitute $\dd{q}$ in the field equation.
+
+\begin{example}{Staight line of constant charge}{straight-line-const-charge}
+    Consider a straight line of length $2L$ and of constant charge $\lambda(\vec r) = \lambda$.
+    Compute the electric field at $P(0,z)$.
+
+    \begin{figure}[H]
+        \centering
+        \includesvg[width=0.5\textwidth]{assets/physics-2/ex-electric-field-straight-line.svg}
+        \caption{Illustration of the problem}
+    \end{figure}
+\end{example}
+
+\begin{proof}[Solution]
+    First, consider the infinitesimal change in the electric field $\dd{\vec E}$ due to a small $\dd{l}$ difference length of the line.
+    As we know, a length of $\dd{l}$ carries a charge of $\dd{q} = \lambda \dd{l}$, hence adding $\dd{l}$ on each side of the line will result in $\dd{\vec E_1}$ and $\dd{\vec E_2}$.
+    We can compute the total $\dd{\vec E}$ as
+    \begin{align}
+        \dd{\vec E} & = \dd{\vec E_1} + \dd{\vec E_2}                                                \\
+                    & = 2 \dd{E_1} \cos \theta \hat z                                                \\
+                    & = 2\oneover{4 \pi \varepsilon_0} \frac{\dd{q}}{r^2} \cos \theta \hat z         \\
+                    & = 2\oneover{4 \pi \varepsilon_0} \frac{\lambda \dd{l}}{r^2} \cos \theta \hat z
+    \end{align}
+
+    Next we want to write everything in terms of $\theta$ such that we can integrate over it.
+    We have
+    \begin{gather}
+        r         = \frac{z}{\cos \theta}                                      \\
+        l(\theta) = z \tan \theta                                              \\
+        \dd{l}    = \dd{z \tan \theta} = \frac{z}{\cos^2 \theta} \dd{\theta}
+    \end{gather}
+    and rewrite $\dd{E}$ accordingly
+    \begin{align}
+        \dd{E} & = 2\oneover{4 \pi \varepsilon_0} \frac{\lambda \frac{z}{\cos^2 \theta} \dd{\theta}}{\frac{z^2}{\cos^2 \theta}} \cos \theta \hat z \\
+               & = \oneover{2 \pi \varepsilon_0} \frac{\lambda}{z} \dd{\theta} \cos \theta \hat z
+    \end{align}
+
+    Now we can integrate in order to find the field
+    \begin{align}
+        \vec E & = \int \dd{\vec E}                                                                                                       \\
+               & = \oneover{2 \pi \varepsilon_0} \frac{\lambda}{z} \hat z \underbrace{\int_0^{\frac{\pi}{2}} \dd{\theta} \cos \theta}_{1} \\
+               & = \oneover{2 \pi \varepsilon_0} \frac{\lambda}{z} \hat z
+    \end{align}
+\end{proof}
+
+\begin{example}{Uniformely charged ring}{uniformely-charged-ring}
+    Consider a ring of radius $R$ and of constant charge $\lambda(\vec r) = \lambda$.
+    Compute the electric field at $P(0,z)$.
+
+    \begin{figure}[H]
+        \centering
+        \includesvg[width=0.5\textwidth]{assets/physics-2/ex-electric-field-ring.svg}
+        \caption{Illustration of the problem}
+    \end{figure}
+\end{example}
+
+\begin{proof}[Solution]
+    We proceed similarly to \Cref{ex:straight-line-const-charge}: first we need to compute $\dd{\vec E}$.
+    \begin{align}
+        \dd{\vec E} & = \dd{\vec E_1} + \dd{\vec E_2} = 2 \dd{E_1} \cos \theta \hat z               \\
+                    & = \frac{2}{4 \pi \varepsilon_0} \frac{\lambda \dd{l}}{r^2} \cos \theta \hat z
+    \end{align}
+
+    This time we notice that $\theta$ does not depend on $\dd{l}$, therefore we can compute the integral quite easily as follows:
+    \begin{align}
+        \vec E & = \int \dd{\vec E} = \frac{2}{4 \pi \varepsilon_0} \frac{\lambda}{r^2} \underbrace{\cos \theta}_{z/r} \hat z \underbrace{\int \dd{l}}_{\pi R} \\
+               & = \frac{1}{4 \pi \varepsilon_0} \frac{\lambda (2\pi R) z}{\left(\sqrt{R^2 + z^2}\right)^3} \hat z
+    \end{align}
+\end{proof}
+
+\begin{example}{Uniformely charged disk}{uniformely-charged-disk}
+    Consider a disk of radius $R$ and of constant charge $\sigma(r') = \sigma$.
+    Compute the electric field at $P(0,z)$.
+
+    \begin{figure}[H]
+        \centering
+        \includesvg[width=0.5\textwidth]{assets/physics-2/ex-electric-field-disk.svg}
+        \caption{Illustration of the problem}
+    \end{figure}
+\end{example}
+
+\begin{proof}{Solution}
+    The trick is to divide the disk into rings of radius $r \in [0, R]$ with thickness $\dd{r}$, therefore the charge of each ring is
+    \begin{equation}
+        \dd{q}_\text{ring} = \sigma (2 \pi r) \dd{r}
+    \end{equation}
+    and we can take the result of \Cref{ex:uniformely-charged-ring} and substitute
+    \begin{equation}
+        \dd{\vec E}_\text{ring} = \frac{1}{4 \pi \varepsilon_0} \frac{\sigma (2 \pi r) z}{\left(\sqrt{r^2 + z^2}\right)^3} \dd{r} \hat z
+    \end{equation}
+
+    Finally, we can integrate in order to get the final result
+    \begin{align}
+        \vec E & = \int \dd{\vec E}_\text{ring}                                                                                    \\
+               & = \frac{1}{4 \pi \varepsilon_0} \sigma(2 \pi) z  \hat z \int_0^R \frac{r}{\left(\sqrt{r^2 + z^2}\right)^3} \dd{r} \\
+               & = \frac{\sigma z}{2 \varepsilon_0} \hat z \int_0^R \frac{r}{\left(r^2 + z^2\right)^{\frac{3}{2}}} \dd{r}          \\
+               & = \frac{\sigma z}{2 \varepsilon_0} \hat z \left[ -\oneover{\sqrt{z^2 + r^2}} \right]_0^R                          \\
+               & = \frac{\sigma z}{2 \varepsilon_0} \left[ \oneover{z} - \oneover{\sqrt{z^2 + R^2}} \right] \hat z
+    \end{align}
+
+    Notably, it is interesting the case where $R \to \infty$, meaning the disk becomes a plane.
+    In this situation we have that the above equation becomes
+    \begin{equation}
+        \vec E = \frac{\sigma}{2 \varepsilon_0} \hat z
+    \end{equation}
+\end{proof}
+
 
 \end{document}

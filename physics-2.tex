@@ -794,7 +794,7 @@ In this course we will cover the following symmetries:
 
 \end{proof}
 
-\subsection{Divergence of \texorpdfstring{$\vec E$}{the electric field}}
+\subsubsection{Divergence of \texorpdfstring{$\vec E$}{the electric field}}
 
 \begin{equation}
     \vec E(\vec r) = \oneover{4 \pi \varepsilon_0} \int \frac{\hat{\Delta r}}{\Delta r^2} \rho(\vec{r'}) \dd{\tau'}
@@ -808,7 +808,7 @@ In this course we will cover the following symmetries:
 
 Note that the fact that $\vec {r'}$ becomes $\vec r$ in the solution is not a typo. This is due to shifting the dirac delta function.
 
-first maxwell law or gauss law in local form.
+We call this equation \emph{first Maxwell equation} or Gauss law in local form.
 
 \begin{proposition}{Equivalence between first maxwell law and gauss law}{equivalence-maxwell-gauss}
     The following are equivalent:
@@ -826,12 +826,181 @@ first maxwell law or gauss law in local form.
     \end{align}
 \end{proof}
 
-\subsection{Curl of \texorpdfstring{$\vec E$}{the electric field}}
+\subsubsection{Curl of \texorpdfstring{$\vec E$}{the electric field}}
+\label{sec:curl-electric}
+
+First we can compute the work of the electric field.
+To do so, we want to move to spherical coordinates as it is easier to compute this way it's easier.
 
 \begin{equation}
-    \int_A^B \vec E \cdot \dd{l} = \int_A^B E \cos \theta \dd{l} = \int_A^B E \dd{r} = \frac{q}{4 \pi \varepsilon_0} \int_A^B \frac{1}{r^2} \dd{r} = \frac{q}{4 \pi \varepsilon_0} \left(\oneover{M_A} - \oneover{M_b}\right)
+    \label{eq:potential-electric-point}
+    \int_A^B \vec E \cdot \dd{l} = \int_A^B E \cos \theta \dd{l} = \int_A^B E \dd{r} = \frac{q}{4 \pi \varepsilon_0} \int_A^B \frac{1}{r^2} \dd{r} = \frac{q}{4 \pi \varepsilon_0} \left(\oneover{r_A} - \oneover{r_B}\right)
 \end{equation}
 
-if path is closed work is zero, E is conservative, by stokes theorem the curl is 0.
+We notice that if the path is closed the work is $0$, meaning that $\vec E$ is conservative.
+
+By Stokes theorem \cref{thm:stokes} we get that
+\begin{equation}
+    \curl \vec E = 0
+\end{equation}
+
+\subsubsection{Considerations on divergence and curl}
+
+Let some unknown vector field $\vec F$. Define $D$ and $\vec C$ as
+\begin{equation}
+    \begin{cases}
+        D = \div \vec F \\
+        \vec C = \curl \vec F
+    \end{cases}
+\end{equation}
+Can we recover $\vec F$ just from $D$ and $\vec C$?
+
+\begin{theorem}{Helmholtz theorem}{helmholtz}
+    Let $D = \div \vec F$ and $\vec C = \curl \vec F$ for some vector field $\vec F$.
+    Then, if $D, \vec C$ decay to $\infty$ \say{fast enough}
+    \begin{equation}
+        \vec F = \grad U + \curl \vec W
+    \end{equation}
+    where
+    \begin{align}
+        U(\vec r)       & = \oneover{4 \pi} \int \frac{D(\vec(r'))}{\Delta r} \dd{\tau'} \label{eq:helmholtz_1}      \\
+        \vec W (\vec r) & = \oneover{4 \pi} \int\frac{\vec C(\vec {r'})}{\Delta r} \dd{\tau'} \label{eq:helmholtz_2}
+    \end{align}
+\end{theorem}
+
+\subsection{Electric potential and energy}
+
+We know from \cref{sec:curl-electric} that $\vec E$ is conservative:
+\begin{equation}
+    \vec E = - \grad V \implies \int_C \vec E \cdot \dd{\vec l} = V(A) - V(B)
+\end{equation}
+
+The measurement unit of $V$ is $\si{\joule \per \coulomb} = \si{\volt}$ (Volt).
+We note the following facts:
+\begin{enumerate}[label=\roman*.]
+    \item To compute $\vec E$ we only need a scalar function.
+    \item We can add any constant $c$ to the potential without altering the field, this means we can choose the point of zero potential.
+    \item $V$ satisfies the superposition principle (\cref{prop:superposition-principle})
+\end{enumerate}
+
+We will assume
+\begin{equation}
+    V(\infty) = 0
+\end{equation}
+this is usually ok, even though we will see some cases where it causes issues.
+
+\begin{example}{Potential of a point charge}{electric-potential-point}
+    Compute the potential of a point charge.
+\end{example}
+\begin{proof}[Solution]
+    We have already computed the potential of a point charge in \Cref{eq:potential-electric-point}.
+
+    \begin{equation}
+        V(\vec r) = - \int_{\infty}^{\vec r} \vec E \cdot \dd{l} = \oneover{4 \pi \varepsilon_0} \frac{q}{\Delta r}
+    \end{equation}
+\end{proof}
+
+\begin{example}{Potential of spherical shell}{electric-potential-shell}
+    Consider an uniformly charged spherical shell of radius $R$.
+    Compute the electric field inside and outside the shell.
+\end{example}
+
+\begin{proof}[Solution]
+    Outside the shell we can use the flux and symmetry arguments (see \Cref{ex:electric-field-sphere-symmetry}) to get that
+    \begin{equation}
+        \vec E = \oneover{4 \pi \varepsilon_0} \frac{q}{r^2} \hat r
+    \end{equation}
+    while inside the shell we have no enclosed charge so the electric field is $0$.
+
+    Now we can compute the potential.
+    If we are outside the shell we get
+    \begin{equation}
+        V(\vec r) = - \int_\infty^{\vec r} \vec E \cdot \dd{\vec l} = - \int_\infty^r \oneover{4 \pi \varepsilon_0} \frac{q}{r^2} \underbrace{\dd{r}}_{\hat r \cdot \dd{\vec l}} = \oneover{4 \pi \varepsilon_0} \frac{q}{r}
+    \end{equation}
+    while in the inside we have to split the integral between the inside and the outside:
+    \begin{equation}
+        V(\vec r) = - \int_\infty^{\vec r} \vec E \cdot \dd{\vec l} = -\int_\infty^R \vec E \cdot \dd{\vec l} - \cancelto{0}{\int_R^r \vec E \cdot \dd{\vec l}} = \oneover{4 \pi \varepsilon_0} \frac{q}{R}
+    \end{equation}
+\end{proof}
+
+TODO: write an example with a full sphere.
+
+\begin{example}{Potential of a plane}{electric-potential-plane}
+    Consider a plane with constant charge. Compute its potential.
+\end{example}
+
+\begin{proof}[Solution]
+    We know from \cref{ex:electric-field-plane-symmetry} that the electric field is
+    \begin{equation}
+        \vec E = \frac{\sigma}{2 \varepsilon_0} \hat z
+    \end{equation}
+    We can check that the field has a jump at $z = 0$.
+
+    For a point $P$ we have
+    \begin{equation}
+        V(P) = - \int_\infty^P \vec E \cdot \dd{\vec l} = - \int^P_\infty \frac{\sigma}{2 \varepsilon_0} \dd{z} = \infty
+    \end{equation}
+    but this is clearly wrong, as it would mean that the potential is infinity for every point.
+    This error is caused by our choice of the zero potential point: choosing $\infty$ only works if the charge is \say{finite}, our plane here is indeed infinite, therefore causing problems.
+
+    To solve thi issue we compute the potential between two points:
+    \begin{equation}
+        V(B) - V(A) = -\int_A^B \vec E \cdot \dd{\vec l} = -\frac{\sigma}{2 \varepsilon_0}(z_B - z_A)
+    \end{equation}
+    We see that a safe zero potential point is $z = 0$, by choosing it we get
+    \begin{equation}
+        V(z) = -\frac{\sigma z}{2 \varepsilon_0}
+    \end{equation}
+\end{proof}
+
+\subsubsection{Potential of a continuous charge distribution}
+
+We want a way to compute the potential without having to go through the computation of the electric field, we want something similar to Coulomb's law but for potential.
+
+For a discrete charge distribution this is quite easy:
+\begin{equation}
+    V(\vec r) = \oneover{4 \pi \varepsilon_0} \sum_{k = 1}^n \frac{q_k}{\Delta r_k}
+\end{equation}
+
+In the case of a continuously distributed charge we have
+\begin{equation}
+    \dd{V}(\vec r) = \oneover{4 \pi \varepsilon_0} \frac{\dd{q}}{\Delta r}
+\end{equation}
+and integrating we get
+\begin{equation}
+    V(\vec r) = \int \dd{V}(\vec r) = \oneover{4 \pi \varepsilon_0} \int \frac{\dd{q}}{\Delta r} = \oneover{4 \pi \varepsilon_0} \int \frac{\rho(\vec {r'})}{\Delta r} \dd{\tau '}
+\end{equation}
+which is the result we expected from \Cref{thm:helmholtz} in \Cref{eq:helmholtz_1}.
+
+\subsubsection{Poisson and Laplace equations}
+
+We know that
+\begin{equation}
+    \begin{cases}
+        \div \vec E = \frac{\rho}{\varepsilon_0} \\
+        \curl \vec E = 0
+    \end{cases}
+\end{equation}
+
+Now substituting $\vec E = - \grad V$ in the first equation we get
+\begin{equation}
+    \label{eq:poisson}
+    \div \vec E = - \div (\grad V) = - \laplacian V = \frac{\rho}{\varepsilon_0}
+\end{equation}
+where $\laplacian{}$ is as defined in \Cref{sec:higher-order-derivatives}.
+This is called \textbf{Poisson equation}.
+
+\textbf{Laplace equation} just tells us that if $\rho = 0$ (there is no charge in the region) then
+\begin{equation}
+    \laplacian V = 0
+\end{equation}
+
+\subsubsection{Boundary conditions of \texorpdfstring{$\vec E, V$}{the electric field and the potential}}
+
+Consider a cylinder of base area $A$ and height $ \varepsilon \ll 1$ inside a general surface $S$ of constant charge distribution $\sigma$.
+
+\begin{equation}
+    \oint_S \vec E \cdot \dd{\vec S} = \frac{Q_\text{enc}}{\varepsilon_0} = \frac{\sigma A}{\varepsilon_0} = \underbrace{\cancel{\int_{S_\text{lat}} \vec E \cdot \dd{\vec S}}}_{\propto \varepsilon} + \int_{S_\text{top}} E \cos \theta \cdot \dd{S} + \int_{S_\text{bottom}} E \cos \theta' \cdot \dd{\vec S}
+\end{equation}
 
 \end{document}

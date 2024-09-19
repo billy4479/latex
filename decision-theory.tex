@@ -297,12 +297,25 @@ A very common problem in economics is to maximize the utility function:
 
 \begin{theorem}{Quotient space of preference}{quotient-space-preference}
     Let $\succsim$ be a preference relation on $X$. Then an utility function function exists if $X/\sim$ has at most the cardinality of $\R$.
+
+    Moreover, if $X / \sim$ is at most countable then $\succsim$ is complete and transitive iff it has a utility function.
 \end{theorem}
+
+\begin{proof}
+    We will prove just the second part in the case $X$ finite: we have a complete and transitive preference over a finite set $X$ and we want to show that an utility function exists.
+
+    Let $L(x, \succsim) = \{ z \in X : x \succsim z \}$, then define $u: X \to \R$ as
+    \begin{equation}
+        u(x) = \abs{L\left(x, \succsim\right)}
+    \end{equation}
+    the cardinality of $L$.
+    Of course if $x \succsim y$ then $\abs{L\left(x, \succsim\right)} \geq \abs{L\left(y, \succsim\right)}$ and the converse is true as well.
+\end{proof}
 
 \subsubsection{Cantor properties}
 
 \begin{definition}{$\succsim$-order dense}{order-dense}
-    Let $\succsim$ be binary relation on $X$, then $Z \subseteq X$ is $\succsim$-order dense if, $forall x, y \in X$ with $x \succ y$, there exists $z \in Z$ s.t.
+    Let $\succsim$ be binary relation on $X$, then $Z \subseteq X$ is $\succsim$-order dense if, $\forall x, y \in X$ with $x \succ y$, there exists $z \in Z$ s.t.
     \begin{equation}
         x \succsim z \succsim y
     \end{equation}
@@ -316,6 +329,8 @@ A very common problem in economics is to maximize the utility function:
         \item $\succsim$ admits an utility function.
     \end{enumerate}
 \end{theorem}
+
+\subsubsection{Quasiconcavity}
 
 \begin{definition}{Quasiconvexity and quasiconcavity}{quasiconcavity}
     Let $V$ be a vector space and $f: V \to \R$.
@@ -356,5 +371,42 @@ A very common problem in economics is to maximize the utility function:
 
     Moreover, $\succsim$ is (strictly) convex iff $u$ is (strictly) quasiconcave.
 \end{theorem}
+
+\begin{proposition}{}{}
+    Let $f: C \to \R$ and $\varphi: D \in \R \to \R$ be two functions defined on convex sets, with $\Im f \in D$.
+    If $f$ is quasiconcave and $\varphi$ is increasing, then
+    \begin{equation}
+        \varphi \circ f \text{ is quasiconcave}
+    \end{equation}
+\end{proposition}
+
+\subsubsection{Lexicographic preferences}
+
+Let $X = \R^2$. Define $x \succsim y$ if either
+\begin{equation}
+    x_1 > y_1 \quad \text{or} \quad x_1 = y_1 \text{ and } x_2 \geq y_2.
+\end{equation}
+
+This is the preference system used, for example, in sorting words in a dictionary.
+
+\begin{proposition}{}{}
+    Lexicographic preferences have no utility function.
+\end{proposition}
+
+\begin{proof}
+    Assume that an utility function $u$ exists.
+    Let $r, r' \in \R$ s.t. $r < r'$.
+    For every $x \in \R$ we have
+    \begin{equation}
+        u(x, r) > u(x, r')
+    \end{equation}
+
+    For any $x, y \in \R$ s.t. $x > y$ there exists $q(x), q(y) \in \Q$ s.t.
+    \begin{equation}
+        u(y, r') < q(y) < u(y, r) < u(x, r') < q(x) < u(x, r)
+    \end{equation}
+    therefore $q(x) \ne q(y)$.
+    But this would mean that we have constructed an injective function $q : \R \to \Q$ which is impossible.
+\end{proof}
 
 \end{document}

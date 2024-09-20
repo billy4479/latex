@@ -29,7 +29,9 @@
 
 \firstpage
 
-\section{Introduction}
+\section{Descriptive statistics}
+
+\subsection{Introduction}
 
 \begin{definition}{Statistics}{statistics}
     Statistics is the art of modelling situations in which probability plays a role and draw conclusions based on data observed in such situations.
@@ -87,7 +89,7 @@ If we sample \textit{with} replacement we can only approximate IID variables if 
     A better solution would be to use the $\Normal(c, \sigma^2)$.
 \end{example}
 
-\section{Validation}
+\subsection{Validation}
 
 After we created a model we have to do a process called \textbf{model validation} to make sure that we found a good model.
 This is because the model we came up with is based on previous observations and we have to verify it still works.
@@ -104,13 +106,13 @@ We proceed by repeating the experiment, therefore our random variables become ju
 
 \begin{definition}{Sample variance}{sample-variance}
     \begin{equation}
-        S_X^2 = \frac{1}{n-1} \sum^n_{i = 1}(X_i - \overline X)
+        S_X^2 = \frac{1}{n-1} \sum^n_{i = 1}(X_i - \bar X)
     \end{equation}
 \end{definition}
 
 Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample mean} and the \textit{variance}; while if the distribution is \textbf{asymmetric} we prefer the \textit{median} and the \textit{interquartile range}.
 
-\subsection{Graphical representation of samples}
+\subsubsection{Graphical representation of samples}
 
 \begin{figure}[H]
     \centering
@@ -126,7 +128,7 @@ Usually if the distribution is \textbf{symmetric} we prefer the \textit{sample m
 
 Boxplots are very useful to check the symmetry of a sample.
 
-\subsection{Location-Scale family of distributions}
+\subsubsection{Location-Scale family of distributions}
 
 \begin{definition}{Location-Scale family}{location-scale-family}
     Let $X$ be a random variable with distribution $F$ and $Y = a + bX$ with $b>0$.
@@ -140,7 +142,7 @@ Boxplots are very useful to check the symmetry of a sample.
     $F$ is in the same location-scale family as the standard normal $\iff$ $F$ is a normal distribution
 \end{example}
 
-\subsection{Quantiles}
+\subsubsection{Quantiles}
 
 \begin{definition}{$\alpha$-quantiles}{alpha-quantiles}
     The $\alpha$-quantile of a distribution $F$ is given by
@@ -163,7 +165,7 @@ $F_{a, b}^{-1}(\alpha) = a + bF^{-1}(\alpha)$.
 If the points $x_1, \dots, x_n$ come from $F$ then the points will approximately align to the $y = x$ line.
 This is because we expect the sample quantile $x_i$ to be close to the theoretical quantile given by the formula.
 
-\subsection{Correlation and independence}
+\subsubsection{Correlation and independence}
 
 As we know from Probability, we define the correlation coefficient as
 \begin{equation}
@@ -176,27 +178,27 @@ Recall that independence implies $\rho = 0$, but not viceversa (except for the n
     Consider a sample of pairs $(X_1, Y_1), \dots, (X_n, Y_n)$.
     Then we define the sample correlation coefficient as
     \begin{equation}
-        r_{X, Y} = \frac{\sum^n_{i = 1} (X_i - \overline{X})(Y_i - \overline{Y})}{(n-1)\sqrt{S^2_X} \sqrt{S^2_Y}}
+        r_{X, Y} = \frac{\sum^n_{i = 1} (X_i - \bar{X})(Y_i - \bar{Y})}{(n-1)\sqrt{S^2_X} \sqrt{S^2_Y}}
     \end{equation}
 \end{definition}
 
 In the definition we use the following notation:
 \begin{itemize}
-    \item $\overline X$ is the sample mean
+    \item $\bar X$ is the sample mean
     \item $\sqrt{S^2_X}$ is the sample variance
 \end{itemize}
 
 We observe the following from $r_{X, Y}$:
 \begin{itemize}
     \item $r_{X, Y} \in [-1, 1]$.
-    \item If $r_{X, Y} = 1$ all the samples lie on the line $y = \overline y + \frac{S_y}{S_x}(x-\overline x)$.
-    \item If $r_{X, Y} = -1$ all the samples lie on the line $y = \overline y - \frac{S_y}{S_x}(x-\overline x)$.
+    \item If $r_{X, Y} = 1$ all the samples lie on the line $y = \bar y + \frac{S_y}{S_x}(x-\bar x)$.
+    \item If $r_{X, Y} = -1$ all the samples lie on the line $y = \bar y - \frac{S_y}{S_x}(x-\bar x)$.
     \item If $X_1, \dots, X_n$ and $Y_1, \dots, Y_n$ are independent then $r_{X, Y}$ will be close to $0$.
 \end{itemize}
 
 Graphically we can observe correlation or independence using \textbf{scatter plots}: if the graph of $\{ (x_i, x_{i+1}) : i = 1, \dots, n-1 \}$ should show not much of a structure if the samples are independent.
 
-\section{Estimation}
+\subsection{Estimation}
 
 Estimation is the process of finding the best fitting distribution from the statistical model.
 
@@ -260,7 +262,7 @@ Since $\norm{T - g(\theta)}$ is a random variable we can consider the one more c
 
 We say that an estimator is \emph{biased} if it's expectation is not centered around $g(\theta)$.
 
-\subsection{Maximum likelihood estimator}
+\subsubsection{Maximum likelihood estimator}
 
 \begin{definition}{Likelihood function}{likelihood-function}
     Let $X$ be a random vector with pdf $p_0$ that depends on a parameter $\theta \in \Theta$.
@@ -313,7 +315,7 @@ The idea behind the likelihood function is that this is a function that, given a
     and by differentiating we get the score equation to be
     \begin{equation}
         \frac{n}{\lambda} - \sum_{i = 1}^{n} x_i = 0
-        \implies \hat \lambda = \frac{1}{\overline{x}}
+        \implies \hat \lambda = \frac{1}{\bar{x}}
     \end{equation}
 
     The last thing we are left to do is to make sure this is a maximum point, therefore we have to take the second derivative:
@@ -322,7 +324,7 @@ The idea behind the likelihood function is that this is a function that, given a
     \end{equation}
     hence it is indeed a point of maximum.
 
-    We conclude that $\hat \lambda = \frac{1}{\overline{x}}$ is the maximum likelihood estimate.
+    We conclude that $\hat \lambda = \frac{1}{\bar{x}}$ is the maximum likelihood estimate.
 \end{example}
 
 \begin{example}{Coin tosses}{mle-bernoulli}
@@ -334,19 +336,19 @@ The idea behind the likelihood function is that this is a function that, given a
     \begin{align}
         L(p; X_1, \dots, X_n)         & = \prod_{i = 1}^n \left( p^{X_i} (1 - p)^{1-X_i} \right)   \\
                                       & = p ^{\sum_{i = 1}^n X_i} (1-p) ^{\sum_{i = 1}^n (1- X_i)} \\
-                                      & = p^{n \overline X} (1-p)^{n(1-\overline{X})}              \\
-        l(p; X_1, \dots, X_n)         & = n \overline X \log p + n(1- \overline{X}) \log(1-p)      \\
-        \dv{l(p; X_1, \dots, X_n)}{p} & = \frac{n \overline x}{p} - \frac{n(1-\overline{x})}{1-p}
+                                      & = p^{n \bar X} (1-p)^{n(1-\bar{X})}                        \\
+        l(p; X_1, \dots, X_n)         & = n \bar X \log p + n(1- \bar{X}) \log(1-p)                \\
+        \dv{l(p; X_1, \dots, X_n)}{p} & = \frac{n \bar x}{p} - \frac{n(1-\bar{x})}{1-p}
     \end{align}
 
     Now we have our score function that we want to maximize:
     \begin{align}
-        \max_p                           & \frac{n \overline x}{p} - \frac{n(1-\overline{X})}{1-p}                             \\
-                                         & \implies \frac{\cancel {n} \overline X}{p} = \frac{\cancel{n}(1-\overline{X})}{1-p} \\
-                                         & \implies \overline{X} (1-p) = p (1-\overline X)                                     \\
-                                         & \implies \overline{X} -\cancel{p\overline{X}} = p -\cancel{p\overline{X}}
-        \implies \hat p = \overline{X}                                                                                         \\
-        \dv[2]{l(p; X_1, \dots, X_n)}{p} & = -\frac{n \overline{X}}{p^2} - \frac{n(1-\overline X)}{(1-p)^2} < 0                \\
+        \max_p                           & \frac{n \bar x}{p} - \frac{n(1-\bar{X})}{1-p}                             \\
+                                         & \implies \frac{\cancel {n} \bar X}{p} = \frac{\cancel{n}(1-\bar{X})}{1-p} \\
+                                         & \implies \bar{X} (1-p) = p (1-\bar X)                                     \\
+                                         & \implies \bar{X} -\cancel{p\bar{X}} = p -\cancel{p\bar{X}}
+        \implies \hat p = \bar{X}                                                                                    \\
+        \dv[2]{l(p; X_1, \dots, X_n)}{p} & = -\frac{n \bar{X}}{p^2} - \frac{n(1-\bar X)}{(1-p)^2} < 0                \\
                                          & \implies \hat p \text{ is the MLE.}
     \end{align}
     which indeed corresponds to the intuitive result.
@@ -378,8 +380,8 @@ The idea behind the likelihood function is that this is a function that, given a
 
     Now we have that \cref{eq:mle-n-seq-1} and \cref{eq:mle-n-seq-2} are our score functions which we want to maximize.
     \begin{align}
-        \sum_{i = 0}^{n} \frac{(X_i - \hat \mu)}{\sigma^2} = 0                      & \implies \hat \mu = \overline X                                            \\
-        -\frac{n}{2 \sigma^2} + \sum_{i = 1}^n \frac{(X_i - \mu)^2}{2 \sigma^4} = 0 & \implies \hat{\sigma}^2 = \frac{1}{n} \sum_{i = 1}^n (X_1 - \overline X)^2
+        \sum_{i = 0}^{n} \frac{(X_i - \hat \mu)}{\sigma^2} = 0                      & \implies \hat \mu = \bar X                                            \\
+        -\frac{n}{2 \sigma^2} + \sum_{i = 1}^n \frac{(X_i - \mu)^2}{2 \sigma^4} = 0 & \implies \hat{\sigma}^2 = \frac{1}{n} \sum_{i = 1}^n (X_1 - \bar X)^2
     \end{align}
     where we substituted the first result into the second equation in order to solve it.
     It can be shown that $\hat \mu$ and $\hat \sigma$ are maximizers but we'll omit it here.
@@ -387,7 +389,7 @@ The idea behind the likelihood function is that this is a function that, given a
     We see that $\hat \mu$ is unbiased while $\hat \sigma ^2$ is.
 \end{example}
 
-\subsection{Method of moments estimators}
+\subsubsection{Method of moments estimators}
 
 \begin{definition}{Moment and sample moment}{moment-sample-moment}
     Let $X \sim p_\theta$. The $j$-th moment of $X$ is given by
@@ -398,7 +400,7 @@ The idea behind the likelihood function is that this is a function that, given a
 
     Similarly, the $j$-th sample moment of $X_1,\dots, X_n$ IID random variables is defined as
     \begin{equation}
-        \overline{X_j} = \frac{1}{n} \sum_{i = 1}^n X_i^j \convas E_\theta(X^j)
+        \bar{X_j} = \frac{1}{n} \sum_{i = 1}^n X_i^j \convas E_\theta(X^j)
     \end{equation}
     by the law of large numbers.
 \end{definition}
@@ -410,7 +412,7 @@ We repeat the process until the $k$-th moment, where $k$ is the smallest number 
 \begin{example}{Common distributions}{}
     \begin{itemize}
         \item \emph{Exponential}: same result as MLE;
-        \item \emph{Uniform}: $\hat \theta = 2 \overline X$ which is a worse result than the MLE.
+        \item \emph{Uniform}: $\hat \theta = 2 \bar X$ which is a worse result than the MLE.
     \end{itemize}
 \end{example}
 
@@ -423,5 +425,82 @@ or, even more generally, for some fixed $g_1, \dots, g_n$,
 \begin{equation}
     \sum_{i = 0}^l \left( \frac{1}{n} \sum_{i = 0}^n g_j(X_i) - E(g_j(X_i)) \right)^2
 \end{equation}
+
+\section{Bayesian statistics}
+
+\subsection{Introduction}
+
+This is the oldest method of constructing estimators.
+The main idea is that there is no unique true parameter, every parameter has it's own probability.
+The main problem of this strategy is that there are problems with computing the result (except for simple cases).
+Nowadays this method is widely used in combination with computer-based simulations.
+
+\begin{definition}{Bayesian model}{bayesian-model}
+    A statistical model in bayesian statistics is
+    \begin{equation}
+        \mathcal M = \{ p_\theta : \theta \in \Theta \}
+    \end{equation}
+    and a \emph{prior distribution} $\pi$ on the parameter space $\Theta$.
+\end{definition}
+
+Differently from before, $\theta$ is seen as a \emph{random variable}, not an unknown.
+The choice of $\pi$ is driven by subjective belief, based on experience and likelihood of different values of $\theta$.
+After observing the data we \emph{update our believes} by computing the posterior distribution.
+
+\begin{definition}{Bayes risk}
+    The Bayes risk of an estimator $T$ for a real-valued parameter $g(\theta)$ is defined as
+    \begin{equation}
+        R(\pi; T) = \int_\Theta E_\theta[(T-g(\theta)^2)] \pi(\theta) \dd{\theta}
+    \end{equation}
+\end{definition}
+This is pretty much the equivalent of the MSE for bayesian models.
+
+\begin{definition}{Bayes estimator}{bayes-estimator}
+    The Bayes estimator with respect to the prior density $\pi$ is the estimator $T$ that minimizes $R(\pi; T)$.
+\end{definition}
+
+\begin{theorem}{Bayes estimator - first version}{bayes-estimator-v1}
+    The Bayes estimator for $g(\theta)$ w.r.t. the prior density $\pi$ is
+    \begin{equation}
+        T(x) = \frac{\int_\Theta g(\theta) p_\theta(x)\pi(\theta) \dd{\theta}}{\int_\Theta g(\theta) \pi(\theta) \dd{\theta}}
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Start by the definition of bayesian risk and plug in the definition of expectation.
+    \begin{align}
+        R(\pi; T) & = \int_\Theta E_\theta[(T-g(\theta)^2)] \pi(\theta) \dd{\theta}                                               \\
+                  & = \int_\Theta \left(\int_X (T-g(\theta))^2 p_\theta(x)\dd{x} \right) \pi(\theta) \dd{\theta}                  \\
+                  & \stackrel{\text{fubini}}{=} \int_X \int_\Theta (T(x) - g(\theta))^2 p_\theta(x) \pi(\theta) \dd{\theta}\dd{x}
+    \end{align}
+
+    The goal is to minimize for all $x$. We can just minimize the inside integral as that will result in the minimization of the whole expression.
+    \begin{align}
+        {\operatorfont argmin} & \int_\Theta (T(x) - g(\theta))^2 p_\theta(x) \pi(\theta) \dd{\theta}                                                                                                                    \\
+                               & = T^2(x) \int_\Theta p_\theta(x) \pi(\theta) \dd{\theta}- 2T(x) \int_\Theta g(\theta) p_\theta(x) \pi(\theta) \dd{\theta} + \int_\Theta g^2(\theta) p_\theta(x) \pi(\theta) \dd{\theta}
+    \end{align}
+
+    Now we take the derivative w.r.t. $T(x)$ and set it equal to zero:
+    \begin{gather}
+        \cancel 2 T(x) \int_\Theta p_\theta(x) \pi(\theta) \dd{\theta}- \cancel 2 \int_\Theta g(\theta) p_\theta(x) \pi(\theta) \dd{\theta} = 0 \\
+        \implies T(x) = \frac{\int_\Theta p_\theta(x) \pi(\theta) \dd{\theta}}{\int_\Theta g(\theta) p_\theta(x) \pi(\theta) \dd{\theta}}
+    \end{gather}
+\end{proof}
+
+\begin{definition}{Posterior distribution}{posterior-distribution}
+    The posterior distribution of $\bar \Theta$ conditionally on $X = x$ is
+    \begin{equation}
+        p_{\bar \Theta | X = x} (\theta) = \frac{p_\theta(x) \pi(\theta)}{\int_\Theta p_\theta(x) \pi(\theta) \dd{\theta}}
+    \end{equation}
+\end{definition}
+
+Now we can rewrite \Cref{thm:bayes-estimator-v1} by substituting this new definition:
+
+\begin{theorem}{Bayes estimator - second version}{bayes-estimator-v2}
+    The Bayes estimator for $g(\theta)$ w.r.t. the prior density $\pi$ is
+    \begin{equation}
+        T(x) = \int_\Theta g(\theta) p_{\bar \Theta | X = x} (\theta) \dd{\theta} = E[g(\bar \Theta) | X = x]
+    \end{equation}
+\end{theorem}
 
 \end{document}

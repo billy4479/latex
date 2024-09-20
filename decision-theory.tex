@@ -409,4 +409,106 @@ This is the preference system used, for example, in sorting words in a dictionar
     But this would mean that we have constructed an injective function $q : \R \to \Q$ which is impossible.
 \end{proof}
 
+\section{Rational choice}
+
+\begin{definition}{Decision framework}{decision-framework}
+    Let $\vec X$ be a choice space of alternatives.
+    A decision framework is the pair $(\vec X,\mathcal X)$ where $\mathcal X$ is a set of $X \subset \mathcal X$.
+\end{definition}
+
+In consumer theory we could have a decision framework where $\vec X$ is the set of all possible bundles of goods and $\mathcal X$ is the collection of budget sets $X$.
+
+Another example could be $\vec X$ is the set of all the restaurant meals available in town, each $X$ is the menu of each restaurant and $\mathcal X$ is the collection of restaurants in town.
+
+A decision maker has a preference $\succsim_X$ over each set $X$ which we will consider \emph{reflexive} and \emph{transitive}.
+Let $P: X \mapsto \succsim_X$ be the \emph{preference map} that given a set $X$ gives the DM's preference on that set.
+
+\begin{definition}{Decision environment}{decision-environment}
+    A decision framework and a preference map make a decision environment:
+    \begin{equation}
+        (\vec X, \mathcal X, P)
+    \end{equation}
+\end{definition}
+
+A \emph{decision problem} is a pair $(X, \succsim_X)$, the DM wants to find the optimal alternative according to $\succsim_X$
+
+\begin{definition}{Optimal alternative}{optimal}
+    An alternative $\hat x \in X$ is optimal if $\nexists x \in X$
+    \begin{equation}
+        x \succsim_X \hat  x
+    \end{equation}
+\end{definition}
+
+\begin{theorem}{Existance of optimal choice}{existance-optimal}
+    If $\succsim_X$ is a preorder, an optimal alternative if the sets
+    \begin{equation}
+        U(x) = \{ z \in X : z \succsim_X x \}
+    \end{equation}
+    are compact $\forall x \in X$.
+\end{theorem}
+
+\begin{proof}
+    First we need to introduce a new mathematical tool, the correspondence.
+    \begin{equation}
+        F:X  \rightrightarrows Y
+    \end{equation}
+    where $F(x) \in \mathcal P(Y)$.
+
+    This is which is basically just a \say{function} returning a set of sets: a function is just a single-valued correspondence.
+
+\end{proof}
+
+\begin{corollary}{}{}
+    If $\succsim_X$ is a preorder, optimal alternatives exists if $X$ is finite.
+\end{corollary}
+
+\begin{proof}
+    Finite sets are compact, hence we can apply the theorem directly.
+\end{proof}
+
+\begin{definition}{Rational choice correspondence}{rational-choice-correspondence}
+    The rational choice correspondence $\sigma : \mathcal D \rightrightarrows \vec X$ is defined as
+    \begin{equation}
+        \sigma (X) = \{ \hat x \in X: \nexists x \in X, x \succ_X \hat x \}
+    \end{equation}
+    where $\mathcal D$ is the collection of choice sets that admits optimal alternatives.
+\end{definition}
+
+\begin{lemma}{}{indifference-optimal}
+    If $\succsim_X$ is a preorder, optimal alternatives are pairwise either incomparable ($x \parallel y$) or indifferent.
+\end{lemma}
+
+If $\succsim_X$ is complete and transitive (\emph{weak order}) then
+\begin{equation}
+    \sigma(X) = \{\hat x \in X : \forall x \in X, \hat x_X x\}
+\end{equation}
+If $\succsim_X$ is a weak order optimal alternatives are indifferent.
+
+\begin{proposition}{}{}
+    If $X$ is convex and $\succsim_X$ is a weak order
+    \begin{enumerate}[label=\roman*.]
+        \item if $\succsim_X$ is convex, then $\sigma(X)$ is convex;
+        \item if $\succsim_X$ is strictly convex, then $\sigma(X)$ is a singleton.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \skiplineafterproof
+    \begin{enumerate}[label=\roman*.]
+        \item Let $\succsim_X$ be convex.
+              Let $x, y \in \sigma (X)$ and $\alpha \in (0,1)$. Then by \cref{lemma:indifference-optimal} $x \sim y$.
+              By convexity of $\succsim$ we have
+              \begin{equation}
+                  x \sim y \implies \alpha x + (1- \alpha y) \succsim x
+              \end{equation}
+              hence
+              $x \sim y \implies \alpha x + (1- \alpha y) \in \sigma(X)$.
+
+        \item Let $\succsim$ be strictly convex.
+              By contradiction, suppose that $x, y \in \sigma(X)$ and $x \neq y$.
+              Again by \cref{lemma:indifference-optimal} $x \sim y$ and let $z = 0.5 x + 0.5 y$.
+              By strict convexity $z \succsim x$ but is a contradiction because $x$ is optimal by hypothesis.
+    \end{enumerate}
+\end{proof}
+
 \end{document}

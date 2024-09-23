@@ -194,7 +194,7 @@ This theorem comes with different names such as Peano-Picard theorem, Picard-Lin
     Note that uniqueness is not implied.
 \end{theorem}
 
-\subsection{System of ODEs}
+\section{System of ODEs}
 
 \begin{definition}{First order system of ODEs in normal form}{system-odes}
     A first order system of ODEs in normal form is a system of $n$ equations
@@ -223,6 +223,8 @@ An initial value problem for a system of ODEs is in the form of
 \end{equation}
 with $(t_0, \lambda_{0,1}, \dots, \lambda_{0,n}) \in A$.
 
+\subsection{Solutions of systems of ODEs}
+
 These systems can be thought as a ODE with vector-valued functions:
 \begin{theorem}{Picard–Lindelöf theorem - second formulation}{picard-lindelof-2nd}
     Let $f: A \to \R^n$ with $A \subseteq \R^{n+1}$ open and $f$ of class $C^1$.
@@ -250,5 +252,69 @@ These systems can be thought as a ODE with vector-valued functions:
     Assume $\abs{f(t, \lambda) - f(t, \lambda')} \leq c(t)\abs{\lambda - \lambda'}$, where $c: \R \to [0, \infty)$.
     Then any IVP has solution defined on $I = \R$.
 \end{theorem}
+
+\subsection{Equivalence between higher order ODEs and first order systems}
+
+Let us consider a scalar ODE like
+\begin{equation}
+    u'' = 2 u' - 3u
+\end{equation}
+we can define $v_1 = u$ and $v = u'$ and rewrite the ODE as a system of first order ODEs as follows:
+\begin{equation}
+    \begin{cases}
+        v_1' = v_2 \\
+        v_2' = 2 v_2 - 3v_1
+    \end{cases}
+\end{equation}
+
+These two formulations are equivalent.
+This works for any higher order ODE and it is the standard procedure.
+
+\section{Bootstrap}
+
+
+\begin{proposition}{Bootstrap}{bootstrap}
+    Consider and ODE $u' = f(t, u)$ with $f : A \to \R$ and $A \in \R^2$ open.
+    Assume $f$ is of class $C^m$ for some $m \geq 1$.
+    Then any solution $u$ is of class $C^{m+1}$.
+\end{proposition}
+
+\begin{proof}
+    Proceed by induction on $l = 0, 1, \dots, m$.
+    We want to prove that $u$ is of class $l +1$.
+    \begin{description}
+        \item[Base case] $l = 0$. We know that $u$ is differentiable by ODE $\implies$ $u$ continuous $\implies$ $f(t, u(t))$ is continuous $\implies$ $u'$ is continuous.
+        \item[Inductive step] By induction $u$ is $C^{l+1}$ which means it is also $C^1$.
+              We need to prove that $u$ is $C^{l+2}$.
+              Let $g(t) = (t, u(t))$ which is $C^1$.
+              Then $f \circ g$ is $C^1$ and
+              \begin{equation}
+                  u''(t) = (f \circ g)'(t) = \underbrace{\pdv{f}{x_1}()}_{C^l} \underbrace{(t, u(t))}_{C^{l+1}} + \underbrace{\pdv{f}{x_2}()}_{C^l}\underbrace{(t, u(t))}_{C^{l+1}} \underbrace{u'(t)}_{C^l}
+              \end{equation}
+    \end{description}
+\end{proof}
+
+\section{Autonomous ODEs}
+
+We say an ODE is autonomous if it doesn't depend on time:
+\begin{equation}
+    u' = f(u)
+\end{equation}
+with $f: \R \to \R$ of class $C'$.
+This means that the solution does not depend on $t$, but just on $u$ itself.
+
+If $u$ is a solution to an autonomous ODE and $v(t) = u(t + \delta)$ with $\delta \in \R$ we can expect $v$ to be a solution as well.
+This property is called \emph{translation invariance}.
+
+We can easily see that autonomous ODEs have some constant solutions:
+\begin{equation}
+    u(t) = c \iff f(c) = 0
+\end{equation}
+these solutions are called \emph{equilibrium points} and are the zeroes of $f$.
+
+If $f$ is differentiable we can alo study $f'$: if $f'(c) < 0$ we say that the equilibrium is \emph{stable}, which means that if we have $u(t_0)$ close to $c$ at any $t \geq t_0$ where $u$ exists $u(t)$ will become closer and closer to $c$; conversely, if $f'(c) > 0$ we say the equilibrium is \emph{unstable} and $u(t)$ will move away from $c$ as time passes.
+
+Switching future and past has the effect of also switching the equilibrium points: $v(t) = u(-t)$ solves $v' = -f(v)$.
+
 
 \end{document}

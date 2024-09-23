@@ -997,10 +997,144 @@ This is called \textbf{Poisson equation}.
 
 \subsubsection{Boundary conditions of \texorpdfstring{$\vec E, V$}{the electric field and the potential}}
 
-Consider a cylinder of base area $A$ and height $ \varepsilon \ll 1$ inside a general surface $S$ of constant charge distribution $\sigma$.
+Consider a cylinder of base area $\dd A \ll 1$ and height $ \varepsilon \ll 1$ inside a general surface $S$ of constant charge distribution $\sigma$.
+We don't assume $S$ is flat.
+
+\begin{align}
+    \oint_S \vec E \cdot \dd{\vec S} & = \frac{Q_\text{enc}}{\varepsilon_0} = \frac{\sigma \dd{A}}{\varepsilon_0}                                                                                                                          \\
+                                     & = \underbrace{\cancelto{{}_0}{\int_{S_\text{lat}} \vec E \cdot \dd{\vec S}}}_{\propto \varepsilon} + \int_{S_\text{top}} \vec E \cdot \dd{\vec S} + \int_{S_\text{bottom}} \vec E \cdot \dd{\vec S} \\
+                                     & = E_\text{top}^\perp \dd{A} - E_\text{bottom}^\perp \dd{A}
+\end{align}
+that is,
+\begin{gather}
+    \frac{\sigma \cancel{\dd{A}}}{\varepsilon_0} = E_\text{top}^\perp \cancel{\dd{A}} - E_\text{bottom}^\perp \cancel{\dd{A}}\\
+    \implies \frac{\sigma}{\varepsilon_0} = E_\text{top}^\perp - E_\text{bottom}^\perp
+\end{gather}
+
+This equation tells us that when we cross a surface we always get a discontinuity in the field.
+
+Now we want to check the tangential component.
+Consider a closed path $C$ that crosses the surfaces perpendicularly to it for a distance $\varepsilon \ll 1$, moves a distance $\dd{l}$ tangentially to $S$ and goes back.
+
+\begin{align}
+    \oint_C \vec E \cdot \dd{\vec l} & = 0                                                                                \\
+                                     & = E_\text{top}^\parallel \dd{l} - E_\text{bottom}^\parallel \dd{l}                 \\
+    \implies                         & E_\text{top}^\parallel \cancel{\dd{l}} = E_\text{bottom}^\parallel \cancel{\dd{l}}
+\end{align}
+
+In general we can write these two results together as follows:
+\begin{equation}
+    \vec E_\text{above} - \vec E_{below} = \frac{\sigma}{\varepsilon_0} \hat n
+\end{equation}
+
+Meanwhile, for the potential we see a different behavior. $V$ is continuous as we cross surfaces' boundaries.
+
+Consider a path $C$ from $A$ to $B$ that crosses a surface in a space $\varepsilon \ll 1$. Let's compute the difference in potential between $A$ and $B$:
+\begin{gather}
+    V_B - V_A = - \int_A^B \vec E \cdot \dd{\vec l} \propto \varepsilon \to 0 \\
+    \implies V_B = V_A
+\end{gather}
+therefore the potential is continuous.
+
+\subsubsection{Electric dipole}
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.6\textwidth]{assets/physics-2/electric-dipole.svg}
+    \caption{Electric dipole}
+    \label{fig:electric-dipole}
+\end{figure}
+
+Let us compute the potential in $P$.
+
+\begin{align}
+    V(r) & = \frac{q}{4 \pi \varepsilon_0} \left( \oneover{r_+} - \oneover{r_-} \right)                 \\
+    r_+  & = \sqrt{r^2 + \left( \frac{d}{2} \right)^2 - \cancel {2} r \frac{d}{\cancel{2}} \cos \theta} \\
+    r_-  & = \sqrt{r^2 + \left( \frac{d}{2} \right)^2 + \cancel {2} r \frac{d}{\cancel{2}} \cos \theta} \\
+\end{align}
+
+Now we want to see what happens when $P$ is very far away, which means $r \gg d$.
+We proceed by taylor expanding:
+
+\begin{align}
+    r_+ & = r \sqrt{1 + \left( \frac{d}{2r} \right)^2 - \frac{d}{r} \cos \theta} \approx r \left( 1- \frac{d}{2r} \cos \theta \right)  \\
+    r_- & = r \sqrt{1 - \left( \frac{d}{2r} \right)^2 - \frac{d}{r} \cos \theta} \approx r \left( 1 + \frac{d}{2r} \cos \theta \right)
+\end{align}
+and substituting into $V$ we get
+\begin{align}
+    V(r) & = \frac{q}{4 \pi \varepsilon_0} \left[ \oneover{r \left( 1- \frac{d}{2r} \cos \theta \right)} - \oneover{r \left( 1 + \frac{d}{2r} \cos \theta \right)} \right] \\
+         & \approx  \frac{q}{4 \pi \varepsilon_0 r} \left[ 1 + \frac{d}{2r}\cos\theta - \left( 1- \frac{d}{2r} \cos \theta \right) \right]                                 \\
+         & = \frac{1}{4 \pi \varepsilon_0} \frac{q d \cos \theta}{r^2}                                                                                                     \\
+         & = \frac{1}{4 \pi \varepsilon_0} \frac{\vec p \cdot \hat r}{r^2}
+\end{align}
+where we call $\vec p = q d \hat z$ \textbf{dipole moment}.
+
+Now, if we look at what the electric field would do if we follow $\vec E = - \grad V$, we get good results only very far away, otherwise close to the charges the results are wrong.
+
+This result works even in 3D and for any charged volume when $P$ is very far away:
+\begin{equation}
+    V(r) = \frac{1}{4 \pi \varepsilon_0} \frac{Q_\text{tot}}{r} + \frac{1}{4 \pi \varepsilon_0} \frac{\vec p \cdot \hat r}{r^2} + o\left( \frac{1}{r^3} \right)
+\end{equation}
+
+\subsubsection{Energy conservation}
+
+Let $q$ and a test charge $Q$, we want to move $Q$ from $A$ to $B$.
 
 \begin{equation}
-    \oint_S \vec E \cdot \dd{\vec S} = \frac{Q_\text{enc}}{\varepsilon_0} = \frac{\sigma A}{\varepsilon_0} = \underbrace{\cancel{\int_{S_\text{lat}} \vec E \cdot \dd{\vec S}}}_{\propto \varepsilon} + \int_{S_\text{top}} E \cos \theta \cdot \dd{S} + \int_{S_\text{bottom}} E \cos \theta' \cdot \dd{\vec S}
+    W_E = \int_A^B \vec F_E \cdot \dd{\vec l} = Q \int_A^B \vec E \dd{\vec l} = - Q(V(B)- V(A)) = -\Delta U = - (U(B) - U(A))
 \end{equation}
+where $U$ is the \emph{potential energy function}.
+In this course we will assume energy conservation:
+\begin{equation}
+    K_A + U_A = K_B + U_B
+\end{equation}
+
+\begin{example}{}{}
+    Consider an electro accelerated from rest through a potential difference $\Delta V = 100 \si{\volt}$.
+    Compute the final speed of $e^-$.
+\end{example}
+
+\begin{proof}[Solution]
+    We use energy conservation:
+    \begin{align}
+        E_m^i & = e V_i                     \\
+        E^f_m & = \frac{1}{2}mv_f^2 + e V_f
+    \end{align}
+    which means
+    \begin{equation}
+        v_f = \sqrt{\frac{2q \Delta V}{m}}
+    \end{equation}
+\end{proof}
+
+\begin{example}{}{}
+    Consider a sphere of radius $R$, total charge $C$ and of charge density $\rho = Ar$ with $r \geq R$ and where $A$ is a parameter.
+    \begin{enumerate}
+        \item Compute $A$
+        \item Compute $\vec E$ inside the sphere
+        \item Compute the potential difference between the surface and the origin
+    \end{enumerate}
+\end{example}
+
+\begin{proof}[Solution]
+    We know that we can compute the total charge as
+    \begin{gather}
+        Q = \int_\text{sphere} \rho \dd{\tau} = A \int r r^2 \sin \theta \dd{\theta} \dd{\varphi} \dd{r} = 4 \pi A \int_0^R r^3 \dd{r} = \pi A R^4 \\
+        \implies A = \frac{Q}{\pi R^4}
+    \end{gather}
+
+    For the second question we can use gauss law. We choose as a surface a sphere with $r < R$.
+    \begin{gather}
+        \Phi_S (\vec E) = 4 \pi r^2 E = \frac{q_\text{enc}}{\varepsilon_0} = \frac{1}{\varepsilon_0} \int_0^r \dd{r'} \int_0^\pi \dd{\theta} \int_0^{2 \pi} (\rho)(r')^2 \sin \theta  = \frac{\pi A r^4}{\varepsilon_0} \\
+        \implies E = \frac{A}{4 \varepsilon_0} r^2
+    \end{gather}
+
+    And for the last question we can just compute the path integral, a straight path will be fine.
+    \begin{equation}
+        V(R) - V(O) = - \int^R_0 \vec E \cdot \dd{\vec l} = - \frac{A}{4 \varepsilon_0} \int^R_0 r^2 \dd{r} = - \frac{AR^3}{12 \varepsilon_0}
+    \end{equation}
+
+    If we don't have any symmetry and we are not able to compute the electric field we can still compute the potential by using the definition.
+    The most convenient way to apply it is to choose a point along an axis, compute $\Delta r$ and proceed with the integral in spherical coordinates but this is a much harder procedure.
+\end{proof}
 
 \end{document}

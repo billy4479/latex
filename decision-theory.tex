@@ -480,14 +480,14 @@ A \emph{decision problem} is a pair $(X, \succsim_X)$, the DM wants to find the 
 
 If $\succsim_X$ is complete and transitive (\emph{weak order}) then
 \begin{equation}
-    \sigma(X) = \{\hat x \in X : \forall x \in X, \hat x_X x\}
+    \sigma(X) = \{\hat x \in X : \forall x \in X, \hat x \succsim_X x\}
 \end{equation}
 If $\succsim_X$ is a weak order optimal alternatives are indifferent.
 
 \begin{proposition}{}{}
     If $X$ is convex and $\succsim_X$ is a weak order
     \begin{enumerate}[label=\roman*.]
-        \item if $\succsim_X$ is convex, then $\sigma(X)$ is convex;
+        \item if $\succsim_X$ is convex, then $\sigma(X)$ is convex-valued;
         \item if $\succsim_X$ is strictly convex, then $\sigma(X)$ is a singleton.
     \end{enumerate}
 \end{proposition}
@@ -510,5 +510,64 @@ If $\succsim_X$ is a weak order optimal alternatives are indifferent.
               By strict convexity $z \succsim x$ but is a contradiction because $x$ is optimal by hypothesis.
     \end{enumerate}
 \end{proof}
+
+\begin{definition}{Menu preference}{menu-preference}
+    The menu (or indirect preference) $\succeq$ is defined between choice sets in $\mathcal D$ as
+    \begin{equation}
+        X \succeq Y \iff \forall y \in Y, \exists x \in X \text{ s.t. } x \succsim y
+    \end{equation}
+\end{definition}
+
+\begin{proposition}{}{}
+    If $\succsim$ is a weak order, then $\succeq$ is a weak order too.
+    Moreover, for any $X, Y \in \mathcal D$:
+    \begin{enumerate}[label=\roman*.]
+        \item $X \sim \sigma (X)$
+        \item $X \subseteq Y \implies X \succeq Y$
+        \item $X \succeq Y \implies X \sim X \cup Y$
+    \end{enumerate}
+    where $X \sim Y$ means $X \succeq Y$ and $Y \succeq X$.
+\end{proposition}
+
+Since $\hat x \sim \sigma(X)$ we also have that $\hat x \sim X$.
+This means that for the menu preference any optimal alternative is indifferent to the whole choice set.
+
+\begin{corollary}{}{}
+    \begin{equation}
+        X \succeq Y \iff \sigma(X) \succeq \sigma(Y)
+    \end{equation}
+\end{corollary}
+
+Assuming $\succsim$ has an utility function $u$ we have that
+\begin{equation}
+    \sigma(X) = \argmax_{x \in X} u(x)
+\end{equation}
+and
+\begin{equation}
+    X \succeq Y \iff \max_{x \in X} (x) \geq \max_{y \in Y} u(y)
+\end{equation}
+
+\begin{definition}{Value function}{value-function}
+    The value function $v: \mathcal D \to \R$ is defined as
+    \begin{equation}
+        v(X) = \max_{x \in X} u(x)
+    \end{equation}
+\end{definition}
+
+This means that the value function represents the menu preference:
+\begin{equation}
+    X \succsim Y \iff v(x) \geq v(Y)
+\end{equation}
+
+\subsection{Contextualized analysis}
+
+A contextualized alternative is a pair $(x, X)$ with $X \in \mathcal X$ and $x \in X$.
+We call $\mathcal C$ the set of all contextualized alternatives.
+
+A preference relation on $\mathcal C$ looks like
+\begin{equation}
+    (x, X) \succsim (y, Y)
+\end{equation}
+which means the DM prefers $x$ in the context $X$ over $y$ in the context $Y$.
 
 \end{document}

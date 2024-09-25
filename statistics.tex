@@ -447,7 +447,7 @@ Differently from before, $\theta$ is seen as a \emph{random variable}, not an un
 The choice of $\pi$ is driven by subjective belief, based on experience and likelihood of different values of $\theta$.
 After observing the data we \emph{update our believes} by computing the posterior distribution.
 
-\begin{definition}{Bayes risk}
+\begin{definition}{Bayes risk}{bayes-risk}
     The Bayes risk of an estimator $T$ for a real-valued parameter $g(\theta)$ is defined as
     \begin{equation}
         R(\pi; T) = \int_\Theta E_\theta[(T-g(\theta)^2)] \pi(\theta) \dd{\theta}
@@ -476,8 +476,8 @@ This is pretty much the equivalent of the MSE for bayesian models.
 
     The goal is to minimize for all $x$. We can just minimize the inside integral as that will result in the minimization of the whole expression.
     \begin{align}
-        {\operatorfont argmin} & \int_\Theta (T(x) - g(\theta))^2 p_\theta(x) \pi(\theta) \dd{\theta}                                                                                                                    \\
-                               & = T^2(x) \int_\Theta p_\theta(x) \pi(\theta) \dd{\theta}- 2T(x) \int_\Theta g(\theta) p_\theta(x) \pi(\theta) \dd{\theta} + \int_\Theta g^2(\theta) p_\theta(x) \pi(\theta) \dd{\theta}
+        \argmin & \int_\Theta (T(x) - g(\theta))^2 p_\theta(x) \pi(\theta) \dd{\theta}                                                                                                                    \\
+                & = T^2(x) \int_\Theta p_\theta(x) \pi(\theta) \dd{\theta}- 2T(x) \int_\Theta g(\theta) p_\theta(x) \pi(\theta) \dd{\theta} + \int_\Theta g^2(\theta) p_\theta(x) \pi(\theta) \dd{\theta}
     \end{align}
 
     Now we take the derivative w.r.t. $T(x)$ and set it equal to zero:
@@ -494,6 +494,8 @@ This is pretty much the equivalent of the MSE for bayesian models.
     \end{equation}
 \end{definition}
 
+We say that the the prior and the posterior distribution are \emph{conjugated} if they belong to the same family of distributions.
+
 Now we can rewrite \Cref{thm:bayes-estimator-v1} by substituting this new definition:
 
 \begin{theorem}{Bayes estimator - second version}{bayes-estimator-v2}
@@ -502,5 +504,77 @@ Now we can rewrite \Cref{thm:bayes-estimator-v1} by substituting this new defini
         T(x) = \int_\Theta g(\theta) p_{\bar \Theta | X = x} (\theta) \dd{\theta} = E[g(\bar \Theta) | X = x]
     \end{equation}
 \end{theorem}
+
+\subsection{Estimation}
+
+We can use an estimator $t = T(x)$ to estimate the value of $\theta$ but usually our estimate will be wrong, the point estimate $t$ will generally differ from $\theta$.
+In this section we will try to quantify the difference between $t$ an $\theta$ and, if $\theta \in \R$, find an \emph{interval estimate} $[L(x), R(x)]$ where $\theta$ has a high probability of lying.
+
+\begin{definition}{Confidence region}{confidence-region}
+    Let $X$ be a random variable depending on a parameter $\theta \in \Theta$.
+    Let $G_X \in \mathcal P(X)$.
+    The map $X \mapsto G_X$ is a confidence region for $\theta$ of confidence level $1-\alpha$ if
+    \begin{equation}
+        P_\theta(G_X \ni \theta) \geq 1- \alpha \quad \forall \theta \in \Theta
+    \end{equation}
+    where usually $\alpha$ is small.
+\end{definition}
+
+We note the following facts:
+\begin{enumerate}
+    \item $G_X$ is a stochastic (i.e. random) subset of $\Theta$ as it depends on a random variable $X$; meanwhile $\theta$ is a fixed number.
+    \item The event $\{ G_X \ni \theta \}$ has as random object $G_X$.
+    \item Given a realization $X = x$, also $G_X$ realizes to $G_x$ which is therefore not random anymore.
+    \item Since $G_x$ and $\theta$ are both fixed, then either $\theta \in G_x$ or $\theta \notin G_x$.
+\end{enumerate}
+
+In bayesian statistics we interpret the true value of $\theta$ as the realization of $\bar \Theta$.
+In this context we can make a statement about the random parameter \emph{after} the realization $X = x$, of the type
+\begin{equation}
+    P(\bar \Theta \in G_X \mid X = x)
+\end{equation}
+and we can determine this probability by the posterior distribution of $p_{\bar \Theta \mid X = x}$.
+
+If we focus on $\theta \in \R$ we have that confidence regions are usually intervals of the form $G_X = [R(X), L(X)]$.
+If the interval is centered around the point estimate $t$ then it is called \emph{symmetric} and we write $\theta = t \pm \eta$ with $\eta = [R(x) - L(x)]/2$.
+
+\begin{example}{Normal distribution}{}
+    Let $X_1, \dots X_n$ be a sample from the normal distribution $\Normal(\theta, \sigma^2)$, with unknown mean $\theta$ and known variance $\sigma^2$.
+    Find a confidence interval for $\theta$ of level of confidence $1-\alpha$.
+\end{example}
+
+\begin{proof}[Solution]
+    TODO: vedi appunti bea, che minchia è $\xi$?
+\end{proof}
+
+\subsubsection{Pivots}
+
+\begin{definition}{Pivot}{pivot}
+    A pivot is a function $T(X, \theta)$ whose probability distribution does not depend on $\theta$ or any other parameter.
+\end{definition}
+
+Note that for a pivot $T(X, \theta)$ the probability $P_\theta(T(X, \theta) \in B)$ is not a function of $\theta$.
+
+For the normal distribution a pivot is
+\begin{equation}
+    T(X, \theta) = \frac{\bar X - \theta}{\sigma /\sqrt{n}}
+\end{equation}
+which is distribution according to the standard normal.
+
+We can define a confidence region for a pivot as well.
+For eery $B$ such that $P_\theta(T(X, \theta) \in B) \geq 1- \alpha$, the set
+\begin{equation}
+    \{ \theta \in \Theta : T(X, \theta) \in B \}
+\end{equation}
+is the confidence region for $\theta$ of confidence level $1- \alpha$.
+
+\begin{example}{Uniform distribution}{}
+    Let $X_1,...,X_n$ be a sample from the uniform distribution $\Uniform(0,\theta)$, with $\theta$ unknown.
+    Find a confidence interval for $\theta$ of level of confidence $1 - \alpha$.
+\end{example}
+
+\begin{proof}[Solution]
+    TODO: chiedere a bea :D
+\end{proof}
 
 \end{document}

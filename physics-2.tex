@@ -1124,7 +1124,7 @@ In this course we will assume energy conservation:
 
     For the second question we can use gauss law. We choose as a surface a sphere with $r < R$.
     \begin{gather}
-        \Phi_S (\vec E) = 4 \pi r^2 E = \frac{q_\text{enc}}{\varepsilon_0} = \frac{1}{\varepsilon_0} \int_0^r \dd{r'} \int_0^\pi \dd{\theta} \int_0^{2 \pi} (\rho)(r')^2 \sin \theta  = \frac{\pi A r^4}{\varepsilon_0} \\
+        \Phi_S (\vec E) = 4 \pi r^2 E = \frac{q_\text{enc}}{\varepsilon_0} = \frac{1}{\varepsilon_0} \int_0^r \dd{r'} \int_0^\pi \dd{\theta} \int_0^{2 \pi} (\rho)(r')^2 \sin \theta \dd{\varphi}  = \frac{\pi A r^4}{\varepsilon_0} \\
         \implies E = \frac{A}{4 \varepsilon_0} r^2
     \end{gather}
 
@@ -1136,5 +1136,83 @@ In this course we will assume energy conservation:
     If we don't have any symmetry and we are not able to compute the electric field we can still compute the potential by using the definition.
     The most convenient way to apply it is to choose a point along an axis, compute $\Delta r$ and proceed with the integral in spherical coordinates but this is a much harder procedure.
 \end{proof}
+
+\subsection{Work and energy of the electrostatic field}
+
+\subsubsection{2 particles}
+
+If we consider two particles with positive charge at a distance $r$ they will start to move apart.
+We conclude that to keep the particles in such position I have to apply a force.
+We now want to compute the work needed to build such system of two particles.
+
+We start with an empty space.
+The first particle has no force applied on it, hence we can move it in place without any work.
+For the second particle we have now the electrostatic force applied by $q_1$, therefore we will have to do some work:
+\begin{equation}
+    W_2 = \int_\infty^r \underbrace{\vec F_\text{ext}}_{-\vec F_\text{el}} \cdot \vec{\dd{l}} = \frac{q_1 q_2}{4 \pi \varepsilon_0} \int_r^\infty \frac{1}{r^2} \dd{r} = \frac{q_1 q_2}{4 \pi \varepsilon_0 r} = q_2 V_1(r)
+\end{equation}
+
+\subsubsection{Discrete number of point charges}
+
+In the case of a general configuration of charges we can repeat the same procedure.
+Assume we want now to add a third particle at distance $r_{13}$ and $r_{23}$ from the other charges.
+\begin{equation}
+    W_3 = q_3 \int_{r_{13}}^\infty \vec E_1 \cdot \vec{\dd{l}} + q_3 \int_{r_{23}}^\infty \vec E_2 \cdot \vec{\dd{l}} = q_3V_1(r_{13}) + q_3 V_2(r_{23})
+\end{equation}
+
+We can now write a formula for the total work of a generic configuration of point charges:
+\begin{align}
+    W_\text{tot} & = \sum^n_{i = 1} W_i = \oneover{4 \pi \varepsilon_0} \sum^n_{i = 1} \sum_{j > i}^n \frac{q_i q_j}{r_{ij}} = \oneover{8 \pi \varepsilon_0} \sum^n_{i = 1} \sum_{j \ne i}^n \frac{q_i q_j}{r_{ij}} \\
+                 & = \oneover{2 \cdot 4 \pi \varepsilon_0} \sum^n_{i = 1} q_i \sum_{j \ne i}^n \frac{ q_j}{r_{ij}} = \half \sum_{i = 1}^n q_i V_i
+\end{align}
+where $V_i$ is the potential of all the particle except the $i$-th particle at the position of $q_i$.
+
+\subsubsection{Continuous charge distribution}
+
+Consider a finite object (not a plane, for example).
+In this case we can just switch the sum with an integral:
+\begin{equation}
+    \label{eq:work-cont-charge}
+    W_\text{tot} = \frac{1}{2} \int_\text{obj} \rho V \dd{\tau}
+\end{equation}
+where $\rho$ is the density of charge.
+
+We'd now like to find another formula that does not depend on $\rho$.
+To do so we can use Maxwell equation (\cref{prop:equivalence-maxwell-gauss}).
+\begin{equation}
+    \div \vec E = \frac{\rho}{\varepsilon_0} \implies \rho = \varepsilon_0 (\div \vec E)
+\end{equation}
+
+Now we can substitute and apply the identity $\div(A B) = A (\div B) + B (\div A)$:
+\begin{align}
+    W_\text{tot} & = \frac{1}{2} \int_\text{obj} \rho V \dd{\tau}                                                                                                                                  \\
+                 & = \frac{\varepsilon_0}{2} \int (\div \vec E) V \dd{\tau}                                                                                                                        \\
+                 & = \frac{\varepsilon_0}{2} \int \div (\vec E V) \dd{\tau} - \frac{\varepsilon_0}{2} \int \vec E \underbrace{\grad V}_{- \vec E} \dd{\tau}                                        \\
+                 & = \frac{\varepsilon_0}{2} \int \div (\vec E V) \dd{\tau} + \frac{\varepsilon_0}{2} \int E^2 \dd{\tau}                                                                           \\
+                 & \stackrel{\text{div. thm.}}{=} \frac{\varepsilon_0}{2} \oint_S \vec E V \vec{\dd{S}} + \frac{\varepsilon_0}{2} \int_{\mathcal V} E^2 \dd{\tau} \label{eq:cont-charge-work-last}
+\end{align}
+but we know that $\frac{\varepsilon_0}{2} \int (\div \vec E) V \dd{\tau}$ is constant if the volume $\mathcal V$ increases.
+We see that in \cref{eq:cont-charge-work-last} the second term increases if $\mathcal V$ increases, therefore, as the sum of the two should remain constant, it means that the first term is decreasing.
+We know that $E \sim \oneover{r^2}$, $V \sim \oneover{r}$ and the surface area $S \sim r^2$ as the volume goes to infinity.
+Therefore we get that the whole term should be asymptotic to $\oneover{r} \to 0$ as $\mathcal V \to \infty$.
+Let us now consider $\mathcal V = \R^3$:
+\begin{equation}
+    W = \frac{1}{2} \int_\text{obj} \rho V \dd{\tau} = \frac{\varepsilon_0}{2} \int_{\R^3} E^2 \dd{\tau}
+\end{equation}
+which means that the work is all stored inside the electric field.
+
+
+\begin{remark}{}{}
+    Actually \Cref{eq:work-cont-charge} is not that trivial.
+
+    The discrete form just takes in account the work done in order to \say{assemble} the charges, while the continuous one take in account also the work done to \emph{create} the charge.
+
+    This can be observed by looking at the sign of the discrete and the continuous version: the discrete version can also be negative, while the continuous one cannot.
+\end{remark}
+
+If we try to apply the continuous formula to a single point charge we get that we would need an infinite amount of work.
+The reason why we don't get infinity when we have a continuous body of charge is because creating a charge $\dd{q}$ is virtually \say{free}, while a discrete point charge $q$ is not, therefore when we integrate one we get a value, while if we integrate the other we get infinity.
+
+
 
 \end{document}

@@ -49,7 +49,7 @@ We will always work with \say{well behaved} fields: this means the functions are
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.6\textwidth]{assets/physics-2/vector-field-example.png}
+        \includegraphics[height=0.4\textwidth]{assets/physics-2/vector-field-example.png}
         \caption{The arrow representation of $\vec v$ when $z = 0$.}
         \label{fig:field_source_0}
     \end{figure}
@@ -506,7 +506,7 @@ this instrument will get charged by contact and since alike charges repel we can
 
 \begin{figure}[H]
     \centering
-    \includesvg[width=0.4\textwidth]{assets/physics-2/electroscope.svg}
+    \includesvg[height=0.4\textwidth]{assets/physics-2/electroscope.svg}
     \caption{Drawing of an electroscope}
 \end{figure}
 
@@ -591,7 +591,7 @@ Similarly to the first case, in the other two we define the density of charge in
 
     \begin{figure}[H]
         \centering
-        \includesvg[width=0.5\textwidth]{assets/physics-2/ex-electric-field-straight-line.svg}
+        \includesvg[height=0.4\textwidth]{assets/physics-2/ex-electric-field-straight-line.svg}
         \caption{Illustration of the problem}
     \end{figure}
 \end{example}
@@ -634,7 +634,7 @@ Similarly to the first case, in the other two we define the density of charge in
 
     \begin{figure}[H]
         \centering
-        \includesvg[width=0.5\textwidth]{assets/physics-2/ex-electric-field-ring.svg}
+        \includesvg[height=0.4\textwidth]{assets/physics-2/ex-electric-field-ring.svg}
         \caption{Illustration of the problem}
     \end{figure}
 \end{example}
@@ -659,7 +659,7 @@ Similarly to the first case, in the other two we define the density of charge in
 
     \begin{figure}[H]
         \centering
-        \includesvg[width=0.5\textwidth]{assets/physics-2/ex-electric-field-disk.svg}
+        \includesvg[height=0.4\textwidth]{assets/physics-2/ex-electric-field-disk.svg}
         \caption{Illustration of the problem}
     \end{figure}
 \end{example}
@@ -1040,7 +1040,7 @@ therefore the potential is continuous.
 
 \begin{figure}[H]
     \centering
-    \includesvg[width=0.6\textwidth]{assets/physics-2/electric-dipole.svg}
+    \includesvg[height=0.4\textwidth]{assets/physics-2/electric-dipole.svg}
     \caption{Electric dipole}
     \label{fig:electric-dipole}
 \end{figure}
@@ -1213,6 +1213,78 @@ which means that the work is all stored inside the electric field.
 If we try to apply the continuous formula to a single point charge we get that we would need an infinite amount of work.
 The reason why we don't get infinity when we have a continuous body of charge is because creating a charge $\dd{q}$ is virtually \say{free}, while a discrete point charge $q$ is not, therefore when we integrate one we get a value, while if we integrate the other we get infinity.
 
+\subsection{Conductors}
+
+Practically a \emph{conductor} is a material with a large amount of electrons that are free to move.
+Meanwhile \emph{insulators} are materials where electrons are bound to the nuclei and are not free to move. You will need a lot of energy to make an insulator conductive because you need to extract the electrons from the nuclei.
+
+\subsubsection{General properties}
+
+Assume we have an external electric field $\vec E_\text{ext}$ and we put a conductor, initially with zero charge, inside the field.
+We have that electrons will try to move in the opposite direction of the field (since electrons have negative charge).
+This results in one side of the conductor having a negative charge (where all the electrons went) and a positive charge on the other: we call these charges \emph{induced charges}.
+
+Due to induced charges the conductor will also generate its own electric field $\vec E_\text{ind}$.
+In this course we will work with perfect conductors, where, inside the object, the total electric field $\vec E_\text{tot}^\text{inside} = \vec E_\text{ext} + \vec E_\text{ind}^\text{inside} = 0$, which basically means that there are enough electrons which can balance the fields.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[height=0.4\textwidth]{assets/physics-2/conductor.svg}
+    \caption{A (non-perfect) conductor.}
+\end{figure}
+
+Moreover, the conductor will be attracted by the object generating the field: we call this phenomenon \emph{electrostatic induction}.
+
+We note the following facts about perfect conductors:
+\begin{enumerate}
+    \item By Maxwell equation $\rho = 0 = \varepsilon_0 (\div \vec E^\text{inside})$.
+    \item The induced charged are located on the surface of the conductor.
+    \item The electric field just outside the conductor is $\vec E^\text{just outside} = \frac{\sigma}{\varepsilon_0} \hat n$.
+    \item $V_\text{inside} = \text{const} \implies$ conductors are \emph{equipotential}.
+    \item The configuration of the charges in the conductor $\sigma$ is unique.
+          We will prove it mathematically solving poisson's equation.
+\end{enumerate}
+
+\subsubsection{Conductors with a cavity}
+
+Consider a conductor with a cavity inside, where \textbf{inside the cavity} there is a charge $q$.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[height=0.3\textwidth]{assets/physics-2/conductor-cavity.svg}
+    \caption{A conductor with a cavity inside and a charge inside it.}
+\end{figure}
+
+We know that the charge inside the conductor is $0$, how are the charges arranged then?
+We can use Gauss law on a surface $\Sigma$ inside the conductor:
+\begin{equation}
+    \oint_\Sigma \vec E \cdot \vec{\dd{S}} = \frac{q_\text{enc}}{\varepsilon_0} = 0 \implies q_\text{enc} = 0
+\end{equation}
+
+This means that, since the total charge enclosed is $0$ we have to balance $q$ somehow; this will be done by having some negative charges in the boundary of the cavity.
+But by conservation of charge, since we created some negative charges we will also need some positive charges, which will be placed on the boundary of the conductor.
+
+An outside observer will be able to tell if there is a charge inside the conductor by measuring the charge on the boundary of the conductor.
+It does not matter if the charge inside touches the conductor or not.
+
+Moreover the charges in the edge of the conductor will arrange such that they are as far as possible from each other, therefore, since the conductor is a sphere, forming a charge distribution $\sigma = \text{const}$.
+This is a non-trivial result, it is an intuitive argument but to prove it we need to solve Poisson equation.
+
+Now consider a conductor with a cavity, a charge \textbf{outside the conductor}, and the observer inside the cavity.
+
+We can study the configuration of charge again by using Gauss law, from which we get again that $q_\text{enc} = 0$, and by using the fact that the electric field is conservative.
+
+We will argue that integrating the field over any closed path $C$ will give us zero.
+We choose a path that goes through the conductor and inside the cavity.
+We know that in the conductor the electric field is zero, hence inside the cavity the field must also be zero.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[height=0.4\textwidth]{assets/physics-2/faraday-cage.svg}
+    \caption{A conductor with a cavity inside and a charge on the outside.}
+\end{figure}
+
+This is called a \emph{Faraday effect} or \emph{Faraday cage}: the conductor isolates the observer completely from any charge on the outside.
 
 
 \end{document}

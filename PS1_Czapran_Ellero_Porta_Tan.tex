@@ -1,0 +1,126 @@
+\documentclass[12pt]{extarticle}
+
+\title{Decision Theory - Problem Set 1}
+\author{Czapran, Ellero, Porta, Tan}
+\date{a.y. 2024/2025}
+
+\usepackage{parskip} % for no indentation
+\usepackage[a4paper,margin=1.5cm]{geometry} % to adjust margins
+\usepackage{bookmark} % for pdf bookmarks
+
+\usepackage{enumitem} % for custom lists
+
+% We want numbers on subsections too
+\setcounter{secnumdepth}{3}
+
+\usepackage{amssymb}   % for varnothing and other weirds symbols
+\usepackage{amsmath}   % basically everything
+\usepackage{amsthm}    % for proof environment
+\usepackage{mathtools} % for underbrace, arrows, and a lot of other things
+\usepackage{mathrsfs}  % for "mathscr"
+\usepackage{bm}        % for bold math symbols
+\usepackage{physics}   % for derivatives and lots of operators
+
+\numberwithin{table}{section}
+\numberwithin{figure}{section}
+
+\usepackage{cancel}    % for canceling terms
+\renewcommand{\CancelColor}{\color{red}}
+
+% Operators
+\newcommand{\gt}{>}
+\newcommand{\lt}{<}
+\newcommand{\indep}{\perp \!\!\! \perp}
+
+% Sets
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\maketitle
+
+\section{Exercise 1}
+
+\begin{enumerate}[label=\alph*.)]
+    \item $\succ$ means that
+          \begin{equation}
+              \max \{ x_1, x_2 \} \geq \max \{ y_1, y_2 \} \land  x_1 + x_2 > y_1 + y_2
+          \end{equation}
+          or
+          \begin{equation}
+              \max \{ x_1, x_2 \} > \max \{ y_1, y_2 \} \land  x_1 + x_2 \geq y_1 + y_2
+          \end{equation}
+          while $\sim$ means that
+          \begin{equation}
+              \max \{ x_1, x_2 \} = \max \{ y_1, y_2 \} \land  x_1 + x_2 = y_1 + y_2
+          \end{equation}
+
+    \item This preference is not complete.
+          Completeness would imply that $\forall x, y \enspace xRy \lor yRx$ or both.
+          We can use as counterexample $x = (1, 9)$ and $y = (7,8)$: we have that
+          \begin{gather}
+              \max\{1, 9\} = 9 \geq \max \{7,8\} = 8\\
+              1+9 = 10 \leq 7+8 = 15
+          \end{gather}
+          which means neither $xRy$ or $yRx$.
+
+    \item This preference is strictly monotone.
+          Strict monotonicity implies that if $x > y \implies x \succ y$.
+          In this scenario we have
+          \begin{equation}
+              x > y \iff (x_1 > y_1 \land x_2 \geq y_2) \lor (x_1 \geq y_1 \land x_2 > y_2)
+          \end{equation}
+          Clearly $x > y \implies x_1 + x_2 > y_1 + y_2$, hence we are left to prove that $\max\{ x_1, x_2 \} \geq \max\{ y_1, y_2 \}$:
+          \begin{itemize}
+              \item If $x_1 > y_1 \land x_2 > y_2$ then $\max\{ x_1, x_2 \} > \max\{ y_1, y_2 \}$
+              \item If $x_1 \geq y_1\land x_2 > y_2$ (or viceversa) we will have
+                    $\max\{ x_1, x_2 \} \geq \max\{ y_1, y_2 \}$
+          \end{itemize}
+    \item This preference is \emph{not} convex.
+          Convexity implies that, for $x, y$ distinct such that $x \sim y$, it holds
+          \begin{equation}
+              \alpha x + (1-\alpha)y \succsim x \quad \forall \alpha \in (0, 1)
+          \end{equation}
+
+          We can use as counterexample $x = (1, 3), y = (3, 1), \alpha = 0.5$.
+          Since $\max x = 3 = \max y$ and $x_1 + x_2 = 4 = y_1 + y_2$ we have that $x \sim y$.
+          But then
+          \begin{gather}
+              0.5 \begin{bmatrix}1 \\ 3\end{bmatrix} + 0.5 \begin{bmatrix}3 \\ 1\end{bmatrix} \succsim \begin{bmatrix}1 \\ 3\end{bmatrix} \\
+              \begin{bmatrix}2 \\ 2\end{bmatrix} \not \succsim \begin{bmatrix}1 \\ 3\end{bmatrix}
+          \end{gather}
+          since $\max\{2,2\} = 2 < \max\{ 1, 3 \} = 3$.
+\end{enumerate}
+
+\section{Exercise 2}
+
+\section{Exercise 3}
+
+\section{Exercise 4}
+
+\begin{enumerate}[label=\alph*.)]
+    \item The statement is true.
+          \begin{proof}
+              By contradiction, assume $x \notin C(X)$, this would imply that $\exists y \in X$ such that $u(x) + 1 < u(y)$.
+              Since $X \subseteq Y$ and $y \in X$ we have that $y \in Y$.
+              But this would mean that also in $Y$ $u(x) + 1 < u(y)$ would hold implying that $x \notin C(Y)$ and we have reached a contradiction.
+          \end{proof}
+    \item The statement is false.
+          \begin{proof}
+              We choose as counterexample $\mathcal D = \mathcal P(\N)$, $X = \{0,1,2,3\}$, $Y = \{0,1,2,3, 4, 5\}$ and $u(x) = x/2$.
+              Consider $x = 2 \in X, y = 3 \in X, z = 5 \in Y$.
+
+              We have that $x \in C(X)$ since $u(x) + 1 = 2 > \max_{x \in X} u(x) = 1.5$
+              Similarly $y \in C(X)$ because $u(y) + 1 = 2.5 > \max_{x \in X} u(x) = 1.5$.
+
+              We also have that $y \in C(Y)$ since $u(y) + 1 = 2.5 \geq \max_{x \in Y} u(x) = 2.5$, but $x \notin C(Y)$ because $u(x) + 1 = 2 < u(z) = 2.5$.
+          \end{proof}
+\end{enumerate}
+
+\end{document}

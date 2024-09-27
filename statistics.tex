@@ -577,4 +577,29 @@ is the confidence region for $\theta$ of confidence level $1- \alpha$.
     TODO: chiedere a bea :D
 \end{proof}
 
+TODO: lezione mancante qui
+
+\subsubsection{Bootstrap}
+
+We observe $x_1, \dots, x_n$, construct a statistical model and choose an estimator $\hat \theta$.
+Now generate a new dataset from $p_{\hat\theta}$ of the same size $n$ as the original data.
+Using the new realizations $x_1^*, \dots, x_n^*$ we estimate again with $\hat \theta^*$.
+Repeat these steps a big number of times $\beta$ and we will get $\hat \theta_1, \dots, \hat \theta_\beta$ which can be seen as the realizations of the same estimator $\hat \theta$.
+Then we can estimate the variance of $\hat \theta$ as
+\begin{equation}
+    \hat \sigma_{\beta}^2 = \sum_{i = 1}^\beta \frac{(\hat \theta_i^* - \hat \theta)^2}{\beta}
+\end{equation}
+and we can use as confidence interval
+\begin{equation}
+    \hat \theta \pm \xi_{1 - \alpha/2} \hat \sigma_\beta
+\end{equation}
+
+TODO: add assumptions, multidimensional case and bernstein-von mises.
+
+\section{Hypothesis testing}
+
+Statistics is used to \say{prove} hypothesis in sciences, where we just have data with measurement error.
+Do we have enough evidence to say that the some new therapy is better than the old one?
+
+
 \end{document}

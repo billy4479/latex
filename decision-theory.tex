@@ -9,6 +9,7 @@
 \usepackage{preamble}
 
 \renewcommand{\vec}[1]{\uvec{#1}}
+\newcommand{\Gr}{{\operatorfont Gr} \,}
 
 \begin{document}
 
@@ -454,7 +455,7 @@ A \emph{decision problem} is a pair $(X, \succsim_X)$, the DM wants to find the 
     \end{equation}
     where $F(x) \in \mathcal P(Y)$.
 
-    This is which is basically just a \say{function} returning a set of sets: a function is just a single-valued correspondence.
+    This is which is basically just a \say{multivalued function} returning a set of sets: a function is just a single-valued correspondence.
 
 \end{proof}
 
@@ -569,5 +570,84 @@ A preference relation on $\mathcal C$ looks like
     (x, X) \succsim (y, Y)
 \end{equation}
 which means the DM prefers $x$ in the context $X$ over $y$ in the context $Y$.
+
+A contextualized preference over $\mathcal C$ implies that $\forall X \in \mathcal X$ and $x, x' \in X$ it holds
+\begin{equation}
+    (x, X) \succsim (x', X) \iff x \succsim_X x'
+\end{equation}
+
+If $\succsim$ is a weak order we can define the optimal in the case of contextualized alternatives as in \Cref{def:rational-choice-correspondence}.
+
+Moreover, the menu preference is induced by a contextualized universal preference:
+\begin{equation}
+    X \succeq Y \iff \forall y \in Y, \exists x \in X \text{ s.t. } (x, X) \succsim (y, Y)
+\end{equation}
+forall $X, Y \in \mathcal D$.
+
+\subsection{Parametric analysis}
+
+Choice sets are usually parametrized by elements of some set $\Theta$ (e.g. for budgets sets we have parameters of the form $(p, w) \in \R^2_+$).
+Parametrization is carried out using a \emph{menu correspondence}:
+\begin{equation}
+    \varphi: \Theta \rightrightarrows \vec X
+\end{equation}
+thus
+\begin{equation}
+    \mathcal X = \{ \varphi(\theta) : \theta \in \Theta \} \quad \text{and} \quad \mathcal D = \{ \varphi(\theta) : \theta \in D \}
+\end{equation}
+
+The contextualized universal preference $\succsim$ is a binary relation over pairs
+\begin{equation}
+    (x, \theta) \in \Gr \varphi
+\end{equation}
+
+Some preferences $\succsim$ can also admit a parametric utility function of the form $u : \Gr \varphi \to \R$ such that, for all pairs $(x, \theta) \in \Gr \phi$
+\begin{equation}
+    (x, \theta) \succsim (x', \theta') \iff u(x, \theta) \geq u(x', \theta')
+\end{equation}
+and, for a fixed $\theta \in \Theta$ we have
+\begin{equation}
+    x \succsim_\theta x' \iff u(x,\theta) \geq u(x', \theta') \quad \forall x,x' \in \varphi(\theta)
+\end{equation}
+
+We can then generalize the optimization problem to take in account a parameter $\theta$:
+\begin{equation}
+    \max_x u(x) \quad {\operatorfont sub} \, x \in \varphi (\theta)
+\end{equation}
+
+Moreover we extend $\sigma$ and $v$ as follows:
+$\sigma : D \rightrightarrows \vec X$ and $v: D \to \R$
+\begin{gather}
+    \sigma(\theta) = \sigma(\varphi(\theta)) = \{ \hat x \in \varphi(\theta) : \forall x \in \varphi(\theta), u(\hat x, \theta) \geq u(x, \theta)\} \\
+    v(\theta) = v(\varphi(\theta)) = \max_{x \in \varphi (\theta)} u(x, \theta)
+\end{gather}
+
+\begin{theorem}{Maximum theorem}{maximum-theorem}
+    Let $\vec X$ and $\Theta$ be metrizable (?).
+    If the parametric utility function $u: \Gr \varphi \to \R$ and the menu correspondence $\varphi: \Theta \rightrightarrows \vec X$ are both continuous then $D = \Theta$ and
+    \begin{enumerate}[label=\roman*.]
+        \item the rational choice correspondence $\sigma \Theta \rightrightarrows \vec X$ is compact-valued and upper continuous when it is a function;
+        \item the value function $v: \Theta \to \R$ is continuous
+    \end{enumerate}
+\end{theorem}
+
+\section{Certainty}
+
+First we define the action space $A$, the consequence space $C$, a collection $\mathcal A \in \mathcal P(A)$ and a consequence function $\rho: A \to C$.
+Summing up we have $(A, \mathcal a, C, \rho)$.
+
+DMs can have a preference over actions $\succsim$
+\begin{equation}
+    \rho(a) = \rho(b) \implies a \sim b
+\end{equation}
+but can also have a preference over consequences $\dot \succsim$.
+
+\begin{theorem}{Outcome consequentialism}{outcome-consequentialism}
+    There is a bijective mapping
+    \begin{equation}
+        \dot \succsim \enspace \mapsto \enspace \succsim
+    \end{equation}
+    if both are preorders.
+\end{theorem}
 
 \end{document}

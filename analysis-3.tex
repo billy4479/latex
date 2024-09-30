@@ -316,5 +316,59 @@ If $f$ is differentiable we can alo study $f'$: if $f'(c) < 0$ we say that the e
 
 Switching future and past has the effect of also switching the equilibrium points: $v(t) = u(-t)$ solves $v' = -f(v)$.
 
+\section{Linear higher order ODEs with constant coefficients}
+
+Given $k \geq 1 \in \N$, linear higher order ODEs with constant coefficients take the form
+\begin{equation}
+    \label{eq:higher-order-linear-const-coeff-ode}
+    a_k \dv[k]{u(t)}{t} + a_{k-1}\dv[k-1]{u(t)}{t} + \dots a_1 u'(t) + a_0 u(t) = 0
+\end{equation}
+we will assume they are homogeneous for simplicity.
+We assume that $a_k \neq 0$, therefore we can divide everything by $a_k$ and therefore assume that $a_k = 1$.
+
+Equivalently we can rewrite as a system as follows:
+\begin{equation}
+    \begin{cases}
+        u_0' = u_1         \\
+        \vdots             \\
+        u_{k_2}' = u_{k-1} \\
+        u_{k-1}' = - \sum_{j = 0}^{k-1} a_j u_j
+    \end{cases}
+\end{equation}
+Since the last equation is a lipschitz function of $u_0, \dots, u_{k_1}$, given the initial conditions, the maximal solution is always defined and is unique.
+
+\begin{proposition}{}{}
+    The set $V$ of solutions $u: \R \to \R$ of \cref{eq:higher-order-linear-const-coeff-ode} is a vector space of dimension $k$.
+\end{proposition}
+
+\begin{proof}
+    Operations are the usual ones (sum of functions, multiplication of a function by a scalar).
+    $V$ is a vector space because \cref{eq:higher-order-linear-const-coeff-ode} is linear and homogeneous.
+
+    We consider a map $L: \R^k \to V$ that given, $\vec \lambda (\lambda_0, \lambda_1, \dots, \lambda_{k_1}) \in \R^k$, $L(\vec \lambda)$ is the unique solution for the initial conditions $\vec \lambda$.
+    We claim $L$ is linear, injective and bijective.
+
+    Linearity is easy, given $\vec \lambda, \vec \mu \in \R^k$ and consider $w = u + v = L(\vec \lambda) + L(\vec \mu)$.
+    $w$ is also a solution since both $u$ and $v$ are and the initial conditions of $w$ are $\lambda_i + \mu_i$.
+    Therefore $L(\lambda + \mu) = w$ by uniqueness of the solution.
+
+    To prove injectivity we will take $u = L(\vec \lambda) = v = L (\vec \mu)$ which means that $u(0) = v(0) \implies \lambda_0 = \mu_0$ and so on for all the derivatives.
+
+    Surjectivity is proven by taking $u \in V$ and setting $\lambda_0 = u(0)$, $\lambda_1 = u'(0)$ and so on, giving us $u = L(\vec \lambda)$.
+\end{proof}
+
+\begin{remark}{}{}
+    Everything we did works also in the case of complex valued solutions.
+
+    The set of solutions $\dim_\C V_\C = k$ and $\dim_\R V_\C = 2k$.
+
+    Note that if the initial conditions are real-valued, the solution will be real-valued as well.
+\end{remark}
+
+Solutions are of the form $e^{\gamma t}$ where $\gamma$ si a root of the polynomial $p$
+\begin{equation}
+    \gamma^k + a_{k-1} \gamma^{k-1} + \dots a_1 \gamma + a_0 = 0
+\end{equation}
+Moreover, if $p$ has $k$ distinct roots $\gamma_1, \dots, \gamma_k$, then $\{ e^{\gamma_1 t}, \dots, e^{\gamma_k t} \}$ is a basis of $V_\C$.
 
 \end{document}

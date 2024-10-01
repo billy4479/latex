@@ -601,5 +601,45 @@ TODO: add assumptions, multidimensional case and bernstein-von mises.
 Statistics is used to \say{prove} hypothesis in sciences, where we just have data with measurement error.
 Do we have enough evidence to say that the some new therapy is better than the old one?
 
+We start with a statistical model for some observations.
+The two hypothesis are coded in sets of parameters $\Theta_0, \Theta_1$ a partition of $\Theta$, such that if $\theta \in \Theta_0$ corresponds to the \textbf{null hypothesis} and if $\theta \in \Theta_1$ it corresponds to the \textbf{alternative hypothesis}.
+
+Our goal is to determine if the alternative hypothesis $H_1$ is valid or not.
+If $H_1$ is valid, we discard the null hypothesis $H_0$, or, if we do not have enough evidence, we cannot discard $H_0$ which means we cannot accept $H_1$ to be correct.
+
+We can make two types of mistakes while doing this estimation:
+\begin{itemize}
+    \item Type I errors mean we reject $H_0$ even if it is correct (very bad)
+    \item Type II errors mean we do not reject $H_0$ when it is incorrect (less bad)
+\end{itemize}
+
+\begin{definition}{Statistical test}{statistical-test}
+    Given $H_0$, a statistical test consists of a set $K$ of possible values for the observations of $X$ called the \textbf{critical region}.
+    Given an observation $x$, if $x \in K$ we \emph{reject} $H_0$, while if $x \notin K$ we \emph{do not reject} $H_0$.
+\end{definition}
+
+We now have to find a way of choosing $K$.
+First, we can measure the quality of a test with the \textbf{power function}.
+\begin{equation}
+    \theta \mapsto \pi(\theta; K) = P_\theta(X \in K)
+\end{equation}
+the goal is to choose $K$ such that $\pi(\theta, K)$ is close to $0$ when $\theta \in \Theta_0$ and close to $1$ when $\theta \in \Theta_1$.
+
+\begin{definition}{Size of a test}{size-of-test}
+    The size of a critical region is the number
+    \begin{equation}
+        \alpha = \sup_{\theta \in \Theta_0} \pi(\theta; K)
+    \end{equation}
+
+    A test has \textbf{significance level} $\alpha_0$ if $\alpha \leq \alpha_0$.
+\end{definition}
+
+By choosing a significance level $\alpha_0$ we ensure that the probability of a type I error is at most $\alpha_0$.
+We would like $\alpha_0$ to be small, but we cannot make it too small otherwise we would have an extremely small $K$ and the probability of a type II error becomes higher.
+Usually a good choice for $\alpha_0$ is $0.05$.
+
+Usually we will fix $\alpha_0$ and, between two tests, we will choose the one with higher $\alpha$ (therefore with smaller probability of type II error).
+
+TODO: add binomial example
 
 \end{document}

@@ -1419,12 +1419,147 @@ Since the plates have opposite charge they will want to attract.
 We want to compute the force we have to apply on the plates in order to keep them fixed.
 
 We want to apply a force $\vec F \gtrsim \vec F_\text{el}$ slightly larger than the electric force.
-In this way the plates will separate over time of some distance $\dd{x}$, therefore I've done some work $\dd{W} = F \dd{x}$.
+In this way the plates will separate over time $\dd{t}$ of some distance $\dd{x}$, therefore I've done some work $\dd{W} = F \dd{x}$.
 The work we have done went into the \say{creation} of the field in the space $\dd{x}$.
 
 \begin{figure}[H]
     \centering
     \includesvg[width=0.5\textwidth]{assets/physics-2/force-capacitors.svg}
+    \caption{Force on the plate of a capacitor. The right plate is fixed.}
 \end{figure}
+
+Now we can compute $\dd{W}$.
+\begin{equation}
+    \dd{W} = F \dd{x} = u A \dd{x} = \half \varepsilon_0 E^2 A \dd{x} = \half \cancel{\varepsilon_0} \frac{\sigma^2}{\varepsilon_0^{\cancel{2}}} A \dd{x} = \half \frac{Q^2}{\varepsilon_0 A^{\cancel{2}}} \cancel{A} \dd{x} = \frac{Q^2}{2 \varepsilon_0 A} \dd{x}
+\end{equation}
+where $u$ is the energy density.
+We have used the fact that the modulus of the electric field stays constant, and the definition of charge density for uniform charge distribution.
+
+This gives us a force of
+\begin{equation}
+    F = \frac{Q^2}{2 \varepsilon_0 A}
+\end{equation}
+But, in order to avoid tilting, we have to apply an equal force on all the whole plate.
+We can compute the pressure of this force:
+\begin{equation}
+    P = \frac{F}{A} = \frac{Q^2}{2 \varepsilon_0 A^2} = u
+\end{equation}
+we call this pressure \textbf{electrostatic pressure}.
+
+This result is general and works for all volumes:
+\begin{equation}
+    P = \dv{F}{A} = u = \half \varepsilon_0 E^2(x, y, z) = \frac{\sigma^2(x, y, z)}{2 \varepsilon_0^2}
+\end{equation}
+
+\subsection{Poisson-Laplace equation}
+
+\subsubsection{General formulation of electrostatics}
+
+Assume we have some known charges $q_1, \dots, q_n$ and a conductor which will get some unknown $\rho$ from the presence the charges $q$.
+
+To solve this problem we have to use Poisson or Laplace equation:
+\begin{align}
+    \laplacian V = -\frac{\rho}{\varepsilon_0} \label{eq:poisson-eq} \\
+    \laplacian V = 0 \label{eq:laplace-eq}
+\end{align}
+where the first equation is Poisson equation and the second one is Laplace equation which is the special case in which $\rho = 0$.
+
+\begin{theorem}{Uniqueness of solution for Poisson equation}{poisson-uniqueness}
+    THe solution to \Cref{eq:poisson-eq} is unique if $V = V_S$ on a surface $S$.
+\end{theorem}
+
+\begin{proof}
+    Suppose, by contradiction, that there exists two functions $V_1, V_2$ that satisfy \cref{eq:poisson-eq}.
+
+    We would have
+    \begin{equation}
+        \begin{cases}
+            \laplacian V_1 = - \frac{\rho}{\varepsilon_0} \\
+            \laplacian V_2 = - \frac{\rho}{\varepsilon_0} \\
+        \end{cases}
+    \end{equation}
+    but now we can take the difference of the two
+    \begin{align}
+        \laplacian V & = \laplacian V_1 - \laplacian V_2 = 0 \\
+        V            & = V_1 - V_2 = 0 \quad \text{ on }S
+    \end{align}
+    Now $V$ satisfies \Cref{eq:laplace-eq} with boundary condition $V = 0$ on $S$.
+
+    Consider now $\div (V \grad V)$ and integrate it on $\tau$ where $\tau$ is the volume inside $S$:
+    \begin{align}
+        \int_\tau \div (V \grad V) \dd{\tau} & = \int_S (V \grad V) \cdot \dd{S} = 0
+    \end{align}
+    since we know from above that $V$ is $0$ on $S$.
+
+    Now we can use the chain rule on $\div (V \grad V)$:
+    \begin{equation}
+        \div (V \grad V) = V \div (\grad V) + \grad V \cdot \grad V = \cancel{V \laplacian V} + \abs{\grad V}^2 = \abs{\grad V}^2
+    \end{equation}
+    therefore for $\int_\tau \abs{\grad V}^2 \dd{\tau}$ to be $0$ we have $\grad V = 0$ which implies $V = $ const.
+    But we know that $V = 0$ on $S$ which means $V = 0$ everywhere.
+
+    Therefore $V_1 = V_2$.
+\end{proof}
+
+\begin{corollary}{}{}
+    The proof is also valid for Laplace equation, just repeat the proof with $\rho = 0$.
+\end{corollary}
+
+Now that we got the math out of the way we can go back to physics:
+Poisson equation is particularly useful because once we know $V$ we can compute $\vec E = - \grad V$ and from there compute the force on a test charge $Q$ using $\vec F = Q \vec E$ and the induced charge density on a conductor by using the boundary condition $\vec E = \frac{\sigma}{\varepsilon_0} \hat n$.
+
+In $d = 1$ we can solve Laplace equation quite easily as it becomes
+\begin{equation}
+    \dv[2]{V}{x} = 0 \implies V = ax + b
+\end{equation}
+we notice the following properties which will be valid also for $d \gt 1$:
+\begin{enumerate}
+    \item $V(x) = \half \left( V(x +c) + V(x-c) \right)$
+    \item $V$ does not have local maxima/minima
+\end{enumerate}
+
+\begin{theorem}{Mean value theorem for Laplace equation}{mean-value-laplace}
+    If $V$ satisfies $\laplacian V = 0$ then the average value of $V$ on a surface $S$ of any sphere is equal to the value assumed at its center.
+
+    \begin{equation}
+        V_\text{avg} (r) = \oneover{4 \pi r^2} \int_S V(\vec r)\dd{S} = V(O)
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    We start by taking the derivative of the statement w.r.t. $r$.
+    We do so because we want to show that the derivative is $0$, implying that $V$ is constant.
+
+    \begin{align}
+        \dv{V_\text{avg}}{r} & = \dv{}{r} \left[ \oneover{4 \pi \cancel{r^2}} \int_S V(r, \theta, \varphi) \cancel{r^2} \sin \theta \dd{\theta} \dd{\varphi} \right] \\
+                             & = \oneover{4 \pi r^2} \int_S \pdv{V(r, \theta, \varphi)}{r} \underbrace{r^2 \sin \theta \dd{\theta} \dd{\varphi}}_{\dd{S}}            \\
+                             & = \oneover{4 \pi r^2} \int_S (\grad V \cdot \hat r) \dd{S}                                                                            \\
+                             & = \oneover{4 \pi r^2} \int_S \grad V \cdot \vec{\dd{S}}                                                                               \\
+                             & = \oneover{4 \pi r^2} \int_\tau \div (\grad V) \dd{\tau}                                                                              \\
+                             & = \oneover{4 \pi r^2} \int_\tau \laplacian V \dd{\tau}                                                                                \\
+                             & = 0
+    \end{align}
+    where we used a change to spherical coordinates, the definition of directional derivative, divergence theorem and lastly the Laplace equation.
+
+    Now, since we have that $V$ does not depend on $r$, we can take any $r$, in particular we can take $r = 0$, and conclude that
+    \begin{equation}
+        V_\text{avg} = V(O)
+    \end{equation}
+\end{proof}
+
+\subsubsection{Image charge method}
+
+\emph{NOTE: There will be no exercises about this topic.}
+
+Consider the $xy$ plane to be a conductor.
+The plane is \emph{grounded}, that is $V = 0$.
+Consider now a charge $q$ at $(0, 0, d)$.
+We ask what is the potential on the right (positive $z$) of the plane.
+
+The two boundary conditions we know are
+\begin{enumerate}
+    \item $V = 0$ if $z = 0$;
+    \item if $x^2 + y^2 + z^2 \gg d^2$ then $V \to 0$.
+\end{enumerate}
 
 \end{document}

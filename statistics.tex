@@ -710,4 +710,62 @@ Usually we will fix $\alpha_0$ and, between two tests, we will choose the one wi
 
 TODO: add binomial example
 
+\subsection{One-sided and two-sided hypothesis tests}
+
+We say that the hypothesis is one-sided if either
+\begin{equation}
+    H_0 = \{\theta : \theta \leq \theta_0\} \quad \text{or} \quad H_0 = \{\theta : \theta \geq \theta_0\}
+\end{equation}
+where the first case is called \emph{right one-sided} and the second one is \emph{right two-sided}.
+
+We say that the hypothesis is two-sided if
+\begin{equation}
+    H_0 = \{ \theta: \theta = \theta_0 \} \implies H_1 = \{ \theta : \theta \ne \theta_0 \}
+\end{equation}
+
+\subsection{Gauss test (\texorpdfstring{$z$}{z}-test)}
+
+Assume we have $X_1, \dots, X_n \stackrel{\text{IID}}{\sim} \Normal(\theta, \sigma^2)$, where $\sigma^2$ is known.
+Consider $H_0 = \{ \theta \leq \theta_0 \}$ and $H_1 = \{ \theta \gt \theta_0 \}$ (right one-sided).
+
+Lets choose the estimator to be the sample mean (which happens to be the MLE for the normal): $T(X) = \bar X$.
+
+We can do better though: we can rescale $T$ to get
+\begin{equation}
+    \tilde{T}(X) = \frac{\bar X - \theta_0}{\sigma /\sqrt{n}} \sim \Normal\left(\sqrt{n} \frac{\theta - \theta_0}{\sigma}, 1\right)
+\end{equation}
+such that if $\theta = \theta_0$ we get $\Normal(0,1)$.
+
+Choose $K_{\tilde T} = [ \tilde c_\alpha, \infty )$ and impose that $\alpha_0 \geq \alpha$ so
+\begin{equation}
+    \sup_{\theta \in \Theta_0} \pi(\theta, L) = \sup_{\substack{\theta \in \Theta_0 \\ \theta \leq \theta_0}} P_\theta (\tilde T \geq \tilde c_{\alpha_0}) = P_{\theta_0}(\tilde T \geq c_{\alpha_0})
+\end{equation}
+which is especially nice because now $\tilde T$ is distributed according to $\Normal(0,1)$.
+\begin{gather}
+    \alpha_0 \geq 1- \Phi(c_{\alpha_0}) \\
+    c_{\alpha_0} \geq \Phi^{-1}(1- \alpha_0) = \xi_{1-\alpha_0}
+\end{gather}
+which means that all critical regions $K_{\tilde T} = [c; \infty)$ are admissible, with $c \geq \xi_{1 - \alpha_0}$.
+Among these regions we choose the one which is most powerful, which we know already is $K_{\tilde T} = [\xi_{1-\alpha_0}, \infty)$.
+
+Now we can choose some $\beta$ such that the type II error is bounded by it (for example max $10\%$).
+We now want to compute how many people we need to interview to get the type II error below $\beta$ at a given $\theta^*$, where $\theta^*$ is a \say{guess} of a likely value of $\theta$.
+\begin{equation}
+    \beta \geq P_{\theta^*}(\text{type II error}) = P_{\theta^*}(\tilde T \notin K_{\tilde T}) = P_{\theta^*}(\tilde T \leq \xi_{1-\alpha_0})
+\end{equation}
+We now have to solve for $n$.
+\begin{align}
+    \beta                          & \geq P_{\theta^*}\left(\frac{\bar X - \theta_0}{\sigma / \sqrt n} \leq \xi_{1-\alpha_0}\right)                                              \\
+                                   & = P_{\theta^*}\left(\frac{\bar X - \theta^*}{\sigma / \sqrt n} \leq \xi_{1-\alpha_0}  - \frac{\theta^* - \theta_0}{\sigma / \sqrt n}\right) \\
+                                   & = P_{\theta^*}\left(Z \leq \xi_{1-\alpha_0}  - \frac{\theta^* - \theta_0}{\sigma / \sqrt n}\right)                                          \\
+                                   & = \Phi\left(\xi_{1-\alpha_0}  - \frac{\theta^* - \theta_0}{\sigma / \sqrt n}\right)                                                         \\
+                                   & = \Phi\left(\xi_{1-\alpha_0}  - (\theta^* - \theta_0) \frac{\sqrt n}{\sigma}\right)                                                         \\
+    \implies \Phi^{-1}(\beta)      & \geq \xi_{1-\alpha_0}  - (\theta^* - \theta_0) \frac{\sqrt n}{\sigma}                                                                       \\
+    \xi_{1-\alpha_0} - \xi_{\beta} & \geq (\theta^* - \theta_0) \frac{\sqrt n}{\sigma}                                                                                           \\
+    n                              & \geq \sigma^2 \left(\frac{\xi_{1-\alpha_0} - \xi_{\beta}}{\theta^* - \theta_0}\right)^2
+\end{align}
+we had to introduce the shift because before it was centered around $\theta_0$, while we want it to be centered around $\theta^*$.
+
+This procedure works also for left one-sided and two-sided hypothesis.
+
 \end{document}

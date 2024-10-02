@@ -591,7 +591,7 @@ If the interval is centered around the point estimate $t$ then it is called \emp
     \end{equation}
 \end{proof}
 
-\subsubsection{Pivots}
+\subsection{Pivots}
 
 \begin{definition}{Pivot}{pivot}
     A pivot is a function $T(X, \theta)$ whose probability distribution does not depend on $\theta$ or any other parameter.
@@ -639,13 +639,88 @@ is the confidence region for $\theta$ of confidence level $1- \alpha$.
 
     Then the confidence region can be calculated by
     \begin{align}
-        1 - alpha & = P\left(c \leq \frac{X_{(n)}}{\theta} \leq d\right)                  \\
-                  & = P\left(\frac{X_{(n)}}{c} \geq \theta \geq \frac{X_{(n)}}{d} \right) \\
-                  & \implies \left[ \frac{X_{(n)}}{d}, \frac{X_{(n)}}{c} \right]
+        1 - \alpha         & = P\left(c \leq \frac{X_{(n)}}{\theta} \leq d\right)                  \\
+                           & = P\left(\frac{X_{(n)}}{c} \geq \theta \geq \frac{X_{(n)}}{d} \right) \\
+        \implies \text{CI} & = \left[ \frac{X_{(n)}}{d}, \frac{X_{(n)}}{c} \right]
     \end{align}
 \end{proof}
 
-TODO: lezione mancante qui
+\subsubsection{Near-pivot}
+
+While pivots are definitely useful there is not always possible to find one.
+The solution to this problem is to find a function $T(X; \theta)$ whose distribution can be approximated by a distribution that does not depend on $\theta$.
+We call this function \textbf{near-pivot} and it typically available when we deal with large samples and therefore we are able to use limit theorems (like the central limit theorem).
+
+More precisely an estimator $T_n = T_n(X)$ is a near pivot if it satisfies
+\begin{equation}
+    \frac{T_n - g(\theta)}{\sigma_{n, \theta}} \convdist \Normal(0,1)
+\end{equation}
+or, equivalently
+\begin{equation}
+    \lim_{n \to \infty} P_\theta \left( \frac{T_n - g(\theta)}{\sigma_{n, \theta}} \leq x \right) = \Phi(x) \quad \forall x
+\end{equation}
+where the standard deviation $\sigma_{n, \theta}$ of $T_n$ is often estimated by $\hat \sigma_n$ called the \emph{standard error}.
+Then the approximate symmetric confidence level is
+\begin{equation}
+    g(\theta) \in T_n \pm \hat \sigma_n \xi_{1-\frac{\alpha}{2}}
+\end{equation}
+
+Moreover, an important near-pivot is the MLE which, under certain conditions, we claim it is asymptotically normal.
+
+\subsubsection{Fisher information}
+
+Let the observation $X_1$ have distribution $p_\theta$.
+We know that the score function is defined as
+\begin{equation}
+    \dot \ell_\theta (x) = \pdv{}{\theta} \log p_\theta(x)
+\end{equation}
+
+\begin{definition}{Fischer information}{fischer-information}
+    \begin{equation}
+        i_\theta = V_\theta \left(\dot \ell_\theta (X_1)\right)
+    \end{equation}
+\end{definition}
+
+\begin{proposition}{Properties of Fisher information}{props-fisher}
+    If $\ell_\theta(x) = \log p_\theta(x)$ is twice differentiable for all $x$, under certain regularity conditions we have
+    \begin{enumerate}[label=\roman*.]
+        \item $E_\theta \ell_\theta (X_1) = 0$
+        \item $i_\theta = -E_\theta \ddot\ell_\theta(X_1)$
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    TODO: see lecture notes of CL10
+\end{proof}
+
+\begin{theorem}{Asymptotic normality of the MLE}{asymptotic-normality-mle}
+    Let $\hat \theta_n$ be the ML estimator for $\theta$ based on a sample of size $n$ IID according to $p_\theta$.
+    Under some regularity assumptions the sequence $\sqrt n (\hat \theta_n - \theta)$ converges in distribution to a normal distribution with expectation $0$ and variance $i_\theta^{-1}$, that is
+    \begin{equation}
+        \sqrt n (\hat \theta - \theta) \convdist \Normal(0, i_\theta^{-1})
+    \end{equation}
+    which means that
+    \begin{equation}
+        \sqrt{n i_\theta}(\hat \theta - \theta) \convdist \Normal(0, 1)
+    \end{equation}
+\end{theorem}
+
+\subsubsection{Wald interval}
+
+The problem is that we don't know $i_\theta$, but we can estimate it:
+\begin{itemize}
+    \item The \emph{plug-in estimator} for $i_\theta$ is $\hat i_\theta = i_{\hat \theta}$.
+    \item The \emph{observed information} estimator, recalling that $E_\theta \ell_\theta (X_1) = 0$,
+          \begin{equation}
+              \hat i_\theta = -\oneover{n} \sum_{i = 1}{n} \ddot \ell_{\hat \theta}
+          \end{equation}
+\end{itemize}
+
+The consequence is that we can consider a \emph{normal approximate} $(1-\alpha)$-confidence interval for $\theta$:
+\begin{equation}
+    \theta = \hat \theta_n \pm \oneover{\sqrt{n \hat i_\theta}} \xi_{1- \frac{\alpha}{2}}
+\end{equation}
+We call this interval \textbf{Wald interval}.
 
 \subsubsection{Bootstrap}
 
@@ -662,7 +737,10 @@ and we can use as confidence interval
     \hat \theta \pm \xi_{1 - \alpha/2} \hat \sigma_\beta
 \end{equation}
 
-TODO: add assumptions, multidimensional case and bernstein-von mises.
+\subsubsection{Extra notions}
+
+In lecture notes CL10 you can find the so called \say{regularity assumptions} introduced in the proof above, the extension to the multidimensional case, and the Bernstein-von Mises theorem.
+These topics are not required for the exam.
 
 \section{Hypothesis testing}
 

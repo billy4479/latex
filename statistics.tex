@@ -294,7 +294,10 @@ The idea behind the likelihood function is that this is a function that, given a
 
 \begin{example}{Exponential distribution}{mle-exponential}
     Let $X = (X_1, \dots, X_n)$ be a sample from the exponential distribution with unknown parameter $\lambda \in (0, \infty)$.
+    Compute the MLE.
+\end{example}
 
+\begin{proof}[Solution]
     The sample space is
     \begin{equation}
         \mathcal{M} = \{ p_\lambda(x) = \lambda e^{-\lambda x}, x > 0 \}
@@ -325,10 +328,15 @@ The idea behind the likelihood function is that this is a function that, given a
     hence it is indeed a point of maximum.
 
     We conclude that $\hat \lambda = \frac{1}{\bar{x}}$ is the maximum likelihood estimate.
-\end{example}
+\end{proof}
+
 
 \begin{example}{Coin tosses}{mle-bernoulli}
     A coin with unknown $p = P(\text{HEAD})$ is tossed $n = 100$ times and shows heads $60$ times.
+    Compute the MLE.
+\end{example}
+
+\begin{proof}[Solution]
     Intuitively we would say that $p = 0.6$.
     Let's check it.
 
@@ -352,11 +360,14 @@ The idea behind the likelihood function is that this is a function that, given a
                                          & \implies \hat p \text{ is the MLE.}
     \end{align}
     which indeed corresponds to the intuitive result.
-\end{example}
+\end{proof}
 
 \begin{example}{Uniform distribution}{mle-uniform}
     Let $X_1, \dots, X_n \stackrel{\text{IID}}{\sim} \Uniform(0,\theta)$ with $\theta$ unknown.
+    Compute the MLE.
+\end{example}
 
+\begin{proof}[Solution]
     \begin{align}
         L(\theta; X_1, \dots, X_n) & = \prod_{i = 1}^n \frac{1}{n} 1_{[0, \theta]}(x_i)                \\
                                    & =\theta^{-n} \prod_{i = 1}^n 1_{[x_i, \infty)} (\theta)           \\ % TODO: explain this better
@@ -365,11 +376,14 @@ The idea behind the likelihood function is that this is a function that, given a
     \end{align}
 
     Now we can look at the two cases of the indicator function and we see that the maximum occurs at $\hat \theta = \max_n x_n$.
-\end{example}
+\end{proof}
 
 \begin{example}{Normal distribution}{mle-normal}
     Let $X_1, \dots, X_n \stackrel{\text{IID}}{\sim} \Normal(\mu,\sigma^2)$ with $\mu,\sigma^2$ unknown.
+    Compute the MLE.
+\end{example}
 
+\begin{proof}[Solution]
     \begin{align}
         L(\mu,\sigma^2; X_1, \dots, X_n)                   & = \prod_{i = 1}^n \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{(X_i - \mu)^2}{2 \sigma^2}}                                 \\
                                                            & = (2 \pi \sigma^2)^{-\frac{n}{2}} e^{- \sum_{i = 1}^n \frac{(X_i - \mu)^2}{2 \sigma^2}}                                 \\
@@ -387,7 +401,7 @@ The idea behind the likelihood function is that this is a function that, given a
     It can be shown that $\hat \mu$ and $\hat \sigma$ are maximizers but we'll omit it here.
 
     We see that $\hat \mu$ is unbiased while $\hat \sigma ^2$ is.
-\end{example}
+\end{proof}
 
 \subsubsection{Method of moments estimators}
 
@@ -544,7 +558,37 @@ If the interval is centered around the point estimate $t$ then it is called \emp
 \end{example}
 
 \begin{proof}[Solution]
-    TODO: vedi appunti bea, che minchia è $\xi$?
+    We know that the MLE estimator for the normal is $\hat \theta = \bar X$.
+    Let us now compute the expectation and variance of $\bar X$:
+    \begin{align}
+        E_{\theta} (\bar X) & = E_\theta \left( \oneover{n} \sum_{i = 1}^n X_i \right) = \oneover n \sum_{i = 1}^n E_\theta(X_i) = \theta                \\
+        V_{\theta} (\bar X) & = V_\theta \left( \oneover{n} \sum_{i = 1}^n X_i \right) = \oneover{n^2} \sum_{i = 1}^n V_\theta(X_i) = \frac{\sigma^2}{n}
+    \end{align}
+
+    From these result we can write $\bar X$ as the rescaling of a standard gaussian $Z$:
+    \begin{equation}
+        \bar X = \frac{\sigma}{\sqrt{n}} Z + \theta
+    \end{equation}
+
+    We define the $\alpha$-quantile of a standard gaussian as $\xi_\alpha$ (as in \Cref{def:alpha-quantiles}).
+    This means that
+    \begin{align}
+        \alpha                                                 & = P(Z \leq \xi_\alpha) \implies                                        \\
+        P(\xi_{\alpha/2} \leq Z \leq \xi_{1-\frac{\alpha}{2}}) & = P(Z \leq \xi_{1-\frac{\alpha}{2}}) -P(Z \leq \xi_{\frac{\alpha}{2}}) \\
+                                                               & = 1-\frac{\alpha}{2} -\frac{\alpha}{2} = 1- \alpha
+    \end{align}
+    So now we can compute the confidence interval by substituting $Z$ with our rescaling of $\bar X$:
+    \begin{align}
+        1 - \alpha & = P(\xi_{\alpha/2} \leq Z \leq \xi_{1-\frac{\alpha}{2}})                                                                                 \\
+                   & = P\left(\xi_{\alpha/2} \leq \frac{\bar X - \theta}{\sigma / \sqrt n} \leq \xi_{1-\frac{\alpha}{2}}\right)                               \\
+                   & = P\left(\frac{\sigma}{\sqrt n}\xi_{\alpha/2} - \bar X \leq - \theta \leq \frac{\sigma}{\sqrt n}\xi_{1-\frac{\alpha}{2}} - \bar X\right) \\
+                   & = P\left(\bar X - \frac{\sigma}{\sqrt n}\xi_{\alpha/2} \geq \theta \geq \bar X -\frac{\sigma}{\sqrt n}\xi_{1-\frac{\alpha}{2}}\right)    \\
+                   & = P\left(\bar X + \frac{\sigma}{\sqrt n}\xi_{1-\alpha/2} \geq \theta \geq \bar X -\frac{\sigma}{\sqrt n}\xi_{1-\frac{\alpha}{2}}\right)
+    \end{align}
+    which gives us a confidence interval of
+    \begin{equation}
+        \bar X \pm \frac{\sigma}{\sqrt n}\xi_{1-\alpha/2} = [\bar X - \frac{\sigma}{\sqrt n}\xi_{1-\alpha/2}, \bar X - \frac{\sigma}{\sqrt n}\xi_{1-\alpha/2}]
+    \end{equation}
 \end{proof}
 
 \subsubsection{Pivots}
@@ -559,10 +603,10 @@ For the normal distribution a pivot is
 \begin{equation}
     T(X, \theta) = \frac{\bar X - \theta}{\sigma /\sqrt{n}}
 \end{equation}
-which is distribution according to the standard normal.
+which is distributed according to the standard normal.
 
 We can define a confidence region for a pivot as well.
-For eery $B$ such that $P_\theta(T(X, \theta) \in B) \geq 1- \alpha$, the set
+For every $B$ such that $P_\theta(T(X, \theta) \in B) \geq 1- \alpha$, the set
 \begin{equation}
     \{ \theta \in \Theta : T(X, \theta) \in B \}
 \end{equation}
@@ -574,7 +618,31 @@ is the confidence region for $\theta$ of confidence level $1- \alpha$.
 \end{example}
 
 \begin{proof}[Solution]
-    TODO: chiedere a bea :D
+    We notice that while $X_i \sim \Uniform(0, \theta)$, if we rescale we get $X_i/ \theta \sim \Uniform(0,1)$.
+    As the MLE for the uniform distribution is $X_{(n)}$ (the maximum observation of $X$), the MLE of our rescaled version is $X_{(n)} / \theta$.
+    We can prove (even if it is quite obvious in this case) that
+    \begin{equation}
+        T(X; \theta) = X_{(n)} / \theta
+    \end{equation}
+    is a pivot as its distribution is independent from $\theta$.
+
+    Now we can find the confidence interval.
+    We have to choose some $c, d$ s.t $[c, d] \subseteq [0, 1]$ and the following holds:
+    \begin{equation}
+        1 - \alpha =  P(c \leq T(X; \theta) \leq d) = P (T(X, \theta) \leq d) - P (T(X, \theta) \leq c) = d^n - c^n
+    \end{equation}
+    that is
+    \begin{align}
+        c = 0 & \implies d = (1- \alpha)^{\frac{1}{n}} \\
+        d = 0 & \implies c = \alpha^{\frac{1}{n}}
+    \end{align}
+
+    Then the confidence region can be calculated by
+    \begin{align}
+        1 - alpha & = P\left(c \leq \frac{X_{(n)}}{\theta} \leq d\right)                  \\
+                  & = P\left(\frac{X_{(n)}}{c} \geq \theta \geq \frac{X_{(n)}}{d} \right) \\
+                  & \implies \left[ \frac{X_{(n)}}{d}, \frac{X_{(n)}}{c} \right]
+    \end{align}
 \end{proof}
 
 TODO: lezione mancante qui

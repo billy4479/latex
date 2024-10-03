@@ -69,9 +69,9 @@ This is the easiest type of differential equation. We have seen them in physics 
     Therefore, by integrating both sides w.r.t. $t$ we get the solution.
 \end{proof}
 
-\section{Existence and uniqueness of the solution}
+\subsection{Existence and uniqueness of the solution}
 
-\subsection{Reminder of old courses}
+\subsubsection{Reminder of old courses}
 
 For this section we will need to recall a few tools from topology.
 
@@ -138,7 +138,7 @@ The following definitions and properties where covered in detail in Analysis 1.
     \end{itemize}
 \end{proposition}
 
-\subsection{Main result of ODE theory}
+\subsubsection{Main result of ODE theory}
 
 We will present this theorem in various forms, from the most basic one to the most sophisticated one.
 This theorem comes with different names such as Peano-Picard theorem, Picard-Lindelöf theorem, or Cauchy-Lipschitz.
@@ -194,7 +194,7 @@ This theorem comes with different names such as Peano-Picard theorem, Picard-Lin
     Note that uniqueness is not implied.
 \end{theorem}
 
-\section{System of ODEs}
+\subsection{System of ODEs}
 
 \begin{definition}{First order system of ODEs in normal form}{system-odes}
     A first order system of ODEs in normal form is a system of $n$ equations
@@ -223,7 +223,7 @@ An initial value problem for a system of ODEs is in the form of
 \end{equation}
 with $(t_0, \lambda_{0,1}, \dots, \lambda_{0,n}) \in A$.
 
-\subsection{Solutions of systems of ODEs}
+\subsubsection{Solutions of systems of ODEs}
 
 These systems can be thought as a ODE with vector-valued functions:
 \begin{theorem}{Picard–Lindelöf theorem - second formulation}{picard-lindelof-2nd}
@@ -253,7 +253,7 @@ These systems can be thought as a ODE with vector-valued functions:
     Then any IVP has solution defined on $I = \R$.
 \end{theorem}
 
-\subsection{Equivalence between higher order ODEs and first order systems}
+\subsubsection{Equivalence between higher order ODEs and first order systems}
 
 Let us consider a scalar ODE like
 \begin{equation}
@@ -270,8 +270,7 @@ we can define $v_1 = u$ and $v = u'$ and rewrite the ODE as a system of first or
 These two formulations are equivalent.
 This works for any higher order ODE and it is the standard procedure.
 
-\section{Bootstrap}
-
+\subsection{Bootstrap}
 
 \begin{proposition}{Bootstrap}{bootstrap}
     Consider and ODE $u' = f(t, u)$ with $f : A \to \R$ and $A \in \R^2$ open.
@@ -294,7 +293,7 @@ This works for any higher order ODE and it is the standard procedure.
     \end{description}
 \end{proof}
 
-\section{Autonomous ODEs}
+\subsection{Autonomous ODEs}
 
 We say an ODE is autonomous if it doesn't depend on time:
 \begin{equation}
@@ -316,7 +315,11 @@ If $f$ is differentiable we can alo study $f'$: if $f'(c) < 0$ we say that the e
 
 Switching future and past has the effect of also switching the equilibrium points: $v(t) = u(-t)$ solves $v' = -f(v)$.
 
-\section{Linear higher order ODEs with constant coefficients}
+Moreover, we say that $c$ is \emph{Lyapunov stable} if, given $\varepsilon > 0$, exists $\delta >0$ such that if $u(t_0) \in (c - \varepsilon_0, c + \varepsilon_0)$ then, $\forall t \geq t_0$ $u(t) \in (c-\delta, c+\delta)$.
+
+\section{Higher order ODEs}
+
+We will focus for now on \textbf{linear and homogeneous} ODEs with \textbf{constant coefficients}.
 
 Given $k \geq 1 \in \N$, linear higher order ODEs with constant coefficients take the form
 \begin{equation}
@@ -365,10 +368,83 @@ Since the last equation is a lipschitz function of $u_0, \dots, u_{k_1}$, given 
     Note that if the initial conditions are real-valued, the solution will be real-valued as well.
 \end{remark}
 
-Solutions are of the form $e^{\gamma t}$ where $\gamma$ si a root of the polynomial $p$
+\subsection{Solutions to higher order linear ODEs}
+
+To solve equations of the form \cref{eq:higher-order-linear-const-coeff-ode} we can start by looking at solutions similar to the first order case, where solutions are of the form $a e^{\alpha t}$ with $\alpha, a \in \R$.
+We will try to plug in the formula and see if it works for some values of $a$, therefore our ODE becomes
 \begin{equation}
-    \gamma^k + a_{k-1} \gamma^{k-1} + \dots a_1 \gamma + a_0 = 0
+    \sum_{j = 0}^{k} c_j \alpha^j e^{\alpha t} = 0
 \end{equation}
-Moreover, if $p$ has $k$ distinct roots $\gamma_1, \dots, \gamma_k$, then $\{ e^{\gamma_1 t}, \dots, e^{\gamma_k t} \}$ is a basis of $V_\C$.
+but since $e^{\alpha t} \gt 0$ we can simplify to
+\begin{equation}
+    \sum_{j = 0}^{k} c_j \alpha^j = 0
+\end{equation}
+This is a polynomial equation: we call $p(z) = \sum c_j z^j$ the \textbf{characteristic polynomial} of the ODE and $e^\alpha$ is a solution to the ODE every time $p(\alpha) = 0$.
+Moreover, by linearity and homogeneity, if a function solves the ODE, any of its multiples will too.
+
+\subsubsection{Real and simple roots}
+
+\begin{theorem}{}{}
+    If the roots $\alpha_1, \dots, \alpha_k$ of the characteristic polynomial $p(z)$ are real and simple (with multiplicity $1$) then any solution $u(t)$ has the form
+    \begin{equation}
+        u(t) = \sum_{\ell = 1}^{k} \beta_\ell e^{\alpha_\ell t}
+    \end{equation}
+    for an unique choice of coefficients $\beta_\ell$.
+\end{theorem}
+
+This theorem tells us that the solutions $\{ e^{\alpha_1 t}, \dots, e^{\alpha_k t} \}$ is a basis of $V_\C$.
+
+It is possible to extend the theory to allow for complex roots and roots with higher multiplicity.
+
+\subsubsection{Roots with higher multiplicity}
+
+If we have a polynomial of the form $p(z) = (z - \alpha)^2$ we have that the root has multiplicity $2$, but we still want to find two linearly independent, orthogonal basis.
+To do so we write
+\begin{equation}
+    p_\varepsilon(z) = (z-\alpha)(z-\alpha - \varepsilon)
+\end{equation}
+with $\varepsilon \to 0$.
+Indeed this polynomial has two simple roots, which implies that $e^{\alpha t}, e^{(\alpha + \varepsilon) t}$ spans the solutions of the ODE.
+But since as $\varepsilon \to 0$ the two solutions become pretty much identical we use Gram-Schmidt orthogonalization
+theorem to write a more \say{stable} basis:
+\begin{equation}
+    e^{\alpha t}, \quad \frac{e^{(\alpha + \varepsilon)t} - e^{\alpha t}}{\varepsilon}
+\end{equation}
+and as $\varepsilon \to 0$ the second function becomes
+\begin{equation}
+    \pdv{e^{\alpha t}}{\alpha} = t e ^{\alpha t}
+\end{equation}
+
+\begin{theorem}{}{}
+    Assume the roots of the characteristic polynomial $p(z)$ are all real.
+    For each distinct root $a_\ell$ with multiplicity $m_\ell$ the functions
+    \begin{equation}
+        e^{\alpha_\ell t}, \quad t e^{\alpha_\ell t}, \quad \ldots, \quad t^{m_\ell -1} e^{\alpha_\ell t}
+    \end{equation}
+    each solve the ODE and together, as $\ell$ varies, form a basis for the space of solutions.
+\end{theorem}
+
+To prove this theorem we will need another tool:
+given a polynomial $a(z) = \sum^\ell_{j = 0} \mu_j z^j$ and a function $f \in X$, where $X$ is the set of functions of class $C^\infty$, we associate the linear operator
+\begin{equation}
+    a(D): X \to X, \quad a(D) f = \sum_{j = 0}^{s} \mu_j \dv[j]{f}{t}
+\end{equation}
+
+\subsubsection{Complex roots}
+
+We can use Euler's formula to write $e^{\alpha t}$ when $\alpha \in \C$:
+\begin{equation}
+    e^{\alpha t} = e^{\gamma t}e^{i \theta t} = e^{\gamma t}(\cos(\theta t) i \sin (\theta t))
+\end{equation}
+
+\begin{theorem}{}{}
+    Assume that the characteristic polynomial has real roots $\sigma_1, \dots, \sigma_r$ with multiplicities \newline $m_1,\dots,m_r$ and complex roots $\tau_1, \bar \tau_1, \dots, \tau_s, \bar \tau_s$ with multiplicities $n_1, \dots, n_s$ so that
+    $\sum m_j + \sum 2n_j = k$.
+    Then the following set is a basis of the space of solutions:
+    \begin{equation}
+        \left\{ \left\{ t^je^{\sigma_\ell t} \right\} \cup \left\{ t^je^{\gamma_{\ell'} t} \cos(\theta_{\ell' t}) \right\} \cup \left\{ t^je^{\gamma_{\ell'} t} \sin(\theta_{\ell' t}) \right\} \right\}
+    \end{equation}
+    where $\tau_{\ell'} =\gamma_{\ell'} + i \theta _{\ell'}$, $\ell \in \{0, \dots, m_\ell-1\}$, $\ell' \in \{ 0,\dots, n_\ell -1 \}$.
+\end{theorem}
 
 \end{document}

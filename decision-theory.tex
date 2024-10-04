@@ -650,4 +650,125 @@ but can also have a preference over consequences $\dot \succsim$.
     if both are preorders.
 \end{theorem}
 
+\section{Decision under uncertainty}
+
+\emph{This is macchero's part.}
+
+TODO: missing class of 03/10
+
+\subsection{Axioms}
+
+We have $\bm C$ the set of material consequences, $\bm L$ the set of function $\ell: \bm C \to \R^+$ which are discrete probability mass functions on $\bm C$.
+
+On $\bm L$ we can define preferences.
+As usually we will define some axioms on preference:
+\begin{enumerate}
+    \item \emph{Weak order}: completeness and transitivity
+    \item \emph{Independence}: for any three lotteries $l, l', l''$ in $\bm L$ and $0<p<1$ we have
+          \begin{equation}
+              l \succ l' \implies pl + (1-p) l'' \succ pl' + (1- p)l''
+          \end{equation}
+
+    \item \emph{Archimedean}: for any three lotteries $l, l', l''$ in $\bm L$ there exists $q, p \in (0, 1)$ such that
+          \begin{equation}
+              pl + (1-p)l'' \succ l' \succ ql + (1-q)l''
+          \end{equation}
+\end{enumerate}
+
+Now assume that beyond the DM's preference, there exists a meaningful order to the space $\bm C$.
+Then we can define also \emph{monotonicity} in the same way as we did for normal preferences.
+
+\subsection{Utility functions}
+
+\begin{theorem}{von Neumann-Morgentern Representation Theorem}{representation-theorem}
+    Let $\succsim$ be a preference on $\bm L$ on the space $\bm C$.
+    The following are equivalent:
+    \begin{enumerate}
+        \item $\succsim$ satisfies the axioms described above
+        \item There exists a function $u:\bm C \to \R$ such that the function $\ddot u : \bm L \to \R$ defined as
+              \begin{equation}
+                  \ddot u(l) = \sum^n_{i = 1} u(c_i) p_i
+              \end{equation}
+              or equivalently
+              \begin{equation}
+                  U(l) = \sum_{c \in C} u(c) l(c)
+              \end{equation}
+              which represents $\succsim$.
+        \item There exists $f:\bm L \to \R$ affine such that
+              \begin{equation}
+                  l \succsim l' \iff f(l) \geq f(l')
+              \end{equation}
+    \end{enumerate}
+\end{theorem}
+
+\begin{lemma}{}{}
+    A function $f:\bm L \to \R$ is affine iff $\exists \varphi : C \to \R$ unique s.t. $f(l) = \sum_{c \in C} \varphi(c) l(c)$, where $\varphi = f \circ \delta$.
+
+    This means that $f$ is affine only if it is an expectation of some $l$.
+\end{lemma}
+\begin{proof}[Proof of lemma]
+    The macchero did it but I didn't write it :D
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:representation-theorem}]
+    We will just proof point $2 \iff 3$.
+
+    Recall that a function is affine if $f(\lambda k_1 + (1- \lambda) k_2) = \lambda f (k_1) + (1 - \lambda ) f(k_2)$ for $\lambda \in (0, 1)$.
+    Note that affinity holds even for multiple $\lambda$ such that $\sum \lambda = 1$.
+
+    Given the lemma above we can easily prove $3 \implies 2$ by choosing $\varphi = u$ and $f = U$.
+    $2 \implies 3$ \say{grazie al cazzo} by taking $f = U$.
+\end{proof}
+
+We now want to show that $u$ is an utility of consumption.
+To do so we will assume that $c \succsim c' \iff \delta_c \succsim \delta_{c'}$ but this means that $U(\delta_c) \geq U(\delta_{c'})$.
+From here we can apply \cref{thm:representation-theorem} and get that $c \succsim c' \iff u(c) \geq u(c')$.
+
+\subsubsection{Robustness}
+
+\emph{Not in the exam?}
+
+This is not a perfect representation of reality, usually we are not sure of the probability, we can \emph{estimate} the probability, but we cannot be sure.
+
+\begin{equation}
+    U_D(l) = \min_{m \in L} \left( U(m) + D(m \mid l) \right)
+\end{equation}
+where $l$ is our estimate, $m$ are other models and $D$ is a distance function.
+
+\subsubsection{Cardinality}
+
+The vN-M utility function $u$ on prizes is cardinal.
+This means that if there exists two distinct $u$ such that
+\begin{equation}
+    l \succsim m \iff \sum u(c) l(c) \geq \sum u(c) l(c)
+\end{equation}
+then $\exists \alpha > 0, \beta \in \R$ s.t. $u = \alpha v + \beta$.
+
+We have that the order of the differences over cardinal transformations is preserved:
+\begin{equation}
+    u(c_1) - u(c_2) \geq u(c'_1) - u(c'_2)
+\end{equation}
+will still hold under cardinal transformations.
+This is equivalent to
+\begin{equation}
+    \left\{ (c_1, 0.5),  (c_2, 0.5) \right\} \succsim \left\{ (c'_1, 0.5),  (c'_2, 0.5) \right\}
+\end{equation}
+
+\subsection{Probability??}
+
+Here the macchero went on a tangent explaining some basic stuff about discrete probability measures, their support, and expectation.
+Idk, it seems like this is not in the lecture notes.
+
+We can define lotteries as the restriction of a simple probability measure $p$ on $\bm C$.
+
+We define $P_l = \sum_{c \in A} l(c)$ to be the probability of getting a prize $c \in A$ given a lottery $l$, with $A \subseteq \bm C$.
+
+\begin{proposition}{}{}
+    $P$ is a simple probability measure with finite carrier $A$ ($P(A)=1$, $A$ finite) iff $\exists l \in L$ s.t.
+    \begin{equation}
+        P(A) = \sum_{c \in A} l(c)
+    \end{equation}
+    Moreover, $l$ is unique and $l(c) = P(\{c\})$.
+\end{proposition}
+
 \end{document}

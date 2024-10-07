@@ -1610,7 +1610,74 @@ We ask the following questions:
                   W = - \oneover{8 \pi \varepsilon_0} \frac{q^2}{2d}
               \end{equation}
     \end{enumerate}
-
 \end{proof}
 
+\subsection{Insulators (or dielectrics)}
+
+At the microscopic level insulators have atoms where electrons are constraint close to their atom and they are not free to move.
+
+When we introduce an $\vec E_\text{ext}$ the insulator will also react by generating its own $\vec E_\text{ind}^\text{diel} \lll \vec E^\text{cond}_\text{ind}$.
+There are two mechanisms in play in this case:
+\begin{description}
+    \item[Stretching]
+          To demonstrate stretching we will model an atom as a point charge $+q$ and a sphere of radius $a$ of electrons with charge $-q$ and a constant density (this is the classical model of an atom).
+          In this case the point charge $+q$ will want to go in one direction, while the electrons will want to go in the opposite direction.
+          We will assume that the \say{cloud} of electrons will not be distorted by $\vec E$.
+
+          This mechanism will go on until there is equilibrium again:
+          we will call $d$ the distance that the nucleus moved and write the dipole moment as
+          \begin{equation}
+              \vec p = \alpha \vec E
+          \end{equation}
+          where $\alpha$ is the \emph{atomic polarizability}.
+          Note that $\vec E$ is very strong the nucleus will detach from its cloud of electrons and the material will become conductive.
+
+          To compute this result we can use Gauss law to compute the flux on a sphere of radius $d$ centered in $q$.
+          We have that
+          \begin{equation}
+              E 4 \pi d^2 = \frac{Q_\text{enc}}{\varepsilon_0} = \oneover{\varepsilon} \rho \frac{4}{3} \pi d^3
+          \end{equation}
+          which gives us, by substituting $\rho$
+          \begin{equation}
+              E = \frac{1}{4 \pi \varepsilon_0}\frac{qd}{a^3}
+          \end{equation}
+          where $qd$ is the dipole moment and $\alpha = 4 \pi \varepsilon_0 a^3$.
+    \item[\say{Rotating} dipoles]
+          In molecules we could have that the electric dipole is oriented in a different direction than the electric field.
+          This is because of the shapes of the molecules: some molecules could have a bigger $\alpha$ in some direction.
+
+          This effect is even worse in molecules with some special shape, like water, which just because their shape have a dipole, without the need of an external field.
+
+          \begin{figure}[H]
+              \centering
+              \includesvg[height=0.3\textwidth]{assets/physics-2/rotating-dipoles-co2.svg}
+              \caption{Electric field through carbon dioxide.}
+          \end{figure}
+
+          \begin{figure}[H]
+              \centering
+              \includesvg[height=0.3\textwidth]{assets/physics-2/rotating-dipoles-h2o.svg}
+              \caption{Electric field through water.}
+          \end{figure}
+
+          If the molecule has a dipole itself then the electric field will apply some force on the molecule.
+
+          If $\vec E$ is uniform these forces will  cancel out, as they are equal and opposite, but they will generate a torque.
+          \begin{equation}
+              \vec N = \vec r_+ \times \vec F_+ + \vec r_- \times \vec F_- = q\vec d \times \vec E = \vec p \times \vec E
+          \end{equation}
+
+          If $\vec E$ is not uniform the forces will not cancel out.
+          But molecules are very small so in general we will assume they are \emph{ideal dipoles}: this means that $d \ll 1$ and $q \gg 1$ so that $\vec E_+ \simeq \vec E_-$ and $\vec p = q\vec d = O(1)$.
+          Because of this property we can taylor expand $\vec E$ to get
+          \begin{equation}
+              E^x_+ = E^x_- + (\grad E^x_+) \cdot \vec d = E^x_- + (\grad \vec d) \cdot \vec E^x_+
+          \end{equation}
+          and so on on the other components.
+          We get
+          \begin{equation}
+              \vec F = q (\vec E_+ - \vec E_-) = q (\vec d \cdot \grad) \vec E = (\vec p \cdot \grad) \vec E
+          \end{equation}
+
+\end{description}
 \end{document}

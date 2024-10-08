@@ -51,6 +51,8 @@
             cleveref
             thmtools
             siunitx
+            subfig
+            emoji
 
             # Indirect dependencies
             environ

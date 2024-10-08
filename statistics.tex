@@ -764,6 +764,20 @@ We can make two types of mistakes while doing this estimation:
     Given an observation $x$, if $x \in K$ we \emph{reject} $H_0$, while if $x \notin K$ we \emph{do not reject} $H_0$.
 \end{definition}
 
+When we have $X = (X_1, \dots, X_n)$ it is generally useful to choose a test statistic $T$ that we deem appropriate and define the critical region as
+\begin{equation}
+    K = \{ (x_1, \dots, x_n) : T(x) \in K_T \}
+\end{equation}
+for some suitable $K_T$ (which is also called critical region).
+
+Many times the critical region takes the form of
+\begin{align}
+    K_T & = \{ T \geq c_{\alpha_0} \}                                \\
+    K_T & = \{ T \leq c_{\alpha_0} \}                                \\
+    K_T & = \{ T \leq c_{\alpha_0} \} \cap \{ T \geq d_{\alpha_0} \}
+\end{align}
+where $c_{\alpha_0}$ is a number that we need to identify.
+
 We now have to find a way of choosing $K$.
 First, we can measure the quality of a test with the \textbf{power function}.
 \begin{equation}
@@ -786,22 +800,65 @@ Usually a good choice for $\alpha_0$ is $0.05$.
 
 Usually we will fix $\alpha_0$ and, between two tests, we will choose the one with higher $\alpha$ (therefore with smaller probability of type II error).
 
-TODO: add binomial example
+Once we find $\alpha_0$ we can also find $c_{\alpha_0}$ and viceversa.
+In fact $c_{\alpha_0}$ is the smallest value for which the corresponding test has size smaller or equal to $\alpha_0$:
+\begin{equation}
+    c_{\alpha_a} = \min \left\{ t : \sup_{\theta \in \Theta_0} P_\theta (T(X)\geq t) \leq \alpha_0 \right\}
+    \label{eq:def-c0}
+\end{equation}
 
 \subsection{One-sided and two-sided hypothesis tests}
 
-We say that the hypothesis is one-sided if either
+We say that the hypothesis is \textbf{one-sided} if either
 \begin{equation}
     H_0 = \{\theta : \theta \leq \theta_0\} \quad \text{or} \quad H_0 = \{\theta : \theta \geq \theta_0\}
 \end{equation}
 where the first case is called \emph{right one-sided} and the second one is \emph{right two-sided}.
 
-We say that the hypothesis is two-sided if
+We say that the hypothesis is \textbf{two-sided} if
 \begin{equation}
     H_0 = \{ \theta: \theta = \theta_0 \} \implies H_1 = \{ \theta : \theta \ne \theta_0 \}
 \end{equation}
 
-\subsection{Gauss test (\texorpdfstring{$z$}{z}-test)}
+\subsection{\texorpdfstring{$p$}{p}-values}
+
+$p$-values are another way of describing a test.
+By now we have seen critical regions and test-statistics but we can use $p$-values as well: these methods are equivalent.
+
+Recall \Cref{eq:def-c0}: in that case we rejected $H_0$ if $t = T(x) \geq c_{\alpha_0}$ which is equivalent to
+\begin{equation}
+    t \geq c_{\alpha_a} \iff \underbrace{\sup_{\theta \in \Theta_0} P_\theta (T(X)\geq t)}_{p\text{-value}} \leq \alpha_0
+\end{equation}
+
+\begin{definition}{$p$-value (for right-sided critical regions)}{p-value-right}
+    Consider a right-sided critical region $K_T$.
+    Let $t$ be the observation of the test statistic $T$.
+    Then the $p$-value is defined as
+    \begin{equation}
+        \sup_{\theta \in \Theta_0} P_\theta(T \geq t)
+    \end{equation}
+\end{definition}
+
+Then the test becomes
+\begin{itemize}
+    \item $p$-value $\leq \alpha_0 \implies$ reject $H_0$
+    \item $p$-value $> \alpha_0 \implies$ retain $H_0$
+\end{itemize}
+
+Equivalently we can define $p$-values for left-sided and double-sided critical regions:
+\begin{gather}
+    \sup_{\theta \in \Theta_0} P_\theta (T {\color{red} \leq} t)\\
+    {\color{red} 2 \min }\left( \sup_{\theta \in \Theta_0} P_\theta (T \geq t), \sup_{\theta \in \Theta_0} P_\theta (T \leq t) \right)
+\end{gather}
+or in general, the smallest value of $\alpha$ for which the corresponding test rejects $H_0$.
+
+\subsection{Tests}
+
+\subsubsection{Binomial test}
+
+TODO
+
+\subsubsection{Gauss test (\texorpdfstring{$z$}{z}-test)}
 
 Assume we have $X_1, \dots, X_n \stackrel{\text{IID}}{\sim} \Normal(\theta, \sigma^2)$, where $\sigma^2$ is known.
 Consider $H_0 = \{ \theta \leq \theta_0 \}$ and $H_1 = \{ \theta \gt \theta_0 \}$ (right one-sided).
@@ -845,5 +902,30 @@ We now have to solve for $n$.
 we had to introduce the shift because before it was centered around $\theta_0$, while we want it to be centered around $\theta^*$.
 
 This procedure works also for left one-sided and two-sided hypothesis.
+
+\subsubsection{\texorpdfstring{$t$}{t}-test}
+
+So far we have covered samples from the normal distribution only when the variance was known.
+To deal with the cases where the variance is also unknown we have to introduce the \emph{Student} distribution.
+
+\begin{definition}{Student distribution}{strudent-}
+    A random variable $T$ has Student distribution with $n$ degrees of freedom, denoted by $t_n$, if $T$ has the same distribution as
+    \begin{equation}
+        \frac{Z}{\sqrt{(\sum^n_{i=1} Z_i^2)/n}}
+    \end{equation}
+    where all the $Z$ are independent and distributed according to $\Normal(0,1)$.
+\end{definition}
+
+\begin{theorem}{Properties of normal samples}{prop-normal-samples}
+    If $X_1, \dots, X_n$ are samples from $\Normal(\mu, \sigma^2)$, then:
+    \begin{enumerate}[label=\roman*.]
+        \item $\bar X \sim \Normal(\mu, \sigma^2/n)$
+        \item $(n-1)\frac{S_X^2}{\sigma^2} \sim \mathcal X^2_{n-1}$, where $\mathcal X$ is Chi distributed
+        \item $\bar X \indep S_X^2$
+        \item $\sqrt n \frac{\bar X - \mu}{S_X} \sim t_{n-1}$
+    \end{enumerate}
+\end{theorem}
+
+TODO: complete here
 
 \end{document}

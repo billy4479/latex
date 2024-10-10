@@ -1777,4 +1777,54 @@ which means
 \end{equation}
 which is the same result we got mathematically.
 
+\subsubsection{Electric displacement}
+
+Now that we know the bound charge we can compute the total charge density:
+\begin{equation}
+    \rho = \rho_b + \rho_f
+\end{equation}
+where $\rho_f$ is called the \emph{free} charge,
+which is the charge that produces $\vec E_\text{ext}$
+and it is generally known.
+
+By Gauss law we can now compute the field:
+\begin{align}
+    \div \vec E = \frac{\rho}{\varepsilon_0} & \implies \varepsilon_0 (\div \vec E) = \rho_f - \div \vec P \\
+                                             & \implies \div (\varepsilon_0 \vec E + \vec P) = \rho_f
+\end{align}
+and we can define the \textbf{electric displacement} as $\vec D = \varepsilon_0 \vec E + \vec P$.
+
+Moreover, we can integrate the result we just got and obtain
+\begin{gather}
+    \int_V \dd \tau \div \vec D = \int_V \dd \tau \rho_f \\
+    \oint_S \vec D \cdot \vec{\dd S} = Q_\text{enc}^f
+\end{gather}
+where we applied the divergence theorem to obtain a formula for the free charge enclosed in the insulator.
+
+\subsubsection{Linear, isotropic, homogeneous dielectrics}
+
+First, let us explain what all of these terms mean.
+\begin{description}
+    \item[Linear]
+          This property means that we can write the polarization as
+          \begin{equation}
+              \vec P = \varepsilon_0 \chi _e \vec E
+          \end{equation}
+          which means that the polarization depends on vector field linearly.
+          We call $\chi_e$ the \emph{electric susceptibility tensor} which is a dimensionless tensor,
+          this means that in general $\vec P$ will not have the same direction of $\vec E$.
+
+    \item[Isotropic] $\chi_e$ is a diagonal matrix, hence we can represent it as a number.
+    \item[Homogeneous] $\chi_e$ is constant in all coordinates inside the dielectric.
+\end{description}
+
+Given these properties we can write the electric displacement as
+\begin{equation}
+    \vec D = \varepsilon_0 \vec E + \vec P = \varepsilon_0 \underbrace{(\chi_e + 1)}_{\varepsilon_r} \vec E
+\end{equation}
+where we define $\varepsilon_r = \chi_e + 1$ to be the \textbf{relative permittivity}.
+In vacuum this values is equal to $1$.
+
+
+
 \end{document}

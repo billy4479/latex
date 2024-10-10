@@ -928,4 +928,63 @@ To deal with the cases where the variance is also unknown we have to introduce t
 
 TODO: complete here
 
+\subsection{Two samples tests}
+
+In this case we have two samples
+$X_1, \dots, X_n \stackrel{\text{IID}}{\sim}P_X$ and
+$Y_1, \dots, Y_n \stackrel{\text{IID}}{\sim}P_Y$.
+We want to compare $P_X$ and $P_Y$.
+
+Our sample can be of two forms:
+\begin{itemize}
+    \item \emph{Paired observations}
+          \begin{equation}
+              (X_1, Y_1), \dots, (X_n, Y_n) \stackrel{\text{IID}}{\sim} P_{(X, Y)}
+          \end{equation}
+    \item \emph{Independent observations} (check independence of the samples)
+          \begin{equation}
+              X_1, \dots, X_n \indep Y_1, \dots, Y_m
+          \end{equation}
+\end{itemize}
+
+\subsubsection{T-test for paired observations}
+
+Let $Z_i = X_i - Y_i$ and $\Delta = \mathbb E Z_i$.
+We want to check if $\Delta = 0$ or not.
+We will assume that $Z_i \sim \Normal(\Delta, \sigma^2)$.
+
+If $X_i \sim \Normal(\mu, \sigma_X^2)$ independent from $Y_i \sim \Normal(\mu - \Delta, \sigma_Y^2)$
+we get that $Z_i \sim \Normal(\Delta, \sigma_X^2 + \sigma_Y^2)$.
+
+We can also have that $X_i$ and $Y_i$ are not independent.
+This is actually better, because this gives us a smaller variance, thus a better test.
+This result comes from the formula
+\begin{equation}
+    V(Z_i) = V(X_i) + V(Y_i) - 2 \cov (X_i, Y_i)
+\end{equation}
+
+Once we have the hypothesis we just use the $t$-test on $Z_i$.
+
+\subsubsection{Two-sample T-test}
+
+In this case $X_i \sim \Normal(\mu, \sigma^2)$ and $Y_i \sim \Normal(\nu, \sigma^2)$
+with the same variance.
+
+Our hypothesis are $H_0 : \mu - \nu \leq 0$ and $H_1 : \mu - \nu > 0$.
+We use the sample mean as test: $\bar X- \bar Y$ os gaussian with mean $\mu - \nu$
+and variance $\sigma^2 \left(\oneover m + \oneover n\right)$.
+
+Note that we don't have the variance, however we can estimate it as the weighted average of the sample variances
+\begin{equation}
+    S^2_{X, Y} = \frac{\sum^m_{i = 1} (X_i - \bar X)^2 + \sum^n_{i = 1} (Y_i - \bar Y)^2 }{n + m - 2}
+\end{equation}
+
+We get that $T$ is student distributed with $m + n - 2$ degrees of freedom:
+\begin{equation}
+    T = \frac{\bar X - \bar Y - 0}{S_{X, Y} \sqrt{\oneover m + \oneover n}}
+\end{equation}
+and from here proceed as in the normal $t$-test.
+
+If we have \textbf{different variances} we can perform an $F$-test, but \emph{it will not be required for the exam}.
+
 \end{document}

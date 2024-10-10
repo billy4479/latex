@@ -15,222 +15,153 @@
 
 \firstpage
 
-\section{Binary relations}
+\section{Decision problems}
 
-\begin{definition}{Proposition}{proposition}
-    A proposition is a statement that can be either true or false.
-\end{definition}
+We will discuss how a Decision Maker (DM) makes decisions.
 
-\begin{definition}{Logical predicate}{predicate}
-    A logical predicate $p(x)$ is an expression that contains an argument $x$ that varies in a given domain $X$.
-\end{definition}
+\subsection{Preference}
 
-Note that if we take a predicate and choose an $x$ and fix it we get a proposition.
+\subsubsection{Binary relations}
 
-To turn a predicate into a proposition we can use the universal $\forall$ and existential $\exists$ quantifier.
-
-We can also identify a predicate with the set $A$ of all the elements $x \in X$ such that the proposition $p(x)$ is true.
+A binary relation in a set $X$ is defined as a subset $R \subset X \cross X$ where a certain predicate is true:
 \begin{equation}
-    \label{eq:extension_set}
-    A = \{ x \in X : p(x) \text{ is true} \}
+    R = \{ (x, y) \in X \cross X : p(x) \text{ is true}\}
 \end{equation}
+If $(x, y) \in R$ we write $xRy$.
 
-Moreover we can also have predicates with two or more variables that may have different domains.
-We call a predicate with two variables a \textbf{binary predicate}. We can again define a set like the one in \cref{eq:extension_set}:
-\begin{equation}
-    R = \{ (x,y) \in X \times Y : p(x,y) \text{ is true} \}
-\end{equation}
-we call this the \textbf{extension set} of $p$.
-
-For our purposes we will always consider $X = Y$.
-
-\begin{definition}{Binary relation}{binary-relation}
-    Let $X$ be a domain. A binary relation is a subset $R$ of $X \times X$.
-\end{definition}
-
-Therefore a binary relation is the extension of a binary predicate.
-
-\begin{remark}{Set-theoretic notation}{set-theoretic-notation}
-    Instead of $(x, y) \in R$ we will instead just write
-    \begin{equation}
-        xRy
-    \end{equation}
-    It reads as \say{$x$ is in the relation $R$ with $y$}.
-\end{remark}
-
-\begin{proposition}{Properties of binary relations}{prop-binary-relations}
-    Given a binary relation $R$ on a set $X$ we say that $R$ is
-    \begin{enumerate}[label=\roman*.]
-        \item \textbf{Reflexive} if $xRx \enspace \forall x \in X$
-        \item \textbf{Transitive} if $xRy \land yRz \implies xRz$
-        \item \textbf{Complete} if $\forall x, y \in R$ either $xRy$ or $yRx$ or both
-        \item \textbf{Symmetric} if $xRy \implies yRx \enspace \forall x,y \in X$
-        \item \textbf{Asymmetric} if $xRy \implies \lnot yRn \enspace \forall x,y \in X$
-        \item \textbf{Antisymmetric} if $xRy \land yRx \implies x = y \enspace \forall x,y \in X$
+\begin{definition}{Properties of binary relations}{props-relations}
+    A binary relation $R$ on $X$ can have one or more of the following properties:
+    \begin{enumerate}
+        \item \textbf{Reflexivity}: $xRx$
+        \item \textbf{Transitivity}: $xRy \land yRz \implies xRz$
+        \item \textbf{Completeness}: either $xRy$ or $yRx$ or both
+        \item \textbf{Symmetry}: $xRy \implies yRx$
+        \item \textbf{Asymmetry}: $xRy \implies \lnot yRn$
+        \item \textbf{Antisymmetry}: $xRy \land yRx \implies x = y$
     \end{enumerate}
-\end{proposition}
+    where $x, y, z \in X$.
 
-\begin{definition}{The $I$ relation}{i-relation}
-    Given a binary relation $R$ and $x, y \in X$ we define $I$ as
-    \begin{equation}
-        xIy \iff xRy \land yRx
-    \end{equation}
+    Moreover, if a relation has some of the properties above we give it a specific name:
+    \begin{enumerate}
+        \item \textbf{Preorder}: reflexivity and transitivity;
+        \item \textbf{Weak order}: reflexivity, transitivity, and completeness;
+        \item \textbf{Partial order}: reflexivity, transitivity, and antisymmetry;
+        \item \textbf{Partial order}: reflexivity, transitivity, antisymmetry, and completeness;
+        \item \textbf{Equivalence}: reflexivity, symmetry, and transitivity;
+    \end{enumerate}
 \end{definition}
 
-\begin{proposition}{Properties of $I$}{props-i}
-    Let $R$ be reflexive and transitive (a \textit{preorder}) on a set $X$.
-    Then the induced binary relation $I$ is reflexive, symmetric and transitive.
-\end{proposition}
+Note that completeness implies reflexivity.
 
-\begin{proof}
-    We want to show that $I$ is transitive.
-    Let $xIy$ and $yIz$, this is equivalent, by definition, to $xRy \land yRx$ and $yRz \land zRy$.
-    By transitivity of $R$ we have that $xRy \land yRz \implies xRz$ and $yRx \land zRy \implies zRx$, meaning $xIz$.
-\end{proof}
+The equivalence class of $R$ is
+\begin{equation}
+    [x] = \{ y \in X : xRy \}
+\end{equation}
+If $y \in [x]$, then $[x] = [y]$.
 
-\begin{definition}{Equivalence relation}{equivalence-relation}
-    A binary relation $R$ is an equivalence relation if it satisfies \textit{reflexivity}, \textit{symmetry}, and \textit{transitivity}.
-\end{definition}
+The set of equivalence classes form a partition:
+\begin{equation}
+    X/R = \{ [x] : x \in X \}
+\end{equation}
 
-\begin{corollary}{}{}
-    $I$ is an equivalence relation.
-\end{corollary}
+\subsubsection{Axioms of preference}
 
-\begin{definition}{Equivalence class}{equivalence-class}
-    Given an equivalence relation $R$ and $x \in X$ we define the equivalence class of $x$ as
-    \begin{equation}
-        [x] = \{y \in X : xRy\}
-    \end{equation}
-    that is, the set of all elements of $X$ equivalent to $x$ according to $R$.
-\end{definition}
+Now consider a set of alternatives $X$ where the DM has to make a choice upon.
+We consider the binary relation $\succsim$
+\begin{equation}
+    x \succsim y
+\end{equation}
+which means the DM prefers $x$ to $y$ or it is indifferent.
+Similarly, define $\sim$ for indifference ($x \succsim y \land y \succsim x$) and
+$\succ_X$ for strict preference ($x \succsim y \land \lnot (y \succsim x)$).
 
-\begin{lemma}{}{}
-    If $y \in [x]$, then $[y] = [x]$.
+Depending on the situation we might be able to assume certain axioms on the preference relation.
+Consider $x, y, z \in X$.
+\begin{description}
+    \item[Extensionality]
+          If $X = X'$ then $x \succsim_X y \iff x \succsim_{X'} y$.
+          This is particularly useful when $X$ and $X'$ have different representations (e.g. budget sets)
+          but they are actually the same set.
+          We usually assume this property as it means that the DM is able to identify equal sets of alternatives
+          and therefore does not suffer of \emph{framing effects}.
+
+    \item[Reflexivity] As in \cref{def:props-relations}.
+    \item[Transitivity] As in \cref{def:props-relations}.
+          This axioms tells us that there are no cycles,
+          therefore it enables optimization.
+          \begin{description}[font=\normalfont\itshape\space]
+              \item[Strict transitivity] As $x \succ y \land y \succ z \implies x \succ z$.
+          \end{description}
+    \item[Completeness] As in \cref{def:props-relations}.
+          This axiom imply that the DM is always able to choose between any alternative.
+
+    \item[Monotonicity] For this property we assume there exists a topology $\tau$ on $X$
+          and we are therefore able to decide whether $x \geq y$.
+          Monotonicity says that
+          \begin{equation}
+              x \geq y \implies x \succsim y
+          \end{equation}
+
+          In case of $\R^n$ we can distinguish the following axioms as well.
+          \begin{description}[font=\normalfont\itshape\space]
+              \item[Strong monotonicity] \say{The more of all goods is definitely better}
+                    \begin{equation}
+                        x \gg y \implies x \succ y \quad \text{and} \quad x \geq y \implies x\succsim y
+                    \end{equation}
+              \item[Strict monotonicity] \say{The more of at least one good is still better}
+                    \begin{equation}
+                        x > y \implies x \succ y
+                    \end{equation}
+          \end{description}
+
+          These axioms are a way to tell us that the goods are actually \say{goods}.
+
+    \item[Archimedean] If $x \succ y \succ z$ then $\exists \alpha, \beta \in (0, 1)$ such that
+          \begin{equation}
+              \alpha x + (1- \alpha)z \succ y \succ \beta x + (1-\beta) z
+          \end{equation}
+
+          This axiom tells us that there is no good that it is preferred infinitely more than any other.
+
+    \item[Convexity] If $x \sim y$ for all $\alpha \in (0, 1)$ there holds
+          \begin{equation}
+              \alpha x + (1-\alpha y) \succsim x
+          \end{equation}
+          which means that the DM likes to differentiate as much as possible.
+
+          \begin{description}[font=\normalfont\itshape\space]
+              \item[Strict convexity] For \emph{distinct} $x, y$
+                    \begin{equation}
+                        \alpha x + (1-\alpha y) \succ x
+                    \end{equation}
+
+                    This axiom is particularly useful as it ensure the uniqueness of an optimal choice.
+              \item[Affinity]
+                    \begin{equation}
+                        \alpha x + (1-\alpha y) \sim x
+                    \end{equation}
+
+          \end{description}
+\end{description}
+
+\begin{lemma}{Strict monotonicity implies strong monotonicity}{strict-strong-monotonicity}
+    Let $\succsim$ be reflexive.
+    If $\succsim$ is strictly monotone then it is also strongly monotone.
+
+    The converse is true only if $d = 1$.
 \end{lemma}
 
-\begin{proposition}{Equivalence classes a partition}{eq-classes-partition}
-    If $R$ is an equivalence relation on $X$ define
-    \begin{equation}
-        X/R = \{ [x] : x\in X \}
-    \end{equation}
-    as the set all equivalence classes in $X$ w.r.t. $R$.
+\begin{proof}
+    Suppose $\succsim$ is strictly monotone.
+    If $x\gg y$ then also $x \gt y$ and by strictly monotonicity we get $x \succ y$.
+    If $x\geq y$ then either $x = y$, and we get that $x \succsim y$ by reflexivity,
+    or $x > y$, and by strict monotonicity we have $x\succ y$ and therefore $x \succsim y$.
 
-    $X/R$ form a partition on $X$.
-\end{proposition}
-
-\begin{definition}{Partial order}{partial-order}
-    A binary relation $R$ is a partial order if it satisfies \textit{reflexivity}, \textit{transitivity}, and \textit{antisymmetry}.
-\end{definition}
-
-A partial order is a preorder (as seen in \cref{prop:props-i}) with antisymmetry added on top.
-
-\begin{remark}{Partially ordered set}{partially-ordered-set}
-    If we are able to define a partial order $\geq$ on $X$ we call $(X, \geq)$ a \emph{partially ordered set}.
-\end{remark}
+    The converse is easily proven by noticing that in $\R$ $\gg$ and $\gt$ mean the same thing.
+\end{proof}
 
 
-\begin{remark}{Total order}{total-order}
-    If $R$ is a partial order and also satisfies \emph{completeness} we call it a total order.
-\end{remark}
-
-\begin{example}{Partial order for functions}{}
-    Consider the set $\R^\Omega$, the set of functions $f: \Omega \to \R$.
-    One can define a partial order on $\R^\Omega$ as
-    \begin{equation}
-        f \geq g \implies f(\omega) \geq g(\omega) \enspace \forall \omega \in \Omega
-    \end{equation}
-
-\end{example}
-
-\begin{example}{Partial order for sets}{}
-    Let $\Omega$ be a set and $\mathcal P(\Omega)$ the power set of $\Omega$.
-    The easiest partial order for sets is inclusion:
-    let $A, B \in \mathcal P(\Omega)$, then
-    \begin{equation}
-        A \leq B \iff A \subseteq B
-    \end{equation}
-\end{example}
-
-\begin{definition}{Ordered vector space}{ordered-vector-space}
-    Let $V$ be a vector space and $\leq$ a partial order on $V$.
-    If $\leq$ satisfies the following properties we call $(V, \leq)$ an ordered vector space:
-    \begin{itemize}
-        \item $v \leq w \implies v + z \leq w + z \enspace \forall v, w, z \in V$.
-        \item $v \leq w \implies \alpha v \leq \alpha w \enspace \forall \alpha \geq 0$ and $\forall v, w \in V$.
-    \end{itemize}
-\end{definition}
-
-Some examples of ordered vector spaces are $(\R^n, \leq)$, $(\mathscr F(\Omega, \R), \leq)$, while $(\mathcal P(\Omega), \leq)$ is not.
-
-\begin{remark}{Order in the limit for sequences}{}
-    Let $x_n$ be a sequence converging to $x$.
-    Let $y \in \R$ such that $x_n \geq y \enspace \forall n \in \N^+$.
-    Then, in the limit the order is preserved, therefore $x \geq y$.
-\end{remark}
-
-\section{Preference}
-
-In this section we will have a \emph{decision maker} (DM), a set of alternatives $X$ and a binary relation $\succsim_X$ called \emph{preference}.
-We write
-\begin{equation}
-    x \succsim_X y
-\end{equation}
-if DM prefers $x$ to $y$ or it is indifferent.
-
-We can also define $\sim_X$ for indifference ($x \succsim_X y \land y \succsim_X x$) and $\succ_X$ for strict preference ($x \succsim_X y \land \lnot (y \succsim_X x)$).
-
-We say two alternatives are \emph{comparable} if DM can have a preference, therefore either $x \succsim_X y$ or $y \succsim_X x$ or both.
-
-\begin{proposition}{Assumptions on preference}{assumptions-preference}
-    \begin{itemize}
-        \item
-              \emph{Extensibility}: if $X = X'$ then
-              \begin{equation}
-                  x \succsim_X y \iff x \succsim_{X'} y
-              \end{equation}
-        \item \emph{Reflexiveness}, \emph{Transitivity} and \emph{Completeness} as defined in \Cref{prop:prop-binary-relations}.
-        \item \emph{Strong monotonicity}: $x \gg y \implies x \succ y$, this means that all the goods in $x$ are greater than in $y$.
-        \item \emph{Archimedean}: Let $x, y, z \in X$ s.t. $x \succ y \succ z$.
-              Then there exist $\alpha, \beta \in (0, 1)$ such that
-              \begin{equation}
-                  \alpha x + (1-\alpha) z \succ y \succ \beta x + (1-\beta)z
-              \end{equation}
-        \item \emph{Convexity}: Let $x, y \in X$ s.t $x \sim y$ then, $\forall \alpha$
-              \begin{equation}
-                  \alpha x + (1-\alpha) y \succsim x
-              \end{equation}
-              Moreover, this axiom could be extended to one of the following:
-              \begin{itemize}
-                  \item \emph{Strict convexity}: $\alpha x + (1-\alpha) y \succ x$
-                  \item \emph{Affinity}: $\alpha x + (1-\alpha) y \sim x$
-              \end{itemize}
-    \end{itemize}
-\end{proposition}
-
-Extensibility is saying that preference does not depend on how the sets $X$ and $X'$ are described but only on the elements in them.
-During this course we will assume that preference is extensional even though this is a non-trivial assumption, see the example on budget sets in the book.
-
-Moreover, we will assume that preference relations are \emph{reflexive} and \emph{transitive}.
-Transitivity is especially useful to prevent cycles and therefore allow \emph{optimization}.
-
-\begin{corollary}{}{}
-    If $\succsim$ is reflexive and transitive, then $\sim$ is an equivalence relation.
-\end{corollary}
-
-Transitivity is not a trivial assumption either because of the \emph{threshold effect} in perception:
-perception usually reacts in a discrete way, even to continuous effects.
-
-We require strong monotonicity and not just strict monotonicity because otherwise we would be assuming that we give a value to every good individually, which is sometimes not true (see the example on shoes).
-
-\begin{corollary}{}{}
-    Strong monotonicity implies strict monotonicity.
-\end{corollary}
-
-Convexity means that in general we will likely want to differentiate more.
-Strict convexity is needed in order to make sure there exists a best bundle.
-Affinity is not always valid but it can be useful in some scenarios.
-
-\section{Utility}
+\subsection{Utility functions}
 
 \begin{definition}{Utility function}{utility-function}
     A function $u: X \to \R$ is a (Paretian) utility function for the preference $\succsim$ if, $\forall x, y \in X$
@@ -244,76 +175,58 @@ We can write indifference curves as the level curves of the utility function:
     [x] = \{ y \in X : u(x) = u(y) \}
 \end{equation}
 
-\begin{proposition}{Ordinality}{ordinality-ic}
-    Let $u: X \to \R$ be an utility function for $\succsim$.
-    Another function $\tilde{u}: X \to \R$ is also an utility function for $\succsim$ iff
-    $\exists f: \Im u \to \R$ \emph{strictly increasing} s.t.
-    \begin{equation}
-        \tilde{u} = f \circ u
-    \end{equation}
-\end{proposition}
-
-\begin{remark}{Strictly increasing}{strictly-increasing}
-    Note that strictly increasing means that
-    \begin{equation}
-        x \geq y \iff f(x) \geq f(y)
-    \end{equation}
-    The important part here is the $\iff$.
-
-    (No typos.)
-\end{remark}
-
-\begin{proof}
-    \skiplineafterproof
-    \begin{description}
-        \item[$\implies$] Let $u$ be an utility function for $\succsim$.
-              Then, according to \cref{rk:strictly-increasing}, we have
-              \begin{equation}
-                  x \succsim y \iff u(x) \geq u(y) \iff f(u(x)) \geq f(u(y))
-              \end{equation}
-        \item[$\impliedby$] Trivial from the definition of $\tilde{u}$.
-    \end{description}
-\end{proof}
+Moreover, utility functions are unique up to a strictly increasing transformation:
+if $u$ is an utility function and $f$ is strictly increasing
+(which means that $x \geq y \iff f(x) \geq f(y)$, note the $\iff$)
+then $f \circ u$ is also an utility function for the same preference.
+We refer to this property as \textbf{ordinality}.
 
 A very common problem in economics is to maximize the utility function:
 \begin{equation}
-    \max_x u(x) \quad {\operatorfont sub} \enspace  x \in C
+    \max_{x \in C} u(x)
 \end{equation}
+where $C \subseteq X$ is the constraint.
 
-\subsection{Existence}
+\subsubsection{Existence}
 
-\begin{theorem}{Existence of utility functions}{exisence-utility}
+\begin{proposition}{}{}
     A preference relation has a utility representation only if it is
     \emph{complete} and \emph{transitive}.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
     Let $\succsim$ be a preference and $u$ one of its utility function.
 
     First let's show that $\succsim$ is transitive.
-    Let $x, y, z \in X$ s.t. $x \succsim y$ and $y \succsim z$. By hypothesis $u(x) \geq u(y)$ and $u(y) \geq u(z)$ hence $u(x) \geq u(z)$, which implies, again by hypothesis, that $x \succsim z$.
+    Let $x, y, z \in X$ s.t. $x \succsim y$ and $y \succsim z$.
+    By hypothesis $u(x) \geq u(y)$ and $u(y) \geq u(z)$ hence $u(x) \geq u(z)$,
+    which implies, again by hypothesis, that $x \succsim z$.
 
     Completeness can be proved similarly by going to scalars and back.
 \end{proof}
 
-\begin{theorem}{Quotient space of preference}{quotient-space-preference}
-    Let $\succsim$ be a preference relation on $X$. Then an utility function function exists if $X/\sim$ has at most the cardinality of $\R$.
+\begin{proposition}{}{}
+    Let $\succsim$ be a preference relation on $X$.
+    Then an utility function function exists if $X/\sim$ has at most the cardinality of $\R$.
+\end{proposition}
 
-    Moreover, if $X / \sim$ is at most countable then $\succsim$ is complete and transitive iff it has a utility function.
-\end{theorem}
+\begin{proposition}{}{}
+    Let $x, y \in \R^n$. Explain the difference between $x > y$, $x \geq y$ and $x \gg y$. Make examples.
+\end{proposition}
 
 \begin{proof}
-    We will prove just the second part in the case $X$ finite: we have a complete and transitive preference over a finite set $X$ and we want to show that an utility function exists.
+    We will prove the proposition just in the case $X$ finite.
+    Consider a complete and transitive preference over a finite set $X$:
+    we want to show that an utility function exists.
 
     Let $L(x, \succsim) = \{ z \in X : x \succsim z \}$, then define $u: X \to \R$ as
     \begin{equation}
         u(x) = \abs{L\left(x, \succsim\right)}
     \end{equation}
     the cardinality of $L$.
-    Of course if $x \succsim y$ then $\abs{L\left(x, \succsim\right)} \geq \abs{L\left(y, \succsim\right)}$ and the converse is true as well.
+    Of course if $x \succsim y$ then $\abs{L\left(x, \succsim\right)} \geq \abs{L\left(y, \succsim\right)}$
+    and the converse is true as well.
 \end{proof}
-
-\subsubsection{Cantor properties}
 
 \begin{definition}{$\succsim$-order dense}{order-dense}
     Let $\succsim$ be binary relation on $X$, then $Z \subseteq X$ is $\succsim$-order dense if, $\forall x, y \in X$ with $x \succ y$, there exists $z \in Z$ s.t.
@@ -331,37 +244,6 @@ A very common problem in economics is to maximize the utility function:
     \end{enumerate}
 \end{theorem}
 
-\subsubsection{Quasiconcavity}
-
-\begin{definition}{Quasiconvexity and quasiconcavity}{quasiconcavity}
-    Let $V$ be a vector space and $f: V \to \R$.
-    $f$ is quasiconcave if
-    \begin{equation}
-        f(\alpha \vec x + (1- \alpha) \vec y) \geq \min \{ f(\vec x), f(\vec y) \}
-    \end{equation}
-    for $\vec x, \vec y \in V$ and $\alpha \in (0,1)$.
-
-    Similarly quasiconvexity is defined as
-    \begin{equation}
-        f(\alpha \vec x + (1- \alpha) \vec y) \leq \max \{ f(\vec x), f(\vec y) \}
-    \end{equation}
-\end{definition}
-
-\begin{remark}{}{}
-    Concavity implies quasiconcavity.
-\end{remark}
-\begin{remark}{}{}
-    Increasing implies quasiconcavity.
-\end{remark}
-
-\begin{proposition}{}{}
-    For a function $f: C \to \R$ the following conditions are equivalent:
-    \begin{enumerate}[label=\roman*.]
-        \item $f$ is quasi concave
-        \item The sets $U(t) = \{ x \in C : f(x) \geq t \}$ are (strictly) convex for all $t \in \R$
-    \end{enumerate}
-\end{proposition}
-
 \begin{theorem}{}{}
     Let $\succsim$ be a preference on $\R^n_+$.
     Then, the following conditions are equivalent:
@@ -373,13 +255,9 @@ A very common problem in economics is to maximize the utility function:
     Moreover, $\succsim$ is (strictly) convex iff $u$ is (strictly) quasiconcave.
 \end{theorem}
 
-\begin{proposition}{}{}
-    Let $f: C \to \R$ and $\varphi: D \in \R \to \R$ be two functions defined on convex sets, with $\Im f \in D$.
-    If $f$ is quasiconcave and $\varphi$ is increasing, then
-    \begin{equation}
-        \varphi \circ f \text{ is quasiconcave}
-    \end{equation}
-\end{proposition}
+\begin{proof}
+    TODO: ot says it should be done but i don't think we did it in class.
+\end{proof}
 
 \subsubsection{Lexicographic preferences}
 
@@ -410,31 +288,28 @@ This is the preference system used, for example, in sorting words in a dictionar
     But this would mean that we have constructed an injective function $q : \R \to \Q$ which is impossible.
 \end{proof}
 
-\section{Rational choice}
+\subsection{Rational choice}
 
 \begin{definition}{Decision framework}{decision-framework}
-    Let $\vec X$ be a choice space of alternatives.
-    A decision framework is the pair $(\vec X,\mathcal X)$ where $\mathcal X$ is a set of $X \subset \mathcal X$.
+    Let $\bm X$ be a choice space of alternatives.
+    A decision framework is the pair $(\bm X,\mathcal X)$
+    where $\mathcal X$ is the non-empty subset $\mathcal X \subset \bm X$ containing alternatives $X$.
 \end{definition}
 
 In consumer theory we could have a decision framework where $\vec X$ is the set of all possible bundles of goods and $\mathcal X$ is the collection of budget sets $X$.
 
 Another example could be $\vec X$ is the set of all the restaurant meals available in town, each $X$ is the menu of each restaurant and $\mathcal X$ is the collection of restaurants in town.
 
-A decision maker has a preference $\succsim_X$ over each set $X$ which we will consider \emph{reflexive} and \emph{transitive}.
+A decision maker has a preference $\succsim_X$ over each set $X$
+which we will consider \emph{reflexive} and \emph{transitive}.
 Let $P: X \mapsto \succsim_X$ be the \emph{preference map} that given a set $X$ gives the DM's preference on that set.
+We call the triplet $(\bm X, \mathcal X, P)$ a \textbf{decision environment}.
 
-\begin{definition}{Decision environment}{decision-environment}
-    A decision framework and a preference map make a decision environment:
-    \begin{equation}
-        (\vec X, \mathcal X, P)
-    \end{equation}
-\end{definition}
-
-A \emph{decision problem} is a pair $(X, \succsim_X)$, the DM wants to find the optimal alternative according to $\succsim_X$
+A \emph{decision problem} is a pair $(X, \succsim_X)$,
+the DM wants to find the optimal alternative according to $\succsim_X$.
 
 \begin{definition}{Optimal alternative}{optimal}
-    An alternative $\hat x \in X$ is optimal if $\nexists x \in X$
+    In a decision problem an alternative $\hat x \in X$ is optimal if $\nexists x \in X$
     \begin{equation}
         x \succsim_X \hat  x
     \end{equation}

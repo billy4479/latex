@@ -53,6 +53,7 @@
             siunitx
             subfig
             emoji
+            multicol
 
             # Indirect dependencies
             environ

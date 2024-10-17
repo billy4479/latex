@@ -1,0 +1,214 @@
+\documentclass[10pt]{extarticle}
+
+\title{Physics 2 Formulas}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage[arrowdel]{physics}
+\usepackage{siunitx}
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+\usepackage{multicol}
+
+% \renewcommand{\vec}[1]{\uvec{#1}}
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{1pt}
+\def\columnseprulecolor{\color{blue}}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\begin{multicols}{2}
+
+
+    \section{Change of coordinates}
+
+    \subsection{Spherical}
+    \begin{equation}
+        \begin{cases}
+            x = r \sin \theta \cos \varphi & r \in [0, \infty)     \\
+            y = r \sin \theta \sin \varphi & \theta \in [0, \pi]   \\
+            z = r \cos \theta              & \varphi \in [0, 2\pi]
+        \end{cases}
+    \end{equation}
+
+    Jacobian:
+    \begin{equation}
+        \dd{\tau} = r^2 \sin \theta \dd{r} \dd{\theta} \dd{\varphi}
+    \end{equation}
+
+    \subsection{Cylindrical}
+    \begin{equation}
+        \begin{cases}
+            x = s \cos \varphi & s \in [0, \infty)       \\
+            y = s \sin \varphi & \varphi \in [0, \pi]    \\
+            z = z              & z \in (-\infty, \infty)
+        \end{cases}
+    \end{equation}
+
+    Jacobian:
+    \begin{equation}
+        \dd{\tau} = s \dd{s} \dd{\varphi} \dd{z}
+    \end{equation}
+
+    \section{Electric Field}
+
+    \textbf{Coulomb law}
+    \begin{equation}
+        \vec F = \oneover{4\pi \varepsilon_0} \frac{Q_1 Q_2}{\Delta r^2} \hat{\Delta r}
+    \end{equation}
+
+    \textbf{Electric field}
+    \begin{equation}
+        \vec E =
+        \oneover{4 \pi \varepsilon_0}
+        \int_{R^3} \frac{\rho (\vec{r'})}{\Delta r} \hat{\Delta r} \dd{\tau'}
+    \end{equation}
+    where
+    \begin{itemize}
+        \item $\vec r$ is the position of the point where we want to compute the field
+        \item $\vec{r'}$ is the position of the space we are integrating over
+        \item $\Delta r = \vec r - \vec{r'}$
+        \item $\dd \tau'$ is the portion of space at $\vec{r'}$
+    \end{itemize}
+
+    \textbf{Gauss law}
+    \begin{equation}
+        \oint_S \vec E \cdot \vec{\dd S} = \frac{Q_\text{enc}}{\varepsilon_0}
+    \end{equation}
+
+    \textbf{Maxwell equation (Gauss in local form)}
+    \begin{equation}
+        \div \vec E = \frac{\rho}{\varepsilon_0}
+    \end{equation}
+
+    \section{Potential}
+
+    \textbf{Definition}
+    \begin{equation}
+        \vec E = - \grad V \implies \int_C \vec E \cdot \vec{\dd \ell} = V(A) - V(B)
+    \end{equation}
+    assume that $V(\infty) = 0$.
+
+    \textbf{Point charge}
+    \begin{equation}
+        V(\vec r) = \oneover{4 \pi \varepsilon_0} \frac{q}{\Delta r}
+    \end{equation}
+
+    \textbf{Continuous charge distribution}
+    \begin{equation}
+        V(\vec{r}) = \oneover{4 \pi \varepsilon_0} \int_{R^3} \frac{\rho(\vec{r'})}{\Delta r} \dd{\tau'}
+    \end{equation}
+
+    \textbf{Potential}
+    \begin{equation}
+        \oneover{4 \pi \varepsilon_0} \frac{\vec p \cdot \hat r}{r^2}
+    \end{equation}
+
+    \section{Energy}
+
+    \textbf{Potential energy}
+    \begin{equation}
+        U(\vec r) = q V(\vec r)
+    \end{equation}
+
+    \textbf{Energy stored}
+    \begin{equation}
+        W = \half \int_{\mathcal V} \rho V \dd \tau = \half \varepsilon_0 \int_{\R^3} E^2 \dd \tau
+    \end{equation}
+
+    \section{Dipoles}
+
+    \textbf{Ideal dipole}
+    \begin{equation}
+        r \gg d
+    \end{equation}
+
+    \textbf{Dipole moment}
+    \begin{equation}
+        \vec p = q \vec d
+    \end{equation}
+
+    \section{Conductors}
+
+    \textbf{Properties}
+    \begin{enumerate}
+        \item $\vec E_\text{inside} = 0$
+        \item The induced charged are located on the surface of the conductor.
+        \item $\vec E^\text{just outside} = \frac{\sigma}{\varepsilon_0} \hat n$.
+        \item $V_\text{inside} = \text{const} \implies$ conductors are \emph{equipotential}.
+    \end{enumerate}
+
+    \subsection{Capacitors}
+
+    \textbf{Capacitance}
+    \begin{equation}
+        C = \frac{Q }{\Delta V} = \varepsilon_0 \frac{A}{d}
+    \end{equation}
+
+    \textbf{Parallel} (same potential)
+    \begin{equation}
+        C = C_1 + C_2
+    \end{equation}
+
+    \textbf{Series} (same charge)
+    \begin{equation}
+        C = \frac{C_1 C_2}{C_1 + C_2}
+    \end{equation}
+
+    \textbf{Energy}
+    \begin{equation}
+        W = \half Q \Delta V
+    \end{equation}
+
+    \textbf{Force}
+    \begin{equation}
+        F = \frac{Q}{2 \varepsilon_0 A}
+    \end{equation}
+
+    \textbf{Pressure}
+    \begin{equation}
+        P = \frac{Q}{2 \varepsilon_0 A^2} = u
+    \end{equation}
+
+    \section{Insulators}
+
+    \textbf{Torque}
+    \begin{equation}
+        \vec N = \vec p \cross \vec E
+    \end{equation}
+
+    \textbf{Force}
+    \begin{equation}
+        \vec F = (\vec p \cdot \grad) \vec E
+    \end{equation}
+
+    \textbf{Energy}
+    \begin{equation}
+        U = - \vec p \cdot \vec E
+    \end{equation}
+
+    \textbf{Bound densities}
+    \begin{equation}
+        \begin{cases}
+            \rho_b = -\div \vec P \\
+            \sigma_b = \vec P \cdot \hat n
+        \end{cases}
+    \end{equation}
+
+    \textbf{Electric displacement}
+    \begin{gather}
+        \vec D = \varepsilon_0 \varepsilon_r \vec E \\
+        \div D = \rho_f \\
+        \oint_S \vec D \cdot \vec{\dd S} = Q_\text{enc}^f
+    \end{gather}
+
+    \textbf{Polarization}
+    \begin{equation}
+        \vec P = \varepsilon_0 (\varepsilon_r-1) \vec E
+    \end{equation}
+
+\end{multicols}
+\end{document}
+

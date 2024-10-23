@@ -1,6 +1,6 @@
 \documentclass[12pt]{extarticle}
 
-\title{Physics 2 Formulas}
+\title{Analysis 3 Theorems}
 \author{Giacomo Ellero}
 \date{a.y. 2024/2025}
 
@@ -62,11 +62,11 @@
 \begin{theorem}{}{}
     Assume that the roots of the characteristic polynomial $p(z)$ are all real.
     Let $\alpha_1, \dots, \alpha_n$ be the distinct roots of $p(z)$ and
-    $m_1, \dots, m_n$ be the algebraic multiplicity of each $\alpha_\ell$.
+    $M_1, \dots, M_n$ be the algebraic multiplicity of each $\alpha_\ell$.
 
     For each root, consider the following set of functions:
     \begin{equation}
-        S = \left\{ t^j e^{\alpha_k t} : k \in 1, \dots, n; j \in 0, \dots, m_k -1 \right\}
+        S = \left\{ t^j e^{\alpha_l t} : l \in 1, \dots, n; j \in 0, \dots, m_k -1 \right\}
     \end{equation}
     each one of them solves the ODE and $S$ is a basis of the space of solutions.
 \end{theorem}
@@ -74,12 +74,128 @@
 \begin{proof}
     We will show that all the functions in $S$ solve the ODE.
     Then, to show that they form a basis, it is sufficient to note that
+    $\abs{S} = \sum M_i = k$ where $k$ is the degree of $p(z)$,
+    hence we just need to show that they are linearly independent.
+    We will not prove linear independence.
 
+    Introduce the operator $a(D) : X \to X$, where $a$ is a polynomial and
+    $X$ is the set of functions of class $C^\infty$.
+    Given $a(z) = \sum_{j= 0}^\ell \mu_j z^j$, the operator is defined as
+    \begin{equation}
+        a(D)f = \sum^{\ell}_{j = 0} \mu_j \dv[j]{f(t)}{t}
+    \end{equation}
+    Note that this operator is linear and behaves like a polynomial,
+    notably if $c(z) = a(z)b(z)$ then $c(D) = a(D) \circ b(D)$ is commutative.
 
+    Assume the characteristic polynomial has leading coefficient of $1$,
+    then $u$ is a solution to the ODE (up to multiplying it by the inverse of the leading coefficient) if
+    \begin{equation}
+        p(D)u = 0
+    \end{equation}
+
+    Let us factorize $p(z)$ as
+    \begin{equation}
+        p(z) = (z-\alpha_1)^{M_1} \dots (z-\alpha_n)^{M_n}
+    \end{equation}
+    now isolate $r(z) = (z-\alpha_\ell)^{M_\ell}$ for some $\ell \in 1, \dots, n$
+    and let $q(z) = \prod_{j \neq \ell} (z-\alpha_j)^{M_j}$
+    such that $p(z) = q(z)r(z)$.
+    Then, to show that $u$ solves the ODE it is enough to show that
+    \begin{equation}
+        r(D)u = (D - \alpha_\ell)^{M_\ell}u = 0
+    \end{equation}
+
+    We want to show this holds for each candidate solution.
+    We can write a general candidate as $h(t) e^{\alpha_\ell t}$
+    where $h(t)$ is a polynomial of degree less than $M_\ell$.
+    Hence our proof reduces to showing that
+    \begin{equation}
+        (D - \alpha_\ell)^{M} [h(t) e^{\alpha_\ell t}] = 0
+    \end{equation}
+    with $M = M_\ell$.
+
+    We can now proceed by induction on $M$:
+    \begin{description}[font=\normalfont\itshape\space]
+        \item[Base case]
+              Since $M = 1$ the degree of $h(t)$ has to be $0$, hence it is constant.
+              We have
+              \begin{equation}
+                  (D - \alpha_\ell)[h e^{\alpha_\ell t}] = h \dv{t} e^{\alpha_\ell t} - h\alpha e^{\alpha_\ell t} = 0
+              \end{equation}
+        \item[Inductive step]
+              \begin{align}
+                  (D - \alpha_\ell)^M[h(t) e^{\alpha_\ell t}] & = (D - \alpha_\ell)^{M-1}\left[ (D - \alpha_\ell) \left[h(t) e^{\alpha_\ell t}\right]\right]                                                               \\
+                                                              & = (D - \alpha_\ell)^{M-1}\left[ h'(t) e^{\alpha_\ell t} + \cancel{h(t)\alpha_\ell e^{\alpha_\ell t}} - \cancel{h(t) \alpha_\ell e^{\alpha_\ell t}} \right]
+                                                              & = 0
+              \end{align}
+              where in the last step we notice that since $h'(t)$ has degree less than $M -1$
+              hence the inductive hypothesis applies.
+    \end{description}
 \end{proof}
 
 \section{Geometric multiplicity less than or equal to algebraic}
 
+\begin{theorem}{}{}
+    For all eigenvalues $\gamma \in \R$ there holds $1 \leq m \leq M$,
+    where $m$ is geometric multiplicity of $\gamma$ and $M$ is the algebraic multiplicity of $\gamma$.
+\end{theorem}
+
+\begin{proof}
+    Since $\gamma$ is an eigenvalue there exists an eigenvector $v \neq 0$,
+    hence $\ker (A - \gamma \mathds{1}) \ne 0$ and $m \geq 1$.
+
+    Let $f: V \to V$ be the linear map associated to $A$: $f(v) = A v$, where $V = \R^n$.
+    Let $\{v_1, \dots, v_m\}$ be the basis of the eigenspace of $\gamma$
+    and complete it to $\{v_1, \dots, v_n\}$ a basis of $V$.
+    Then let $P = \begin{pmatrix}v_1 & \dots & v_n\end{pmatrix}$ be the change of basis matrix
+    such that
+    \begin{equation}
+        A = P B P^{-1}
+    \end{equation}
+
+    Since $f(v_j) = \gamma v_j$ for all $j \in 1, \dots, m$, $B$ has the form of
+    \begin{equation}
+        B = \left(\begin{array}{c|c}
+            \begin{matrix}
+                \gamma &        & 0      \\
+                       & \ddots &        \\
+                0      &        & \gamma
+            \end{matrix} & *_1          \\
+            \hline
+            0                           & *_2
+        \end{array}
+        \right)
+    \end{equation}
+    Notice that $z \mathds{1} - B$ is a triangular block matrix, hence its characteristic polynomial is
+    \begin{equation}
+        \det(z \mathds 1 - B) = (z-\gamma)^m \det(z \mathds 1_{n-m} - *_2)
+    \end{equation}
+    but since $A$ and $B$ are similar they have the same characteristic polynomial,
+    hence $(z-\gamma)^m$ divides the characteristic polynomial of $A$,
+    which means $M \geq m$.
+\end{proof}
+
 \section{A matrix is diagonalizable iff geometric equals to algebraic}
+
+\begin{theorem}{}{}
+    A square matrix is diagonalizable over $\C$ if and only if
+    for each root $\gamma$ of the characteristic polynomial
+    $m_\gamma = M_\gamma$.
+
+    Moreover, it is diagonalizable over $\R$ if and only if all the roots are also real.
+\end{theorem}
+
+\begin{proof}
+    We will just show the statement over $\R$ for simplicity.
+
+    We will also use the fact that non-zero eigenvector corresponding
+    to distinct eigenvalues are linearly independent without proof.
+
+    \begin{description}
+        \item[$\implies$] If a matrix is diagonalizable over $\R$ we can find a basis of eigenvector,
+              $v_1, \dots, v_n \in \R^n$: call $\gamma_j$ their eigenvalues.
+        \item[$\impliedby$]
+    \end{description}
+\end{proof}
 
 \end{document}

@@ -53,6 +53,7 @@
             siunitx
             subfig
             emoji
+            doublestroke
 
             # Indirect dependencies
             environ

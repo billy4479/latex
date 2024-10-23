@@ -1,0 +1,85 @@
+\documentclass[12pt]{extarticle}
+
+\title{Physics 2 Formulas}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+
+% \renewcommand{\vec}[1]{\uvec{#1}}
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\section{Maximal solutions either coincide or do not intersect}
+
+\begin{theorem}{}{}
+    In the same setting of the Peano-Picard theorem,
+    consider the maximal solution $u: I \to \R$
+    for the i.v.p. $u(t_0) = \lambda_0$.
+    Given $t_1 \in I$ and $\lambda_1 = u(t_1)$,
+    consider $\tilde{u}: \tilde I \to \R$,
+    the solution to the same ODE with initial condition $\tilde{u}(t_1) = \lambda_1$.
+    Then
+    \begin{equation}
+        I = \tilde I \quad \text{and} \quad u = \tilde u
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Since, by assumption, $u$ also solves the i.v.p. with initial condition $(t_1, \lambda_1)$,
+    by Peano-Picard, $I \subseteq \tilde I$ and $u = \left. \tilde u \right|_I$.
+
+    Since $t_0 \in I$ it means $t_0 \in \tilde I$, meaning that $\tilde u(t_0) = \lambda_0$
+    (since $u(t_0) = \lambda_0$), but now we can apply Peano-Picard again for the initial conditions $(t_0, \lambda_0)$
+    and prove the claim.
+\end{proof}
+
+
+\begin{theorem}{}{}
+    Under the assumptions of Peano-Picard, let $(t_0, \lambda_0)$ and $(t_0, \mu_0)$ with $\lambda_0 \ne \mu_0$.
+    Consider $u: I' \to \R$ and $v: I'' \to \R$ to be solutions for the ODE with initial conditions as above.
+    Then
+    \begin{equation}
+        u(t) \neq v(t) \quad \forall t \in I' \cap I''
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Assume that there exists $t_1 \in I' \cap I''$ such that $u(t_1) = v(t_1) = \lambda_1$.
+    Let $w: I \to \R$ be the maximal solution for initial condition $(t_1, \lambda_1)$,
+    then we must have that
+    \begin{equation}
+        I'\subseteq I, \quad I'' \subseteq I, \quad u = \left. w\right|_{I'}, \quad v = \left. w\right|_{I''}
+    \end{equation}
+
+    In particular, we must have $t_0 \in I \implies u(t_0) = w(t_0) = v(t_0)$, which is a contradiction.
+\end{proof}
+
+\section{\texorpdfstring{$t^j e^{\alpha_\ell t}$ form a basis of solutions}{Basis of solutions}}
+
+\begin{theorem}{}{}
+    Assume that the roots of the characteristic polynomial $p(z)$ are all real.
+    Let $\alpha_1, \dots, \alpha_n$ be the distinct roots of $p(z)$ and
+    $m_1, \dots, m_n$ be the algebraic multiplicity of each $\alpha_\ell$.
+
+    For each root, consider the following set of functions:
+    \begin{equation}
+        S = \left\{ t^j e^{\alpha_k t} : k \in 1, \dots, n; j \in 0, \dots, m_k -1 \right\}
+    \end{equation}
+    each one of them solves the ODE and $S$ is a basis of the space of solutions.
+\end{theorem}
+
+\begin{proof}
+    We will show that all the functions in $S$ solve the ODE.
+    Then, to show that they form a basis, it is sufficient to note that
+
+
+\end{proof}
+
+\section{Geometric multiplicity less than or equal to algebraic}
+
+\section{A matrix is diagonalizable iff geometric equals to algebraic}
+
+\end{document}

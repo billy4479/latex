@@ -18,6 +18,7 @@
           (nerdfonts.override { fonts = [ "FiraCode" ]; })
           ubuntu_font_family
           fg-virgil # excalidraw font
+          noto-fonts-color-emoji # `emoji` dependencies
         ];
 
         # https://discourse.nixos.org/t/project-local-fonts/22174/2?u=billy4479

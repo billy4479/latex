@@ -133,7 +133,7 @@
     \end{description}
 \end{proof}
 
-\section{Geometric multiplicity less than or equal to algebraic}
+\section{\texorpdfstring{$m_\gamma \leq M_\gamma$}{Geometric multiplicity less than or equal to algebraic}}
 
 \begin{theorem}{}{}
     For all eigenvalues $\gamma \in \R$ there holds $1 \leq m \leq M$,
@@ -175,7 +175,7 @@
     which means $M \geq m$.
 \end{proof}
 
-\section{A matrix is diagonalizable iff geometric equals to algebraic}
+\section{Diagonalizable \texorpdfstring{$\iff m_\gamma = M_\gamma$}{iff geometric equals to algebraic}}
 
 \begin{theorem}{}{}
     A square matrix is diagonalizable over $\C$ if and only if
@@ -188,13 +188,35 @@
 \begin{proof}
     We will just show the statement over $\R$ for simplicity.
 
-    We will also use the fact that non-zero eigenvector corresponding
+    We will also use lemma which reads that non-zero eigenvector corresponding
     to distinct eigenvalues are linearly independent without proof.
 
     \begin{description}
         \item[$\implies$] If a matrix is diagonalizable over $\R$ we can find a basis of eigenvector,
-              $v_1, \dots, v_n \in \R^n$: call $\gamma_j$ their eigenvalues.
-        \item[$\impliedby$]
+              $\mathcal B = \{v_1, \dots, v_n \} \in \R^n$: call $\gamma_j$ their eigenvalues.
+              Fix a specific $\gamma_j = \gamma$, then let $n_\gamma$ be the number of elements of $\mathcal B$
+              which are eigenvectors of $\gamma$.
+              These vectors belong to the eigenspace $\ker (A - \gamma \mathds 1)$ and,
+              since they are part of a basis, they are linearly independent.
+              So far we have that
+              \begin{equation}
+                  n_\gamma \leq m_\gamma \leq M_\gamma
+              \end{equation}
+              Moreover, since the vectors $v_j$ form a basis, necessarily $\sum n_\gamma = n$.
+              On the other hand, the sum of the multiplicities of the real roots of a polynomial is at most its degree,
+              which means $\sum M_\gamma \leq n$, and we obtain
+              \begin{equation}
+                  n = \sum n_\gamma \leq \sum m_\gamma \leq \sum M_\gamma \leq n
+              \end{equation}
+              therefore we must have $n_\gamma = m_\gamma = M_\gamma$ for all real roots $\gamma$.
+              It also follows that, since $\sum M_\gamma = n$ (where $n$ was just the sum over the real roots),
+              $p(z)$ has only real roots (there is no \say{space} for complex ones).
+        \item[$\impliedby$] If all roots are real and $m_\gamma = M_\gamma$, then $\sum m_\gamma = \sum M_\gamma = n$.
+              This means that we can find a basis of $\ker(A - \gamma \mathds{1})$ consisting of $m_\gamma$ vectors
+              for each $\gamma$, which together form a collection of $n$ vectors.
+              To conclude they are a basis we are just left to check that they are linearly independent.
+              We now just use the fact that basis of eigenspaces are indeed linearly independent among the same eigenspace
+              and combine it with the lemma.
     \end{description}
 \end{proof}
 

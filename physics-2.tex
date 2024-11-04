@@ -1825,6 +1825,133 @@ Given these properties we can write the electric displacement as
 where we define $\varepsilon_r = \chi_e + 1$ to be the \textbf{relative permittivity}.
 In vacuum this values is equal to $1$.
 
+\section{Electric current}
 
+Consider a capacitor charged with some charge $Q$ and assume we short it.
+We have that $\Delta V \sim e^{-t/\tau}$, $Q \sim e^{t/\tau}$ and the wire heats up.
+
+Let us define the current as
+\begin{equation}
+    I(t) = \dv{q}{t}
+\end{equation}
+
+Electrons in $\vec E = 0$ move in a random direction with
+$\langle \vec v_T \rangle = 0$ and
+$\sqrt{\langle \abs{\vec v_T}^2 \rangle} \sim \sqrt{\frac{3 k_B T}{m_e}} \sim 120 \si{\kilo \meter \per \second}$.
+If we now create an electric field we have that the drift velocity $\langle \vec v_d \rangle = \vec v_d \neq 0$.
+This velocity is constant w.r.t. time because of collisions.
+
+Now we want find a relation between $I$ and $\vec v_d$.
+How much charge $\dd q$ will flow through $\dd S$ (parallel to $\vec v_d$) in time $\dd t$
+if the wire has $n$ free charges per unit volume?
+
+We know that only particles that are at a distance $d = v_d \dd t$ will be able to cross $\dd{S}$.
+Then
+\begin{equation}
+    \dd q = q n v_d \dd t \dd S \implies \dd I = q n v_d \dd S
+\end{equation}
+and in the general case where $\vec v_d$ is not parallel to $\vec{\dd S}$ we have
+\begin{equation}
+    \dd q = n q \vec v_d \cdot \vec{\dd S} \dd t = \vec J \cdot \vec{\dd S} \dd t
+\end{equation}
+where $\vec J$ is the \emph{current density vector}
+with $[J] = \si{\coulomb \per \meter \squared \per \second} = \si{\ampere \per \meter \squared}$.
+where $\si{\ampere} = \si{\coulomb \per \second}$ is the Ampere and is the unit of $I$.
+
+Then to compute $I$ we can integrate on both sides:
+\begin{equation}
+    I = \int_S \vec J \cdot \vec{\dd{S}} = \Phi_S (\vec J)
+\end{equation}
+
+\subsection{Conservation of charge}
+
+Let $q(t)$ be the charge enclosed in a closed surface $S$.
+If $\dd q \neq 0$ it means that some charge moved in or out of the surface, but it did not disappear.
+We know that charges move in the direction of $\vec J$, hence
+\begin{equation}
+    -\dd q = \left[\oint_S \vec J \cdot \vec{\dd S}\right] \dd t
+\end{equation}
+therefore we can write the \emph{conservation of charge in integral form}
+\begin{equation}
+    - \dv{q}{t} = \oint_S \vec J \vec{\dd S}
+\end{equation}
+
+We can also write it in local form:
+\begin{equation}
+    q(t) = \int_\mathcal{V} \rho(x, y, z, t) \dd x \dd y \dd z
+\end{equation}
+and substituting in the equation above we get
+\begin{align}
+    - \dv{t} \int_\mathcal{V} \rho(x, y, z, t) \dd x \dd y \dd z & = - \int_\mathcal{V} \pdv{\rho}{t} \dd x \dd y \dd z \\
+                                                                 & = \oint_S \vec J \cdot \vec{\dd S}                   \\
+                                                                 & = \int_\mathcal{V} \div \vec J \dd \tau
+\end{align}
+which gives us
+\begin{equation}
+    \div \vec J = - \dv{\rho}{t}
+\end{equation}
+which is called \textbf{continuity equation}.
+
+We say that we are in \emph{stationary condition} if no quantity depends on time,
+therefore $\pdv{\rho}{t} = 0 = \div \vec J$ and we say that $\vec J$ is \emph{solenoidal}.
+This means that either all charges are fixed or some charges do move but $\rho$ remains constant.
+
+\subsection{Ohm's law}
+
+Consider a cylindrical conductor of length $l$
+where the two faces $S$ are kept at a potential difference $\Delta V$ constant.
+Let $V^+$ be the potential on one face and $V^-$ the potential on the other,
+moreover assume that the particles that carry charge are positive.
+
+In this situation we will have a current flowing from $V^+$ to $V^-$.
+Ohm's law tells us that the potential difference and the current are proportional:
+\begin{equation}
+    \Delta V = R I
+\end{equation}
+where $R$ is the \textbf{resistance} and it is measured in Ohm $[R] = \si{\ohm} = \si{\volt \per \ampere}$.
+
+We can try to justify this result by using the Drude model of conductors,
+this is a classical model that does not use quantum mechanics but it still works nicely.
+At room temperature $T \simeq 300 \si{\kelvin}$
+we have an average time between two collisions $\tau \simeq 2.5 \cdot 10^14 \si{\second}$.
+Moreover we will use the result $E = \frac{\Delta V}{l}$, this is a non trivial result which is proven in the book,
+(Example 7.3, maybe, this is the only one that satisfies Laplace equation).
+
+Now we can compute the acceleration of the particle by using Newton's law:
+\begin{equation}
+    a = \frac{e E}{m_e}
+\end{equation}
+so that we cna compute the average value of the drift velocity.
+We have that $v_d^{\text{max}} = a \tau$, therefore the average drift velocity is
+\begin{equation}
+    v_d = \frac{v_d^{\text{max}}}{2} = \frac{e E \tau}{2 m_e}
+\end{equation}
+
+Then we can substitute in the formula for $I$ to get
+\begin{equation}
+    I = n e \int_S \vec v_d \cdot \vec{\dd S} = n e v_d S = \underbrace{\frac{n e^2 \tau}{2 m_e}}_\sigma E S
+\end{equation}
+where $\sigma$ is called \emph{conductivity}.
+We can also substitute into Ohm's law as
+\begin{equation}
+    \Delta V = \frac{l}{\sigma S} I
+\end{equation}
+
+Equivalently we can write Ohm's law as
+\begin{equation}
+    I = \sigma S E \implies \frac{I}{S} = \vec J = \sigma \vec E
+\end{equation}
+
+\subsection{Joule's law}
+
+We now want to look into the work that $\vec E$ is doing inside the conductor.
+\begin{align}
+    \dd W      & = (V^+ - V^-) \dd q = \Delta V \dd q          \\
+               & = R I \dd q = R I^2 \dd t                     \\
+    \implies P & = R I ^ 2 = \Delta V I = \frac{\Delta V^2}{R}
+\end{align}
+
+This equation tells us that the work is dissipated into the collisions of the electrons into the nuclei,
+which generates heat.
 
 \end{document}

@@ -1,0 +1,78 @@
+\documentclass[12pt]{extarticle}
+
+\title{Decision Theory - Problem Set 2}
+\author{Czapran, Ellero, Porta, Tan}
+\date{a.y. 2024/2025}
+
+\usepackage{parskip} % for no indentation
+\usepackage[a4paper,margin=1.5cm]{geometry} % to adjust margins
+\usepackage{bookmark} % for pdf bookmarks
+
+\usepackage{enumitem} % for custom lists
+
+% We want numbers on subsections too
+\setcounter{secnumdepth}{3}
+
+\usepackage{amssymb}   % for varnothing and other weirds symbols
+\usepackage{amsmath}   % basically everything
+\usepackage{amsthm}    % for proof environment
+\usepackage{mathtools} % for underbrace, arrows, and a lot of other things
+\usepackage{mathrsfs}  % for "mathscr"
+\usepackage{bm}        % for bold math symbols
+\usepackage{physics}   % for derivatives and lots of operators
+\usepackage{dsfont}    % for \mathds{1}
+
+\numberwithin{table}{section}
+\numberwithin{figure}{section}
+
+\usepackage{cancel}    % for canceling terms
+\renewcommand{\CancelColor}{\color{red}}
+
+% Operators
+\newcommand{\gt}{>}
+\newcommand{\lt}{<}
+\newcommand{\indep}{\perp \!\!\! \perp}
+
+% Sets
+\newcommand{\C}{\mathds{C}}
+\newcommand{\R}{\mathds{R}}
+\newcommand{\N}{\mathds{N}}
+\newcommand{\Q}{\mathds{Q}}
+\newcommand{\Z}{\mathds{Z}}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+\stepcounter{section}
+
+\section*{Problem 2}
+\stepcounter{section}
+
+\section*{Problem 3}
+\stepcounter{section}
+
+\section*{Problem 4}
+\stepcounter{section}
+
+Let us write $u(c)$ as
+\begin{equation}
+    u(c) = \frac{1}{2} u(c + k) + \frac{1}{2} u(c-k) + \pi(c, k, u) [ u(c + k) - u(c-k)]
+\end{equation}
+
+Then, since $u$ is concave, by choosing $\alpha = \frac{1}{2}$ we get
+\begin{equation}
+    u(\alpha (c - k) + (1-\alpha) (c + k)) = u(c) \geq \alpha u(c - k) + (1-\alpha) u(c+k) = \frac{1}{2} u(c + k) + \frac{1}{2} u(c-k)
+\end{equation}
+which means that $\pi(c, k, u) [ u(c + k) - u(c-k)] \geq 0$.
+
+Moreover, since $u$ is increasing, $u(c + k) - u(c-k) \geq 0$, hence, necessarily $\pi(c, k, u) \geq 0$ too.
+
+\section*{Problem 5}
+\stepcounter{section}
+
+
+\end{document}

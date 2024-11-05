@@ -13,6 +13,7 @@
 
 \usepackage{subfig}
 \usepackage{emoji}
+\usepackage{circuitikz}
 
 % \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -1953,5 +1954,144 @@ We now want to look into the work that $\vec E$ is doing inside the conductor.
 
 This equation tells us that the work is dissipated into the collisions of the electrons into the nuclei,
 which generates heat.
+
+\subsection{Electromotive force}
+
+When you close a circuit the current tends to make the potential difference go away.
+To keep $\Delta V$ constant we need a device called \emph{battery} which keeps the potential difference constant.
+
+A battery needs to be able to exert some force per unit charge in order to
+take the charge back to a point of higher potential from a point of lower one.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.5\textwidth]{assets/physics-2/battery.svg}
+\end{figure}
+
+The battery generates a field $\vec E_b$ such that
+\begin{equation}
+    \vec E_b = \begin{cases}
+        0         & \text{outside}            \\
+        -\vec E_S & \text{inside the battery}
+    \end{cases}
+\end{equation}
+Then, we define the electromotive force as
+\begin{align}
+    \Sigma & = \oint_\text{circuit} (\vec E_s + \vec E_b) \cdot \vec{\dd l} \\
+           & = \oint_\text{circuit} \vec E_b \cdot \vec{\dd l}              \\
+           & = \int_{A}^{B} \vec E_b \cdot \vec{\dd l }                     \\
+           & = - \int_A^B \vec E_s \cdot \vec{\dd l}                        \\
+           & = V_B - V_A = \Delta V
+\end{align}
+
+\subsection{Kirchhoff's laws}
+
+In stationary conditions we have the following laws:
+\begin{enumerate}
+    \item If we have a node in a circuit where the wires all have some current $I_1, \dots, I_n$ then
+          \begin{equation}
+              \sum_{k=1}^{n} I_k = 0
+          \end{equation}
+          \begin{proof}
+              This is due to the fact that $\div \vec J = 0 = \oint_S \vec J \cdot \vec{\dd S}$.
+              If we take $S$ to be a sphere centered at the node we have that $J$ is non-zero only on the surfaces
+              $S_1, \dots, S_n$ the wires sections.
+              We can therefore write
+              \begin{equation}
+                  \sum_{k = 1}^n \int_{S_k} \vec J \cdot \vec{\dd S} = \sum_{k = 1}^n I_k = 0
+              \end{equation}
+          \end{proof}
+
+    \item If we have a loop in a circuit then the sum of the potential differences between
+          all the nodes in the loop is 0.
+          \begin{equation}
+              \sum_k \Delta V_k = 0
+          \end{equation}
+\end{enumerate}
+
+Actually these laws are valid even in \emph{quasi-stationary conditions}.
+This means that quantity can change in time but it has to be in the same way in the same part of the wire.
+This means that, for example, measuring the current in some point of the circuit at time $t$ is equal in all
+points of the circuit.
+Even more precisely, this means that the circuit is \say{small} relatively to the speed at which electricity travels,
+the electric field moves at the speed of light but the current needs some time to adapt to the electric field.
+For all the circuits we have on Earth we can assume this condition.
+
+\subsubsection{Resistors in series and in parallel}
+
+\paragraph{Series}
+If we have two resistors $R_1, R_2$ connected in parallel, consider a node $C$ in between the two and a current $I$.
+By Kirchhoff's law we have that the current at $C$ has to be $I$ too, since there are no other currents.
+Then, by Ohm's law we have
+\begin{equation}
+    \begin{cases}
+        V_A - V_C = R_1 I \\
+        V_C - V_B = R_2 I
+    \end{cases}
+\end{equation}
+which gives us
+\begin{equation}
+    V_A - V_B = (R_1 + R_2)I = \Delta V \implies R_\text{eq} = R_1 + R_2
+\end{equation}
+
+\paragraph{Parallel}
+By Kirchhoff we know that $I = I_1 + I_2$ and by Ohm's law we have
+\begin{equation}
+    \begin{cases}
+        V_A - V_B = R_1 I_1 \\
+        V_A - V_B = R_2 I_2
+    \end{cases} \implies
+    \begin{cases}
+        I_1 = \frac{V_A - V_B}{R_1} \\
+        I_2 = \frac{V_A - V_B}{R_2}
+    \end{cases}
+\end{equation}
+and combining these two laws together we get
+\begin{equation}
+    \oneover{R} = \oneover{R_1} + \oneover{R_2}
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \begin{circuitikz}
+        \draw (-1.5,1.5) to[short,i=$I$, -*] (0,1.5);
+        \draw (0,1.5) to[short,i=$I_1$] (0,3);
+        \draw (0,1.5) to[short,i=$I_2$] (0,0);
+        \draw (0,3) to[R=$R_1$] (3,3);
+        \draw (0,0) to[R=$R_2$] (3,0);
+        \draw (3,3) -- (3,0);
+        \draw (3,1.5) to[short,i=$I$, *-] (4.5,1.5);
+    \end{circuitikz}
+    \caption{Two resistors in parallel}
+\end{figure}
+
+\subsection{Discharge of a capacitor}
+
+Consider a circuit where we have a capacitor charged with $Q_0$ and a resistor $R$.
+At $t = 0$ we short the circuit.
+We want to compute $Q(t)$.
+
+We have
+\begin{equation}
+    \Delta V = R I(t) = \frac{Q(t)}{C} \implies I(t) = \frac{Q(t)}{RC}
+\end{equation}
+but we can replace $I$ with its definition
+\begin{equation}
+    I(t)= -\dv{Q(t)}{t}
+\end{equation}
+note the minus sign: this is because $Q$ is the charge on the plates of the capacitor,
+which is equal and opposite to the one flowing in the wire.
+
+Now we have a differential equation of the form
+\begin{equation}
+    \begin{cases}
+        \dv{Q(t)}{t} = - \frac{Q(t)}{RC} \\
+        Q(t = 0) = Q_0
+    \end{cases}
+\end{equation}
+which can be easily solved and gives us
+\begin{equation}
+    Q(t) = Q_0 e^{- t/\tau} \quad \text{with } \tau = RC
+\end{equation}
 
 \end{document}

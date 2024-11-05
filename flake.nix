@@ -55,6 +55,7 @@
             subfig
             emoji
             doublestroke
+            circuitikz
 
             # Indirect dependencies
             environ

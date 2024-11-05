@@ -9,8 +9,11 @@
 \usepackage{preamble}
 
 \newcommand{\cov}{{\operatorfont Cov}}
+\renewcommand{\var}{{\operatorfont var}}
+\newcommand{\E}{\mathds{E}}
 % Distributions
 \newcommand{\Bernoulli}{{\operatorfont Bernoulli}}
+\newcommand{\Binomial}{{\operatorfont Binomial}}
 \newcommand{\Normal}{{\operatorfont N}}
 \newcommand{\GammaD}{{\operatorfont Gamma}}
 \newcommand{\Poisson}{{\operatorfont Poisson}}
@@ -441,6 +444,8 @@ or, even more generally, for some fixed $g_1, \dots, g_n$,
 \end{equation}
 
 \section{Bayesian statistics}
+
+\label{sec:bayes}
 
 \subsection{Introduction}
 
@@ -997,5 +1002,130 @@ Consider as test statistic
 \end{equation}
 and if our $H_0$ is defined as $H_0 : \mu \leq \nu$
 we can consider an approximate critical region of $(\xi_{1-\alpha_0}, \infty)$.
+
+% TODO: wilcoxon, goodness of fit, likelihood
+
+\section{Optimality Theorem}
+
+In this section we will try to find the \say{best} estimator and test.
+The first step in this process is to remove the unneeded data.
+
+\subsection{Sufficient statistic}
+
+We want to find a summary statistic $V(X)$ of $X = (X_1, \dots, X_n)$ containing all the relevant information of $X$.
+
+\begin{definition}{Sufficient statistic}{sufficient-statistic}
+    Let $X$ be a statistical model of discrete probability distributions that depend on a parameter $\theta$.
+    A statistic $V = V(X)$ is called sufficient if
+    \begin{equation}
+        P(X = x \mid V = v) \text{ does not depend on } \theta
+    \end{equation}
+\end{definition}
+
+\begin{example}{Bernoulli}{}
+    Consider a model $X_1, \dots, X_n \sim \Bernoulli(p)$.
+    Prove that the statistic
+    \begin{equation}
+        V(X) = \sum_{i =1}^n X_i \sim \Binomial(n, p)
+    \end{equation}
+    is a sufficient statistic.
+\end{example}
+
+\begin{proof}
+    \begin{align}
+        P(X = x \mid V = v) & = \frac{X = x, V = v}{V = v}                                                                          \\
+                            & = \frac{\prod P(X_i = x_i)}{P(V = v)}                                                                 \\
+                            & = \frac{\cancel{p^{\sum x_i}} \cancel{(1-p)^{n - \sum x_i}}}{\binom{n}{v} \cancel{p^v (1-p)^{n - v}}}
+    \end{align}
+\end{proof}
+
+\begin{theorem}{Factorization theorem}{factorization}
+    Suppose that the statistical model for $X$ consists of discrete distributions.
+    A statistic $V = V(X)$ is sufficient if and only if there exists $v \mapsto g_\theta(v)$ and $x \mapsto h(x)$
+    such that for all $x$ and $\theta$
+    \begin{equation}
+        p_\theta(x) = g_\theta (V(x)) h(x)
+    \end{equation}
+    where $p_\theta$ is the probability mass function of $X$.
+\end{theorem}
+
+\begin{proof}
+    First assume that $V$ is a sufficient statistic:
+    \begin{align}
+        p_\theta(X = x) & = p_\theta(X = x, V = v)                                                                               \\
+                        & = \underbrace{p_{\cancel{\theta}}(X = x \mid V = v)}_{h(x)} \underbrace{p_\theta(V = v)}_{g_\theta(v)}
+    \end{align}
+
+    Now suppose that $p_\theta$ is factorizable:
+    \begin{align}
+        p_\theta(X = x_0 \mid V = v) & = \frac{p_\theta(X = x_0, \cancel{V = v})}{p_\theta(V = v)}                        \\
+                                     & = \frac{p_\theta (X = x_0)}{\sum_{x: V(x) = v} p_\theta (X = x)}                   \\
+                                     & = \frac{g_\theta(V(x_0)) h(x_0)}{\sum_{x: V(x) = v} g_\theta(V(x)) h(x)}           \\
+                                     & = \frac{\cancel{g_\theta(v)} h(x_0)}{\cancel{g_\theta(v)} \sum_{x: V(x) = v} h(x)}
+    \end{align}
+    which indeed does not depend on $\theta$.
+\end{proof}
+
+Note that sufficient statistics are \emph{not unique}.
+Our goal is to find one that is simple.
+
+\begin{lemma}{}{}
+    Let $V$ be a sufficient statistic and $f$ be a one-to-one map.
+    Then $V = f(V^*)$ is sufficient if and only if $V^*$ is also sufficient.
+\end{lemma}
+
+For example, we can show that for a gaussian distributed sample,
+a minimal statistic depends only on $\bar X$ and $S_X^2$.
+
+Similarly, for a uniform distributed sample $X_{(n)}$ (the largest sample) is a sufficient statistic.
+
+\subsection{Optimality theory}
+
+We want to find the best estimator, which gives us the smallest MSE.
+But this is impossible, because $T(X) = g(\theta_0)$ has 0 MSE everywhere, which is impossible.
+Therefore we have to relax our requirements:
+\begin{itemize}
+    \item The \emph{Bayes criterion} (\Cref{sec:bayes}) minimizes the average MSE.
+    \item The \emph{Minmax criterion} minimizes the worst case scenario MSE:
+          \begin{equation}
+              \sup_{\theta \in \Theta} MSE(T(x), g(\theta))
+          \end{equation}
+    \item \emph{Universal Minimum Variance Uniform estimator} (UMVU) is an estimator for $g(\theta)$
+          which is unbiased and has a smaller variance than any other estimator.
+          Note that it is not always possible to find one.
+\end{itemize}
+
+\subsubsection{Constricting UMVU estimators}
+
+\begin{theorem}{Rao-Blackwell}{rao-blackwell}
+    Let $V$ be a sufficient statistic and $T$ a real valued estimator for $g(\theta)$.
+    Then there exists an estimator $T^*(V)$ for $g(\theta)$ which depends only on $V$ such that
+    $E_\theta T = E_\theta T^*$ and var$_\theta T^* \leq$ var$_\theta T$ for all $\theta$.
+    In particular $\MSE(T, g(\theta)) \geq \MSE(T^*, g(\theta))$.
+\end{theorem}
+
+\begin{proof}
+    Let us consider only discrete cases.
+
+    Let $T^* = E(T\mid V)$ which by definition does not depend on $\theta$, then $T^*$ is an estimator.
+    We have
+    \begin{equation}
+        E_\theta T^* = \sum_V T^* (v) p_\theta(V = v) = \sum_V E(T(V = v) p_\theta(V = v)) = E_\theta T
+    \end{equation}
+
+    Furthermore,
+    \begin{align}
+        E_\theta T T^* & = \sum_V E_\theta(T T^*) p_\theta(V = v)                \\
+                       & = \sum_V T^*(v) E_\theta(T \mid V = v) p_\theta (V = v) \\
+                       & = \sum_V T^*(v)^2 p_\theta(V = v) = (ET^*)^2
+    \end{align}
+    which gives us
+    \begin{equation}
+        \var_\theta (T) = \E_\theta T^2 - (\E_\theta(T))^2 \geq \E_\theta (T^*)^2
+    \end{equation}
+
+    TODO: explain this better, can be asked during the exam
+\end{proof}
+
 
 \end{document}

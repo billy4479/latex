@@ -8,7 +8,7 @@
 
 \usepackage{preamble}
 
-\newcommand{\cov}{{\operatorfont Cov}}
+\newcommand{\cov}{{\operatorfont cov}}
 \renewcommand{\var}{{\operatorfont var}}
 \newcommand{\E}{\mathds{E}}
 % Distributions
@@ -1085,12 +1085,15 @@ We want to find the best estimator, which gives us the smallest MSE.
 But this is impossible, because $T(X) = g(\theta_0)$ has 0 MSE everywhere, which is impossible.
 Therefore we have to relax our requirements:
 \begin{itemize}
-    \item The \emph{Bayes criterion} (\Cref{sec:bayes}) minimizes the average MSE.
+    \item The \emph{Bayes criterion} (\Cref{sec:bayes}) minimizes the weighted average MSE.
+          \begin{equation}
+              \int \MSE(g(\theta), T) \pi(\theta) \dd \theta
+          \end{equation}
     \item The \emph{Minmax criterion} minimizes the worst case scenario MSE:
           \begin{equation}
-              \sup_{\theta \in \Theta} MSE(T(x), g(\theta))
+              \sup_{\theta \in \Theta} \MSE(T(x), g(\theta))
           \end{equation}
-    \item \emph{Universal Minimum Variance Uniform estimator} (UMVU) is an estimator for $g(\theta)$
+    \item \emph{Universal Minimum Variance Unbiased estimator} (UMVU) is an estimator for $g(\theta)$
           which is unbiased and has a smaller variance than any other estimator.
           Note that it is not always possible to find one.
 \end{itemize}
@@ -1127,5 +1130,136 @@ Therefore we have to relax our requirements:
     TODO: explain this better, can be asked during the exam
 \end{proof}
 
+\begin{definition}{Complete statistic}{complete-statistic}
+    A statistic $V$ is complete if $\E_\theta f(V) = 0$ for all $\theta \in \Theta$
+    holds only for functions $f$ such that
+    \begin{equation}
+        p_\theta(f(V) = 0) = 1
+    \end{equation}
+\end{definition}
+
+This definition means that it is impossible to dorm an unbiased estimator of $0$ from it nontrivially.
+Consequently if $\exists$ an unbiased estimator $T$ for $g(\theta)$ then it is unique.
+
+\begin{proof}
+    Consider two unbiased estimators $T_1, T_2$ for $g(\theta)$.
+    We have
+    \begin{equation}
+        \E(T_1 - T_2) = \E(T_1) - \E(T_2) = g(\theta) - g(\theta) = 0
+    \end{equation}
+    TODO: finish here
+\end{proof}
+
+\begin{theorem}{Lehmann-Scheffé}{lehmann-scheffe}
+    Let $V$ be a sufficient and complete statistic and let $T$ be an unbiased estimator for $g(\theta)$ that depends only on $V$.
+    Then $T$ is a UMVU estimator for $g(\theta)$.
+\end{theorem}
+\begin{proof}
+    By \Cref{thm:rao-blackwell} there exists an unbiased estimator $S^*$ which has same expectation and lower variance compared to $S$.
+    We now want to show that $S^*$ is equal to $T$.
+    Consider $S^* - T$: indeed it only depends on $V$ and
+    \begin{equation}
+        \E_\theta(S^* - T) = \E_\theta S^* -\E_\theta T = g(\theta) - g(\theta) = 0
+    \end{equation}
+    By completeness we get that $p_\theta(S^* = T) = 1$ which means that $\var_\theta(T) = \var_\theta(S^*) \leq \var_\theta(S)$.
+\end{proof}
+
+\begin{definition}{Exponential family}{exponential-family}
+    A family of distributions $p_\theta$ that depends on a parameter $\theta$
+    is called a $k$-dimensional exponential family if it can be written as
+    \begin{equation}
+        p_\theta(x) = c(\theta) h(x)e^{\sum^k_{j=1} Q_j(\theta) V_j(x)}
+    \end{equation}
+\end{definition}
+
+\begin{theorem}{UMVU for exponential family}{umvu-exp}
+    If a statistical model is given as a $k$-dimensional exponential family such that
+    \begin{equation}
+        \{(Q_1(\theta), \dots, Q_k(\theta)) : \theta \in \Theta \} \subset \R^k
+    \end{equation}
+    has an interior point, then the unbiased estimator $T = T(V)$ for $g(\theta)$
+    depending only on $V = (V_1, \dots, V_k)$ is UMVU.
+\end{theorem}
+
+\begin{example}{Binomial distribution}{}
+    Write the binomial distribution as a exponential family distribution.
+\end{example}
+\begin{proof}[Solution]
+    We can write the pmf as
+    \begin{equation}
+        (1-p)^n \binom{n}{p}e^{x \log\left(\frac{p}{1-p}\right)}
+    \end{equation}
+    then $h(x) = \binom{n}{x}$, $V_1(x) = x$ and $Q(p) = \log\left(\frac{p}{1-p}\right)$.
+
+    We note that
+    \begin{equation}
+        \{Q_1(\theta) = \log \left( \frac{1}{1-p} \right) : p\in(0, 1)\} = \R
+    \end{equation}
+    has of course an internal point, therefore by \cref{thm:umvu-exp} $V$ it is sufficient and complete
+    and by \cref{thm:lehmann-scheffe} any unbiased estimator is UMVU.
+\end{proof}
+
+\begin{theorem}{Cramér-Rao inequality}{cramer-rao}
+    Suppose that $\theta \mapsto p_\theta(x)$ is differentiable for every $x$.
+    Under certain regularity conditions, the variance of every unbiased estimator $T$ fo $g(\theta) \in \R$
+    satisfies
+    \begin{equation}
+        \var_\theta T \geq \frac{g'(\theta)^2}{I_\theta}
+    \end{equation}
+    where $I_\theta$ is the Fisher information.
+\end{theorem}
+\begin{proof}
+    Since $T$ is unbiased $\E_\theta T = g(\theta)$.
+    \begin{align}
+        g'(\theta)                             & = \pdv{\theta} \int T(x) p_\theta(x) \dd x                \\
+                                               & \int T(x) p'_\theta(x) \dd x                              \\
+        \implies \pdv{\theta} \log p_\theta(x) & = \dot l_\theta(x) = \frac{\dot p_\theta(x)}{p_\theta(x)} \\
+        \implies \dot p_\theta(x)              & = \dot l_\theta(x) p_\theta(x)
+    \end{align}
+
+    Since $\E_\theta \dot l_\theta(x) = 0$ we get that
+    \begin{equation}
+        g'(\theta) = \E_\theta(T(x) \dot l_\theta (x)) - \E_\theta(T(x)) \E_\theta(\dot l_\theta(x)) = \cov_\theta(T(x), \dot l_\theta(x))
+    \end{equation}
+    and by applying Cauchy-Schwartz we get
+    \begin{equation}
+        g'(\theta)^2 = \cov(T, \dot l_\theta)^2 \leq \var_\theta (T) \var(\dot l_\theta) = \var_\theta(T) I_\theta
+    \end{equation}
+    and rearranging we get the result.
+\end{proof}
+
+\begin{corollary}{}{}
+    \begin{itemize}
+        \item For $g(\theta) = \theta$ we get a lower bound of $I_\theta^{-1}$.
+        \item If $T$ is UMVU then it attains the lower bound.
+        \item Larger Fisher information yields better lower bounds.
+    \end{itemize}
+\end{corollary}
+
+\begin{lemma}{Sum of Fisher information}{}
+    Let $X, Y$ be independent random variables.
+    The Fisher information in the observation $(X, Y)$ is the sum of the information of $X$ and $Y$ separately.
+\end{lemma}
+
+\begin{proof}
+    Assume $X$ and $Y$ are continuous.
+    Since they are independent the likelihood function factorizes
+    \begin{equation}
+        \theta \mapsto p_\theta(x)q_\theta(y)
+    \end{equation}
+    and the score function is
+    \begin{equation}
+        \pdv{\theta} \log(p_\theta(x)q_\theta(y)) = \pdv{\theta} \log p_\theta(x) + \pdv{\theta} \log q_\theta(x)
+    \end{equation}
+    but since $X \indep Y$ we have that the variance is linear:
+    \begin{align}
+        I_\theta(X, Y) & = \var \left(\pdv{\theta} \log p_\theta(x) + \pdv{\theta} \log q_\theta(x)\right)                   \\
+                       & = \var \left(\pdv{\theta} \log p_\theta(x)\right) + \var \left(\pdv{\theta} \log q_\theta(x)\right) \\
+                       & = I_\theta(X) + I_\theta(Y)
+    \end{align}
+\end{proof}
+
+Under certain regularity conditions the MLE $\hat \theta_n$ in the limit as $n \to \infty$ becomes UMVU.
+This also applies for most Bayes estimators but not for the method of moments estimator.
 
 \end{document}

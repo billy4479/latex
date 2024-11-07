@@ -14,6 +14,7 @@
 \usepackage{subfig}
 \usepackage{emoji}
 \usepackage{circuitikz}
+\usetikzlibrary{calc,quotes,angles}
 
 % \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -2093,5 +2094,280 @@ which can be easily solved and gives us
 \begin{equation}
     Q(t) = Q_0 e^{- t/\tau} \quad \text{with } \tau = RC
 \end{equation}
+
+\section{Magnetic field}
+
+\subsection{Lorentz force}
+
+Assume we have a field $\vec B$ called the magnetic field,
+for now we don't care how it is generated, we just assume that it is there.
+
+If we have a charge $q$ moving with velocity $\vec v$ inside a magnetic field $\vec B$
+the particle will be subject to a force
+\begin{equation}
+    \vec F_\text{mag} = q \vec v \cross \vec B
+\end{equation}
+and if we also have an electric field the total force will be
+\begin{equation}
+    \vec F_\text{tot} = q (\vec E + \vec v \cross \vec B)
+\end{equation}
+
+\subsubsection{Motion of a particle in \texorpdfstring{$\vec B$}{B}}
+
+\begin{example}{$\vec v \perp \vec B$}{}
+    Consider a particle with mass $m$, charge $q$ and velocity $\vec v$
+    such that $\vec v$ is perpendicular to a constant magnetic field $\vec B$.
+
+    What is the motion of the particle?
+\end{example}
+
+\begin{proof}[Solution]
+    We have that
+    \begin{equation}
+        \vec F = ma = q \vec v \cross B = q v B \underbrace{\sin \theta}_{= 1} = q v B = \text{const}
+    \end{equation}
+
+    Since the force is constant even though the velocity varies we deduce that $q$
+    is moving in uniform circular motion.
+
+    Then we can compute the centripetal acceleration
+    \begin{align}
+        a = \frac{q v B}{m} & \implies \omega = \frac{qB}{R}   \\
+                            & \implies T = \frac{2 \pi m}{q B}
+    \end{align}
+\end{proof}
+
+Constructing on the previous example we can derive the case where $\vec v$ is not parallel to $\vec B$.
+In this case we will have that $F = qvB \sin \theta$,
+therefore the particle will move in an helical trajectory with
+$R = \frac{mv \sin \theta}{q B}$ and the step $x = \frac{2 \pi m}{q B} v \cos \theta$.
+
+TODO: missing velocity selector and Moss spectrometer
+
+\subsubsection{Force on current carrying wires}
+
+Consider a wire. We want to compute $\vec{\dd F}$.
+We have
+\begin{gather}
+    \dd q = \dd N q = q n \dd S \dd l = qn \dd \tau \\
+    \implies \vec{\dd F} = q n \vec v_d \cross \vec B = \vec J \cross \vec B \\
+    \implies \vec F = \int_\text{wire} \vec J \cross \vec B \dd{\tau}
+\end{gather}
+
+Now consider a simplified case where the wire is 1D.
+Then
+\begin{equation}
+    \dd q = \dd N q = q n \dd l = \lambda_+ v_d \dd t
+\end{equation}
+where $\lambda_+ = qn$ is the \say{density} of moving charges.
+This gives us
+\begin{equation}
+    \dv{q}{t} = I = \lambda_+ v_d
+\end{equation}
+and we get
+\begin{align}
+    \vec F & = \int \vec v_d \cross \vec B \dd q
+    = \int \lambda_+ \cdot \vec v_d \cross \vec B \dd l                  \\
+           & = \int (\lambda_+ \cdot v_d) (\hat v_d \cross \vec B) \dd l
+    = \int \lambda_+ v_d (\vec{\dd l} \cross \vec B)                     \\
+           & = \int I (\vec {\dd l} \cross \vec B)
+    = I \int \vec B \cross \vec{\dd l}
+\end{align}
+
+\subsubsection{Work of the magnetic field}
+
+We have
+\begin{align}
+    \dd W & = \vec F \cdot \vec{\dd l}
+    = q(\vec v \cross B) \cdot \vec{\dd l}          \\
+          & = q(\vec v \cross B) \cdot \vec v \dd t
+    = 0
+\end{align}
+therefore the work of the magnetic field is always 0.
+
+\subsubsection{Motion due to the magnetic field}
+
+Consider the circuit in \Cref{fig:work-magnetic}.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.5\textwidth]{assets/physics-2/work-magnetic.svg}
+    \caption{A circuit partially inside a magnetic field $\vec B$.
+        Assume $\vec B$ is uniform and directed into the page}
+    \label{fig:work-magnetic}
+\end{figure}
+
+We can compute that the magnetic forces on the two wire portions $b$ cancel each other,
+while the one on $a$ will be directed upwards and contrast the gravitational force.
+
+Call $\vec w$ the velocity of the charge carriers in the wire:
+\begin{equation}
+    \vec F_\text{mag}^\perp = q \abs{\vec w \cross \vec B} = q w B = \lambda_+ a w B = I a B
+\end{equation}
+
+Assume now that the magnetic force is strong enough that the circuit starts to move upwards,
+therefore we have that \emph{something} must be doing work.
+We could be tempted to say that $\vec B$ is doing work, but we have proved earlier that $W_\text{mag} = 0$ always:
+where is the work coming from then?
+
+Since the system is now moving with a vertical velocity $\vec u$ we have that also the charge carriers
+will receive some vertical velocity:
+\begin{equation}
+    \vec v = \vec w + \vec u
+\end{equation}
+This means that now the magnetic force also has a parallel component w.r.t. the flow of charge carriers
+which will be directed opposite to $\vec w$, as it can be seen in \Cref{fig:mag-field-parallel}.
+
+This means that the magnetic force is opposing the flow of charge, therefore the battery has to do extra work
+in order to keep the current constant.
+We have
+\begin{equation}
+    \vec F_\text{mag}^\parallel = q u B = \lambda_+ a u B
+\end{equation}
+and therefore the work is
+\begin{align}
+    W_\text{battery} & = - \int F_\text{mag}^\parallel \cdot \vec{\dd S}                                    \\
+                     & = \int F_\text{mag}^\parallel \cdot \underbrace{\dd S \cos \theta}_{\dd l = w \dd t} \\
+                     & = \int_0^{\Delta t} \lambda_+ a u B w \dd t                                          \\
+                     & = \lambda_+ a u B w \Delta t                                                         \\
+                     & = I B a h
+\end{align}
+where $h$ is the distance traveled in $\Delta t$.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Define vectors
+        \coordinate (O) at (0,0); % Origin
+        \coordinate (W) at (3,0); % Vector w (horizontal, to the right)
+        \coordinate (U) at (0,2); % Vector u (vertical, upwards)
+        \coordinate (V) at (3,2); % Vector v = u + w
+        \coordinate (F) at (-1.5,2.75); % Vector F, perpendicular to v
+
+        \coordinate (Fh) at (-1.5,0); % Horizontal component of F
+        \coordinate (Fv) at (0,2.75);  % Vertical component of F
+
+        % Draw vectors
+        \draw[->, thick, black] (O) -- (W) node[midway, below] {$\vec{w}$};
+        \draw[->, thick, red] (W) -- (V) node[midway, right] {$\vec{u}$};
+        \draw[->, thick, blue] (O) -- (V) node[midway, above left] {$\vec{v}$};
+        \draw[->, thick, green] (O) -- (F) node[midway, below left] {$\vec{F}_\text{mag}$};
+
+        \draw[->, thick, black, dashed] (O) -- (Fh) node[midway, below] {$\vec{F}_\text{mag}^\parallel$}; % Horizontal component
+        \draw[->, thick, black, dashed] (O) -- (Fv) node[midway, right] {$\vec{F}_\text{mag}^\perp$};  % Vertical component
+    \end{tikzpicture}
+    \caption{The magnetic force has a parallel component.}
+    \label{fig:mag-field-parallel}
+\end{figure}
+
+\subsection{Magnetostatics}
+
+This is pretty much the equivalent of electrostatics but with magnets:
+in electrostatic we had that
+\begin{equation}
+    \pdv{\rho}{t} = 0
+\end{equation}
+Equivalently, in magnetostatics we will have
+\begin{equation}
+    \pdv{\vec J}{t} = 0
+\end{equation}
+
+We can now write the equivalent of Coulomb's law for the magnetic field:
+\begin{theorem}{Biot-Savart Law}{biot-savart}
+    Consider a wire with current $I$ and $\vec{\dd l'}$ the direction tangent to the wire.
+    At some point $P$ at position $\vec r$ we will have
+    \begin{equation}
+        \vec B(\vec r) = \frac{\mu_0 I}{4 \pi} \oint_\text{circuit} \frac{\vec{\dd l'} \cross \hat{\Delta r}}{\Delta r^2}
+    \end{equation}
+    where $\vec{\Delta r} = \vec r = \vec{r '}$ and $\vec{r'}$ is the position of each point on the circuit.
+\end{theorem}
+
+We have introduced a constant $\mu_0 = 4 \pi \cdot 10^{-7} \si{\newton \per \ampere \squared}$
+which is called \emph{permeability} (in vacuum).
+Note also that $[B] = \si{\newton \per \ampere \per \meter} = \si{\tesla}$.
+
+If we consider a very simple 3D wire creating a loop we have that
+\begin{equation}
+    I = \int_{S'} \vec J \cdot \vec{\dd S}
+\end{equation}
+where $S'$ is the cross section of the wire.
+Then the magnetic field is
+\begin{align}
+    \vec B(\vec r) & = \frac{\mu_0}{4 \pi} \oint_{l'} \int_{S'} \vec J \cdot \vec{\dd S'} \frac{\vec{\dd l'} \cross \hat{\Delta r}}{\Delta r^2} \\
+                   & = \frac{\mu_0}{4 \pi} \oint_{l'} \int_{S'} \frac{\vec J \cross \vec{\Delta r}}{\Delta r^3} \vec{\dd S'} \vec{\dd l'}       \\
+                   & = \frac{\mu_0}{4 \pi} \oint_{l'} \int_{S'} \frac{\vec J \cross \vec{\Delta r}}{\Delta r^3} \dd \tau
+\end{align}
+
+These formulas suck but at lease \textbf{superposition principle} still holds
+and we can also use all the symmetry rules we used before.
+
+\begin{example}{Field of a straight wire}{}
+    Consider a infinitely long, straight wire with current $I$.
+    Compute the magnetic field that it generates.
+\end{example}
+
+\begin{proof}[Solution]
+    Assume the wire is laying on the $x$ axis and the current is flowing in $\hat x$ direction.
+    Consider a point on the wire (for simplicity on the positive part)
+    such that $\vec{\dd l '} \cross \hat{\Delta r} = \hat y$,
+    hence $\vec B$ is going inside the plane.
+
+    Now consider a point where we want to compute the field $P$.
+    By cylindrical symmetry we can argue that $B$ is constant w.r.t. $z$,
+    therefore we can pick $P = (0, 0, P_z)$.
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+
+            % Draw axes
+            \draw[->] (-1,0) -- (5,0) node[right] {$x$};
+            \draw[->] (0,-1) -- (0,5) node[above] {$z$};
+
+            % Define points
+            \coordinate (O) at (0,0);       % Origin
+            \coordinate (P) at (0,4);       % Point P on y-axis
+            \coordinate (dl) at (3,0);      % Point dl on x-axis
+
+            % Draw points
+            \fill (P) circle (2pt) node[left] {$P$};
+            \fill (dl) circle (2pt) node[below] {$\dd l$};
+
+            % Draw vector from dl to P
+            \draw[->, thick] (dl) -- (P) node[midway, right] {$\Delta r$};
+
+            % Draw angle gamma at the origin between O, dl, P
+            \draw[->, blue] (O) -- (dl);
+            \draw[->, blue] (O) -- (P) node[midway, left] {$s$};
+            \pic [draw, "$\gamma$", angle eccentricity=1.5, angle radius=1cm] {angle = P--dl--O};
+
+            % Draw angle theta at point P between O, P, dl
+            \pic [draw, "$\theta$", angle eccentricity=1.5, angle radius=1cm] {angle = O--P--dl};
+
+        \end{tikzpicture}
+    \end{figure}
+
+    Since we have computed already the direction of $\vec B$ we can focus on the modulus $B$.
+    We have
+    \begin{equation}
+        \abs{\dd l' \cross \hat{\Delta r}} = \dd l' \sin \gamma = \cos \theta \dd l'
+    \end{equation}
+    now we want to integrate over $\theta \in [-\frac{\pi}{2}, \frac{\pi}{2}]$,
+    lets rewrite in terms of $\theta$:
+    \begin{gather}
+        l'(\theta) = s \tan \theta \\
+        \implies \dd l' = \dv{l'(\theta)}{\theta} \dd \theta = \frac{s}{\cos ^2 \theta} \dd \theta \\
+        \Delta r = \frac{s}{\cos \theta} \implies \frac{1}{\Delta r^2} = \frac{\cos ^2 \theta}{s^2}
+    \end{gather}
+
+    Substituting into the formula we get
+    \begin{align}
+        B & = \frac{\mu_0 I}{4 \pi} \oint_\text{circuit} \frac{\abs{\dd l' \cross \hat{\Delta r}}}{\Delta r^2}                                                           \\
+          & = \frac{\mu_0 I}{4 \pi} \int_{-\pi/2}^{\pi/2} \dd \theta \frac{\cancel{s}}{\cancel{\cos^2 \theta}} \cos \theta \frac{\cancel{\cos^2 \theta}}{s^{\cancel{2}}} \\
+          & = \frac{\mu_0 I}{4 \pi} \int_{-\pi/2}^{\pi/2} \dd \theta \frac{\cos \theta}{s}                                                                               \\
+          & = \frac{\mu_0 I}{4 \pi s} 2 = \frac{\mu_0 I}{2 \pi s}
+    \end{align}
+\end{proof}
+
 
 \end{document}

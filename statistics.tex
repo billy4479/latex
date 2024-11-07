@@ -1138,7 +1138,7 @@ Therefore we have to relax our requirements:
     \end{equation}
 \end{definition}
 
-This definition means that it is impossible to dorm an unbiased estimator of $0$ from it nontrivially.
+This definition means that it is impossible to form an unbiased estimator of $0$ from it nontrivially.
 Consequently if $\exists$ an unbiased estimator $T$ for $g(\theta)$ then it is unique.
 
 \begin{proof}
@@ -1261,5 +1261,72 @@ Consequently if $\exists$ an unbiased estimator $T$ for $g(\theta)$ then it is u
 
 Under certain regularity conditions the MLE $\hat \theta_n$ in the limit as $n \to \infty$ becomes UMVU.
 This also applies for most Bayes estimators but not for the method of moments estimator.
+
+\subsection{Optimal test}
+
+We introduce the \textbf{Neyman-Pearson} statistic:
+\begin{equation}
+    L(\theta_1, \theta_0, X) = \frac{p_{\theta_1}(X)}{p_{\theta_0}(X)}
+\end{equation}
+
+\begin{theorem}{Neyman-Person}{neyman-person}
+    Suppose that there exists a number $c_{\alpha_0}$ such that
+    \begin{equation}
+        P_\theta(L(\theta_1, \theta_0, X)\geq c_{\alpha_0})= \alpha_0
+    \end{equation}
+
+    Then the critical region
+    \begin{equation}
+        K = \{ x : L(\theta_1, \theta_0, x) \geq c_{\alpha_0} \}
+    \end{equation}
+    is the most powerful at level $\alpha_0$ for testing $H_0: \theta = \theta_0$ against $H_1: \theta = \theta_1$.
+\end{theorem}
+
+\begin{proof}
+    Assume that the size of $k$ is $\alpha_0$ and
+    suppose that $\exists K'$ s.t. $P_{\theta_0}(X \in K')\leq \alpha_0$.
+
+    We want to show that
+    \begin{equation}
+        P_{\theta_1}(X \in K) \leq P_{\theta_1}(X \in K)
+    \end{equation}
+
+    We will start by proving this intermediate result:
+    we want to show that for all $x$ there holds
+    \begin{equation}
+        (\mathds 1_{K'}(x) - \mathds 1_{K}(x))(p_{\theta_1}(x) - c_{\alpha_0}p_{\theta_0}(x)) \leq 0
+    \end{equation}
+    Indeed for $x \in K$ we have
+    \begin{itemize}
+        \item $\mathds 1_{K'}(x) - \mathds 1_{K}(x) = \mathds 1_{K'}(x) -1 \leq 0$
+        \item $p_{\theta_1}(x) - c_{\alpha_0}p_{\theta_0}(x) \geq 0 \iff p_{\theta_1}(x) \geq c_{\alpha_0}p_{\theta_0}(x) \iff \frac{p_{\theta_1}(X)}{p_{\theta_0}(X)} \geq c_{\alpha_0} \iff x \in K$
+    \end{itemize}
+
+    Then
+    \begin{align}
+        p_{\theta_1}(x \in K') - p_{\theta_1}(x \in K) & = \int (\mathds 1_{K'} - \mathds 1_{K}) p_{\theta_1}(x) \dd x                   \\
+                                                       & \leq c_{\alpha_0} \int (\mathds 1_{K'} - \mathds 1_{K}) p_{\theta_0}(x) \dd x   \\
+                                                       & = c_{\alpha_0} (\E_{\theta_0} \mathds 1_{K'}(x) - \E_{\theta_0} \mathds 1_K(x)) \\
+                                                       & = c_{\alpha_0} (P_{\theta_0}(X \in K') - P_{\theta_0}(x \in K))                 \\
+                                                       & \leq c_{\alpha_0} (\alpha_0 - \alpha_0) = 0
+    \end{align}
+\end{proof}
+
+In practice the Neyman-Pearson test statistic will be not so nice to work with.
+We can take some transformations of it in order to make it nicer and
+be able to compute an actual value for $c_{\alpha_0}$.
+This is done by applying monotone transformations to the critical regions
+until we get some distribution we know.
+
+\subsubsection{Composite hypothesis}
+In the previous section we saw the simple case, now we want consider hypothesis of the type
+\begin{equation}
+    H_0: \theta \in \Theta_0 \quad \text{against} \quad H_1 : \theta \in \Theta_1
+\end{equation}
+
+A test with power function $\theta \mapsto \pi(\theta, K)$ is called \emph{uniformly most powerful}
+if $\sup_{\theta \in \Theta_0} \pi(\theta, K) \leq \alpha_0$ and the power function of any other test
+with critical region $\sup_{\theta \in \Theta_0} \pi(\theta, K') \leq \alpha_0$ satisfies
+$\pi(\theta, K) \geq \pi(\theta, K')$.
 
 \end{document}

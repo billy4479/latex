@@ -210,6 +210,45 @@ we can create a graph representation.
 \section*{Problem 3}
 \stepcounter{section}
 
+We want to maximize the utility over the budget constraint.
+To do so first we compute the Lagrangian
+\begin{equation}
+    \mathcal L(c_1, c_2, \lambda) = \frac{c_1 -1}{(2 - c_2)^2} + \lambda(w - p_1 c_1 - p_2 c_2)
+\end{equation}
+and its derivatives
+\begin{equation}
+    \begin{cases}
+        \pdv{\mathcal L}{c_1} = \frac{1}{(2-c_2)^2} - \lambda p_1 \\
+        \pdv{\mathcal L}{c_2} = \frac{2(c_1 - 1)}{(2-c_2)^3} - \lambda p_2
+    \end{cases}
+\end{equation}
+now set them equal to $0$ and find $\lambda$
+\begin{equation}
+    \begin{cases}
+        \lambda = \frac{1}{p_1 (2-c_2)^2} \\
+        \lambda = \frac{2(c_1 - 1)}{p_2 (2-c_2)^3}
+    \end{cases}
+\end{equation}
+therefore
+\begin{equation}
+    \frac{1}{p_1 (2-c_2)^2} = \frac{2(c_1 - 1)}{p_2 (2-c_2)^3}
+    \implies c_1 = \frac{p_2(2-c_2)}{2p_1} + 1
+\end{equation}
+
+Now we can substitute this result back into the budget constraint giving us
+\begin{equation}
+    p_1 \left( \frac{p_2(2-c_2)}{2p_1} + 1 \right) + p_2 c_2 = w
+    \implies c_2 = \frac{2(w - p_1 - p_2)}{p_2}
+\end{equation}
+
+By combining these results we get
+\begin{equation}
+    \begin{cases}
+        d_1(w, p) = c_1 = 2 - \frac{w - 2p_2}{p_1} \\
+        d_2(w, p) = c_2 = \frac{2(w - p_1)}{p_2} - 2
+    \end{cases}
+\end{equation}
+
 \section*{Problem 4}
 \stepcounter{section}
 

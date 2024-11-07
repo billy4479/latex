@@ -56,11 +56,11 @@ To prove this, let $\varepsilon>0$.
 Then consider the utility function obtained by increasing
 by a arbitrarily small amount $\varepsilon$ the quantity of good 1:
 \begin{equation}
-    u'(c_1,c_2)=-\frac{1}{c_1+\varepsilon}-\frac{1}{c_2}
+    u(c_1 + \varepsilon,c_2)=-\frac{1}{c_1+\varepsilon}-\frac{1}{c_2}
 \end{equation}
 This is greater than the original utility function, thus it's preferred. The same holds when increasing good 2:
 \begin{equation}
-    u'(c_1,c_2)=-\frac{1}{c_1+\varepsilon}-\frac{1}{c_2}
+    u(c_1,c_2 + \varepsilon)=-\frac{1}{c_1}-\frac{1}{c_2 + \varepsilon}
 \end{equation}
 Therefore, as strong monotonicity states, "the more of all goods, it is always better".
 
@@ -105,11 +105,12 @@ The indirect utility function is found by substituting in the demand function th
 \end{align}
 
 \subsection*{Part 5}
-To investigate wether the two goods are substitutes, complements or indifferent, we compute the cross price derivative:
-\begin{equation}
-    \frac{\partial d_1(p,w)}{\partial p_2}= \frac{-wp_1}{2\sqrt{p_1p_2}(\sqrt{p_1p_2}+p_1)^2}\le 0
-\end{equation}
-As we found a negative result, this means that the two goods are complements.
+To investigate whether the two goods are substitutes, complements or indifferent, we compute the cross price substitution term:
+\begin{align}
+    s_{12}(p,w) & = \frac{\partial d_1(p,w)}{\partial p_2}+ \frac{\partial d_1(p,w)}{\partial w }d_2(p,w)                      \\
+                & =\frac{-wp_1}{2\sqrt{p_1p_2}(\sqrt{p_1p_2}+p_1)^2}+ \frac{1}{\sqrt{p_1p_2}+p_1}\frac{w}{\sqrt{p_1p_2}+p_2}>0
+\end{align}
+As we found a positive result, this means that the two goods are substitutes.
 
 \section*{Problem 2}
 \stepcounter{section}

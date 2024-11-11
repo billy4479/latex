@@ -449,4 +449,57 @@ We can use Euler's formula to write $e^{\alpha t}$ when $\alpha \in \C$:
 
 % TODO: jordan normal form, matrix exponentials, classification of unstable points, probably more
 
+\section{Proving Peano-Picard}
+
+\subsection{Metric spaces}
+
+\begin{definition}{Metric space}{metric-space}
+    A metric space is a pair $(X, d)$ where $X$ is a non-empty set and $d$ is a function
+    \begin{equation}
+        d: X \cross X \to [0, +\infty)
+    \end{equation}
+    called the \emph{distance function}, with the following properties:
+    \begin{itemize}
+        \item \emph{Positive definiteness}: $d(x, y) = 0 \iff x = y$
+        \item \emph{Symmetry}: $d(x, y) = d(y, x)$
+        \item \emph{Triangle inequality}: $d(x, z) \leq d(x, y) + d(y, z)$
+    \end{itemize}
+\end{definition}
+
+Notably, if $X$ is a vector space, we can define a distance function by relying on the norm $\norm{\cdot}$:
+\begin{equation}
+    d(x, y) = \norm{x - y}
+\end{equation}
+On the norm there holds also the \emph{homogeneity} property: $\norm{\lambda v} = \abs{\lambda}\norm{v}$.
+
+The euclidean norm belongs to a family of norms depending on a parameter $p \in [1, \infty]$.
+The $\ell^p$-norm is defined as
+\begin{equation}
+    \norm{(x_1, \dots, x_n)}_{\ell^p} = \left( \abs{x_1}^p + \dots + \abs{x_n}^p \right)^{1/p}
+\end{equation}
+and for $p = \infty$ we have $\norm{(x_1, \dots, x_n)}_{\ell^\infty} = \max_{1 \leq i \leq n} \abs{x_i}$.
+
+Another interesting property is that if we take $\varphi : [0, \infty) \to [0, \infty)$ increasing,
+such that $\varphi(a + b) \leq \varphi(a) + \varphi(b)$ we have that $\tilde d = \varphi \circ d$
+is also a distance function on $X$.
+
+Knowing these facts we can state and prove many properties we have seen before by using distances.
+Some examples are the convergence of a sequence, uniqueness of the limit, open and closed sets,
+compactness, and continuity.
+
+\begin{definition}{Cauchy sequance}{cauchy-sequence}
+    A sequence of points in $X$ is called a Cauchy sequence if $d(x_k, x_l) \to 0$ as $k, l \to \infty$.
+\end{definition}
+
+Note that any converging sequence is a Cauchy sequence, but the converse does not necessarily hold.
+
+\begin{definition}{Completeness of a metric space}{metric-completeness}
+    We say that a metric space $(X, d)$ is complete when all the Cauchy sequences
+    in $X$ converge to some limit in $X$.
+\end{definition}
+
+Notably, $\R$ is complete and, for example $\Q$ is not.
+From a non-complete metric space $(X, d)$ it is always possible to define $\hat X \supset X$ and
+a measure $\hat d$ of $\hat X$ such that $d = \eval{\hat d}_{X \cross X}$.
+
 \end{document}

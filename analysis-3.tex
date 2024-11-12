@@ -7,6 +7,7 @@
 \date{a.y. 2024/2025}
 
 \usepackage{preamble}
+\usepackage{preamble_svg}
 
 \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -479,7 +480,7 @@ The $\ell^p$-norm is defined as
 \end{equation}
 and for $p = \infty$ we have $\norm{(x_1, \dots, x_n)}_{\ell^\infty} = \max_{1 \leq i \leq n} \abs{x_i}$.
 
-Another interesting property is that if we take $\varphi : [0, \infty) \to [0, \infty)$ increasing,
+Another interesting property is that if we take $\varphi : [0, \infty) \to\abs{}g_K(x_0) - g_(x_0)\abs{}0, \infty)$ increasing,
 such that $\varphi(a + b) \leq \varphi(a) + \varphi(b)$ we have that $\tilde d = \varphi \circ d$
 is also a distance function on $X$.
 
@@ -501,5 +502,122 @@ Note that any converging sequence is a Cauchy sequence, but the converse does no
 Notably, $\R$ is complete and, for example $\Q$ is not.
 From a non-complete metric space $(X, d)$ it is always possible to define $\hat X \supset X$ and
 a measure $\hat d$ of $\hat X$ such that $d = \eval{\hat d}_{X \cross X}$.
+
+\subsubsection{Metric space of functions}
+\label{sec:metric-space-func}
+
+For the purpose of proving Peano-Picard we will consider the metric space $(X, d)$ where $X$ is the set
+\begin{equation}
+    X = \{ g:I \to \R : g \text{ bounded and continuous} \}
+\end{equation}
+and $d$ is induced from the \emph{supremum norm}:
+\begin{equation}
+    d(g_1, g_2) = \norm{g_1 - g_2} = \sup_{t \in I} \abs{g_1 - g_2}
+\end{equation}
+note that the supremum is always finite since $g$ is bounded.
+
+\begin{definition}{Uniform convergence}{uniform-convergence}
+    Let $S \neq \varnothing$ and $g_k : S \to \R$ a sequence of functions.
+    We say that $g_k$ converges uniformly to $g: S \to \R$ if for any $\varepsilon > 0$ there exists $K \in \N$ such that
+    \begin{equation}
+        \abs{g_k(x) - g(x)} < \varepsilon \quad \text{for all } k \geq K \text{ and } x \in S
+    \end{equation}
+\end{definition}
+This definition is stronger than pointwise convergence, since it requires that $K$ is a valid threshold at all points,
+independently of $x$, while in pointwise convergence we can choose a different $K$ at each point $x$.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.3\textwidth]{assets/analysis-3/uniform-convergence.svg}
+    \caption{The sequence $f_k$ converges uniformly to $f$ if after some point $K$ all the functions $f_N$ with $N \geq K$ are inside the region $f\pm \varepsilon$.}
+\end{figure}
+
+\begin{proposition}{Uniform convergence and distance}{uniform-convergence-distance}
+    A sequence of functions $g_k$ in $X$ converges uniformly to $g \in X$ if and only if
+    $d(g_k, g) \to 0$ as $k \to \infty$.
+\end{proposition}
+\begin{proof}
+    \skiplineafterproof
+    \begin{description}
+        \item[$\implies$]
+              Assume $g_k \to g$ uniformly.
+              Fix $k$ such that $\abs{g_k(x) -g(x)} < \varepsilon$, now we can take the supremum and get the result.
+        \item[$\impliedby$]
+              Assume $\norm{g_k - g} \to 0$.
+              We can rewrite using the $\varepsilon$ definition of limit and we get
+              \begin{equation}
+                  \varepsilon > \norm{g_k - g} = \sup_{x \in I}\abs{g_k(x)-g(x)} \implies \abs{g_k(x) - g(x)} < \varepsilon
+              \end{equation}
+    \end{description}
+    As desired.
+\end{proof}
+
+\begin{theorem}{Permanence of continuity}{permanence-continuity}
+    Assume that $g_k$ are continuous and converge uniformly to $g$. Then $g$ is continuous as well.
+\end{theorem}
+\begin{proof}
+    We want to show that $g$ is continuous at some point $x_0 \in I$.
+    Consider $g_K$. By uniform continuity we have that $\abs{g_K(x) - g(x)} < \varepsilon$.
+    Since $g_K$ is continuous by hypothesis we can find $\delta > 0$ such that
+    \begin{equation}
+        \abs{g_K(x) - g_L(x_0)} < \varepsilon \quad \forall x \in I \text{ with } \abs{x - x_0} < \delta
+    \end{equation}
+    But now we can use the fact that $g$ is \say{close} to $g_K$ and that $g_K(x)$ is \say{close} to $g_K(x_0)$.
+    We have:
+    \begin{equation}
+        g(x) - g(x_0) = [g(x) -g_K(x)] + [g_K(x) - g_K(x_0)] + [g_K(x_0) - g(x_0)]
+    \end{equation}
+    which gives us
+    \begin{equation}
+        \abs{g(x) - g(x_0)} \leq \abs{g(x) -g_K(x)} + \abs{g_K(x) - g_K(x_0)} +\abs{g_K(x_0) - g(x_0)} < 3 \varepsilon
+    \end{equation}
+    when $x \in I$ and $\abs{x - x_0} < \delta$.
+    Repeating the argument with $\varepsilon/3$ yields the result.
+\end{proof}
+
+\begin{theorem}{Completeness}{}
+    The metric space $(X, d)$ as defined at the beginning of \cref{sec:metric-space-func} is complete.
+\end{theorem}
+\begin{proof}
+    Let $g_k$ be a Cauchy sequence (\cref{def:cauchy-sequence}) in $(X, d)$,
+    we want to show that there exists $g \in X$ such that $d(g_k, g) \to 0$ (i.e. $\norm{g_k - g} \to 0$) as $k \to \infty$.
+
+    Since $g_k$ is a Cauchy sequence $\exists K \in \N$ such that $\norm{g_k - g_l} < \varepsilon$ for $k, l \geq K$ and, for an arbitrary $x \in I$ we have
+    \begin{equation}
+        \abs{g_k(x)-g_l(x)} \leq \norm{g_k - g_l} < \varepsilon \quad \forall k, l \geq K
+    \end{equation}
+    by our definition of the norm.
+    This tells us that the sequence of numbers $(g_k(x))_{k \in \N}$ is a Cauchy sequence over $\R$ and, by completeness of $\R$ this sequence converges.
+    We can therefore write
+    \begin{equation}
+        g(x) = \lim_{k \to \infty} g_k(x)
+    \end{equation}
+    for each $x \in I$.
+
+    We now have a definition for $g$, we are left to prove the following:
+    \begin{itemize}
+        \item \emph{$g_k$ converges to $g$ uniformly}.
+
+              Consider the definition of Cauchy sequence, fix $k \geq K$ and let $l \to \infty$.
+              We get that
+              \begin{equation}
+                  \abs{g_k(x) - g(x)} = \lim_{l \to \infty} \abs{g_k(x) - g_l(x)} \leq \varepsilon
+              \end{equation}
+              Since $\varepsilon > 0$ is arbitrary all functions $g_k$ converge uniformly to $g$.
+
+        \item \emph{$g$ is bounded}
+
+              Let $\varepsilon = 1$.
+              We have
+              \begin{equation}
+                  \abs{g(x)} = \abs{g(x) - g_K(x) + g_K(x)} \leq \abs{g(x) - g_K(x)} + \abs{g_K(x)} \leq 1 + \abs{g_K(x)}
+              \end{equation}
+              and since $g_K$ is bounded we get the result.
+
+        \item \emph{$g$ is continuous}
+
+              Immediate from \Cref{thm:permanence-continuity}.
+    \end{itemize}
+\end{proof}
 
 \end{document}

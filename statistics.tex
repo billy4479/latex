@@ -243,23 +243,23 @@ Since $\norm{T - g(\theta)}$ is a random variable we can consider the one more c
 \begin{definition}{Mean squared error}{mean-squared-error}
     The mean squared error MSE of an estimator $T$ for the value of $g(\theta)$ is defined as
     \begin{equation}
-        \MSE(\theta, T) = E_\theta\left(\norm{T - g(\theta)}^2\right)
+        \MSE(\theta, T) = \E_\theta\left(\norm{T - g(\theta)}^2\right)
     \end{equation}
-    where $E_\theta$ is the expectation of $P_\theta$
+    where $\E_\theta$ is the expectation of $P_\theta$
 \end{definition}
 
 \begin{proposition}{MSE decomposition}{mse-decomposition}
     If a $T$ is real-valued estimator we can decompose the $\MSE$ as
     \begin{equation}
-        \MSE(\theta, T) = V_\theta(T) + (E_\theta(T) - g(\theta))^2
+        \MSE(\theta, T) = \var_\theta(T) + (\E_\theta(T) - g(\theta))^2
     \end{equation}
 \end{proposition}
 \begin{proof}
     \begin{align}
-        E_\theta\left((T - g(\theta))^2\right) & = E_\theta\left((T -E_\theta(T) + E_\theta(T) - g(\theta))^2\right)                                                            \\
-                                               & = E_\theta(T-E_\theta(T))^2 - 2E_\theta(T-E_\theta(T))(E_\theta(T) - g(\theta)) + \cancel{E_\theta}(E_\theta(T) - g(\theta))^2 \\
-                                               & = V_\theta(T) - 2 (E_\theta(T) - g(\theta)) \cancelto{0}{E_\theta(T-E_\theta(T))} - (E_\theta(T) - g(\theta))^2                \\
-                                               & = V_\theta(T) - (E_\theta(T) - g(\theta))^2
+        \E_\theta\left((T - g(\theta))^2\right) & = \E_\theta\left((T -\E_\theta(T) + \E_\theta(T) - g(\theta))^2\right)                                                                \\
+                                                & = \E_\theta(T-\E_\theta(T))^2 - 2\E_\theta(T-\E_\theta(T))(\E_\theta(T) - g(\theta)) + \cancel{\E_\theta}(\E_\theta(T) - g(\theta))^2 \\
+                                                & = \var_\theta(T) - 2 (\E_\theta(T) - g(\theta)) \cancelto{0}{\E_\theta(T-\E_\theta(T))} - (\E_\theta(T) - g(\theta))^2                \\
+                                                & = \var_\theta(T) - (\E_\theta(T) - g(\theta))^2
     \end{align}
 \end{proof}
 
@@ -411,13 +411,13 @@ The idea behind the likelihood function is that this is a function that, given a
 \begin{definition}{Moment and sample moment}{moment-sample-moment}
     Let $X \sim p_\theta$. The $j$-th moment of $X$ is given by
     \begin{equation}
-        E_\theta(X^j),
+        \E_\theta(X^j),
     \end{equation}
     assuming the expectation exists.
 
     Similarly, the $j$-th sample moment of $X_1,\dots, X_n$ IID random variables is defined as
     \begin{equation}
-        \bar{X_j} = \frac{1}{n} \sum_{i = 1}^n X_i^j \convas E_\theta(X^j)
+        \bar{X_j} = \frac{1}{n} \sum_{i = 1}^n X_i^j \convas \E_\theta(X^j)
     \end{equation}
     by the law of large numbers.
 \end{definition}
@@ -436,11 +436,11 @@ We repeat the process until the $k$-th moment, where $k$ is the smallest number 
 Note that in this way we are summarizing the distribution in $k$ values. A best method is to find the $\hat \theta$ that minimizes the distance between the two moments.
 For example, if we use $l$ moments, we define the \emph{generalized method of moments} as
 \begin{equation}
-    \sum_{i = 0}^l \left( \frac{1}{n} \sum_{i = 0}^n X^j_i - E(X_i^j) \right)^2
+    \sum_{i = 0}^l \left( \frac{1}{n} \sum_{i = 0}^n X^j_i - \E(X_i^j) \right)^2
 \end{equation}
 or, even more generally, for some fixed $g_1, \dots, g_n$,
 \begin{equation}
-    \sum_{i = 0}^l \left( \frac{1}{n} \sum_{i = 0}^n g_j(X_i) - E(g_j(X_i)) \right)^2
+    \sum_{i = 0}^l \left( \frac{1}{n} \sum_{i = 0}^n g_j(X_i) - \E(g_j(X_i)) \right)^2
 \end{equation}
 
 \section{Bayesian statistics}
@@ -469,7 +469,7 @@ After observing the data we \emph{update our believes} by computing the posterio
 \begin{definition}{Bayes risk}{bayes-risk}
     The Bayes risk of an estimator $T$ for a real-valued parameter $g(\theta)$ is defined as
     \begin{equation}
-        R(\pi; T) = \int_\Theta E_\theta[(T-g(\theta)^2)] \pi(\theta) \dd{\theta}
+        R(\pi; T) = \int_\Theta \E_\theta[(T-g(\theta)^2)] \pi(\theta) \dd{\theta}
     \end{equation}
 \end{definition}
 This is pretty much the equivalent of the MSE for bayesian models.
@@ -488,7 +488,7 @@ This is pretty much the equivalent of the MSE for bayesian models.
 \begin{proof}
     Start by the definition of bayesian risk and plug in the definition of expectation.
     \begin{align}
-        R(\pi; T) & = \int_\Theta E_\theta[(T-g(\theta)^2)] \pi(\theta) \dd{\theta}                                               \\
+        R(\pi; T) & = \int_\Theta \E_\theta[(T-g(\theta)^2)] \pi(\theta) \dd{\theta}                                              \\
                   & = \int_\Theta \left(\int_X (T-g(\theta))^2 p_\theta(x)\dd{x} \right) \pi(\theta) \dd{\theta}                  \\
                   & \stackrel{\text{fubini}}{=} \int_X \int_\Theta (T(x) - g(\theta))^2 p_\theta(x) \pi(\theta) \dd{\theta}\dd{x}
     \end{align}
@@ -566,8 +566,8 @@ If the interval is centered around the point estimate $t$ then it is called \emp
     We know that the MLE estimator for the normal is $\hat \theta = \bar X$.
     Let us now compute the expectation and variance of $\bar X$:
     \begin{align}
-        E_{\theta} (\bar X) & = E_\theta \left( \oneover{n} \sum_{i = 1}^n X_i \right) = \oneover n \sum_{i = 1}^n E_\theta(X_i) = \theta                \\
-        V_{\theta} (\bar X) & = V_\theta \left( \oneover{n} \sum_{i = 1}^n X_i \right) = \oneover{n^2} \sum_{i = 1}^n V_\theta(X_i) = \frac{\sigma^2}{n}
+        \E_{\theta} (\bar X)   & = \E_\theta \left( \oneover{n} \sum_{i = 1}^n X_i \right) = \oneover n \sum_{i = 1}^n \E_\theta(X_i) = \theta                    \\
+        \var_{\theta} (\bar X) & = \var_\theta \left( \oneover{n} \sum_{i = 1}^n X_i \right) = \oneover{n^2} \sum_{i = 1}^n \var_\theta(X_i) = \frac{\sigma^2}{n}
     \end{align}
 
     From these result we can write $\bar X$ as the rescaling of a standard gaussian $Z$:
@@ -682,15 +682,15 @@ We know that the score function is defined as
 
 \begin{definition}{Fischer information}{fischer-information}
     \begin{equation}
-        i_\theta = V_\theta \left(\dot \ell_\theta (X_1)\right)
+        i_\theta = \var_\theta \left(\dot \ell_\theta (X_1)\right)
     \end{equation}
 \end{definition}
 
 \begin{proposition}{Properties of Fisher information}{props-fisher}
     If $\ell_\theta(x) = \log p_\theta(x)$ is twice differentiable for all $x$, under certain regularity conditions we have
     \begin{enumerate}[label=\roman*.]
-        \item $E_\theta \ell_\theta (X_1) = 0$
-        \item $i_\theta = -E_\theta \ddot\ell_\theta(X_1)$
+        \item $\E_\theta \ell_\theta (X_1) = 0$
+        \item $i_\theta = -\E_\theta \ddot\ell_\theta(X_1)$
     \end{enumerate}
 \end{proposition}
 
@@ -715,7 +715,7 @@ We know that the score function is defined as
 The problem is that we don't know $i_\theta$, but we can estimate it:
 \begin{itemize}
     \item The \emph{plug-in estimator} for $i_\theta$ is $\hat i_\theta = i_{\hat \theta}$.
-    \item The \emph{observed information} estimator, recalling that $E_\theta \ell_\theta (X_1) = 0$,
+    \item The \emph{observed information} estimator, recalling that $\E_\theta \ell_\theta (X_1) = 0$,
           \begin{equation}
               \hat i_\theta = -\oneover{n} \sum_{i = 1}{n} \ddot \ell_{\hat \theta}
           \end{equation}
@@ -965,7 +965,7 @@ We can also have that $X_i$ and $Y_i$ are not independent.
 This is actually better, because this gives us a smaller variance, thus a better test.
 This result comes from the formula
 \begin{equation}
-    V(Z_i) = V(X_i) + V(Y_i) - 2 \cov (X_i, Y_i)
+    \var(Z_i) = \var(X_i) + \var(Y_i) - 2 \cov (X_i, Y_i)
 \end{equation}
 
 Once we have the hypothesis we just use the $t$-test on $Z_i$.
@@ -1103,17 +1103,17 @@ Therefore we have to relax our requirements:
 \begin{theorem}{Rao-Blackwell}{rao-blackwell}
     Let $V$ be a sufficient statistic and $T$ a real valued estimator for $g(\theta)$.
     Then there exists an estimator $T^*(V)$ for $g(\theta)$ which depends only on $V$ such that
-    $E_\theta T = E_\theta T^*$ and var$_\theta T^* \leq$ var$_\theta T$ for all $\theta$.
+    $\E_\theta T = \E_\theta T^*$ and var$_\theta T^* \leq$ var$_\theta T$ for all $\theta$.
     In particular $\MSE(T, g(\theta)) \geq \MSE(T^*, g(\theta))$.
 \end{theorem}
 
 \begin{proof}
     Let us consider only discrete cases.
 
-    Let $T^* = E(T\mid V)$ which by definition does not depend on $\theta$, then $T^*$ is an estimator.
+    Let $T^* = \E(T\mid V)$ which by definition does not depend on $\theta$, then $T^*$ is an estimator.
     We have
     \begin{equation}
-        E_\theta T^* = \sum_V T^* (v) p_\theta(V = v) = \sum_V E(T(V = v) p_\theta(V = v)) = E_\theta T
+        \E_\theta T^* = \sum_V T^* (v) p_\theta(V = v) = \sum_V \E(T(V = v) p_\theta(V = v)) = \E_\theta T
     \end{equation}
 
     Furthermore,

@@ -1329,4 +1329,125 @@ if $\sup_{\theta \in \Theta_0} \pi(\theta, K) \leq \alpha_0$ and the power funct
 with critical region $\sup_{\theta \in \Theta_0} \pi(\theta, K') \leq \alpha_0$ satisfies
 $\pi(\theta, K) \geq \pi(\theta, K')$.
 
+\section{Linear regression}
+
+The goal in this section is to predict a dependent variable $y$ (often called \emph{response})
+with an independent variable $x = (x_1, \dots, x_p)$
+(often called \emph{covariates} or \emph{explanatory variables}).
+
+There might be many different relationships between $x$ and $y$,
+therefore there exist a collection of regression models.
+Of course, in this process there is some randomness involved, hence $(x, y)$
+is the realization of the random vector $(X, Y)$.
+Our goal is to determine the distribution of $Y \mid X = x$.
+
+\subsection{Simple linear regression}
+Assume we observe $(x_1, Y_1), \dots, (x_n, Y_N)$ and we observe the following:
+\begin{equation}
+    Y_i = \alpha + \beta x_i + e_i \quad \forall i
+\end{equation}
+where $e_i$ is a \emph{measurement error} are i.i.d. and distributed according to $\Normal(0, \sigma^2)$.
+We want to estimate the parameters of this model, that is $\alpha, \beta, \sigma^2$.
+
+Note that the expectation depends on $x_i$, while the variance does not.
+\begin{align}
+    \E(Y_i \mid X_i = x_i)   & = \alpha + \beta x_i \\
+    \var(Y_i \mid X_i = x_i) & = \sigma^2
+\end{align}
+This gives us that the random variables $(Y_1, \dots, Y_n)$ are independent
+but \emph{not} identically distributed since the expectation depends on $x_i$.
+
+This model is not always accurate: we might have a different correlation between the $x$ and $Y$ which is not linear
+and we we might also have \emph{outliers} (datapoint which cannot be explained by our model).
+
+\subsubsection{Estimation}
+
+\begin{theorem}{MLE for simple linear regression}{MLE-slr}
+    The MLEs for $\alpha, \beta, \sigma^2$ in the simple linear regression model are
+    \begin{align}
+        \hat \alpha & = \bar Y - \hat \beta \bar x                                       \\
+        \hat \beta  & = \frac{s_Y}{s_x} r_{x, Y}                                         \\
+        \hat \sigma & = \frac{1}{n} \sum_{i = 1}^n (Y_n - \hat \alpha- \hat \beta x_i)^2
+    \end{align}
+    where
+    \begin{align}
+        s_x      & = \frac{1}{n - 1} \sum^n_{i = 1}(x_i - \bar x)                                                              \\
+        s_Y      & = \frac{1}{n - 1} \sum^n_{i = 1}(Y_i - \bar Y)                                                              \\
+        r_{x, Y} & = \frac{1}{n - 1} \sum^n_{i = 1}\left(\frac{x_i - \bar x}{s_x}\right) \left(\frac{y_i - \bar y}{s_y}\right)
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    We just need to compute the MLE.
+    \begin{align}
+        \ell(\alpha, \beta, \sigma^2) & = \log\left( \prod_{i = 1}^n \frac{1}{\sqrt{2 \pi \sigma ^2}} \exp \left( - \frac{(Y_i - \alpha - \beta x_i)^2}{2 \sigma^2} \right) \right) \\
+                                      & = -\frac{1}{2} n \log(2 \pi) - \frac{1}{2} n \log \sigma^2 - \frac{1}{2 \pi \sigma ^2} \sum_{i = 1}^n  (Y_i - \alpha - \beta x_i)^2
+    \end{align}
+
+    Now we can take the partial derivatives and set them equal to 0.
+    For $\alpha$ and $\beta$ we get:
+    \begin{gather}
+        \sum_{i = 1}^n  (Y_i - \alpha - \beta x_i) = 0 \\
+        \sum_{i = 1}^n  (Y_i - \alpha - \beta x_i) x_i = 0
+    \end{gather}
+    and with some algebra we get we get the result.
+
+    For $\sigma^2$ we can substitute the results for $\alpha$ and $\beta$ into $\sigma^2$
+    and take the derivative.
+    This is a bit long but indeed gives the result we expect.
+
+    Moreover, we should check the hessian matrix to make sure that these are actually maxima but it is very long to do.
+\end{proof}
+
+Moreover, we note that the estimator for $\alpha$ and $\beta$ are unbiased.
+The estimator for $\sigma^2$ is biased but it can be written in this nice form
+\begin{equation}
+    \hat \sigma^2 = \frac{1}{n}\sum_{i = 1}^n (Y_i - \bar Y)^2 - \frac{1}{n} \hat \beta^2 \sum_{i = 1}^n (x_i - \bar x)^2
+\end{equation}
+Note that if $\beta$ is unknown $\hat \sigma^2$ is actually smaller:
+this is because some variation in the $Y$ could be explained by the variation of the $x$,
+while if $\beta = 0$ all the variation has to come from the $Y$.
+
+We define the \textbf{fitted regression line} to be
+\begin{equation}
+    y = \hat \alpha + \hat \beta x
+\end{equation}
+and the \textbf{residual} as
+\begin{equation}
+    \hat e_i = Y_i - \hat \alpha - \hat \beta x_i \quad \forall i
+\end{equation}
+
+We say that our model is \emph{strong} if the points are close to out fitted regression line,
+while the sign of $r_{x, Y}$ is called the \emph{direction}.
+
+We define the following quantities:
+\begin{itemize}
+    \item \emph{Total sum of squares}: $SS_\text{tot} = \sum_{i = 1}^n (Y_i - \bar Y)^2 = \min_\alpha \sum_{i = 1}^n (Y_i - \alpha)^2$
+    \item \emph{Residual sum of squares}: $SS_\text{res} = \sum_{i = 1}^n (Y_i - \hat \alpha - \hat \beta x_i)^2 = \min_{\alpha, \beta} \sum_{i = 1}^n (Y_i - \alpha - \beta x_i)^2$
+    \item \emph{Coefficient of determination}: $R^2 = 1 - \frac{SS_\text{res}}{SS_\text{tot}} = r^2_{x, Y}$
+\end{itemize}
+
+\subsubsection{Test and confidence interval}
+
+Note that expanding the definition of $\hat \beta$ gets us a linear combination of $Y$
+and a linear combination of normal distributions gives again a normal distribution:
+\begin{equation}
+    \hat \beta \sim \Normal\left(\beta, \frac{\sigma^2}{\sum_i (x_i - \bar x)^2}\right)
+\end{equation}
+this yields the test statistics of
+\begin{equation}
+    T = \frac{(\hat \beta - \beta)\sqrt{\sum_i (x_i - \bar x)^2}}{\sigma} \sim \Normal(0, 1)
+\end{equation}
+However, most times we don't know the value of $\sigma^2$ and therefore we have to estimate it.
+We can use the unbiased version of the estimator of $\sigma^2$:
+\begin{equation}
+    \hat \sigma^2_u = \frac{\sum_i (Y_i - \hat \alpha - \hat \beta x_i)}{n-2}
+\end{equation}
+which has the nice property that if substituted into the formula above we get
+\begin{equation}
+    T = \frac{(\hat \beta - \beta)\sqrt{\sum_i (x_i - \bar x)^2}}{\hat \sigma_u} \sim t_{n -2}
+\end{equation}
+
+This can be used to perform the usual hypothesis testing, as we did in the previous sections.
+
 \end{document}

@@ -14,7 +14,8 @@
 \usepackage{subfig}
 \usepackage{emoji}
 \usepackage{circuitikz}
-\usetikzlibrary{calc,quotes,angles}
+\tikzset{>=latex}
+\usetikzlibrary{calc,quotes,angles,snakes}
 
 % \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -2301,7 +2302,7 @@ Then the magnetic field is
 These formulas suck but at lease \textbf{superposition principle} still holds
 and we can also use all the symmetry rules we used before.
 
-\begin{example}{Field of a straight wire}{}
+\begin{example}{Field of a straight wire}{magnetic-straight-wire}
     Consider a infinitely long, straight wire with current $I$.
     Compute the magnetic field that it generates.
 \end{example}
@@ -2368,6 +2369,166 @@ and we can also use all the symmetry rules we used before.
           & = \frac{\mu_0 I}{4 \pi s} 2 = \frac{\mu_0 I}{2 \pi s}
     \end{align}
 \end{proof}
+
+
+\subsubsection{Curl of \texorpdfstring{$\vec B$}{B}}
+
+Using the result from the previous section we can compute the integral of $\vec B$ along a circular path of radius $s$:
+\begin{equation}
+    \oint_C \vec B \cdot \vec{\dd l} =
+    \frac{\mu_0 I}{2 \pi s} \oint_C \vec{\dd l} =
+    \frac{\mu_0 I}{2 \pi s} 2 \pi s = \mu_0 I
+\end{equation}
+Notice how the path integral of $\vec B$ depends on the current enclosed in the path.
+To calculate $I_\text{enc}$ we have to sum the current of all wires taking in account
+for the direction of the current and how many times the path $\ell$ runs around each wire.
+
+We now want to rewrite the above relation in local form.
+We know $I_\text{enc} = \int_S \vec J \cdot \vec{\dd S'}$.
+Now consider a closed path $C$ around the wire such that the boundary of $C$ is $S$.
+We have
+\begin{gather}
+    \oint_C \vec B \cdot \vec{\dd l} = \mu_0 I_\text{enc} = \mu_0 \int_S \vec J \cdot \vec{\dd S'} = \int_S (\curl \vec B) \cdot \vec{\dd S'} \\
+    \implies \curl \vec B = \mu_0 \vec J
+\end{gather}
+which is \textbf{Ampere's law} in local form.
+
+Note that we proved this just in the case of wires but it is general fact.
+Indeed
+\begin{align}
+    \curl \vec B & = \frac{\mu_0}{4 \pi} \int \curl \left( \vec J(\vec{r '}) \cdot \frac{\hat{\Delta r}}{\Delta^2}\right)       \\
+                 & = \frac{\mu_0}{4 \pi} \int \vec J(\vec{r '}) \left( \div \frac{\hat{\Delta r}}{\Delta r^2} \right) \dd \tau' \\
+                 & = \frac{\mu_0}{\cancel{4 \pi}} \int \vec J(\vec{r '}) \cancel {4 \pi} \delta(\vec r - \vec{r '}) \dd \tau'   \\
+                 & = \mu_0 \vec J
+\end{align}
+
+This is a very useful law, but to use in exercises we will need some symmetry conditions.
+
+Consider the situation of \cref{ex:magnetic-straight-wire}.
+In this case we have a rotational symmetry (which gives us that $\vec B$ is equal at the same distance $s$ from the wire);
+a translation symmetry along the $z$ axis, since the wire is infinite (which tells us that the that the field is the same along the $z$ axis);
+a flip antisymmetry, since flipping the wire upside down will invert the current and therefore change the direction of $\vec B$.magnetic-straight-wire
+
+Now consider each component of $\vec B$ in cylindrical coordinates:
+\begin{itemize}
+    \item
+          $z$ must be zero by Biot-Savart law, since $\vec{\dd B} \propto I \vec{\dd l} \cross \hat{\Delta r}$
+          and $\vec{\dd l}$ points in the $\hat z$ direction, hence $\vec B$ has to be $\perp \vec{\dd l}$
+    \item
+          $s$ must be zero because of the flipping symmetry: if we flip the wire the $\hat s$ component would stay the same
+          but since the flow of the current has changed direction we would need that $\vec B$ also changed direction,
+          hence the only possibility is for $s$ to be zero
+\end{itemize}
+This leaves us with the only possibility of $\vec B$ to be circling around the wire in direction $\hat \varphi$.
+
+As in the previous chapter we used a lot gaussian surfaces, this time we will use \textbf{amperian loops} $C$,
+which are circles of radius $s$.
+
+\begin{example}{$\vec B$ of a solenoid}{magnetic-solenoid}
+    Consider a solenoid of length $L \gg 1$: this is a series of coils
+    of radius $R$ separated by a small distance $x \ll 1$.
+    In the solenoid flows a current $I$.
+    Call $n$ the number of turns per unit length (uniform).
+
+    \begin{figure}[H]
+        \centering
+        % https://tikz.net/solenoid/
+        \begin{tikzpicture}[scale=1]
+            \def\R{0.8}
+            \def\A{11}   % amplitude
+            \def\s{12}    % coil segment length
+            \def\L{8}    % coil length
+            \def\a{0.5}  % coil segment aspect
+            \def\dy{0.9} % vertical shift
+            \def\dx{0.2} % horizontal shift
+            \draw[snake=coil,thick,segment amplitude=2*\A,segment length=\s,segment aspect=\a]
+            (0,0) -- (\L,0);
+            \draw[<->,shorten >=5]
+            (0,\dy) -- (\L,\dy) node[midway,above] {length $L$};
+            \draw[snake=brace,mirror snake,segment amplitude=3]
+            (0,-\dy) -- (\L,-\dy) node[midway,below=1] {$N$ turns};
+            \draw[-,thick]
+            (\L,0) -- (1.01*\L,0); % coil extension
+            \draw[<->]
+            (-\dx,0) -- (-\dx,\R) node[midway,left=6] {$R$};
+        \end{tikzpicture}
+    \end{figure}
+
+
+    Find the magnetic field $\vec B$.
+\end{example}
+
+\begin{proof}[Solution]
+    First, lets identity the symmetries:
+    we have rotation around $\hat z$, transformation along $\hat z$ and flip $z \to -z$ as in the case of the wire.
+
+    \begin{itemize}
+        \item We cannot have a $\hat s$ component, by a similar argument argument as the wire, by using the flip symmetry.
+        \item We also cannot have a $\hat \varphi$ component, this is because if we consider an amperian path $C$
+              inside the solenoid we would have that, by construction, the $\varphi$ component of $\vec B$ points in the same direction
+              as $\vec{\dd l}$ hence
+              \begin{equation}
+                  \oint_C \vec B \cdot \vec{\dd l} = \oint_C B \dd{l} = B 2\pi s = \mu_0 I_\text{enc}
+              \end{equation}
+              where we used the fact that $B$ is constant along that path because of the other symmetries.
+              Since the current enclosed in $C$ is zero we have no $\varphi$ component for $\vec B$.
+        \item $B$ must have just a $\hat z$ component
+    \end{itemize}
+
+    Now we can consider various cases:
+    \begin{itemize}
+        \item Consider a loop $C$ of the form of a rectangle with the side $d$ parallel to $\hat z$.
+              The two sides which are perpendicular to $z$ will give a zero contribution in the line integral of $\vec B$,
+              hence
+              \begin{equation}
+                  \oint_C \vec B \cdot \vec{\dd l} = B(a) d - B(b) d = \mu_0 I = 0
+              \end{equation}
+              which tells us that $B(a) = B(b) = 0$, where $a, b$ are the distances of the two sides of the rectangle from the solenoid.
+
+        \item Now consider a similar rectangle but this time with a side inside the solenoid.
+              We have
+              \begin{equation}
+                  \oint \vec B \cdot \vec{\dd l} = \int_{C_\text{left}} \vec B \cdot \vec{\dd l} +\cancel{\int_{C_\text{right}} \vec B \cdot \vec{\dd l}} = B h = \mu_0 I_\text{enc} = \mu_0 I n h
+              \end{equation}
+    \end{itemize}
+
+    This gives the final result:
+    \begin{equation}
+        \vec B = \mu_0 n I \hat z
+    \end{equation}
+\end{proof}
+
+\subsubsection{Magnetic vector potential}
+
+By now we have
+\begin{equation}
+    \begin{cases}
+        \div \vec E = \frac{\rho}{\varepsilon_0} \\
+        \curl \vec E = 0                         \\
+        \div \vec B = 0                          \\
+        \curl \vec B = \mu_0 \vec J
+    \end{cases}
+\end{equation}
+
+Since $\vec B$ is not conservative we cannot write it as a gradient of a scalar function,
+instead we can write
+\begin{equation}
+    \vec B = \curl \vec A
+\end{equation}
+where $\vec A$ is the \emph{magnetic vector potential}.
+
+Now, as we did with the electrostatic field, we can combine the two equation.
+In the electrostatic case we got Poisson equation, this time we get
+\begin{equation}
+    \curl \vec B = \curl (\curl \vec A) = \grad(\div \vec A) - \laplacian{\vec A} = \mu_0 \vec J
+\end{equation}
+where the laplacian of a vector field is just the laplacian of each component.
+Note that this looks a lot like Poisson equation but with an extra part $\grad(\div \vec A)$.
+However the curl of $\vec A$ is invariant up to a shift of $\grad f$ where $f: \R^3 \to \R$:
+\begin{equation}
+    \vec {B'} = \curl \vec{A '} = \curl \vec A + \underbrace{\curl (\grad f)}_{= 0} = \vec B
+\end{equation}
+this gives a great deal of freedom which can be used to remove the extra term in the partial differential equation above.
 
 
 \end{document}

@@ -2524,11 +2524,144 @@ In the electrostatic case we got Poisson equation, this time we get
 \end{equation}
 where the laplacian of a vector field is just the laplacian of each component.
 Note that this looks a lot like Poisson equation but with an extra part $\grad(\div \vec A)$.
+
 However the curl of $\vec A$ is invariant up to a shift of $\grad f$ where $f: \R^3 \to \R$:
 \begin{equation}
-    \vec {B'} = \curl \vec{A '} = \curl \vec A + \underbrace{\curl (\grad f)}_{= 0} = \vec B
+    \vec {B'} = \curl \vec{A '} = \curl \vec A + \underbrace{\curl (\grad f)}_{= 0 \text{ by product rules}} = \vec B
 \end{equation}
-this gives a great deal of freedom which can be used to remove the extra term in the partial differential equation above.
+therefore we can write
+\begin{equation}
+    \begin{cases}
+        V' = V + c                  & c \in \R        \\
+        \vec{A'} = \vec A + \grad f & f : \R^3 \to \R
+    \end{cases}
+\end{equation}
+and using $V'$ instead of $V$ or $\vec{A'}$ instead of $\vec A$ will describe an equivalent physical situation.
+
+Indeed we are be able to find $f$ such that $\grad(\div \vec A)$ vanishes.
+We want $\div \vec A = 0$ where $\vec A = \vec{A'} + \grad f$ and $\div \vec{A'} \neq 0$.
+By expanding $\vec A$ we get the equation
+\begin{gather}
+    \div \vec A = \div \vec{A '} + \div(\grad f) = \div \vec{A '} + \laplacian f = 0 \\
+    \implies \laplacian f = - \div \vec{A '}
+\end{gather}
+which is a Poisson equation, hence when we know the boundary conditions we are able to solve for $f$.
+By analogy to the electric case we know that
+\begin{equation}
+    f = \frac{1}{4 \pi} \int \frac{\div \vec{A '}}{\Delta r} \dd \tau '
+\end{equation}
+which indeed exists, therefore we can write
+\begin{equation}
+    \begin{cases}
+        \laplacian \vec A = - \mu_0 \vec J \\
+        \laplacian V = - \frac{\rho}{\varepsilon_0}
+    \end{cases}
+\end{equation}
+We note that these two equations are completely independent from one another.
+
+Again, by analogy to the electric case we can write $\vec A$ in integral form:
+\begin{equation}
+    \vec A = \frac{\mu_0}{4 \pi} \int \frac{\vec J(\vec r)}{\Delta r} \dd \tau '
+\end{equation}
+and for a 1D wire we can write $\vec J \dd \tau' = \vec J \dd S' \dd l ' = I \dd l'$
+which allows us to simplify to
+\begin{equation}
+    \vec A = \frac{\mu_0}{4 \pi}\int \frac{I}{\Delta r} \vec{\dd l}
+\end{equation}
+
+\subsubsection{Boundary conditions}
+
+Consider a surface where there flows some current $\vec K$ and a box with surface $S$ and height $\varepsilon$.
+We know that $\oint_S \vec B \cdot \vec{\dd S} = 0$:
+\begin{align}
+    \oint_S \vec B \cdot \vec{\dd S}
+     & = \underbrace{\oint_{S_\text{lat}} \vec B \cdot \vec{\dd S}}_{\propto \varepsilon} +\oint_{S_\text{top} \cup S_\text{bot}}\vec B \cdot \vec{\dd S} \\
+     & = B_\text{top}^{\perp} \cancel{A} - B_\text{bot}^{\perp} \cancel{A} = 0
+\end{align}
+
+Now consider a loop $C$ crossing the same plane where the height of the loop is $\varepsilon$ and of length $l$.
+We have
+\begin{align}
+    \oint_C \vec B \cdot \vec{\dd l} & = \mu_0 I_\text{enc}                                                                             \\
+                                     & = \oint_{C_\text{top}}\vec B \cdot \vec{\dd l} + \oint_{C_\text{bottom}}\vec B \cdot \vec{\dd l} \\
+                                     & = B^{\parallel}_\text{top} \cancel l - B^{\parallel}_\text{bot} \cancel l = \mu_0 K \cancel l
+\end{align}
+
+Combining these two results we get
+\begin{equation}
+    \begin{cases}
+        B_\text{top}^{\perp} = B_\text{bot}^{\perp} \\
+        B^{\parallel}_\text{top} - B^{\parallel}_\text{bot} = \mu_0 K
+    \end{cases}
+\end{equation}
+
+\subsection{Magnetic field in matter}
+Now we want to study the scenario where we have a material which gets inserted into an external magnetic field.
+Different materials react differently to the magnetic field:
+\begin{itemize}
+    \item \textbf{Magnets} are made of ferromagnetic materials.
+          They will create their own field $\vec B_\text{ind}$
+          in the opposite direction of $\vec B$ and maintain it even when the external $\vec B$ is gone.
+    \item \textbf{Paramagnetic} will create a field
+          $\vec B_\text{ind}$ in the same direction of $\vec B$,
+          but once $\vec B$ is turned off they will not maintain a magnetization.
+    \item \textbf{Diamagnetic} will create a field $\vec B_\text{ind}$
+          which goes in the opposite direction of $\vec B$,
+          but when $\vec B$ is turned off $\vec B_\text{ind}$ is not maintained.
+\end{itemize}
+
+Microscopically materials posses tiny currents:
+electrons orbit around their nuclei and they also \say{spin} around their axis.
+
+\subsubsection{Torque and force on magnetic dipoles}
+
+We can model electrons as an uniformly charged sphere spinning with angular velocity $\vec \omega$.
+Electrons are that small that we can model them as a \emph{magnetic dipole}.
+
+First lets consider a loop of radius $R$ with a current $I$ flowing in it.
+When we compute the magnetic field at $\vec r$ with $r \gg R$ then
+\begin{equation}
+    \vec B(\vec r) \approx I \vec S = \vec m
+\end{equation}
+where $\vec m$ is the magnetic dipole moment.
+
+In the case of electrons $\vec m$ is directed as $\vec \omega$ and it has a constant module,
+we will learn more about this in quantum mechanics \emoji{cowboy-hat-face}.
+
+Consider the scenario in \Cref{fig:mag-dipole}, where we want to compute the force and the torque due to $\vec B$ uniform on
+a square magnetic dipole.
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.75\textwidth]{assets/physics-2/magnetic-dipole.svg}
+    \caption{Force exerted by $\vec B$ on a square magnetic dipole $\vec m$}
+    \label{fig:mag-dipole}
+\end{figure}
+
+Let us compute the force of $\vec B$ on each segment of wire.
+\begin{align}
+    \vec F_{12} & = -I \int_1^2 \dd l B \hat y = -I B \int_1^2 \dd l \hat y = - I B a \hat y \\
+    \vec F_{34} & = I \int_3^4 \dd l B \hat y =  I B a \hat y                                \\
+\end{align}
+similarly $\vec F_{23} + \vec F_{14} = 0$.
+Indeed we have that the total force $\vec F = 0$, however the torque generated by $F_{12}, F_{34}$ is not zero:
+\begin{align}
+    \vec N & = \vec r \cross \vec F = \vec r_{12} \cross \vec F_{12} + \vec r_{34} \cross \vec F_{34}        \\
+           & = \vec r_{12} \vec F_{12} \sin \theta \hat x+ \vec r_{34} \cross \vec F_{34} \sin \theta \hat x \\
+           & = \frac{a}{2} I B a \sin \theta \hat x + \frac{a}{2} I B a \sin \theta \hat x                   \\
+           & = I B a^2 \sin \theta \hat x                                                                    \\
+           & = m B \sin \theta \hat x = \vec m \cross \vec B
+\end{align}
+which is very similar to the result we got for the electric field:
+\begin{equation}
+    \begin{cases}
+        \vec N_E = \vec p \cross \vec E \\
+        \vec N_B = \vec m \cross \vec B
+    \end{cases}
+\end{equation}
+
+TODO: why does the torque point in $\hat x$? shouldn't it be $\hat z$?
+
+TODO: what about the torque of $F_{23}, F_{14}$? Professor said it is zero but why?
 
 
 \end{document}

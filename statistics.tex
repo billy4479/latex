@@ -1329,7 +1329,7 @@ if $\sup_{\theta \in \Theta_0} \pi(\theta, K) \leq \alpha_0$ and the power funct
 with critical region $\sup_{\theta \in \Theta_0} \pi(\theta, K') \leq \alpha_0$ satisfies
 $\pi(\theta, K) \geq \pi(\theta, K')$.
 
-\section{Linear regression}
+\section{Simple linear regression}
 
 The goal in this section is to predict a dependent variable $y$ (often called \emph{response})
 with an independent variable $x = (x_1, \dots, x_p)$
@@ -1341,7 +1341,8 @@ Of course, in this process there is some randomness involved, hence $(x, y)$
 is the realization of the random vector $(X, Y)$.
 Our goal is to determine the distribution of $Y \mid X = x$.
 
-\subsection{Simple linear regression}
+We will start with the simplest regression model, called \emph{simple linear regression}.
+
 Assume we observe $(x_1, Y_1), \dots, (x_n, Y_N)$ and we observe the following:
 \begin{equation}
     Y_i = \alpha + \beta x_i + e_i \quad \forall i
@@ -1360,7 +1361,7 @@ but \emph{not} identically distributed since the expectation depends on $x_i$.
 This model is not always accurate: we might have a different correlation between the $x$ and $Y$ which is not linear
 and we we might also have \emph{outliers} (datapoint which cannot be explained by our model).
 
-\subsubsection{Estimation}
+\subsection{Estimation}
 
 \begin{theorem}{MLE for simple linear regression}{MLE-slr}
     The MLEs for $\alpha, \beta, \sigma^2$ in the simple linear regression model are
@@ -1427,7 +1428,23 @@ We define the following quantities:
     \item \emph{Coefficient of determination}: $R^2 = 1 - \frac{SS_\text{res}}{SS_\text{tot}} = r^2_{x, Y}$
 \end{itemize}
 
-\subsubsection{Test and confidence interval}
+\subsubsection{Principle of lease squares}
+Given a general regression model
+\begin{equation}
+    Y_i = f_\theta(x_i) + e_i
+\end{equation}
+for some parameter $\theta$ and some errors $e_1, \dots, e_n$.
+
+The least square estimator for $\theta$ takes teh form of
+\begin{equation}
+    \hat \theta_\text{LS} = \argmin_{\theta \in \Theta} \sum_{i}(Y_i - f_\theta(x_i))^2
+\end{equation}
+
+In the case of the simple linear regression this estimator corresponds to the MLE.
+
+\subsection{Tests}
+
+\subsubsection{\texorpdfstring{$t$}{t}-test and confidence interval}
 
 Note that expanding the definition of $\hat \beta$ gets us a linear combination of $Y$
 and a linear combination of normal distributions gives again a normal distribution:
@@ -1442,6 +1459,7 @@ However, most times we don't know the value of $\sigma^2$ and therefore we have 
 We can use the unbiased version of the estimator of $\sigma^2$:
 \begin{equation}
     \hat \sigma^2_u = \frac{\sum_i (Y_i - \hat \alpha - \hat \beta x_i)}{n-2}
+    \label{eq:unbiased-est-var-slr}
 \end{equation}
 which has the nice property that if substituted into the formula above we get
 \begin{equation}
@@ -1449,5 +1467,100 @@ which has the nice property that if substituted into the formula above we get
 \end{equation}
 
 This can be used to perform the usual hypothesis testing, as we did in the previous sections.
+
+Hypothesis on $\alpha$ can be tested with a $t$-test as well.
+
+\subsubsection{Likelihood ratio test}
+We can perform a likelihood ratio test on $\beta$ as well.
+Let $H_0: \beta = 0$ and $H_1: \beta \neq 0$.
+
+We get a test statistic of
+\begin{equation}
+    T = 2 \log(\lambda_n) = -n \log(1-r^2_{x, Y}) \sim \chi^2_1
+\end{equation}
+(see lecture 28 for the computation).
+
+Then we reject $H_0$ if $2\log(\lambda_n) \geq \chi^2_{1, 1-\alpha_0}$,
+that is, we reject for large values of $R^2$.
+
+\subsection{Predictions}
+
+We can estimate the value $m(x) = \E(Y \mid X) = \alpha + \beta x$
+as $\hat m(x) = \bar Y + \hat \beta (x - \bar x)$.
+With a bunch of algebra we can rewrite $\hat \beta$ as
+\begin{equation}
+    \hat \beta = \beta +  \frac{\sum_i (x_i - \bar x) e_i}{\sum_i (x_i - \bar x)}
+\end{equation}
+therefore we can also rewrite $\hat m$ as
+\begin{align}
+    \hat m(x) & = \bar Y + \left(\beta +  \frac{\sum_i (x_i - \bar x) e_i}{\sum_i (x_i - \bar x)}\right) (x - \bar x)   \\
+              & = \alpha + \beta x + \frac{1}{n} \sum_i e_i(1+\frac{(x-\bar x)(x_i - \bar x) n}{\sum_i (x_i-\bar x)^2})
+\end{align}
+from which we notice that $\hat m$ is unbiased and normally distributed with
+\begin{align}
+    \E(\hat m(x))   & = m(x) = \alpha - \beta x                                                                                 \\
+    \var(\hat m(x)) & = \frac{\sigma^2}{n^2} \sum_i \left( 1+ \frac{(x-\bar x)(x_i - \bar x) n}{\sum_i (x_i-\bar x)^2}\right)^2 \\
+                    & = \frac{\sigma^2}{n} \sum_i \left( 1 + \frac{n(x-\bar x)^2}{s_x^2(n-1)}\right)                            \\
+                    & = \frac{\sigma^2}{n} \sum_i \left( 1 + \frac{n}{n-1} \frac{(x-\bar x)^2}{n-1}\right)
+\end{align}
+
+We can make three important remarks on this result:
+\begin{itemize}
+    \item The noise around the measurement $\sigma^2$ makes the prediction worse
+    \item A larger $n$ makes the variance smaller
+    \item The further away is $x$ from $\bar x$ the more uncertain is the prediction
+\end{itemize}
+
+This results in a test statistic
+\begin{equation}
+    T = \frac{\hat m(x) - m(x)}{\sqrt{\hat{\var}(\hat m(x)}} \sim t_{n-2}
+\end{equation}
+where $\hat{\var}(\hat m(x))$ is the variance of $\hat m$ where $\sigma^2$ is replaced with its unbiased
+estimator \cref{eq:unbiased-est-var-slr}.
+
+We now want to find an interval defined by $\ell$ and $k$ such that
+\begin{equation}
+    P(\ell \leq Y \leq k | X = x) = 1-\alpha
+\end{equation}
+with some computations we get
+\begin{equation}
+    Y \mid X = \Normal(m(x), \sigma^2) = \hat m(x) + \Normal\left(0, \underbrace{\frac{\sigma^2}{n}\left(n+1+ \frac{n(x-\bar x)^2}{(n-1)s^2_x}\right)}_{\sigma_\text{pred}} \right)
+\end{equation}
+and again we can derive a test statistic
+\begin{equation}
+    T = \frac{Y - \hat m(x)}{\sqrt{\hat \sigma^2_\text{pred}}} \sim t_{n-2}
+\end{equation}
+
+\subsection{Multiple linear regression}
+In this model we observe $Y_1, \dots, Y_n$ with corresponding $p$-dimensional predictors
+\begin{equation}
+    (x_{1,1}, \dots, x_{1,p}), \dots, (x_{n, 1}, \dots, x_{n,p})
+\end{equation}
+which satisfy
+\begin{equation}
+    Y_i = \sum_{j = 1}^p \beta_j x_{i, j}+ e_j
+\end{equation}
+
+This can be conveniently represented in matrix form:
+\begin{equation}
+    \vec Y = \begin{pmatrix}
+        x_{1, 1} & \dots  & x_{1, p} \\
+        \vdots   & \ddots & \vdots   \\
+        x_{n, 1} & \dots  & x_{n, p}
+    \end{pmatrix} \vec \beta + \vec e
+\end{equation}
+
+To add an intercept ($\alpha$ from before) we just take the first column of the matrix $X$ to be all $1$.
+
+\subsubsection{Categorical variables}
+Categorical variables are not numbers, which cannot be sorted (for example male or female, somewhat like an \texttt{enum} in C).
+We say that a categorical variable is of class $k$ if it has $k$ alternatives.
+
+To represent these variables we introduce dummy variables:
+for each cat. variable we add $k$ dummy variables (according to the class),
+then $x_i = 1$ if the cat. variable is in class $i$ and $0$ otherwise.
+
+Note that if we have an intercept we cannot add all $k$ variables, because then the matrix $X$
+would have some columns that can be written as a linear combination of others.
 
 \end{document}

@@ -620,4 +620,101 @@ independently of $x$, while in pointwise convergence we can choose a different $
     \end{itemize}
 \end{proof}
 
+\subsubsection{Contractions}
+
+\begin{definition}{Contraction}{contraction}
+    Let $(X, d)$ be a metric space.
+    A function $F: X \to X$ is a contraction if $\exists \alpha \in [0, 1)$
+    such that
+    \begin{equation}
+        d(F(x), F(y)) \leq \alpha d(x, y) \quad \forall x, y \in X
+    \end{equation}
+\end{definition}
+
+\begin{theorem}{Banach fixed-point theorem}{banach}
+    Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
+    Then, there exists an unique $\bar x \in X$ such that
+    \begin{equation}
+        F(\bar x) = \bar x
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    First let us show that $\bar x$ is unique.
+    Assume that $F(x) = x$ and $F(y) = y$, hence
+    \begin{equation}
+        d(x, y) = d(F(x), F(y)) \leq \alpha d(x, y) \implies (1-\alpha) d(x, y) \leq 0
+    \end{equation}
+    and since distances are non-negative we get that $d(x, y) = 0$ but this implies $x = y$.
+
+    We now want to prove the existence of $\bar x$.
+    For the first step we define a sequence of points recursively as follows:
+    \begin{equation}
+        x_{k + 1} = F(x_k)
+    \end{equation}
+    and claim that
+    \begin{equation}
+        d(x_k, x_{k+1}) \leq \alpha^k d(x_0, x_1) \quad \forall k \in \N .
+    \end{equation}
+    We proceed by induction: the base case of $k = 0$ is trivial since $\alpha^0 = 1$ (assume that $0^0=1$);
+    for the inductive step we have
+    \begin{equation}
+        d(x_{k+1}, x_{k+2}) = d(F(x_k), F(x_{k+1})) \leq \alpha d(x_k, x_{k+1}) \leq \alpha \alpha^k d(x_0, x_1)
+    \end{equation}
+    as desired.
+
+    Next, we let $C = d(x_0, x_1)$ and claim that
+    \begin{equation}
+        d(x_k, x_{k+1}) \leq C \sum_{j = k}^{l-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
+    \end{equation}
+    We again proceed by induction on $\ell > j$:
+    the base case will be $\ell = j + 1$ which reduces to $d(x_k, x_{k+1}) \leq C \alpha^k$, which is the result of the previous claim;
+    at $\ell + 1$ we have
+    \begin{equation}
+        d(x_k, x_{l+1}) \leq d(x_k, x_\ell) + d(x_\ell, x_{l + 1}) \leq d(x_k, x_\ell) + C \alpha^\ell \leq C\sum_{j = k}^{l-1} \alpha^j + C \alpha^\ell
+    \end{equation}
+    thanks to the triangle inequality, the previous claim and the inductive hypothesis.
+
+    Now we can combine the non-negativity of $d$, the claim we just proved and some algebra to get that for $0 \leq k < \ell$
+    \begin{equation}
+        0 \leq d(x_k, x_\ell) \leq C \sum_{j = k}^{l-1} \alpha^j = C \frac{\alpha^k - \alpha^\ell}{1-\alpha}
+    \end{equation}
+    but the sequence on the right goes to $0$ as $k, j \to \infty$ (since $\alpha \in [0, 1)$) hence
+    \begin{equation}
+        \lim_{k, j \to \infty} d(x_k, x_{\ell}) = 0
+    \end{equation}
+    which means that $(x_k)_{k \in \N}$ is a Cauchy sequence.
+
+    Since $(X, d)$ is complete by hypothesis, $(x_d)$ must converge to some $\bar x \in X$.
+    We have
+    \begin{equation}
+        \bar x = \lim_{k \to \infty} x_k = \lim_{k \to \infty} x_{k + 1} = \lim_{k \to \infty} F(x_k).
+    \end{equation}
+    Since $F$ is continuous because it is a contraption (why?), for any converging sequence $x_k \to \bar x$ we have
+    \begin{equation}
+        d(F(\bar x), F(x_k)) \leq \alpha d(\bar x, x_k) \to 0
+    \end{equation}
+    as $k \to \infty$.
+    Therefore $d(F(\bar x), F(x_k)) \to 0$ and thus $F(x_k) \to F(\bar x)$.
+\end{proof}
+
+\begin{theorem}{}{}
+    Let $f: U \to \R^d$ with $U \subseteq \R^p$ open be defined as
+    \begin{equation}
+        f(x) = x + g(x) \quad \text{with } \abs{g(a) - g(b)} \leq \alpha \abs{a - b}, \enspace \alpha \in [0,1)
+    \end{equation}
+    that is, a Lipschitz perturbation of the identity.
+    Then $f(U)$ is open, $f: U \to f(U)$ is a bijection, and it has a continuous inverse $f^{-1}$
+    which satisfies
+    \begin{equation}
+        \abs{f^{-1}(a)- f^{-1}(b)} \leq \frac{1}{1-\alpha} \abs{a-b}
+    \end{equation}
+\end{theorem}
+
+TODO: there is a weird corollary here, but f it.
+
+\begin{proof}
+    TODO: write the proof
+\end{proof}
+
 \end{document}

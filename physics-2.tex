@@ -2613,7 +2613,7 @@ Different materials react differently to the magnetic field:
 Microscopically materials posses tiny currents:
 electrons orbit around their nuclei and they also \say{spin} around their axis.
 
-\subsubsection{Torque and force on magnetic dipoles}
+\subsubsection{Torque and force on magnetic dipoles - Paramagnetic materials}
 
 We can model electrons as an uniformly charged sphere spinning with angular velocity $\vec \omega$.
 Electrons are that small that we can model them as a \emph{magnetic dipole}.
@@ -2660,8 +2660,103 @@ which is very similar to the result we got for the electric field:
 \end{equation}
 
 TODO: why does the torque point in $\hat x$? shouldn't it be $\hat z$?
+NON C'È L'ASSE X, LA FIGURA È 2D
 
 TODO: what about the torque of $F_{23}, F_{14}$? Professor said it is zero but why?
 
+For $\vec B$ non uniform we give the following formulas without proof:
+\begin{equation}
+    \vec F = \grad(\vec m \cdot \vec B)\\
+    \vec N = \vec m \cross \vec B
+\end{equation}
+
+\subsubsection{Effects of \texorpdfstring{$\vec B$}{B} on orbits - Diamagnetic materials}
+
+Due to Pauli exclusion principle in each orbital electrons have opposite spin.
+Then if an atom has a full shell (like noble gasses) the total magnetic moment is zero and there is no torque.
+
+The magnetic field has an effect on it anyways.
+First consider the atom with no external field: in the classical model of an atom the electrons orbit around the nucleus
+as shown.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.5\textwidth]{assets/physics-2/atom-diamagnetism.svg}
+    \caption{The electrons spin at a distance $R$ from the nucleus at a velocity $\vec v$,
+        creating a current $I$ in the opposite direction and therefore a magnetic moment}
+\end{figure}
+
+We have
+\begin{equation}
+    \vec m_0 = I \vec S = I \pi R^2 \hat z = \frac{1}{2}e v_0 R \hat z
+\end{equation}
+where we substituted $I = -e/T$ and $T = \frac{2\pi R}{v_0}$.
+
+Meanwhile there will also be a Coulomb force between the electron and the protons in the nucleus
+which will act as a centripetal force:
+\begin{equation}
+    F_C = \frac{1}{4 \pi \varepsilon_0} \frac{e^2}{R^2} = m_e a_C = m_e \frac{v_0^2}{R}
+    \implies v_0 = \sqrt{\frac{1}{4 \pi \varepsilon_0} \frac{e^2}{m_e R}}
+\end{equation}
+
+Now assume we turn on a magnetic field $\vec B$ directed as $\hat z$.
+We will assume that $R$ is constant.
+\begin{align}
+    F        & = F_c + F_L = \frac{1}{4 \pi \varepsilon_0} \frac{e^2}{R^2} + e v B = m \frac{v^2}{R} \\
+    \implies & \frac{m_e}{R} (v+v_0)(v- v_0) = evB
+\end{align}
+We will also say that $v \approx v_0 \implies \Delta v/v_0 \ll 1$.
+We get
+\begin{equation}
+    \frac{m_e}{R}\Delta v 2 \cancel{v_0} = e \cancel{v_0} B \implies \Delta v = \frac{e R}{2m_e}B
+\end{equation}
+
+Then the difference of magnetic moment is
+\begin{equation}
+    \Delta \vec m = -\frac{1}{2} e R (v-v_0) \hat z = -\frac{e^2R^2}{4 m_e} \vec B
+\end{equation}
+
+This tells us that the magnetic moment will point in the opposite direction of the field.
+
+\subsubsection{Forces on diamagnetic and paramagnetic materials}
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.5\textwidth]{assets/physics-2/diamagnet-in-with-magnet.svg}
+    \caption{The force exerted by a magnet on an diamagnetic atom placed in $A$}
+\end{figure}
+
+As we can see $\vec m$ is going opposite to $\vec B$, therefore the force is repulsive.
+
+Fun fact: \href{https://www.youtube.com/watch?v=KlJsVqc0ywM}{animals are diamagnetic}.
+
+\subsubsection{Magnetization}
+
+In matter, magnetic dipoles are oriented randomly,
+but if we apply an external field they will all align to $\vec B$
+
+We can measure how magnetic dipole moments are oriented by using the \emph{magnetization vector}:
+\begin{equation}
+    \vec M = \dv{\vec m}{\tau}
+\end{equation}
+
+Similarly to what we had in dielectrics we will have a bound current $\vec J_b$ inside the volume
+and a bound current $\vec K_b$ on the surfaces:
+\begin{equation}
+    \begin{cases}
+        \vec J_b = \curl \vec M \\
+        \vec K_b = \vec M \cross \hat n
+    \end{cases}
+\end{equation}
+
+\subsubsection{Ampere law in matter}
+\begin{equation}
+    \curl \vec B = \mu_0 \vec (\vec J_f + \vec J_b) = \mu_0 (\vec J_f + \curl \vec M)
+    \implies \vec J_f = \curl \underbrace{\left( \frac{\vec B}{\mu_0} - \vec M \right)}_{\vec H}
+\end{equation}
+and
+\begin{equation}
+    \oint_C \vec H \cdot \vec{\dd l} = I^f_\text{enc}
+\end{equation}
 
 \end{document}

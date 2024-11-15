@@ -26,7 +26,7 @@
 \newcommand{\convprob}{\xrightarrow{\operatorfont P}}
 \newcommand{\convmean}[1]{\xrightarrow{#1}}
 
-\renewcommand{\vec}[1]{\uvec{#1}}
+\renewcommand{\vec}[1]{\bm{#1}}
 
 \begin{document}
 
@@ -1531,7 +1531,7 @@ and again we can derive a test statistic
     T = \frac{Y - \hat m(x)}{\sqrt{\hat \sigma^2_\text{pred}}} \sim t_{n-2}
 \end{equation}
 
-\subsection{Multiple linear regression}
+\section{Multiple linear regression}
 In this model we observe $Y_1, \dots, Y_n$ with corresponding $p$-dimensional predictors
 \begin{equation}
     (x_{1,1}, \dots, x_{1,p}), \dots, (x_{n, 1}, \dots, x_{n,p})
@@ -1543,24 +1543,145 @@ which satisfy
 
 This can be conveniently represented in matrix form:
 \begin{equation}
-    \vec Y = \begin{pmatrix}
+    \vec Y = X \vec \beta + \vec e \quad \text{where } X = \begin{pmatrix}
         x_{1, 1} & \dots  & x_{1, p} \\
         \vdots   & \ddots & \vdots   \\
         x_{n, 1} & \dots  & x_{n, p}
-    \end{pmatrix} \vec \beta + \vec e
+    \end{pmatrix};
+\end{equation}
+in order to add an intercept ($\alpha$ from before) we just take the first column of the matrix $\uvec X$ to be all $1$.
+
+We have that the distribution of $Y$ will be a multivariate normal:
+\begin{equation}
+    \vec Y \sim \Normal(X \vec \beta, I \sigma ^2)
 \end{equation}
 
-To add an intercept ($\alpha$ from before) we just take the first column of the matrix $X$ to be all $1$.
 
 \subsubsection{Categorical variables}
-Categorical variables are not numbers, which cannot be sorted (for example male or female, somewhat like an \texttt{enum} in C).
+Categorical variables are not numbers, which cannot be sorted
+(for example male or female, somewhat like an \texttt{enum} in \texttt{C}).
 We say that a categorical variable is of class $k$ if it has $k$ alternatives.
 
 To represent these variables we introduce dummy variables:
-for each cat. variable we add $k$ dummy variables (according to the class),
+for each cat. variable we consider a vector $\vec x \in \{ 0, 1\}^k$,
 then $x_i = 1$ if the cat. variable is in class $i$ and $0$ otherwise.
 
 Note that if we have an intercept we cannot add all $k$ variables, because then the matrix $X$
-would have some columns that can be written as a linear combination of others.
+would be not \emph{full rank},
+(that is have some columns that can be written as a linear combination of others)
+which will result in $\beta$ not being identifiable.
+
+\subsection{Estimation}
+
+\begin{theorem}{MLE}{}
+    If the design matrix $X$ in a regression model has full rank, the MLE for $\beta$ and $\sigma^2$ are
+    \begin{equation}
+        \hat \beta = (X^T X)^{-1} X^T Y \quad \text{and} \quad \hat \sigma^2 = \frac{\norm{Y - X \hat \beta}^2}{n}
+    \end{equation}
+\end{theorem}
+
+Note tha $\hat \beta$ is unbiased and its variance is
+\begin{align}
+    \var(\hat \beta ) & = \var((X^T X)^{-1} X^T Y)                                 \\
+                      & = (X^T X)^{-1}X^T \var(Y) ((X^T X)^{-1} X^T)^T             \\
+                      & = (X^T X)^{-1}X^T \sigma^2 \mathds{1} ((X^T X)^{-1} X^T)^T \\
+                      & = \sigma^2 (X^T X)^{-1}
+\end{align}
+
+We also now understand the full rank requirement: if $X$ is not full rank $X^T X$ is also not full rank,
+which means it will not be invertible.
+
+\begin{proof}
+    We compute the MLE as usual, this time now we have vectors though.
+    \begin{align}
+        \ell(\beta, \sigma^2) & = \log\left( (2\pi)^{-n/2} \det{\mathds{1}_n \sigma^2}^{-1/2} \exp\left( \frac{1}{2} (Y-X\beta)^T(\mathds{1}_n \sigma^2)^{-1}(Y - X \beta) \right) \right) \\
+                              & = -\frac{n}{2} \log(2 \pi) - \frac{n}{2} \log(\sigma^2) - \frac{1}{2\sigma^2} \norm{Y - X \beta}^2
+    \end{align}
+    then the MLE for $\beta$ is
+    \begin{equation}
+        \hat \beta = \argmin_{\beta} \norm{Y - X\beta}^2
+    \end{equation}
+    which can be computed by setting the gradient equal to zero:
+    \begin{align}
+        \eval{\nabla_\beta (\norm{Y - X\beta}^2)}_{\beta = \hat \beta} & = 0                                                                                                               \\
+                                                                       & \iff \eval{\nabla_\beta (\norm{Y}^2 + \norm{X \beta}^2 - 2 \langle Y, X\beta \rangle^2)}_{\beta = \hat \beta} = 0 \\
+                                                                       & \iff -2 X^T Y + 2 X^T X \beta = 0                                                                                 \\
+                                                                       & \iff \hat \beta = (X^T X)^{-1} X^T Y
+    \end{align}
+
+    Similarly for $\hat \sigma^2$ we have
+    \begin{equation}
+        \pdv{\sigma^2} \ell(\sigma^2) = - \frac{n}{2\sigma^2} + \frac{1}{2 (\sigma^2)^2} \norm{Y - X \hat \beta}^2
+    \end{equation}
+    and setting it to zero we get
+    \begin{equation}
+        \hat \sigma^2 = \frac{\norm{Y- X \hat \beta}^2}{n}
+    \end{equation}
+\end{proof}
+
+\subsubsection{Geometric interpretation}
+Let $b \in \R^n$ and $A \in \R^{n \times p}$.
+Then the closest point from $b$ to the column space of $A$ is $Ax$
+from which we can draw an orthogonal to the columns space of $A$ to $b$.
+Formally we have that
+\begin{equation}
+    \langle A\gamma , b - Ax \rangle = 0 \implies \forall \gamma \in \R^p \enspace A^T(\beta -Ax) = 0
+\end{equation}
+which gives us
+\begin{equation}
+    A x = A (A ^T A)^{-1} A^T b = P_A
+\end{equation}
+which is the projection matrix.
+
+So in a linear regression $\vec Y = X \vec \beta + e$ with $\hat \beta = (X^T X)^{-1} X^T Y$
+we are really just taking the projection of $Y$ onto the column space of $X$:
+\begin{equation}
+    \hat Y = X (X^T X)^{-1} X^T Y = P_X Y
+\end{equation}
+
+A some properties of the projection operator are
+\begin{itemize}
+    \item If $\vec \gamma \in {\operatorfont Col}(X)$ then $P_X \vec \gamma = \gamma$
+    \item If $\vec \gamma \perp{\operatorfont Col}(X)$ then $P_X \vec \gamma = 0$
+    \item $P_X^2 = P_X$
+\end{itemize}
+
+Moreover we can define the \emph{orthogonal projection operator} as $I - P_X$
+which projects into the orthogonal space of ${\operatorfont Col}(X)$.
+
+Another useful property is that if we have an orthogonal basis $\vec v_1, \dots, \vec v_k \in \R^k$
+then
+\begin{equation}
+    \vec x = \sum_{j = 1}^k \zeta_j \vec v_j \quad \text{for some } \zeta_j \in \R
+\end{equation}
+which means that the orthogonal projection can be written as
+\begin{equation}
+    P_X = \sum_{j = 1}^\ell \zeta_j v_j \quad \text{for } j < k
+\end{equation}
+and
+\begin{equation}
+    \norm{P_X}^2
+    = \sum_{j = 1}^\ell \zeta_j ^2 \langle v_j, v_j \rangle + \sum_{j \neq i \in \{ 1, \dots, \ell \}} \zeta_j \zeta_i\langle v_j, v_j \rangle
+    = \sum^\ell_{j = 1} \zeta_j^2
+\end{equation}
+
+Note that for any point $\vec x$ the distance between any other vector $\vec z = \sum_{j = 1}^\ell \zeta_j \vec v_j$
+is greater or equal to the distance between $\vec x$ and it's projection $Px$.
+
+\subsubsection{Residuals and sum of squares}
+
+For the multivariate linear regression we have
+\begin{itemize}
+    \item Residuals: $\vec Y - X \vec{\hat \beta}$
+    \item Total sum of squares: $SS_\text{tot} = \norm{\vec Y - \vec{\bar Y1}}^2$ where $\bar Y1 = (\bar Y, \dots, \bar Y)$
+    \item Residual sum of squares: $SS_\text{res} = \norm{\vec Y - X \vec{\hat\beta}}^2$
+    \item Coefficient of determination: $R^2 = 1 - SS_\text{tot}/ SS_\text{res}$
+\end{itemize}
+
+Moreover there holds
+\begin{equation}
+    0 \leq SS_\text{res} \leq SS_\text{tot}
+\end{equation}
+
 
 \end{document}

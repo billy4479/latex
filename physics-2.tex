@@ -14,8 +14,10 @@
 \usepackage{subfig}
 \usepackage{emoji}
 \usepackage{circuitikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \tikzset{>=latex}
-\usetikzlibrary{calc,quotes,angles,snakes}
+\usetikzlibrary{calc,quotes,angles,decorations.pathmorphing,decorations.pathreplacing,intersections}
 
 % \renewcommand{\vec}[1]{\uvec{#1}}
 
@@ -2434,21 +2436,31 @@ which are circles of radius $s$.
         \centering
         % https://tikz.net/solenoid/
         \begin{tikzpicture}[scale=1]
-            \def\R{0.8}
-            \def\A{11}   % amplitude
-            \def\s{12}    % coil segment length
-            \def\L{8}    % coil length
-            \def\a{0.5}  % coil segment aspect
-            \def\dy{0.9} % vertical shift
-            \def\dx{0.2} % horizontal shift
-            \draw[snake=coil,thick,segment amplitude=2*\A,segment length=\s,segment aspect=\a]
+            \def\R{0.8}    % Radius
+            \def\A{11}     % Amplitude of the coil
+            \def\s{12}     % Coil segment length
+            \def\L{8}      % Coil length
+            \def\a{0.5}    % Coil segment aspect ratio
+            \def\dy{0.9}   % Vertical shift
+            \def\dx{0.2}   % Horizontal shift
+
+            % Coil using decorations
+            \draw[thick,decorate,decoration={coil,amplitude=\A pt,segment length=\s pt,aspect=\a}]
             (0,0) -- (\L,0);
+
+            % Length indication
             \draw[<->,shorten >=5]
             (0,\dy) -- (\L,\dy) node[midway,above] {length $L$};
-            \draw[snake=brace,mirror snake,segment amplitude=3]
+
+            % Brace with turns indication
+            \draw[decorate,decoration={brace,mirror,amplitude=6pt}]
             (0,-\dy) -- (\L,-\dy) node[midway,below=1] {$N$ turns};
+
+            % Coil extension
             \draw[-,thick]
-            (\L,0) -- (1.01*\L,0); % coil extension
+            (\L,0) -- (1.01*\L,0);
+
+            % Radius indication
             \draw[<->]
             (-\dx,0) -- (-\dx,\R) node[midway,left=6] {$R$};
         \end{tikzpicture}
@@ -2633,7 +2645,8 @@ a square magnetic dipole.
 \begin{figure}[H]
     \centering
     \includesvg[width=0.75\textwidth]{assets/physics-2/magnetic-dipole.svg}
-    \caption{Force exerted by $\vec B$ on a square magnetic dipole $\vec m$}
+    \caption{Force exerted by $\vec B$ on a square magnetic dipole $\vec m$ placed at the origin.
+        On the right there is a magnification of the dipole itself.}
     \label{fig:mag-dipole}
 \end{figure}
 
@@ -2658,9 +2671,6 @@ which is very similar to the result we got for the electric field:
         \vec N_B = \vec m \cross \vec B
     \end{cases}
 \end{equation}
-
-TODO: why does the torque point in $\hat x$? shouldn't it be $\hat z$?
-NON C'È L'ASSE X, LA FIGURA È 2D
 
 TODO: what about the torque of $F_{23}, F_{14}$? Professor said it is zero but why?
 
@@ -2751,12 +2761,147 @@ and a bound current $\vec K_b$ on the surfaces:
 
 \subsubsection{Ampere law in matter}
 \begin{equation}
-    \curl \vec B = \mu_0 \vec (\vec J_f + \vec J_b) = \mu_0 (\vec J_f + \curl \vec M)
+    \curl \vec B = \mu_0 (\vec J_f + \vec J_b) = \mu_0 (\vec J_f + \curl \vec M)
     \implies \vec J_f = \curl \underbrace{\left( \frac{\vec B}{\mu_0} - \vec M \right)}_{\vec H}
 \end{equation}
 and
 \begin{equation}
     \oint_C \vec H \cdot \vec{\dd l} = I^f_\text{enc}
 \end{equation}
+note that when $\vec M$ is uniform we have that $\vec J_b = 0$.
+
+\paragraph{Linear, homogeneous and isotropic}
+We say that $\vec M$ is \emph{linear} when
+\begin{equation}
+    \vec M = \chi_m \vec H
+\end{equation}
+where $\chi_m$ is the \emph{magnetic susceptibility}.
+Moreover, we say that the media is \emph{homogeneous} if $\chi_m$ does not depend on the position
+and \emph{isotropic} if $\chi_m$ can be described as a single scalar.
+\begin{equation}
+    \vec B = \mu_0(\vec H + \vec M) = \mu_0 (\vec H + \chi_m \vec H) = \mu_0 \underbrace{(1+\chi_m)}_{\mu_r} \vec H = \mu_0 \mu_r \vec H
+\end{equation}
+where $\mu_r$ is the relative permeability.
+
+This is usually the behavior in paramagnets and diamagnets: for diamagnets $\chi_m < 0$ while for paramagnets $\chi_m > 0$.
+When $\chi_m \approx -1$ we say that the material is a perfect diamagnet, which means that inside the material $\vec B = 0$ all the time.
+
+\begin{example}{3D wire of dielectric material}{}
+    Consider a 3D wire of radius $R$ with uniform current density $\vec J$ made out a diamagnetic material with $\chi_m = \text{const} < 0$.
+    Compute
+    \begin{enumerate}
+        \item $\vec H$
+        \item $\vec B$
+        \item $\vec M$
+        \item $\vec J_b, \vec K_b$.
+    \end{enumerate}
+\end{example}
+
+\begin{proof}[Solution]
+
+    \skiplineafterproof
+    \begin{enumerate}
+        \item
+              For $\vec H$ we have that
+              \begin{equation}
+                  \oint_C \vec H \cdot \vec{\dd l} = I_\text{enc}^f
+              \end{equation}
+              and by symmetry $\vec H \propto \hat \varphi$.
+              Let $C$ be a circle of radius $s$ directed as $\hat z$: if $s \leq R$ we have
+              \begin{equation}
+                  \oint_C \vec H \cdot \vec{\dd l} = \oint_C H \dd l = H \oint_C \dd l = H 2 \pi s = I_\text{enc}^f = \int_S \vec J \cdot \vec{\dd S} = J \pi s^2 = \frac{I s^2}{R^2}
+              \end{equation}
+              giving us
+              \begin{equation}
+                  \vec H = \frac{Is}{2 \pi R^2} \hat \varphi
+              \end{equation}
+              while when $s > R$ by the same argument we have
+              \begin{equation}
+                  \vec H = \frac{I}{2 \pi s} \hat \varphi
+              \end{equation}
+
+        \item We have
+              \begin{equation}
+                  \vec B = \mu_0 \mu_r \vec H = \begin{cases}
+                      \frac{\mu_r \mu_0 Is}{2 \pi R^2} \hat \varphi & s < R    \\
+                      \frac{\mu_0 I}{2 \pi s} \hat \varphi          & s \geq R
+                  \end{cases}
+              \end{equation}
+
+        \item For $\vec M$ we have
+              \begin{equation}
+                  \vec M = \chi_m \vec H = \begin{cases}
+                      \frac{\chi_m Is}{2 \pi R^2} \hat \varphi & s < R    \\
+                      0                                        & s \geq R
+                  \end{cases}
+              \end{equation}
+
+        \item
+              For $\vec J_b$ we have
+              \begin{equation}
+                  \vec J_b = \curl \vec M = \frac{1}{s} \pdv{s M_\varphi}{s} \hat z = \frac{1}{s} \pdv{s} \left( \frac{\chi_m I}{2 \pi R^2} s^2 \right) = \frac{\chi_m I}{\pi R^2} \hat z
+              \end{equation}
+              while for $\vec K_b$ we have
+              \begin{equation}
+                  \vec K_b = \vec M \cross \vec n = \frac{\chi_m I}{2 \pi R^2} s (\hat y \cross \hat n) = \frac{\chi_m I}{2 \pi R}(- \hat z)
+              \end{equation}
+    \end{enumerate}
+
+    We can sketch the solution as follows:
+    \begin{figure}[H]
+        \centering
+        \includesvg[width=0.35\textwidth]{assets/physics-2/diamagnetic-wire.svg}
+        \caption{A 3D diamagnetic wire with current density $\vec J$ and radius $R$. }
+    \end{figure}
+\end{proof}
+
+\paragraph{Ferromagnets}
+These materials are highly non-linear, however they can approximately seen as linear material with $\chi_m \gg 1$.
+In these materials electrons spins like to align with each other for quantum mechanics reasons.
+When exposed to an external field the electron spins will all align giving a very strong magnetic field back
+which will persist even when the external field is powered off.
+
+\begin{figure}[H]
+    \centering
+    % reminder to myself to never mess around with this shit ever again
+    \subfloat[Hysteresis loop: $\mu_0 H$ represents the external field, while $B$ is the field we actually get.
+        As you can see $B$ is $10^4$ orders of magnitude greater.]{\begin{tikzpicture}
+            \begin{axis}[very thick,
+                    samples = 50,
+                    xlabel = $\mu_0 H \cdot 10^4$,
+                    ylabel = $B$,
+                    xmin = -7,
+                    xmax = 7,
+                    ymin = -4,
+                    ymax = 4,
+                    axis x line = middle,
+                    axis y line = middle,
+                    ticks = none]
+                \addplot[dashed] plot (\x, 2.5);
+                \addplot[dashed] plot (\x,-2.5);
+                \addplot[red, name path=A] plot (\x, {5/(1 + exp(-1.7*\x+1.5))-2.5});
+                \addplot[red, name path=B] plot (\x, {5/(1 + exp(-1.7*\x-1.5))-2.5});
+            \end{axis}
+        \end{tikzpicture}}
+    \qquad
+    \subfloat[At Curie temperature $T_C$ ferromagnetic materials become paramagnets.]{\begin{tikzpicture}
+            \begin{axis}[very thick,
+                    samples = 50,
+                    xlabel = $T$,
+                    ylabel = $M$,
+                    xmin = -1,
+                    xmax = 7,
+                    ymin = -1,
+                    ymax = 10,
+                    axis x line = middle,
+                    axis y line = middle,
+                    ticks = none]
+                \addplot[red, domain={0:sqrt(7)}] plot (\x, -\x^2+7);
+                \addplot[red, domain={sqrt(7):2*sqrt(7)}] plot {-(\x-2*sqrt(7))^2+7};
+                \addplot[dashed] coordinates {(sqrt(7),0)(sqrt(7),10)} node[below, pos=0] {$T_C$};
+            \end{axis}
+        \end{tikzpicture}}
+    \caption{Behavior of ferromagnetic materials.}
+\end{figure}
 
 \end{document}

@@ -56,6 +56,7 @@
             emoji
             doublestroke
             circuitikz
+            pgfplots
 
             # Indirect dependencies
             environ

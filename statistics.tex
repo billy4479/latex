@@ -1667,6 +1667,7 @@ and
 
 Note that for any point $\vec x$ the distance between any other vector $\vec z = \sum_{j = 1}^\ell \zeta_j \vec v_j$
 is greater or equal to the distance between $\vec x$ and it's projection $Px$.
+This in turns means that the MLE is equivalent to the LSE.
 
 \subsubsection{Residuals and sum of squares}
 
@@ -1682,6 +1683,67 @@ Moreover there holds
 \begin{equation}
     0 \leq SS_\text{res} \leq SS_\text{tot}
 \end{equation}
+
+\subsection{Tests}
+
+\subsubsection{\texorpdfstring{$F$}{F}-distribution}
+Let $U, V \sim \chi^2$ with $p, q$ degrees of freedom.
+Then the random variable
+\begin{equation}
+    F = \frac{U/p}{V/q}
+\end{equation}
+has an $F$-distribution with $p,q$ degrees of freedom.
+The pdf of this distribution is
+\begin{equation}
+    f(x) =
+    \frac{\Gamma\left( \frac{p+q}{2} \right)}{\Gamma\left(\frac{p}{2}\right) \Gamma\left(\frac{q}{2}\right)}
+    \left( \frac{p}{q} \right)^{\frac{p}{2}}
+    \frac{x^{\frac{p}{2}-1}}{\left[1+\left( \frac{p}{q} \right) x \right]^{\frac{p+q}{2}}}
+\end{equation}
+
+Note that the $F$ distribution has \say{heavy tails}, which means the tails decay polynomially, instead of exponentially.
+
+\begin{theorem}{Cochran's theorem}{cochran}
+    Consider an orthogonal basis of $V = \R^k$ and the sets $\{v_1^1, \dots, v_{i_1}^1\},\dots,\{v_1^r, \dots, v_{i_r}^r\}$,
+    with $\sum_j i_j = k$.
+    Let $H_1, \dots, H_r$ be the span of each of these sets
+    and $P_1, \dots, P_r$ map $V$ onto $H_j$.
+
+    If $Z \sim \Normal_k(0, I)$, then $P_1 Z, \dots, P_r Z$ are independent gaussian random variables
+    and the random quantities $\norm{P_1 Z}^2, \dots, \norm{P_r z}^2$ have a chi-squared distribution
+    with respectively $i_1 = \dim(H_1), \dots, i_r = \dim(H_r)$ degrees of freedom.
+
+    Moreover
+    \begin{equation}
+        \frac{\norm{P_1 Z}^2/i_j}{\norm{P_1 Z}^2/i_k} \sim F_{i_j, i_k} \quad \text{for } j \neq k
+    \end{equation}
+\end{theorem}
+
+\subsubsection{Test of all predictors}
+We now want to figure out if covariates are useful in the prediction.
+Formally we have
+\begin{equation}
+    H_0: \beta_1 = \dots = \beta_{p-1} = 0 \quad \text{vs} \quad H_1: \exists \beta_i \neq 0, \enspace i = 0, \dots, p-1
+\end{equation}
+
+Let $\mathcal M_0 = \{ (t, \dots, t) \in \R^n : t \in \R \}$ and $\mathcal M_1= {\operatorfont Col}(X) \setminus \mathcal M_0$.
+Then our hypothesis reduce to
+\begin{equation}
+    H_0: \mu \in \mathcal M_0 \quad \text{vs} \quad H_1: \mu \notin \mathcal M_1
+\end{equation}
+
+Note that $\dim(\mathcal M_0) = 1$ and $\dim(\mathcal M_1) = p-1$.
+Define the orthogonal projection onto $\mathcal M_0$ as $P_1 y = \bar y (1, \dots, 1)^T$
+and the following spaces:
+\begin{align}
+    \mathcal P_1 & = \{ (P_X - P_1)\gamma : \gamma \in \R^n \} \\
+    \mathcal P_2 & = \{ (I - P_X)\gamma : \gamma \in \R^n \}
+\end{align}
+then $\dim(\mathcal P_1) = p-1$ and $\mathcal P_1  \subseteq {\operatorfont Col}(X)$;
+while $\dim(\mathcal P_2) = n - p$.
+
+Since $\mathcal P_2 \indep {\operatorfont Col}(X) \implies \mathcal P_1 \indep P_2$.
+Moreover, note that $(P_X - P_1) \bar Y1 = 0$ and $(I - P_X) \bar Y1 = 0$.
 
 
 \end{document}

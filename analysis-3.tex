@@ -575,7 +575,7 @@ independently of $x$, while in pointwise convergence we can choose a different $
     Repeating the argument with $\varepsilon/3$ yields the result.
 \end{proof}
 
-\begin{theorem}{Completeness}{}
+\begin{theorem}{Completeness- EXAM}{}
     The metric space $(X, d)$ as defined at the beginning of \cref{sec:metric-space-func} is complete.
 \end{theorem}
 \begin{proof}
@@ -616,7 +616,8 @@ independently of $x$, while in pointwise convergence we can choose a different $
 
         \item \emph{$g$ is continuous}
 
-              Immediate from \Cref{thm:permanence-continuity}.
+              Immediate from \Cref{thm:permanence-continuity}
+              (given for granted in the exam).
     \end{itemize}
 \end{proof}
 
@@ -631,7 +632,7 @@ independently of $x$, while in pointwise convergence we can choose a different $
     \end{equation}
 \end{definition}
 
-\begin{theorem}{Banach fixed-point theorem}{banach}
+\begin{theorem}{Banach fixed-point theorem - EXAM}{banach}
     Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
     Then, there exists an unique $\bar x \in X$ such that
     \begin{equation}
@@ -714,7 +715,148 @@ independently of $x$, while in pointwise convergence we can choose a different $
 TODO: there is a weird corollary here, but f it.
 
 \begin{proof}
-    TODO: write the proof
+    For the exam we will just be asked to show that $f(B_r(x_0))$ includes $B_{(1-\alpha)r}(f(x))$.
+
+    Consider $x \mapsto f(x_0 + x) - f(x_0)$, then if a claim holds for this new function at $0$, it also holds for $f$ at $x_0$.
+    This means that we can assume $x_0 = 0$ and $f(x_0) =0$ without loss of generality.
+
+    Since $f(x) = x + g(x)$, for a fixed $y \in B_{(1-\alpha)r}(0)$ we want to solve $x + g(x) = y$ or equivalently
+    \begin{equation}
+        F(x) = x = y-g(x)
+    \end{equation}
+    in other words this means we want to find a fixed point of $F$.
+    Since $B_r(0)$ is not complete, we can take a closed ball $\bar B_s(0)$ with $0 < s< r$ giving us
+    $\bar B_s(0) \subset B_r(0) \subset U$.
+    Since closed balls constitute closed sets and $\bar B_s(0)$ is a subset of a complete metric space,
+    $(\bar B_s(0), d)$ is a complete metric space.
+
+    In order to be able to apply \cref{thm:banach} we are left to check that $F$ maps $X = \bar B_s(0)$ to itself
+    for a suitable $s$.
+    Given $x \in \bar B_s(0)$ we have
+    \begin{equation}
+        \abs{F(x)} = \abs{y - g(x)} \leq \abs{y} + \abs{g(x)} =  \abs{y} + \abs{g(x) - g(0)} \leq \abs{y} + \alpha \abs{x - 0} \leq \abs{y} + \alpha s
+    \end{equation}
+    where we used the fact that $g(0) = f(0) - 0 = 0$.
+    In order to deduce that $F(x) \in \bar B_s (0)$ we need to have $\abs{y} + \alpha s \leq s$, that is
+    \begin{equation}
+        \frac{\abs{y}}{1-\alpha} \leq s < r
+    \end{equation}
+    and since we are are assuming $\abs{y} < (1-\alpha) r$ such radius $s$ exists.
+
+    Finally we check that $F$ is a contraption:
+    \begin{equation}
+        \abs{F(x) - F(x')} = \abs{(y-g(x')) - (y-g(x'))} = \abs{g(x)-g(x')} \leq \alpha \abs{x-x'}
+    \end{equation}
+
+    Then the existence of the fixed point is guaranteed by \cref{thm:banach}.
 \end{proof}
+
+\subsection{Peano-Picard local version}
+
+Consider the initial value problem
+\begin{equation}
+    \begin{cases}
+        u' = f(t, u) \\
+        u(t_0) = \lambda_0
+    \end{cases}
+\end{equation}
+where $f: A \to \R^n$ as in Peano-Picard.
+
+Now consider the following set with $T, M > 0$ and the initial condition $(t_0, \lambda_0) \in A$:
+\begin{equation}
+    X_{T, M} = \{ v: [t_0 - T, t_0 + T] \to \R^n : v \text{ continuous and } \norm{v-\lambda_0} \leq M \}
+\end{equation}
+where
+\begin{equation}
+    \norm{v-\lambda_0} = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - \lambda_0}
+\end{equation}
+is the usual supremum norm, which means that
+\begin{equation}
+    \norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \enspace \forall t \in [t_0 - T, t_0 + T]
+\end{equation}
+
+We then define a metric space $(X_{T, M}, d)$ with
+\begin{equation}
+    d(v, w) = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - w(t)}
+\end{equation}
+
+\begin{proposition}{}{}
+    The metric space $(X_{T,M}, d)$ is complete.
+\end{proposition}
+
+\begin{proof}
+    In lecture notes.
+\end{proof}
+
+\begin{theorem}{Peano-Picard local version - EXAM}{}
+    For $M > 0$ small enough and, once $M$ is fixed, for $T>0$ small enough, the set $X_{T, M}$ contains exactly one solution
+    for the initial value problem.
+\end{theorem}
+
+Since $A$ is open, it includes an open ball around the point $p = (t_0, \lambda_0)$:
+for some $R > 0$ we have $B_R(p) \subseteq A$.
+Moreover, by shrinking $R$ we can assume that $\eval{f}_{B_R(p)}$ is $L$-Lipschitz.
+We will always take $T, M \leq R/2$ from now on, which guarantees that points in the graph of a function $v \in X_{T, M}$ belong to the domain $A$ of $f$.
+
+Recall that $v \in X_{T, M}$ solves the initial value problem iff
+\begin{equation}
+    v \mapsto F(v), \quad F(v)(t) = \lambda_0 + \int^t_{t_0} f(s, v(s)) \dd s
+\end{equation}
+
+In order to prove the theorem we want to show that
+\begin{enumerate}
+    \item $F(X_{T, M}) \subseteq X_{T, M}$ for a suitable $T, M >0$
+    \item $\eval{F}_{X_{T, M}}$ is a contraption on a complete metric space for some suitable $T, M > 0$
+\end{enumerate}
+and then apply \cref{thm:banach}.
+
+\begin{proposition}{EXAM}{}
+    The function $f$ is bounded on $B_R(p)$.
+    Namely, there exists $\Lambda \geq 0$ such that
+    \begin{equation}
+        \abs{f(q)} \leq \Lambda \quad \forall q \in B_R(p)
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    Since $f$ is Lipschitz here, we have
+    \begin{equation}
+        \abs{f(q)} \leq \abs{f(q)-f(p)} + \abs{f(p)} \leq L \abs{q-p} + \abs{f(p)} \leq L R + \abs{f(p)}
+    \end{equation}
+    for all $q \in B_R(p)$.
+    Then we can set $\Lambda = LR + \abs{f(p)}$.
+\end{proof}
+
+\begin{proposition}{EXAM}{}
+    If $M > 0$ and $T > 0$ are small enough, then for any $v \in X_{T, M}$ we have
+    $F(v) \in X_{T, M}$.
+    Specifically, this holds as long as
+    \begin{equation}
+        0 < M \leq \frac{R}{2}, \quad 0 < T \leq \min \left\{ \frac{R}{2}, \frac{M}{\Lambda} \right\}
+    \end{equation}
+\end{proposition}
+\begin{proof}
+    Given $v \in X_{T, M}$ we need to check that for any $t \in [t_0 - T, t_0 + T]$ we have
+    \begin{equation}
+        \abs{F(v)(t) - \lambda_0} \leq M
+    \end{equation}
+
+    $F(v)$ can be bound for $t \geq t_0$ as follows
+    \begin{equation}
+        \abs{F(v)(t) - \lambda_0} = \abs{\int_{t_0}^t f(s, v(s)) \dd s} \leq \int_{t_0}^t \abs{f(s, v(s))} \dd s
+    \end{equation}
+    and by the previous proposition we have that $\abs{f(q)} \leq \Lambda$, hence
+    \begin{equation}
+        \abs{F(v)(t)-\lambda_0} \leq \int_{t_0}^t \Lambda \dd s = \Lambda (t-t_0) \leq \Lambda T
+    \end{equation}
+
+    We can use a similar argument for $t \leq t_0$:
+    \begin{equation}
+        \abs{F(v)(t)-\lambda_0} \leq \int^{t_0}_t \abs{f(s, v(s))} \dd s \leq \int^{t_0}_t \Lambda \dd s = \Lambda (t_0-t) \leq \Lambda T
+    \end{equation}
+    and imposing that $\Lambda T \leq M$ we obtain the conclusion.
+\end{proof}
+
+TODO: there is more theory here but it is not in the exam
 
 \end{document}

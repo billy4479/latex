@@ -2858,16 +2858,25 @@ When $\chi_m \approx -1$ we say that the material is a perfect diamagnet, which 
 \paragraph{Ferromagnets}
 These materials are highly non-linear, however they can approximately seen as linear material with $\chi_m \gg 1$.
 In these materials electrons spins like to align with each other for quantum mechanics reasons.
+
 When exposed to an external field the electron spins will all align giving a very strong magnetic field back
 which will persist even when the external field is powered off.
+In \Cref{fig:hysteresis} we can see how the free magnetic field $\mu_0 H$ influences the total magnetic field $B$.
+As you can see, once the ferromagnet has been \emph{magnetized} it maintains some of its magnetization
+even when the external field is turned off.
+
+Another properties of ferromagnets is that at \emph{Curie temperature} $T_C$ the ferromagnet becomes a paramagnet,
+as we can see in \Cref{fig:ising}.
+We have that $M = a(T_C-T)^b$ where $b \approx 0.5$ is universal for all materials.
+This is called the \emph{ising model}.
 
 \begin{figure}[H]
     \centering
     % reminder to myself to never mess around with this shit ever again
     \subfloat[Hysteresis loop: $\mu_0 H$ represents the external field, while $B$ is the field we actually get.
-        As you can see $B$ is $10^4$ orders of magnitude greater.]{\begin{tikzpicture}
+        As you can see $B$ is $10^4$ orders of magnitude greater. \label{fig:hysteresis}]{\begin{tikzpicture}
             \begin{axis}[very thick,
-                    samples = 50,
+                    samples = 25,
                     xlabel = $\mu_0 H \cdot 10^4$,
                     ylabel = $B$,
                     xmin = -7,
@@ -2884,13 +2893,13 @@ which will persist even when the external field is powered off.
             \end{axis}
         \end{tikzpicture}}
     \qquad
-    \subfloat[At Curie temperature $T_C$ ferromagnetic materials become paramagnets.]{\begin{tikzpicture}
+    \subfloat[At Curie temperature $T_C$ ferromagnetic materials become paramagnets. \label{fig:ising}]{\begin{tikzpicture}
             \begin{axis}[very thick,
-                    samples = 50,
+                    samples = 25,
                     xlabel = $T$,
                     ylabel = $M$,
                     xmin = -1,
-                    xmax = 7,
+                    xmax = 6,
                     ymin = -1,
                     ymax = 10,
                     axis x line = middle,
@@ -2903,5 +2912,141 @@ which will persist even when the external field is powered off.
         \end{tikzpicture}}
     \caption{Behavior of ferromagnetic materials.}
 \end{figure}
+
+\begin{example}{}{}
+    Consider an infinitely long cylinder centered around the $z$ axis
+    with uniform \emph{frozan} magnetization $\vec M \hat z$.
+    Find $\vec B$.
+\end{example}
+
+\begin{proof}[Solution]
+    We have two approaches to solve this problem.
+    \begin{enumerate}
+        \item We know that
+              \begin{align}
+                  \vec J_b & = \curl \vec M = 0                                               \\
+                  \vec K_b & = \vec M \cross \hat n = M \hat z \cross \hat s = M \hat \varphi
+              \end{align}
+              hence the system behaves somewhat like a solenoid:
+              the current is flowing just on the surface.
+
+              By the usual cylindrical symmetries we deduce that $\vec B$ points in the $\hat z$ direction
+              and depends only on $s$.
+              Then apply Ampere's law on a path $C$ of height $L$ which is only partially inside the cylinder.
+              \begin{equation}
+                  \oint_C \vec B \cdot \vec{\dd l} = B L = \mu_0 I_\text{enc} = \mu_0 K_b L
+                  \implies \vec B = \mu_0 K_b \hat z = \mu_0 M \hat z
+              \end{equation}
+
+              Our claim of similarity with a solenoid is now explained: $K_b$ is equivalent to $nI$ in a solenoid.
+
+        \item If we notice that $\vec J_f = 0$ this exercises becomes much easier.
+              Indeed we can write
+              \begin{equation}
+                  \oint_C \vec H \cdot \vec{\dd l} = I_\text{enc}^f = 0
+                  \implies \vec H = 0
+              \end{equation}
+              which gives us
+              \begin{equation}
+                  \vec H = \frac{1}{\mu_0} \vec B - \vec M \implies \vec B = \mu_0 \vec M
+              \end{equation}
+              as desired.
+    \end{enumerate}
+
+    \begin{figure}[H]
+        \centering
+        \includesvg[width=0.3\textwidth]{assets/physics-2/ex-ferromagnetic-cylinder.svg}
+        \caption{A representation of the problem.}
+    \end{figure}
+\end{proof}
+
+\section{Faraday's law}
+As we saw in before, in the stationary case
+\begin{equation}
+    \begin{cases}
+        \div \vec E = \frac{\rho}{\varepsilon_0} \\
+        \curl \vec E = 0                         \\
+        \div \vec B = 0                          \\
+        \curl \vec B = \mu_0 \vec J
+    \end{cases}
+\end{equation}
+but only if
+\begin{equation}
+    \pdv{\vec J}{t} = \pdv{\rho}{t} = 0
+\end{equation}
+but unfortunately relativity exists.
+
+Notice that the Lorentz's force depends on $v$, which is a relative quantity
+and depends on the frame of reference.
+If I were to move with the particle I would say that $v = 0$, so there is no Lorentz's force?
+The answer to this problem is that $\vec B$ are relativistic quantities.
+
+For $\vec E$ we have a similar problem:
+consider a neutral wire with plus charges on one side and minus charges on the other side;
+then if the observer moves in the same direction as the plus charges by relativity we will have that
+the plus charges are gonna be more tightly packed and the minus charges are gonna be more spread apart
+and the wire will become charged.
+
+\subsection{Faraday's experiments}
+
+Faraday in 1831 was able to correct some of these equations, without even knowing about relativity.
+
+\begin{enumerate}
+    \item
+          The first experiment he did was putting a loop with a stationary current $I$ near another loop
+          with no battery.
+          Then he started moving the second loop with velocity $v$ and noticed that in the second loop started flowing
+          a current $I_\text{ind}$.
+
+    \item
+          Similarly, in the second experiment,
+          if we were moving the first circuit in the opposite direction we obtained the same effect.
+
+    \item
+          In the third experiment both circuits are still, but this time the current $I(t)$ is not constant,
+          and again in the second circuit we got an induced current.
+\end{enumerate}
+
+Faraday noticed that in all these experiments the magnetic flux $\Phi(\vec B)$ is changing
+and he wrote the following equation
+\begin{equation}
+    \Sigma = \oint_\text{loop} \vec E \cdot \vec{\dd l} = - \dv{\Phi(\vec B)}{t}
+\end{equation}
+where $\Sigma$ is an EMF, equivalent to a battery.
+The minus sign was added thank to Lenz: this means that if the flux of the magnetic field changes
+the induced current will go \say{against} the change of flux
+by generating a $\vec B_\text{ind}$ in the opposite direction of the change of flux.
+
+\subsubsection{First experiment}
+Consider the system in \Cref{fig:faraday-exp-1}.
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.5\textwidth]{assets/physics-2/faraday-exp1.svg}
+    \caption{Faraday first experiment}
+    \label{fig:faraday-exp-1}
+\end{figure}
+
+If we take for granted Faraday law we get
+\begin{align}
+    \Phi(\vec B)         & = \int \vec B \cdot \vec{\dd S} = B h x \\
+    \dv{\Phi(\vec B)}{t} & = B h \dv{x}{t} = - B h v               \\
+    \implies \Sigma      & = - \dv{\varphi(\vec B)}{t} B h v
+\end{align}
+
+We could have also derived the same result just considering what happens to the electrons in the wire:
+indeed the electrons also get a velocity $\vec v$ and since they are charged they are subject to a Lorentz
+force, which is pointing upwards by the right-hand rule.
+The Lorentz force will cause the electrons to get a non-zero $\vec u$ component in their velocity:
+\begin{equation}
+    \vec w = \vec v + \vec u
+\end{equation}
+and since $I = \lambda v_d$ we have now a current.
+
+But who is doing work then?
+The work comes from the fact that when electrons start moving $\vec F_L$ starts tilting in order to stay
+perpendicular to $\vec w$ which makes the component of $\vec F_L$ go in the opposite direction of $\vec v$
+and therefore it will try to slow down the circuit.
+The work then comes from the fact that to keep the circuit moving at constant speed we need a force to pull it.
 
 \end{document}

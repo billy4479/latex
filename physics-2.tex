@@ -3119,4 +3119,162 @@ which implies another very important result which takes the name of \textbf{Maxw
 \end{equation}
 which tells us that the electric field is not irrotational and not conservative.
 
+TODO: missing class here
+
+\subsection{Inductance}
+
+Consider two loops: in the first one we have a current flowing which generates a $\vec B_1$
+\begin{equation}
+    \vec B_1 = \frac{\mu_0 I_1}{4 \pi} \oint \frac{\vec{\dd l_1} \cross \hat{\Delta r}}{\Delta r^2} \propto I_1
+\end{equation}
+We will have that some part of $\vec B_1$ will go through the second loop, therefore we can compute the flux
+\begin{equation}
+    \Phi_2(\vec B_1) = \int \vec B_1 \cdot \vec{\dd S_2} \propto B_1 \propto I_1
+\end{equation}
+which means we can write the flux as
+\begin{equation}
+    \Phi_2(\vec B_1) = M_{21} I_1
+\end{equation}
+where $M_{21}$ is the \textbf{mutual inductance} and $[M_{21}] = \si{\henry} = \si{\tesla \meter \squared \per \ampere}$.
+
+Now we can use the fact that $\vec B$ is solenoidal (and therefore it can be written as the curl of the magnetic vector potential)
+and stokes theorem to write
+\begin{equation}
+    \Phi_2(\vec B_1) = \int \vec B_1 \cdot \vec{\dd S_2} = \int (\curl \vec A) \cdot \vec{\dd S}
+    = \oint \vec A_1 \cdot \vec{\dd l_2} = \frac{\mu_0 I_1}{4 \pi} \oint \oint \frac{\vec{\dd l_1} \cdot \vec{\dd l_2}}{\Delta r}
+\end{equation}
+where we substituted $\vec A$ with its definition $\vec A_1 = \frac{\mu_0 I_1}{4 \pi} \oint \frac{\vec{\dd l_1}}{\Delta r}$.
+We then get \emph{Neumann formula} which expresses $M_{21}$ as
+\begin{equation}
+    M_{21} = \frac{\Phi_2(\vec B_1)}{I_1} = \frac{\mu_0 }{4 \pi} \oint \oint \frac{\vec{\dd l_1} \cdot \vec{\dd l_2}}{\Delta r}
+\end{equation}
+
+We note a few things about the mutual inductance:
+\begin{enumerate}
+    \item Since the dot product is commutative $M_{21} = M_{12} = M$.
+    \item $M$ depends only on the geometrical characteristics of the loops
+    \item When $I_1 = I_2 = I$ we get that
+          \begin{equation}
+              \Phi_1(\vec B_2) = M I_2 = MI = M I_1 = \Phi_2(\vec B_1)
+          \end{equation}
+\end{enumerate}
+
+\subsubsection{Self-inductance}
+
+Consider a single loop with current $I$ which generates a $\vec B$.
+Now we want to compute the flux of $\vec B$ through the loop itself.
+By Biot-Savart law we know that $\Phi(\vec B) \propto I$ hence we can write
+\begin{equation}
+    \Phi(\vec B) = L I
+\end{equation}
+where the proportionality constant $L$ is called the \emph{self inductance}.
+We can use some Neumann formula from above to compute $L$ and we will get that $L$
+depends purely on the geometric characteristics of the loop and $L > 0$.
+
+\begin{example}{Self inductance on a toroidal coil}{}
+    Consider a toroidal coil with inner radius $a$, outer radius $b$ and height $h$.
+    On the toroid there are $N \gg 1$ turns of a wire where there flows a current $I$.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.4\textwidth]{assets/physics-2/toroidal-coil.jpg}
+    \end{figure}
+
+    Compute $L$.
+\end{example}
+
+\begin{proof}[Solution]
+    By symmetry on the $z$ axis and by flipping we get that $\vec B = B(s) \hat \varphi$
+    (see example 5.10 on the book for a more formal proof).
+    Consider a circle $C$ inside the toroid such that the field lines are tangent to it,
+    then
+    \begin{equation}
+        \oint_C \vec B \cdot \vec{\dd l} = B 2 \pi s = \mu_0 I_\text{enc} =
+        \begin{cases}
+            \mu_0 I N & \text{if } a < s < b \\
+            0         & \text{otherwise}
+        \end{cases}
+    \end{equation}
+    therefore inside the toroid we have
+    \begin{equation}
+        \vec B = \frac{\mu_0 N I}{2 \pi s} \hat \varphi
+    \end{equation}
+
+    Now we want to compute the flux through every turn.
+    The flux through a single turn is
+    \begin{equation}
+        \int \vec B \cdot \vec{\dd A} = \int B \dd{A} = \frac{\mu_0 N I}{2 \pi} \int \frac{1}{s} \dd A
+        = \frac{\mu_0 N I}{2 \pi} \int_a^b \frac{h}{s} \dd s
+        = \frac{\mu_0 N I h}{2 \pi} \ln \left( \frac{b}{a} \right)
+    \end{equation}
+    and the total flux will be
+    \begin{equation}
+        \Phi(\vec B) = \frac{\mu_0 N^2 I h}{2 \pi} \ln \left( \frac{b}{a} \right)
+    \end{equation}
+    which gives us
+    \begin{equation}
+        L = \frac{\mu_0 N^2 h}{2 \pi} \ln \left(\frac{b}{a}\right)
+    \end{equation}
+\end{proof}
+
+Going back to Faraday law we consider the case of two loops with $I_1(t)$ inducing $\Sigma_2$.
+We get
+\begin{equation}
+    \Sigma_2 = - \dv{\Phi(\vec B)}{t} = \dv{t}(M I_1) = -M \dv{I_1}{t}
+\end{equation}
+
+If we consider a single loop we get
+\begin{eqnarray}
+    \Sigma = - \dv{\Phi(\vec B)}{t} = -\dv{t}(LI) = -L \dv{I}{t}
+\end{eqnarray}
+where $\Sigma$ is called \textbf{back emf} which is somewhat of an inertial term:
+the inductance will fight back the change in current.
+We could say that $L$ plays the role of the mass in mechanics and $I$ the role of velocity.
+
+In circuit analysis we will denote that the circuit has a non-negligible inductance $L$ with the symbol~
+\begin{circuitikz}
+    \draw (0,0)
+    to[inductor, l={}] (1,0);
+\end{circuitikz}.
+
+\begin{example}{RL circuit}{rl-circuit}
+    Consider the following circuit
+    \begin{figure}[H]
+        \centering
+        \begin{circuitikz}
+            % Draw the voltage source
+            \draw (0,2) to[battery1, l=$\Sigma_0$] (0,0);
+
+            % Draw the resistor
+            \draw (0,2) to[R, l=$R$] (2,2);
+
+            % Draw the closing switch
+            \draw (2,2) to[closing switch] (4,2);
+
+            % Draw the inductor on the right segment
+            \draw (4,2) to[L, l=$L$] (4,0);
+
+            % Complete the circuit
+            \draw (4,0) to[short, i=$I$] (0,0);
+        \end{circuitikz}
+    \end{figure}
+\end{example}
+
+\begin{proof}[Solution]
+    We have
+    \begin{equation}
+        \begin{cases}
+            V_B - V_A = \Sigma_0      & \text{battery}  \\
+            V_C - V_B = - RI(t)       & \text{resistor} \\
+            V_A - V_C = - L \dv{I}{t} & \text{inductor}
+        \end{cases}
+    \end{equation}
+    and we can use Kirchhoff's law to get $\Sigma_0 - RI(t) - L \dv{I}{t} = 0$
+    which is a separable differential equation we can solve to get
+    \begin{equation}
+        I(t) = \frac{\Sigma_0}{R} \left( 1 - e^{-\frac{R}{L}t} \right)
+    \end{equation}
+\end{proof}
+
+
 \end{document}

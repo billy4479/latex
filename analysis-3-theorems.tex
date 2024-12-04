@@ -12,7 +12,9 @@
 
 \begin{document}
 
-\section{Maximal solutions either coincide or do not intersect}
+\section{First partial}
+
+\subsection{Maximal solutions either coincide or do not intersect}
 
 \begin{theorem}{}{}
     In the same setting of the Peano-Picard theorem,
@@ -57,7 +59,7 @@
     In particular, we must have $t_0 \in I \implies u(t_0) = w(t_0) = v(t_0)$, which is a contradiction.
 \end{proof}
 
-\section{\texorpdfstring{$t^j e^{\alpha_\ell t}$ form a basis of solutions}{Basis of solutions}}
+\subsection{\texorpdfstring{$t^j e^{\alpha_\ell t}$ form a basis of solutions}{Basis of solutions}}
 
 \begin{theorem}{}{}
     Assume that the roots of the characteristic polynomial $p(z)$ are all real.
@@ -133,7 +135,7 @@
     \end{description}
 \end{proof}
 
-\section{\texorpdfstring{$m_\gamma \leq M_\gamma$}{Geometric multiplicity less than or equal to algebraic}}
+\subsection{\texorpdfstring{$m_\gamma \leq M_\gamma$}{Geometric multiplicity less than or equal to algebraic}}
 
 \begin{theorem}{}{}
     For all eigenvalues $\gamma \in \R$ there holds $1 \leq m \leq M$,
@@ -175,7 +177,7 @@
     which means $M \geq m$.
 \end{proof}
 
-\section{Diagonalizable \texorpdfstring{$\iff m_\gamma = M_\gamma$}{iff geometric equals to algebraic}}
+\subsection{Diagonalizable \texorpdfstring{$\iff m_\gamma = M_\gamma$}{iff geometric equals to algebraic}}
 
 \begin{theorem}{}{}
     A square matrix is diagonalizable over $\C$ if and only if
@@ -218,6 +220,263 @@
               We now just use the fact that basis of eigenspaces are indeed linearly independent among the same eigenspace
               and combine it with the lemma.
     \end{description}
+\end{proof}
+
+\section{Second partial}
+
+\subsection{Completeness of the metric space of functions}
+
+\begin{definition}{Metric space of bounded continuous functions}
+    Let $(X, d)$ be a metric space where $X$ is the set
+    \begin{equation}
+        X = \{ g:I \to \R : g \text{ bounded and continuous} \}
+    \end{equation}
+    and $d$ is induced from the \emph{supremum norm}:
+    \begin{equation}
+        d(g_1, g_2) = \norm{g_1 - g_2} = \sup_{t \in I} \abs{g_1 - g_2}
+    \end{equation}
+    Note that the supremum is always finite since $g$ is bounded.
+\end{definition}
+
+
+\begin{theorem}{}{}
+    The metric space $(X, d)$, as defined above, is complete.
+\end{theorem}
+\begin{proof}
+    Let $g_k$ be a Cauchy sequence in $(X, d)$,
+    we want to show that there exists $g \in X$ such that $d(g_k, g) \to 0$ (i.e. $\norm{g_k - g} \to 0$) as $k \to \infty$.
+
+    Since $g_k$ is a Cauchy sequence $\exists K \in \N$ such that $\norm{g_k - g_l} < \varepsilon$ for $k, l \geq K$ and, for an arbitrary $x \in I$ we have
+    \begin{equation}
+        \abs{g_k(x)-g_l(x)} \leq \norm{g_k - g_l} < \varepsilon \quad \forall k, l \geq K
+    \end{equation}
+    by our definition of the norm.
+    This tells us that the sequence of numbers $(g_k(x))_{k \in \N}$ is a Cauchy sequence over $\R$ and, by completeness of $\R$ this sequence converges.
+    We can therefore write
+    \begin{equation}
+        g(x) = \lim_{k \to \infty} g_k(x)
+    \end{equation}
+    for each $x \in I$.
+
+    We now have a definition for $g$, we are left to prove the following:
+    \begin{itemize}
+        \item \emph{$g_k$ converges to $g$ uniformly}.
+
+              Consider the definition of Cauchy sequence, fix $k \geq K$ and let $l \to \infty$.
+              We get that
+              \begin{equation}
+                  \abs{g_k(x) - g(x)} = \lim_{l \to \infty} \abs{g_k(x) - g_l(x)} \leq \varepsilon
+              \end{equation}
+              Since $\varepsilon > 0$ is arbitrary all functions $g_k$ converge uniformly to $g$.
+
+        \item \emph{$g$ is bounded}
+
+              Let $\varepsilon = 1$.
+              We have
+              \begin{equation}
+                  \abs{g(x)} = \abs{g(x) - g_K(x) + g_K(x)} \leq \abs{g(x) - g_K(x)} + \abs{g_K(x)} \leq 1 + \abs{g_K(x)}
+              \end{equation}
+              and since $g_K$ is bounded we get the result.
+
+        \item \emph{$g$ is continuous}
+
+              Since all $g_k$ are continuous and $g_k \to g$, $g$ is continuous function too.
+              (Given for granted in the exam).
+    \end{itemize}
+\end{proof}
+
+\subsection{Banach fixed-point theorem}
+
+\begin{theorem}{}{banach}
+    Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
+    Then, there exists an unique $\bar x \in X$ such that
+    \begin{equation}
+        F(\bar x) = \bar x
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    First let us show that $\bar x$ is unique.
+    Assume that $F(x) = x$ and $F(y) = y$, hence
+    \begin{equation}
+        d(x, y) = d(F(x), F(y)) \leq \alpha d(x, y) \implies (1-\alpha) d(x, y) \leq 0
+    \end{equation}
+    and since distances are non-negative we get that $d(x, y) = 0$ but this implies $x = y$.
+
+    We now want to prove the existence of $\bar x$.
+    For the first step we define a sequence of points recursively as follows:
+    \begin{equation}
+        x_{k + 1} = F(x_k)
+    \end{equation}
+    and claim that
+    \begin{equation}
+        d(x_k, x_{k+1}) \leq \alpha^k d(x_0, x_1) \quad \forall k \in \N .
+    \end{equation}
+    We proceed by induction: the base case of $k = 0$ is trivial since $\alpha^0 = 1$ (assume that $0^0=1$);
+    for the inductive step we have
+    \begin{equation}
+        d(x_{k+1}, x_{k+2}) = d(F(x_k), F(x_{k+1})) \leq \alpha d(x_k, x_{k+1}) \leq \alpha \alpha^k d(x_0, x_1)
+    \end{equation}
+    as desired.
+
+    Next, we let $C = d(x_0, x_1)$ and claim that
+    \begin{equation}
+        d(x_k, x_{k+1}) \leq C \sum_{j = k}^{l-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
+    \end{equation}
+    We again proceed by induction on $\ell > j$:
+    the base case will be $\ell = j + 1$ which reduces to $d(x_k, x_{k+1}) \leq C \alpha^k$, which is the result of the previous claim;
+    at $\ell + 1$ we have
+    \begin{equation}
+        d(x_k, x_{l+1}) \leq d(x_k, x_\ell) + d(x_\ell, x_{l + 1}) \leq d(x_k, x_\ell) + C \alpha^\ell \leq C\sum_{j = k}^{l-1} \alpha^j + C \alpha^\ell
+    \end{equation}
+    thanks to the triangle inequality, the previous claim and the inductive hypothesis.
+
+    Now we can combine the non-negativity of $d$, the claim we just proved and some algebra to get that for $0 \leq k < \ell$
+    \begin{equation}
+        0 \leq d(x_k, x_\ell) \leq C \sum_{j = k}^{l-1} \alpha^j = C \frac{\alpha^k - \alpha^\ell}{1-\alpha}
+    \end{equation}
+    but the sequence on the right goes to $0$ as $k, j \to \infty$ (since $\alpha \in [0, 1)$) hence
+    \begin{equation}
+        \lim_{k, j \to \infty} d(x_k, x_{\ell}) = 0
+    \end{equation}
+    which means that $(x_k)_{k \in \N}$ is a Cauchy sequence.
+
+    Since $(X, d)$ is complete by hypothesis, $(x_d)$ must converge to some $\bar x \in X$.
+    We have
+    \begin{equation}
+        \bar x = \lim_{k \to \infty} x_k = \lim_{k \to \infty} x_{k + 1} = \lim_{k \to \infty} F(x_k).
+    \end{equation}
+    Since $F$ is continuous because it is a contraption (why?), for any converging sequence $x_k \to \bar x$ we have
+    \begin{equation}
+        d(F(\bar x), F(x_k)) \leq \alpha d(\bar x, x_k) \to 0
+    \end{equation}
+    as $k \to \infty$.
+    Therefore $d(F(\bar x), F(x_k)) \to 0$ and thus $F(x_k) \to F(\bar x)$.
+\end{proof}
+
+\subsection{Lipschitz perturbation of the identity}
+
+\begin{theorem}{}{}
+    Let $f: U \to \R^d$ with $U \subseteq \R^p$ open be defined as
+    \begin{equation}
+        f(x) = x + g(x) \quad \text{with } \abs{g(a) - g(b)} \leq \alpha \abs{a - b}, \enspace \alpha \in [0,1)
+    \end{equation}
+    that is, a Lipschitz perturbation of the identity.
+    Then $f(U)$ is open, $f: U \to f(U)$ is a bijection, and it has a continuous inverse $f^{-1}$
+    which satisfies
+    \begin{equation}
+        \abs{f^{-1}(a)- f^{-1}(b)} \leq \frac{1}{1-\alpha} \abs{a-b}
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    For the exam we will just be asked to show that $f(B_r(x_0))$ includes $B_{(1-\alpha)r}(f(x))$.
+
+    Consider $x \mapsto f(x_0 + x) - f(x_0)$, then if a claim holds for this new function at $0$, it also holds for $f$ at $x_0$.
+    This means that we can assume $x_0 = 0$ and $f(x_0) =0$ without loss of generality.
+
+    Since $f(x) = x + g(x)$, for a fixed $y \in B_{(1-\alpha)r}(0)$ we want to solve $x + g(x) = y$ or equivalently
+    \begin{equation}
+        F(x) = x = y-g(x)
+    \end{equation}
+    in other words this means we want to find a fixed point of $F$.
+    Since $B_r(0)$ is not complete, we can take a closed ball $\bar B_s(0)$ with $0 < s< r$ giving us
+    $\bar B_s(0) \subset B_r(0) \subset U$.
+    Since closed balls constitute closed sets and $\bar B_s(0)$ is a subset of a complete metric space,
+    $(\bar B_s(0), d)$ is a complete metric space.
+
+    In order to be able to apply \cref{thm:banach} we are left to check that $F$ maps $X = \bar B_s(0)$ to itself
+    for a suitable $s$.
+    Given $x \in \bar B_s(0)$ we have
+    \begin{equation}
+        \abs{F(x)} = \abs{y - g(x)} \leq \abs{y} + \abs{g(x)} =  \abs{y} + \abs{g(x) - g(0)} \leq \abs{y} + \alpha \abs{x - 0} \leq \abs{y} + \alpha s
+    \end{equation}
+    where we used the fact that $g(0) = f(0) - 0 = 0$.
+    In order to deduce that $F(x) \in \bar B_s (0)$ we need to have $\abs{y} + \alpha s \leq s$, that is
+    \begin{equation}
+        \frac{\abs{y}}{1-\alpha} \leq s < r
+    \end{equation}
+    and since we are are assuming $\abs{y} < (1-\alpha) r$ such radius $s$ exists.
+
+    Finally we check that $F$ is a contraption:
+    \begin{equation}
+        \abs{F(x) - F(x')} = \abs{(y-g(x')) - (y-g(x'))} = \abs{g(x)-g(x')} \leq \alpha \abs{x-x'}
+    \end{equation}
+
+    Then the existence of the fixed point is guaranteed by \cref{thm:banach}.
+\end{proof}
+
+\subsection{Local Peano-Picard}
+
+Consider the following set with $T, M > 0$
+and the initial condition $(t_0, \lambda_0) \in A$ of some initial value problem:
+\begin{equation}
+    X_{T, M} = \{ v: [t_0 - T, t_0 + T] \to \R^n : v \text{ continuous and } \norm{v-\lambda_0} \leq M \}
+\end{equation}
+where
+\begin{equation}
+    \norm{v-\lambda_0} = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - \lambda_0}
+\end{equation}
+is the usual supremum norm, which means that
+\begin{equation}
+    \norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \enspace \forall t \in [t_0 - T, t_0 + T]
+\end{equation}
+
+We then define a metric space $(X_{T, M}, d)$ with
+\begin{equation}
+    d(v, w) = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - w(t)}
+\end{equation}
+
+We can prove that the $(X_{T,M}, d)$ is complete.
+
+\begin{theorem}{Peano-Picard local version - EXAM}{}
+    For $M > 0$ small enough and, once $M$ is fixed, for $T>0$ small enough, the set $X_{T, M}$ contains exactly one solution
+    for the initial value problem.
+\end{theorem}
+
+Since $A$ is open, it includes an open ball around the point $p = (t_0, \lambda_0)$:
+for some $R > 0$ we have $B_R(p) \subseteq A$.
+Moreover, by shrinking $R$ we can assume that $\eval{f}_{B_R(p)}$ is $L$-Lipschitz.
+We will always take $T, M \leq R/2$ from now on, which guarantees that points in the graph of a function $v \in X_{T, M}$ belong to the domain $A$ of $f$.
+
+Recall that $v \in X_{T, M}$ solves the initial value problem iff
+\begin{equation}
+    v \mapsto F(v), \quad F(v)(t) = \lambda_0 + \int^t_{t_0} f(s, v(s)) \dd s
+\end{equation}
+
+In order to prove the theorem we want to show that
+\begin{enumerate}
+    \item $F(X_{T, M}) \subseteq X_{T, M}$ for a suitable $T, M >0$
+    \item $\eval{F}_{X_{T, M}}$ is a contraption on a complete metric space for some suitable $T, M > 0$
+\end{enumerate}
+and then apply \cref{thm:banach}.
+
+\begin{proposition}{$F$ is a contraption}{}
+    If $M, T > 0$ are small enough, then the function $F: X_{T, M} \to X_{T, M}$
+    is a contraption.
+    Specifically, this will hold as long as
+    \begin{equation}
+        0 < M \leq \frac{R}{2} \quad \text{and} \quad 0 < T \leq \min \left\{ \frac{R}{2}, \frac{M}{\Lambda}, \frac{1}{2L} \right\}
+    \end{equation}
+    where $L$ is the Lipschitz constant for $F$ and
+    $\Lambda$ is such that $\abs{F(q)} \leq \Lambda \enspace \forall q \in B_R(p)$.
+\end{proposition}
+
+\begin{proof}
+    Take for granted that $F(X_{T, M}) \subseteq X_{T, M}$.
+    To show that $F$ is a contraption with $\alpha = 0.5$ we want to show that
+    \begin{equation}
+        \norm{F(v) - F(w)} = \frac{1}{2} \norm{v-w}
+    \end{equation}
+
+    With $t \in [t_0 - T, t_0 + T]$ we compute that
+    \begin{align}
+        \abs{F(v)(t) - F(w)(t)} & = \abs{\int_{t_0}^{t} f(s,v(s)) \dd s - \int_{t_0}^{t} f(s,w(s)) \dd s} \\
+                                & \leq \int_{t_0}^{t} \abs{f(s,v(s)) - f(s,w(s))} \dd s                   \\
+                                & \leq \int_{t_0}^{t} L\norm{v - w} \dd s                                 \\
+                                & \leq L \norm{v - w} (t - t_0) \leq LT \norm{v - w}                      \\
+    \end{align}
+    therefore as long as $LT \leq 0.5$ the claim is true.
 \end{proof}
 
 \end{document}

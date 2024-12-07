@@ -2174,7 +2174,7 @@ and we get
            & = \int (\lambda_+ \cdot v_d) (\hat v_d \cross \vec B) \dd l
     = \int \lambda_+ v_d (\vec{\dd l} \cross \vec B)                     \\
            & = \int I (\vec {\dd l} \cross \vec B)
-    = I \int \vec B \cross \vec{\dd l}
+    = I \int \vec{\dd l} \cross \vec B
 \end{align}
 
 \subsubsection{Work of the magnetic field}
@@ -2676,8 +2676,10 @@ TODO: what about the torque of $F_{23}, F_{14}$? Professor said it is zero but w
 
 For $\vec B$ non uniform we give the following formulas without proof:
 \begin{equation}
-    \vec F = \grad(\vec m \cdot \vec B)\\
-    \vec N = \vec m \cross \vec B
+    \begin{cases}
+        \vec F = \grad(\vec m \cdot \vec B) \\
+        \vec N = \vec m \cross \vec B
+    \end{cases}
 \end{equation}
 
 \subsubsection{Effects of \texorpdfstring{$\vec B$}{B} on orbits - Diamagnetic materials}

@@ -15,7 +15,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         fonts = with pkgs; [
-          (nerdfonts.override { fonts = [ "FiraCode" ]; })
+          nerd-fonts.fira-code
           ubuntu_font_family
           fg-virgil # excalidraw font
           noto-fonts-color-emoji # `emoji` dependencies

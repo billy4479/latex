@@ -226,7 +226,14 @@
 
 \subsection{Completeness of the metric space of functions}
 
-\begin{definition}{Metric space of bounded continuous functions}
+\begin{definition}{Cauchy sequence}{}
+  Given a metric space $(X, d)$ a sequence $x_n \in X$ is a Cauchy sequence if,
+  fixed $\varepsilon > 0$,
+  $\exists K$ s.t. $\forall k, \ell \geq K
+  \implies d(x_k, x_\ell) \leq \varepsilon$.
+\end{definition}
+
+\begin{definition}{Metric space of bounded continuous functions}{}
     Let $(X, d)$ be a metric space where $X$ is the set
     \begin{equation}
         X = \{ g:I \to \R : g \text{ bounded and continuous} \}
@@ -287,6 +294,15 @@
 
 \subsection{Banach fixed-point theorem}
 
+\begin{definition}{Contraption}{contraption}
+  Given a metric space $(X, d)$, a function $F: X \to X$ is a contraption if
+  $\forall x, y \in X$ there holds
+  \begin{equation}
+    d(F(x), F(y)) \leq \alpha d(x, y)
+  \end{equation}
+  for $\alpha \in [0, 1)$.
+\end{definition}
+
 \begin{theorem}{}{banach}
     Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
     Then, there exists an unique $\bar x \in X$ such that
@@ -321,7 +337,7 @@
 
     Next, we let $C = d(x_0, x_1)$ and claim that
     \begin{equation}
-        d(x_k, x_{k+1}) \leq C \sum_{j = k}^{l-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
+        d(x_k, x_{k+1}) \leq C \sum_{j = k}^{\ell-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
     \end{equation}
     We again proceed by induction on $\ell > j$:
     the base case will be $\ell = j + 1$ which reduces to $d(x_k, x_{k+1}) \leq C \alpha^k$, which is the result of the previous claim;
@@ -419,7 +435,7 @@ where
 \end{equation}
 is the usual supremum norm, which means that
 \begin{equation}
-    \norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \enspace \forall t \in [t_0 - T, t_0 + T]
+    \norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \leq M \enspace \forall t \in [t_0 - T, t_0 + T]
 \end{equation}
 
 We then define a metric space $(X_{T, M}, d)$ with
@@ -429,7 +445,7 @@ We then define a metric space $(X_{T, M}, d)$ with
 
 We can prove that the $(X_{T,M}, d)$ is complete.
 
-\begin{theorem}{Peano-Picard local version - EXAM}{}
+\begin{theorem}{Peano-Picard local version}{}
     For $M > 0$ small enough and, once $M$ is fixed, for $T>0$ small enough, the set $X_{T, M}$ contains exactly one solution
     for the initial value problem.
 \end{theorem}
@@ -474,7 +490,7 @@ and then apply \cref{thm:banach}.
         \abs{F(v)(t) - F(w)(t)} & = \abs{\int_{t_0}^{t} f(s,v(s)) \dd s - \int_{t_0}^{t} f(s,w(s)) \dd s} \\
                                 & \leq \int_{t_0}^{t} \abs{f(s,v(s)) - f(s,w(s))} \dd s                   \\
                                 & \leq \int_{t_0}^{t} L\norm{v - w} \dd s                                 \\
-                                & \leq L \norm{v - w} (t - t_0) \leq LT \norm{v - w}                      \\
+                                & \leq L \norm{v - w} (t - t_0) \leq LT \norm{v - w}                      
     \end{align}
     therefore as long as $LT \leq 0.5$ the claim is true.
 \end{proof}

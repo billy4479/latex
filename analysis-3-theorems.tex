@@ -68,7 +68,7 @@
 
     For each root, consider the following set of functions:
     \begin{equation}
-        S = \left\{ t^j e^{\alpha_l t} : l \in 1, \dots, n; j \in 0, \dots, m_k -1 \right\}
+        S = \left\{ t^j e^{\alpha_\ell t} : \ell \in 1, \dots, n; j \in 0, \dots, m_k -1 \right\}
     \end{equation}
     each one of them solves the ODE and $S$ is a basis of the space of solutions.
 \end{theorem}
@@ -89,7 +89,7 @@
     Note that this operator is linear and behaves like a polynomial,
     notably if $c(z) = a(z)b(z)$ then $c(D) = a(D) \circ b(D)$ is commutative.
 
-    Assume the characteristic polynomial has leading coefficient of $1$,
+    Assume the characteristic polynomial $p$ has leading coefficient of $1$,
     then $u$ is a solution to the ODE (up to multiplying it by the inverse of the leading coefficient) if
     \begin{equation}
         p(D)u = 0
@@ -122,7 +122,7 @@
               Since $M = 1$ the degree of $h(t)$ has to be $0$, hence it is constant.
               We have
               \begin{equation}
-                  (D - \alpha_\ell)[h e^{\alpha_\ell t}] = h \dv{t} e^{\alpha_\ell t} - h\alpha e^{\alpha_\ell t} = 0
+                  (D - \alpha_\ell)[h e^{\alpha_\ell t}] = h \dv{t} e^{\alpha_\ell t} - h\alpha_\ell e^{\alpha_\ell t} = 0
               \end{equation}
         \item[Inductive step]
               \begin{align}
@@ -149,6 +149,13 @@
     Let $f: V \to V$ be the linear map associated to $A$: $f(v) = A v$, where $V = \R^n$.
     Let $\{v_1, \dots, v_m\}$ be the basis of the eigenspace of $\gamma$
     and complete it to $\{v_1, \dots, v_n\}$ a basis of $V$.
+    Since the algebraic multiplicity of $\gamma$ is $M$ 
+    the characteristical polynomial of of $A$ has the form
+    \begin{equation}
+      \det(\gamma \mathds{1} - A) = (z-\gamma)^M (z_1 - \lambda_1)^{M_1} \dots
+    \end{equation}
+    where $\lambda_i$ are the other eigenvalues.
+
     Then let $P = \begin{pmatrix}v_1 & \dots & v_n\end{pmatrix}$ be the change of basis matrix
     such that
     \begin{equation}

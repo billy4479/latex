@@ -18,6 +18,29 @@
         "type": "github"
       }
     },
+    "latex-build": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1736098301,
+        "narHash": "sha256-yDENgcL9nhTdpgQ9ntRRtXnsjRgSALqzjFLiwP7Ph8w=",
+        "owner": "billy4479",
+        "repo": "latex-build",
+        "rev": "6719bcb5b06eb5defcb867862e2dde8d18a35dd1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "billy4479",
+        "repo": "latex-build",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1734119587,
@@ -36,6 +59,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "latex-build": "latex-build",
         "nixpkgs": "nixpkgs"
       }
     },

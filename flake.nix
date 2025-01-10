@@ -2,12 +2,21 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+
+    latex-build = {
+      url = "github:billy4479/latex-build";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
   outputs =
     {
       nixpkgs,
       flake-utils,
+      latex-build,
       ...
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -76,6 +85,7 @@
         nativeBuildInputs =
           (with pkgs; [
             texPkgs
+            latex-build.packages.${system}.default
 
             # `minted` dependencies
             python3

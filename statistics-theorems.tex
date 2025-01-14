@@ -1,0 +1,210 @@
+\documentclass[12pt]{extarticle}
+
+\title{Statistics Theorems}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+
+\newcommand{\cov}{{\operatorfont cov}}
+\renewcommand{\var}{{\operatorfont var}}
+\newcommand{\E}{\mathds{E}}
+% Distributions
+\newcommand{\Bernoulli}{{\operatorfont Bernoulli}}
+\newcommand{\Binomial}{{\operatorfont Binomial}}
+\newcommand{\Normal}{{\operatorfont N}}
+\newcommand{\GammaD}{{\operatorfont Gamma}}
+\newcommand{\Poisson}{{\operatorfont Poisson}}
+\newcommand{\Exponential}{{\operatorfont Exponential}}
+\newcommand{\BivariateNormal}{{\operatorfont BivariateN}}
+\newcommand{\Uniform}{{\operatorfont Uniform}}
+
+\newcommand{\convas}{\xrightarrow{\operatorfont a.s.}}
+\newcommand{\convdist}{\xrightarrow{\operatorfont d}}
+\newcommand{\convprob}{\xrightarrow{\operatorfont P}}
+\newcommand{\convmean}[1]{\xrightarrow{#1}}
+
+\renewcommand{\vec}[1]{\bm{#1}}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Factorization theorem}
+
+\begin{theorem}{Factorization theorem}{}
+	A statistic $V = V(X)$ is sufficient if and only if there exists functions $g_\theta$ and $h$
+	such that for all $x, \theta$
+	\begin{equation}
+		p_\theta(x) = g_\theta(V(x)) h(x)
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	Suppose $V$ is sufficient, then
+	\begin{align}
+		P_\theta(X = x) & = P(X = x, V = V(x))                        \\
+		                & = P(X = x \mid V = V(x)) P_\theta(V = V(x))
+	\end{align}
+	where the first part does not depend on $\theta$ and can therefore be used as $h(x)$,
+	while the second term does depend on $\theta$ but only through $V(x)$ and can therefore
+	be considered as our $g_\theta$.
+
+	Suppose now that $p_\theta$ is factorizable, we have
+	\begin{align}
+		P_\theta(X = x_0 \mid V = v) & = \frac{P_\theta(X = x_0, V = v)}{P_\theta(V = v)}
+	\end{align}
+	which is equal to $0$ if $v \ne V(x_0)$.
+	Otherwise, if $v = V(x_0)$, we have that the equation above is equal to
+	\begin{align}
+		\frac{P_\theta(X= x_0)}{P_\theta(V = v)} & = \frac{P_\theta(X = x_0)}{\sum_{x : v = V(x)} P_\theta(X = x)}                     \\
+		                                         & = \frac{g_\theta(V(x_0))h(x_0)}{\sum_{x : v = V(x)} g_\theta(V(x))h(x)}             \\
+		                                         & = \frac{g_\theta(v)h(x_0)}{\sum_{x : v = V(x)} g_\theta(v)h(x)}                     \\
+		                                         & = \frac{\cancel{g_\theta(v)} h(x_0)}{\cancel{g_\theta(v)} \sum_{x : v = V(x)} h(x)}
+	\end{align}
+	which no longer depends on $\theta$.
+\end{proof}
+
+\section{Rao-Blackwell theorem}
+
+\begin{theorem}{Rao-Blackwell}{}
+	Let $V(X)$ be a sufficient statistic and $T(X)$ an estimator for $g(\theta)$.
+	Then there exists an estimator $T^*(V)$ for $g(\theta)$ which depends only on $V$
+	such that $\E_\theta T^* = \E_\theta T$ but $\var_\theta T^* \leq \var_\theta T$ for all $\theta$.
+\end{theorem}
+
+\begin{proof}
+	Let $T^* = \E(T \mid V)$, which does not depend on $\theta$ since $V$ is a sufficient statistic.
+	We have
+	\begin{equation}
+		\E_\theta T^* = \sum_v T^*(v) P_\theta(V = v) = \sum_v E(T\mid V = v) P_\theta(V = v) = \E_\theta T^*
+	\end{equation}
+
+	Furthermore,
+	\begin{align}
+		E_\theta T T^* & = \sum_V E_\theta(T T^*) p_\theta(V = v)                \\
+		               & = \sum_V T^*(v) E_\theta(T \mid V = v) p_\theta (V = v) \\
+		               & = \sum_V T^*(v)^2 p_\theta(V = v) = (ET^*)^2
+	\end{align}
+	which gives us
+	\begin{align}
+		\E_\theta T^2 & = \E_\theta (T - T^* + T^*)^2                                               \\
+		              & = \E_\theta(T - T^*)^2 + \cancel{2 \E_\theta(T-T^*) T^*} + \E_\theta(T^*)^2 \\
+		              & = \E_\theta(T - T^*)^2 + \E_\theta(T^*)^2                                   \\
+		              & \geq \E_\theta(T^*)^2
+	\end{align}
+	and since the expectation is the same for both estimators we get that the variance of $T^*$ is smaller.
+\end{proof}
+
+\section{Lehmann-Scheffe theorem}
+\begin{theorem}{Lehmann-Scheffe}{}
+	Let $V$ be sufficient and complete and $T(V)$ an unbiased estimator for $g(\theta)$
+	that depends only on $V$.
+	Then $T$ is a UMVU estimator for $g(\theta)$.
+\end{theorem}
+
+\begin{proof}
+	By Rao-Blackwell, for every unbiased estimator $S$ there exists an unbiased estimator $S^*(V)$
+	whose variance is less than or equal to $\var S$.
+	Then, $S^* - T$ also depends only on $V$ and $\E_\theta(S^* - T) = 0$ since they are both unbiased.
+	By the completeness of $V$ we have that $P_\theta(S^* - T = 0) = 1$ for all $\theta$,
+	hence $T = S^*$ almost surely.
+\end{proof}
+
+\section{Cramer-Rao lower bound}
+
+\begin{theorem}{Cramer-Rao lower bound}{}
+	Suppose that $\theta \mapsto p_\theta(x)$ is differentiable for every $x$.
+	Let $T$ be an unbiased estimator for $g(\theta)$.
+	Then, under certain regularity conditions,
+	\begin{equation}
+		\var_\theta T \geq \frac{g'(\theta)^2}{I_\theta}
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	Since $g(\theta) = \E_\theta T$ we have
+	\begin{align}
+		g'(\theta) & = \pdv{\theta} \int T(x) p_\theta(x) \dd x        \\
+		           & = \int T(x) \dot{p}_\theta(x) \dd x               \\
+		           & = \int T(x) \dot \ell_\theta(x) p_\theta(x) \dd x \\
+		           & = \E_\theta (T \dot \ell_\theta (X))
+	\end{align}
+	and since $\E_\theta \dot \ell_\theta = 0$ we get
+	\begin{equation}
+		g'(\theta) = \E_\theta (T \dot \ell_\theta (X)) - \E_\theta T \E_\theta \dot \ell_\theta(X) = \cov_\theta(T, \dot \ell_\theta(X))
+	\end{equation}
+	and by Cauchy-Schwartz we get
+	\begin{equation}
+		\cov_\theta(T, \dot \ell_\theta(X))^2 \leq \var_\theta T \var_\theta \ell_\theta(X) = \var_\theta T I_\theta
+	\end{equation}
+
+	We then replace the covariance on the left with $g'(x)^2$ and rearrange.
+\end{proof}
+
+\section{Sum of Fisher information}
+
+\begin{lemma}{Sum of Fisher information}
+	Let $X, Y$ be independent random variables.
+	Then the Fisher information in the observation $(X, Y)$ is equal to the sum
+	of the information in $X$ and $Y$ separately.
+\end{lemma}
+
+\begin{proof}
+	The join density is $(x, y) \mapsto p_\theta(x) q_\theta(y)$.
+	Then the Fisher information is the variance of the score function:
+	\begin{equation}
+		\pdv{\theta} \log p_\theta(x) q_\theta(y) = \pdv \log p_\theta(x) + \pdv \log q_\theta(y)
+	\end{equation}
+	and since these variables are independent the variance of the sum is the sum of the variance.
+\end{proof}
+
+\section{Neyman-Pearson lemma}
+
+\begin{theorem}{Neyman-Pearson}{}
+	Suppose there exists a number $c_{\alpha_0}$ such that
+	$P_{\theta_0}(L(\theta_1, \theta_0; X) \geq c_{\alpha_0}) = \alpha_0$.
+	Then the critical region
+	$K = \{ x: L(\theta_1, \theta_0; X) \geq c_{\alpha_0} \} = \alpha_0$
+	is the most powerful at level $\alpha_0$
+	for testing $H_0: \theta = \theta_0$ against $H_1: \theta = \theta_1$,
+	where $L(\theta_1, \theta_0; X) = p_{\theta_1}(X) / p_{\theta_0}(X)$.
+\end{theorem}
+
+\begin{proof}
+	By assumption we know that the size of $K$ is $\alpha_0$.
+	Suppose that $K'$ is another critical region of size at most $\alpha_0$,
+	that is, $P_{\theta_0}(X \in K') \leq \alpha_0$.
+
+	We want to prove that
+	$P_{\theta_1}(X \in K') \leq P_{\theta_1}(X \in K)$.
+	We claim that this is equivalent to proving that
+	\begin{equation}
+		(\mathds{1}_{K'}(x) - \mathds{1}_{K}(x))(p_{\theta_1}(x) - c_{\alpha_0}p_{\theta_0})) \leq 0
+	\end{equation}
+	holds for all $x$.
+
+	Indeed for $x \in K$ we have
+	\begin{itemize}
+		\item $\mathds 1_{K'}(x) - \mathds 1_{K}(x) = \mathds 1_{K'}(x) -1 \leq 0$
+		\item $p_{\theta_1}(x) - c_{\alpha_0}p_{\theta_0}(x) \geq 0 \iff p_{\theta_1}(x) \geq c_{\alpha_0}p_{\theta_0}(x) \iff \frac{p_{\theta_1}(X)}{p_{\theta_0}(X)} \geq c_{\alpha_0} \iff x \in K$
+	\end{itemize}
+	and the inequality is flipped for $x \notin K$.
+	In any case we are always multiplying a non-negative term with a non-positive one,
+	hence the result is non-positive.
+
+	We can then write
+	\begin{align}
+		p_{\theta_1}(x \in K') - p_{\theta_1}(x \in K) & = \int (\mathds 1_{K'} - \mathds 1_{K}) p_{\theta_1}(x) \dd x                   \\
+		                                               & \leq c_{\alpha_0} \int (\mathds 1_{K'} - \mathds 1_{K}) p_{\theta_0}(x) \dd x   \\
+		                                               & = c_{\alpha_0} (\E_{\theta_0} \mathds 1_{K'}(x) - \E_{\theta_0} \mathds 1_K(x)) \\
+		                                               & = c_{\alpha_0} (P_{\theta_0}(X \in K') - P_{\theta_0}(x \in K))                 \\
+		                                               & \leq c_{\alpha_0} (\alpha_0 - \alpha_0) = 0
+	\end{align}
+	It follows that $P_{\theta_1}(X \in K') \leq P_{\theta_1}(X \in K)$
+	and therefore $K$ is the most poweful critical region at level $\alpha_0$.
+\end{proof}
+
+\end{document}

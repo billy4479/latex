@@ -116,7 +116,7 @@
             buildPhase = ''
               runHook preBuild
 
-              latexmk -lualatex -shell-escape -auxdir=${OUTDIR}/aux -outdir=${OUTDIR} -interaction=nonstopmode *.tex
+              latex-build
 
               runHook postBuild
             '';

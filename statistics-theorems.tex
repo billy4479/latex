@@ -133,7 +133,13 @@
 		           & = \int T(x) \dot \ell_\theta(x) p_\theta(x) \dd x \\
 		           & = \E_\theta (T \dot \ell_\theta (X))
 	\end{align}
-	and since $\E_\theta \dot \ell_\theta = 0$ we get
+	where we used the fact that
+	\begin{equation}
+		\dot \ell_\theta(x) = \pdv{\theta} \log p_\theta(x) = \frac{\dot p_\theta(x)}{p_\theta(x)}
+		\implies \dot p_\theta(x) = \dot \ell_\theta(x) p_\theta(x)
+	\end{equation}
+
+	Since $\E_\theta \dot \ell_\theta = 0$ we get
 	\begin{equation}
 		g'(\theta) = \E_\theta (T \dot \ell_\theta (X)) - \E_\theta T \E_\theta \dot \ell_\theta(X) = \cov_\theta(T, \dot \ell_\theta(X))
 	\end{equation}
@@ -157,7 +163,7 @@
 	The join density is $(x, y) \mapsto p_\theta(x) q_\theta(y)$.
 	Then the Fisher information is the variance of the score function:
 	\begin{equation}
-		\pdv{\theta} \log p_\theta(x) q_\theta(y) = \pdv \log p_\theta(x) + \pdv \log q_\theta(y)
+		\pdv{\theta} \log p_\theta(x) q_\theta(y) = \pdv{\theta} \log p_\theta(x) + \pdv{\theta} \log q_\theta(y)
 	\end{equation}
 	and since these variables are independent the variance of the sum is the sum of the variance.
 \end{proof}

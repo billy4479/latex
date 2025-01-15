@@ -79,20 +79,21 @@
 	Let $T^* = \E(T \mid V)$, which does not depend on $\theta$ since $V$ is a sufficient statistic.
 	We have
 	\begin{equation}
-		\E_\theta T^* = \sum_v T^*(v) P_\theta(V = v) = \sum_v E(T\mid V = v) P_\theta(V = v) = \E_\theta T^*
+		\E_\theta T^* = \sum_v T^*(v) P_\theta(V = v) = \sum_v E(T\mid V = v) P_\theta(V = v) = \E_\theta T
 	\end{equation}
 
 	Furthermore,
 	\begin{align}
-		E_\theta T T^* & = \sum_V E_\theta(T T^*) p_\theta(V = v)                \\
+		E_\theta T T^* & = \sum_V E_\theta(T T^* \mid V = v) p_\theta(V = v)     \\
 		               & = \sum_V T^*(v) E_\theta(T \mid V = v) p_\theta (V = v) \\
-		               & = \sum_V T^*(v)^2 p_\theta(V = v) = (ET^*)^2
+		               & = \sum_V T^*(v)^2 p_\theta(V = v) = E(T^*)^2
 	\end{align}
 	which gives us
 	\begin{align}
-		\E_\theta T^2 & = \E_\theta (T - T^* + T^*)^2                                               \\
-		              & = \E_\theta(T - T^*)^2 + \cancel{2 \E_\theta(T-T^*) T^*} + \E_\theta(T^*)^2 \\
-		              & = \E_\theta(T - T^*)^2 + \E_\theta(T^*)^2                                   \\
+		\E_\theta T^2 & = \E_\theta (T - T^* + T^*)^2                                                                       \\
+		              & = \E_\theta(T - T^*)^2 + 2 \E_\theta(T-T^*) T^* + \E_\theta(T^*)^2                                  \\
+		              & = \E_\theta(T - T^*)^2 + 2( \cancel{\E_\theta TT^*} - \cancel{\E_\theta(T^*)^2}) + \E_\theta(T^*)^2 \\
+		              & = \E_\theta(T - T^*)^2 + \E_\theta(T^*)^2                                                           \\
 		              & \geq \E_\theta(T^*)^2
 	\end{align}
 	and since the expectation is the same for both estimators we get that the variance of $T^*$ is smaller.
@@ -120,7 +121,7 @@
 	Let $T$ be an unbiased estimator for $g(\theta)$.
 	Then, under certain regularity conditions,
 	\begin{equation}
-		\var_\theta T \geq \frac{g'(\theta)^2}{I_\theta}
+		\var_\theta (T) \geq \frac{g'(\theta)^2}{I_\theta}
 	\end{equation}
 \end{theorem}
 
@@ -138,7 +139,7 @@
 	\end{equation}
 	and by Cauchy-Schwartz we get
 	\begin{equation}
-		\cov_\theta(T, \dot \ell_\theta(X))^2 \leq \var_\theta T \var_\theta \ell_\theta(X) = \var_\theta T I_\theta
+		\cov_\theta(T, \dot \ell_\theta(X))^2 \leq \var_\theta (T) \var_\theta (\ell_\theta(X)) = \var_\theta (T) I_\theta
 	\end{equation}
 
 	We then replace the covariance on the left with $g'(x)^2$ and rearrange.
@@ -146,7 +147,7 @@
 
 \section{Sum of Fisher information}
 
-\begin{lemma}{Sum of Fisher information}
+\begin{lemma}{Sum of Fisher information}{}
 	Let $X, Y$ be independent random variables.
 	Then the Fisher information in the observation $(X, Y)$ is equal to the sum
 	of the information in $X$ and $Y$ separately.
@@ -191,7 +192,7 @@
 		\item $\mathds 1_{K'}(x) - \mathds 1_{K}(x) = \mathds 1_{K'}(x) -1 \leq 0$
 		\item $p_{\theta_1}(x) - c_{\alpha_0}p_{\theta_0}(x) \geq 0 \iff p_{\theta_1}(x) \geq c_{\alpha_0}p_{\theta_0}(x) \iff \frac{p_{\theta_1}(X)}{p_{\theta_0}(X)} \geq c_{\alpha_0} \iff x \in K$
 	\end{itemize}
-	and the inequality is flipped for $x \notin K$.
+	and the inequalities are flipped for $x \notin K$.
 	In any case we are always multiplying a non-negative term with a non-positive one,
 	hence the result is non-positive.
 

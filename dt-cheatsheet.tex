@@ -1,0 +1,247 @@
+\documentclass[landscape, 12pt]{extarticle}
+
+\title{Decision Theory Cheat Sheet}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+\usepackage{multicol}
+\geometry{letterpaper}
+
+\renewcommand{\vec}[1]{\bm{#1}}
+
+\begin{document}
+
+\begin{center}
+	\huge
+	\bf
+	Decision Theory
+\end{center}
+
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{1pt}
+\def\columnseprulecolor{\color{blue}}
+
+\vspace{0.25cm}
+
+\section{Notation}
+
+\begin{multicols}{2}
+
+	\paragraph{Actions} what the DM does
+	\begin{itemize}
+		\item Preference: $\succsim$
+		\item Space: $\bm A$
+		\item Collections of subsets $A$ of $\bm A$: $\mathcal A$
+	\end{itemize}
+
+
+	\paragraph{Consequences} what happens
+	\begin{itemize}
+		\item Preference: $\dot \succsim$
+		\item Space: $\bm C$
+	\end{itemize}
+
+
+	\paragraph{State} everything else we cannot control
+	\begin{itemize}
+		\item Each state is called $s$
+		\item Space: $S$
+		\item Algebra on $S$: $\bm \Sigma$
+		\item Each element of $\bm \Sigma$ is an event $E$ ???
+	\end{itemize}
+
+	\paragraph{Act} what happens in each state
+	\[
+		f: S \to \bm C = \sum^n_{i = 1} c_i \mathds 1_{E_i}
+	\]
+	\begin{itemize}
+		\item $c_i$ is the consequence of event $E_i$
+		\item Preference: $\mathring \succsim$
+		\item Space: $\bm F$
+		\item $\bm C \subseteq \bm F$: consequences can be seen as state independent acts
+		\item We use simple acts i.e. where $\Im(f)$ is finite
+		\item Every action gives an act $\rho(a) = \gamma_a: S \to \bm C$
+		      where $\rho$ is the consequence function.
+		\item There is a bijection between acts and actions given by
+		      \[
+			      a \succsim b \iff \rho(a) \, \mathring \succsim \, \rho(b)
+		      \]
+	\end{itemize}
+
+	\paragraph{Lotteries}
+	\begin{itemize}
+		\item Space over consequences $\bm C$: $\bm \Delta(\bm C) = \bm L$
+		\item Preference: $\ddot \succsim$
+		\item Sometimes acts do not output consequences but lotteries:
+		      $\gamma: \bm A \cross S \to \bm \Delta(\bm C)$ and $\gamma(a, s)(c)$ is the probability
+		      of the consequence $c$ when action $a$ is taken in the state $s$
+	\end{itemize}
+
+\end{multicols}
+
+\clearpage
+
+\section{Axioms}
+
+\begin{multicols}{2}
+	\subsection{Normal}
+
+	\paragraph{A.1 Transitivity}
+	For all $x, y, z \in X$ if $x \succsim y$ and $y \succsim z$, then $x \succsim z$.
+
+	\paragraph{A.2 Completeness}
+	For all $x, y \in X$ we have $x \succsim y$ or $y \succsim x$ (or both).
+
+	\paragraph{A.3 Monotonicity}
+	For all $x, y \in X$, if
+	\begin{itemize}
+		\item \textit{Strict}: $x>y$ (at least one is bigger bigger)
+		\item \textit{Strong}: $x \gg y$ (all components are bigger)
+		\item \textit{Weak}: $x \geq y$
+	\end{itemize}
+	we have $x \succ y$ (or $x\succsim y$ for weak)
+
+	\paragraph{A.4 Archimedean}
+	For all $x \succ y \succ z \in X$ there exists $\alpha, \beta \in (0, 1)$ such that
+	\[
+		\alpha x + \overline \alpha z \succ y \succ \beta x + \overline \beta z
+	\]
+
+	\paragraph{A.5 Convexity}
+	For all $x, y \in X$, there exists $\alpha \in [0, 1]$ such that $x \sim y$ implies
+	that for the convex combination
+	\[
+		c = \alpha x + \overline \alpha y
+	\]
+	\begin{itemize}
+		\item \textit{Weak}: $c \succsim x$
+		\item \textit{Strict}: $c \succ x$
+		\item \textit{Affinity}: $c \sim x$
+	\end{itemize}
+
+	\paragraph{A.8 Independence}
+	For all $x, y, z \in X$ and $\alpha \in (0,1)$
+	if $x \succ y$ then
+	\[
+		\alpha x + \overline \alpha z \succ \alpha y + \overline \alpha z
+	\]
+
+	\paragraph{A.16 Monotonicity (of acts)}
+	For any $f, g \in \bm F$ if $f(s) \ddot \succsim g(s)$ for all $s \in S$ then $f \dot \succsim g$.
+
+	\subsection{Lotteries}
+	\paragraph{B.1 Weak order}
+	$\succsim$ is complete and transitive (A.1 and A.2)
+
+	\paragraph{B.2 Independence}
+	For all $l, l', l'' \in \bm L$ and $p \in (0,1)$
+	\[
+		l \succ l' \implies pl + \overline p l'' \succ p l' + \overline p l''
+	\]
+	\textit{Strong}: replace $\succ$ with $\succsim$ and $\sim$.
+
+	\paragraph{B.3 Archimedean}
+	For all $l \succ l' \succ l'' \in \bm L$ there exists $p,q \in (0,1)$
+	\[
+		pl + \overline p l'' \succ l' \succ ql + \overline q l''
+	\]
+
+	\paragraph{B.4 Monotonicity}
+	For all $c, c' \in \bm C$ then $c \gg c' \implies c\succ c'$ and $c \geq c' \implies c \succsim c'$.
+
+	\paragraph{B.5 Certainty equivalent}
+	For every $l \in \bm L$ there exists $c_l \in \bm C$ such that $l \sim c_l$.
+
+	\subsection{Gilboa-Schmeidler}
+	\paragraph{GS.3 Certainty independece}
+	For every $f, g \in \bm F(X)$ and $l \in \bm X$
+	\[
+		f \succ g \iff \alpha f + \overline \alpha l \succ \alpha g + \overline \alpha x
+	\]
+	same for $\sim$.
+
+	\paragraph{GS.6 Uncertainty Aversion}
+	If $f \sim g \in \bm F$ then $\alpha f + \overline \alpha g \succsim f$.
+
+	\subsection{De Finetti}
+	These are acioms over events $E \in \bm \Sigma$,
+	where $\succsim^*$ is the \textit{qualitatibe probability}:
+	\say{event $E$ is at least as likely as event $F$}.
+
+	\paragraph{DF.1 Weak order}
+	$\succsim^*$ is complete and transitive (A.1 and A.2)
+
+	\paragraph{DF.2 Normalization}
+	For all events $E \in \bm \Sigma$
+	we have $S \succsim^* E \succsim^* \varnothing$
+	and $S \succsim^* \varnothing$.
+
+	\paragraph{DF.3 Additivity}
+	For all events $E, F, H$ such that $E \cap H = F \cap H = \varnothing$ we have
+	\[
+		E \succsim^* F \iff E \cup H \succsim^* F \cup H
+	\]
+
+	\paragraph{DF.4 Equidivisibility}
+	For each $n \geq 1$ there exists a partition of $2^n$ equally likely events.
+
+	A stronger version (\textit{Divisibility}) states that for all $E \succ^* F$ there ecists
+	a partition of events $\{H_i\}^n_{i = 1}$
+	such that $E \succ^* F \cup H_i$ for all $i = 1, \dots, n$.
+
+	\subsection{Savage}
+	We consider $\succsim$ on the set $\bm F$ of acts from $S$ to $\bm C$.
+
+	Let $f, g \in \bm F$ and $E \in \bm \Sigma$: we introduce the following notation
+	\[
+		fEg = \begin{cases}
+			f(s) & \text{if } s \in E    \\
+			g(s) & \text{if } s \notin E
+		\end{cases}
+	\]
+
+	\paragraph{P.1 Weak order}
+	$\succsim$ is complete and transitive (A.1 and A.2).
+
+	\paragraph{P.2 Sure-thing principle}
+	For all acts $f, g, h, h'$ and any event $E$
+	\[
+		fEh \succsim gEh \iff fEh' \succsim gEh'
+	\]
+	from which we can define the \textit{conditional preference} $\succsim_E$ as
+	\[
+		f \succsim_E g \iff \exists h \in \bm F : f E h \succsim gEh
+	\]
+
+	An event is \textit{null} if $\forall f, g$ there holds $fEh \sim gEh$.
+
+	\paragraph{P.3 State independece}
+	Let $E$ be a non-null event and $c, d \in \bm C$, for any $h \in \bm F$
+	\[
+		cEh \succsim dEh \iff c\, \dot \succsim \, d
+	\]
+
+	\paragraph{P.4 Stake independance}
+	For any $c \dot \succsim d$ and $c' \, \dot \succsim \, d' \in \bm C$
+	and $E, F \in \bm \Sigma$
+	\[
+		cEd \succsim cFd \iff c'Ed'\succsim c'Fd'
+	\]
+
+	\paragraph{P.5 Non-triviality}
+	There exists $c \, \dot \succ \, d \in \bm C$.
+
+	\paragraph{P.6 Divisibility}
+	Let $f \succ g \in \bm F$ and $c \in \bm C$,
+	then there exists a parition of events $\{E_i\}^n_{i=1}$
+	such that $cE_if \succ g$ and $f \succ cE_ig$ for all $i=1,\dots,n$.
+
+	This tells us that we can divide $S$ in events so small that we can create
+	a partition of events that does not influence the outcome at all (represented by $cE_i$).
+
+
+\end{multicols}
+
+\end{document}

@@ -129,7 +129,8 @@
 	\]
 
 	\paragraph{A.16 Monotonicity (of acts)}
-	For any $f, g \in \bm F$ if $f(s) \ddot \succsim g(s)$ for all $s \in S$ then $f \dot \succsim g$.
+	For any $f, g \in \bm F$ if $f(s) \, \ddot \succsim \, g(s)$ for all $s \in S$
+	then $f \, \dot \succsim \, g$.
 
 	\subsection{Lotteries}
 	\paragraph{B.1 Weak order}
@@ -153,17 +154,6 @@
 
 	\paragraph{B.5 Certainty equivalent}
 	For every $l \in \bm L$ there exists $c_l \in \bm C$ such that $l \sim c_l$.
-
-	\subsection{Gilboa-Schmeidler}
-	\paragraph{GS.3 Certainty independece}
-	For every $f, g \in \bm F(X)$ and $l \in \bm X$
-	\[
-		f \succ g \iff \alpha f + \overline \alpha l \succ \alpha g + \overline \alpha x
-	\]
-	same for $\sim$.
-
-	\paragraph{GS.6 Uncertainty Aversion}
-	If $f \sim g \in \bm F$ then $\alpha f + \overline \alpha g \succsim f$.
 
 	\subsection{De Finetti}
 	These are acioms over events $E \in \bm \Sigma$,
@@ -241,7 +231,37 @@
 	This tells us that we can divide $S$ in events so small that we can create
 	a partition of events that does not influence the outcome at all (represented by $cE_i$).
 
+	\subsection{Gilboa-Schmeidler}
+	\paragraph{GS.3 Certainty independece}
+	For every $f, g \in \bm F(X)$ and $l \in \bm X$
+	\[
+		f \succ g \iff \alpha f + \overline \alpha l \succ \alpha g + \overline \alpha x
+	\]
+	same for $\sim$.
 
+	\paragraph{GS.6 Uncertainty Aversion}
+	If $f \sim g \in \bm F$ then $\alpha f + \overline \alpha g \succsim f$.
+
+\end{multicols}
+
+\clearpage
+
+\section{Representations}
+
+\begin{multicols}{2}
+	\subsection{Savage}
+	\subsection{Anscombe-Aumann}
+	\subsection{Gilboa-Schmeidler}
+
+	\paragraph{Axioms} A.1, A.2, A.4, A.16, GS.3, GS.6
+
+	\paragraph{Theorem}
+	$\succsim$ on $\bm F$ satisfies the axioms iff there exists an \textit{affine} function
+	$u: X \to \bm F$ and a set of probabilities $\mathcal C \subseteq \bm \Delta(\bm \Sigma)$
+	such that
+	\[
+		U(f) = \min_{P\in \mathcal C} \int_S u(f(s)) dP(s)
+	\]
 \end{multicols}
 
 \end{document}

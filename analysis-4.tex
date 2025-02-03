@@ -1,0 +1,163 @@
+\documentclass[12pt]{extarticle}
+
+\setlength{\headheight}{16pt} % ??? we do what fancyhdr tells us to do  
+
+\title{Analysis 4}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble}
+
+\renewcommand{\vec}[1]{\uvec{#1}}
+
+\begin{document}
+\oldfirstpage
+
+The first part of the course will be about complex analysis and the second one will be about
+differential geometry.
+
+\section{Complex analysis}
+
+Naively we can start by replacing $\R$ with $\C \approxeq \R^2$.
+A lot things carry over from real analysis but \emph{complex differentiable} functions have
+many more interesting properties.
+
+\subsection{Constructing complex numers}
+
+\subsubsection{The boring way}
+The \say{boring} definition of complex number is a set $\C \supseteq \R$ where $\sqrt{-1}$ exists
+and is defined as $i$ and $-i$.
+Formally, this is the smallest \emph{field} where we include $\R$ and $i$.
+
+A complex number $z$ can be written as
+\begin{equation}
+	z = a + bi \in \C \quad \text{with } a, b \in \R
+\end{equation}
+
+This representation is useful since it has a bunch of nice properties:
+\begin{itemize}
+	\item It is closed under multiplication;
+	\item We define the complex conjugate $\overline{a + bi} = a - bi$ and
+	      if we multiply $z$ with $\overline z$ we get a real number;
+	\item We define a norm over $\C$ as $\norm{z} = z \overline z$;
+	\item There exists an inverse, that is for each $z = a + bi \neq 0$
+	      (i.e. either $a$ or $b$ $\neq 0$) we can define
+	      \begin{equation}
+		      z^{-1} = \frac{\overline z}{\norm{z}^2}
+	      \end{equation}
+\end{itemize}
+
+Now we can formally say that $a + bi$ is the formal expression of a number in $\C$,
+define the sum as the usual sum in $\R^2$ and the product as
+\begin{equation}
+	(a, b) \cdot (c, d) = (ac - bd, ad + bc)
+\end{equation}
+and we are able to prove that this is commutative and associative,
+the proof is long and boring therefore we skip it.
+
+\subsubsection{Geometric construction}
+
+First we start with a simple lemma about isometries.
+
+\begin{lemma}{Isometries that fix the origin are linear maps}{}
+	Consider an isometry $f: \R^n \to \R^n$,
+	that is $\abs{f(p) - f(q)} = \abs{p-q}$ for all $p, q \in \R^2$.
+	If $f(0) = 0$, then $f$ is linear and we can write $f(v) = Av$
+	where $A \in O(n)$ is an orthogonal $n\cross n$ matrix, that is $A^{-1} = A^T$.
+\end{lemma}
+
+In dimension $n = 2$ we can explicitly write a matrix $A$ which rotates the plane counterclockwise
+by an angle $\theta$ as
+\begin{equation}
+	A = \begin{pmatrix}
+		\cos \theta & -\sin \theta \\
+		\sin \theta & \cos \theta
+	\end{pmatrix}
+\end{equation}
+Rotation matrices form a subset of $O(n)$, namely those with $\det = 1$.
+
+On the other hand, we define a \emph{homothety} or \emph{dilation} as the linear maps which
+can be written as $f = \rho I$, with $\rho \geq 1$.
+Now we can combine rotations and dilations to obtain a set of matrices of the form
+\begin{align}
+	\mathcal C & = \left\{ A = \rho I \cdot R_\theta \mid \rho \geq 0, \theta \in \R\right\} \\
+	           & =  \left\{ A = \begin{pmatrix}
+		                            \rho \cos \theta & - \rho \sin \theta \\
+		                            \rho \sin \theta & \rho \cos \theta
+	                            \end{pmatrix}
+	\mid \rho \geq 0, \theta \in \R\right\}                                                  \\
+	           & = \left\{ A = \begin{pmatrix}
+		                           a & -b \\
+		                           b & a
+	                           \end{pmatrix}
+	\mid a, b \in \R\right\}
+\end{align}
+We notice that $\mathcal C$ is a vector space of matrices of dimension 2 with bases
+$I$ (the identity matrix) and $J = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$.
+
+We can now draw a parallel between $\mathcal C$ and $\C$:
+$I$ corresponds to $1$ and $J$ corresponds to $i$.
+
+We can now write a formal definition using the matrices:
+the sum and the product is the same as in matrices,
+note that this set is closed under multiplication as $J ^2 = -I$.
+Moreover we get for free that the product is associative (since it is that way with matrices)
+and since $IJ = JI$ it is also commutative.
+
+\subsection{Complex differentiability}
+We will identify $\C \approxeq \R^2$ so that we get for free the definition of open and closed sets.
+
+\begin{remark}{Product of complex numbers as a matrix}{}
+	We can prove that identifying two complex numbers as pairs in $\R^2$ we get
+	\begin{equation}
+		(a, b) \cdot (c, d) = \begin{pmatrix} a & -b \\ b & a \end{pmatrix}
+		\begin{pmatrix} c \\d \end{pmatrix}
+	\end{equation}
+\end{remark}
+
+Now we can define complex differentiability:
+\begin{definition}{Complex differentiability}{}
+	Let $U \in \C$ open, $f: U \to \C$ be a function and $z_0 \in U$.
+	We say that $f$ is complex differentiable at $z_0$ if
+	\begin{equation}
+		f(z) = f(z_0) + \alpha (z-z_0) + \o(\abs{z -z_0})
+	\end{equation}
+	for some $\alpha \in \C$ or equivalently
+	\begin{equation}
+		f'(z_0) \coloneq \lim_{z \to z_0} \frac{f(z) - f(z_0)}{z - z_0} = \alpha \in \C
+	\end{equation}
+	exists for some $\alpha$.
+\end{definition}
+Basically this definition tells us that $f$ is complex differentiable
+if the first order taylor expansion exists and is linear.
+
+\begin{definition}{Holomorfic function}{}
+	A function $f: U \to \C$ is holomorfic if it is complex differentiable at every $z_0 \in U$.
+\end{definition}
+
+\begin{proposition}{Cauchy-Riemann equations}{}
+	$f$ is complex differentiable at $z_0 \in U$ $\iff$
+	$Df(z_0) = \begin{pmatrix} a & -b \\ b & a \end{pmatrix}$ for some $a, b \in \R$, in which case
+	$f'(z_0) = a + bi$.
+
+	Equivalently we can say that there exists $g, h: \R \to \R$ that satisfy
+	\begin{equation}
+		\begin{cases}
+			\pdv{g}{x}()(z_0) = \pdv{h}{y}()(z_0) \\
+			\pdv{h}{z}()(z_0) = -\pdv{g}{y}()(z_0)
+		\end{cases}
+	\end{equation}
+	and
+	\begin{equation}
+		f(z) = f(x + yi) = g(x+yi) + h(x+yi)i
+	\end{equation}
+\end{proposition}
+
+\begin{proof}
+	This is actually quite easy, just see $f$ as a function from and to $\R^2$.
+	Now we can compute the differential the usual way and if we want it to look like
+	$\begin{pmatrix} a & -b \\ b & a \end{pmatrix}$
+	we have to impose the two equations above.
+\end{proof}
+
+\end{document}

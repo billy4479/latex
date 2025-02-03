@@ -1,0 +1,93 @@
+\documentclass[12pt]{extarticle}
+
+\setlength{\headheight}{16pt} % ??? we do what fancyhdr tells us to do  
+
+\title{Advanced Programming and Optimization}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble}
+\usepackage{preamble_code}
+
+\renewcommand{\vec}[1]{\uvec{#1}}
+
+\begin{document}
+
+\oldfirstpage
+
+\section{Introduction}
+
+This course will all be about
+\begin{align}
+	\max f(x), & \text{subject to}                          \\
+	g_i(x)     & \leq b_i \quad \text{for } i = 1, \dots, m \\
+	x          & \in \R^n
+\end{align}
+where $f, g_1, \dots, g_m: \R^n \to \R$ are linear functions and $b_1, \dots, b_m \in \R$.
+This is the standard \emph{linear programming} problem and can be solved in polynomial time.
+
+However we are also going to be looking at problems where $x \in \Z^n$ (integers).
+This is a NP hard problem.
+
+The last part of the course we will have the case where $f, g_1, \dots, g_m$ are not linear
+but they are \emph{convex} instead. This also is a hard problem.
+
+\section{Linear programming}
+
+Recall that even though we have stated the problem with less-than-or-equal, we can just multiply
+the constraints by $-1$ to flip the inequality if needed.
+Similarly we can multiply $f$ by $-1$ to change $\min$ to $\max$ or viceversa.
+
+In linear programming our constraint make a polygon in an $n$-dimensional space.
+If we let $\vec a$ be the vector of the coefficients of $f$ the problem reduces to finding the
+point which is further away from the origin perpendicular to $\vec a$.
+
+It is not always possible to find an unique solution to a linear programming problem: sometimes
+the problem has multiple solutions, it is undecidable, or unbounded.
+
+\subsubsection{Examples}
+
+\begin{example}{Flow}{}
+	Recall that the flow problem we saw in CS2 can be written as a linear programming problem:
+	each edge has a constraint of $-c_i \leq e_i \leq c_i$ (where $c_i$ is the capacity of each edge)
+	and each node has an additional constraint of flow preservation.
+	We can maximize the output from the source or the input to the destination.
+\end{example}
+
+\begin{example}{Icecream production}{}
+	Each month $i$ has a certain icecream demand $d_i$.
+	Changing the prodution of icecream has a cost $a_1$ and the cost of storing icecream we pay $a_2$.
+	What is the optimal amount of icecream to be produced?
+\end{example}
+
+\begin{proof}[Solution]
+	For each month $i$ we want
+	\begin{equation}
+		x_i + s_{i-1} - s_i = d_i
+	\end{equation}
+	where $x_i$ is the production of icecream and $s_i$ is the amount we have in storage.
+
+	Our objective will be
+	\begin{equation}
+		\min a_1 \sum \abs{x_i - x_{i-1}} + a_2 \sum s_i
+	\end{equation}
+	but this is not a linear funtion!
+
+	Instead we introduce two new variables $y_i$ which represents the increase in the prodution
+	and $z_i$ which represents the decrease in the production.
+	We can now add the constraint
+	\begin{align}
+		x_i - {x_{i-1}} & = y_i - z_i \\
+		y_i             & \geq 0      \\
+		z_i             & \geq 0
+	\end{align}
+	and our objective becomes
+	\begin{equation}
+		\min a_1 \sum y_i + a_1 \sum z_i + a_2 \sum s_i
+	\end{equation}
+	which is indeed linear.
+	Moreover, we notice that an optimal solution either has $y_i = 0$ or $z_i = 0$,
+	hence the problem is equivalent to the first one.
+\end{proof}
+
+\end{document}

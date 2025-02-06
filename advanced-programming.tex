@@ -252,11 +252,84 @@ We can fix this by introducing another variable $\delta$ and a constraint $\delt
 moreover we also need to $\max$ is, since, ideally we'd like for $\delta$ to be $> 0$ but, again,
 we are not allowed to have strict inequalities.
 \begin{align}
-	\max \delta & \text{subject to}                                    \\
+	\max \delta & \text{ subject to}                                   \\
 	y(p_i)      & > ax(p_i) + b + \delta \quad \forall i = 1, \dots, m \\
 	y(q_i)      & < ax(q_i) + b + \delta \quad \forall i = 1, \dots, m \\
 	\delta      & \geq 0
 \end{align}
 
+\subsection{Standard form for linear programs}
+\subsubsection{Affine Geometry}
+
+Let $L$ be a linear subspace of $\R^d$.
+Then $A = a + L$ with $a \in \R$ is a shifted linear subspace: we call it an \emph{affine space}.
+
+Firstly we note that $A = a + L = x + L$ $\forall x \in A$: indeed if $x \in A$ then $x-a \in L$,
+then for $y \in a + L$ we have that $y - a - (x - a) \in L$ giving $y \in x + L$.
+
+We also define the \emph{affine hull} of $X \subseteq \R^d$ to be the intersection of all affine
+subspaces containing $X$.
+
+\begin{proposition}{}{}
+	The affine hull of $X \subseteq \R^d$ can be written as
+	\begin{equation}
+		\mathrm{aff. hull}(X) =
+		\left\{ \sum \alpha_i x_i \left| \substack{x_i \in X \\ \sum \alpha_i = 1} \right. \right \}
+	\end{equation}
+\end{proposition}
+\begin{proof}
+	First we prove that the set of affine combinations is included in the affine hull.
+	By definition of affine hull we have $X \subseteq A = x_1 + L$.
+	Moreover
+	\begin{equation}
+		\sum x_i \alpha_i = x_1 + \left(\sum \alpha_i (x_i - x_1)\right) \in x_1 + L = A
+	\end{equation}
+
+	Then we prove that affine hull is included in the set of affine combinations.
+\end{proof}
+
+Now we consider the dimensions of these spaces:
+\begin{itemize}
+	\item $\dim(L) =$ max number of linear independent vectors in $L$.
+	\item $\dim(A) = \dim(L)$.
+	\item $\dim(X) = \dim(\mathrm{aff. hull}(X))$.
+	\item $\dim(\varnothing) = -1$
+\end{itemize}
+take these as definitions.
+
+In particular a point is an affine space with dimension 0, a line has dimension 1,
+a plane has dimension 2, and an hyperplane in $\R^d$ has dimension $d-1$.
+Moreover, note that hyperplanes can be written as
+\begin{equation}
+	\{ x: \R^d \mid a^T x = b \}
+\end{equation}
+
+Observe that affine spaces spaces $A$ of dimensions $k \leq d-1$ are intersections of hyperplanes
+(proof in lecture notes).
+
+We call \emph{halfspace} the set
+\begin{equation}
+	\{x \in \R ^d : a^T x \leq b \}
+\end{equation}
+
+
+\subsubsection{Standard form}
+
+\begin{definition}{Standard form}{lp-standard}
+	Given $A \in \R^{m\cross n}, b \in \R^m, c \in \R^n$
+	a linear program where the variables are $n$ dimensional and there are $m$ constraints
+	can be written as
+	\begin{align}
+		\max c^T x & \text{ subject to} \\
+		Ax \leq    & b                  \\
+		x \in \R^n
+	\end{align}
+\end{definition}
+
+Moreover any LP can be written in this form by adding another constraint when we have equalities,
+flipping the signs of $\geq$ and of the objective function if needed.
+
+We note that this is equivalent to finding an intersection between halpspaces, and when we require
+$Ax = b$ we are instead finding an intersection between hyperplanes.
 
 \end{document}

@@ -1,0 +1,114 @@
+\documentclass[12pt]{extarticle}
+
+\setlength{\headheight}{16pt} % ??? we do what fancyhdr tells us to do  
+
+\title{Mathematical Modelling for ML}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble}
+
+\renewcommand{\vec}[1]{\uvec{#1}}
+
+\begin{document}
+
+\oldfirstpage
+
+\section{Introduction}
+
+Assume our data is of the form $(x_n, y_n)$, where $x \in \R ^d$ and $y \in \R$
+and we want to find a predictor $f_\theta(\cdot): \R^d \to \R$.
+
+To figure out how good our model is we want to find a \emph{loss function} which tells us
+how far is our predicted value from the real one.
+Ideally we'd like to \say{count} the errors we make and use that as our loss function,
+however these functions are usually not differentiable.
+To fix this problem we look for another function which is differentiable and bounds the \say{true}
+loss function, an example is the \emph{square error} (as we saw in statistics).
+Eventually we want to find a model which minimizes the average loss:
+\begin{equation}
+	\argmin_\theta \bm R_\text{emp}(\theta) = \frac{1}{N} \sum_{i = 1}^N \ell(y_i, \hat y_i)
+\end{equation}
+Note that we will use $\theta$ and $w$ interchangeably,
+they both represents the parameters/coefficients/weights of our model.
+
+As we saw in linear regressions, the best estimator for $w$ is
+\begin{equation}
+	\hat w= (W^T W)^{-1} X^T y
+\end{equation}
+However, the Hessian matrix (given by $\laplacian \ell (w) = X^T X$)
+is \emph{positive semi-definite}: this means that the function indeed has a global minimum,
+but it might not be unique.
+If we find more than one minimum we take the one which is closer to the origin:
+in this way we avoid noise as much as possible.
+
+\subsection{Reducing overfitting}
+When we train our model we try to minimize the error against the training set.
+Then we run the model against the test dataset:
+of course we will get a higher loss than on the training set, however we want to check how the model
+behaves when we modify the number of parameters to check for overfitting or underfitting.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./assets/modelling-ml/overfitting-vs-underfitting.jpg}
+	\caption{Graph of the loss function as the number of parameters changes.}
+\end{figure}
+
+To reduce the number of parameters and ensure positive definiteness (i.e. uniqueness of the minimum)
+we can use a \emph{Ridge regression} (see statistics), where we penalize the model based on the
+magnitude of the parameters, this is more numerically stable.
+
+\subsection{Bayes theorem}
+
+\begin{equation}
+	p(\theta \mid x) = \frac{p(x\mid \theta) p(\theta)}{p(x)}
+\end{equation}
+
+Our final goal is to compute the posterior $p(\theta \mid x)$.
+This is hard by itself, however by using the theorem we can separate it in \say{computable}
+chunks: $p(x \mid \theta)$ is the easiest; while the prior $p(\theta)$
+is definitely more \say{guessable}.
+
+Instead of minimizing the negative maximum likelihood estimator
+we minimize the negative log-posterior
+using a technique called \emph{maximum a posteriori} estimation.
+\begin{equation}
+	\argmin_\theta - \log [p(x \mid \theta) p(\theta)]
+\end{equation}
+
+\subsection{Kullback-Leibler divergence}
+
+The definition of the KL divergence is
+\begin{equation}
+	D_{KL}(p,q) = \sum_{x \in X} p(x) \log \frac{p(x)}{q(x)}
+\end{equation}
+This is a way to measure the distance between two functions.
+We can use this to minimize the distance between the given data and some theoretical distribution.
+We can model the empirical data into an actual distribution by considering its histogram:
+this distribution will just be a sum of $\delta$ functions of the observations we had.
+
+\begin{proposition}{Non-negativity of DL-divergence}{dl-non-neg}
+	For all probability measures $p, q$ we have that $D_{KL}(p, q) \geq 0$.
+\end{proposition}
+
+\begin{proof}
+	First invert the sign of the definition:
+	\begin{align}
+		-D_{KL}(p,q)          & = -\sum_{x \in X} p(x) \log \frac{p(x)}{q(x)}   \\
+		                      & = \sum_{x \in X} p(x) \log \frac{q(x)}{p(x)}    \\
+		                      & \leq \log \sum_{x \in X} p(x) \frac{q(x)}{p(x)} \\
+		                      & = \log \sum_{x \in X} q(x)                      \\
+		                      & = \log (1) = 0                                  \\
+		\implies D_{KL}(p, q) & \geq 0
+	\end{align}
+	where we have used Jensen inequality.
+\end{proof}
+
+\subsubsection{KL divergence and MLE}
+
+He proved that they are basically the same thing but
+I think he'll go over this again in the next class.
+
+
+
+\end{document}

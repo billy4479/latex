@@ -160,4 +160,42 @@ if the first order taylor expansion exists and is linear.
 	we have to impose the two equations above.
 \end{proof}
 
+\subsection{Integration}
+
+In this section $U$ will be an open subset of $\C$.
+
+\begin{definition}{Piecewise $C^1$ curve}{piecewise-c1}
+	A function of the form $\gamma: [s, t]: U$ with $U$ and $s \leq t \in \R$
+	is piecewise $C^1$ if for some suitable $s = t_0 < t_1 < \dots < t_N = t$
+	the restriction $\eval{\gamma}_{[t_{j-1}, t_j]}$ is of class $C^1$ for all $j = 1, \dots, N$.
+
+	Moreover, we say $\gamma$ is a \emph{loop} if $\gamma(s) = \gamma(t) = z_0$ and we call $z_0$ the
+	\emph{basepoint} of the loop.
+\end{definition}
+
+\begin{definition}{Line integral}{line-integral}
+	Given a continuous function $f: U \to \C$ and a piecewise $C^1$ curve $\gamma$ in $U$ we define the line
+	integral of $f$ along $\gamma$ as
+	\begin{equation}
+		\int_\gamma f(z) \dd z \coloneq
+		\sum_{j = 1}^N \int_{t_{j-1}}^{t_j} f(\gamma(\tau)) \cdot \gamma'(\tau) \dd{\tau}
+	\end{equation}
+\end{definition}
+
+\begin{proposition}{Reparametrization independence}{reparametrization}
+	Let $\gamma: U \to [s, t]$ and $\varphi: [s, t] \to [s', t']$ strictly increasing and both
+	piecewise $C^1$.
+	Let $\delta = \gamma \circ \varphi$, then, for all $f$ continuous,
+	\begin{equation}
+		\int_\gamma f(z) \dd z = \int_\delta f(z) \dd z
+	\end{equation}
+\end{proposition}
+\begin{proof}
+	This is the result of applying the change of variable formula with $z'= \varphi(z)$
+	together with the chain rule.
+\end{proof}
+
+From now on we will often describe a loop by just its shape and it's orientation, without specifying
+the parametrization or the basepoint, since, as we just saw, the integral does not depend on those.
+
 \end{document}

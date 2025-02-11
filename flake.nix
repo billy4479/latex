@@ -84,34 +84,40 @@
           ]
         );
 
-        nativeBuildInputs =
-          (with pkgs; [
-            texPkgs
-            latex-build.packages.${system}.default
-
-            # `minted` dependencies
-            python3
-            python3Packages.pygments
-            which
-
-            inkscape # `svg` dependencies
-          ])
-          ++ fonts;
-
         OSFONTDIR = "${fontDir}/share/fonts";
         FONTCONFIG_FILE = pkgs.makeFontsConf { fontDirectories = fonts; };
 
-        OUTDIR = "build"; # This is not optimal as it needs to be changed manually in minted and svg preamble
+        OUTDIR = "build"; # This is not optimal as it needs to be changed manually in latex-build.yml
       in
-      {
-        devShells.default = pkgs.mkShell { inherit nativeBuildInputs OSFONTDIR FONTCONFIG_FILE; };
+      rec {
+        devShells.default = pkgs.mkShell {
+          inherit OSFONTDIR FONTCONFIG_FILE;
+          packages = with pkgs; [
+            mupdf-headless
+          ];
+
+          inputsFrom = [ packages.default ];
+        };
         packages = rec {
           document = pkgs.stdenvNoCC.mkDerivation {
             name = "latex-documents";
             src = ./.;
 
-            inherit nativeBuildInputs OSFONTDIR FONTCONFIG_FILE;
+            nativeBuildInputs =
+              (with pkgs; [
+                texPkgs
+                latex-build.packages.${system}.default
 
+                # `minted` dependencies
+                python3
+                python3Packages.pygments
+                which
+
+                inkscape # `svg` dependencies
+              ])
+              ++ fonts;
+
+            inherit OSFONTDIR FONTCONFIG_FILE;
             TEXMFVAR = "./cache/var";
             TEXMFHOME = "./cache";
 

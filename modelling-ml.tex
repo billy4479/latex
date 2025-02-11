@@ -8,7 +8,8 @@
 
 \usepackage{preamble}
 
-\renewcommand{\vec}[1]{\uvec{#1}}
+%\renewcommand{\vec}[1]{\uvec{#1}}
+\renewcommand{\vec}[1]{\bm{#1}}
 
 \begin{document}
 
@@ -109,6 +110,98 @@ this distribution will just be a sum of $\delta$ functions of the observations w
 He proved that they are basically the same thing but
 I think he'll go over this again in the next class.
 
+TODO: FINISH HERE
 
+\section{Perceptron}
+
+This is a model that tries to work similarly to the actual biological neurons.
+The simplest model of a neuron looks like
+\begin{equation}
+	y = \Theta \left(\sum_i w_i x_i - T \right)
+\end{equation}
+where $y \in \{0, 1\}$ is the neuron output (either it fires or it doesn't),
+$\Theta$ is the Heavisde function defined as
+\begin{equation}
+	\Theta(x) = \begin{cases}
+		1 & \text{if } x \geq 0 \\
+		0 & \text{otherwise}
+	\end{cases}
+\end{equation}
+while $w_i$ are called weights and $x_i$ are the outputs of other connected neurons.
+$T$ is the fire threshold.
+
+By changing the weight we can modify the way that neurons fire: this is a phenomenon which happens
+also in biological brains.
+
+Depending on how the neurons are connected to each other we can define \emph{feedforward}
+networks, where each neuron is connected only to some \say{next} ones, and \emph{recurrent} ones,
+where we can have neurons which link back to other neurons, this for example allows for short-term.
+
+\subsection{Learning}
+
+There are multiple way an actor can learn: we can have an unsupervised learning where the actor
+is just trying to make statistical sense of the input;
+we can have reinforced learning where the actor gets a reward for a correct output, this is what
+happens with dopamine in biological brain;
+we can have supervised learning where the actor knows what it wants to achieve and it gets feedback
+on how good or bad it did, for example trying to throw a ball at a target.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./assets/modelling-ml/brain-learning-types.jpg}
+	\caption{Different parts of the brain learn in different modes.}
+\end{figure}
+
+We want our model to be able to classify inputs $\vec x^\mu$ as $y^\mu \in \{0, 1\}$,
+that is, we want to find some weights $\vec w$ such that
+\begin{equation}
+	y^\mu = \Theta(\vec w \cdot \vec x^\mu)
+\end{equation}
+Geometrically, this is equivalent to finding an hyperplane which divides the two sets of inputs.
+
+A simple perceptron is able to solve problems where the inputs are already linearly separable,
+for more complex inputs we will need to add hidden layers, but we will cover this further
+ahead in the course.
+
+\subsubsection{Learning algorithm}
+
+Initialize $t = 0$ and $\vec w_t$.
+Now iterate on $t$: pick a pattern $\mu$, if $\vec w_t$ gives the right output we leave it the same,
+if it doesn't we modify $\vec w_{t+1}$ as follows
+\begin{equation}
+	\vec w_{t + 1} = \begin{cases}
+		\vec w_t + \eta \vec x^\mu & \text{if } y^mu = 1 \\
+		\vec w_t - \eta \vec x^\mu & \text{if } y^mu = 0
+	\end{cases}
+\end{equation}
+where $\eta \in \R$ is the learning rate.
+
+\begin{proposition}{Convergence of the perceptron algorithm}{perceptron-convergence}
+	If there exists an hyperplane which separates the inputs as desired
+	the perceptron algorithm will converge to it.
+\end{proposition}
+
+\begin{proof}
+	Let $\vec z^\mu = (2 y^\mu - 1) \vec x^mu$.
+	We assume that $\exists K : \norm{\vec z^\mu} < K$.
+
+	Then
+	\begin{equation}
+		\vec z^\mu = \begin{cases}
+			\vec x^\mu  & \text{if }y^\mu = 1 \\
+			-\vec x^\mu & \text{if }y^\mu = 0
+		\end{cases}
+	\end{equation}
+	such that $\vec w \cdot \vec z^\mu > 0$.
+
+	We claim that if there exists $\vec w^*$ such that $\norm{\vec w^*} = 1$ and
+	$\vec w^* \cdot \vec z^\mu > \varepsilon$ for all $\mu$ the algorithm will converge.
+
+	The idea of this claim is that we want to find a lower bound for $A_t = \vec w_t \cdot \vec w^*$
+	and an upper bound for $B_t = \norm{\vec w^*}$.
+
+	TODO: see slides
+
+\end{proof}
 
 \end{document}

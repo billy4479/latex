@@ -332,4 +332,148 @@ flipping the signs of $\geq$ and of the objective function if needed.
 We note that this is equivalent to finding an intersection between halpspaces, and when we require
 $Ax = b$ we are instead finding an intersection between hyperplanes.
 
+\subsubsection{Convex geometry}
+
+We define the convex hull of a set $X$ as the intersection of all convex sets containing $X$.
+Moreover we define a convex combination as $\sum \alpha_i x_i$ such that $x_i \in X$ and
+$\sum \alpha_i = 1$.
+
+The convex hull of $X$, i.e. $\mathrm{conv}(X)$ has the following properties:
+\begin{itemize}
+	\item $\mathrm{conv}(X)$ is convex itself
+	\item $\mathrm{conv}(X)$ is the set of convex combinations of elements of $X$, that is
+	      \begin{equation}
+		      \mathrm{conv}(X) =
+		      \left\{ \left.\sum_{i = 1}^k \alpha_i x_i \,\right|\, k \in \N^+ , x_i \in X, \sum_{i = 1}^k \alpha_i = 1 \right\}
+	      \end{equation}
+	\item $\mathrm{conv}(X) \subseteq X$
+	\item For $X$ finite $\mathrm{conv}(X)$ is compact (closed and bounded)
+\end{itemize}
+
+\begin{theorem}{Caratheodory}{caratheodory}
+	Let $X \subseteq \R^n$ and $d = \dim X$.
+	Then
+	\begin{equation}
+		\mathrm{conv}(X) =
+		\left\{ \left.\sum_{i = 1}^{d+1} \alpha_i x_i \,\right|\, x_i \in X, \sum_{i = 1}^k \alpha_i = 1 \right\}
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	We know that there exists $k \in \N^+$ such that the theorem is true, let $k$ be the smallest one.
+	If $k \leq d + 1$ we are done as we can set the remaining coefficients to $0$.
+
+	We will show by contradiction that it is not possible that $k > d + 1$.
+	Let $\{x_1, \dots, x_k\} = X'$: they are affine dependant;
+	then there exists $\beta \neq 0 \in \R^k$ s.t. $\sum \beta_i x_i = 0$ and $\sum \beta_i = 0$.
+
+	We know that for any $x \in X$ we can find $\alpha_i$ such that $x = \sum^k_{i = 1} \alpha_i x_i$.
+	Let $\gamma = \max\{\frac{\alpha_i}{\beta_i} \mid i = 1, \dots, k_i, \beta_i < 0\}$
+	and $\alpha_i' = \alpha_i - \gamma \beta_i$, such that $\alpha_i \geq 0$ and there exists exactly
+	one $i^*$ such that $\alpha_{i^*}' = 0$.
+
+	Note that
+	\begin{equation}
+		\sum \alpha_i' = \underbrace{\sum \alpha_i}_{=1} + \underbrace{\sum \gamma \beta_i}_{= 0} = 1
+	\end{equation}
+	But then $\sum \alpha_i' x_i = x$ since $\sum \beta_i x_i = 0$ and by our choice of $\alpha_i'$
+	we know that $\alpha_{i^*}' = 0$ therefore we can remove the $i^*$-th term of the combination
+	without changing the result.
+	In this way we decreased $k$ by $1$.
+	We can continue iteratively until $k = d+1$.
+\end{proof}
+
+\begin{theorem}{Strong convex separation}{strong-conv-sep}
+	Let $C, D \subseteq \R^d$ be non-empty, convex, closed, and disjoint,
+	moreover $C$ is bounded and therefore compact.
+	Then, there is a hyperplane $\{x \mid a^T x = b\}$ such that
+	$C \subseteq \{ \mid a^T x < b\}$ and $D \subseteq \{ x \mid a^T x > b\}$.
+\end{theorem}
+
+\begin{proof}
+	Find $c \in C, d \in D$ such that $\norm{c-d}$ is minimal.
+	Note that we can do this only if $C$ and $D$ are compact.
+	If $D$ is also compact we are done.
+
+	If $D$ is unbounded we choose $c'\in C, d' \in D$ and $\beta = \norm{c' - d'}$,
+	$\alpha = \mathrm{diam}(C)$ (the diameter of $C$).
+	Then consider the ball $B$ defined as $B = \{x \mid \norm{c' - x} \leq \alpha+\beta\}$.
+	The set $D'= D \cap B$ is now compact and for $x \in C$ and $y \in D$, if $\norm{x - y} \leq \beta$,
+	$y \in D'$:
+	\begin{equation}
+		\norm{c'-y} \leq \norm{c' - x} + \norm{x - y} \leq \alpha + \beta
+	\end{equation}
+	Now we choose $(c, d) = \argmin_{c \in C, d \in D'} \{\norm{c - d}\}$.
+
+	We now choose an hyperplane using the parameters $a, b$:
+	\begin{equation}
+		a \coloneq d - c \quad \text{and} \quad b \coloneq \frac{a^T d - a^T c}{2}
+	\end{equation}
+	then
+	\begin{equation}
+		a^Td - a^T c = a^T a = \norm{a}^2 = \norm{d - c}^2 \geq 0
+		\implies a^T d > a^T c
+	\end{equation}
+
+	Now we want to prove that $\forall x \in C: a^Tx < b$ and $\forall y \in D: a^T y > b$.
+	We show that $a^T x \leq a^T c < b$ and we can do the same procedure over $D$.
+
+	By contradiction assume that $a^Tx > a^Tc$.
+	We have $a^T(x-c)>0$ which means that the angle $d, c, x$ is sharp (acuto) and we can draw
+	a right-angle triangle we can form with $x' \in \mathrm{conv}(\{c, x\})$ and
+	$\norm{x'-d}<\norm{c-d}$, but this contradicts the fact that $c$ is minimal.
+\end{proof}
+
+
+\begin{theorem}{Weak convex separation}{weak-conv-sep}
+	Let $C, D$ be convex and disjoint.
+	Then there is an hyper plane $\{x \mid a^T x= b\}$ such that
+	$C \subseteq \{ \mid a^T x \leq b\}$ and $D \subseteq \{ x \mid a^T x \geq b\}$.
+\end{theorem}
+
+\begin{proof}
+	Consider $\{0\}$ and $S = \{x - y \mid x \in C, y \in D\}$.
+	Let $x - y \in S$ and $x' - y' \in S$, then take their convex combination:
+	\begin{equation}
+		t(x - y) + (1-t)(x'-y') =
+		\underbrace{tx + (1-t)x'}_{\in C} - \underbrace{(ty + (1-t)y')}_{\in D} \in S
+	\end{equation}
+	Now we have a few possible cases:
+	\begin{enumerate}
+		\item $0 \notin \mathrm{cl}(S)$ ($0$ is in the closure of $S$).
+
+		      We apply \cref{thm:strong-conv-sep} to $\{0\}$ and $\mathrm{cl}(S)$.
+		      We have
+		      \begin{equation}
+			      0 = a^T 0 < b , a^T(x-y) \enspace \forall x-y \in S
+			      \implies a^T x > a^T y \enspace \forall x \in C, d \in D
+		      \end{equation}
+
+		\item $0 \in \mathrm{cl}(S)$.
+
+		      Then $0$ is in the boundary of $\mathrm{cl}(S)$.
+		      \begin{enumerate}
+			      \item If $\mathrm{int}(S) = \varnothing$, then $S$ belongs to a hyperplane
+			            $\{x \mid a^T = 0 \}$ which we can use as separator: we have
+			            $a^T x =  a^T y$ for all $x \in C, y \in D$.
+
+			      \item If $\mathrm{int}(S) \neq \varnothing$ we define
+			            $S_{-\varepsilon} = \{s \in S \mid B_\varepsilon(s) \subseteq S\}$
+			            for some $\varepsilon > 0$.
+			            Then $\mathrm{cl}(S_{-\varepsilon})$ is closed, convex and does not contain $0$,
+			            therefore we can apply \cref{thm:strong-conv-sep}
+			            and get some $a_\varepsilon, b_\varepsilon$ such that
+			            $a_\varepsilon^T s > 0$ for all $s \in S_{-\varepsilon}$.
+
+			            Now we normalize $a_\varepsilon$ such that $\norm{a_\varepsilon} = 1$
+			            and choose an infinite sequence $\varepsilon_n$
+			            which converges to $0$ as $n\to\infty$.
+			            Since is bounded ($\norm{a_{\varepsilon_k}} = 1$) the sequence $a_{\varepsilon_n}$
+			            contains a subsequence converging to $a\neq 0$.
+
+			            TODO: FINISH HERE
+		      \end{enumerate}
+	\end{enumerate}
+\end{proof}
+
 \end{document}

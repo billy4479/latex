@@ -2,6 +2,7 @@
 /.ruff_cache
 
 /result
+/tmp
 
 **/_minted-*
 /svg-inkscape/

@@ -198,4 +198,114 @@ In this section $U$ will be an open subset of $\C$.
 From now on we will often describe a loop by just its shape and it's orientation, without specifying
 the parametrization or the basepoint, since, as we just saw, the integral does not depend on those.
 
+\subsubsection{Cauchy integral theorem special form}
+
+TODO: lec 3
+
+\subsubsection{Local primitives}
+
+\begin{definition}{Connected set}{connected-set}
+	A non-empty set $V \subseteq \C$ is connected if
+	$\nexists S_1, S_2 \in V$ open with $S_1, S_2 \neq \varnothing$,
+	$V = S_1 \cup S_2$ and $S_1 \cap S_2 = \varnothing$.
+\end{definition}
+
+We note that a set is connected if and only if given $p, q \in V$ we can find $\gamma: [s, t] \in V$
+continuous such that $\gamma(s) = p$ and $\gamma(t) = q$.
+Moreover, if we have a family of connected sets $V_j$ such that they have a point in common, then
+their union is still connected.
+
+\begin{definition}{Local primitive}{local-primitive}
+	Let $f: U \to \C$ holomorfic and $V \subseteq U$ open and connected.
+	Then $F: V \to \C$ is a local primitive of $f$ on $V$ if
+	\begin{equation}
+		F' = f
+	\end{equation}
+\end{definition}
+
+\begin{proposition}{Uniqueness of local primitives}{uniq-local-prim}
+	Two local primitives $F_1, F_2: V \to \C$ of the same $f$, defined on the same $V \subseteq U$
+	are unique up to a constant.
+\end{proposition}
+
+This is the same behavior we observe for primitives over $\R$.
+
+\begin{proof}
+	Let $H = F_2 - F_1$, we want to prove that $H$ is constant.
+	Let $\lambda \in H(V)$ be one of the values assumed by $H$, then
+	\begin{equation}
+		V = \{ z \in V : H(z) = \lambda \} \cup \{ z \in V : H(z) \neq \lambda \}
+	\end{equation}
+	This is a disjoint union and we claim that the sets are both open, hence, since $V$ is connected,
+	one of the two must be empty.
+	We know that $\{ z \in V : H(z) = \lambda \} \neq \varnothing$ therefore necessarily
+	$\{ z \in V : H(z) \neq \lambda \} = \varnothing$ and $\lambda$ is the only value assumed by $H$.
+
+	Now, $\{ z \in V : H(z) \neq \lambda \}$ is open because it is the preimage of an open set
+	($\C \setminus \lambda$) through a continuous function
+	($H$ is holomorfic and therefore continuous).
+
+	To show that $\{ z \in V : H(z) = \lambda \}$ is open we fix a point $z_0 \in V$ such that
+	$H(z_0) = \lambda$. Since $V$ is open we can find $B_r(z_0) \in V$ and we will show that
+	$H(B_r(z_0)) = \lambda$ which is enough to conclude that $\{ z \in V : H(z) = \lambda \}$ is open.
+	To prove this we use the fact that $H' = f - f = 0$ and viewing it as a function from $\R^2$ to
+	$\R^2$ we get that $DH(z) = 0$ everywhere.
+	Now we consider $z_1 \in B_r(z_0)$ and we let $\gamma: [0,1] \to B_r(z_0)$ be the parametrization
+	of the segment from $z_0$ to $z_1$:
+	\begin{equation}
+		\gamma(t) = H(z_0 + t(z_1 - z_0))
+	\end{equation}
+	and by the chain rule we have that
+	\begin{equation}
+		(H\circ \gamma)'(t) = DH(\gamma(t)) [\gamma'(t)] = 0
+	\end{equation}
+	Thus $H \circ \gamma: [0, 1] \to \R^2$ is a function with zero derivative at each point,
+	which means that
+	\begin{equation}
+		H(z_1) = H(\gamma(1)) = H(\gamma(0)) = H(z_0) = \lambda
+	\end{equation}
+	as desired.
+\end{proof}
+
+\begin{proposition}{Fundamental theorem of calculus for curves}{fundamental-curves}
+	Given a local primitive $F: V \to \C$ of $f$ and a piecewise $C^1$ curve $\gamma: [s, t] \to V$
+	we have
+	\begin{equation}
+		\int_\gamma f(z) \dd z = F(\gamma(t)) - F(\gamma(s))
+	\end{equation}
+\end{proposition}
+
+\begin{proof}
+	Let $s = t_0 < t_1 < \dots < t_N = t$ such that the restriction $\eval{\gamma}_{[t_{j-1}, t_j]}$
+	is $C^1$ for all $j = 1, \dots, N$.
+	The usual proof of the chain rule gives us that
+	\begin{equation}
+		\dv{\tau} (F\circ \gamma)(\tau) = F'(\gamma(\tau)) \cdot \gamma'(\tau)
+	\end{equation}
+	where the lat $\cdot$ is the product of complex numbers.
+
+	Since $F' = f$ we get
+	\begin{align}
+		\int_\gamma f(z) \dd z
+		 & = \sum^N_{j = 1} \int^{t_j}_{t_{j-1}} f(\gamma(\tau)) \cdot \gamma'(\tau) \dd \tau  \\
+		 & = \sum^N_{j = 1} \int^{t_j}_{t_{j-1}} F'(\gamma(\tau)) \cdot \gamma'(\tau) \dd \tau \\
+		 & = \sum^N_{j = 1} \int^{t_j}_{t_{j-1}} (F\circ \gamma)'(\tau) \dd \tau               \\
+		 & = \sum^N_{j = 1} [F \circ \gamma(t_j) - F \circ \gamma(t_{j-1})]                    \\
+		 & = F \circ \gamma(t) - F \circ \gamma(s)
+	\end{align}
+	where we have used the fundamental theorem of calculus and
+	the fact that the last sum is telescopic.
+\end{proof}
+
+\begin{corollary}{}{}
+	If a local primitive $F: V \to \C$ exists and $\gamma: [s, t] \to V$ is a piecewise $C^1$ loop
+	we have
+	\begin{equation}
+		\int_\gamma f(z) \dd z = 0
+	\end{equation}
+\end{corollary}
+\begin{proof}
+	Follows from the proposition since $F(\gamma(t)) = F(\gamma(s))$.
+\end{proof}
+
 \end{document}

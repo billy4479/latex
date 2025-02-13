@@ -7,6 +7,7 @@
 \date{a.y. 2024/2025}
 
 \usepackage{preamble}
+\usepackage{preamble_svg}
 %\usepackage{preamble_code}
 
 \renewcommand{\vec}[1]{\uvec{#1}}
@@ -258,8 +259,8 @@ we are not allowed to have strict inequalities.
 	\delta      & \geq 0
 \end{align}
 
-\subsection{Standard form for linear programs}
-\subsubsection{Affine Geometry}
+\subsection{Affine and convex geometry}
+\subsubsection{Affinity}
 
 Let $L$ be a linear subspace of $\R^d$.
 Then $A = a + L$ with $a \in \R$ is a shifted linear subspace: we call it an \emph{affine space}.
@@ -312,27 +313,7 @@ We call \emph{halfspace} the set
 	\{x \in \R ^d : a^T x \leq b \}
 \end{equation}
 
-
-\subsubsection{Standard form}
-
-\begin{definition}{Standard form}{lp-standard}
-	Given $A \in \R^{m\cross n}, b \in \R^m, c \in \R^n$
-	a linear program where the variables are $n$ dimensional and there are $m$ constraints
-	can be written as
-	\begin{align}
-		\max c^T x & \text{ subject to} \\
-		Ax \leq    & b                  \\
-		x \in \R^n
-	\end{align}
-\end{definition}
-
-Moreover any LP can be written in this form by adding another constraint when we have equalities,
-flipping the signs of $\geq$ and of the objective function if needed.
-
-We note that this is equivalent to finding an intersection between halpspaces, and when we require
-$Ax = b$ we are instead finding an intersection between hyperplanes.
-
-\subsubsection{Convex geometry}
+\subsubsection{Convexity}
 
 We define the convex hull of a set $X$ as the intersection of all convex sets containing $X$.
 Moreover we define a convex combination as $\sum \alpha_i x_i$ such that $x_i \in X$ and
@@ -471,9 +452,141 @@ The convex hull of $X$, i.e. $\mathrm{conv}(X)$ has the following properties:
 			            Since is bounded ($\norm{a_{\varepsilon_k}} = 1$) the sequence $a_{\varepsilon_n}$
 			            contains a subsequence converging to $a\neq 0$.
 
-			            TODO: FINISH HERE
+			            Since $a_{\varepsilon_k}^T s > 0$ for all $s \in S$ and for all $k$, we have
+			            $a^T s > 0$ for all $s \in \mathrm{int}$ and $a^T s \geq 0$ for all $s \in S$.
 		      \end{enumerate}
 	\end{enumerate}
+	Therefore we have proven that $a^Ts \geq 0 \implies a^T(x-y) \geq 0$ which gives the result of
+	$a^T x \geq a^T y$.
 \end{proof}
+
+\subsection{Duality}
+
+\begin{definition}{Standard form}{lp-standard}
+	Given $A \in \R^{m\cross n}, b \in \R^m, c \in \R^n$
+	a linear program where the variables are $n$ dimensional and there are $m$ constraints
+	can be written as
+	\begin{align}
+		\max c^T x & \text{ subject to} \\
+		Ax \leq    & b                  \\
+		x \in \R^n
+	\end{align}
+\end{definition}
+
+Moreover any LP can be written in this form by adding another constraint when we have equalities,
+flipping the signs of $\geq$ and of the objective function if needed.
+We note that this is equivalent to finding an intersection between halpspaces, and when we require
+$Ax = b$ we are instead finding an intersection between hyperplanes.
+
+We now want to find a bound for the objective function, that is $h$ such that $c^T x \leq h$.
+To do so we look for a vector $d$ such that $d_i \geq c_i$ and $h$ as small as possible.
+To find such $d$ we take the constraints of the original problem and
+take linear combinations of them: let $y$ be a vector in $\R^m$
+(where $m$ is the number of contraints we have) and we take $y_i$ times the $i$-th constraint;
+then $d_i = \sum_{j} A_{ji} y_j$.
+
+\begin{definition}{Dual of a LP}{dual}
+	In general, for a given LP in standard form (\cref{def:lp-standard}) called primal
+	we can write its \emph{dual} (where $A, c, b$ are the same as primal):
+	\begin{align}
+		\min b^T x & \text{ subject to} \\
+		A^T y =    & c                  \\
+		y \geq 0
+	\end{align}
+\end{definition}
+
+\subsubsection{Weak duality}
+
+\begin{theorem}{Weak duality}{weak-duality}
+	Given an LP (P) and its dual (D), for each $x$ feasible to (P) and each $y$ feasible to (D)
+	we have $c^T x \leq b^y$.
+\end{theorem}
+
+\begin{proof}
+	\begin{equation}
+		c^T x = (A^T y)^T x = y^T A x \leq y^T b
+	\end{equation}
+	Where the first equality is due to $A^T y = c$ (TODO: why??) and the last inequality is because
+	$Ax \leq b$ and $y \geq 0$.
+\end{proof}
+
+\begin{corollary}{}{}
+	If (P) is unbounded then (D) in infeasible and viceversa.
+\end{corollary}
+
+\subsubsection{Farkas lemma}
+
+\begin{definition}{Convex cone}{convex-cone}
+	A set $C \subseteq \R^n$ is a convex cone if for all $x, y \in C$ and $\lambda, \mu \in \R^+$
+	we have $\mu x + \lambda y \in C$.
+\end{definition}
+
+We call $\mathrm{cone}(X)$ the smallest cone containing $X$.
+
+We now state some facts about convex cones without proof.
+
+\begin{proposition}{Facts about convex cones}{facts-cones}
+	The following facts are true for any convex cone:
+	\begin{enumerate}[label=\roman*.]
+		\item Every cone contains $0$;
+		\item The smallest cone containing $X$ is
+		      \begin{equation}
+			      \mathrm{cone}(X) =
+			      \left\{ \sum^k_{i = 1} \lambda_i x_i \mid k \in N^+, x_i \in X, \lambda_i \geq 0 \right\}
+		      \end{equation}
+		\item If $\abs{X}$ is finite then $\mathrm{cone}(X)$ is closed.
+	\end{enumerate}
+\end{proposition}
+
+\begin{figure}[h!]
+	\centering
+	\includesvg[width=0.3\textwidth]{./assets/advanced-programming/convex-cone.svg}
+	\caption{Two convex cones: the red one consists of all points such that $\mu x + \lambda y$.
+		The curves on the top-right edge represent the region continues infinitely.}
+\end{figure}
+
+\begin{theorem}{Farkas lemma}{farkas}
+	Let $a_1, \dots, a_n, b \in \R^m$ and $A = \{a_1, \dots, a_n\} \subset \R^m$.
+	Then exactly one of the following cases occurs:
+	\begin{enumerate}[label=\roman*.]
+		\item $b \in \mathrm{cone}(A)$;
+		\item There is a hyperplane passing through $0$ of the form $h = \{x \in \R^m \mid y^Tx = 0\}$
+		      such that $\mathrm{cone}(A)$ is one one side of the cone
+		      (i.e. $y^T a_i \geq 0$ for all $i = 1, \dots, n$) and $b$ lies on the othe side
+		      (i.e $y^T b < 0$).
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	First note that i. and ii. cannot hold at the same time, since i. implies that $y^T b \geq 0$
+	but ii. implies the opposite, therefore we just need to prove that
+	if i. is false then ii. is true.
+
+	Let $C = \mathrm{cone}(A)$ and assume that $b \notin C$.
+	Let $D = \{b\}$ then $D$ is compact, $C$ is closed by \cref{prop:facts-cones} and they are both
+	convex, therefore we can apply \cref{thm:strong-conv-sep} to find a hyperplane
+	$h' = \{ x \in \R^m \mid y^T x = \gamma\}$ such that $y^T b < \gamma$ and $y^T c > \gamma$
+	for all $c \in C$. Note that since $0 \in C$ we have that $\gamma < 0$.
+
+	Now choose $h = \{ x \in \R^m \mid y^T x = 0\}$, then $0 \in h$, $y^T b < \gamma < 0$.
+	TODO: finish here
+\end{proof}
+
+
+\subsubsection{Strong duality}
+
+\begin{theorem}{Strong duality}{strong-duality}
+	Given a LP (P) and its dual (D) (as in \cref{def:lp-standard} and \cref{def:dual})
+	exactly one of the following cases occurs:
+	\begin{enumerate}[label=\roman*.]
+		\item Both (P) and (D) are infeasible;
+		\item (P) is unbounded and (D) is infeasible;
+		\item (D) is unbounded and (P) is infeasible;
+		\item Both (P) and (D) have a feasible solution, then the optimal solutions $x^*$ of (P)
+		      and $y^*$ of (D) both exists and are such that $c^T x = b^T y$.
+	\end{enumerate}
+\end{theorem}
+
+
 
 \end{document}

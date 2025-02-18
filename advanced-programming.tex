@@ -10,7 +10,7 @@
 \usepackage{preamble_svg}
 %\usepackage{preamble_code}
 
-\renewcommand{\vec}[1]{\uvec{#1}}
+\renewcommand{\vec}[1]{\bm{#1}}
 
 \begin{document}
 
@@ -602,6 +602,167 @@ We now state some facts about convex cones without proof.
 	\end{enumerate}
 \end{theorem}
 
+\section{Convex optimization}
 
+\begin{definition}{Convex function}{convex-fn}
+	Let $\mathcal D \subseteq \R^d$ convex and $f: \mathcal D \to \R$.
+	Then $f$ is convex if for all $x, y \in \mathcal D$ and $\alpha \in [0, 1]$ we have
+	\begin{equation}
+		f(\alpha x + \overline{\alpha} y) \leq \alpha f(x) + \overline \alpha f(y)
+	\end{equation}
+	where $\overline \alpha = (1-\alpha)$.
+\end{definition}
+
+As we know that a differentiable $f$ is convex if and only if its domain is convex and
+\begin{equation}
+	f(y) \geq f(x) + \grad f(x)^T(y-x)
+\end{equation}
+that is, its first order approximation is smaller than the value itself.
+This is quite useful because it tells us that if $\grad f(x) = 0$ we have found a local minimum.
+
+
+\begin{definition}{Convex program}{convex-program}
+	Let $\mathcal D \subseteq \R^n$ convex and $f_0, f_1, \dots, f_m, h_1, \dots, h_p: \mathcal D \to \R$
+	be convex functions.
+	The following minimization problem is a convex program in standard form:
+	\begin{align}
+		\min f_0(x)         &                              \\
+		\text{s.t. }	f_i(x) & \leq 0 \quad i = 1, \dots, m \\
+		h_i(x)              & = 0    \quad i = 1, \dots, p
+	\end{align}
+\end{definition}
+
+\begin{definition}{Lagrangian}{lagrangian}
+	A function $L: (\mathcal D \cross \R^m \cross \R^p) \to \R$ is the lagrangian of a convex
+	program if
+	\begin{equation}
+		L(x, \lambda, \nu) = f_0(x) + \sum_{i = 1}^m \lambda_i f_i(x) + \sum_{i = 1}^p \nu_i h_i(x)
+	\end{equation}
+	where $\lambda_i, \nu_i$ are called \emph{lagrangian multipliers}, while
+	the vectors $\vec \lambda, \vec \nu$ are called \emph{dual variables}.
+\end{definition}
+
+Using the lagrangian we can express the primal as
+\begin{equation}
+	p^* = \inf_{x \in \mathcal D} \sup_{\substack{\lambda \geq 0 \\ \nu}} L(x, \lambda, \nu)
+\end{equation}
+and the dual as
+\begin{equation}
+	q^* = \sup_{\substack{\lambda \geq 0 \\ \nu}} \inf_{x \in \mathcal D} L(x, \lambda, \nu)
+\end{equation}
+
+TODO: weak duality holds, see lecture 7.
+
+However strong duality does not: in fact we can construct a counter example where
+the optimal solutions exist and do not coincide.
+Consider the following program over the domain $\mathcal D = \{(x, y) \mid y \geq 0 \}$
+\begin{align}
+	\min e^{-x} & \\
+	\text{s.t. }	\frac{x^2}{y} \leq 0
+\end{align}
+We have that the optimal objective value is $e^0 = 1 = p^*$ with $x^* = 0$.
+The lagrangian is $L(x, y, \lambda) = e^{-x} + \lambda \frac{x^2}{y}$
+and the dual function is $g(\lambda) = \inf_{x, y \gt 0} (e^{-x} + \lambda x^2/y)$
+which is $0$ if $\lambda \geq 0$ and $-\infty$ if $\lambda < 0$.
+Then the solution to the dual is $\max_{\lambda \geq 0} g(\lambda) = 0 = d^*$
+and $p^* \neq d^*$.
+
+We want to find another condition to add to the strong duality theorem for it to hold
+even in convex programs.
+
+\subsection{Slater's contraints}
+
+\begin{theorem}{Slater's theorem}{slaters}
+	Consider the following convex program
+	\begin{align}
+		\min f_0(x)         &                              \\
+		\text{s.t. }	f_i(x) & \leq 0 \quad i = 1, \dots, m \\
+		A x                 & = b
+	\end{align}
+	such that $x \in \mathrm{int}(\mathcal D)$ and $f_i \lt 0$ for all $i = 1, \dots, m$ where
+	$f_i$ is not affine.
+	Note that all the $h_i$ are affine and can therefore be summarized as a matrix.
+
+	Then strong duality holds.
+\end{theorem}
+
+Note that these conditions these are not the only conditions for strong duality to hold, we will
+discuss more in the future.
+Moreover, Slanter's conditions ensure that an optimal solution exists.
+These conditions are automatically satisfied by linear programs.
+
+\begin{proof}
+	Consider the following sets:
+	\begin{align}
+		\mathcal G & = \{ (f_0(x), f_1(x), \dots, f_m(x), h_1(x), \dots, h_p(x)) \mid x \in \mathcal D\} \\
+		\mathcal A & = \left\{ (u, v, t) \mid \exists x \in \mathcal D \text{ s.t. }
+		\substack{f_i(x) \leq u_i \enspace \forall i = 1, \dots, m                                       \\
+		h_i(x) = v_i \enspace \forall i = 1, \dots, p                                                    \\
+			f_0(x) \leq t
+		} \right\}
+	\end{align}
+
+	Then we can write the optimal solution for the primal equivalently as
+	\begin{align}
+		p^* & = \inf \{ t \mid (u, v, t) \in \mathcal G, u \leq 0, v = 0\} \\
+		    & = \inf \{ t \mid (0, 0, t) \in \mathcal A\}
+	\end{align}
+	We can also write the dual function as
+	\begin{align}
+		g(\lambda, \nu) & = \inf \{(\lambda, \nu, 1)^T(u, v, t) \mid (u, v, t) \in \mathcal G \} \\
+		                & = \inf \{(\lambda, \nu, 1)^T(u, v, t) \mid (u, v, t) \in \mathcal A \}
+	\end{align}
+	where we notice that $(\lambda, \nu, 1)^T(u, v, t)$ is the lagrangian.
+
+	The next step is to prove that $\mathcal A$ is convex.
+	To do so we consider $(u, v, t) = x, (u', v', t') = x' \in \mathcal A$
+	and $\tau \in [0, 1]$.
+	We want to show that $\overline x = \tau (u, v, t) + \overline \tau(u', v', t') \in \mathcal A$.
+	\begin{align}
+		f_0(\overline x) & \leq \tau t + \overline \tau t     & \text{by convexity of } f_0 \\
+		f_i(\overline x) & \leq \tau u_i + \overline \tau u_i & \text{by convexity of } f_i \\
+		h_i(\overline x) & \leq \tau v_i + \overline \tau v_i & \text{by affinity of } h_i
+	\end{align}
+	therefore $\overline x \in \mathcal A$.
+
+	Now we are ready to prove the actual theorem.
+	We assume $\mathrm{rank}(A) = p$ (otherwise we remove the redundant constraints).
+	If $p^* = -\infty$ by weak duality also $d^* = -\infty$, hence we just need to consider the cases
+	where $p^*$ is finite.
+	Let us define another set
+	\begin{equation}
+		\mathcal B = \{(0,0,s) \in \R^m \cross \R^n \cross \R \mid s < p^* \}
+	\end{equation}
+	then $\mathcal A \cap \mathcal B = \varnothing$ since otherwise it would imply that
+	there exists a feasible $x \in \mathcal D$ and $f_0(x) = t < p^*$ which contradicts the fact that
+	$p^*$ is optimal.
+
+	Since they are both convex we use \cref{thm:weak-conv-sep} to find a hyperplane
+	$h = \{(u, v, t) \mid (\overline \lambda, \overline \nu, \mu)^T (u, v, t) = \alpha \}$
+	such that
+	\begin{align}
+		\overline \lambda^T u + \overline \nu^T v + \mu t & \geq \alpha \quad \forall (u, v, t) \in \mathcal A \\
+		\overline \lambda^T u + \overline \nu^T v + \mu t & \leq \alpha \quad \forall (u, v, t) \in \mathcal B
+	\end{align}
+	then for every $x \in \mathcal D$ we have
+	\begin{equation}
+		\sum_{i = 1}^m \lambda_i f_i(x) + \overline \nu^T(Ax - b) + \mu f_0(x) \geq \alpha \geq \overline \mu p^*
+	\end{equation}
+	which is very similar to the lagrangian with an extra $\mu$ term.
+
+	Now we consider two cases based on $\mu$:
+	\begin{enumerate}[label=\roman*.]
+		\item $\mu > 0$. We divide everything by $\mu$ to get the lagrangian
+		      \begin{equation}
+			      L(x, \lambda, \nu) =
+			      L\left( x, \frac{\overline \lambda}{\mu}, \frac{\overline \nu}{\mu} \right)
+			      \geq p^*
+		      \end{equation}
+		      which means $g(\lambda, \nu) \geq p^*$ and since $g(\lambda, \nu)\leq p^*$ already holds
+		      by weal duality we conclude that $g(\lambda, \nu) = p^*$ and $(\lambda, \nu)$ is the
+		      optimal solution to the dual.
+		\item $\mu = 0$.
+	\end{enumerate}
+\end{proof}
 
 \end{document}

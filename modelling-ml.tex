@@ -199,9 +199,82 @@ where $\eta \in \R$ is the learning rate.
 
 	The idea of this claim is that we want to find a lower bound for $A_t = \vec w_t \cdot \vec w^*$
 	and an upper bound for $B_t = \norm{\vec w^*}$.
+	Assume there exists a $\mu$ such that such $\vec w^*$ exists and $\vec w_t \cdot \vec z^\mu <0$,
+	now we do the $t+1$ modification.
 
-	TODO: see slides
-
+	TODO: finish here
 \end{proof}
+
+\subsubsection{Capacity of a perceptron}
+Given a set of $p$ associations $\vec x^\mu \to y^\mu$ what is the probability to find
+a weight vector that correctly classifies all input patterns?
+
+We know perceptrons can only work for patterns which are separable by an hyperplane.
+Therefore our task is to find the probability that our inputs can be separated by a hyperplane.
+
+We solve this problem geometrically, by finding the number of dichotomies of the input (that is,
+what are the possible ways we can color the inputs with two colors).
+In particular we look for \emph{linear dichotomies}, which are the patterns in which we can separate
+the two colors with an hyperplane.
+
+\begin{proposition}{Probability of finding a linear dichotomy}{prob-lin-dichotomy}
+	The probability of finding a linear dichotomy in a set of $p$ points in $N$ dimensions is
+	\begin{equation}
+		P = \frac{1}{2^{p-1}} \sum_{k = 0}^{N -1} \binom{p-1}{k}
+		\label{eq:prob-lin-dichotomy}
+	\end{equation}
+\end{proposition}
+
+\begin{proof}
+	Let $C(p, N)$ be our goal function which counts the number of linear dichotomies of $p$ points
+	in $N$ dimensions.
+
+	We know that the total number of dichotomies is $2^p$, which means that the probability of finding
+	a linear dichotomy is
+	\begin{equation}
+		P = \frac{C(p, N)}{2^p}
+	\end{equation}
+
+	Suppose we know $C(p, N)$ and we add another point: we want to compute $C(p + 1, N)$.
+	To do so we count the ways we can move the separating hyperplane without changing the output
+	of the other $p$ points, but this is equivalent to counting the linear dichotomies where
+	the separating hyperplane goes through a particular point.
+	Since now we are constraint by passing through a point the number of dimensions
+	is reduced to $N-1$, therefore we conclude that
+	\begin{equation}
+		C(p+1, N) = C(p, N) + C(p, N-1)
+	\end{equation}
+
+	Now we check that \cref{eq:prob-lin-dichotomy} is correct.
+	Recall the way we construct Pascal's triangle: there holds that
+	\begin{equation}
+		\binom{p}{k} = \binom{p-1}{k} + \binom{p-1}{k-1}
+	\end{equation}
+	We know that $C(1, N) = 2$ and since $\binom{0}{0} = 1$ we have $C(1, N) = 2 \binom{0}{0}$.
+	Then
+	\begin{align}
+		C(p+1, N) & = 2 \sum_{k = 1}^{N-1} \binom{p}{k}                                           \\
+		          & = 2 \sum_{k = 1}^{N-1} \binom{p-1}{k} + 2 \sum_{k = 1}^{N-1} \binom{p-1}{k-1} \\
+		          & = C(p, N) + 2 \sum_{k = 1}^{N-2} \binom{p-1}{k}                               \\
+		          & = C(p, N) + C(p, N-1)
+	\end{align}
+	where we have shifted the sum by one in the third step.
+\end{proof}
+
+We can study what happens in the limit:
+\begin{itemize}
+	\item $p \leq N \implies P = 1$;
+	\item $N \leq p \leq 2N \implies P \to 1$ as $N \to \infty$;
+	\item $p = 2N \implies P = 0.5$
+	\item $p > 2N \implies P \to 0$ as $N\to \infty$.
+\end{itemize}
+We notice that we have a very sharp bound at $p = 2N$ which separates the cases where $P = 0$ and
+the ones where $P = 1$. We call $p = 2N$ the \emph{capacity} of the perceptron.
+
+\subsubsection{Continuous perceptron}
+If $y^\mu$ is a continuous variable, instead of being in $\{0, 1\}$, we need to define a cost
+function $\phi$ such that
+
+NEXT CLASS!
 
 \end{document}

@@ -651,6 +651,15 @@ and the dual as
 	q^* = \sup_{\substack{\lambda \geq 0 \\ \nu}} \inf_{x \in \mathcal D} L(x, \lambda, \nu)
 \end{equation}
 
+\begin{definition}{Lagrangian dual}{lagrangian-dual}
+	The lagrangian dual problem (or just dual) of a convex optimization problem is defined as
+	\begin{align}
+		\max_{\lambda, \nu} \left(\inf_{x\in \mathcal D} L(x, \lambda, \nu) \right) &        \\
+		\text{s.t. }	\lambda                                                        & \geq 0
+	\end{align}
+	where $L$ is the lagrangian of the primal as defined in \cref{def:lagrangian}.
+\end{definition}
+
 TODO: weak duality holds, see lecture 7.
 
 However strong duality does not: in fact we can construct a counter example where
@@ -670,7 +679,7 @@ and $p^* \neq d^*$.
 We want to find another condition to add to the strong duality theorem for it to hold
 even in convex programs.
 
-\subsection{Slater's contraints}
+\subsection{Slater's constraints}
 
 \begin{theorem}{Slater's theorem}{slaters}
 	Consider the following convex program
@@ -683,7 +692,7 @@ even in convex programs.
 	$f_i$ is not affine.
 	Note that all the $h_i$ are affine and can therefore be summarized as a matrix.
 
-	Then strong duality holds.
+	Then strong duality holds (cf. \cref{thm:strong-duality}).
 \end{theorem}
 
 Note that these conditions these are not the only conditions for strong duality to hold, we will
@@ -747,6 +756,7 @@ These conditions are automatically satisfied by linear programs.
 	then for every $x \in \mathcal D$ we have
 	\begin{equation}
 		\sum_{i = 1}^m \lambda_i f_i(x) + \overline \nu^T(Ax - b) + \mu f_0(x) \geq \alpha \geq \overline \mu p^*
+		\label{eq:weird-lagrangian}
 	\end{equation}
 	which is very similar to the lagrangian with an extra $\mu$ term.
 
@@ -762,7 +772,112 @@ These conditions are automatically satisfied by linear programs.
 		      by weal duality we conclude that $g(\lambda, \nu) = p^*$ and $(\lambda, \nu)$ is the
 		      optimal solution to the dual.
 		\item $\mu = 0$.
+		      The idea is that we have that
+		      $h = \{(u, v, t) \mid (\overline \lambda, \overline \nu, 0)^T (u, v, t) = \alpha \}$
+		      which means that the plane is vertical since it does not depend on $t$.
+
+		      If we substitute $\mu = 0$ in \cref{eq:weird-lagrangian} we get
+		      \begin{equation}
+			      \sum_{i = 1}^m \lambda_i f_i(x) + \overline \nu^T(Ax - b)  \geq 0
+		      \end{equation}
+		      Now we apply feasibility, that is $Ax - b = 0$, to get
+		      \begin{equation}
+			      \sum_{i = 1}^m \lambda_i f_i(x) \geq 0
+		      \end{equation}
+		      but by Slater's conditions we have that $f_i(\overline x) < 0$,
+		      therefore $\overline \lambda = 0$.
+
+		      Then our hyperplane, which is defined by $(\overline \lambda, \overline \nu, \mu)$, needs
+		      to be $\neq 0$, since $0$ does not define an hyperplane: necessarily we have that
+		      $\overline \nu \neq 0$.
+
+		      From before we know that $\overline \nu^T (Ax - b) = 0$ which fives us two cases:
+		      \begin{itemize}
+			      \item If $\overline \nu^T A \neq 0$ then there exists $x \in \mathcal D$ such that
+			            $\overline \nu^T(Ax - b) < 0$;
+			      \item If $\overline \nu^T A = 0$ then $A$ has some linearly dependent rows.
+		      \end{itemize}
+		      In both cases we have reached a contradiction, therefore $\mu$ cannot be $0$.
+		      \qedhere
 	\end{enumerate}
+\end{proof}
+
+\begin{example}{Least squares}{least-squares}
+	Write the dual of the following convex problem:
+	\begin{align}
+		\min x^T x       &     \\
+		\text{s.t. }	A x & = b
+	\end{align}
+\end{example}
+
+\begin{proof}[Solution]
+	The lagrangian is
+	\begin{equation}
+		L(x, \nu) = x^T x + \nu^T (Ax - b)
+	\end{equation}
+	(notice we do not have $\lambda$.)
+	Now we want to minimize the lagrangian w.r.t. $x$: since it is differentiable we can solve
+	$\grad_x L(x, \nu) = 0$, that is
+	\begin{equation}
+		2x + A^T \nu = 0 \implies x = - \frac{A^T \nu}{2}
+	\end{equation}
+	then the dual can be written as
+	\begin{equation}
+		\max_{\nu} \left(-\frac{1}{4}\right) \nu^T A A^T \nu - b^T \nu
+	\end{equation}
+\end{proof}
+
+\subsection{KKT Conditions}
+In linear programming we had some ways to check whether a solution was optimal.
+In convex programming we have something similar.
+
+\begin{theorem}{KKT}{kkt-cond}
+	Consider a convex problem as in \cref{def:convex-program} where $f_0, f_1, \dots, f_m, h_1, \dots, h_p$
+	are differentiable.
+	Let $x^*$ be a solution to the primal and $(\lambda^*, \nu^*)$ a solution to the dual.
+	Then $x^*$ and $(\lambda^*, \nu^*)$ are optimal and $d^* = p^*$ if and only if all the following
+	conditions are true:
+	\begin{enumerate}[label=(\roman*.)]
+		\item $f_i(x^*) \leq 0 \enspace \forall i = 1, \dots, m$
+		\item $h_i(x^*) = 0 \enspace \forall i = 1, \dots, p$
+		\item $\lambda_i^* \geq 0 \enspace \forall i = 1, \dots, m$
+		\item $\lambda^*_i f_i(x^*) = 0 \enspace \forall i = 1, \dots, m$
+		\item $\grad f_0(x^*) + \sum \lambda_i^* \grad f_i(x^*) + \sum \nu_i^* \grad h_i(x^*) = 0$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	We prove each implication separately.
+	\begin{description}
+		\item[Optimality implies KKT conditions]
+		      Conditions (i.), (ii.), and (iii.) are true since they are implied
+		      by the feasibility of the primal and the dual.
+
+		      To show (iv.) and (v.) we use the fact that we have optimal solutions:
+		      \begin{align}
+			      f_0(x^*) & = g(\lambda^*, \nu^*)                                                                                            \\
+			               & = \inf_{x} f_0(x) + \sum \lambda_i^* f_i(x) + \sum \nu_i^* h_i(x)                                                \\
+			               & \cancelto{=}{\leq} f_0(x^*) + \cancelto{\leq 0}{\sum \lambda_i^* f_i(x^*)} + \cancelto{0}{\sum \nu_i^* h_i(x^*)} \\
+			               & \cancelto{=}{\leq} f_0(x^*)
+		      \end{align}
+		      where we put $=$ instead of $\leq$ since $x^*$ is minimizer of the lagrangian and
+		      the last equality holds because (by feasibility) we have that $\lambda_i^* \geq 0$
+		      and $f_i(x^*) \leq 0$.
+		      This proves (v.) and (iv.) comes from the fact that $\sum \lambda_i^* f_i(x^*) = 0$
+		      and every term is non-positive.
+		\item[KKT conditions imply optimality]
+		      Conditions (i.), (ii.) and (iii.) imply feasibility of the primal and the dual.
+
+		      Since $\lambda_i \geq 0$, $L$ is the sum of convex functions so it is also convex.
+		      Moreover, we use (v.), which tells us that $x^*$ is a minimizer, to write
+		      \begin{align}
+			      g(\lambda^*, \nu^*) & = L(x^*, \lambda^*, \nu^*)                                                                   \\
+			                          & = f_0(x^*) + \cancelto{= 0}{\sum \lambda_i^* f_i(x^*)} + \cancelto{0}{\sum \nu_i^* h_i(x^*)} \\
+			                          & = f_0(x^*)
+		      \end{align}
+		      where we cancelled the first term using (iv.) and the second one by feasibility.
+		      \qedhere
+	\end{description}
 \end{proof}
 
 \end{document}

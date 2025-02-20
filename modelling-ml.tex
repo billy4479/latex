@@ -107,10 +107,115 @@ this distribution will just be a sum of $\delta$ functions of the observations w
 
 \subsubsection{KL divergence and MLE}
 
-He proved that they are basically the same thing but
-I think he'll go over this again in the next class.
+We can use this distance in order to \say{fit} a model to some data:
+we set $P$ to be the distribution of the empirical data, defined as
+\begin{equation}
+	P(x) = \frac{1}{M} \sum^M_{\mu = 1} \delta(\vec x, \vec x^\mu)
+\end{equation}
+and $Q_\theta(x)$ be the approximating probability distribution.
 
-TODO: FINISH HERE
+Then, with some algebra, we can prove that minimizing the KL divergence is equivalent to minimizing
+the MLE.
+
+\section{Dimensionality reduction}
+
+Many times we need to analyze very high dimensional data: this is usually very hard to analyze,
+almost impossible to visualize and storing it can be expensive.
+We want to project our high dimensional data onto a lower dimensional space, however we want to do
+this in a smart way, such that we lose the least information possible.
+
+\subsection{The setting}
+
+We will use a linear setting for simplicity.
+
+Our setup is defined as a dataset $\vec X = \{ \vec x_1, \dots, \vec x_N\}$
+with each $\vec x_i \in \R^D$, also assume that they are i.i.d. and with mean $0$.
+Then define the \emph{data covariance matrix} as
+\begin{equation}
+	S = \frac{1}{M} \sum_{i = 1}^N \vec x_i \vec x_i^T
+\end{equation}
+
+We will want to project to a space of dimension $M$. If we assume $M = D$, then we can have
+an invertible matrix $B$ that projects $\bm X$ onto $\R^M$ and $B^{-1}$ which does the opposite
+without any error.
+
+However, $M < B$, therefore $B$ is not a square matrix hence not invertible.
+Our goal is to find a matrix $B$ such that $\vec z_i = B^T \vec x_i$ and
+$\tilde{\vec x_i} = B \vec z_i$ and the error, defined as
+\begin{equation}
+	\norm{\vec x_i - \tilde{\vec x_i}}^2
+\end{equation}
+is as small as possible.
+We call $B^T$ the \emph{encoder} and $B$ the \emph{decoder}.
+Moreover, we want $B$ to be \textbf{orthonormal},
+that is its column $b_i$ have $\norm{b_i} = 1$ and $b_i \cdot b_j = 0$.
+
+\subsection{Eigendecomposition}
+
+In order to preserve as much data as possible we want to project in the direction that preserves
+the maximum variance in the output.
+
+We start by looking at a single vector $\vec b_1 \in \R^D$ such that the projected data
+$\vec z_{1n} = \vec b_1^T \vec x_n$ has maximum variance, defined as
+\begin{equation}
+	V_1 = \mathrm{var} (\vec z_1) = \frac{1}{N} \sum^N_{i = 1} z_{1i}^2
+\end{equation}
+and with some algebra we can show that
+\begin{equation}
+	V_1 = \vec b_1^T S \vec b_1
+\end{equation}
+
+Now we want to solve a linear programming problem:
+\begin{align}
+	 & \max_{\vec b_1} \vec b_1^T S \vec b_1    \\
+	 & \text{subject to } \norm{\vec b_1}^2 = 1
+\end{align}
+where the constraint $\norm{\vec b_1} = 1$ is there in order to respect the orthonormality of $B$
+and to make sure that $V_1$ is finite.
+
+The lagrangian is
+\begin{equation}
+	\mathcal L(\vec b_1, \lambda) = \vec b_1^T S \vec b_1 + \lambda(1-\vec b_1 \vec b_1^T)
+\end{equation}
+and setting its derivatives equal to zero we get that $S \vec b_1 = \lambda \vec b_1$
+and $\vec b_1^T \vec b_1 = 1$.
+This means that
+\begin{equation}
+	V_1 = \vec b_1^T S \vec b_1 = \lambda \vec b_1^T \vec b_1 = \lambda
+\end{equation}
+
+This is an awesome results: it means that the vector which gives maximum variance is the eigenvector
+of $S$ with the highest eigenvalue.
+
+Now we repeat the steps with another column $b_k$ where we add the additional constraint
+of $b_k \cdot b_\ell = 0$ for all $\ell = k-1, \dots, 1$.
+The existence of a solution is guaranteed by the spectral theorem, which tells us that a symmetric
+matrix has an orthonormal basis of eigenvectors.
+From there use the lagrangian as before to obtain the result.
+
+\subsection{Principal component analysis}
+
+Our algorithm is then as follows:
+\begin{enumerate}[label=\roman*.]
+	\item Shift by the mean
+	\item Scale by the variance of each dimension of the dataset
+	\item Apply eigendecomposition
+	\item Project along the chosen direction
+\end{enumerate}
+
+Moreover, we can prove (see slides, lecture 3), that minimizing the reconstruction error
+is equivalent to finding the projected maximum variance.
+
+\subsection{Non linear encoders}
+To achieve better results we can have, on top of the linear transformation, some non-linear function,
+this of course adds complexity but also gives better results.
+We would have
+\begin{align}
+	\vec z_k         & = f\left(\sum_j W x_j\right)                                  \\
+	\tilde{\vec x}_k & = g\left(\sum_i f\left(\sum_j B_{kj} x_j\right) V_{ki}\right)
+\end{align}
+
+TODO: what?
 
 \section{Perceptron}
 

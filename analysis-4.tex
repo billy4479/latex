@@ -160,9 +160,12 @@ if the first order taylor expansion exists and is linear.
 	we have to impose the two equations above.
 \end{proof}
 
-\subsection{Integration}
+\subsection{Cauchy integral theorem}
 
-In this section $U$ will be an open subset of $\C$.
+In this section we will discuss and prove Cauchy integral theorem.
+We will assume $U$ to be an open subset of $\C$.
+
+\subsubsection{Integration over \texorpdfstring{$\C$}{C}}
 
 \begin{definition}{Piecewise $C^1$ curve}{piecewise-c1}
 	A function of the form $\gamma: [s, t]: U$ with $U$ and $s \leq t \in \R$
@@ -201,6 +204,9 @@ the parametrization or the basepoint, since, as we just saw, the integral does n
 \subsubsection{Cauchy integral theorem special form}
 
 TODO: lec 3
+
+\begin{theorem}{Cauchy integral theorem for rectangles}{cauchy-integral-rect}
+\end{theorem}
 
 \subsubsection{Local primitives}
 
@@ -267,6 +273,8 @@ This is the same behavior we observe for primitives over $\R$.
 	as desired.
 \end{proof}
 
+\subsubsection{Integration over piecewise \texorpdfstring{$C^1$}{C1} curves}
+
 \begin{proposition}{Fundamental theorem of calculus for curves}{fundamental-curves}
 	Given a local primitive $F: V \to \C$ of $f$ and a piecewise $C^1$ curve $\gamma: [s, t] \to V$
 	we have
@@ -306,6 +314,143 @@ This is the same behavior we observe for primitives over $\R$.
 \end{corollary}
 \begin{proof}
 	Follows from the proposition since $F(\gamma(t)) = F(\gamma(s))$.
+\end{proof}
+
+\subsubsection{Local primitives in a ball}
+
+We will now show that a local primitive always exists within open balls
+(often called disks when over $\C$).
+
+We will also introduce the following notation:
+\begin{itemize}
+	\item Given two curves $\eta$ and $\beta$ we indicate with $\eta * \beta$ the concatenation
+	      of two curves such that
+	      \begin{equation}
+		      \int_{\eta * \beta} f(z) \dd z = \int_\eta f(z) \dd z + \int_\beta f(z) \dd z
+	      \end{equation}
+	\item We denote $[p, q]$ any parametrization of the segment that connects the two points $p, q$.
+	      A standard parametrization is $\tau \mapsto p + \tau(q-p)$ with $\tau \in [0, 1]$.
+\end{itemize}
+
+\begin{proposition}{Existence of local primitives in a ball}{existence-local-primitive}
+	Let $f: U \to \C$ holomorfic and $V = B_r(z_0) \subseteq U$ be an open ball.
+	Then there exists a local primitive $F(z)$ for all $z \in V$.
+\end{proposition}
+
+\begin{proof}
+	Let $z \in V$ and $a + bi = z - z_0$, consider two piecewise $C^1$ curves $\gamma, \delta$
+	defined as
+	\begin{align}
+		\gamma & = [z_0, z_0 + bi] * [z_0 + bi, z] \\
+		\delta & = [z_0, z_0 + a] * [z_0 + a, z]
+	\end{align}
+	that is, both curves start at $z_0$ and reach $z$ but
+	$\gamma$ travels first vertically then horizontally while
+	$\delta$ travels first horizontally and then vertically.
+
+	Let $\alpha = \delta * \gamma^{-1}$ be the concatenation of $\delta$ and the \emph{reverse} of
+	$\gamma$, that is, $\alpha$ parametrizes the boundary of the rectangle $R$ with vertices
+	$\{z_0, z_0 + a, z_0 + bi, z\}$.
+	This gives
+	\begin{equation}
+		\int_\delta f(w) \dd w - \int_\eta f(w) \dd w = \int_{\partial R} f(z) \dd z = 0
+	\end{equation}
+	by \cref{thm:cauchy-integral-rect} which we have already proven. Also note that all $w \in R$ are
+	also included in $V$.
+	Now, since their difference is $0$, we can let $F(z)$ be the common value of these two integrals:
+	\begin{equation}
+		F(z) = \int_\delta f(w) \dd w = \int_\eta f(w) \dd w
+	\end{equation}
+
+	Interpreting $F$ as a map of the form $F: \R^2 \to \C$, we have
+	\begin{equation}
+		\pdv{F}{x}()(z) = \lim_{\varepsilon \to 0} \frac{F(z + \varepsilon) - F(z)}{\varepsilon}
+	\end{equation}
+	where $\varepsilon \in \R$.
+	Now if we consider the definition of $F$ using $\gamma$, we have
+	\begin{align}
+		F(z + \varepsilon) & = \int_{[z_0, z_0 + ib] * [z_0 + ib, z + \varepsilon]} f(w) \dd w          \\
+		                   & = \int_{[z_0, z_0 + ib] * [z_0 + ib, z] * [z, z + \varepsilon]} f(w) \dd w \\
+		                   & = \int_{[z_0, z_0 + ib] * [z_0 + ib, z]} f(w) \dd w
+		+ \int_{[z, z + \varepsilon]} f(w) \dd w                                                        \\
+		                   & = F(z) + \int_{[z, z + \varepsilon]} f(w) \dd w
+	\end{align}
+	then we choose $\tau \mapsto z + \tau \varepsilon$ as our parametrization of $[z, z + \varepsilon]$
+	so that $\dv{\tau} (z + \tau \varepsilon) = \varepsilon$.
+	We get
+	\begin{equation}
+		F(z + \varepsilon) - F(z) = \int_0^1 f(z + \tau \varepsilon) \cdot \varepsilon \dd \tau
+		= \int_0^\varepsilon f(z + \sigma) \dd{\sigma}
+	\end{equation}
+	where we have used the change of variable $\sigma = \tau \varepsilon$.
+	Then, since $f$ is continuous, (and???)
+	\begin{equation}
+		\pdv{F}{x}()(z) = \lim_{\varepsilon \to 0} \frac{1}{\varepsilon}
+		\int_0^\varepsilon f(z + \sigma) \dd \sigma = f(z)
+	\end{equation}
+
+	Similarly for the imaginary part we have
+	\begin{equation}
+		\pdv{F}{y}()(z) = \lim_{\varepsilon \to 0} \frac{1}{\varepsilon}
+		\int_0^\varepsilon f(z + i \sigma) \cdot i \dd \sigma = f(z) \cdot i
+	\end{equation}
+	where the additional $i$ comes from the fact that now the extra piece we are integrating over is
+	$[z, z + i \varepsilon]$.
+
+	We have just showed that $F$ admits a derivative at any point $z \in V$ and it is continuous,
+	since $f$ is continuous, therefore, we can invoke the powers of multivariate calculus to say that
+	$F$ is indeed differentiable and of class $C^1$.
+	Moreover if we write $f(z) = \alpha + i \beta$ we have
+	\begin{align}
+		\pdv{F}{x}()(z) & = \alpha + i \beta  \\
+		\pdv{F}{y}()(z) & = - \beta + i\alpha
+	\end{align}
+	which means that $F$ satisfies Cauchy-Riemann equations therefore $F$ is holomorfic
+	and $F'(z) = f(z)$ for all $z \in V$.
+\end{proof}
+
+\subsubsection{Integration over continuous curves}
+
+We now state a more general result for integrating over all continuous curves
+(not just those which are piecewise $C^1$).
+
+\begin{proposition}{Line integral over a continuous curve}{integral-continuous-curve}
+	Let $f: U \to C$ holomorfic and $\gamma: [s, t] \to U$ continuous,
+	then there exists a subdivision $s = t_0 < t_1 \dots < t_N = t$ such that
+	for each $j = 1, \dots, N$ the image of $\gamma([t_{j-1}, t_j])$ is included in the domain
+	$V_j \subseteq U$ of some local primitive $F_j: V \to \C$ of $f$.
+
+	Moreover,
+	\begin{equation}
+		\int_\gamma f(z) \dd z = \sum_{j = 1}^N [F_j(\gamma(t_j)) - F_j(\gamma(t_{j-1}))]
+	\end{equation}
+	and this value does not depend on the choice of the subdivision, of $V_j$ or of $F_j$.
+\end{proposition}
+
+\begin{proof}
+	If $U = \C$ we can just take $N = 1$ and $V_1$ be any ball included in the image of $\gamma$.
+
+	Otherwise we let $\rho: \C \to \R$ be the function that assigns to each $z \in \C$ the distance to
+	$\C \setminus U$, that is
+	\begin{equation}
+		\rho(z) = \inf_{w \in \C \setminus U} \abs{z - w}
+	\end{equation}
+	Moreover, by the triangle inequality we have that $\rho(z') \leq \abs{z-z'} + \rho(z)$
+	and interchanging the roles of $z$ and $z'$ we get $\abs{\rho(z') - \rho(z)} \leq \abs{z' - z}$
+	which means that $\rho$ is Lipschitz continuous.
+	Furthermore, since $U$ is open, $\rho$ is positive on $U$, thus we can let
+	\begin{equation}
+		r = \min_{\tau \in [s, t]} \rho(\gamma(\tau))) > 0
+	\end{equation}
+	Now, since $\gamma$ is continuous and its domain is compact it is also uniformly continuous,
+	thus, for some $N$ large enough, we have
+	\begin{equation}
+		\abs{\gamma(\tau) - \gamma(t_j)} < r \quad \text{for } \tau \in [t_{j-1}, t_j],
+		\quad \text{with } t_j = s + j \frac{t-s}{N}
+	\end{equation}
+	which means we can take $\gamma(t_j)$ as the center of the ball $V_j$ with radius $r$, which is
+	guaranteed to be included in $U$ since $r \leq \rho(\gamma(t_j))$,
+	and invoking \cref{prop:existence-local-primitive} we obtain a local primitive $F_j$.
 \end{proof}
 
 \end{document}

@@ -451,6 +451,54 @@ We now state a more general result for integrating over all continuous curves
 	which means we can take $\gamma(t_j)$ as the center of the ball $V_j$ with radius $r$, which is
 	guaranteed to be included in $U$ since $r \leq \rho(\gamma(t_j))$,
 	and invoking \cref{prop:existence-local-primitive} we obtain a local primitive $F_j$.
+
+	TODO: idk about the second part of the proof, too hard for now.
+\end{proof}
+
+Moreover, this definition is coherent with the one over $C^1$ curves.
+
+\subsubsection{Invariance under homotopies}
+
+\begin{definition}{Homotopy}{homotopy}
+	Given two curves $\gamma_0: [s, t] \to U$ and $\gamma_1: [s, t] \to U$ with the same endpoints
+	$p = \gamma_0(s) = \gamma_1(s)$ and $q = \gamma_0(t) = \gamma_1(t)$, a homotopy is a
+	\emph{continuous} function
+	\begin{equation}
+		\Gamma: [0,1]\cross[s, t] \to U
+	\end{equation}
+	such that $\Gamma(0, \cdot) = \gamma_0$, $\Gamma(1, \cdot) = \gamma_1$, and
+	for all $\lambda \in [0,1]$ we have that $\Gamma(\lambda, \cdot)$
+	is a curve with endpoints $p, q$.
+	That is $\Gamma$	interpolates between the two curves.
+
+	If such function exists we say that $\gamma_0, \gamma_1$ are \emph{homotopic}
+	and we write $\gamma_0 \simeq \gamma_1$.
+\end{definition}
+
+\begin{theorem}{Invariance under homotopies}{invariance-homotopies}
+	Let $f: U \to \C$ holomorfic and two curves such that $\gamma_0 \simeq \gamma_1$.
+	Then
+	\begin{equation}
+		\int_{\gamma_0} f(z) \dd z = \int_{\gamma_1} f(z) \dd z
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	Assume that $s = 0$ and $t = 1$ (which we can obtain by reparametrizing the curves which remain
+	homotopic) and let $\Gamma: [0,1]\cross[0,1]$ be an homotopy between $\gamma_0$ and $\gamma_1$.
+
+	With a similar argument as the beginning of the proof of \cref{prop:integral-continuous-curve},
+	for some $N$ large enough, we can subdivide the domain $Q = [0, 1] \cross [0,1]$ into $N^2$
+	smaller squares of sidelength $\frac{1}{N}$ such that, for each small square $Q'$, the image
+	$\Gamma(Q')$ is included in some ball in $U$.
+
+	Let $\eta_0$ be the curves that travels from $(0,0)$ to $(1,1)$ along the bottom and
+	the right side of $Q$ and $\eta_1$ a curve with the same endpoints which travels along the
+	left and top side instead.
+	Now consider the integral $\int_{\Gamma \circ \eta_0} f(z) \dd z$: the right side (and the
+	left side as well) contribute nothing to the integral
+
+	TODO: finish here
 \end{proof}
 
 \end{document}

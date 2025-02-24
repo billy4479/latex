@@ -880,4 +880,139 @@ In convex programming we have something similar.
 	\end{description}
 \end{proof}
 
+\section{Simplex method}
+
+\subsection{Geometry of polyhedra}
+
+\begin{definition}{Polyhedron and polytope}{polyhedron-polytope}
+	\begin{itemize}
+		\item A polyhedron is an intersection of a finite number of halfspaces;
+		\item A polytope is a bounded polyhedron.
+	\end{itemize}
+\end{definition}
+
+There are some notable types of polyhedra:
+\begin{description}
+	\item[Cubes] They are polytopes with $2n$ constraints in $[-1, 1]^n$ defined as
+	      $\{x \mid \norm{x}_\infty \leq 1\}$, or equivalently we have
+	      \begin{align}
+		      x_i & \leq 1  & \text{for all } i = 1, \dots, n \\
+		      x_i & \geq -1 & \text{for all } i = 1, \dots, n
+	      \end{align}
+	      Cubes have $2n$ constraints and $2^n$ vertices.
+
+	\item[Cross polytope] These are polytops defined as $\{ x \in \R^n \mid \norm{x}_1 \leq 1\}$
+	      where $\norm{x}_1 = \sum \abs{x_i} \leq 1$.
+	      To write it in constraint form we write:
+	      \begin{equation}
+		      \forall \sigma \in \{\pm 1\}^n : \sigma^T x \leq 1
+	      \end{equation}
+	      which is equivalent to the definition above.
+	      Cross polytopes have $2^n$ constraints and $2n$ vertices.
+
+	\item[Simplex] An $n$ dimensional simplex has $n + 1$ vertices and is better defined in
+	      $n+1$ dimensions.
+	      \begin{equation}
+		      x_i \geq 0 \quad \forall i = 1, \dots, n+1 \quad \text{s.t. } \sum x_i = 1
+	      \end{equation}
+\end{description}
+
+\begin{definition}{Face}{face}
+	A face of a polyhedron $P$ is a subset $F \subseteq P$ such that there exists a non-zero vector
+	$c \in R^n$ and a number $z \in R$ such that $c^T x = z$ for all $x \in F$ and $c^T x < z$
+	for all $x \in P \setminus F$.
+
+	In other words there exists an hyperplane that touches $P$ exactly at $F$.
+\end{definition}
+
+\subsection{Minkowski-Weyl}
+
+\begin{theorem}{Minkowski-Weyl for polytopes}{minkowski-weyl}
+	$P \subseteq \R$ is a polytope if and only if $\exists V \subseteq \R^n$ finite such that
+	$P = \mathrm{conv}(V)$ (convex hull of $V$).
+\end{theorem}
+
+
+\begin{theorem}{Minkowski-Weyl for polyhedra}{minkowski-weyl}
+	$P \subseteq \R$ is a polytope if and only if $\exists V, Y \subseteq \R^n$ finite such that
+	$P = \mathrm{conv}(V) + \mathrm{cone}(Y)$ (convex hull of $V$ plus
+	the convex cone of $Y$ (as in \cref{def:convex-cone}),
+	the sum is defined as $A + B = \{ x+ y \mid x \in A, y \in B$).
+\end{theorem}
+
+Therefore, as a consequence of these theorems we have two ways of writing each polytope:
+$P = \{x \mid A x \leq b\} = \mathrm{conv}(V)$.
+There formulation are equivalent from the meaning point of view, but they are very different from
+the computational point of view: we saw how cross polytopes have $2^n$ constraints but just $2n$
+vertices.
+We can prove that the optimal solution of an optimization problem is on a vertex, however this
+is often not good enough as we could need to check $2^\abs{V}$ vertices, which are too many.
+
+Let $P$ be a polyhedra defined as $P = \{x \mid A x \leq b\}$. Then, note that if we choose some
+$i$ and we make the inequality strict, that is $A_i x = b$ we get a face.
+Moreover, if we do this procedure for some $i$ \emph{and} $j$ we obtain a vertex.
+This result is formalized in the following lemma.
+
+\begin{lemma}{Equivalent definitions of faces}{faces}
+	The following definitions of faces are equivalent:
+	\begin{enumerate}
+		\item The definition we used in \cref{def:face}:
+		      \begin{equation}
+			      F = P \cap \{ x \mid c^T x = \delta \} \quad \text{s.t. }
+			      \substack{c \neq 0 \\ c^T x \leq \delta \enspace \forall x \in P_i}
+		      \end{equation}
+		      Moreover, $F = \varnothing$ and $F = P$ are also valid faces.
+		\item $F = \{ x \in P \mid A'x = b'\}$ for some subsystem $A'x \leq b'$ of
+		      $Ax \leq b$.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	First we prove that (1) $\implies$ (2).
+
+	We can rewrite $F$ as $F = \{ x \in P \mid c^T = \delta\}$ and
+	$\delta = \max \{ c^T x \mid x \in P\}$.
+	This is a linear program, therefore we can use \cref{thm:strong-duality} and write
+	$F = \min \{b^T y \mid A^T y = c, y \geq 0 \}$.
+
+	By complementary slackness (???) we have that if $x, y$ are feasible $y^T(Ax - b) = 0$ and
+	$y_i \geq 0$ implies $(Ax - b)_i = 0$ and $(Ax - b)_i < 0$ implies that $y_i - 0$,
+	so that by knowing the solution to the dual we can check which constraints are tight in the
+	primal.
+
+	Then for all $x \in P$ we have that $c^T x = \delta$ iff $x$ is optimal, which in turns holds
+	iff $(y^*)^T(b - Ax) = 0$ by complementary slackness, which again is equivalent to $Ax'= b'$.
+
+	Now we prove (2) $\implies$ (1).
+
+	If $F = \{ x \in P \mid A'x = b'\} \neq \varnothing$ then $c$ is the sum of the rows of $A'$
+	and $\delta$ is the sum of the entries in $b'$.
+	Then, for each $x \in P$ we have that $A'x\leq b'$ and $c^T x = \delta$ if and only if
+	$A'_i x = b_i'$ for all $i$ implying $F = \{ x \in P \mid c^T x = \delta \}$.
+\end{proof}
+
+First we note that $P$ has a finite number of faces.
+Moreover, if $E \subseteq F$ and $E$ is a face of $F$, then $E$ is a face of $P$.
+
+We can define a polyhedron in an even more generic way, that is
+\begin{equation}
+	P = \{ x \in \R^n \mid \underbrace{A'x = b'}_{m' \text{ number of equalities}},
+	\underbrace{A '' x \leq b''}_{m'' \text{ number of inequalities}} \}
+	\label{eq:poly-desc}
+\end{equation}
+Using this description we can define the minimal description of $P$.
+\begin{definition}{Minimal description of a polyhedron}{poly-minimal-desc}
+	Let $P$ as in \cref{eq:poly-desc}.
+	That is a minimal description if
+	\begin{itemize}
+		\item All rows of $A'$ are linearly independent;
+		\item Omitting any of the inequalities changes the polyhedron;
+		\item Converting an inequality to	an equality also changes the polyhedron.
+	\end{itemize}
+\end{definition}
+
+We note that if we consider a minimal description of $P$ and $P \neq \varnothing$,
+then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, lecture 10).
+
+
 \end{document}

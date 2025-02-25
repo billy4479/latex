@@ -14,7 +14,7 @@
 
 \begin{document}
 
-\oldfirstpage
+\firstpage
 
 \section{Introduction}
 
@@ -923,15 +923,16 @@ There are some notable types of polyhedra:
 	for all $x \in P \setminus F$.
 
 	In other words there exists an hyperplane that touches $P$ exactly at $F$.
-\end{definition}
 
-\subsection{Minkowski-Weyl}
+	Note that also $P$ itself and $\varnothing$ fall into this definition.
+	To differentiate them, we say that the other faces $F \neq P$ and $F \neq \varnothing$ are
+	\emph{proper faces}.
+\end{definition}
 
 \begin{theorem}{Minkowski-Weyl for polytopes}{minkowski-weyl}
 	$P \subseteq \R$ is a polytope if and only if $\exists V \subseteq \R^n$ finite such that
 	$P = \mathrm{conv}(V)$ (convex hull of $V$).
 \end{theorem}
-
 
 \begin{theorem}{Minkowski-Weyl for polyhedra}{minkowski-weyl}
 	$P \subseteq \R$ is a polytope if and only if $\exists V, Y \subseteq \R^n$ finite such that
@@ -1014,5 +1015,150 @@ Using this description we can define the minimal description of $P$.
 We note that if we consider a minimal description of $P$ and $P \neq \varnothing$,
 then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, lecture 10).
 
+\begin{lemma}{Dimension of proper faces}{dim-faces}
+	If there exists $z \in P \neq \varnothing$ such that $A'' z<b''$, then
+	\begin{itemize}
+		\item $\mathrm{dim}(P) = n - \mathrm{rank}(A')$;
+		\item $z$ does not belong to any proper face of $P$.
+	\end{itemize}
+\end{lemma}
+
+\begin{proof}
+	Let $A = \{ x \mid A'x = b\}$, since $P \subseteq A$ we have
+	$\dim(P) \leq \dim(A) = n - \mathrm{rank}(A)$.
+	Then, since the inequality is strict, we can find $\varepsilon > 0$ such that the ball
+	$B = \{ x \in A \mid \norm{x - z} \leq \varepsilon \} \subseteq P$ which in turns implies
+	$\dim(P) \geq \dim(B) = \dim(A)$.
+
+	To prove the second part we consider any $h = \{x \mid a^T x = b\}$ such that $a^T z = b$
+	and $A \subseteq h$.
+
+	TODO: lecture 11
+\end{proof}
+
+\begin{corollary}{}{}
+	Let $F$ be a proper face of $P$, then $\dim(F) \leq \dim(P) -1$.
+\end{corollary}
+
+\begin{proof}
+	Consider a minimal description of $P$.
+	Then $F$ can be written as
+	\begin{equation}
+		F = \{ x \in \R^n \mid A'x = b', \tilde A x = \tilde b, A'' x \leq b'' \}
+	\end{equation}
+	where $\tilde A x \leq \tilde b$ is a subsystem of $A '' x \leq b ''$.
+	Then $\dim(F) \leq n - \mathrm{rank}\begin{pmatrix} A' \\ \tilde A \end{pmatrix}$.
+
+	If $\mathrm{rank}\begin{pmatrix} A' \\ \tilde A \end{pmatrix} = \mathrm{rank}(A')$ then
+	either each inequality of $\tilde A x = \tilde b$ is a linear combination of $A' x = b'$
+	and $F = P$, otherwise we have
+	\begin{equation}
+		\mathrm{rank} \begin{pmatrix} A' & b' \\ \tilde A & \tilde b \end{pmatrix} >
+		\mathrm{rank} \begin{pmatrix} A' \\ \tilde A \end{pmatrix} = \mathrm{rank}(A')
+	\end{equation}
+	which implies $F = \varnothing$.
+
+	Otherwise we have that
+	$\mathrm{rank} \begin{pmatrix} A' \\ \tilde A \end{pmatrix} \geq \mathrm{rank}(A') + 1$
+	and
+	\begin{equation}
+		\dim(F) \leq n - \mathrm{rank}(A') - 1 = \dim(P) -1 \qedhere
+	\end{equation}
+\end{proof}
+
+\begin{theorem}{Facets of $P$ and inequalities}{facets-vs-inequalities}
+	There is a 1-to-1 correspondence between facets of $P$ and inequalities in $A'' x \leq b''$.
+\end{theorem}
+
+\begin{proof}
+	Recall that a facet is a face $F$ so that $\dim(F) = \dim(P) -1$.
+	Let $F = \{x \in P \mid \tilde A x = \tilde b\}$ where $\tilde A x \leq \tilde b$ is a subsystem
+	of $A'' \leq b''$.
+	Consider some $a_1^T \leq b_1$ from the system $\tilde A x \leq \tilde b$ and let
+	$F' = \{ x \in P \mid a^T_1 x = b_1 \}$ so that $F \subseteq F' \subseteq P$.
+
+	Note that $F' \neq P$ since $\dim(F') \leq \dim(P) - 1$ and since $F \subseteq F'$ and $F$ is
+	a face of $P$, $F$ is a face of $F'$.
+	This means that either $F = F'$ or $F \subsetneq F'$ which means that
+	$\dim(F) \leq \dim(F') -1 \leq \dim (P) -2$ which means that $F$ is not a facet.
+
+	Now we want to prove that, for any inequality $a^T \leq b$ from $A'' x \leq b ''$,
+	$F = \{ x \in P \mid a^T x = b \}$ is a facet of $P$.
+	Consider the following
+	\begin{align}
+		F   & = \{ x \in P \mid A'x = b', \underbrace{a^T x = b, \tilde A x \leq \tilde b}_{A'' x \leq b''} \}               \\
+		z_1 & \text{ such that } A'z_1 = b', A'' z_1 < b''                                                                   \\
+		z_2 & \text{ such that } A'z_2 = b', \tilde A z_2 \leq \tilde b, a^T z_2 > b                                         \\
+		z   & = tz_1 + (1-t) z_2                                                                               & t \in (0,1)
+	\end{align}
+	we know that $z_2$ exists since $a^T x \leq b$ is not redundant.
+
+	Then, by \cref{lemma:dim-faces}, we get
+	\begin{equation}
+		\dim(F) = n - \mathrm{rank}\begin{pmatrix} A'\\a^T \end{pmatrix} = n- \mathrm{rank}(A') + 1
+	\end{equation}
+	since $a^Tx \leq b$ is not redundant.
+	Then $\dim(F) = \dim(P) -1$ which means $F$ is a facet.
+\end{proof}
+
+\begin{corollary}{}{}
+	Every proper face of $P \neq \varnothing$ is an intersection of some facets.
+\end{corollary}
+
+\begin{proof}
+	We have
+	\begin{equation}
+		F = \{x \in P \mid \tilde A x = \tilde b \} =
+		\bigcap_{i = 1}^k \{x\in P \mid \tilde A_i x \tilde b_i \}
+	\end{equation}
+	but the sets on the right are the facets of $P$.
+\end{proof}
+
+\begin{definition}{Minimal faces}{minimal-faces}
+	A minimal face is a face which does not have any proper face.
+\end{definition}
+
+\begin{lemma}{}{}
+	$F$ is a minimal face if and only if $\varnothing \neq F \subseteq P$ and
+	$F = \{ x \mid A'x b', \tilde A x = \tilde b \}$
+	where $\tilde A x \leq \tilde b$ is a subsystem of $A'' x \leq b''$.
+\end{lemma}
+
+\begin{proof}
+	Note that $F = \{ x \mid A'x b', \tilde A x = \tilde b \}$ has no facets and no faces,
+	hence the first direction is trivial.
+
+	If $F$ is a minimal face, then
+	$F = \{ x \mid A'x b', \overline A x = \overline b, A'' \leq b'' \}$ for some subsystem
+	$\overline A x = \overline b$.
+	Let $F = \{ x \mid A'x b', \tilde A x = \tilde b, \tilde A' \leq \tilde b' \}$
+	be the minimal description of $F$.
+	Then by \cref{thm:facets-vs-inequalities} the inequalities $\tilde A'x \leq \tilde b'$ determines
+	a facet of $F$. However, since $F$ is minimal $\tilde A'x \leq \tilde b'$ is empty.
+\end{proof}
+
+\begin{theorem}{Dimension of minimal faces}{dim-minimal-faces}
+	All minimal faces of $P$ have dimension $n - \mathrm{rank}\begin{pmatrix} A' \\ A'' \end{pmatrix}$.
+\end{theorem}
+
+\begin{proof}
+	Let $F = \{ x \mid A'x = b', \tilde A x = \tilde b\}$ for $\tilde A x \leq \tilde b$ a subsystem
+	of $A'' x \leq b''$.
+	Then
+	\begin{equation}
+		\dim(F) = n- \mathrm{rank}\begin{pmatrix} A' \\ \tilde A \end{pmatrix}
+		\geq n - \mathrm{rank}\begin{pmatrix} A' \\ A''\end{pmatrix}
+	\end{equation}
+	We claim that they are equal.
+	By contradiction say $\mathrm{rank} \begin{pmatrix} A' \\ \tilde A \end{pmatrix} \leq
+		\mathrm{rank} \begin{pmatrix} A' \\ A'' \end{pmatrix}$.
+	Then there is a row $A_k''$ linearly independent from the rows of $\tilde A$ and $A'$, but this
+	would give that
+	\begin{equation}
+		F \subset P \implies F \in \{ x \mid A'x = b', \tilde A x = \tilde b, A''_k x \leq b''_k\}
+		\subsetneq \{ x \mid A'x = b', \tilde A x = \tilde b\} = F
+	\end{equation}
+	which is a contradiction.
+\end{proof}
 
 \end{document}

@@ -496,9 +496,55 @@ Moreover, this definition is coherent with the one over $C^1$ curves.
 	the right side of $Q$ and $\eta_1$ a curve with the same endpoints which travels along the
 	left and top side instead.
 	Now consider the integral $\int_{\Gamma \circ \eta_0} f(z) \dd z$: the right side (and the
-	left side as well) contribute nothing to the integral
+	left side as well) contribute nothing to the integral since they are just moving from a curve to
+	another.
 
-	TODO: finish here
+	Let $Q'$ be the bottom-right square of the given subdivision and $\eta_1$ be the slightly
+	modified curve which rather travels on the other two sides of $Q'$ (left and top instead of bottom
+	right) and agrees with $\eta_0$ everywhere else.
+	Now, since $Q'$ is included in a ball where a local primitive exists, we have
+	\begin{equation}
+		\int_{\Gamma \circ \eta_0} f(z) \dd z = \int_{\Gamma \circ \eta_1} f(z) \dd z
+	\end{equation}
+
+	Now consider the small square $Q''$ next to $Q'$ and perform the same modification to $\eta_1$
+	obtaining the curve $\eta_2$. After repeating the steps $N^2$ times we obtain that
+	\begin{equation}
+		\int_{\gamma_0} f(z) \dd z = \int_{\Gamma \circ \eta_0} f(z) \dd z = \dots =
+		\int_{\Gamma \circ \eta_{N^2}} f(z) \dd z = \int_{\gamma_1} f(z) \dd z
+	\end{equation}
+	as desired.
+\end{proof}
+
+\begin{theorem}{Cauchy integral theorem}{cauchy-integral}
+	If $f : U \to \C$ is homotopic and $\gamma$ is a continuous loop which can be continuously
+	deformed into a point (among loops in $U$) then
+	\begin{equation}
+		\int_\gamma f(z) \dd z = 0
+	\end{equation}
+\end{theorem}
+\begin{proof}
+	If $\gamma$ is homotopic to a constant curve $\gamma_1$ then, by \cref{thm:invariance-homotopies},
+	\begin{equation}
+		\int_\gamma f(z) \dd z = \int_{\gamma_1} f(z) \dd z =
+		\int_s^t f(\gamma_1(t)) \cdot \gamma_1'(t) \dd z = 0
+	\end{equation}
+	since $\gamma_1' = 0$.
+\end{proof}
+
+\begin{theorem}{Cauchy integral formula}{cauchy-integral-formula}
+	If $\overline B_r(z_0) \subseteq U$ for $f$ homotopic we have
+	\begin{equation}
+		f(z_0) = \frac{1}{2 \pi i} \int_{\partial B_r(z_0)} \frac{f(z)}{z - z_0} \dd z
+	\end{equation}
+	where $\partial B_r(z_0)$ is travelled counterclockwise.
+\end{theorem}
+
+Note that we can replace $\partial B_r(z_0)$ with any loop in $\C \setminus \{z_0\}$
+homotopic to it.
+
+\begin{proof}
+	Not in the exam; see lecture 4.
 \end{proof}
 
 \end{document}

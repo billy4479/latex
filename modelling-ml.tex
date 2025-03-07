@@ -110,12 +110,33 @@ this distribution will just be a sum of $\delta$ functions of the observations w
 We can use this distance in order to \say{fit} a model to some data:
 we set $P$ to be the distribution of the empirical data, defined as
 \begin{equation}
-	P(x) = \frac{1}{M} \sum^M_{\mu = 1} \delta(\vec x, \vec x^\mu)
+	P(x) = \frac{1}{M} \sum^M_{\mu = 1} \delta(x, x^\mu)
 \end{equation}
-and $Q_\theta(x)$ be the approximating probability distribution.
+where $\delta(x, x^\mu)$ is $1$ when $x$ is equal to the empirical sample data and $0$ otherwise.
+$Q_\theta(x)$ is the approximating probability distribution.
 
-Then, with some algebra, we can prove that minimizing the KL divergence is equivalent to minimizing
-the MLE.
+Turns out that minimizing the KL divergence is equivalent to maximizing the MLE.
+
+\begin{proposition}{KL divergence and MLE}{kl-mle}
+	Let $P$ be the empirical distribution of the sample and $Q_\theta$ the model distribution
+	parametrized by $\theta$.
+	Then minimizing the KL divergence is equivalent to maximizing the MLE for $\theta$:
+	\begin{equation}
+		\argmin_\theta D_{KL}(P, Q_\theta) = \argmax_\theta \frac{1}{M} \sum^M_{\mu = 1} \log
+		Q_\theta(x^\mu)
+	\end{equation}
+\end{proposition}
+\begin{proof}
+	We start by rewriting the KL distance:
+	\begin{align}
+		D_{KL}(P, Q_\theta) & = \sum_x P(x) \log \frac{P(x)}{Q_\theta(x)}                                                                                   \\
+		                    & = \sum_x \frac{1}{M} \sum^M_{\mu = 1} \delta(x, x^\mu) \log \frac{\frac{1}{M} \sum^M_{\mu = 1} \delta(x, x^\mu)}{Q_\theta(x)} \\
+		                    & = \frac{1}{M} \sum^M_{\mu = 1} \log \frac{\frac{1}{M}}{Q_\theta(x^\mu)}                                                       \\
+		                    & = \frac{1}{M} \sum^M_{\mu = 1}\left( \log \frac{1}{M} - \log Q_\theta(x^\mu) \right)                                          \\
+		                    & = -\underbrace{\log M}_\text{const} - \frac{1}{M} \sum^M_{\mu = 1} \log Q_\theta(x^\mu)
+	\end{align}
+	where the first term is a constant and we recognize the second term to be the MLE.
+\end{proof}
 
 \section{Dimensionality reduction}
 

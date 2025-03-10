@@ -168,51 +168,118 @@ $\tilde{\vec x_i} = B \vec z_i$ and the error, defined as
 \end{equation}
 is as small as possible.
 We call $B^T$ the \emph{encoder} and $B$ the \emph{decoder}.
-Moreover, we want $B$ to be \textbf{orthonormal},
-that is its column $b_i$ have $\norm{b_i} = 1$ and $b_i \cdot b_j = 0$.
+Moreover, we want $B^T$ to be \textbf{orthonormal},
+that is its columns $\vec b_i$ have $\norm{\vec b_i} = 1$ and $\vec b_i \cdot \vec b_j = 0$.
 
 \subsection{Eigendecomposition}
 
 In order to preserve as much data as possible we want to project in the direction that preserves
 the maximum variance in the output.
 
-We start by looking at a single vector $\vec b_1 \in \R^D$ such that the projected data
-$\vec z_{1n} = \vec b_1^T \vec x_n$ has maximum variance, defined as
-\begin{equation}
-	V_1 = \mathrm{var} (\vec z_1) = \frac{1}{N} \sum^N_{i = 1} z_{1i}^2
-\end{equation}
-and with some algebra we can show that
-\begin{equation}
-	V_1 = \vec b_1^T S \vec b_1
-\end{equation}
-
-Now we want to solve a linear programming problem:
+We want to find vectors $b_1, \dots, b_M \in \R^D$ which will be the columns of $B^T$
+Consider some vector $\vec b_i$, we want that projecting the data in its direction
+$\vec z_{in} = \vec b_i^T \vec x_n \in \R$ has maximum variance:
 \begin{align}
-	 & \max_{\vec b_1} \vec b_1^T S \vec b_1    \\
-	 & \text{subject to } \norm{\vec b_1}^2 = 1
+	V_i & = \mathrm{var} (\vec z_i) = \frac{1}{N} \sum^N_{j = 1} \vec z_{ij}^2               \\
+	    & = \frac{1}{N} \sum^N_{j = 1} (\vec b_i^T \cdot \vec x_n)^2                         \\
+	    & = \frac{1}{N} \sum^N_{j = 1} \vec b_i^T \vec x_n \vec x_n^T \vec b_i               \\
+	    & = \vec b_i^T \left(\frac{1}{N} \sum^N_{j = 1} \vec x_n \vec x_n^T \right) \vec b_i \\
+	    & = \vec b_i^T S \vec b_i
 \end{align}
-where the constraint $\norm{\vec b_1} = 1$ is there in order to respect the orthonormality of $B$
-and to make sure that $V_1$ is finite.
+where we have used the symmetry of the product $\vec a^T \vec b = \vec a \vec b^T$.
+We have obtained the so called \emph{data covariance matrix}: this is an $n \cross n$
+\emph{symmetric} matrix.
 
-The lagrangian is
-\begin{equation}
-	\mathcal L(\vec b_1, \lambda) = \vec b_1^T S \vec b_1 + \lambda(1-\vec b_1 \vec b_1^T)
-\end{equation}
-and setting its derivatives equal to zero we get that $S \vec b_1 = \lambda \vec b_1$
-and $\vec b_1^T \vec b_1 = 1$.
-This means that
-\begin{equation}
-	V_1 = \vec b_1^T S \vec b_1 = \lambda \vec b_1^T \vec b_1 = \lambda
-\end{equation}
+\begin{theorem}{Eigendecomposition for PCA}{eigendecomposition}
+	The orthonormal matrix $B^T$ which maximizes variance of the projected data
+	for each input $\vec x_n$	have as its columns the eigenvectors of $S$
+	with the largest eigenvalues.
+\end{theorem}
 
-This is an awesome results: it means that the vector which gives maximum variance is the eigenvector
-of $S$ with the highest eigenvalue.
+\begin{proof}
+	First, note that the existance of an orthonormal basis of eigenvectors of $S$ is guaranteed by
+	the spectral theorem.
 
-Now we repeat the steps with another column $b_k$ where we add the additional constraint
-of $b_k \cdot b_\ell = 0$ for all $\ell = k-1, \dots, 1$.
-The existence of a solution is guaranteed by the spectral theorem, which tells us that a symmetric
-matrix has an orthonormal basis of eigenvectors.
-From there use the lagrangian as before to obtain the result.
+	We will proceed by induction, adding one by one each vector $\vec b_i$ in our basis.
+		{
+			\setlist{font=\normalfont\itshape}
+			\begin{description}
+				\item[Base case]
+				      We want to solve
+				      \begin{align}
+					      \max_{\vec b_1} \vec b_1^T S \vec b_1 &                       \\
+					      \text{subject to }                    & \norm{\vec b_1}^2 = 1
+				      \end{align}
+
+				      The lagrangian is
+				      \begin{equation}
+					      \mathcal L(\vec b_1, \lambda) = \vec b_1^T S \vec b_1 + \lambda(1-\vec b_1 \vec b_1^T)
+				      \end{equation}
+				      and setting its derivatives equal to zero we get that $S \vec b_1 = \lambda \vec b_1$
+				      and $\vec b_1^T \vec b_1 = 1$.
+
+				      By substituting we obtain
+				      \begin{equation}
+					      V_1 = \vec b_1^T S \vec b_1 = \lambda \vec b_1^T \vec b_1 = \lambda_1
+				      \end{equation}
+				      which confirms that $\vec b_1$ is an eigenvector of $S$.
+				      Moreover, $V_1 = \lambda_1$ (the eigenvalue of $\vec b_1$), therefore we choose
+				      $\vec b_1$ to be the eigenvectors with largest eigenvalue within the orthonormal basis
+				      of $S$.
+
+				\item[Inductive step] Assume we already have $b_1, \dots, b_k$ orthonormal eigenvectors
+				      vectors of $S$ and we want to show that the next best orthonormal vector
+				      $\vec b_{k+1}$ is also an eigenvector of $S$.
+
+				      We want to solve
+				      \begin{align}
+					      \max_{\vec b_{k+1}}  \vec b_{k+1}^T S \vec b_{k+1} &                                                             \\
+					      \text{subject to }                                 & \norm{\vec b_{k+1}}^2 = 1                                   \\
+					                                                         & \vec b_{k+1}^T \vec b_i = 0 \quad \forall i \in 1, \dots, k
+				      \end{align}
+				      which gives us the lagrangian
+				      \begin{equation}
+					      \mathcal L(\vec b_1,\dots, \vec b_{k+1}, \lambda, \eta_1, \dots, \eta_k)
+					      = \vec b_1^T S \vec b_1 - \lambda(\vec b_1 \vec b_1^T -1)
+					      - \sum_{i = 1}^k \eta_i \vec b_{k+1}^T \vec b_i
+				      \end{equation}
+				      (note that we can change the signs pretty much the way we like,
+				      we can incorporate the change of sign inside $\lambda$ or $\eta_i$.)
+
+				      We take the derivative with respect to $\vec b_{k+1}$ and set it equal to zero
+				      \begin{equation}
+					      \pdv{\mathcal L}{\vec b_{k+1}} = 2 S \vec b_{k+1} - 2 \lambda \vec b_{k+1}
+					      - \sum_{i = 1}^k \eta_i \vec b_i = 0
+					      \label{eq:pca-lagrangian}
+				      \end{equation}
+
+				      Now, multiply both sides by $\vec b_j^T$ with $j \in 1, \dots, k$ so that
+				      \begin{align}
+					      0 & = 2 \vec b_j^T S \vec b_{k+1} - 2 \lambda \vec b_j^T \vec b_{k+1} - \sum_{i = 1}^k \eta_i \vec b_j^T \vec b_i \\
+					        & = 2 \lambda_j \vec b_j^T \vec b_{k+1} - 0 - \eta_j                                                            \\
+					        & = \eta_j                                                                                                      \\
+				      \end{align}
+				      where we have used the fact that $\vec b_j$ is an eigenvectors of $S$ and $\vec b_j$
+				      is orthonormal to the other $\vec b_i$ and to $\vec b_{k+1}$.
+
+				      We have obtained that $\eta_j = 0$ for any $j$, therefore, substituting this result
+				      in \cref{eq:pca-lagrangian}, we obtain
+				      \begin{equation}
+					      S \vec b_{k+1} = \lambda \vec b_{k+1}
+				      \end{equation}
+				      which tells us that $\vec b_{k+1}$ is also an eigenvector of $S$ and gives us that
+				      $V_{k+1} = \lambda$.
+				      \qedhere
+			\end{description}
+		}
+\end{proof}
+
+\subsubsection{Data compression prospective}
+It can be proven that the same conclusion would be reached if we tried to minimize the mean square
+error instead.
+
+In the end, performing some (a lot) of algebra on the mean square error we reach the same variance
+formula we had before.
 
 \subsection{Principal component analysis}
 
@@ -230,13 +297,14 @@ is equivalent to finding the projected maximum variance.
 \subsection{Non linear encoders}
 To achieve better results we can have, on top of the linear transformation, some non-linear function,
 this of course adds complexity but also gives better results.
-We would have
+
+For some $f, g$ non-linear write
 \begin{align}
-	\vec z_k         & = f\left(\sum_j W x_j\right)                                  \\
-	\tilde{\vec x}_k & = g\left(\sum_i f\left(\sum_j B_{kj} x_j\right) V_{ki}\right)
+	\vec z          & = f(W \vec x) \\
+	\vec {\tilde x} & = g(V \vec z)
 \end{align}
 
-TODO: what?
+This could lead to way better results at the price of a much larger complexity.
 
 \section{Perceptron}
 

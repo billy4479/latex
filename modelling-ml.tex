@@ -296,8 +296,8 @@ Now iterate on $t$: pick a pattern $\mu$, if $\vec w_t$ gives the right output w
 if it doesn't we modify $\vec w_{t+1}$ as follows
 \begin{equation}
 	\vec w_{t + 1} = \begin{cases}
-		\vec w_t + \eta \vec x^\mu & \text{if } y^mu = 1 \\
-		\vec w_t - \eta \vec x^\mu & \text{if } y^mu = 0
+		\vec w_t + \eta \vec x^\mu & \text{if } y^\mu = 1 \\
+		\vec w_t - \eta \vec x^\mu & \text{if } y^\mu = 0
 	\end{cases}
 \end{equation}
 where $\eta \in \R$ is the learning rate.
@@ -308,27 +308,54 @@ where $\eta \in \R$ is the learning rate.
 \end{proposition}
 
 \begin{proof}
-	Let $\vec z^\mu = (2 y^\mu - 1) \vec x^mu$.
-	We assume that $\exists K : \norm{\vec z^\mu} < K$.
+	We claim that if there exists $\vec w^*$ with $\norm{\vec w^*} = 1$ and
+	$\vec w^* \cdot \vec z^\mu > \varepsilon$ for all $\mu$ then the algorithm will converge to it.
 
-	Then
+	For simplicity consider a learning rate $\eta = 1$
+	and we let $\vec z^\mu = (2 y^\mu - 1) \vec x^\mu$ so that
 	\begin{equation}
 		\vec z^\mu = \begin{cases}
 			\vec x^\mu  & \text{if }y^\mu = 1 \\
 			-\vec x^\mu & \text{if }y^\mu = 0
 		\end{cases}
 	\end{equation}
+	Moreover we assume that $\vec z^\mu$ is bounded, i.e. $\exists K : \norm{\vec z^\mu} < K$,
 	such that $\vec w \cdot \vec z^\mu > 0$.
 
-	We claim that if there exists $\vec w^*$ such that $\norm{\vec w^*} = 1$ and
-	$\vec w^* \cdot \vec z^\mu > \varepsilon$ for all $\mu$ the algorithm will converge.
-
 	The idea of this claim is that we want to find a lower bound for $A_t = \vec w_t \cdot \vec w^*$
-	and an upper bound for $B_t = \norm{\vec w^*}$.
-	Assume there exists a $\mu$ such that such $\vec w^*$ exists and $\vec w_t \cdot \vec z^\mu <0$,
-	now we do the $t+1$ modification.
+	and an upper bound for $B_t = \norm{\vec w_t}^2$.
 
-	TODO: finish here
+	Assume there exists a $\mu$ such that such $\vec w^*$ exists.
+	Intialize the algorithm with $\vec w_0 = 0$ start the algorithm.
+	At some time $t$ assume that $\vec w_t \cdot \vec z^\mu <0$, which means we have to perform the
+	the $t+1$ modification to $\vec w$.
+
+	For $A_{t+1}$ we have
+	\begin{align}
+		A_{t+1} & = (\vec w_t + \vec z^\mu) \cdot \vec w^* \\
+		        & = A_t + \vec z^\mu \cdot \vec w^*        \\
+		        & > A_t + \varepsilon                      \\
+		        & > (t+1) \varepsilon                      \\
+	\end{align}
+	where in the last step we have used the fact that $A_0 = $ since $\vec w_0 = 0$ and then proceeded
+	by induction.
+
+	For $B_{t+1}$ we have
+	\begin{align}
+		B_{t+1} & = \norm{\vec w_t + \vec z^\mu}^2                             \\
+		        & = \norm{\vec w_t}^2 + 2 \vec w_t \vec z^\mu + \norm{z^\mu}^2 \\
+		        & < B_t + K^2                                                  \\
+		        & < (t+1)K^2
+	\end{align}
+	where we have used the same induction as before and the fact that $\vec w_t z^\mu < 0$.
+
+	Now, since $A_t < \sqrt{B_t}$ for all $t$ we have
+	\begin{align}
+		t\varepsilon < A_t & < \sqrt{B_t} < \sqrt{t K^2} \\
+		t^2 \varepsilon^2  & < t K^2                     \\
+		t                  & < \frac{K^2}{\varepsilon^2}
+	\end{align}
+	which gives us a bound for $t$.
 \end{proof}
 
 \subsubsection{Capacity of a perceptron}

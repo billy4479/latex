@@ -306,6 +306,86 @@ For some $f, g$ non-linear write
 
 This could lead to way better results at the price of a much larger complexity.
 
+\section{Entropy}
+
+\subsection{Definition}
+
+Given a probability measure $P(x)$ we define the (Shannon) entropy as
+\begin{equation}
+	h(x) = \log_2 \frac{1}{P(x)}
+\end{equation}
+Entropy is the measure of the \say{surprise}, the more the event $x$ is unlikely, the larger the
+entropy.
+We can also define the average entropy of some sample $X$
+\begin{equation}
+	H(X) = \sum_{x \in X} P(x) \log_2 \frac{1}{P(x)} = \mathds{E}_x[h(x)]
+\end{equation}
+
+\subsubsection{Derivation}
+
+The definition of entropy comes from four fundamental axioms about the amount of information $I(x)$
+carried by each event. Consider two events $x, y$ with probabilities $p, q$:
+\begin{enumerate}
+	\item \emph{Normalization}: If $P(x) = 1$ then $I(p) = 0$.
+	\item \emph{Monotonicity}: If $P(x) > P(y)$ then $I(p) < I(q)$.
+	\item \emph{Continuity}: $I(p)$ is continuous in $p$.
+	\item \emph{Additivity} for independent events: If $x \indep y$ then $I(pq) = I(p) + I(q)$.
+\end{enumerate}
+
+We can use these axioms to identify that any entropy function must have the form of
+\begin{equation}
+	I(p) = -C \ln p \quad \text {with } C > 0
+\end{equation}
+Indeed, Shannon entropy respects this result, since all logarithms are the same up to multiplication
+by a constant.
+
+\subsubsection{Information gain}
+
+We define the conditional entropy as
+\begin{equation}
+	H(Y \mid X = x) = - \sum_{y \in Y} P(y \mid x) \log P(y \mid x)
+\end{equation}
+This allows us to define the \emph{information gain} from knowing that a certain event $x$ happened:
+\begin{equation}
+	\mathrm{IG}(x) = H(Y) - H(Y \mid X = x)
+\end{equation}
+
+\subsection{Decision trees}
+
+We can use information gain to ask questions about some sample we want to classify:
+assume our sample is $k$ dimensional, we split the data based on some feature $x_j > \nu$ which
+maximizes information gain.
+
+To choose the right feature $x_j$ and the right value of $\nu$ note that, even though $\nu \in \R$,
+our sample is finite, therefore we only have a finite number of values $x_j$ can take which means
+we only have a finite number of splits: for each $j \in 1, \dots, k$ we can just test each value
+that $x_j$ takes and find the split that maximizes information gain.
+
+Then we repeat the procedure for each split, asking a different question for each one of them, in
+order to maximize the information gain each time.
+We can define various criteria to stop, some of the most commons are bounding the depth of the
+tree or stopping when the information gain for every choice is less than some threshold.
+Note that decision trees have the tendency to overfit.
+
+Finding the smallest consistent tree is a very complicated problem (NP-hard), however our greedy
+algorithm still gives ok results.
+
+\subsubsection{Random forests}
+
+An even more effective way of using decision trees through the technique of
+\emph{ensamble learning}, which means we take many models and the prediction is the result of a
+majority vote or the average of each model.
+
+This is useful as we can prove that averaging many i.i.d. random variables we obtain one with the
+same mean but smaller variance.
+
+Since the trees are deterministic (given the same input and hyperparameters they will produce the
+same output) we differentiate them by sampling different portions of the dataset or by selecting
+only certain features to split on.
+
+Random forests are still used as a benchmark in comparison to more sophisticated approaches.
+
+
 \section{Perceptron}
 
 This is a model that tries to work similarly to the actual biological neurons.

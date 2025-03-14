@@ -499,15 +499,16 @@ then $d_i = \sum_{j} A_{ji} y_j$.
 
 \begin{theorem}{Weak duality}{weak-duality}
 	Given an LP (P) and its dual (D), for each $x$ feasible to (P) and each $y$ feasible to (D)
-	we have $c^T x \leq b^y$.
+	we have $c^T x \leq b^T y$.
 \end{theorem}
 
 \begin{proof}
+	We have
 	\begin{equation}
 		c^T x = (A^T y)^T x = y^T A x \leq y^T b
 	\end{equation}
-	Where the first equality is due to $A^T y = c$ (TODO: why??) and the last inequality is because
-	$Ax \leq b$ and $y \geq 0$.
+	where the first equality is due to $A^T y = c$ (\cref{def:dual}) and the last
+	inequality is because $Ax \leq b$ and $y \geq 0$.
 \end{proof}
 
 \begin{corollary}{}{}
@@ -552,7 +553,7 @@ We now state some facts about convex cones without proof.
 		\item $b \in \mathrm{cone}(A)$;
 		\item There is a hyperplane passing through $0$ of the form $h = \{x \in \R^m \mid y^Tx = 0\}$
 		      such that $\mathrm{cone}(A)$ is on one side of the cone
-		      (i.e. $y^T a_i \geq 0$ for all $i = 1, \dots, n$) and $b$ lies on the othe side
+		      (i.e. $y^T a_i \geq 0$ for all $i = 1, \dots, n$) and $b$ lies on the other side
 		      (i.e $y^T b < 0$).
 	\end{enumerate}
 \end{theorem}
@@ -588,7 +589,45 @@ We now state some facts about convex cones without proof.
 	\end{enumerate}
 \end{corollary}
 
+\begin{proof}
+	Let $a_1, \dots, a_n \in \R^m$ the columns of $A$, then $x$ defines a non-negative combination of
+	$a_1, \dots, a_n$ so that $b$ is in their cone, and $y$ defines the hyperplane $h$.
+\end{proof}
+
 \subsubsection{Strong duality}
+
+\begin{lemma}{}{strong-duality-claim}
+	Let $x\in \R^n$ be such that $Ax \leq b$, then the following statements are equivalent:
+	\begin{enumerate}[label=\roman*.]
+		\item For all $x\in \R^n$ such that $Ax \leq b$ there holds $c^T x \leq \delta$.
+		\item There is $y \in \R^m$ such that $y \geq 0$, $A^T y = c$, and $b^T y \leq \delta$.
+	\end{enumerate}
+\end{lemma}
+
+This lemma tells us that for every valid upper bound $\delta$ of the objective of (P) there is a
+solution $y$ of (D) which certifies it.
+
+\begin{proof}
+	We prove the two directions separately.
+	\begin{description}[font=\normalfont\itshape]
+		\item[i. $\implies$ ii.]
+		      By weak duality we have
+		      \begin{equation}
+			      c^T x = (y^T A)x \leq y^T b \leq \delta
+		      \end{equation}
+		\item[ii. $\implies$ i.] We will show that if ii. is false then there is no $x$ such that
+		      $Ax \leq b$ and $c^T > \delta$.
+
+		      Assume that there is no $y \in \R^m$ and no $\lambda \in \R$ with $y, \lambda \geq 0$
+		      such that
+		      \begin{align}
+			      A^Ty         & = c      \\
+			      b^Ty+\lambda & = \delta
+		      \end{align}
+
+		      TODO
+	\end{description}
+\end{proof}
 
 \begin{theorem}{Strong duality}{strong-duality}
 	Given a LP (P) and its dual (D) (as in \cref{def:lp-standard} and \cref{def:dual})
@@ -601,6 +640,19 @@ We now state some facts about convex cones without proof.
 		      and $y^*$ of (D) both exists and are such that $c^T x = b^T y$.
 	\end{enumerate}
 \end{theorem}
+
+\begin{proof}
+	Cases i., ii., and iii. are already covered by weak duality, we are left to prove iv.
+
+	Assume that (P) has a feasible solution, and let
+	$\delta = \sup_{x \in \R^b} \{c^T x \mid Ax \leq b\}$ be the objective for $x$ optimal.
+	Note that $-\infty < \delta < \infty$ since this solution exists and (P) is bounded.
+
+	By weak duality we have that $\delta \leq b^T y$ for each $y$ feasible to (D)
+	and by \cref{lemma:strong-duality-claim}, we find $y \geq 0$ such that $A^T y = c$ and
+	$b^T y \leq \delta$, then $\delta \leq b^T y \leq \delta \implies b^T y = \delta$ and $y$ is an
+	optimal solution to $(D)$.
+\end{proof}
 
 \section{Convex optimization}
 
@@ -957,7 +1009,7 @@ This result is formalized in the following lemma.
 \begin{lemma}{Equivalent definitions of faces}{faces}
 	The following definitions of faces are equivalent:
 	\begin{enumerate}
-		\item The definition we used in \cref{def:face}:
+		\item \Cref{def:face}:
 		      \begin{equation}
 			      F = P \cap \{ x \mid c^T x = \delta \} \quad \text{s.t. }
 			      \substack{c \neq 0 \\ c^T x \leq \delta \enspace \forall x \in P_i}
@@ -969,27 +1021,29 @@ This result is formalized in the following lemma.
 \end{lemma}
 
 \begin{proof}
-	First we prove that (1) $\implies$ (2).
+	We prove each direction separately.
+	\begin{description}[font=\normalfont\itshape]
+		\item[(1) $\implies$ (2)]
+		      We can rewrite $F$ as $F = \{ x \in P \mid c^T = \delta\}$ and
+		      $\delta = \max \{ c^T x \mid x \in P\}$.
+		      This is a linear program, therefore we can use \cref{thm:strong-duality} and write
+		      $F = \min \{b^T y \mid A^T y = c, y \geq 0 \}$.
 
-	We can rewrite $F$ as $F = \{ x \in P \mid c^T = \delta\}$ and
-	$\delta = \max \{ c^T x \mid x \in P\}$.
-	This is a linear program, therefore we can use \cref{thm:strong-duality} and write
-	$F = \min \{b^T y \mid A^T y = c, y \geq 0 \}$.
+		      By complementary slackness (???) we have that if $x, y$ are feasible $y^T(Ax - b) = 0$ and
+		      $y_i \geq 0$ implies $(Ax - b)_i = 0$ and $(Ax - b)_i < 0$ implies that $y_i - 0$,
+		      so that by knowing the solution to the dual we can check which constraints are tight in the
+		      primal.
 
-	By complementary slackness (???) we have that if $x, y$ are feasible $y^T(Ax - b) = 0$ and
-	$y_i \geq 0$ implies $(Ax - b)_i = 0$ and $(Ax - b)_i < 0$ implies that $y_i - 0$,
-	so that by knowing the solution to the dual we can check which constraints are tight in the
-	primal.
+		      Then for all $x \in P$ we have that $c^T x = \delta$ iff $x$ is optimal, which in turns holds
+		      iff $(y^*)^T(b - Ax) = 0$ by complementary slackness, which again is equivalent to $Ax'= b'$.
 
-	Then for all $x \in P$ we have that $c^T x = \delta$ iff $x$ is optimal, which in turns holds
-	iff $(y^*)^T(b - Ax) = 0$ by complementary slackness, which again is equivalent to $Ax'= b'$.
-
-	Now we prove (2) $\implies$ (1).
-
-	If $F = \{ x \in P \mid A'x = b'\} \neq \varnothing$ then $c$ is the sum of the rows of $A'$
-	and $\delta$ is the sum of the entries in $b'$.
-	Then, for each $x \in P$ we have that $A'x\leq b'$ and $c^T x = \delta$ if and only if
-	$A'_i x = b_i'$ for all $i$ implying $F = \{ x \in P \mid c^T x = \delta \}$.
+		\item[(2) $\implies$ (1)]
+		      If $F = \{ x \in P \mid A'x = b'\} \neq \varnothing$ then $c$ is the sum of the rows of $A'$
+		      and $\delta$ is the sum of the entries in $b'$.
+		      Then, for each $x \in P$ we have that $A'x\leq b'$ and $c^T x = \delta$ if and only if
+		      $A'_i x = b_i'$ for all $i$ implying $F = \{ x \in P \mid c^T x = \delta \}$.
+		      \qedhere
+	\end{description}
 \end{proof}
 
 First we note that $P$ has a finite number of faces.
@@ -1109,7 +1163,7 @@ then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, l
 	We have
 	\begin{equation}
 		F = \{x \in P \mid \tilde A x = \tilde b \} =
-		\bigcap_{i = 1}^k \{x\in P \mid \tilde A_i x \tilde b_i \}
+		\bigcap_{i = 1}^k \{x\in P \mid \tilde A_i x = \tilde b_i \}
 	\end{equation}
 	but the sets on the right are the facets of $P$.
 \end{proof}
@@ -1120,7 +1174,7 @@ then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, l
 
 \begin{lemma}{}{}
 	$F$ is a minimal face if and only if $\varnothing \neq F \subseteq P$ and
-	$F = \{ x \mid A'x b', \tilde A x = \tilde b \}$
+	$F = \{ x \mid A'x = b', \tilde A x = \tilde b \}$
 	where $\tilde A x \leq \tilde b$ is a subsystem of $A'' x \leq b''$.
 \end{lemma}
 
@@ -1129,9 +1183,9 @@ then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, l
 	hence the first direction is trivial.
 
 	If $F$ is a minimal face, then
-	$F = \{ x \mid A'x b', \overline A x = \overline b, A'' \leq b'' \}$ for some subsystem
+	$F = \{ x \mid A'x = b', \overline A x = \overline b, A'' \leq b'' \}$ for some subsystem
 	$\overline A x = \overline b$.
-	Let $F = \{ x \mid A'x b', \tilde A x = \tilde b, \tilde A' \leq \tilde b' \}$
+	Let $F = \{ x \mid A'x = b', \tilde A x = \tilde b, \tilde A' \leq \tilde b' \}$
 	be the minimal description of $F$.
 	Then by \cref{thm:facets-vs-inequalities} the inequalities $\tilde A'x \leq \tilde b'$ determines
 	a facet of $F$. However, since $F$ is minimal $\tilde A'x \leq \tilde b'$ is empty.

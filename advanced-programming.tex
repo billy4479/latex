@@ -626,6 +626,7 @@ solution $y$ of (D) which certifies it.
 		      \end{align}
 
 		      TODO
+		      \qedhere
 	\end{description}
 \end{proof}
 
@@ -653,6 +654,23 @@ solution $y$ of (D) which certifies it.
 	$b^T y \leq \delta$, then $\delta \leq b^T y \leq \delta \implies b^T y = \delta$ and $y$ is an
 	optimal solution to $(D)$.
 \end{proof}
+
+\begin{theorem}{Complementary slackness conditions}{complementary-slackness}
+	Let $x$ be a feasible solution to (P) and $y$ a feasible solution to (D).
+	Then $x,y$ are optimal if and only if $y^T(b-Ax) = 0$.
+\end{theorem}
+
+\begin{proof}
+	By \cref{thm:strong-duality} if $x, y$ are optimal we have $c^T x = b^T y$.
+	Then
+	\begin{equation}
+		0 = y^T b - c^T x = y^T b - (A^T y)^T x = y^T (b - Ax)
+	\end{equation}
+	as desired.
+\end{proof}
+
+Note that since $y \geq 0$ and $b - Ax \geq 0$, for each $i$, if $y_i > 0$ then $b_i-a_i^T x = 0$
+(the $i$-th constraint is tight) or if $b_i-a_i^T x > 0$ then $y_i = 0$.
 
 \section{Convex optimization}
 
@@ -982,12 +1000,12 @@ There are some notable types of polyhedra:
 \end{definition}
 
 \begin{theorem}{Minkowski-Weyl for polytopes}{minkowski-weyl-polytopes}
-	$P \subseteq \R$ is a polytope if and only if $\exists V \subseteq \R^n$ finite such that
+	$P \subseteq \R^n$ is a polytope if and only if $\exists V \subseteq \R^n$ finite such that
 	$P = \mathrm{conv}(V)$ (convex hull of $V$).
 \end{theorem}
 
 \begin{theorem}{Minkowski-Weyl for polyhedra}{minkowski-weyl-polyhedra}
-	$P \subseteq \R$ is a polytope if and only if $\exists V, Y \subseteq \R^n$ finite such that
+	$P \subseteq \R^n$ is a polytope if and only if $\exists V, Y \subseteq \R^n$ finite such that
 	$P = \mathrm{conv}(V) + \mathrm{cone}(Y)$ (convex hull of $V$ plus
 	the convex cone of $Y$ (as in \cref{def:convex-cone}),
 	the sum is defined as $A + B = \{ x+ y \mid x \in A, y \in B$).
@@ -1029,17 +1047,19 @@ This result is formalized in the following lemma.
 		      This is a linear program, therefore we can use \cref{thm:strong-duality} and write
 		      $F = \min \{b^T y \mid A^T y = c, y \geq 0 \}$.
 
-		      By complementary slackness (???) we have that if $x, y$ are feasible $y^T(Ax - b) = 0$ and
+		      By complementary slackness (cf. \cref{thm:complementary-slackness}),
+		      we have that if $x, y$ are feasible $y^T(Ax - b) = 0$ and
 		      $y_i \geq 0$ implies $(Ax - b)_i = 0$ and $(Ax - b)_i < 0$ implies that $y_i - 0$,
-		      so that by knowing the solution to the dual we can check which constraints are tight in the
-		      primal.
+		      so that by knowing the solution to the dual we can check which constraints are tight
+		      in the primal.
 
-		      Then for all $x \in P$ we have that $c^T x = \delta$ iff $x$ is optimal, which in turns holds
-		      iff $(y^*)^T(b - Ax) = 0$ by complementary slackness, which again is equivalent to $Ax'= b'$.
+		      Then for all $x \in P$ we have that $c^T x = \delta$ iff $x$ is optimal, which in turns
+		      holds iff $(y^*)^T(b - Ax) = 0$ by complementary slackness, which again is equivalent
+		      to $Ax'= b'$.
 
 		\item[(2) $\implies$ (1)]
-		      If $F = \{ x \in P \mid A'x = b'\} \neq \varnothing$ then $c$ is the sum of the rows of $A'$
-		      and $\delta$ is the sum of the entries in $b'$.
+		      If $F = \{ x \in P \mid A'x = b'\} \neq \varnothing$ then $c$ is the sum of the rows
+		      of $A'$ and $\delta$ is the sum of the entries in $b'$.
 		      Then, for each $x \in P$ we have that $A'x\leq b'$ and $c^T x = \delta$ if and only if
 		      $A'_i x = b_i'$ for all $i$ implying $F = \{ x \in P \mid c^T x = \delta \}$.
 		      \qedhere
@@ -1136,7 +1156,7 @@ then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, l
 	This means that either $F = F'$ or $F \subsetneq F'$ which means that
 	$\dim(F) \leq \dim(F') -1 \leq \dim (P) -2$ which means that $F$ is not a facet.
 
-	Now we want to prove that, for any inequality $a^T \leq b$ from $A'' x \leq b ''$,
+	Now we want to prove that, for any inequality $a^T x \leq b$ from $A'' x \leq b ''$,
 	$F = \{ x \in P \mid a^T x = b \}$ is a facet of $P$.
 	Consider the following
 	\begin{align}
@@ -1179,7 +1199,7 @@ then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, l
 \end{lemma}
 
 \begin{proof}
-	Note that $F = \{ x \mid A'x b', \tilde A x = \tilde b \}$ has no facets and no faces,
+	Note that $F = \{ x \mid A'x = b', \tilde A x = \tilde b \}$ has no facets and no faces,
 	hence the first direction is trivial.
 
 	If $F$ is a minimal face, then
@@ -1255,7 +1275,8 @@ We make the following observations about this construct:
 
 \begin{theorem}{}{}
 	Let $P$ be a polytope and $V$ its vertices.
-	Let $V_\text{ext} = \{ x \in P \mid x \notin \mathrm{conv}(P\setminus{x})\}$
+	Let $V_\text{ext} = \{ x \in P \mid x \notin \mathrm{conv}(P\setminus{x})\}$ be the set of its
+	extremal points.
 	Then $V_\text{ext} = V$ and $P = \mathrm{conv}(V)$.
 \end{theorem}
 
@@ -1341,8 +1362,13 @@ We observe the following:
 	and we have that $v_i = 0$ for all $i \in B$.
 \end{proof}
 
-Introduce the notation $\Delta(n, m)$: this is the maximum distance between two vertices of an
-$n$-dimensional polyhedron with $m$ facets.
+Note that if an optimal solution exists, then there exists also an optimal basic feasible solution.
+In order to see this we note that $P$ has some vertices (unless $P = \varnothing$) and the set of
+optimal solutions is a face $F$ of $P$, which also has vertices. We choose a vertex $v \in F$ and
+invoke the lemma above.
+
+We now introduce the notation $\Delta(n, m)$: this is the maximum distance between two vertices of
+an $n$-dimensional polyhedron with $m$ facets.
 
 
 \end{document}

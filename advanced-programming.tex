@@ -1313,62 +1313,98 @@ Similarly, for a vector $x \in \R^n$ we define $x_B \in \R^\abs{B}$ as the vecto
 of the values in $x$ whose indices are in $B$.
 
 \begin{definition}{Basic feasible solution}{basic-feasible-sol}
-	Given an LP $\max \{ c^T x \mid Ax = b, x\geq 0\}$, a feasible solution is a vector $x \in \R^n$
-	for which there is an $m$-element $B \subseteq \{1, \dots, n\}$ such that $A_B$ is non-singular
-	and $x_j = 0$ for all $j \notin B$.
+	Given an LP $\max \{ \vec c^T \vec x \mid A \vec x = \vec b, \vec x \geq 0\}$, a basic feasible solution
+	is a vector $\vec x \in \R^n$ for which there is an $m$-element $B \subseteq \{1, \dots, n\}$
+	such that $A_B$ is non-singular and $x_j = 0$ for all $j \notin B$.
+
+	We call this vector $B$ a \emph{basic feasible basis}.
 \end{definition}
-
-\begin{definition}{Feasible basis}{feasible-basis}
-	We say that $B \subseteq \{1, \dots, n\}$ is a feasible basis if there exists a feasible solution
-	corresponding to $B$.
-\end{definition}
-
-We observe the following:
-\begin{enumerate}[label=\roman*.]
-	\item Let $\tilde A$ containing the rows of $- \mathds 1_n$ whose indices are not in $B$.
-	      Then
-	      \begin{equation}
-		      A_B \text{ is non-singular } \iff \rank\begin{pmatrix}A \\ \tilde A \end{pmatrix} = n
-	      \end{equation}
-
-	\item For every $B \subseteq \{1, \dots, n\}$ with $\abs{B} = m$ with $A_B$ non-singular,
-	      there is at most one feasible solution $x \in \R^n$ such that $x_j = 0$ for all $j \notin B$
-	      and this solution is a vertex.
-
-	      To prove this let $\tilde A$ containing the rows of $- \mathds 1_n$ whose indices are not in $B$.
-	      Then $\{x \mid Ax = b, \tilde A x = 0 \} = \{x\}$ since
-	      $\begin{pmatrix}A \\ \tilde A \end{pmatrix} = n$.
-	      This means that, if $x$ is feasible, $\{x\}$ is a minimal face.
-\end{enumerate}
 
 \begin{lemma}{}{}
-	Let $P = \{ x \mid Ax = b_1, x \geq 0 \}$.
-	Every vertex of $P$ is a basic feasible solution to some corresponding basis $B$ of size $m$.
+	A feasible solution $\vec x$ is basic if and only if $A_K$ is non-singular, where
+	$K = \{ j \in \{1, \dots, n\} : x_j > 0 \}$.
 \end{lemma}
 
-\begin{proof}
-	Let $v$ be a vertex of $P$.
-	Consider
-	\begin{equation}
-		\{v\} = \{ x \mid A x = b, \tilde A x = 0\} \quad \text{where }
-		\rank\begin{pmatrix}A \\ \tilde A \end{pmatrix} \text{ and } \tilde A = (-\mathds 1_n)_J \text{ for some indices } J
-	\end{equation}
-	Since $\rank(A) = m$ we have $\abs{J} \geq n - m$.
-	Consider $B' = {1, \dots, n} \setminus J$, then the columns of $A_{B'}$ must
-	be linearly independent otherwise $\rank \begin{pmatrix}A \\ \tilde A \end{pmatrix} < n$,
-	which in turns means that $\abs{B'} \leq m$.
+This lemma is telling us that we can \say{remove} from $B$ the indices $i \in B$ where $x_i = 0$
+and still obtain a basic feasible solution.
 
-	Now choose $B \supset B'$ of indices of $m$ linearly independent columns of $A$
-	and we have that $v_i = 0$ for all $i \in B$.
+\begin{proof}
+	If $\vec x$ is a basic feasible solution and $B$ the corresponding basic feasible basis (as in the
+	definition), then $K \subseteq B$ (by the definition of $K$) and the columns of $A_K$ are linearly
+	independent.
+
+	Conversely, if $\vec x$ is feasible and the columns of $A_K$ are linearly independent we either
+	have that $\abs{K} = m$ or $\abs{K} < m$.
+	If $\abs{K} = m$ then $K = B$ and we are done; if $\abs{K} < m$ then set $B = K$ and
+	iterate $m- \abs{K}$ times: for each iteration find a column of $A$ which is linearly independent
+	from $A_B$ and add its index to $B$.
+	At the end we are guaranteed to have $\abs{B} = m$ since $\mathrm{rank}(A) = m$.
 \end{proof}
 
-Note that if an optimal solution exists, then there exists also an optimal basic feasible solution.
-In order to see this we note that $P$ has some vertices (unless $P = \varnothing$) and the set of
-optimal solutions is a face $F$ of $P$, which also has vertices. We choose a vertex $v \in F$ and
-invoke the lemma above.
+\begin{proposition}{Uniqueness of basic feasible basis}{uniqueness-basic-feasible-basis}
+	A basic feasible solution is uniquely identified by the set $B$.
 
-We now introduce the notation $\Delta(n, m)$: this is the maximum distance between two vertices of
-an $n$-dimensional polyhedron with $m$ facets.
+	Formally, for each set $B \subseteq \{1, \dots, n\}$ with $A_B$ non-singular
+	there exists at most one feasible $\vec x$ with $x_j = 0$ for all $j \notin B$.
+\end{proposition}
 
+Note however that for each basic feasible solution $\vec x$ there might be more than one basic
+feasible basis $B$.
+
+\begin{proof}
+	For $\vec x$ to be feasible we must have that $A \vec x = \vec b$.
+	We can write $A \vec x = A_B \vec x_B + A_N \vec x_N$ with $N = \{1, \dots, n\} \setminus B$.
+	For $\vec x$ to be basic we need $\vec x_N = 0$, therefore $A_B \vec x_B = \vec b$.
+	But since $A_B$ is non-singular $A_B \vec x_B = \vec b$ has exactly one solution, say
+	$\tilde{\vec x}_B \in \R^{\abs{B}}$.
+	If all of the components of $\tilde{\vec x}_B$ are non-negative we get a basic feasible solution by
+	expanding $\tilde{\vec x}_B$ with zeros on the missing spots, otherwise we have none.
+\end{proof}
+
+\begin{proposition}{Basic feasible solutions and vertices}{bfs-vertices}
+	A point $\vec x$ is a basic feasible solution if and only if it is a vertex of $P$.
+\end{proposition}
+\begin{proof}
+	\begin{description}[font=\normalfont\itshape]
+		\item[Basic feasible solution implies vertex]
+		      This follows almost immediately from \cref{prop:uniqueness-basic-feasible-basis}:
+		      since $\vec x$ is the unique solution of $A_B \vec x = \vec b$ then $\{x\}$ is a minimal face.
+
+		      Formally, consider the matrix $\tilde A$ containing the rows of $-\mathds 1_n$ whose indices are
+		      not in $B$.
+		      Then $\{x \mid A \vec x = \vec b, \tilde A \vec x = 0\} = \{ x\}$ since the augmented matrix
+		      $\begin{pmatrix} A \\ \tilde A \end{pmatrix}$ has rank $n$.
+
+		\item[Vertex implies basic feasible solution]
+		      Let $\vec v$ be a vertex of $P$.
+		      Then $\vec v$ is the unique solution to some system of the form
+		      \begin{equation}
+			      \{ \vec v \} = \{ \vec x \mid A \vec x = \vec b, \tilde A \vec x = 0\} \quad \text{where }
+			      \rank\begin{pmatrix}A \\ \tilde A \end{pmatrix} = n
+		      \end{equation}
+		      and the matrix $\tilde A$ containing some rows of $-\mathds 1_n$.
+		      Denote by $J$ the set of such indices.
+
+		      Since $\rank(A) = m$ we have $\abs{J} \geq n - m$.
+		      Consider $B' = \{1, \dots, n\} \setminus J$, then the columns of $A_{B'}$ must
+		      be linearly independent otherwise $\rank \begin{pmatrix}A \\ \tilde A \end{pmatrix} < n$,
+		      which in turns means that $\abs{B'} \leq m$.
+
+		      Now choose $B \supseteq B'$ of indices of $m$ linearly independent columns of $A$
+		      and we have that $v_i = 0$ for all $i \in B$.
+		      \qedhere
+	\end{description}
+\end{proof}
+
+\begin{corollary}{}{}
+	If there is an optimal solution, then there is also an optimal basic feasible solution.
+\end{corollary}
+\begin{proof}
+	Let $P$ be a polyhedron representing some LP. Then $P$ has some vertices (unless $P = \varnothing$
+	in which case there is no solution).
+	Then the set of optimal solutions is a face of $F$ which also has some vertices:
+	choose $\vec v \in F$, then $\vec v$ is optimal and a feasible basic solution by
+	\cref{prop:bfs-vertices}.
+\end{proof}
 
 \end{document}

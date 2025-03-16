@@ -1367,13 +1367,14 @@ feasible basis $B$.
 \begin{proof}
 	\begin{description}[font=\normalfont\itshape]
 		\item[Basic feasible solution implies vertex]
-		      This follows almost immediately from \cref{prop:uniqueness-basic-feasible-basis}:
-		      since $\vec x$ is the unique solution of $A_B \vec x = \vec b$ then $\{x\}$ is a minimal face.
+		      This follows from \cref{prop:uniqueness-basic-feasible-basis}:
+		      since $\vec x$ is the unique solution of $A_B \vec x = \vec b$ then $\{x\}$ is a minimal
+		      face.
 
-		      Formally, consider the matrix $\tilde A$ containing the rows of $-\mathds 1_n$ whose indices are
-		      not in $B$.
-		      Then $\{x \mid A \vec x = \vec b, \tilde A \vec x = 0\} = \{ x\}$ since the augmented matrix
-		      $\begin{pmatrix} A \\ \tilde A \end{pmatrix}$ has rank $n$.
+		      Formally, consider the matrix $\tilde A$ containing the rows of $-\mathds 1_n$ whose
+		      indices are not in $B$.
+		      Then $\{x \mid A \vec x = \vec b, \tilde A \vec x = 0\} = \{ x\}$ since the augmented
+		      matrix $\begin{pmatrix} A \\ \tilde A \end{pmatrix}$ has rank $n$.
 
 		\item[Vertex implies basic feasible solution]
 		      Let $\vec v$ be a vertex of $P$.
@@ -1406,5 +1407,135 @@ feasible basis $B$.
 	choose $\vec v \in F$, then $\vec v$ is optimal and a feasible basic solution by
 	\cref{prop:bfs-vertices}.
 \end{proof}
+
+\subsection{Simplex algorithm}
+
+\subsubsection{Simplex tableau}
+
+The simplex tableau is a way of representing a linear program which also incorporates a basic
+feasible solution endowed by the basis $B$.
+We refer to the simplex tableau of $B$ as $\mathcal T(B)$.
+
+The general form of $\mathcal T(B)$ is
+\begin{equation}
+	\def\arraystretch{1.2}
+	\begin{array}{lllll}
+		\vec x_B & = & \vec p & + & Q \vec x_N        \\
+		\hline
+		z        & = & z_0    & + & \vec r^T \vec x_N
+	\end{array}
+\end{equation}
+where $N = \{1, \dots, n\} \setminus B$, $\vec p \in \R^m, \vec r \in \R^{n-m}, Q \in \R^{m
+		\cross(n-m)}$ and $z \in \R$ is the objective value, that is $z = \vec c^T \vec x$.
+
+To find the values of these variables we first rewrite the system $A\vec x = \vec b$ as
+$A_B \vec x_B = \vec b - A_N \vec x_N$, then multiply both sides by $A_B^{-1}$, which gives us
+\begin{equation}
+	\vec x_B = A_B^{-1} \vec b - A_B^{-1} A_N \vec x_N
+\end{equation}
+Then, we substitute into $z = \vec c^T \vec x = \vec c^T_B \vec x_B + \vec c^T_N \vec x_N$
+and through some algebra we obtain
+\begin{equation}
+	z = \vec c^T_B A^{-1}_B \vec b + (\vec c^T_N - c^T_B A_B^{-1} A_N) \vec x_N
+\end{equation}
+
+From these equations we deduce that
+\begin{align}
+	Q      & = -A_B^{-1} A_N                     \\
+	\vec p & = A_B^{-1} \vec b                   \\
+	z_0    & = \vec c_B^T A_B^{-1} \vec b        \\
+	\vec r & = \vec c_N - (c^T_B A^{-1}_B A_N)^T
+\end{align}
+moreover this choice of variables is unique to $B$.
+
+\subsubsection{The algorithm}
+
+The simplex algorithm starts by finding a basic feasible solution from which it constructs a tableau
+$\mathcal T(B)$ based on it.
+Then at each step it performs some transformation of the tableau which represents a new basis $B'$.
+Eventually we will be able to read the objective value $z$ and the value of the variables clearly
+from the final tableau.
+
+\paragraph{Stopping condition}
+The algorithm will stop when $\vec r < 0$, which means that all the coefficients of the non-basic
+variables are non-positive, hence changing them will only decrease the objective.
+In this case it means that the current basis $B$ is optimal.
+
+\paragraph{Pivot step}
+If this is not the case we choose some variable $x_i$ with $i \in B$ which will leave the basis and
+some other $x_j$ with $j \notin B$ which will enter it.
+Therefore $B'= (B \setminus \{i\}) \cup \{j\}$.
+
+First we choose the variable $x_j$ which has to enter. We choose between those variables whose
+coefficient in the last row of $\mathcal T(B)$ is strictly positive, in this way we guarantee that
+the objective will increase.
+We choose $x_j$ according to some rule we will discuss later.
+
+To choose which variable leaves the basis we look at the top part of the tableau: we want to increase
+$X_j$ as much as possible, therefore we look at its coefficients in the equations of the top part of
+the tableau.
+Consider the coefficient $q_{ij}$ for the $i$-th coefficient of $x_j$: if $q_{ij}$ is positive we
+can increase $x_j$ as much as we want without risking to make $x_i$ negative; otherwise, if $q_{ij}$
+is negative, we are limited on how much we can grow on the $i$-th equation by $\frac{p_i}{q_{ij}}$,
+since otherwise $x_i$ would become negative.
+Then we choose $i = \argmin_{i} \frac{p_i}{q_{ij}}$ such that all the variable are still
+non-negative and the new $B'$ is still a basic feasible basis.
+Note that if no such $i$ exists the program is unbounded and we stop.
+
+Then we update the tableau: in the $i$-th equation we move $x_j$ on the left and substitute this new
+equation for $x_j$ into $z$.
+
+\paragraph{Initialization}
+If the linear program has no \say{obvious} feasible basis we construct an auxiliary program to find
+one.
+For a LP of the form $\max \{ \vec c^T \vec x \mid A \vec x = \vec b, \vec x \geq 0 \}$ we first
+arrange it so that $\vec b \geq 0$, then we introduce the new variables $x_{n+1}, \dots, x_{n+m}$
+and solve
+\begin{equation}
+	\begin{array}{ll}
+		\max              & -(x_{n+1} + \dots + x_{n+m})           \\
+		\text{subject to} & \overline A \overline{\vec x} = \vec b \\
+		                  & \overline{\vec x} \geq 0
+	\end{array}
+\end{equation}
+where $\overline{\vec x} = (x_1, \dots, x_{n+m})^T$ and $\overline A = (A \mid \mathds 1_m)$.
+
+The original problem is feasible if and only if for every optimal solution of the auxiliary program
+we have $x_{n+1} = \dots = x_{n + m} = 0$.
+Indeed such solution gives a feasible solution to the original linear program and conversely any
+solution to the original problem has $x_{n+1} = \dots = x_{n + m} = 0$ and is therefore optimal in
+the auxiliary.
+This auxiliary program can be solved directly by the simplex algorithm since the new variables
+constitute an basic feasible solution.
+
+When the auxiliary program returns and we have that $n+1, \dots, n+m \notin B$ we are done and we
+can use $B$ as the basic feasible basis for the main program. If, in some degenerate case, we end up
+with one of the new variables in the final basis we just perform some linear algebra and substitute
+these values in the basis with some other from the main program.
+
+\subsubsection{Pivot rules}
+
+There are many ways one can choose which variable to use as pivot, here's some.
+\begin{description}[font=\normalfont\itshape]
+	\item[Largest coefficient] Choose the variable with the largest coefficient in the bottom row of
+	      the tableau. This is the original rule suggested by Dantzig.
+	\item[Largest increase] Choose the variable with the largest absolute improvement in $z$. This
+	      method is more computationally intensive than the previous one but gives better local results.
+	\item[Steepest edge] Choose the variable whose entering the basis moves the current basic feasible
+	      solution, mathematically
+	      \begin{equation}
+		      \argmax \frac{\vec c^T(\vec x_\text{new} - \vec x_\text{old})}
+		      {\norm{\vec x_\text{new} - \vec x_\text{old}}}
+	      \end{equation}
+	      This is the most used in practice as it yields the best results.
+	\item[Bland's rule] Choose the variable with the smallest index. This rule is kind of slow
+	      compared to the others but prevents the program from cycling.
+	\item[Random edge] Select a variable uniformly at random. This rule has the best proven upper
+	      bound for the number of pivot steps needed.
+\end{description}
+
+\begin{theorem}{Bland's rule avoids cycling}{blands-cycling}
+	The simplex method with Bland's rule is always finite, i.e. cycling is impossible.
+\end{theorem}
 
 \end{document}

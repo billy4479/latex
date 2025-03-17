@@ -1538,4 +1538,30 @@ There are many ways one can choose which variable to use as pivot, here's some.
 	The simplex method with Bland's rule is always finite, i.e. cycling is impossible.
 \end{theorem}
 
+\begin{proof}
+	Not required, see MatLP Theorem 5.8.1
+\end{proof}
+
+\subsection{Simplex method and duality}
+
+\begin{lemma}{}{}
+	Consider the optimal tableau $\tau(B)$, then $\vec y^* = (\vec c^T_B A_B^{-1})^T$ is an optimal solution to
+	(D), the dual of the original problem.
+\end{lemma}
+
+\begin{proof}
+	Recall that if $\mathcal T(B)$ is optimal, then $\vec x^* = \vec p = A_B^{-1}$ and
+	$z = z_0 = \vec c^T_B A_B^{-1} \vec b$, with $\vec x_N = 0$.
+	Consider $\vec w = A^T \vec y^*$. We want $\vec w \geq \vec c$ for (D) to be feasible.
+	We have
+	\begin{equation}
+		\vec w = A^T \vec y^* = (\vec c^T_B A_B^{-1} A)^T
+	\end{equation}
+
+	Then $\vec w_B = (\vec c_B^T A_B^{-1}A_B)^T = \vec c_B$ since $B$ is optimal and performing some
+	trickery on the equation for $z_0$.
+	Furthermore, $\vec w_N  = (\vec c_B^T A_B^{-1}A_N)^T = \vec c_N - \vec r \geq \vec c_N$ since
+	$\vec r \leq 0$.
+\end{proof}
+
 \end{document}

@@ -690,6 +690,132 @@ the ones where $P = 1$. We call $p = 2N$ the \emph{capacity} of the perceptron.
 If $y^\mu$ is a continuous variable, instead of being in $\{0, 1\}$, we need to define a cost
 function $\phi$ such that
 
-NEXT CLASS!
+TODO
+
+\section{Auto encoder}
+
+\subsection{Gradient descent}
+\subsubsection{Loss function}
+
+To do supervised learning ideally we'd like to minimize the error rate on the training set.
+\begin{equation}
+	\min_{\vec w} \frac{1}{N} \sum_{i = 1}^N \mathds 1(y_i \neq y(\vec w, \vec x))
+\end{equation}
+but this is very hard (NP-hard, in fact). We want to take a relaxation of this.
+
+Consider
+\begin{equation}
+	\min_{\vec w} \frac{1}{N} \sum_{i = 1}^N \ell(y_i, \vec w, \vec x)
+\end{equation}
+for some \emph{surrogate loss function} $\ell$.
+
+How do we choose the right $\ell$? We want it to be differentiable, sensitive to changes in
+$\vec w$, but not necessarily convex.
+Convexity would be nice because then we are guaranteed to have an unique minimum but in reality we
+often do not have this pleasure.
+
+Some example of surrogate loss functions are the square loss function or the logistic loss function.
+
+\subsubsection{Idea of gradient descent}
+
+We want to update the weight $\vec w$ so that the loss function decreases.
+
+\begin{equation}
+	\vec w_{t} = \vec w_{t-1} - \eta_t \grad \left(\frac{1}{N}\sum_{i = 1}^N
+	\ell(\vec w_{t-1}, \vec x_i, y_i) \right)
+\end{equation}
+where $\eta_1, \dots, \eta_K$ is the learning rate. We take it as a sequence since we might want to
+change it: at the beginning we want to take bigger steps, then we take smaller ones in order to
+fine-tune the result.
+
+For the square loss function $\ell(\vec w, \vec x, y) = (y_i - \vec w \cdot \vec x_i)^2$
+\begin{align}
+	\vec w_{t} & = \vec w_{t-1} - \eta_t \grad \left(\frac{1}{N}\sum_{i = 1}^N (y_i - \vec w \cdot \vec x_i)^2 \right) \\
+	           & = \vec w_{t-1} - \eta_t  \frac{1}{N}\sum_{i = 1}^N 2 (y_i - \vec w \cdot \vec x_i) \vec x_i           \\
+	           & = \vec w_{t-1} - \eta_t  \frac{1}{N}\sum_{i = 1}^N (y_i - \vec w \cdot \vec x_i) \vec x_i
+\end{align}
+where we have absorbed the $2$ into $\eta_t$.
+
+The costly part of our algorithm is the sum we over $N$: at every iteration the need to sum over all
+the dataset is very expensive.
+
+\subsubsection{Mini-batch}
+
+Instead of averaging over the whole dataset, at each iteration $t$ we choose a set $B_t$ with
+$\abs{B_t} = m$ uniformly at random within the data set.
+
+\begin{equation}
+	\vec w_{t} = \vec w_{t-1} - \eta_t  \frac{1}{m}\sum_{(\vec x, y) \in B_t}
+	(y_i - \vec w \cdot \vec x_i) \vec x_i
+\end{equation}
+
+Note that a higher $m$ gives lower variance but it is also more computational expensive.
+
+This algorithm makes use of a lot of linear algebra, which is easily parallelizable on GPUs.
+
+Moreover, we can use a regularization term (as in ridge regression) to avoid $\vec w$ from getting
+too big.
+\begin{equation}
+	\min_{\vec w} \frac{1}{N} \sum_{i = 1}^N (y_i - \vec w \cdot \vec x) + \lambda \norm{\vec w}^2
+\end{equation}
+
+\subsection{MLP autoencoders}
+
+A multi-layer perceptron is a device similar to a perceptron: the inputs are multiplied by some
+weights and trigger the activation of a node. However, differently from the perceptron case, each
+layer has more than one node: the weighted inputs are passed to multiple perceptrons with different
+weights. In turn, the output of these perceptrons will be weighted again and passed over as the
+input for the next layer.
+Moreover, the nodes will have some (maybe different) activation function.
+
+We have a lot of weights! Each layer has its own.
+\begin{equation}
+	W_{ij}^{(k)} \quad \text{where } \begin{cases}
+		i \text{ is the index of the starting node/input}     \\
+		j \text{ is the index of the destination note/output} \\
+		k \text{ is the index of the layer}
+	\end{cases}
+\end{equation}
+
+We can divide this network in three parts: an encode, a decoder and a feature generating layer.
+The \textbf{encoder} is the first part of the network, which takes the input data and creates a
+\emph{latent feature representation} of it.
+The \textbf{decoder} takes the output of the network and reconstruct a result which has the same
+shape as the original input.
+
+Given an input $\vec x_i \in \R^d$, the encoder will construct an internal representation
+$\vec z_i \in \R^q$ with $d > q$: this encoding process can be \say{summarized} by a function
+$g_{\vec w}: \R^d \to \R^q$ (which is the composition of linear and non-linear functions).
+Then the decoder takes the encoded data and decodes it, therefore the reconstructed data is
+$\tilde{\vec x}_i = f_{\vec w'}(g_{\vec w}(\vec x_i))$ where $f_{\vec w'}$ is the work done by the
+decoder.
+
+To train this network we want to find some $\vec w, \vec w'$ such that
+\begin{equation}
+	(\vec w, \vec w') = \argmin_{ \vec w, \vec w' }
+	\E [ \ell( \vec x_i, f_{\vec w'}(g_{\vec w}(x_i))]
+\end{equation}
+where $\E$ is just a fancy way to say average.
+
+To this we can add some $L^1$ or $L^2$ normalization terms and then run gradient descent on this.
+We have obtained a non-linear compressor, yay!
+
+\subsubsection{Activation functions}
+
+As we said, the non linearity comes from the activation functions of each neuron.
+There are many choices of these functions but the most popular are
+\begin{itemize}
+	\item \emph{ReLU}: this function is good for when the input takes a wide range of positive real
+	      values.
+	      \begin{equation}
+		      \mathrm{ReLU}(x) = \max \{ 0, x \}
+	      \end{equation}
+
+	\item \emph{Sigmoid function}: this is good when the input $x \in (0, 1)$.
+	      \begin{equation}
+		      \sigma(x) = \frac{1}{1+e^{-x}}
+	      \end{equation}
+
+\end{itemize}
 
 \end{document}

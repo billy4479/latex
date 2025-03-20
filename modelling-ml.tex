@@ -488,6 +488,18 @@ Then we repeat the following steps until convergence:
 It is possible to prove that the algorithm will converge and that each iteration will take $O(Nk)$
 but it is not possible to know how many iterations it will take to converge.
 
+\section{\texorpdfstring{$k$}{k} Nearest Neighbours}
+
+This is a supervised learning algorithm: we are given $N$ labelled samples $(\vec x^\mu, y^\mu)$ and
+we want to decide what to do with a new sample $\vec x$.
+
+We consider $k$ samples in the training set which are the closest (according to some distance $d$)
+to $\vec x$, then we take a majority vote.
+
+This is a nice algorithm because it yields highly non-linear decision boundaries but it comes with a
+computational cost: predictions take $O(kdN)$.
+Furthermore, KNN is also sensitive to noise: a few noisy samples could influence the result.
+
 \section{Perceptron}
 
 This is a model that tries to work similarly to the actual biological neurons.

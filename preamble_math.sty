@@ -37,15 +37,20 @@
 \renewcommand{\O}{\mathcal{O}}
 % https://tex.stackexchange.com/questions/191059/how-to-get-a-small-letter-version-of-mathcalo
 \renewcommand{\o}{
-    \mathchoice
-    {{\scriptstyle\mathcal{O}}}% \displaystyle
-    {{\scriptstyle\mathcal{O}}}% \textstyle
-    {{\scriptscriptstyle\mathcal{O}}}% \scriptstyle
-    {\scalebox{.6}{$\scriptscriptstyle\mathcal{O}$}}%\scriptscriptstyle
+	\mathchoice
+	{{\scriptstyle\mathcal{O}}}% \displaystyle
+	{{\scriptstyle\mathcal{O}}}% \textstyle
+	{{\scriptscriptstyle\mathcal{O}}}% \scriptstyle
+	{\scalebox{.6}{$\scriptscriptstyle\mathcal{O}$}}%\scriptscriptstyle
 }
 
 \newcommand{\half}{\frac{1}{2}}
 \newcommand{\oneover}[1]{\frac{1}{#1}}
+
+% Stats stuff
+\newcommand{\cov}{{\operatorfont cov}}
+\renewcommand{\var}{{\operatorfont var}}
+\newcommand{\E}{\mathds{E}}
 
 % *-------------------*
 % | *** Utilities *** |
@@ -75,108 +80,108 @@
 
 \let\oldfirstpage\firstpage
 \renewcommand{\firstpage}{
-    \oldfirstpage
-    \tcblistof[\section*]{thms}{List of Theorems}
-    \tcblistof[\section*]{defs}{List of Definitions}
-    \clearpage
+	\oldfirstpage
+	\tcblistof[\section*]{thms}{List of Theorems}
+	\tcblistof[\section*]{defs}{List of Definitions}
+	\clearpage
 }
 
 \tcbset{
-    theoremstyle/.style={
-            enhanced,
-            parbox=false,
-            sharp corners,
-            boxrule=0pt,
-            left=1em,
-            top=0.5em,
-            bottom=0.5em,
-            toptitle=0.25em,
-            bottomtitle=0.25em,
-            separator sign={\   $\blacktriangleright$},
-            coltitle=black,
-            fonttitle=\bfseries,
-        },
+	theoremstyle/.style={
+			enhanced,
+			parbox=false,
+			sharp corners,
+			boxrule=0pt,
+			left=1em,
+			top=0.5em,
+			bottom=0.5em,
+			toptitle=0.25em,
+			bottomtitle=0.25em,
+			separator sign={\   $\blacktriangleright$},
+			coltitle=black,
+			fonttitle=\bfseries,
+		},
 }
 
 % theorem
 \newtcbtheorem[
-    number within=subsection,
-    list inside=thms,
+	number within=subsection,
+	list inside=thms,
 ]{theorem}{Theorem}{
-    theoremstyle,
-    colback=red!10!white,
-    colframe=red!20!white,
-    borderline west={0.25em}{0pt}{red},
-    label type=theorem,
+	theoremstyle,
+	colback=red!10!white,
+	colframe=red!20!white,
+	borderline west={0.25em}{0pt}{red},
+	label type=theorem,
 }{thm}
 
 % corollary
 \newtcbtheorem[
-    number within=tcb@cnt@theorem,
+	number within=tcb@cnt@theorem,
 ]{corollary}{Corollary}{
-    theoremstyle,
-    colback=yellow!10!white,
-    colframe=yellow!20!white,
-    borderline west={0.25em}{0pt}{yellow},
-    label type=corollary,
+	theoremstyle,
+	colback=yellow!10!white,
+	colframe=yellow!20!white,
+	borderline west={0.25em}{0pt}{yellow},
+	label type=corollary,
 }{cor}
 
 % lemma
 \newtcbtheorem[
-    use counter from=theorem,
+	use counter from=theorem,
 ]{lemma}{Lemma}{
-    theoremstyle,
-    colback=yellow!10!white,
-    colframe=yellow!20!white,
-    borderline west={0.25em}{0pt}{yellow},
-    label type=lemma,
+	theoremstyle,
+	colback=yellow!10!white,
+	colframe=yellow!20!white,
+	borderline west={0.25em}{0pt}{yellow},
+	label type=lemma,
 }{lemma}
 
 % proposition
 \newtcbtheorem[
-    use counter from=theorem,
-    list inside=thms,
+	use counter from=theorem,
+	list inside=thms,
 ]{proposition}{Proposition}{
-    theoremstyle,
-    colback=orange!10!white,
-    colframe=orange!20!white,
-    borderline west={0.25em}{0pt}{orange},
-    label type=proposition,
+	theoremstyle,
+	colback=orange!10!white,
+	colframe=orange!20!white,
+	borderline west={0.25em}{0pt}{orange},
+	label type=proposition,
 }{prop}
 
 % definition
 \newtcbtheorem[
-    use counter from=theorem,
-    list inside=defs,
+	use counter from=theorem,
+	list inside=defs,
 ]{definition}{Definition}{
-    theoremstyle,
-    colback=cyan!10!white,
-    colframe=cyan!20!white,
-    borderline west={0.25em}{0pt}{cyan},
-    label type=definition,
+	theoremstyle,
+	colback=cyan!10!white,
+	colframe=cyan!20!white,
+	borderline west={0.25em}{0pt}{cyan},
+	label type=definition,
 }{def}
 
 
 % example
 \newtcbtheorem[
-    use counter from=theorem,
+	use counter from=theorem,
 ]{example}{Example}{
-    theoremstyle,
-    colback=green!10!white,
-    colframe=green!20!white,
-    borderline west={0.25em}{0pt}{green},
-    label type=example,
+	theoremstyle,
+	colback=green!10!white,
+	colframe=green!20!white,
+	borderline west={0.25em}{0pt}{green},
+	label type=example,
 }{ex}
 
 % remark
 \newtcbtheorem[
-    number within=tcb@cnt@theorem,
+	number within=tcb@cnt@theorem,
 ]{remark}{Remark}{
-    theoremstyle,
-    colback=gray!10!white,
-    colframe=gray!20!white,
-    borderline west={0.25em}{0pt}{gray},
-    label type=remark,
+	theoremstyle,
+	colback=gray!10!white,
+	colframe=gray!20!white,
+	borderline west={0.25em}{0pt}{gray},
+	label type=remark,
 }{rk}
 
 

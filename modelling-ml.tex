@@ -385,6 +385,108 @@ only certain features to split on.
 
 Random forests are still used as a benchmark in comparison to more sophisticated approaches.
 
+\section{Clustering}
+
+Clustering is a class of unsupervised learning algorithms which classify the input data
+$\vec x_1, \dots, \vec x_N \in X$ into $K \in \N$ partitions of $X$.
+The input to the algorithm are the data $\vec x_1, \dots, \vec x_N \in X$, the number of clusters
+$K$ and a distance function $d: X \cross X \to \R$.
+
+
+\begin{definition}{Distance function}{distance-function}
+	A function $d: X \cross X \to \R$ is a distance function on $X$ if
+	\begin{enumerate}[label=\roman*.]
+		\item \emph{Non-negativity}: $d(x, y) \geq 0$ for all $x, y \in X$.
+		\item \emph{Identity}: $d(x, y) = 0$ if and only if $x = y$.
+		\item \emph{Symmetry}: $d(x, y) = d(y, x)$ for all $x, y \in X$.
+		\item \emph{Triangle inequality}: $d(x, z) \leq d(x, y) + d(y, z)$ for all $x, y, z \in X$.
+	\end{enumerate}
+\end{definition}
+
+In our applications usually $X = \R^d$ and $d$ is one of the Minkowski metrics.
+
+\begin{definition}{Minkowski metrics}{minkowski-metrics}
+	Given a parameter $p \in \N$ we define the Minkowski distance on $\R^d$ as
+	\begin{equation}
+		d_p(\vec x, \vec y) = \left( \sum_{i = 1}^D \abs{x_i - y_i}^p\right)^{\frac{1}{p}}
+	\end{equation}
+
+	In particular:
+	\begin{itemize}
+		\item When $p = 1$ we obtain the \emph{Manhattan distance};
+		\item When $p = 2$ we obtain the \emph{Euclidean distance};
+		\item When $p \to \infty$ we obtain the \emph{Chebyshev distance}, that is
+		      \begin{equation}
+			      d_\infty(\vec x, \vec y) = \max_i (\abs{x_i - y_i})
+		      \end{equation}
+	\end{itemize}
+\end{definition}
+
+\subsection{Hierarchical algorithms}
+
+This algorithm starts with $N$ clusters, one for each sample, and starts merging them based on the
+distance between each cluster.
+We could also do the opposite: start with one big cluster and split it up, but we will not focus on
+this.
+
+Starting from $N$ clusters we look for the two clusters with the smallest distance between them and
+we merge them. Then we update the distance matrix between this new cluster and all the others and
+repeat until we only have $K$ clusters left.
+
+There are many ways to define the distance between two clusters $d(c_i, c_j)$:
+\begin{itemize}
+	\item \emph{Single linkage}:
+	      \begin{equation}
+		      d(c_i, c_j) = \min_{\substack{a \in c_i \\ b \in c_j}} d(a, b)
+	      \end{equation}
+
+	\item \emph{Complete linkage}:
+	      \begin{equation}
+		      d(c_i, c_j) = \max_{\substack{a \in c_i \\ b \in c_j}} d(a, b)
+	      \end{equation}
+
+	\item \emph{Average linkage}:
+	      \begin{equation}
+		      d(c_i, c_j) = \frac{1}{\abs{c_i} \abs{c_j}}
+		      \sum_{\substack{a \in c_i \\ b \in c_j}} d(a, b)
+	      \end{equation}
+\end{itemize}
+
+This procedure is $O(N^2)$ and it is a totally greedy approach.
+
+The output of this algorithm is either the partition of $X$ or a \emph{dentrogram} (see
+\cref{fig:dendrogram}).
+These are also useful to find outliers (see lecture notes for example).
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./assets/modelling-ml/dendrogram.png}
+	\caption{A dendrogram.}
+	\label{fig:dendrogram}
+\end{figure}
+
+\subsection{\texorpdfstring{$k$}{k}-means clustering}
+
+In this algorithm we start by randomly picking $\vec \mu_1, \dots, \vec \mu_K \in \R^d$ which will be the
+\say{centers} of our clusters.
+Then we repeat the following steps until convergence:
+\begin{itemize}
+	\item \emph{Update samples}: for each $i \in \{1, \dots, N\}$ we put $\vec x_i$ into the
+	      \say{closer} cluster.
+	      \begin{equation}
+		      c_i = \argmax_{j \in \{1, \dots, K\}} d(\vec x_i, \vec \mu_j)
+	      \end{equation}
+	      where $c_i$ is the index of the cluster of $x\vec x_i$.
+
+	\item \emph{Update centers}: for each $j \in \{1, \dots, K\}$ we update $\vec \mu_k$ to be the
+	      center of the clusters.
+	      \begin{equation}
+		      \vec \mu_j = \frac{\sum_{i = 1}^N \delta(c_i, j) \vec x_i}{\sum_{i = 1}^N \delta(c_i, j)}
+	      \end{equation}
+\end{itemize}
+
+It is possible to prove that the algorithm will converge and that each iteration will take $O(Nk)$
+but it is not possible to know how many iterations it will take to converge.
 
 \section{Perceptron}
 

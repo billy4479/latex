@@ -1,0 +1,88 @@
+\documentclass[12pt]{extarticle}
+
+\title{Advanced Programming and Optimization Algorithms \\ Homework 02}
+\author{Giacomo Ellero}
+\date{26/03/2025}
+
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\maketitle
+
+\section*{Exercise 1}
+\stepcounter{section}
+
+Recall the definition of convex function: $f: X \to Y$ is convex if and only if
+$\forall x_1, x_2 \in X$ and $\forall \tau \in [0, 1]$ we have
+\begin{equation}
+	f(\tau x_1 + \overline \tau x_2) \leq \tau f(x_1) + \overline \tau f(x_2)
+\end{equation}
+where we use the notation $\overline \tau = 1 - \tau$.
+
+We will show that all the functions in the sequence of the partial sums $g_1, \dots, g_k = g$ are
+convex.
+Assume that $\alpha_1, \dots \alpha_k > 0$, since if $\alpha_i = 0$ it is equivalent to removing it
+from the sum, therefore we could construct another sequence $\tilde \alpha_n$ of length $k - 1$
+where we have removed $\alpha_i$ and we wouldn't alter the resulting $g$.
+We proceed by induction on $i \in \{1, \dots, k\}$.
+
+\begin{description}[font=\normalfont\itshape]
+	\item[Base step] For $i = 1$ we have $g_1(x) = \alpha_1 f_1(x)$, so that $\forall x_1, x_2 \in X$
+	      and $\forall \tau \in [0, 1]$ we have
+	      \begin{align}
+		      g_1(\tau x_1 + \overline \tau x_2) & = \alpha_1 f_1(\tau x_1 + \overline \tau x_2)                  \\
+		                                         & \leq \alpha_1 \tau f_1(x_1) + \alpha_1 \overline \tau f_1(x_2) \\
+		                                         & = \tau g_1(x_1) + \overline \tau g_1(x_2)
+	      \end{align}
+	      where we have used the definition of $g_1$, the convexity of $f_1$ and the fact that
+	      $\alpha_1 > 0$ and the definition of
+	      $g_1$ again.
+	      We conclude that $g_1$ is convex.
+	\item[Inductive step] Assume that $g_1, \dots, g_i$ are convex. We want to show that $g_{i+1}$ is
+	      also convex.
+	      We have that, $\forall x_1, x_2 \in X$ and $\forall \tau \in [0, 1]$,
+	      \begin{align}
+		      g_{i + 1}(\tau x_1 + \overline \tau x_2) & = g_i(\tau x_1 + \overline \tau x_2) +
+		      \alpha_{i + 1} f_{i + 1}(\tau x_1 + \overline \tau x_2)                                      \\
+		                                               & \leq \tau g_i(x_1) + \overline \tau g_i(x_2) +
+		      \alpha_{i+1} \tau f_{i+1}(x_1) + \overline \tau f(x_2)                                       \\
+		                                               & = \tau g_{i+1}(x_1) + \overline \tau g_{i+1}(x_2)
+	      \end{align}
+	      where we have used the definition of $g_{i+1}$, the inductive hypothesis and the convexity
+	      of $f_{i+1}$ (and the fact that $\alpha_{i+1} > 0$, and finally again the definition of
+	      $g_{i+1}$. We conclude that $g_{i+1}$ is also convex.
+\end{description}
+
+Therefore $g$ is convex.
+
+\clearpage
+
+\section*{Exercise 2}
+\stepcounter{section}
+
+We substitute each variable $x_1, \dots x_5$ with $x_i^+ - x_i^-$ both $\geq 0$ which represent the
+positive and negative part of each variable $x_i$.
+Then we add the slack variables $s_1, \dots, s_4 \geq 0$, one for each constraint.
+
+We obtain the equation form of the polyhedron:
+\begin{gather*}
+	\begin{array}{ccccc cccc cc}
+		+ x_1^+ - x_1^- & + x_2^+ - x_2^-    &                 &                   &                 & + s_1 &       &       &       & = & 3  \\
+		                & + x_2^+ - x_2^-    & + x_3^+ - x_3^- &                   &                 &       & + s_2 &       &       & = & 12 \\
+		+ x_1^+ - x_1^- & + 3(x_2^+ - x_2^-) &                 & - (x_4^+ - x_4^-) &                 &       &       & - s_3 &       & = & -7 \\
+		                &                    &                 &                   & + x_5^+ - x_5^- &       &       &       & - s_4 & = & 6
+	\end{array} \\
+	\begin{array}{ccc}
+		x_i^+, x_i^- & \geq 0 & \enspace \forall i \in \{1, \dots, 5\} \\
+		s_i          & \geq 0 & \enspace \forall i \in \{1, \dots, 4\}
+	\end{array}
+\end{gather*}
+
+From the equation form we notice that if we set all the $x_i^+ = x_i^- = 0$ for all $i$ we obtain a
+basic feasible solution where $s_1 = 3$, $s_2 = 12$, $s_3 = 7$, and $s_4 = -6$.
+
+\end{document}

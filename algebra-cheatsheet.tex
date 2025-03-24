@@ -17,35 +17,35 @@
 \section{Vector spaces}
 
 \begin{definition}{Field}{field}
-    A non-empty set $F$ is a field if it has two operations called sum and multiplication.
-    These operations must satisfy the following properties:
-    \begin{enumerate}
-        \item The sum and the multiplication are associative;
-        \item The sum and the multiplication are commutative;
-        \item The sum and the multiplication are closed;
-        \item There exists an additive zero;
-        \item There exists an element $b$ such that $a+b = 0 \enspace a \in F$ (usually called $-a$);
-        \item There exists a multiplicative neutral element (usually referred as $1$);
-        \item There exists an inverse for every $a \in F$ (referred as $a^{-1}$);
-    \end{enumerate}
+	A non-empty set $F$ is a field if it has two operations called sum and multiplication.
+	These operations must satisfy the following properties:
+	\begin{enumerate}
+		\item The sum and the multiplication are associative;
+		\item The sum and the multiplication are commutative;
+		\item The sum and the multiplication are closed;
+		\item There exists an additive zero;
+		\item There exists an element $b$ such that $a+b = 0 \enspace a \in F$ (usually called $-a$);
+		\item There exists a multiplicative neutral element (usually referred as $1$);
+		\item There exists an inverse for every $a \in F$ (referred as $a^{-1}$);
+	\end{enumerate}
 \end{definition}
 
 The most common fields we will use are $\R$ and $\C$.
 
 \begin{definition}{Vector space}{vector-space}
-    Let $F$ be a field (\cref{def:field}). A vector space $V$ defined over $F$ is set with two operations called sum and multiplication.
-    These operations must satisfy the following properties: let $\vec{x} , \vec{y}, \vec{z} \in V$ and $c, d \in F$, then
-    \begin{enumerate}
-        \item $ \vec{x} +\vec{y} \in V$
-        \item $c \vec{x}  \in V$
-        \item $ \vec{x}  + \vec{y} = \vec{y}+  \vec{x} $
-        \item $ (\vec x + \vec y) + \vec z = \vec x + (\vec y + \vec z)$
-        \item $\exists \vec 0 \in V$ s.t. $ \vec{x} +\vec 0 =  \vec{x}  = \vec 0 +  \vec{x} $
-        \item $\forall \vec x \exists -\vec x \in V$ s.t $\vec x + (-\vec x) = \vec 0 $
-        \item $c( \vec{x} +\vec{y}) = c \vec{x}  + cy$ and $(c+d) \vec{x}  = c \vec{x}  + d \vec{x} $
-        \item $(cd) \vec{x}  = c(d \vec{x} )$
-        \item $1\vec x = \vec x$
-    \end{enumerate}
+	Let $F$ be a field (\cref{def:field}). A vector space $V$ defined over $F$ is set with two operations called sum and multiplication.
+	These operations must satisfy the following properties: let $\vec{x} , \vec{y}, \vec{z} \in V$ and $c, d \in F$, then
+	\begin{enumerate}
+		\item $ \vec{x} +\vec{y} \in V$
+		\item $c \vec{x}  \in V$
+		\item $ \vec{x}  + \vec{y} = \vec{y}+  \vec{x} $
+		\item $ (\vec x + \vec y) + \vec z = \vec x + (\vec y + \vec z)$
+		\item $\exists \vec 0 \in V$ s.t. $ \vec{x} +\vec 0 =  \vec{x}  = \vec 0 +  \vec{x} $
+		\item $\forall \vec x \exists -\vec x \in V$ s.t $\vec x + (-\vec x) = \vec 0 $
+		\item $c( \vec{x} +\vec{y}) = c \vec{x}  + cy$ and $(c+d) \vec{x}  = c \vec{x}  + d \vec{x} $
+		\item $(cd) \vec{x}  = c(d \vec{x} )$
+		\item $1\vec x = \vec x$
+	\end{enumerate}
 \end{definition}
 
 The main difference between a vector space and a field is that in a field you are able to multiply two elements of the field while in a vector space it is not always the case. Moreover, in a vector space there are no divisions.
@@ -54,29 +54,29 @@ In general all fields are vector spaces over themselves.
 Some of the most common vector spaces are $\R^n$, $\C^n$, polynomials and functions.
 
 \begin{definition}{Linear subsapace}{linear-subspace}
-    A linear subspace $M$ is a subset of a vector space $V$ which is also a vector space.
+	A linear subspace $M$ is a subset of a vector space $V$ which is also a vector space.
 \end{definition}
 
 \begin{definition}{Span}{span}
-    Let $A \subseteq V$, then $[A]$ the span of $A$ is the set of all the linear combinations of the elements of $A$.
+	Let $A \subseteq V$, then $[A]$ the span of $A$ is the set of all the linear combinations of the elements of $A$.
 \end{definition}
 
 \begin{lemma}{}{}
-    $[A]$ is the smallest linear subspace of $V$ containing $A$.
+	$[A]$ is the smallest linear subspace of $V$ containing $A$.
 \end{lemma}
 
 \begin{definition}{Linear dependence}{linear-dependece}
-    Given a set of vectors $x_1, \dots, x_n \in V$ we say that they are linearly dependent if there exists some vector $x_i$ which is a linear combination of the others.
+	Given a set of vectors $x_1, \dots, x_n \in V$ we say that they are linearly dependent if there exists some vector $x_i$ which is a linear combination of the others.
 
-    If there is none we say that those vectors are linearly independent.
+	If there is none we say that those vectors are linearly independent.
 \end{definition}
 
 We say that $A$ is \textbf{generating} for $V$ if $[A] = V$. Moreover if $A$ contains only linearly independent vectors we say $A$ is a basis for $V$ and we say that the dimension of $V$ is the number of elements in $A$.
 
 \begin{theorem}{}{}
-    Let $n = \dim V$. Then it is not possible to find more than $n$ linearly independent vectors of $V$ and it is not possible to find less than $n$ generating vectors for $V$.
+	Let $n = \dim V$. Then it is not possible to find more than $n$ linearly independent vectors of $V$ and it is not possible to find less than $n$ generating vectors for $V$.
 
-    All the basis of $V$ have the same number of elements.
+	All the basis of $V$ have the same number of elements.
 \end{theorem}
 
 If $\dim V$ is finite we say that $V$ is finitely generated. We will usually assume this is true.
@@ -84,22 +84,22 @@ If $\dim V$ is finite we say that $V$ is finitely generated. We will usually ass
 \subsection{Cosets and quotient spaces}
 
 \begin{definition}{Equivalence relation}{eq-relation}
-    Let $f:A \to B$ be any function. For all $x, y \in A$ we write $x \sim y$ if $f(x) = f(y)$.
+	Let $f:A \to B$ be any function. For all $x, y \in A$ we write $x \sim y$ if $f(x) = f(y)$.
 \end{definition}
 
 We have the following properties of equivalence relations:
 \begin{enumerate}
-    \item $x \sim x \enspace \forall x \in A$ (reflexivity)
-    \item $x \sim y \implies y \sim x$ (symmetry)
-    \item $x\sim y \land y\sim z \implies x \sim z$ (transitivity)
+	\item $x \sim x \enspace \forall x \in A$ (reflexivity)
+	\item $x \sim y \implies y \sim x$ (symmetry)
+	\item $x\sim y \land y\sim z \implies x \sim z$ (transitivity)
 \end{enumerate}
 
 \begin{example}{Coset}{coset}
-    Let $V$ and fix $M$ a linear subspace of $V$. Then write $x \sim y$ if $x-y \in M$. This is an equivalence relation.
+	Let $V$ and fix $M$ a linear subspace of $V$. Then write $x \sim y$ if $x-y \in M$. This is an equivalence relation.
 \end{example}
 
 \begin{definition}{Equivalence class}{eq-class}
-    Let $x \in V$. Then $[x] = \{y \in V: y \sim x\}$ is the set of all the elements in $V$ equivalent to $x$.
+	Let $x \in V$. Then $[x] = \{y \in V: y \sim x\}$ is the set of all the elements in $V$ equivalent to $x$.
 \end{definition}
 
 Equivalence classes form a partition of $V$.
@@ -111,49 +111,49 @@ Notably, if we fix $M$ to be a linear subspace of $V$ and $\sim$ to mean $x \sim
 \section{Linear mappings}
 
 \begin{definition}{Linear mapping}{linear-mapping}
-    Let $T$ be a function defined as $T: V \to W$ where $V, W$ are vector spaces.
-    $T$ is a linear mapping if
-    \begin{enumerate}
-        \item $T(\vec x+\vec y) = T\vec x + T\vec y$
-        \item $T(c\vec x) = cT\vec x$
-    \end{enumerate}
+	Let $T$ be a function defined as $T: V \to W$ where $V, W$ are vector spaces.
+	$T$ is a linear mapping if
+	\begin{enumerate}
+		\item $T(\vec x+\vec y) = T\vec x + T\vec y$
+		\item $T(c\vec x) = cT\vec x$
+	\end{enumerate}
 
-    If $W = F$ we say $T$ is a \textbf{linear form}.
+	If $W = F$ we say $T$ is a \textbf{linear form}.
 \end{definition}
 
 \begin{definition}{Kernel and Image}{ker-img}
-    Let $T$ be a linear mapping. Then
-    \begin{itemize}
-        \item $\ker T = \{ x \in V : Tx = \vec 0 \}$
-        \item $T(V) = \{ y \in W : y = Tx \enspace \forall x \in V \}$
-    \end{itemize}
+	Let $T$ be a linear mapping. Then
+	\begin{itemize}
+		\item $\ker T = \{ x \in V : Tx = \vec 0 \}$
+		\item $T(V) = \{ y \in W : y = Tx \enspace \forall x \in V \}$
+	\end{itemize}
 \end{definition}
 
 \begin{definition}{$\mathscr{L}(V, W)$ and $\mathscr{L}(V)$}{spaces-of-linear-mappings}
-    $\mathscr{L}(V, W)$ is the set of all linear mappings of the form $T: V \to W$.
+	$\mathscr{L}(V, W)$ is the set of all linear mappings of the form $T: V \to W$.
 
-    $\mathscr{L}(V)$ is equivalent to $\mathscr{L}(V, V)$.
+	$\mathscr{L}(V)$ is equivalent to $\mathscr{L}(V, V)$.
 \end{definition}
 
 Notably we can always define the zero mapping $Tx = 0 \enspace \forall x \in V$ and the identity mapping $Tx = x \enspace \forall x \in V$.
 
 \begin{theorem}{$\mathscr{L}(V, W)$ is a vector space}{}
-    $\mathscr{L}(V, W)$ is a vector spaces and $\dim \mathscr{L}(V, W) = \dim V \times \dim W$.
+	$\mathscr{L}(V, W)$ is a vector spaces and $\dim \mathscr{L}(V, W) = \dim V \times \dim W$.
 \end{theorem}
 
 \begin{definition}{Isomorphic vector spaces}{isomorphism}
-    If $T: V\to W$ is bijective we say that $V \cong W$ ($V$ and $W$ are isomorphic) and $T$ is an isomorphism.
+	If $T: V\to W$ is bijective we say that $V \cong W$ ($V$ and $W$ are isomorphic) and $T$ is an isomorphism.
 \end{definition}
 
 \begin{proposition}{}{}
-    $V \cong W \iff \dim V = \dim W$.
+	$V \cong W \iff \dim V = \dim W$.
 \end{proposition}
 
 \begin{theorem}{First isomorphism theorem}{1st-iso}
-    Let $T: V \to W$ then
-    \begin{equation}
-        V/\ker T \cong \Im T
-    \end{equation}
+	Let $T: V \to W$ then
+	\begin{equation}
+		V/\ker T \cong \Im T
+	\end{equation}
 \end{theorem}
 
 \end{document}

@@ -28,8 +28,8 @@ in these equations $u$ is a functions of only one variable which is evaluated at
 
 We will focus on ODEs in \textbf{normal form}:
 \begin{equation}
-    \label{eq:normal-form}
-    \dv[k]{u(t)}{t} = f\left( t, u(t), u'(t), \dots, \dv[k-1]{u(t)}{t} \right)
+	\label{eq:normal-form}
+	\dv[k]{u(t)}{t} = f\left( t, u(t), u'(t), \dots, \dv[k-1]{u(t)}{t} \right)
 \end{equation}
 where $f$ is a known function with some properties we will describe later.
 For this kind of equation there exists a general theory on how to solve them.
@@ -47,27 +47,27 @@ Moreover, sometimes, for brevity, I will write $u$ instead of $u(t)$, $u'$ inste
 This is the easiest type of differential equation. We have seen them in physics before, now we will prove how to solve them.
 
 \begin{definition}{Separable differential equation}{separable}
-    Let $f: \R^2 \to \R$.
-    We say a that a differential equation is separable if it is of the form
-    \begin{equation}
-        u' = f(t, u) = g(t) \cdot h(u)
-    \end{equation}
-    for some functions $g(t)$ and $h(u)$.
+	Let $f: \R^2 \to \R$.
+	We say a that a differential equation is separable if it is of the form
+	\begin{equation}
+		u' = f(t, u) = g(t) \cdot h(u)
+	\end{equation}
+	for some functions $g(t)$ and $h(u)$.
 \end{definition}
 
 \begin{proof}[Solution]
-    First, separate the variables:
-    \begin{equation}
-        \frac{u'}{h(u)} = g(t)
-    \end{equation}
+	First, separate the variables:
+	\begin{equation}
+		\frac{u'}{h(u)} = g(t)
+	\end{equation}
 
-    Let $H$ be the primitive of $\frac{1}{h}$ and $G$ the primitive of $g$.
-    Now let's differentiate $H(u(t))$ using the chain rule:
-    \begin{equation}
-        \dv{t} H(u(t)) = H'(u(t)) \cdot u'(t) = \frac{u'}{h(u)}
-    \end{equation}
-    which we know to be equal to $g(t) = G'(t)$.
-    Therefore, by integrating both sides w.r.t. $t$ we get the solution.
+	Let $H$ be the primitive of $\frac{1}{h}$ and $G$ the primitive of $g$.
+	Now let's differentiate $H(u(t))$ using the chain rule:
+	\begin{equation}
+		\dv{t} H(u(t)) = H'(u(t)) \cdot u'(t) = \frac{u'}{h(u)}
+	\end{equation}
+	which we know to be equal to $g(t) = G'(t)$.
+	Therefore, by integrating both sides w.r.t. $t$ we get the solution.
 \end{proof}
 
 \subsection{Existence and uniqueness of the solution}
@@ -77,66 +77,66 @@ This is the easiest type of differential equation. We have seen them in physics 
 For this section we will need to recall a few tools from topology.
 
 \begin{definition}{Euclidean space and norm}{euclidean-space-norm}
-    An euclidean space is a vector space where an operator called \textit{inner product} is defined.
-    Then norm is defined as $\norm{\vec x} = \langle \vec x, \vec x \rangle$.
+	An euclidean space is a vector space where an operator called \textit{inner product} is defined.
+	Then norm is defined as $\norm{\vec x} = \langle \vec x, \vec x \rangle$.
 
-    If $\vec x \in \R^n$, given the definition of inner product in $\R^n$, we get that
-    \begin{equation}
-        \norm{\vec x} = \sqrt{x_1^2 + \dots + x_n^2}
-    \end{equation}
+	If $\vec x \in \R^n$, given the definition of inner product in $\R^n$, we get that
+	\begin{equation}
+		\norm{\vec x} = \sqrt{x_1^2 + \dots + x_n^2}
+	\end{equation}
 \end{definition}
 
 For a complete list of properties of the inner product or the norm see the Linear Algebra notes.
 For our purposes we will recall the following ones:
 
 \begin{proposition}{Notable properties of the norm}{norm-props}
-    Let $\lambda \in \mathbb F$ and $\vec x, \vec y \in \R^n$. Then
-    \begin{itemize}
-        \item $\norm{\lambda \vec x} = \abs{\lambda}\norm{\vec x}$ (\textit{homogeneity}).
-        \item $\norm{\vec x + \vec y} \leq \norm{\vec x} + \norm{\vec y}$ (\textit{triangle inequality}).
-    \end{itemize}
+	Let $\lambda \in \mathbb F$ and $\vec x, \vec y \in \R^n$. Then
+	\begin{itemize}
+		\item $\norm{\lambda \vec x} = \abs{\lambda}\norm{\vec x}$ (\textit{homogeneity}).
+		\item $\norm{\vec x + \vec y} \leq \norm{\vec x} + \norm{\vec y}$ (\textit{triangle inequality}).
+	\end{itemize}
 \end{proposition}
 
 The following definitions will also result useful. These were covered in Analysis 2.
 
 \begin{definition}{Open set}{open-set}
-    Let the ball $B_r(p)$ be defined as
-    \begin{equation}
-        B_r(p) = \{ q \in \R^n : \norm{q - p} < r \}
-    \end{equation}
-    with $p \in \R^n$ and $r \in \R$.
+	Let the ball $B_r(p)$ be defined as
+	\begin{equation}
+		B_r(p) = \{ q \in \R^n : \norm{q - p} < r \}
+	\end{equation}
+	with $p \in \R^n$ and $r \in \R$.
 
-    A set $A \in \R^n$ is open if for all points $p \in A$ there exists a ball $B_r(p)$ with $r > 0$ such that $B_r(p) \subseteq A$.
+	A set $A \in \R^n$ is open if for all points $p \in A$ there exists a ball $B_r(p)$ with $r > 0$ such that $B_r(p) \subseteq A$.
 \end{definition}
 
 \begin{proposition}{Properties of open sets}{props-open-set}
-    \begin{itemize}
-        \item The union of open sets is still an open set.
-        \item The intersection of finitely many open sets is an open set.
-        \item A set is open iff it can be written as the union of open balls.
-        \item Given a function $f:A \to \R^n$ with $A \subseteq \R^m$ open, $f$ is continuous iff for any $U \subseteq \R^n$ the preimage $f^{-1}(U)$ is an open set (in $\R^m$).
-    \end{itemize}
+	\begin{itemize}
+		\item The union of open sets is still an open set.
+		\item The intersection of finitely many open sets is an open set.
+		\item A set is open iff it can be written as the union of open balls.
+		\item Given a function $f:A \to \R^n$ with $A \subseteq \R^m$ open, $f$ is continuous iff for any $U \subseteq \R^n$ the preimage $f^{-1}(U)$ is an open set (in $\R^m$).
+	\end{itemize}
 \end{proposition}
 
 The following definitions and properties where covered in detail in Analysis 1.
 
 \begin{definition}{Lipschitz functions}{lipschitz-functions}
-    A function $f: S \to \R^n$ with $S\in \R^m$ is Lipschitz if $\forall a, b \in S$ there exists $C \in \R$ such that
-    \begin{equation}
-        \norm{f(a) - f(b)} \leq C \norm{a - b}
-    \end{equation}
+	A function $f: S \to \R^n$ with $S\in \R^m$ is Lipschitz if $\forall a, b \in S$ there exists $C \in \R$ such that
+	\begin{equation}
+		\norm{f(a) - f(b)} \leq C \norm{a - b}
+	\end{equation}
 
-    Moreover, a function is \textbf{locally Lipschitz} if, assuming this time $S$ open,
-    for any $p \in S$ there exists a ball $B_r(p) \in S$ with $r > 0$ where the function is Lipschitz.
+	Moreover, a function is \textbf{locally Lipschitz} if, assuming this time $S$ open,
+	for any $p \in S$ there exists a ball $B_r(p) \in S$ with $r > 0$ where the function is Lipschitz.
 \end{definition}
 
 \begin{proposition}{Properties of Lipschitz functions}{props-lipschitz}
-    \begin{itemize}
-        \item Lipschitz functions are also locally Lipschitz.
-        \item Locally Lipschitz functions are also continuous.
-        \item A function is Lipschitz iff all its partial derivatives are bounded.
-        \item If a functions is differentiable with continuous partial derivatives then it is locally Lipschitz
-    \end{itemize}
+	\begin{itemize}
+		\item Lipschitz functions are also locally Lipschitz.
+		\item Locally Lipschitz functions are also continuous.
+		\item A function is Lipschitz iff all its partial derivatives are bounded.
+		\item If a functions is differentiable with continuous partial derivatives then it is locally Lipschitz
+	\end{itemize}
 \end{proposition}
 
 \subsubsection{Main result of ODE theory}
@@ -145,82 +145,82 @@ We will present this theorem in various forms, from the most basic one to the mo
 This theorem comes with different names such as Peano-Picard theorem, Picard-Lindelöf theorem, or Cauchy-Lipschitz.
 
 \begin{theorem}{Picard–Lindelöf theorem}{picard-lindelof}
-    Let $f: A \to \R$ with $A \subseteq \R^2$ open and $f$ jointly continuous on both inputs and locally Lipschitz in the second input.
-    Then, for any $t_0, \lambda_0 \in \R$ there exists a unique \emph{maximal solution}
-    \begin{equation}
-        u: I \to \R
-    \end{equation}
-    where $I$ is an open interval called the \emph{interval of maximal existence} such that $t_0 \in I$ and
-    \begin{equation}
-        \begin{cases}
-            u'(t) = f(t, u(t)) \\
-            u(t_0) = \lambda_0
-        \end{cases}
-    \end{equation}
+	Let $f: A \to \R$ with $A \subseteq \R^2$ open and $f$ jointly continuous on both inputs and locally Lipschitz in the second input.
+	Then, for any $t_0, \lambda_0 \in \R$ there exists a unique \emph{maximal solution}
+	\begin{equation}
+		u: I \to \R
+	\end{equation}
+	where $I$ is an open interval called the \emph{interval of maximal existence} such that $t_0 \in I$ and
+	\begin{equation}
+		\begin{cases}
+			u'(t) = f(t, u(t)) \\
+			u(t_0) = \lambda_0
+		\end{cases}
+	\end{equation}
 \end{theorem}
 
 \begin{remark}{Meaning of unique}{}
-    In this context \say{unique} means that if $v: J \to \R$ is another solution defined on another interval $J$ containing $t_0$ then $J \subseteq I$ and $v = u|_J$.
+	In this context \say{unique} means that if $v: J \to \R$ is another solution defined on another interval $J$ containing $t_0$ then $J \subseteq I$ and $v = u|_J$.
 \end{remark}
 
 \begin{remark}{Existance if not locally Lipschitz}{}
-    Peano proved that the existence of a solution is guaranteed even if the function is continuous but not locally Lipschitz.
-    Uniqueness is not guaranteed though.
+	Peano proved that the existence of a solution is guaranteed even if the function is continuous but not locally Lipschitz.
+	Uniqueness is not guaranteed though.
 \end{remark}
 
 \begin{corollary}{}{}
-    Let $u$ and $v$ be solutions for the same ODE with different initial conditions, $t_0$ and $t_1$ respectively.
-    Then $u$ and $v$ never cross.
+	Let $u$ and $v$ be solutions for the same ODE with different initial conditions, $t_0$ and $t_1$ respectively.
+	Then $u$ and $v$ never cross.
 \end{corollary}
 
 \begin{proof}
-    We have that $u(t_0) \neq v(t_0)$ hence we cannot have that $u(t_i) = v(t_i)$ at some other point $t_i$ because otherwise we could apply uniqueness with initial point $t_i$ and we would have that are the same function on a restricted domain,
-    contradicting that $u(t_0) \neq v(t_0)$.
+	We have that $u(t_0) \neq v(t_0)$ hence we cannot have that $u(t_i) = v(t_i)$ at some other point $t_i$ because otherwise we could apply uniqueness with initial point $t_i$ and we would have that are the same function on a restricted domain,
+	contradicting that $u(t_0) \neq v(t_0)$.
 \end{proof}
 
 \begin{theorem}{Peano theorem}{peano}
-    Let $f: A \to \R$ with $A \subseteq \R^2$ open and $f$ continuous.
-    Then, for any $t_0, \lambda_0 \in \R$ there exists a solution
-    \begin{equation}
-        u: I \to \R
-    \end{equation}
-    where $I$ is an open interval such that $t_0 \in I$ and
-    \begin{equation}
-        \begin{cases}
-            u'(t) = f(t, u(t)) \\
-            u(t_0) = \lambda_0
-        \end{cases}
-    \end{equation}
+	Let $f: A \to \R$ with $A \subseteq \R^2$ open and $f$ continuous.
+	Then, for any $t_0, \lambda_0 \in \R$ there exists a solution
+	\begin{equation}
+		u: I \to \R
+	\end{equation}
+	where $I$ is an open interval such that $t_0 \in I$ and
+	\begin{equation}
+		\begin{cases}
+			u'(t) = f(t, u(t)) \\
+			u(t_0) = \lambda_0
+		\end{cases}
+	\end{equation}
 
-    Note that uniqueness is not implied.
+	Note that uniqueness is not implied.
 \end{theorem}
 
 \subsection{System of ODEs}
 
 \begin{definition}{First order system of ODEs in normal form}{system-odes}
-    A first order system of ODEs in normal form is a system of $n$ equations
-    \begin{equation}
-        \begin{cases}
-            u_1' = f(t, u_1, \dots, u_n) \\
-            \vdots                       \\
-            u_n' = f(t, u_1, \dots, u_n) \\
-        \end{cases}
-    \end{equation}
-    where $f_1, \dots, f_n: A \to \R$ and $A \in \R^{n+1}$ open.
+	A first order system of ODEs in normal form is a system of $n$ equations
+	\begin{equation}
+		\begin{cases}
+			u_1' = f(t, u_1, \dots, u_n) \\
+			\vdots                       \\
+			u_n' = f(t, u_1, \dots, u_n) \\
+		\end{cases}
+	\end{equation}
+	where $f_1, \dots, f_n: A \to \R$ and $A \in \R^{n+1}$ open.
 \end{definition}
 
 A solution to a system of ODEs consists of $u_1, \dots, u_n: I \to \R$, with $I \subseteq \R$ is an interval.
 
 An initial value problem for a system of ODEs is in the form of
 \begin{equation}
-    {\operatorfont IVP:}
-    \begin{cases}
-        u_1' = \ldots             \\
-        u_1(t_0) = \lambda_{0, 1} \\
-        \vdots                    \\
-        u_n' = \ldots             \\
-        u_n(t_0) = \lambda_{0, n} \\
-    \end{cases}
+	{\operatorfont IVP:}
+	\begin{cases}
+		u_1' = \ldots             \\
+		u_1(t_0) = \lambda_{0, 1} \\
+		\vdots                    \\
+		u_n' = \ldots             \\
+		u_n(t_0) = \lambda_{0, n} \\
+	\end{cases}
 \end{equation}
 with $(t_0, \lambda_{0,1}, \dots, \lambda_{0,n}) \in A$.
 
@@ -228,44 +228,44 @@ with $(t_0, \lambda_{0,1}, \dots, \lambda_{0,n}) \in A$.
 
 These systems can be thought as a ODE with vector-valued functions:
 \begin{theorem}{Picard–Lindelöf theorem - second formulation}{picard-lindelof-2nd}
-    Let $f: A \to \R^n$ with $A \subseteq \R^{n+1}$ open and $f$ of class $C^1$.
-    Then, for any $t_0 \in \R$ and $\lambda_0 \in \R^n$ s.t. $(t_0, \lambda_0) \in A$ there exists a unique \emph{maximal solution}
-    $u: I \to \R^n$
-    where $I$ is an open interval called the \emph{interval of maximal existence} such that $t_0 \in I$ and
-    \begin{equation}
-        \begin{cases}
-            u'(t) = f(t, u(t)) \\
-            u(t_0) = \lambda_0
-        \end{cases}
-    \end{equation}
+	Let $f: A \to \R^n$ with $A \subseteq \R^{n+1}$ open and $f$ of class $C^1$.
+	Then, for any $t_0 \in \R$ and $\lambda_0 \in \R^n$ s.t. $(t_0, \lambda_0) \in A$ there exists a unique \emph{maximal solution}
+	$u: I \to \R^n$
+	where $I$ is an open interval called the \emph{interval of maximal existence} such that $t_0 \in I$ and
+	\begin{equation}
+		\begin{cases}
+			u'(t) = f(t, u(t)) \\
+			u(t_0) = \lambda_0
+		\end{cases}
+	\end{equation}
 \end{theorem}
 
 \begin{theorem}{Escape from compacts}{escape-from-compacts}
-    Let $K \in A$ compact, the maximal solution $u: I \to \R^n$ to IVP is s.t. $I$ is open and $\exists [a, b] \in I$ s.t. $(t, u(t)) \notin K$ for $t \notin [a, b]$.
+	Let $K \in A$ compact, the maximal solution $u: I \to \R^n$ to IVP is s.t. $I$ is open and $\exists [a, b] \in I$ s.t. $(t, u(t)) \notin K$ for $t \notin [a, b]$.
 \end{theorem}
 
 \begin{corollary}{}{}
-    Let $A = \R^{n+1}$. If $u: I \to \R^n$ is the maximal solution and $u$ is bounded, then $I = \R$.
+	Let $A = \R^{n+1}$. If $u: I \to \R^n$ is the maximal solution and $u$ is bounded, then $I = \R$.
 \end{corollary}
 
 \begin{theorem}{}{}
-    Let $A, f$ as in \Cref{thm:picard-lindelof-2nd}.
-    Assume $\abs{f(t, \lambda) - f(t, \lambda')} \leq c(t)\abs{\lambda - \lambda'}$, where $c: \R \to [0, \infty)$.
-    Then any IVP has solution defined on $I = \R$.
+	Let $A, f$ as in \Cref{thm:picard-lindelof-2nd}.
+	Assume $\abs{f(t, \lambda) - f(t, \lambda')} \leq c(t)\abs{\lambda - \lambda'}$, where $c: \R \to [0, \infty)$.
+	Then any IVP has solution defined on $I = \R$.
 \end{theorem}
 
 \subsubsection{Equivalence between higher order ODEs and first order systems}
 
 Let us consider a scalar ODE like
 \begin{equation}
-    u'' = 2 u' - 3u
+	u'' = 2 u' - 3u
 \end{equation}
 we can define $v_1 = u$ and $v = u'$ and rewrite the ODE as a system of first order ODEs as follows:
 \begin{equation}
-    \begin{cases}
-        v_1' = v_2 \\
-        v_2' = 2 v_2 - 3v_1
-    \end{cases}
+	\begin{cases}
+		v_1' = v_2 \\
+		v_2' = 2 v_2 - 3v_1
+	\end{cases}
 \end{equation}
 
 These two formulations are equivalent.
@@ -274,31 +274,31 @@ This works for any higher order ODE and it is the standard procedure.
 \subsection{Bootstrap}
 
 \begin{proposition}{Bootstrap}{bootstrap}
-    Consider and ODE $u' = f(t, u)$ with $f : A \to \R$ and $A \in \R^2$ open.
-    Assume $f$ is of class $C^m$ for some $m \geq 1$.
-    Then any solution $u$ is of class $C^{m+1}$.
+	Consider and ODE $u' = f(t, u)$ with $f : A \to \R$ and $A \in \R^2$ open.
+	Assume $f$ is of class $C^m$ for some $m \geq 1$.
+	Then any solution $u$ is of class $C^{m+1}$.
 \end{proposition}
 
 \begin{proof}
-    Proceed by induction on $l = 0, 1, \dots, m$.
-    We want to prove that $u$ is of class $l +1$.
-    \begin{description}
-        \item[Base case] $l = 0$. We know that $u$ is differentiable by ODE $\implies$ $u$ continuous $\implies$ $f(t, u(t))$ is continuous $\implies$ $u'$ is continuous.
-        \item[Inductive step] By induction $u$ is $C^{l+1}$ which means it is also $C^1$.
-              We need to prove that $u$ is $C^{l+2}$.
-              Let $g(t) = (t, u(t))$ which is $C^1$.
-              Then $f \circ g$ is $C^1$ and
-              \begin{equation}
-                  u''(t) = (f \circ g)'(t) = \underbrace{\pdv{f}{x_1}()}_{C^l} \underbrace{(t, u(t))}_{C^{l+1}} + \underbrace{\pdv{f}{x_2}()}_{C^l}\underbrace{(t, u(t))}_{C^{l+1}} \underbrace{u'(t)}_{C^l}
-              \end{equation}
-    \end{description}
+	Proceed by induction on $l = 0, 1, \dots, m$.
+	We want to prove that $u$ is of class $l +1$.
+	\begin{description}
+		\item[Base case] $l = 0$. We know that $u$ is differentiable by ODE $\implies$ $u$ continuous $\implies$ $f(t, u(t))$ is continuous $\implies$ $u'$ is continuous.
+		\item[Inductive step] By induction $u$ is $C^{l+1}$ which means it is also $C^1$.
+		      We need to prove that $u$ is $C^{l+2}$.
+		      Let $g(t) = (t, u(t))$ which is $C^1$.
+		      Then $f \circ g$ is $C^1$ and
+		      \begin{equation}
+			      u''(t) = (f \circ g)'(t) = \underbrace{\pdv{f}{x_1}()}_{C^l} \underbrace{(t, u(t))}_{C^{l+1}} + \underbrace{\pdv{f}{x_2}()}_{C^l}\underbrace{(t, u(t))}_{C^{l+1}} \underbrace{u'(t)}_{C^l}
+		      \end{equation}
+	\end{description}
 \end{proof}
 
 \subsection{Autonomous ODEs}
 
 We say an ODE is autonomous if it doesn't depend on time:
 \begin{equation}
-    u' = f(u)
+	u' = f(u)
 \end{equation}
 with $f: \R \to \R$ of class $C'$.
 This means that the solution does not depend on $t$, but just on $u$ itself.
@@ -308,7 +308,7 @@ This property is called \emph{translation invariance}.
 
 We can easily see that autonomous ODEs have some constant solutions:
 \begin{equation}
-    u(t) = c \iff f(c) = 0
+	u(t) = c \iff f(c) = 0
 \end{equation}
 these solutions are called \emph{equilibrium points} and are the zeroes of $f$.
 
@@ -324,49 +324,49 @@ We will focus for now on \textbf{linear and homogeneous} ODEs with \textbf{const
 
 Given $k \geq 1 \in \N$, linear higher order ODEs with constant coefficients take the form
 \begin{equation}
-    \label{eq:higher-order-linear-const-coeff-ode}
-    a_k \dv[k]{u(t)}{t} + a_{k-1}\dv[k-1]{u(t)}{t} + \dots a_1 u'(t) + a_0 u(t) = 0
+	\label{eq:higher-order-linear-const-coeff-ode}
+	a_k \dv[k]{u(t)}{t} + a_{k-1}\dv[k-1]{u(t)}{t} + \dots a_1 u'(t) + a_0 u(t) = 0
 \end{equation}
 we will assume they are homogeneous for simplicity.
 We assume that $a_k \neq 0$, therefore we can divide everything by $a_k$ and therefore assume that $a_k = 1$.
 
 Equivalently we can rewrite as a system as follows:
 \begin{equation}
-    \begin{cases}
-        u_0' = u_1         \\
-        \vdots             \\
-        u_{k_2}' = u_{k-1} \\
-        u_{k-1}' = - \sum_{j = 0}^{k-1} a_j u_j
-    \end{cases}
+	\begin{cases}
+		u_0' = u_1         \\
+		\vdots             \\
+		u_{k_2}' = u_{k-1} \\
+		u_{k-1}' = - \sum_{j = 0}^{k-1} a_j u_j
+	\end{cases}
 \end{equation}
 Since the last equation is a lipschitz function of $u_0, \dots, u_{k_1}$, given the initial conditions, the maximal solution is always defined and is unique.
 
 \begin{proposition}{}{}
-    The set $V$ of solutions $u: \R \to \R$ of \cref{eq:higher-order-linear-const-coeff-ode} is a vector space of dimension $k$.
+	The set $V$ of solutions $u: \R \to \R$ of \cref{eq:higher-order-linear-const-coeff-ode} is a vector space of dimension $k$.
 \end{proposition}
 
 \begin{proof}
-    Operations are the usual ones (sum of functions, multiplication of a function by a scalar).
-    $V$ is a vector space because \cref{eq:higher-order-linear-const-coeff-ode} is linear and homogeneous.
+	Operations are the usual ones (sum of functions, multiplication of a function by a scalar).
+	$V$ is a vector space because \cref{eq:higher-order-linear-const-coeff-ode} is linear and homogeneous.
 
-    We consider a map $L: \R^k \to V$ that given, $\vec \lambda (\lambda_0, \lambda_1, \dots, \lambda_{k_1}) \in \R^k$, $L(\vec \lambda)$ is the unique solution for the initial conditions $\vec \lambda$.
-    We claim $L$ is linear, injective and bijective.
+	We consider a map $L: \R^k \to V$ that given, $\vec \lambda (\lambda_0, \lambda_1, \dots, \lambda_{k_1}) \in \R^k$, $L(\vec \lambda)$ is the unique solution for the initial conditions $\vec \lambda$.
+	We claim $L$ is linear, injective and bijective.
 
-    Linearity is easy, given $\vec \lambda, \vec \mu \in \R^k$ and consider $w = u + v = L(\vec \lambda) + L(\vec \mu)$.
-    $w$ is also a solution since both $u$ and $v$ are and the initial conditions of $w$ are $\lambda_i + \mu_i$.
-    Therefore $L(\lambda + \mu) = w$ by uniqueness of the solution.
+	Linearity is easy, given $\vec \lambda, \vec \mu \in \R^k$ and consider $w = u + v = L(\vec \lambda) + L(\vec \mu)$.
+	$w$ is also a solution since both $u$ and $v$ are and the initial conditions of $w$ are $\lambda_i + \mu_i$.
+	Therefore $L(\lambda + \mu) = w$ by uniqueness of the solution.
 
-    To prove injectivity we will take $u = L(\vec \lambda) = v = L (\vec \mu)$ which means that $u(0) = v(0) \implies \lambda_0 = \mu_0$ and so on for all the derivatives.
+	To prove injectivity we will take $u = L(\vec \lambda) = v = L (\vec \mu)$ which means that $u(0) = v(0) \implies \lambda_0 = \mu_0$ and so on for all the derivatives.
 
-    Surjectivity is proven by taking $u \in V$ and setting $\lambda_0 = u(0)$, $\lambda_1 = u'(0)$ and so on, giving us $u = L(\vec \lambda)$.
+	Surjectivity is proven by taking $u \in V$ and setting $\lambda_0 = u(0)$, $\lambda_1 = u'(0)$ and so on, giving us $u = L(\vec \lambda)$.
 \end{proof}
 
 \begin{remark}{}{}
-    Everything we did works also in the case of complex valued solutions.
+	Everything we did works also in the case of complex valued solutions.
 
-    The set of solutions $\dim_\C V_\C = k$ and $\dim_\R V_\C = 2k$.
+	The set of solutions $\dim_\C V_\C = k$ and $\dim_\R V_\C = 2k$.
 
-    Note that if the initial conditions are real-valued, the solution will be real-valued as well.
+	Note that if the initial conditions are real-valued, the solution will be real-valued as well.
 \end{remark}
 
 \subsection{Solutions to higher order linear ODEs}
@@ -374,11 +374,11 @@ Since the last equation is a lipschitz function of $u_0, \dots, u_{k_1}$, given 
 To solve equations of the form \cref{eq:higher-order-linear-const-coeff-ode} we can start by looking at solutions similar to the first order case, where solutions are of the form $a e^{\alpha t}$ with $\alpha, a \in \R$.
 We will try to plug in the formula and see if it works for some values of $a$, therefore our ODE becomes
 \begin{equation}
-    \sum_{j = 0}^{k} c_j \alpha^j e^{\alpha t} = 0
+	\sum_{j = 0}^{k} c_j \alpha^j e^{\alpha t} = 0
 \end{equation}
 but since $e^{\alpha t} \gt 0$ we can simplify to
 \begin{equation}
-    \sum_{j = 0}^{k} c_j \alpha^j = 0
+	\sum_{j = 0}^{k} c_j \alpha^j = 0
 \end{equation}
 This is a polynomial equation: we call $p(z) = \sum c_j z^j$ the \textbf{characteristic polynomial} of the ODE and $e^\alpha$ is a solution to the ODE every time $p(\alpha) = 0$.
 Moreover, by linearity and homogeneity, if a function solves the ODE, any of its multiples will too.
@@ -386,11 +386,11 @@ Moreover, by linearity and homogeneity, if a function solves the ODE, any of its
 \subsubsection{Real and simple roots}
 
 \begin{theorem}{}{}
-    If the roots $\alpha_1, \dots, \alpha_k$ of the characteristic polynomial $p(z)$ are real and simple (with multiplicity $1$) then any solution $u(t)$ has the form
-    \begin{equation}
-        u(t) = \sum_{\ell = 1}^{k} \beta_\ell e^{\alpha_\ell t}
-    \end{equation}
-    for an unique choice of coefficients $\beta_\ell$.
+	If the roots $\alpha_1, \dots, \alpha_k$ of the characteristic polynomial $p(z)$ are real and simple (with multiplicity $1$) then any solution $u(t)$ has the form
+	\begin{equation}
+		u(t) = \sum_{\ell = 1}^{k} \beta_\ell e^{\alpha_\ell t}
+	\end{equation}
+	for an unique choice of coefficients $\beta_\ell$.
 \end{theorem}
 
 This theorem tells us that the solutions $\{ e^{\alpha_1 t}, \dots, e^{\alpha_k t} \}$ is a basis of $V_\C$.
@@ -402,50 +402,50 @@ It is possible to extend the theory to allow for complex roots and roots with hi
 If we have a polynomial of the form $p(z) = (z - \alpha)^2$ we have that the root has multiplicity $2$, but we still want to find two linearly independent, orthogonal basis.
 To do so we write
 \begin{equation}
-    p_\varepsilon(z) = (z-\alpha)(z-\alpha - \varepsilon)
+	p_\varepsilon(z) = (z-\alpha)(z-\alpha - \varepsilon)
 \end{equation}
 with $\varepsilon \to 0$.
 Indeed this polynomial has two simple roots, which implies that $e^{\alpha t}, e^{(\alpha + \varepsilon) t}$ spans the solutions of the ODE.
 But since as $\varepsilon \to 0$ the two solutions become pretty much identical we use Gram-Schmidt orthogonalization
 theorem to write a more \say{stable} basis:
 \begin{equation}
-    e^{\alpha t}, \quad \frac{e^{(\alpha + \varepsilon)t} - e^{\alpha t}}{\varepsilon}
+	e^{\alpha t}, \quad \frac{e^{(\alpha + \varepsilon)t} - e^{\alpha t}}{\varepsilon}
 \end{equation}
 and as $\varepsilon \to 0$ the second function becomes
 \begin{equation}
-    \pdv{e^{\alpha t}}{\alpha} = t e ^{\alpha t}
+	\pdv{e^{\alpha t}}{\alpha} = t e ^{\alpha t}
 \end{equation}
 
 \begin{theorem}{}{}
-    Assume the roots of the characteristic polynomial $p(z)$ are all real.
-    For each distinct root $a_\ell$ with multiplicity $m_\ell$ the functions
-    \begin{equation}
-        e^{\alpha_\ell t}, \quad t e^{\alpha_\ell t}, \quad \ldots, \quad t^{m_\ell -1} e^{\alpha_\ell t}
-    \end{equation}
-    each solve the ODE and together, as $\ell$ varies, form a basis for the space of solutions.
+	Assume the roots of the characteristic polynomial $p(z)$ are all real.
+	For each distinct root $a_\ell$ with multiplicity $m_\ell$ the functions
+	\begin{equation}
+		e^{\alpha_\ell t}, \quad t e^{\alpha_\ell t}, \quad \ldots, \quad t^{m_\ell -1} e^{\alpha_\ell t}
+	\end{equation}
+	each solve the ODE and together, as $\ell$ varies, form a basis for the space of solutions.
 \end{theorem}
 
 To prove this theorem we will need another tool:
 given a polynomial $a(z) = \sum^\ell_{j = 0} \mu_j z^j$ and a function $f \in X$, where $X$ is the set of functions of class $C^\infty$, we associate the linear operator
 \begin{equation}
-    a(D): X \to X, \quad a(D) f = \sum_{j = 0}^{s} \mu_j \dv[j]{f}{t}
+	a(D): X \to X, \quad a(D) f = \sum_{j = 0}^{s} \mu_j \dv[j]{f}{t}
 \end{equation}
 
 \subsubsection{Complex roots}
 
 We can use Euler's formula to write $e^{\alpha t}$ when $\alpha \in \C$:
 \begin{equation}
-    e^{\alpha t} = e^{\gamma t}e^{i \theta t} = e^{\gamma t}(\cos(\theta t) i \sin (\theta t))
+	e^{\alpha t} = e^{\gamma t}e^{i \theta t} = e^{\gamma t}(\cos(\theta t) i \sin (\theta t))
 \end{equation}
 
 \begin{theorem}{}{}
-    Assume that the characteristic polynomial has real roots $\sigma_1, \dots, \sigma_r$ with multiplicities \newline $m_1,\dots,m_r$ and complex roots $\tau_1, \bar \tau_1, \dots, \tau_s, \bar \tau_s$ with multiplicities $n_1, \dots, n_s$ so that
-    $\sum m_j + \sum 2n_j = k$.
-    Then the following set is a basis of the space of solutions:
-    \begin{equation}
-        \left\{ \left\{ t^je^{\sigma_\ell t} \right\} \cup \left\{ t^je^{\gamma_{\ell'} t} \cos(\theta_{\ell' t}) \right\} \cup \left\{ t^je^{\gamma_{\ell'} t} \sin(\theta_{\ell' t}) \right\} \right\}
-    \end{equation}
-    where $\tau_{\ell'} =\gamma_{\ell'} + i \theta _{\ell'}$, $\ell \in \{0, \dots, m_\ell-1\}$, $\ell' \in \{ 0,\dots, n_\ell -1 \}$.
+	Assume that the characteristic polynomial has real roots $\sigma_1, \dots, \sigma_r$ with multiplicities \newline $m_1,\dots,m_r$ and complex roots $\tau_1, \bar \tau_1, \dots, \tau_s, \bar \tau_s$ with multiplicities $n_1, \dots, n_s$ so that
+	$\sum m_j + \sum 2n_j = k$.
+	Then the following set is a basis of the space of solutions:
+	\begin{equation}
+		\left\{ \left\{ t^je^{\sigma_\ell t} \right\} \cup \left\{ t^je^{\gamma_{\ell'} t} \cos(\theta_{\ell' t}) \right\} \cup \left\{ t^je^{\gamma_{\ell'} t} \sin(\theta_{\ell' t}) \right\} \right\}
+	\end{equation}
+	where $\tau_{\ell'} =\gamma_{\ell'} + i \theta _{\ell'}$, $\ell \in \{0, \dots, m_\ell-1\}$, $\ell' \in \{ 0,\dots, n_\ell -1 \}$.
 \end{theorem}
 
 % TODO: jordan normal form, matrix exponentials, classification of unstable points, probably more
@@ -455,28 +455,28 @@ We can use Euler's formula to write $e^{\alpha t}$ when $\alpha \in \C$:
 \subsection{Metric spaces}
 
 \begin{definition}{Metric space}{metric-space}
-    A metric space is a pair $(X, d)$ where $X$ is a non-empty set and $d$ is a function
-    \begin{equation}
-        d: X \cross X \to [0, +\infty)
-    \end{equation}
-    called the \emph{distance function}, with the following properties:
-    \begin{itemize}
-        \item \emph{Positive definiteness}: $d(x, y) = 0 \iff x = y$
-        \item \emph{Symmetry}: $d(x, y) = d(y, x)$
-        \item \emph{Triangle inequality}: $d(x, z) \leq d(x, y) + d(y, z)$
-    \end{itemize}
+	A metric space is a pair $(X, d)$ where $X$ is a non-empty set and $d$ is a function
+	\begin{equation}
+		d: X \cross X \to [0, +\infty)
+	\end{equation}
+	called the \emph{distance function}, with the following properties:
+	\begin{itemize}
+		\item \emph{Positive definiteness}: $d(x, y) = 0 \iff x = y$
+		\item \emph{Symmetry}: $d(x, y) = d(y, x)$
+		\item \emph{Triangle inequality}: $d(x, z) \leq d(x, y) + d(y, z)$
+	\end{itemize}
 \end{definition}
 
 Notably, if $X$ is a vector space, we can define a distance function by relying on the norm $\norm{\cdot}$:
 \begin{equation}
-    d(x, y) = \norm{x - y}
+	d(x, y) = \norm{x - y}
 \end{equation}
 On the norm there holds also the \emph{homogeneity} property: $\norm{\lambda v} = \abs{\lambda}\norm{v}$.
 
 The euclidean norm belongs to a family of norms depending on a parameter $p \in [1, \infty]$.
 The $\ell^p$-norm is defined as
 \begin{equation}
-    \norm{(x_1, \dots, x_n)}_{\ell^p} = \left( \abs{x_1}^p + \dots + \abs{x_n}^p \right)^{1/p}
+	\norm{(x_1, \dots, x_n)}_{\ell^p} = \left( \abs{x_1}^p + \dots + \abs{x_n}^p \right)^{1/p}
 \end{equation}
 and for $p = \infty$ we have $\norm{(x_1, \dots, x_n)}_{\ell^\infty} = \max_{1 \leq i \leq n} \abs{x_i}$.
 
@@ -489,14 +489,14 @@ Some examples are the convergence of a sequence, uniqueness of the limit, open a
 compactness, and continuity.
 
 \begin{definition}{Cauchy sequance}{cauchy-sequence}
-    A sequence of points in $X$ is called a Cauchy sequence if $d(x_k, x_l) \to 0$ as $k, l \to \infty$.
+	A sequence of points in $X$ is called a Cauchy sequence if $d(x_k, x_l) \to 0$ as $k, l \to \infty$.
 \end{definition}
 
 Note that any converging sequence is a Cauchy sequence, but the converse does not necessarily hold.
 
 \begin{definition}{Completeness of a metric space}{metric-completeness}
-    We say that a metric space $(X, d)$ is complete when all the Cauchy sequences
-    in $X$ converge to some limit in $X$.
+	We say that a metric space $(X, d)$ is complete when all the Cauchy sequences
+	in $X$ converge to some limit in $X$.
 \end{definition}
 
 Notably, $\R$ is complete and, for example $\Q$ is not.
@@ -508,289 +508,289 @@ a measure $\hat d$ of $\hat X$ such that $d = \eval{\hat d}_{X \cross X}$.
 
 For the purpose of proving Peano-Picard we will consider the metric space $(X, d)$ where $X$ is the set
 \begin{equation}
-    X = \{ g:I \to \R : g \text{ bounded and continuous} \}
+	X = \{ g:I \to \R : g \text{ bounded and continuous} \}
 \end{equation}
 and $d$ is induced from the \emph{supremum norm}:
 \begin{equation}
-    d(g_1, g_2) = \norm{g_1 - g_2} = \sup_{t \in I} \abs{g_1 - g_2}
+	d(g_1, g_2) = \norm{g_1 - g_2} = \sup_{t \in I} \abs{g_1 - g_2}
 \end{equation}
 note that the supremum is always finite since $g$ is bounded.
 
 \begin{definition}{Uniform convergence}{uniform-convergence}
-    Let $S \neq \varnothing$ and $g_k : S \to \R$ a sequence of functions.
-    We say that $g_k$ converges uniformly to $g: S \to \R$ if for any $\varepsilon > 0$ there exists $K \in \N$ such that
-    \begin{equation}
-        \abs{g_k(x) - g(x)} < \varepsilon \quad \text{for all } k \geq K \text{ and } x \in S
-    \end{equation}
+	Let $S \neq \varnothing$ and $g_k : S \to \R$ a sequence of functions.
+	We say that $g_k$ converges uniformly to $g: S \to \R$ if for any $\varepsilon > 0$ there exists $K \in \N$ such that
+	\begin{equation}
+		\abs{g_k(x) - g(x)} < \varepsilon \quad \text{for all } k \geq K \text{ and } x \in S
+	\end{equation}
 \end{definition}
 This definition is stronger than pointwise convergence, since it requires that $K$ is a valid threshold at all points,
 independently of $x$, while in pointwise convergence we can choose a different $K$ at each point $x$.
 
 \begin{figure}[H]
-    \centering
-    \includesvg[width=0.3\textwidth]{assets/analysis-3/uniform-convergence.svg}
-    \caption{The sequence $f_k$ converges uniformly to $f$ if after some point $K$ all the functions $f_N$ with $N \geq K$ are inside the region $f\pm \varepsilon$.}
+	\centering
+	\includesvg[width=0.3\textwidth]{assets/analysis-3/uniform-convergence.svg}
+	\caption{The sequence $f_k$ converges uniformly to $f$ if after some point $K$ all the functions $f_N$ with $N \geq K$ are inside the region $f\pm \varepsilon$.}
 \end{figure}
 
 \begin{proposition}{Uniform convergence and distance}{uniform-convergence-distance}
-    A sequence of functions $g_k$ in $X$ converges uniformly to $g \in X$ if and only if
-    $d(g_k, g) \to 0$ as $k \to \infty$.
+	A sequence of functions $g_k$ in $X$ converges uniformly to $g \in X$ if and only if
+	$d(g_k, g) \to 0$ as $k \to \infty$.
 \end{proposition}
 \begin{proof}
-    \skiplineafterproof
-    \begin{description}
-        \item[$\implies$]
-              Assume $g_k \to g$ uniformly.
-              Fix $k$ such that $\abs{g_k(x) -g(x)} < \varepsilon$, now we can take the supremum and get the result.
-        \item[$\impliedby$]
-              Assume $\norm{g_k - g} \to 0$.
-              We can rewrite using the $\varepsilon$ definition of limit and we get
-              \begin{equation}
-                  \varepsilon > \norm{g_k - g} = \sup_{x \in I}\abs{g_k(x)-g(x)} \implies \abs{g_k(x) - g(x)} < \varepsilon
-              \end{equation}
-    \end{description}
-    As desired.
+	\skiplineafterproof
+	\begin{description}
+		\item[$\implies$]
+		      Assume $g_k \to g$ uniformly.
+		      Fix $k$ such that $\abs{g_k(x) -g(x)} < \varepsilon$, now we can take the supremum and get the result.
+		\item[$\impliedby$]
+		      Assume $\norm{g_k - g} \to 0$.
+		      We can rewrite using the $\varepsilon$ definition of limit and we get
+		      \begin{equation}
+			      \varepsilon > \norm{g_k - g} = \sup_{x \in I}\abs{g_k(x)-g(x)} \implies \abs{g_k(x) - g(x)} < \varepsilon
+		      \end{equation}
+	\end{description}
+	As desired.
 \end{proof}
 
 \begin{theorem}{Permanence of continuity}{permanence-continuity}
-    Assume that $g_k$ are continuous and converge uniformly to $g$. Then $g$ is continuous as well.
+	Assume that $g_k$ are continuous and converge uniformly to $g$. Then $g$ is continuous as well.
 \end{theorem}
 \begin{proof}
-    We want to show that $g$ is continuous at some point $x_0 \in I$.
-    Consider $g_K$. By uniform continuity we have that $\abs{g_K(x) - g(x)} < \varepsilon$.
-    Since $g_K$ is continuous by hypothesis we can find $\delta > 0$ such that
-    \begin{equation}
-        \abs{g_K(x) - g_L(x_0)} < \varepsilon \quad \forall x \in I \text{ with } \abs{x - x_0} < \delta
-    \end{equation}
-    But now we can use the fact that $g$ is \say{close} to $g_K$ and that $g_K(x)$ is \say{close} to $g_K(x_0)$.
-    We have:
-    \begin{equation}
-        g(x) - g(x_0) = [g(x) -g_K(x)] + [g_K(x) - g_K(x_0)] + [g_K(x_0) - g(x_0)]
-    \end{equation}
-    which gives us
-    \begin{equation}
-        \abs{g(x) - g(x_0)} \leq \abs{g(x) -g_K(x)} + \abs{g_K(x) - g_K(x_0)} +\abs{g_K(x_0) - g(x_0)} < 3 \varepsilon
-    \end{equation}
-    when $x \in I$ and $\abs{x - x_0} < \delta$.
-    Repeating the argument with $\varepsilon/3$ yields the result.
+	We want to show that $g$ is continuous at some point $x_0 \in I$.
+	Consider $g_K$. By uniform continuity we have that $\abs{g_K(x) - g(x)} < \varepsilon$.
+	Since $g_K$ is continuous by hypothesis we can find $\delta > 0$ such that
+	\begin{equation}
+		\abs{g_K(x) - g_L(x_0)} < \varepsilon \quad \forall x \in I \text{ with } \abs{x - x_0} < \delta
+	\end{equation}
+	But now we can use the fact that $g$ is \say{close} to $g_K$ and that $g_K(x)$ is \say{close} to $g_K(x_0)$.
+	We have:
+	\begin{equation}
+		g(x) - g(x_0) = [g(x) -g_K(x)] + [g_K(x) - g_K(x_0)] + [g_K(x_0) - g(x_0)]
+	\end{equation}
+	which gives us
+	\begin{equation}
+		\abs{g(x) - g(x_0)} \leq \abs{g(x) -g_K(x)} + \abs{g_K(x) - g_K(x_0)} +\abs{g_K(x_0) - g(x_0)} < 3 \varepsilon
+	\end{equation}
+	when $x \in I$ and $\abs{x - x_0} < \delta$.
+	Repeating the argument with $\varepsilon/3$ yields the result.
 \end{proof}
 
 \begin{theorem}{Completeness- EXAM}{}
-    The metric space $(X, d)$ as defined at the beginning of \cref{sec:metric-space-func} is complete.
+	The metric space $(X, d)$ as defined at the beginning of \cref{sec:metric-space-func} is complete.
 \end{theorem}
 \begin{proof}
-    Let $g_k$ be a Cauchy sequence (\cref{def:cauchy-sequence}) in $(X, d)$,
-    we want to show that there exists $g \in X$ such that $d(g_k, g) \to 0$ (i.e. $\norm{g_k - g} \to 0$) as $k \to \infty$.
+	Let $g_k$ be a Cauchy sequence (\cref{def:cauchy-sequence}) in $(X, d)$,
+	we want to show that there exists $g \in X$ such that $d(g_k, g) \to 0$ (i.e. $\norm{g_k - g} \to 0$) as $k \to \infty$.
 
-    Since $g_k$ is a Cauchy sequence $\exists K \in \N$ such that $\norm{g_k - g_l} < \varepsilon$ for $k, l \geq K$ and, for an arbitrary $x \in I$ we have
-    \begin{equation}
-        \abs{g_k(x)-g_l(x)} \leq \norm{g_k - g_l} < \varepsilon \quad \forall k, l \geq K
-    \end{equation}
-    by our definition of the norm.
-    This tells us that the sequence of numbers $(g_k(x))_{k \in \N}$ is a Cauchy sequence over $\R$ and, by completeness of $\R$ this sequence converges.
-    We can therefore write
-    \begin{equation}
-        g(x) = \lim_{k \to \infty} g_k(x)
-    \end{equation}
-    for each $x \in I$.
+	Since $g_k$ is a Cauchy sequence $\exists K \in \N$ such that $\norm{g_k - g_l} < \varepsilon$ for $k, l \geq K$ and, for an arbitrary $x \in I$ we have
+	\begin{equation}
+		\abs{g_k(x)-g_l(x)} \leq \norm{g_k - g_l} < \varepsilon \quad \forall k, l \geq K
+	\end{equation}
+	by our definition of the norm.
+	This tells us that the sequence of numbers $(g_k(x))_{k \in \N}$ is a Cauchy sequence over $\R$ and, by completeness of $\R$ this sequence converges.
+	We can therefore write
+	\begin{equation}
+		g(x) = \lim_{k \to \infty} g_k(x)
+	\end{equation}
+	for each $x \in I$.
 
-    We now have a definition for $g$, we are left to prove the following:
-    \begin{itemize}
-        \item \emph{$g_k$ converges to $g$ uniformly}.
+	We now have a definition for $g$, we are left to prove the following:
+	\begin{itemize}
+		\item \emph{$g_k$ converges to $g$ uniformly}.
 
-              Consider the definition of Cauchy sequence, fix $k \geq K$ and let $l \to \infty$.
-              We get that
-              \begin{equation}
-                  \abs{g_k(x) - g(x)} = \lim_{l \to \infty} \abs{g_k(x) - g_l(x)} \leq \varepsilon
-              \end{equation}
-              Since $\varepsilon > 0$ is arbitrary all functions $g_k$ converge uniformly to $g$.
+		      Consider the definition of Cauchy sequence, fix $k \geq K$ and let $l \to \infty$.
+		      We get that
+		      \begin{equation}
+			      \abs{g_k(x) - g(x)} = \lim_{l \to \infty} \abs{g_k(x) - g_l(x)} \leq \varepsilon
+		      \end{equation}
+		      Since $\varepsilon > 0$ is arbitrary all functions $g_k$ converge uniformly to $g$.
 
-        \item \emph{$g$ is bounded}
+		\item \emph{$g$ is bounded}
 
-              Let $\varepsilon = 1$.
-              We have
-              \begin{equation}
-                  \abs{g(x)} = \abs{g(x) - g_K(x) + g_K(x)} \leq \abs{g(x) - g_K(x)} + \abs{g_K(x)} \leq 1 + \abs{g_K(x)}
-              \end{equation}
-              and since $g_K$ is bounded we get the result.
+		      Let $\varepsilon = 1$.
+		      We have
+		      \begin{equation}
+			      \abs{g(x)} = \abs{g(x) - g_K(x) + g_K(x)} \leq \abs{g(x) - g_K(x)} + \abs{g_K(x)} \leq 1 + \abs{g_K(x)}
+		      \end{equation}
+		      and since $g_K$ is bounded we get the result.
 
-        \item \emph{$g$ is continuous}
+		\item \emph{$g$ is continuous}
 
-              Immediate from \Cref{thm:permanence-continuity}
-              (given for granted in the exam).
-    \end{itemize}
+		      Immediate from \Cref{thm:permanence-continuity}
+		      (given for granted in the exam).
+	\end{itemize}
 \end{proof}
 
 \subsubsection{Contractions}
 
 \begin{definition}{Contraction}{contraction}
-    Let $(X, d)$ be a metric space.
-    A function $F: X \to X$ is a contraction if $\exists \alpha \in [0, 1)$
-    such that
-    \begin{equation}
-        d(F(x), F(y)) \leq \alpha d(x, y) \quad \forall x, y \in X
-    \end{equation}
+	Let $(X, d)$ be a metric space.
+	A function $F: X \to X$ is a contraction if $\exists \alpha \in [0, 1)$
+	such that
+	\begin{equation}
+		d(F(x), F(y)) \leq \alpha d(x, y) \quad \forall x, y \in X
+	\end{equation}
 \end{definition}
 
 \begin{theorem}{Banach fixed-point theorem - EXAM}{banach}
-    Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
-    Then, there exists an unique $\bar x \in X$ such that
-    \begin{equation}
-        F(\bar x) = \bar x
-    \end{equation}
+	Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
+	Then, there exists an unique $\bar x \in X$ such that
+	\begin{equation}
+		F(\bar x) = \bar x
+	\end{equation}
 \end{theorem}
 
 \begin{proof}
-    First let us show that $\bar x$ is unique.
-    Assume that $F(x) = x$ and $F(y) = y$, hence
-    \begin{equation}
-        d(x, y) = d(F(x), F(y)) \leq \alpha d(x, y) \implies (1-\alpha) d(x, y) \leq 0
-    \end{equation}
-    and since distances are non-negative we get that $d(x, y) = 0$ but this implies $x = y$.
+	First let us show that $\bar x$ is unique.
+	Assume that $F(x) = x$ and $F(y) = y$, hence
+	\begin{equation}
+		d(x, y) = d(F(x), F(y)) \leq \alpha d(x, y) \implies (1-\alpha) d(x, y) \leq 0
+	\end{equation}
+	and since distances are non-negative we get that $d(x, y) = 0$ but this implies $x = y$.
 
-    We now want to prove the existence of $\bar x$.
-    For the first step we define a sequence of points recursively as follows:
-    \begin{equation}
-        x_{k + 1} = F(x_k)
-    \end{equation}
-    and claim that
-    \begin{equation}
-        d(x_k, x_{k+1}) \leq \alpha^k d(x_0, x_1) \quad \forall k \in \N .
-    \end{equation}
-    We proceed by induction: the base case of $k = 0$ is trivial since $\alpha^0 = 1$ (assume that $0^0=1$);
-    for the inductive step we have
-    \begin{equation}
-        d(x_{k+1}, x_{k+2}) = d(F(x_k), F(x_{k+1})) \leq \alpha d(x_k, x_{k+1}) \leq \alpha \alpha^k d(x_0, x_1)
-    \end{equation}
-    as desired.
+	We now want to prove the existence of $\bar x$.
+	For the first step we define a sequence of points recursively as follows:
+	\begin{equation}
+		x_{k + 1} = F(x_k)
+	\end{equation}
+	and claim that
+	\begin{equation}
+		d(x_k, x_{k+1}) \leq \alpha^k d(x_0, x_1) \quad \forall k \in \N .
+	\end{equation}
+	We proceed by induction: the base case of $k = 0$ is trivial since $\alpha^0 = 1$ (assume that $0^0=1$);
+	for the inductive step we have
+	\begin{equation}
+		d(x_{k+1}, x_{k+2}) = d(F(x_k), F(x_{k+1})) \leq \alpha d(x_k, x_{k+1}) \leq \alpha \alpha^k d(x_0, x_1)
+	\end{equation}
+	as desired.
 
-    Next, we let $C = d(x_0, x_1)$ and claim that
-    \begin{equation}
-        d(x_k, x_{k+1}) \leq C \sum_{j = k}^{l-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
-    \end{equation}
-    We again proceed by induction on $\ell > j$:
-    the base case will be $\ell = j + 1$ which reduces to $d(x_k, x_{k+1}) \leq C \alpha^k$, which is the result of the previous claim;
-    at $\ell + 1$ we have
-    \begin{equation}
-        d(x_k, x_{l+1}) \leq d(x_k, x_\ell) + d(x_\ell, x_{l + 1}) \leq d(x_k, x_\ell) + C \alpha^\ell \leq C\sum_{j = k}^{l-1} \alpha^j + C \alpha^\ell
-    \end{equation}
-    thanks to the triangle inequality, the previous claim and the inductive hypothesis.
+	Next, we let $C = d(x_0, x_1)$ and claim that
+	\begin{equation}
+		d(x_k, x_{k+1}) \leq C \sum_{j = k}^{l-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
+	\end{equation}
+	We again proceed by induction on $\ell > j$:
+	the base case will be $\ell = j + 1$ which reduces to $d(x_k, x_{k+1}) \leq C \alpha^k$, which is the result of the previous claim;
+	at $\ell + 1$ we have
+	\begin{equation}
+		d(x_k, x_{l+1}) \leq d(x_k, x_\ell) + d(x_\ell, x_{l + 1}) \leq d(x_k, x_\ell) + C \alpha^\ell \leq C\sum_{j = k}^{l-1} \alpha^j + C \alpha^\ell
+	\end{equation}
+	thanks to the triangle inequality, the previous claim and the inductive hypothesis.
 
-    Now we can combine the non-negativity of $d$, the claim we just proved and some algebra to get that for $0 \leq k < \ell$
-    \begin{equation}
-        0 \leq d(x_k, x_\ell) \leq C \sum_{j = k}^{l-1} \alpha^j = C \frac{\alpha^k - \alpha^\ell}{1-\alpha}
-    \end{equation}
-    but the sequence on the right goes to $0$ as $k, j \to \infty$ (since $\alpha \in [0, 1)$) hence
-    \begin{equation}
-        \lim_{k, j \to \infty} d(x_k, x_{\ell}) = 0
-    \end{equation}
-    which means that $(x_k)_{k \in \N}$ is a Cauchy sequence.
+	Now we can combine the non-negativity of $d$, the claim we just proved and some algebra to get that for $0 \leq k < \ell$
+	\begin{equation}
+		0 \leq d(x_k, x_\ell) \leq C \sum_{j = k}^{l-1} \alpha^j = C \frac{\alpha^k - \alpha^\ell}{1-\alpha}
+	\end{equation}
+	but the sequence on the right goes to $0$ as $k, j \to \infty$ (since $\alpha \in [0, 1)$) hence
+	\begin{equation}
+		\lim_{k, j \to \infty} d(x_k, x_{\ell}) = 0
+	\end{equation}
+	which means that $(x_k)_{k \in \N}$ is a Cauchy sequence.
 
-    Since $(X, d)$ is complete by hypothesis, $(x_d)$ must converge to some $\bar x \in X$.
-    We have
-    \begin{equation}
-        \bar x = \lim_{k \to \infty} x_k = \lim_{k \to \infty} x_{k + 1} = \lim_{k \to \infty} F(x_k).
-    \end{equation}
-    Since $F$ is continuous because it is a contraption (why?), for any converging sequence $x_k \to \bar x$ we have
-    \begin{equation}
-        d(F(\bar x), F(x_k)) \leq \alpha d(\bar x, x_k) \to 0
-    \end{equation}
-    as $k \to \infty$.
-    Therefore $d(F(\bar x), F(x_k)) \to 0$ and thus $F(x_k) \to F(\bar x)$.
+	Since $(X, d)$ is complete by hypothesis, $(x_d)$ must converge to some $\bar x \in X$.
+	We have
+	\begin{equation}
+		\bar x = \lim_{k \to \infty} x_k = \lim_{k \to \infty} x_{k + 1} = \lim_{k \to \infty} F(x_k).
+	\end{equation}
+	Since $F$ is continuous because it is a contraption (why?), for any converging sequence $x_k \to \bar x$ we have
+	\begin{equation}
+		d(F(\bar x), F(x_k)) \leq \alpha d(\bar x, x_k) \to 0
+	\end{equation}
+	as $k \to \infty$.
+	Therefore $d(F(\bar x), F(x_k)) \to 0$ and thus $F(x_k) \to F(\bar x)$.
 \end{proof}
 
 \begin{theorem}{}{}
-    Let $f: U \to \R^d$ with $U \subseteq \R^p$ open be defined as
-    \begin{equation}
-        f(x) = x + g(x) \quad \text{with } \abs{g(a) - g(b)} \leq \alpha \abs{a - b}, \enspace \alpha \in [0,1)
-    \end{equation}
-    that is, a Lipschitz perturbation of the identity.
-    Then $f(U)$ is open, $f: U \to f(U)$ is a bijection, and it has a continuous inverse $f^{-1}$
-    which satisfies
-    \begin{equation}
-        \abs{f^{-1}(a)- f^{-1}(b)} \leq \frac{1}{1-\alpha} \abs{a-b}
-    \end{equation}
+	Let $f: U \to \R^d$ with $U \subseteq \R^p$ open be defined as
+	\begin{equation}
+		f(x) = x + g(x) \quad \text{with } \abs{g(a) - g(b)} \leq \alpha \abs{a - b}, \enspace \alpha \in [0,1)
+	\end{equation}
+	that is, a Lipschitz perturbation of the identity.
+	Then $f(U)$ is open, $f: U \to f(U)$ is a bijection, and it has a continuous inverse $f^{-1}$
+	which satisfies
+	\begin{equation}
+		\abs{f^{-1}(a)- f^{-1}(b)} \leq \frac{1}{1-\alpha} \abs{a-b}
+	\end{equation}
 \end{theorem}
 
 TODO: there is a weird corollary here, but f it.
 
 \begin{proof}
-    For the exam we will just be asked to show that $f(B_r(x_0))$ includes $B_{(1-\alpha)r}(f(x))$.
+	For the exam we will just be asked to show that $f(B_r(x_0))$ includes $B_{(1-\alpha)r}(f(x))$.
 
-    Consider $x \mapsto f(x_0 + x) - f(x_0)$, then if a claim holds for this new function at $0$, it also holds for $f$ at $x_0$.
-    This means that we can assume $x_0 = 0$ and $f(x_0) =0$ without loss of generality.
+	Consider $x \mapsto f(x_0 + x) - f(x_0)$, then if a claim holds for this new function at $0$, it also holds for $f$ at $x_0$.
+	This means that we can assume $x_0 = 0$ and $f(x_0) =0$ without loss of generality.
 
-    Since $f(x) = x + g(x)$, for a fixed $y \in B_{(1-\alpha)r}(0)$ we want to solve $x + g(x) = y$ or equivalently
-    \begin{equation}
-        F(x) = x = y-g(x)
-    \end{equation}
-    in other words this means we want to find a fixed point of $F$.
-    Since $B_r(0)$ is not complete, we can take a closed ball $\bar B_s(0)$ with $0 < s< r$ giving us
-    $\bar B_s(0) \subset B_r(0) \subset U$.
-    Since closed balls constitute closed sets and $\bar B_s(0)$ is a subset of a complete metric space,
-    $(\bar B_s(0), d)$ is a complete metric space.
+	Since $f(x) = x + g(x)$, for a fixed $y \in B_{(1-\alpha)r}(0)$ we want to solve $x + g(x) = y$ or equivalently
+	\begin{equation}
+		F(x) = x = y-g(x)
+	\end{equation}
+	in other words this means we want to find a fixed point of $F$.
+	Since $B_r(0)$ is not complete, we can take a closed ball $\bar B_s(0)$ with $0 < s< r$ giving us
+	$\bar B_s(0) \subset B_r(0) \subset U$.
+	Since closed balls constitute closed sets and $\bar B_s(0)$ is a subset of a complete metric space,
+	$(\bar B_s(0), d)$ is a complete metric space.
 
-    In order to be able to apply \cref{thm:banach} we are left to check that $F$ maps $X = \bar B_s(0)$ to itself
-    for a suitable $s$.
-    Given $x \in \bar B_s(0)$ we have
-    \begin{equation}
-        \abs{F(x)} = \abs{y - g(x)} \leq \abs{y} + \abs{g(x)} =  \abs{y} + \abs{g(x) - g(0)} \leq \abs{y} + \alpha \abs{x - 0} \leq \abs{y} + \alpha s
-    \end{equation}
-    where we used the fact that $g(0) = f(0) - 0 = 0$.
-    In order to deduce that $F(x) \in \bar B_s (0)$ we need to have $\abs{y} + \alpha s \leq s$, that is
-    \begin{equation}
-        \frac{\abs{y}}{1-\alpha} \leq s < r
-    \end{equation}
-    and since we are are assuming $\abs{y} < (1-\alpha) r$ such radius $s$ exists.
+	In order to be able to apply \cref{thm:banach} we are left to check that $F$ maps $X = \bar B_s(0)$ to itself
+	for a suitable $s$.
+	Given $x \in \bar B_s(0)$ we have
+	\begin{equation}
+		\abs{F(x)} = \abs{y - g(x)} \leq \abs{y} + \abs{g(x)} =  \abs{y} + \abs{g(x) - g(0)} \leq \abs{y} + \alpha \abs{x - 0} \leq \abs{y} + \alpha s
+	\end{equation}
+	where we used the fact that $g(0) = f(0) - 0 = 0$.
+	In order to deduce that $F(x) \in \bar B_s (0)$ we need to have $\abs{y} + \alpha s \leq s$, that is
+	\begin{equation}
+		\frac{\abs{y}}{1-\alpha} \leq s < r
+	\end{equation}
+	and since we are are assuming $\abs{y} < (1-\alpha) r$ such radius $s$ exists.
 
-    Finally we check that $F$ is a contraption:
-    \begin{equation}
-        \abs{F(x) - F(x')} = \abs{(y-g(x')) - (y-g(x'))} = \abs{g(x)-g(x')} \leq \alpha \abs{x-x'}
-    \end{equation}
+	Finally we check that $F$ is a contraption:
+	\begin{equation}
+		\abs{F(x) - F(x')} = \abs{(y-g(x')) - (y-g(x'))} = \abs{g(x)-g(x')} \leq \alpha \abs{x-x'}
+	\end{equation}
 
-    Then the existence of the fixed point is guaranteed by \cref{thm:banach}.
+	Then the existence of the fixed point is guaranteed by \cref{thm:banach}.
 \end{proof}
 
 \subsection{Peano-Picard local version}
 
 Consider the initial value problem
 \begin{equation}
-    \begin{cases}
-        u' = f(t, u) \\
-        u(t_0) = \lambda_0
-    \end{cases}
+	\begin{cases}
+		u' = f(t, u) \\
+		u(t_0) = \lambda_0
+	\end{cases}
 \end{equation}
 where $f: A \to \R^n$ as in Peano-Picard.
 
 Now consider the following set with $T, M > 0$ and the initial condition $(t_0, \lambda_0) \in A$:
 \begin{equation}
-    X_{T, M} = \{ v: [t_0 - T, t_0 + T] \to \R^n : v \text{ continuous and } \norm{v-\lambda_0} \leq M \}
+	X_{T, M} = \{ v: [t_0 - T, t_0 + T] \to \R^n : v \text{ continuous and } \norm{v-\lambda_0} \leq M \}
 \end{equation}
 where
 \begin{equation}
-    \norm{v-\lambda_0} = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - \lambda_0}
+	\norm{v-\lambda_0} = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - \lambda_0}
 \end{equation}
 is the usual supremum norm, which means that
 \begin{equation}
-    \norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \enspace \forall t \in [t_0 - T, t_0 + T]
+	\norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \enspace \forall t \in [t_0 - T, t_0 + T]
 \end{equation}
 
 We then define a metric space $(X_{T, M}, d)$ with
 \begin{equation}
-    d(v, w) = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - w(t)}
+	d(v, w) = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - w(t)}
 \end{equation}
 
 \begin{proposition}{}{}
-    The metric space $(X_{T,M}, d)$ is complete.
+	The metric space $(X_{T,M}, d)$ is complete.
 \end{proposition}
 
 \begin{proof}
-    In lecture notes.
+	In lecture notes.
 \end{proof}
 
 \begin{theorem}{Peano-Picard local version - EXAM}{}
-    For $M > 0$ small enough and, once $M$ is fixed, for $T>0$ small enough, the set $X_{T, M}$ contains exactly one solution
-    for the initial value problem.
+	For $M > 0$ small enough and, once $M$ is fixed, for $T>0$ small enough, the set $X_{T, M}$ contains exactly one solution
+	for the initial value problem.
 \end{theorem}
 
 Since $A$ is open, it includes an open ball around the point $p = (t_0, \lambda_0)$:
@@ -800,61 +800,61 @@ We will always take $T, M \leq R/2$ from now on, which guarantees that points in
 
 Recall that $v \in X_{T, M}$ solves the initial value problem iff
 \begin{equation}
-    v \mapsto F(v), \quad F(v)(t) = \lambda_0 + \int^t_{t_0} f(s, v(s)) \dd s
+	v \mapsto F(v), \quad F(v)(t) = \lambda_0 + \int^t_{t_0} f(s, v(s)) \dd s
 \end{equation}
 
 In order to prove the theorem we want to show that
 \begin{enumerate}
-    \item $F(X_{T, M}) \subseteq X_{T, M}$ for a suitable $T, M >0$
-    \item $\eval{F}_{X_{T, M}}$ is a contraption on a complete metric space for some suitable $T, M > 0$
+	\item $F(X_{T, M}) \subseteq X_{T, M}$ for a suitable $T, M >0$
+	\item $\eval{F}_{X_{T, M}}$ is a contraption on a complete metric space for some suitable $T, M > 0$
 \end{enumerate}
 and then apply \cref{thm:banach}.
 
 \begin{proposition}{EXAM}{}
-    The function $f$ is bounded on $B_R(p)$.
-    Namely, there exists $\Lambda \geq 0$ such that
-    \begin{equation}
-        \abs{f(q)} \leq \Lambda \quad \forall q \in B_R(p)
-    \end{equation}
+	The function $f$ is bounded on $B_R(p)$.
+	Namely, there exists $\Lambda \geq 0$ such that
+	\begin{equation}
+		\abs{f(q)} \leq \Lambda \quad \forall q \in B_R(p)
+	\end{equation}
 \end{proposition}
 
 \begin{proof}
-    Since $f$ is Lipschitz here, we have
-    \begin{equation}
-        \abs{f(q)} \leq \abs{f(q)-f(p)} + \abs{f(p)} \leq L \abs{q-p} + \abs{f(p)} \leq L R + \abs{f(p)}
-    \end{equation}
-    for all $q \in B_R(p)$.
-    Then we can set $\Lambda = LR + \abs{f(p)}$.
+	Since $f$ is Lipschitz here, we have
+	\begin{equation}
+		\abs{f(q)} \leq \abs{f(q)-f(p)} + \abs{f(p)} \leq L \abs{q-p} + \abs{f(p)} \leq L R + \abs{f(p)}
+	\end{equation}
+	for all $q \in B_R(p)$.
+	Then we can set $\Lambda = LR + \abs{f(p)}$.
 \end{proof}
 
 \begin{proposition}{EXAM}{}
-    If $M > 0$ and $T > 0$ are small enough, then for any $v \in X_{T, M}$ we have
-    $F(v) \in X_{T, M}$.
-    Specifically, this holds as long as
-    \begin{equation}
-        0 < M \leq \frac{R}{2}, \quad 0 < T \leq \min \left\{ \frac{R}{2}, \frac{M}{\Lambda} \right\}
-    \end{equation}
+	If $M > 0$ and $T > 0$ are small enough, then for any $v \in X_{T, M}$ we have
+	$F(v) \in X_{T, M}$.
+	Specifically, this holds as long as
+	\begin{equation}
+		0 < M \leq \frac{R}{2}, \quad 0 < T \leq \min \left\{ \frac{R}{2}, \frac{M}{\Lambda} \right\}
+	\end{equation}
 \end{proposition}
 \begin{proof}
-    Given $v \in X_{T, M}$ we need to check that for any $t \in [t_0 - T, t_0 + T]$ we have
-    \begin{equation}
-        \abs{F(v)(t) - \lambda_0} \leq M
-    \end{equation}
+	Given $v \in X_{T, M}$ we need to check that for any $t \in [t_0 - T, t_0 + T]$ we have
+	\begin{equation}
+		\abs{F(v)(t) - \lambda_0} \leq M
+	\end{equation}
 
-    $F(v)$ can be bound for $t \geq t_0$ as follows
-    \begin{equation}
-        \abs{F(v)(t) - \lambda_0} = \abs{\int_{t_0}^t f(s, v(s)) \dd s} \leq \int_{t_0}^t \abs{f(s, v(s))} \dd s
-    \end{equation}
-    and by the previous proposition we have that $\abs{f(q)} \leq \Lambda$, hence
-    \begin{equation}
-        \abs{F(v)(t)-\lambda_0} \leq \int_{t_0}^t \Lambda \dd s = \Lambda (t-t_0) \leq \Lambda T
-    \end{equation}
+	$F(v)$ can be bound for $t \geq t_0$ as follows
+	\begin{equation}
+		\abs{F(v)(t) - \lambda_0} = \abs{\int_{t_0}^t f(s, v(s)) \dd s} \leq \int_{t_0}^t \abs{f(s, v(s))} \dd s
+	\end{equation}
+	and by the previous proposition we have that $\abs{f(q)} \leq \Lambda$, hence
+	\begin{equation}
+		\abs{F(v)(t)-\lambda_0} \leq \int_{t_0}^t \Lambda \dd s = \Lambda (t-t_0) \leq \Lambda T
+	\end{equation}
 
-    We can use a similar argument for $t \leq t_0$:
-    \begin{equation}
-        \abs{F(v)(t)-\lambda_0} \leq \int^{t_0}_t \abs{f(s, v(s))} \dd s \leq \int^{t_0}_t \Lambda \dd s = \Lambda (t_0-t) \leq \Lambda T
-    \end{equation}
-    and imposing that $\Lambda T \leq M$ we obtain the conclusion.
+	We can use a similar argument for $t \leq t_0$:
+	\begin{equation}
+		\abs{F(v)(t)-\lambda_0} \leq \int^{t_0}_t \abs{f(s, v(s))} \dd s \leq \int^{t_0}_t \Lambda \dd s = \Lambda (t_0-t) \leq \Lambda T
+	\end{equation}
+	and imposing that $\Lambda T \leq M$ we obtain the conclusion.
 \end{proof}
 
 TODO: there is more theory here but it is not in the exam

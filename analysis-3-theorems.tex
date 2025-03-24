@@ -17,216 +17,216 @@
 \subsection{Maximal solutions either coincide or do not intersect}
 
 \begin{theorem}{}{}
-    In the same setting of the Peano-Picard theorem,
-    consider the maximal solution $u: I \to \R$
-    for the i.v.p. $u(t_0) = \lambda_0$.
-    Given $t_1 \in I$ and $\lambda_1 = u(t_1)$,
-    consider $\tilde{u}: \tilde I \to \R$,
-    the solution to the same ODE with initial condition $\tilde{u}(t_1) = \lambda_1$.
-    Then
-    \begin{equation}
-        I = \tilde I \quad \text{and} \quad u = \tilde u
-    \end{equation}
+	In the same setting of the Peano-Picard theorem,
+	consider the maximal solution $u: I \to \R$
+	for the i.v.p. $u(t_0) = \lambda_0$.
+	Given $t_1 \in I$ and $\lambda_1 = u(t_1)$,
+	consider $\tilde{u}: \tilde I \to \R$,
+	the solution to the same ODE with initial condition $\tilde{u}(t_1) = \lambda_1$.
+	Then
+	\begin{equation}
+		I = \tilde I \quad \text{and} \quad u = \tilde u
+	\end{equation}
 \end{theorem}
 
 \begin{proof}
-    Since, by assumption, $u$ also solves the i.v.p. with initial condition $(t_1, \lambda_1)$,
-    by Peano-Picard, $I \subseteq \tilde I$ and $u = \left. \tilde u \right|_I$.
+	Since, by assumption, $u$ also solves the i.v.p. with initial condition $(t_1, \lambda_1)$,
+	by Peano-Picard, $I \subseteq \tilde I$ and $u = \left. \tilde u \right|_I$.
 
-    Since $t_0 \in I$ it means $t_0 \in \tilde I$, meaning that $\tilde u(t_0) = \lambda_0$
-    (since $u(t_0) = \lambda_0$), but now we can apply Peano-Picard again for the initial conditions $(t_0, \lambda_0)$
-    and prove the claim.
+	Since $t_0 \in I$ it means $t_0 \in \tilde I$, meaning that $\tilde u(t_0) = \lambda_0$
+	(since $u(t_0) = \lambda_0$), but now we can apply Peano-Picard again for the initial conditions $(t_0, \lambda_0)$
+	and prove the claim.
 \end{proof}
 
 
 \begin{theorem}{}{}
-    Under the assumptions of Peano-Picard, let $(t_0, \lambda_0)$ and $(t_0, \mu_0)$ with $\lambda_0 \ne \mu_0$.
-    Consider $u: I' \to \R$ and $v: I'' \to \R$ to be solutions for the ODE with initial conditions as above.
-    Then
-    \begin{equation}
-        u(t) \neq v(t) \quad \forall t \in I' \cap I''
-    \end{equation}
+	Under the assumptions of Peano-Picard, let $(t_0, \lambda_0)$ and $(t_0, \mu_0)$ with $\lambda_0 \ne \mu_0$.
+	Consider $u: I' \to \R$ and $v: I'' \to \R$ to be solutions for the ODE with initial conditions as above.
+	Then
+	\begin{equation}
+		u(t) \neq v(t) \quad \forall t \in I' \cap I''
+	\end{equation}
 \end{theorem}
 
 \begin{proof}
-    Assume that there exists $t_1 \in I' \cap I''$ such that $u(t_1) = v(t_1) = \lambda_1$.
-    Let $w: I \to \R$ be the maximal solution for initial condition $(t_1, \lambda_1)$,
-    then we must have that
-    \begin{equation}
-        I'\subseteq I, \quad I'' \subseteq I, \quad u = \left. w\right|_{I'}, \quad v = \left. w\right|_{I''}
-    \end{equation}
+	Assume that there exists $t_1 \in I' \cap I''$ such that $u(t_1) = v(t_1) = \lambda_1$.
+	Let $w: I \to \R$ be the maximal solution for initial condition $(t_1, \lambda_1)$,
+	then we must have that
+	\begin{equation}
+		I'\subseteq I, \quad I'' \subseteq I, \quad u = \left. w\right|_{I'}, \quad v = \left. w\right|_{I''}
+	\end{equation}
 
-    In particular, we must have $t_0 \in I \implies u(t_0) = w(t_0) = v(t_0)$, which is a contradiction.
+	In particular, we must have $t_0 \in I \implies u(t_0) = w(t_0) = v(t_0)$, which is a contradiction.
 \end{proof}
 
 \subsection{\texorpdfstring{$t^j e^{\alpha_\ell t}$ form a basis of solutions}{Basis of solutions}}
 
 \begin{theorem}{}{}
-    Assume that the roots of the characteristic polynomial $p(z)$ are all real.
-    Let $\alpha_1, \dots, \alpha_n$ be the distinct roots of $p(z)$ and
-    $M_1, \dots, M_n$ be the algebraic multiplicity of each $\alpha_\ell$.
+	Assume that the roots of the characteristic polynomial $p(z)$ are all real.
+	Let $\alpha_1, \dots, \alpha_n$ be the distinct roots of $p(z)$ and
+	$M_1, \dots, M_n$ be the algebraic multiplicity of each $\alpha_\ell$.
 
-    For each root, consider the following set of functions:
-    \begin{equation}
-        S = \left\{ t^j e^{\alpha_\ell t} : \ell \in 1, \dots, n; j \in 0, \dots, m_k -1 \right\}
-    \end{equation}
-    each one of them solves the ODE and $S$ is a basis of the space of solutions.
+	For each root, consider the following set of functions:
+	\begin{equation}
+		S = \left\{ t^j e^{\alpha_\ell t} : \ell \in 1, \dots, n; j \in 0, \dots, m_k -1 \right\}
+	\end{equation}
+	each one of them solves the ODE and $S$ is a basis of the space of solutions.
 \end{theorem}
 
 \begin{proof}
-    We will show that all the functions in $S$ solve the ODE.
-    Then, to show that they form a basis, it is sufficient to note that
-    $\abs{S} = \sum M_i = k$ where $k$ is the degree of $p(z)$,
-    hence we just need to show that they are linearly independent.
-    We will not prove linear independence.
+	We will show that all the functions in $S$ solve the ODE.
+	Then, to show that they form a basis, it is sufficient to note that
+	$\abs{S} = \sum M_i = k$ where $k$ is the degree of $p(z)$,
+	hence we just need to show that they are linearly independent.
+	We will not prove linear independence.
 
-    Introduce the operator $a(D) : X \to X$, where $a$ is a polynomial and
-    $X$ is the set of functions of class $C^\infty$.
-    Given $a(z) = \sum_{j= 0}^\ell \mu_j z^j$, the operator is defined as
-    \begin{equation}
-        a(D)f = \sum^{\ell}_{j = 0} \mu_j \dv[j]{f(t)}{t}
-    \end{equation}
-    Note that this operator is linear and behaves like a polynomial,
-    notably if $c(z) = a(z)b(z)$ then $c(D) = a(D) \circ b(D)$ is commutative.
+	Introduce the operator $a(D) : X \to X$, where $a$ is a polynomial and
+	$X$ is the set of functions of class $C^\infty$.
+	Given $a(z) = \sum_{j= 0}^\ell \mu_j z^j$, the operator is defined as
+	\begin{equation}
+		a(D)f = \sum^{\ell}_{j = 0} \mu_j \dv[j]{f(t)}{t}
+	\end{equation}
+	Note that this operator is linear and behaves like a polynomial,
+	notably if $c(z) = a(z)b(z)$ then $c(D) = a(D) \circ b(D)$ is commutative.
 
-    Assume the characteristic polynomial $p$ has leading coefficient of $1$,
-    then $u$ is a solution to the ODE (up to multiplying it by the inverse of the leading coefficient) if
-    \begin{equation}
-        p(D)u = 0
-    \end{equation}
+	Assume the characteristic polynomial $p$ has leading coefficient of $1$,
+	then $u$ is a solution to the ODE (up to multiplying it by the inverse of the leading coefficient) if
+	\begin{equation}
+		p(D)u = 0
+	\end{equation}
 
-    Let us factorize $p(z)$ as
-    \begin{equation}
-        p(z) = (z-\alpha_1)^{M_1} \dots (z-\alpha_n)^{M_n}
-    \end{equation}
-    now isolate $r(z) = (z-\alpha_\ell)^{M_\ell}$ for some $\ell \in 1, \dots, n$
-    and let $q(z) = \prod_{j \neq \ell} (z-\alpha_j)^{M_j}$
-    such that $p(z) = q(z)r(z)$.
-    Then, to show that $u$ solves the ODE it is enough to show that
-    \begin{equation}
-        r(D)u = (D - \alpha_\ell)^{M_\ell}u = 0
-    \end{equation}
+	Let us factorize $p(z)$ as
+	\begin{equation}
+		p(z) = (z-\alpha_1)^{M_1} \dots (z-\alpha_n)^{M_n}
+	\end{equation}
+	now isolate $r(z) = (z-\alpha_\ell)^{M_\ell}$ for some $\ell \in 1, \dots, n$
+	and let $q(z) = \prod_{j \neq \ell} (z-\alpha_j)^{M_j}$
+	such that $p(z) = q(z)r(z)$.
+	Then, to show that $u$ solves the ODE it is enough to show that
+	\begin{equation}
+		r(D)u = (D - \alpha_\ell)^{M_\ell}u = 0
+	\end{equation}
 
-    We want to show this holds for each candidate solution.
-    We can write a general candidate as $h(t) e^{\alpha_\ell t}$
-    where $h(t)$ is a polynomial of degree less than $M_\ell$.
-    Hence our proof reduces to showing that
-    \begin{equation}
-        (D - \alpha_\ell)^{M} [h(t) e^{\alpha_\ell t}] = 0
-    \end{equation}
-    with $M = M_\ell$.
+	We want to show this holds for each candidate solution.
+	We can write a general candidate as $h(t) e^{\alpha_\ell t}$
+	where $h(t)$ is a polynomial of degree less than $M_\ell$.
+	Hence our proof reduces to showing that
+	\begin{equation}
+		(D - \alpha_\ell)^{M} [h(t) e^{\alpha_\ell t}] = 0
+	\end{equation}
+	with $M = M_\ell$.
 
-    We can now proceed by induction on $M$:
-    \begin{description}[font=\normalfont\itshape\space]
-        \item[Base case]
-              Since $M = 1$ the degree of $h(t)$ has to be $0$, hence it is constant.
-              We have
-              \begin{equation}
-                  (D - \alpha_\ell)[h e^{\alpha_\ell t}] = h \dv{t} e^{\alpha_\ell t} - h\alpha_\ell e^{\alpha_\ell t} = 0
-              \end{equation}
-        \item[Inductive step]
-              \begin{align}
-                  (D - \alpha_\ell)^M[h(t) e^{\alpha_\ell t}] & = (D - \alpha_\ell)^{M-1}\left[ (D - \alpha_\ell) \left[h(t) e^{\alpha_\ell t}\right]\right]                                                               \\
-                                                              & = (D - \alpha_\ell)^{M-1}\left[ h'(t) e^{\alpha_\ell t} + \cancel{h(t)\alpha_\ell e^{\alpha_\ell t}} - \cancel{h(t) \alpha_\ell e^{\alpha_\ell t}} \right] \\
-                                                              & = 0
-              \end{align}
-              where in the last step we notice that since $h'(t)$ has degree less than $M -1$
-              hence the inductive hypothesis applies.
-    \end{description}
+	We can now proceed by induction on $M$:
+	\begin{description}[font=\normalfont\itshape\space]
+		\item[Base case]
+		      Since $M = 1$ the degree of $h(t)$ has to be $0$, hence it is constant.
+		      We have
+		      \begin{equation}
+			      (D - \alpha_\ell)[h e^{\alpha_\ell t}] = h \dv{t} e^{\alpha_\ell t} - h\alpha_\ell e^{\alpha_\ell t} = 0
+		      \end{equation}
+		\item[Inductive step]
+		      \begin{align}
+			      (D - \alpha_\ell)^M[h(t) e^{\alpha_\ell t}] & = (D - \alpha_\ell)^{M-1}\left[ (D - \alpha_\ell) \left[h(t) e^{\alpha_\ell t}\right]\right]                                                               \\
+			                                                  & = (D - \alpha_\ell)^{M-1}\left[ h'(t) e^{\alpha_\ell t} + \cancel{h(t)\alpha_\ell e^{\alpha_\ell t}} - \cancel{h(t) \alpha_\ell e^{\alpha_\ell t}} \right] \\
+			                                                  & = 0
+		      \end{align}
+		      where in the last step we notice that since $h'(t)$ has degree less than $M -1$
+		      hence the inductive hypothesis applies.
+	\end{description}
 \end{proof}
 
 \subsection{\texorpdfstring{$m_\gamma \leq M_\gamma$}{Geometric multiplicity less than or equal to algebraic}}
 
 \begin{theorem}{}{}
-    For all eigenvalues $\gamma \in \R$ there holds $1 \leq m \leq M$,
-    where $m$ is geometric multiplicity of $\gamma$ and $M$ is the algebraic multiplicity of $\gamma$.
+	For all eigenvalues $\gamma \in \R$ there holds $1 \leq m \leq M$,
+	where $m$ is geometric multiplicity of $\gamma$ and $M$ is the algebraic multiplicity of $\gamma$.
 \end{theorem}
 
 \begin{proof}
-    Since $\gamma$ is an eigenvalue there exists an eigenvector $v \neq 0$,
-    hence $\ker (A - \gamma \mathds{1}) \ne 0$ and $m \geq 1$.
+	Since $\gamma$ is an eigenvalue there exists an eigenvector $v \neq 0$,
+	hence $\ker (A - \gamma \mathds{1}) \ne 0$ and $m \geq 1$.
 
-    Let $f: V \to V$ be the linear map associated to $A$: $f(v) = A v$, where $V = \R^n$.
-    Let $\{v_1, \dots, v_m\}$ be the basis of the eigenspace of $\gamma$
-    and complete it to $\{v_1, \dots, v_n\}$ a basis of $V$.
-    Since the algebraic multiplicity of $\gamma$ is $M$ 
-    the characteristical polynomial of of $A$ has the form
-    \begin{equation}
-      \det(\gamma \mathds{1} - A) = (z-\gamma)^M (z_1 - \lambda_1)^{M_1} \dots
-    \end{equation}
-    where $\lambda_i$ are the other eigenvalues.
+	Let $f: V \to V$ be the linear map associated to $A$: $f(v) = A v$, where $V = \R^n$.
+	Let $\{v_1, \dots, v_m\}$ be the basis of the eigenspace of $\gamma$
+	and complete it to $\{v_1, \dots, v_n\}$ a basis of $V$.
+	Since the algebraic multiplicity of $\gamma$ is $M$
+	the characteristical polynomial of of $A$ has the form
+	\begin{equation}
+		\det(\gamma \mathds{1} - A) = (z-\gamma)^M (z_1 - \lambda_1)^{M_1} \dots
+	\end{equation}
+	where $\lambda_i$ are the other eigenvalues.
 
-    Then let $P = \begin{pmatrix}v_1 & \dots & v_n\end{pmatrix}$ be the change of basis matrix
-    such that
-    \begin{equation}
-        A = P B P^{-1}
-    \end{equation}
+	Then let $P = \begin{pmatrix}v_1 & \dots & v_n\end{pmatrix}$ be the change of basis matrix
+	such that
+	\begin{equation}
+		A = P B P^{-1}
+	\end{equation}
 
-    Since $f(v_j) = \gamma v_j$ for all $j \in 1, \dots, m$, $B$ has the form of
-    \begin{equation}
-        B = \left(\begin{array}{c|c}
-            \begin{matrix}
-                \gamma &        & 0      \\
-                       & \ddots &        \\
-                0      &        & \gamma
-            \end{matrix} & *_1          \\
-            \hline
-            0                           & *_2
-        \end{array}
-        \right)
-    \end{equation}
-    Notice that $z \mathds{1} - B$ is a triangular block matrix, hence its characteristic polynomial is
-    \begin{equation}
-        \det(z \mathds 1 - B) = (z-\gamma)^m \det(z \mathds 1_{n-m} - *_2)
-    \end{equation}
-    but since $A$ and $B$ are similar they have the same characteristic polynomial,
-    hence $(z-\gamma)^m$ divides the characteristic polynomial of $A$,
-    which means $M \geq m$.
+	Since $f(v_j) = \gamma v_j$ for all $j \in 1, \dots, m$, $B$ has the form of
+	\begin{equation}
+		B = \left(\begin{array}{c|c}
+			\begin{matrix}
+				\gamma &        & 0      \\
+				       & \ddots &        \\
+				0      &        & \gamma
+			\end{matrix} & *_1          \\
+			\hline
+			0                           & *_2
+		\end{array}
+		\right)
+	\end{equation}
+	Notice that $z \mathds{1} - B$ is a triangular block matrix, hence its characteristic polynomial is
+	\begin{equation}
+		\det(z \mathds 1 - B) = (z-\gamma)^m \det(z \mathds 1_{n-m} - *_2)
+	\end{equation}
+	but since $A$ and $B$ are similar they have the same characteristic polynomial,
+	hence $(z-\gamma)^m$ divides the characteristic polynomial of $A$,
+	which means $M \geq m$.
 \end{proof}
 
 \subsection{Diagonalizable \texorpdfstring{$\iff m_\gamma = M_\gamma$}{iff geometric equals to algebraic}}
 
 \begin{theorem}{}{}
-    A square matrix is diagonalizable over $\C$ if and only if
-    for each root $\gamma$ of the characteristic polynomial
-    $m_\gamma = M_\gamma$.
+	A square matrix is diagonalizable over $\C$ if and only if
+	for each root $\gamma$ of the characteristic polynomial
+	$m_\gamma = M_\gamma$.
 
-    Moreover, it is diagonalizable over $\R$ if and only if all the roots are also real.
+	Moreover, it is diagonalizable over $\R$ if and only if all the roots are also real.
 \end{theorem}
 
 \begin{proof}
-    We will just show the statement over $\R$ for simplicity.
+	We will just show the statement over $\R$ for simplicity.
 
-    We will also use lemma which reads that non-zero eigenvector corresponding
-    to distinct eigenvalues are linearly independent without proof.
+	We will also use lemma which reads that non-zero eigenvector corresponding
+	to distinct eigenvalues are linearly independent without proof.
 
-    \begin{description}
-        \item[$\implies$] If a matrix is diagonalizable over $\R$ we can find a basis of eigenvector,
-              $\mathcal B = \{v_1, \dots, v_n \} \in \R^n$: call $\gamma_j$ their eigenvalues.
-              Fix a specific $\gamma_j = \gamma$, then let $n_\gamma$ be the number of elements of $\mathcal B$
-              which are eigenvectors of $\gamma$.
-              These vectors belong to the eigenspace $\ker (A - \gamma \mathds 1)$ and,
-              since they are part of a basis, they are linearly independent.
-              So far we have that
-              \begin{equation}
-                  n_\gamma \leq m_\gamma \leq M_\gamma
-              \end{equation}
-              Moreover, since the vectors $v_j$ form a basis, necessarily $\sum n_\gamma = n$.
-              On the other hand, the sum of the multiplicities of the real roots of a polynomial is at most its degree,
-              which means $\sum M_\gamma \leq n$, and we obtain
-              \begin{equation}
-                  n = \sum n_\gamma \leq \sum m_\gamma \leq \sum M_\gamma \leq n
-              \end{equation}
-              therefore we must have $n_\gamma = m_\gamma = M_\gamma$ for all real roots $\gamma$.
-              It also follows that, since $\sum M_\gamma = n$ (where $n$ was just the sum over the real roots),
-              $p(z)$ has only real roots (there is no \say{space} for complex ones).
-        \item[$\impliedby$] If all roots are real and $m_\gamma = M_\gamma$, then $\sum m_\gamma = \sum M_\gamma = n$.
-              This means that we can find a basis of $\ker(A - \gamma \mathds{1})$ consisting of $m_\gamma$ vectors
-              for each $\gamma$, which together form a collection of $n$ vectors.
-              To conclude they are a basis we are just left to check that they are linearly independent.
-              We now just use the fact that basis of eigenspaces are indeed linearly independent among the same eigenspace
-              and combine it with the lemma.
-    \end{description}
+	\begin{description}
+		\item[$\implies$] If a matrix is diagonalizable over $\R$ we can find a basis of eigenvector,
+		      $\mathcal B = \{v_1, \dots, v_n \} \in \R^n$: call $\gamma_j$ their eigenvalues.
+		      Fix a specific $\gamma_j = \gamma$, then let $n_\gamma$ be the number of elements of $\mathcal B$
+		      which are eigenvectors of $\gamma$.
+		      These vectors belong to the eigenspace $\ker (A - \gamma \mathds 1)$ and,
+		      since they are part of a basis, they are linearly independent.
+		      So far we have that
+		      \begin{equation}
+			      n_\gamma \leq m_\gamma \leq M_\gamma
+		      \end{equation}
+		      Moreover, since the vectors $v_j$ form a basis, necessarily $\sum n_\gamma = n$.
+		      On the other hand, the sum of the multiplicities of the real roots of a polynomial is at most its degree,
+		      which means $\sum M_\gamma \leq n$, and we obtain
+		      \begin{equation}
+			      n = \sum n_\gamma \leq \sum m_\gamma \leq \sum M_\gamma \leq n
+		      \end{equation}
+		      therefore we must have $n_\gamma = m_\gamma = M_\gamma$ for all real roots $\gamma$.
+		      It also follows that, since $\sum M_\gamma = n$ (where $n$ was just the sum over the real roots),
+		      $p(z)$ has only real roots (there is no \say{space} for complex ones).
+		\item[$\impliedby$] If all roots are real and $m_\gamma = M_\gamma$, then $\sum m_\gamma = \sum M_\gamma = n$.
+		      This means that we can find a basis of $\ker(A - \gamma \mathds{1})$ consisting of $m_\gamma$ vectors
+		      for each $\gamma$, which together form a collection of $n$ vectors.
+		      To conclude they are a basis we are just left to check that they are linearly independent.
+		      We now just use the fact that basis of eigenspaces are indeed linearly independent among the same eigenspace
+		      and combine it with the lemma.
+	\end{description}
 \end{proof}
 
 \section{Second partial}
@@ -234,199 +234,199 @@
 \subsection{Completeness of the metric space of functions}
 
 \begin{definition}{Cauchy sequence}{}
-  Given a metric space $(X, d)$ a sequence $x_n \in X$ is a Cauchy sequence if,
-  fixed $\varepsilon > 0$,
-  $\exists K$ s.t. $\forall k, \ell \geq K
-  \implies d(x_k, x_\ell) \leq \varepsilon$.
+	Given a metric space $(X, d)$ a sequence $x_n \in X$ is a Cauchy sequence if,
+	fixed $\varepsilon > 0$,
+	$\exists K$ s.t. $\forall k, \ell \geq K
+		\implies d(x_k, x_\ell) \leq \varepsilon$.
 \end{definition}
 
 \begin{definition}{Metric space of bounded continuous functions}{}
-    Let $(X, d)$ be a metric space where $X$ is the set
-    \begin{equation}
-        X = \{ g:I \to \R : g \text{ bounded and continuous} \}
-    \end{equation}
-    and $d$ is induced from the \emph{supremum norm}:
-    \begin{equation}
-        d(g_1, g_2) = \norm{g_1 - g_2} = \sup_{t \in I} \abs{g_1 - g_2}
-    \end{equation}
-    Note that the supremum is always finite since $g$ is bounded.
+	Let $(X, d)$ be a metric space where $X$ is the set
+	\begin{equation}
+		X = \{ g:I \to \R : g \text{ bounded and continuous} \}
+	\end{equation}
+	and $d$ is induced from the \emph{supremum norm}:
+	\begin{equation}
+		d(g_1, g_2) = \norm{g_1 - g_2} = \sup_{t \in I} \abs{g_1 - g_2}
+	\end{equation}
+	Note that the supremum is always finite since $g$ is bounded.
 \end{definition}
 
 
 \begin{theorem}{}{}
-    The metric space $(X, d)$, as defined above, is complete.
+	The metric space $(X, d)$, as defined above, is complete.
 \end{theorem}
 \begin{proof}
-    Let $g_k$ be a Cauchy sequence in $(X, d)$,
-    we want to show that there exists $g \in X$ such that $d(g_k, g) \to 0$ (i.e. $\norm{g_k - g} \to 0$) as $k \to \infty$.
+	Let $g_k$ be a Cauchy sequence in $(X, d)$,
+	we want to show that there exists $g \in X$ such that $d(g_k, g) \to 0$ (i.e. $\norm{g_k - g} \to 0$) as $k \to \infty$.
 
-    Since $g_k$ is a Cauchy sequence $\exists K \in \N$ such that $\norm{g_k - g_l} < \varepsilon$ for $k, l \geq K$ and, for an arbitrary $x \in I$ we have
-    \begin{equation}
-        \abs{g_k(x)-g_l(x)} \leq \norm{g_k - g_l} < \varepsilon \quad \forall k, l \geq K
-    \end{equation}
-    by our definition of the norm.
-    This tells us that the sequence of numbers $(g_k(x))_{k \in \N}$ is a Cauchy sequence over $\R$ and, by completeness of $\R$ this sequence converges.
-    We can therefore write
-    \begin{equation}
-        g(x) = \lim_{k \to \infty} g_k(x)
-    \end{equation}
-    for each $x \in I$.
+	Since $g_k$ is a Cauchy sequence $\exists K \in \N$ such that $\norm{g_k - g_l} < \varepsilon$ for $k, l \geq K$ and, for an arbitrary $x \in I$ we have
+	\begin{equation}
+		\abs{g_k(x)-g_l(x)} \leq \norm{g_k - g_l} < \varepsilon \quad \forall k, l \geq K
+	\end{equation}
+	by our definition of the norm.
+	This tells us that the sequence of numbers $(g_k(x))_{k \in \N}$ is a Cauchy sequence over $\R$ and, by completeness of $\R$ this sequence converges.
+	We can therefore write
+	\begin{equation}
+		g(x) = \lim_{k \to \infty} g_k(x)
+	\end{equation}
+	for each $x \in I$.
 
-    We now have a definition for $g$, we are left to prove the following:
-    \begin{itemize}
-        \item \emph{$g_k$ converges to $g$ uniformly}.
+	We now have a definition for $g$, we are left to prove the following:
+	\begin{itemize}
+		\item \emph{$g_k$ converges to $g$ uniformly}.
 
-              Consider the definition of Cauchy sequence, fix $k \geq K$ and let $l \to \infty$.
-              We get that
-              \begin{equation}
-                  \abs{g_k(x) - g(x)} = \lim_{l \to \infty} \abs{g_k(x) - g_l(x)} \leq \varepsilon
-              \end{equation}
-              Since $\varepsilon > 0$ is arbitrary all functions $g_k$ converge uniformly to $g$.
+		      Consider the definition of Cauchy sequence, fix $k \geq K$ and let $l \to \infty$.
+		      We get that
+		      \begin{equation}
+			      \abs{g_k(x) - g(x)} = \lim_{l \to \infty} \abs{g_k(x) - g_l(x)} \leq \varepsilon
+		      \end{equation}
+		      Since $\varepsilon > 0$ is arbitrary all functions $g_k$ converge uniformly to $g$.
 
-        \item \emph{$g$ is bounded}
+		\item \emph{$g$ is bounded}
 
-              Let $\varepsilon = 1$.
-              We have
-              \begin{equation}
-                  \abs{g(x)} = \abs{g(x) - g_K(x) + g_K(x)} \leq \abs{g(x) - g_K(x)} + \abs{g_K(x)} \leq 1 + \abs{g_K(x)}
-              \end{equation}
-              and since $g_K$ is bounded we get the result.
+		      Let $\varepsilon = 1$.
+		      We have
+		      \begin{equation}
+			      \abs{g(x)} = \abs{g(x) - g_K(x) + g_K(x)} \leq \abs{g(x) - g_K(x)} + \abs{g_K(x)} \leq 1 + \abs{g_K(x)}
+		      \end{equation}
+		      and since $g_K$ is bounded we get the result.
 
-        \item \emph{$g$ is continuous}
+		\item \emph{$g$ is continuous}
 
-              Since all $g_k$ are continuous and $g_k \to g$, $g$ is continuous function too.
-              (Given for granted in the exam).
-    \end{itemize}
+		      Since all $g_k$ are continuous and $g_k \to g$, $g$ is continuous function too.
+		      (Given for granted in the exam).
+	\end{itemize}
 \end{proof}
 
 \subsection{Banach fixed-point theorem}
 
 \begin{definition}{Contraption}{contraption}
-  Given a metric space $(X, d)$, a function $F: X \to X$ is a contraption if
-  $\forall x, y \in X$ there holds
-  \begin{equation}
-    d(F(x), F(y)) \leq \alpha d(x, y)
-  \end{equation}
-  for $\alpha \in [0, 1)$.
+	Given a metric space $(X, d)$, a function $F: X \to X$ is a contraption if
+	$\forall x, y \in X$ there holds
+	\begin{equation}
+		d(F(x), F(y)) \leq \alpha d(x, y)
+	\end{equation}
+	for $\alpha \in [0, 1)$.
 \end{definition}
 
 \begin{theorem}{}{banach}
-    Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
-    Then, there exists an unique $\bar x \in X$ such that
-    \begin{equation}
-        F(\bar x) = \bar x
-    \end{equation}
+	Let $(X, d)$ be a \emph{complete} metric space and $F$ a contraction.
+	Then, there exists an unique $\bar x \in X$ such that
+	\begin{equation}
+		F(\bar x) = \bar x
+	\end{equation}
 \end{theorem}
 
 \begin{proof}
-    First let us show that $\bar x$ is unique.
-    Assume that $F(x) = x$ and $F(y) = y$, hence
-    \begin{equation}
-        d(x, y) = d(F(x), F(y)) \leq \alpha d(x, y) \implies (1-\alpha) d(x, y) \leq 0
-    \end{equation}
-    and since distances are non-negative we get that $d(x, y) = 0$ but this implies $x = y$.
+	First let us show that $\bar x$ is unique.
+	Assume that $F(x) = x$ and $F(y) = y$, hence
+	\begin{equation}
+		d(x, y) = d(F(x), F(y)) \leq \alpha d(x, y) \implies (1-\alpha) d(x, y) \leq 0
+	\end{equation}
+	and since distances are non-negative we get that $d(x, y) = 0$ but this implies $x = y$.
 
-    We now want to prove the existence of $\bar x$.
-    For the first step we define a sequence of points recursively as follows:
-    \begin{equation}
-        x_{k + 1} = F(x_k)
-    \end{equation}
-    and claim that
-    \begin{equation}
-        d(x_k, x_{k+1}) \leq \alpha^k d(x_0, x_1) \quad \forall k \in \N .
-    \end{equation}
-    We proceed by induction: the base case of $k = 0$ is trivial since $\alpha^0 = 1$ (assume that $0^0=1$);
-    for the inductive step we have
-    \begin{equation}
-        d(x_{k+1}, x_{k+2}) = d(F(x_k), F(x_{k+1})) \leq \alpha d(x_k, x_{k+1}) \leq \alpha \alpha^k d(x_0, x_1)
-    \end{equation}
-    as desired.
+	We now want to prove the existence of $\bar x$.
+	For the first step we define a sequence of points recursively as follows:
+	\begin{equation}
+		x_{k + 1} = F(x_k)
+	\end{equation}
+	and claim that
+	\begin{equation}
+		d(x_k, x_{k+1}) \leq \alpha^k d(x_0, x_1) \quad \forall k \in \N .
+	\end{equation}
+	We proceed by induction: the base case of $k = 0$ is trivial since $\alpha^0 = 1$ (assume that $0^0=1$);
+	for the inductive step we have
+	\begin{equation}
+		d(x_{k+1}, x_{k+2}) = d(F(x_k), F(x_{k+1})) \leq \alpha d(x_k, x_{k+1}) \leq \alpha \alpha^k d(x_0, x_1)
+	\end{equation}
+	as desired.
 
-    Next, we let $C = d(x_0, x_1)$ and claim that
-    \begin{equation}
-        d(x_k, x_{k+1}) \leq C \sum_{j = k}^{\ell-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
-    \end{equation}
-    We again proceed by induction on $\ell > j$:
-    the base case will be $\ell = j + 1$ which reduces to $d(x_k, x_{k+1}) \leq C \alpha^k$, which is the result of the previous claim;
-    at $\ell + 1$ we have
-    \begin{equation}
-        d(x_k, x_{l+1}) \leq d(x_k, x_\ell) + d(x_\ell, x_{l + 1}) \leq d(x_k, x_\ell) + C \alpha^\ell \leq C\sum_{j = k}^{l-1} \alpha^j + C \alpha^\ell
-    \end{equation}
-    thanks to the triangle inequality, the previous claim and the inductive hypothesis.
+	Next, we let $C = d(x_0, x_1)$ and claim that
+	\begin{equation}
+		d(x_k, x_{k+1}) \leq C \sum_{j = k}^{\ell-1} \alpha^j \quad \forall k, \ell \text{ s.t. } 0 \leq k < \ell.
+	\end{equation}
+	We again proceed by induction on $\ell > j$:
+	the base case will be $\ell = j + 1$ which reduces to $d(x_k, x_{k+1}) \leq C \alpha^k$, which is the result of the previous claim;
+	at $\ell + 1$ we have
+	\begin{equation}
+		d(x_k, x_{l+1}) \leq d(x_k, x_\ell) + d(x_\ell, x_{l + 1}) \leq d(x_k, x_\ell) + C \alpha^\ell \leq C\sum_{j = k}^{l-1} \alpha^j + C \alpha^\ell
+	\end{equation}
+	thanks to the triangle inequality, the previous claim and the inductive hypothesis.
 
-    Now we can combine the non-negativity of $d$, the claim we just proved and some algebra to get that for $0 \leq k < \ell$
-    \begin{equation}
-        0 \leq d(x_k, x_\ell) \leq C \sum_{j = k}^{l-1} \alpha^j = C \frac{\alpha^k - \alpha^\ell}{1-\alpha}
-    \end{equation}
-    but the sequence on the right goes to $0$ as $k, j \to \infty$ (since $\alpha \in [0, 1)$) hence
-    \begin{equation}
-        \lim_{k, j \to \infty} d(x_k, x_{\ell}) = 0
-    \end{equation}
-    which means that $(x_k)_{k \in \N}$ is a Cauchy sequence.
+	Now we can combine the non-negativity of $d$, the claim we just proved and some algebra to get that for $0 \leq k < \ell$
+	\begin{equation}
+		0 \leq d(x_k, x_\ell) \leq C \sum_{j = k}^{l-1} \alpha^j = C \frac{\alpha^k - \alpha^\ell}{1-\alpha}
+	\end{equation}
+	but the sequence on the right goes to $0$ as $k, j \to \infty$ (since $\alpha \in [0, 1)$) hence
+	\begin{equation}
+		\lim_{k, j \to \infty} d(x_k, x_{\ell}) = 0
+	\end{equation}
+	which means that $(x_k)_{k \in \N}$ is a Cauchy sequence.
 
-    Since $(X, d)$ is complete by hypothesis, $(x_d)$ must converge to some $\bar x \in X$.
-    We have
-    \begin{equation}
-        \bar x = \lim_{k \to \infty} x_k = \lim_{k \to \infty} x_{k + 1} = \lim_{k \to \infty} F(x_k).
-    \end{equation}
-    Since $F$ is continuous because it is a contraption (why?), for any converging sequence $x_k \to \bar x$ we have
-    \begin{equation}
-        d(F(\bar x), F(x_k)) \leq \alpha d(\bar x, x_k) \to 0
-    \end{equation}
-    as $k \to \infty$.
-    Therefore $d(F(\bar x), F(x_k)) \to 0$ and thus $F(x_k) \to F(\bar x)$.
+	Since $(X, d)$ is complete by hypothesis, $(x_d)$ must converge to some $\bar x \in X$.
+	We have
+	\begin{equation}
+		\bar x = \lim_{k \to \infty} x_k = \lim_{k \to \infty} x_{k + 1} = \lim_{k \to \infty} F(x_k).
+	\end{equation}
+	Since $F$ is continuous because it is a contraption (why?), for any converging sequence $x_k \to \bar x$ we have
+	\begin{equation}
+		d(F(\bar x), F(x_k)) \leq \alpha d(\bar x, x_k) \to 0
+	\end{equation}
+	as $k \to \infty$.
+	Therefore $d(F(\bar x), F(x_k)) \to 0$ and thus $F(x_k) \to F(\bar x)$.
 \end{proof}
 
 \subsection{Lipschitz perturbation of the identity}
 
 \begin{theorem}{}{}
-    Let $f: U \to \R^d$ with $U \subseteq \R^p$ open be defined as
-    \begin{equation}
-        f(x) = x + g(x) \quad \text{with } \abs{g(a) - g(b)} \leq \alpha \abs{a - b}, \enspace \alpha \in [0,1)
-    \end{equation}
-    that is, a Lipschitz perturbation of the identity.
-    Then $f(U)$ is open, $f: U \to f(U)$ is a bijection, and it has a continuous inverse $f^{-1}$
-    which satisfies
-    \begin{equation}
-        \abs{f^{-1}(a)- f^{-1}(b)} \leq \frac{1}{1-\alpha} \abs{a-b}
-    \end{equation}
+	Let $f: U \to \R^d$ with $U \subseteq \R^p$ open be defined as
+	\begin{equation}
+		f(x) = x + g(x) \quad \text{with } \abs{g(a) - g(b)} \leq \alpha \abs{a - b}, \enspace \alpha \in [0,1)
+	\end{equation}
+	that is, a Lipschitz perturbation of the identity.
+	Then $f(U)$ is open, $f: U \to f(U)$ is a bijection, and it has a continuous inverse $f^{-1}$
+	which satisfies
+	\begin{equation}
+		\abs{f^{-1}(a)- f^{-1}(b)} \leq \frac{1}{1-\alpha} \abs{a-b}
+	\end{equation}
 \end{theorem}
 
 \begin{proof}
-    For the exam we will just be asked to show that $f(B_r(x_0))$ includes $B_{(1-\alpha)r}(f(x))$.
+	For the exam we will just be asked to show that $f(B_r(x_0))$ includes $B_{(1-\alpha)r}(f(x))$.
 
-    Consider $x \mapsto f(x_0 + x) - f(x_0)$, then if a claim holds for this new function at $0$, it also holds for $f$ at $x_0$.
-    This means that we can assume $x_0 = 0$ and $f(x_0) =0$ without loss of generality.
+	Consider $x \mapsto f(x_0 + x) - f(x_0)$, then if a claim holds for this new function at $0$, it also holds for $f$ at $x_0$.
+	This means that we can assume $x_0 = 0$ and $f(x_0) =0$ without loss of generality.
 
-    Since $f(x) = x + g(x)$, for a fixed $y \in B_{(1-\alpha)r}(0)$ we want to solve $x + g(x) = y$ or equivalently
-    \begin{equation}
-        F(x) = x = y-g(x)
-    \end{equation}
-    in other words this means we want to find a fixed point of $F$.
-    Since $B_r(0)$ is not complete, we can take a closed ball $\bar B_s(0)$ with $0 < s< r$ giving us
-    $\bar B_s(0) \subset B_r(0) \subset U$.
-    Since closed balls constitute closed sets and $\bar B_s(0)$ is a subset of a complete metric space,
-    $(\bar B_s(0), d)$ is a complete metric space.
+	Since $f(x) = x + g(x)$, for a fixed $y \in B_{(1-\alpha)r}(0)$ we want to solve $x + g(x) = y$ or equivalently
+	\begin{equation}
+		F(x) = x = y-g(x)
+	\end{equation}
+	in other words this means we want to find a fixed point of $F$.
+	Since $B_r(0)$ is not complete, we can take a closed ball $\bar B_s(0)$ with $0 < s< r$ giving us
+	$\bar B_s(0) \subset B_r(0) \subset U$.
+	Since closed balls constitute closed sets and $\bar B_s(0)$ is a subset of a complete metric space,
+	$(\bar B_s(0), d)$ is a complete metric space.
 
-    In order to be able to apply \cref{thm:banach} we are left to check that $F$ maps $X = \bar B_s(0)$ to itself
-    for a suitable $s$.
-    Given $x \in \bar B_s(0)$ we have
-    \begin{equation}
-        \abs{F(x)} = \abs{y - g(x)} \leq \abs{y} + \abs{g(x)} =  \abs{y} + \abs{g(x) - g(0)} \leq \abs{y} + \alpha \abs{x - 0} \leq \abs{y} + \alpha s
-    \end{equation}
-    where we used the fact that $g(0) = f(0) - 0 = 0$.
-    In order to deduce that $F(x) \in \bar B_s (0)$ we need to have $\abs{y} + \alpha s \leq s$, that is
-    \begin{equation}
-        \frac{\abs{y}}{1-\alpha} \leq s < r
-    \end{equation}
-    and since we are are assuming $\abs{y} < (1-\alpha) r$ such radius $s$ exists.
+	In order to be able to apply \cref{thm:banach} we are left to check that $F$ maps $X = \bar B_s(0)$ to itself
+	for a suitable $s$.
+	Given $x \in \bar B_s(0)$ we have
+	\begin{equation}
+		\abs{F(x)} = \abs{y - g(x)} \leq \abs{y} + \abs{g(x)} =  \abs{y} + \abs{g(x) - g(0)} \leq \abs{y} + \alpha \abs{x - 0} \leq \abs{y} + \alpha s
+	\end{equation}
+	where we used the fact that $g(0) = f(0) - 0 = 0$.
+	In order to deduce that $F(x) \in \bar B_s (0)$ we need to have $\abs{y} + \alpha s \leq s$, that is
+	\begin{equation}
+		\frac{\abs{y}}{1-\alpha} \leq s < r
+	\end{equation}
+	and since we are are assuming $\abs{y} < (1-\alpha) r$ such radius $s$ exists.
 
-    Finally we check that $F$ is a contraption:
-    \begin{equation}
-        \abs{F(x) - F(x')} = \abs{(y-g(x')) - (y-g(x'))} = \abs{g(x)-g(x')} \leq \alpha \abs{x-x'}
-    \end{equation}
+	Finally we check that $F$ is a contraption:
+	\begin{equation}
+		\abs{F(x) - F(x')} = \abs{(y-g(x')) - (y-g(x'))} = \abs{g(x)-g(x')} \leq \alpha \abs{x-x'}
+	\end{equation}
 
-    Then the existence of the fixed point is guaranteed by \cref{thm:banach}.
+	Then the existence of the fixed point is guaranteed by \cref{thm:banach}.
 \end{proof}
 
 \subsection{Local Peano-Picard}
@@ -434,27 +434,27 @@
 Consider the following set with $T, M > 0$
 and the initial condition $(t_0, \lambda_0) \in A$ of some initial value problem:
 \begin{equation}
-    X_{T, M} = \{ v: [t_0 - T, t_0 + T] \to \R^n : v \text{ continuous and } \norm{v-\lambda_0} \leq M \}
+	X_{T, M} = \{ v: [t_0 - T, t_0 + T] \to \R^n : v \text{ continuous and } \norm{v-\lambda_0} \leq M \}
 \end{equation}
 where
 \begin{equation}
-    \norm{v-\lambda_0} = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - \lambda_0}
+	\norm{v-\lambda_0} = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - \lambda_0}
 \end{equation}
 is the usual supremum norm, which means that
 \begin{equation}
-    \norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \leq M \enspace \forall t \in [t_0 - T, t_0 + T]
+	\norm{v - \lambda_0} \leq M \iff \abs{v(t) - \lambda_0} \leq M \enspace \forall t \in [t_0 - T, t_0 + T]
 \end{equation}
 
 We then define a metric space $(X_{T, M}, d)$ with
 \begin{equation}
-    d(v, w) = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - w(t)}
+	d(v, w) = \max_{t \in [t_0 - T, t_0 + T]} \abs{v(t) - w(t)}
 \end{equation}
 
 We can prove that the $(X_{T,M}, d)$ is complete.
 
 \begin{theorem}{Peano-Picard local version}{}
-    For $M > 0$ small enough and, once $M$ is fixed, for $T>0$ small enough, the set $X_{T, M}$ contains exactly one solution
-    for the initial value problem.
+	For $M > 0$ small enough and, once $M$ is fixed, for $T>0$ small enough, the set $X_{T, M}$ contains exactly one solution
+	for the initial value problem.
 \end{theorem}
 
 Since $A$ is open, it includes an open ball around the point $p = (t_0, \lambda_0)$:
@@ -464,42 +464,42 @@ We will always take $T, M \leq R/2$ from now on, which guarantees that points in
 
 Recall that $v \in X_{T, M}$ solves the initial value problem iff
 \begin{equation}
-    v \mapsto F(v), \quad F(v)(t) = \lambda_0 + \int^t_{t_0} f(s, v(s)) \dd s
+	v \mapsto F(v), \quad F(v)(t) = \lambda_0 + \int^t_{t_0} f(s, v(s)) \dd s
 \end{equation}
 
 In order to prove the theorem we want to show that
 \begin{enumerate}
-    \item $F(X_{T, M}) \subseteq X_{T, M}$ for a suitable $T, M >0$
-    \item $\eval{F}_{X_{T, M}}$ is a contraption on a complete metric space for some suitable $T, M > 0$
+	\item $F(X_{T, M}) \subseteq X_{T, M}$ for a suitable $T, M >0$
+	\item $\eval{F}_{X_{T, M}}$ is a contraption on a complete metric space for some suitable $T, M > 0$
 \end{enumerate}
 and then apply \cref{thm:banach}.
 
 \begin{proposition}{$F$ is a contraption}{}
-    If $M, T > 0$ are small enough, then the function $F: X_{T, M} \to X_{T, M}$
-    is a contraption.
-    Specifically, this will hold as long as
-    \begin{equation}
-        0 < M \leq \frac{R}{2} \quad \text{and} \quad 0 < T \leq \min \left\{ \frac{R}{2}, \frac{M}{\Lambda}, \frac{1}{2L} \right\}
-    \end{equation}
-    where $L$ is the Lipschitz constant for $F$ and
-    $\Lambda$ is such that $\abs{F(q)} \leq \Lambda \enspace \forall q \in B_R(p)$.
+	If $M, T > 0$ are small enough, then the function $F: X_{T, M} \to X_{T, M}$
+	is a contraption.
+	Specifically, this will hold as long as
+	\begin{equation}
+		0 < M \leq \frac{R}{2} \quad \text{and} \quad 0 < T \leq \min \left\{ \frac{R}{2}, \frac{M}{\Lambda}, \frac{1}{2L} \right\}
+	\end{equation}
+	where $L$ is the Lipschitz constant for $F$ and
+	$\Lambda$ is such that $\abs{F(q)} \leq \Lambda \enspace \forall q \in B_R(p)$.
 \end{proposition}
 
 \begin{proof}
-    Take for granted that $F(X_{T, M}) \subseteq X_{T, M}$.
-    To show that $F$ is a contraption with $\alpha = 0.5$ we want to show that
-    \begin{equation}
-        \norm{F(v) - F(w)} = \frac{1}{2} \norm{v-w}
-    \end{equation}
+	Take for granted that $F(X_{T, M}) \subseteq X_{T, M}$.
+	To show that $F$ is a contraption with $\alpha = 0.5$ we want to show that
+	\begin{equation}
+		\norm{F(v) - F(w)} = \frac{1}{2} \norm{v-w}
+	\end{equation}
 
-    With $t \in [t_0 - T, t_0 + T]$ we compute that
-    \begin{align}
-        \abs{F(v)(t) - F(w)(t)} & = \abs{\int_{t_0}^{t} f(s,v(s)) \dd s - \int_{t_0}^{t} f(s,w(s)) \dd s} \\
-                                & \leq \int_{t_0}^{t} \abs{f(s,v(s)) - f(s,w(s))} \dd s                   \\
-                                & \leq \int_{t_0}^{t} L\norm{v - w} \dd s                                 \\
-                                & \leq L \norm{v - w} (t - t_0) \leq LT \norm{v - w}                      
-    \end{align}
-    therefore as long as $LT \leq 0.5$ the claim is true.
+	With $t \in [t_0 - T, t_0 + T]$ we compute that
+	\begin{align}
+		\abs{F(v)(t) - F(w)(t)} & = \abs{\int_{t_0}^{t} f(s,v(s)) \dd s - \int_{t_0}^{t} f(s,w(s)) \dd s} \\
+		                        & \leq \int_{t_0}^{t} \abs{f(s,v(s)) - f(s,w(s))} \dd s                   \\
+		                        & \leq \int_{t_0}^{t} L\norm{v - w} \dd s                                 \\
+		                        & \leq L \norm{v - w} (t - t_0) \leq LT \norm{v - w}
+	\end{align}
+	therefore as long as $LT \leq 0.5$ the claim is true.
 \end{proof}
 
 \end{document}

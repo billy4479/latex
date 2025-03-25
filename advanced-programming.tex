@@ -1564,4 +1564,147 @@ There are many ways one can choose which variable to use as pivot, here's some.
 	$\vec r \leq 0$.
 \end{proof}
 
+\section{Other methods for linear programs}
+\subsection{Ellipsoid method}
+
+\subsection{Interior point method}
+
+\section{Integer linear programming}
+
+\subsection{Introduction}
+
+If we have a linear program where the solution $\vec x$ is constraint to be a vector of integers
+we obtain a integer linear program.
+
+\begin{theorem}{ILP complexity}{ilp-nphard}
+	Integer linear programming problems are NP-hard.
+\end{theorem}
+\begin{proof}[Proof (sketch)]
+	Consider the following SAT formula:
+	\begin{equation}
+		\varphi = (x_1 \lor \lnot x_2 \lor x_4) \land (x_2 \lor x_3 \lor \lnot x_5) \land \dots
+	\end{equation}
+	then
+	this is equivalent to
+	\begin{align}
+		x_1 + (1-x_2) + x_4    & \leq 1          \\
+		x_2 + x_3 (1 - x_5)    & \leq 1          \\
+		0 \leq              {} & x_i \leq 1      \\
+		x_i                    & \text{ integer}
+	\end{align}
+	and the same can be done for any integer linear program.
+\end{proof}
+
+\begin{definition}{Integer hull}{integer-hull}
+	Given a polyhedron $P$ we denote $P_I$ the integer hull of $P$, that is,
+	all the integer vectors included in $P$.
+\end{definition}
+
+\begin{remark}{}{}
+	\begin{itemize}
+		\item If $P$ is rational (that is $A, \vec b$ are rational) then $P_I$ is also a polyhedron;
+		\item If $P$ is bounded, $P_I$ is finite.
+	\end{itemize}
+\end{remark}
+
+\begin{proposition}{Weak duality for ILP}{weak-duality-ilp}
+	Consider a ILP and its dual:
+	\begin{align}
+		\delta & = \sup \{\vec c^T \vec x \mid A \vec x \leq \vec b, \vec x \in \Z^n \} \\
+		\gamma & = \inf \{\vec b^T \vec y \mid A^T \vec y = \vec c, \vec y \in \N^n \}
+	\end{align}
+	then $\delta \leq \gamma$, that is, weak duality holds.
+\end{proposition}
+
+\begin{proof}
+	We prove this statement by going back to the normal LP:
+	\begin{equation}
+		\delta \leq \sup \{ \vec c^T \vec x \mid A \vec x \leq \vec b \}
+		\leq \inf \{ \vec b^T \vec y \mid A^T \vec y = \vec c, \vec y \geq 0\} \leq \gamma
+	\end{equation}
+	as desired.
+\end{proof}
+
+Note that strong duality does not hold in general.
+
+\subsection{Total unimodularity}
+
+Even though for the general case ILP is NP-hard, there are some cases where it can be solved in
+polynomial time, such as in the flow problem.
+Why?
+
+\begin{definition}{Total unimodularity}{total-unimodularity}
+	We say that a matrix $A$ is totally unimodular if each square submatrix of $A$ has determinant in
+	$\{-1, 0, 1\}$.
+\end{definition}
+
+\begin{remark}
+	If $A$ is totally unimodular we observe that
+	\begin{itemize}
+		\item All its entries are in $\{-1, 0, 1\}$;
+		\item The following augmented matrices are also totally unimodularity:
+		      \begin{equation}
+			      \begin{pmatrix}
+				      A \\ \mathds 1
+			      \end{pmatrix},
+			      \quad
+			      \begin{pmatrix}
+				      A \\ - \mathds 1 \\ \mathds 1
+			      \end{pmatrix},
+			      \quad
+			      \begin{pmatrix}
+				      - \mathds 1 \\ A^T \\ A^T
+			      \end{pmatrix}
+		      \end{equation}
+	\end{itemize}
+\end{remark}
+
+\begin{theorem}{Totally unimodular polyhedra}{tu-polyhedra}
+	If $A$ is totally unimodular and $\vec b \in \Z^m$ then the vertices of
+	$P = \{ \vec x \mid A \vec x \leq \vec b \}$ are integers.
+\end{theorem}
+
+\begin{proof}
+	TODO: lec 18, thm 3
+\end{proof}
+
+\begin{definition}{Integer polyhedra}{integer-polyhedra}
+	We say that $P$ is an integer polyhedron if for each $\vec c$ so that
+	$M = \max\{\vec c^T \vec x \mid x \in P\}$ exists, then $M$ is attained at an integer point.
+\end{definition}
+
+Observe that $P$ is an integer polyhedron if and only if all of its vertices are integer points.
+
+\begin{corollary}{}{}
+	Let $A$ be totally unimodular and $\vec b \in \Z^m$. Then
+	$P = \{ \vec x \mid A \vec x \leq \vec b \}$ is an integer polyhedron.
+\end{corollary}
+
+\begin{proof}
+	TODO: lec 18, cor 5
+\end{proof}
+
+\begin{corollary}{}{}
+	Let $A$ be totally unimodular, $\vec b \in \R^m$ and $\vec c \in \R^n$. Then, if both the primal
+	and the dual defined by these parameters have a finite optima, they have an integer optimal
+	solution.
+\end{corollary}
+
+\begin{proof}
+	For (P) we just apply the previous corollary, for (D) we notice that
+	$\begin{pmatrix} A^T \\ -A^T \\ \mathds 1 \end{pmatrix}$ is also totally unimodular.
+\end{proof}
+
+\begin{theorem}{Hoffman-Kruskal}{hoffman-kruskal}
+	Let $A$ be a $m \cross n$ matrix. $A$ is totally unimodular iff for each $\vec b \in \Z^m$ the
+	polyhedron $P \{ \vec x \mid A \vec x \leq \vec b \}$ is integer.
+\end{theorem}
+
+\begin{proof} Not required. \end{proof}
+
+\subsubsection{Max cardinality matching in bipartite graphs}
+
+TODO: lec 18
+
+
 \end{document}

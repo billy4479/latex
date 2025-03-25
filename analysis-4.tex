@@ -547,4 +547,148 @@ homotopic to it.
 	Not in the exam; see lecture 4.
 \end{proof}
 
+\section{Differential geometry}
+
+\subsection{Inverse function theorem}
+
+\begin{definition}{Diffeomorphism}{diffeomorphism}
+	Let $U, V \subseteq \R^n$ both open. A function $\Phi : U \to V$ is a diffeomorphism if it is
+	bijective, with $\Phi$ and $\Phi^{-1}$ both of class $C^1$.
+
+	Moreover, we say that $\Phi$ is a diffeomorphism \emph{with its image} if $V = \Phi(U)$.
+\end{definition}
+
+\begin{theorem}{Inverse function theorem}{inverse-func}
+	Let $f: U \to \R^n$ of class $C^1$ with $U \subseteq \R^n$ open.
+	If the differential $Df(x_0)$ is invertible at a given point $x_0 \in U$, then there exists a
+	smaller open set $U' \subseteq U$ such that $x_0 \in U'$, $f(U')$ is open and $f \eval_{U'}$ is a
+	bijection from $U'$ to $f(U')$ with a $C^1$ inverse.
+
+	In other words, $f\eval_{U'}$ is a diffeomorphism with its image.
+\end{theorem}
+
+This theorem essentially says that the Taylor expansion $T_1(x) = f(x_0) + (Df(x_0))(x-x_0)$ is
+invertible if $f$ is also invertible near $x_0$.
+
+\begin{proof}
+	TODO: thm 9.1
+\end{proof}
+
+\begin{theorem}{Implicit function theorem}{implicit-func}
+	Let $P \subset \R^k$ and $S, V \subseteq \R^n$, all open, and a function $f: P \cross S \to V$ of
+	class $C^1$.
+	If $D_s f(p_0, s_0)$ is invertible for some $(p_0, s_0) \in P \cross S$ then, letting
+	$v_0 = f(p_0, s_0)$, there exists some smaller sets $P' \subseteq P$, $S'\subseteq S$, and
+	$V' \subseteq V$ containing $p_0, s_0, v_0$ respectively such that, for $p \in P'$ and $v \in V'$
+	the equation $f(p, s) = v$ has an unique solution $s \in S'$.
+	Furthermore, the assignment $(p, v) \to s$ giving the solution is a $C^1$ function
+	$P \cross V \to S$.
+\end{theorem}
+
+Basically this theorem gives us a way of finding a solution to a non-linear equation $f(p, s) = v$
+for $s$ given a value $v$ and a parameter $p$.
+Note that if we fix the parameter $p = p_0$ we are back to the same situation as the inverse
+function theorem.
+
+This is why we impose the condition that $D_s f$ (the differential of $f$ limited to the partial
+derivatives in $s_1, \dots s_n$) is invertible at $(p_0, s_0)$.
+Recall that the differential is a matrix, in this case $n \cross (k + n)$, and can be written as
+\begin{equation}
+	Df(p_0, s_0) = (D_p f(p_0, s_0) \mid D_s f(p_0, s_0))
+\end{equation}
+
+\begin{proof}
+	TODO: thm 9.3
+\end{proof}
+
+\subsection{Manifolds}
+
+Intuitively a $k$-dimensional manifold is a subset of $\R^n$, with $k \in \{1, \dots, n\}$, which
+resembles an affine space of dimension $k$ close to any point in it. In other words, if we zoom in
+to a point in the manifold we have something that looks like a straight line.
+
+\begin{definition}{First definition of manifold}{manifold-1}
+	A set $M \subseteq \R^n$ is a $k$-dimensional manifold if, for any $p \in M$, there exists an open
+	set $U \subseteq \R^n$, such that $p \in U$, and a function $\Phi : U \to \R^n$ which is a diffeomorphism with
+	its image, such that
+	\begin{equation}
+		\Phi(M \cap U) = [\R^k \cross \{0\}] \cap \Phi(U)
+	\end{equation}
+\end{definition}
+
+This definition tells us that, within a set $U$, we can deform the portion of $M$ contained in $U$
+top obtain a $k$-dimensional plane (or, more precisely, the portion of this plane included in
+$\Phi(U)$).
+The notation $\R^k \cross \{0\}$ indicates a $k$-dimensional subspace of $\R^n$: for example, if
+$n = 3$ and $k = 2$ we would obtain the $xy$ plane \emph{in} $\R^3$, i.e. the set of points
+$(x, y, 0) \in \R^3$.
+
+\begin{definition}{Second definition of manifold}{manifold-2}
+	A set $M \subseteq \R^n$ is a $k$-dimensional manifold if, for any $p \in M$, there exists an open
+	set $U \subseteq \R^n$, such that $p \in U$, and a function $h: U \to \R^{n-k}$ such that $Dh(p)$
+	is surjective (or, equivalently, has full rank) and
+	\begin{equation}
+		M \cap U = \{ x \in U : h(x) = 0 \}
+	\end{equation}
+\end{definition}
+
+This definition is kind of complementary to the previous one: it says that $M$ is locally the zero
+of a function with values in $\R^{n-k}$, which imposes $n-k$ constraints.
+
+\begin{definition}{Third definition of manifold}{manifold-3}
+	A set $M \subseteq \R^n$ is a $k$-dimensional manifold if, for any $p \in M$, there exists an open
+	set $U \subseteq \R^n$, such that $p \in U$, an open set $V \subseteq \R^k$, and a function
+	$\psi: V \to U$ of class $C^1$ with the following properties:
+	\begin{itemize}
+		\item $D \psi (x) $ is injective (or, equivalently, has full rank) for all $x \in V$;
+		\item $\psi$ is a homeorphism with its image, that is $\psi$ as a map from $V \to \psi(V)$ is
+		      bijective and has continuous inverse;
+		\item $M \cap U = \psi(V)$.
+	\end{itemize}
+\end{definition}
+
+Here we are told that around any point $p \in M$ we can write $M$ as the image of a parametrization
+$\psi$. Note that it is enough to check the first condition at $\psi^{-1}(p)$ because $D\psi$ is
+continuous.
+
+\begin{definition}{Fourth definition of manifold}{manifold-4}
+	A set $M \subseteq \R^n$ is a $k$-dimensional manifold if, for any $p \in M$, up to a permutation
+	of the coordinates, there exists an open set $U \subseteq \R^n$ of the form $U = V \cross W$, with
+	$V \subseteq \R^k$ and $W \subseteq \R^{n - k}$ both open, and a function $\tilde \psi: V \to W$
+	of class $C^1$ such that $M \cap U$ is the graph of $\tilde \psi$, i.e.
+	\begin{equation}
+		M \cap U = \{ (x, \tilde \psi(x)) \mid x \in V\}
+	\end{equation}
+\end{definition}
+
+
+\begin{theorem}{Equivalence of the definitions of manifold}{equivalence-def-manifold}
+	The four definitions of manifold (\cref{def:manifold-1}, \cref{def:manifold-2},
+	\cref{def:manifold-3}, and \cref{def:manifold-4}) are equivalent.
+\end{theorem}
+\begin{proof}
+	TODO: thm 9.9
+\end{proof}
+
+\subsubsection{Tangent space}
+
+\begin{definition}{Tangent space}
+	Let $M$ be a manifold and $p \in M$. The tangent space to $M$ at point $p$ is defined as
+	\begin{equation}
+		T_p M = \{ \gamma'(0) \mid \gamma: [0, \varepsilon] \to M \text{ of class } C^1 \text{ with }
+		\gamma(0) = p \text{ and } \varepsilon > 0 \}
+	\end{equation}
+\end{definition}
+In other words we consider all the possible initial speeds of the curves starting at $p$ and
+travelling along $M$.
+
+\begin{proposition}{Tangent space is linear}{tangent-space-linear}
+	The tangent space $T_p M$ of a $k$-dimensional manifold $M$ at $p$ is a $k$-differential linear
+	subspace of $\R^n$ for any $p \in M$.
+\end{proposition}
+
+\begin{proof}
+	TODO: prop 9.14
+\end{proof}
+
 \end{document}

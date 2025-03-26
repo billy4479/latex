@@ -601,7 +601,7 @@ Recall that the differential is a matrix, in this case $n \cross (k + n)$, and c
 	TODO: thm 9.3
 \end{proof}
 
-\subsection{Manifolds}
+\subsection{Definition of manifold}
 
 Intuitively a $k$-dimensional manifold is a subset of $\R^n$, with $k \in \{1, \dots, n\}$, which
 resembles an affine space of dimension $k$ close to any point in it. In other words, if we zoom in
@@ -637,8 +637,9 @@ of a function with values in $\R^{n-k}$, which imposes $n-k$ constraints.
 
 \begin{definition}{Third definition of manifold}{manifold-3}
 	A set $M \subseteq \R^n$ is a $k$-dimensional manifold if, for any $p \in M$, there exists an open
-	set $U \subseteq \R^n$, such that $p \in U$, an open set $V \subseteq \R^k$, and a function
-	$\psi: V \to U$ of class $C^1$ with the following properties:
+	set $U \subseteq \R^n$, such that $p \in U$, an open set $V \subseteq \R^k$, and a
+	\emph{parametrization} $\psi: V \to U$, that is $\psi$ of class $C^1$ with the following
+	properties:
 	\begin{itemize}
 		\item $D \psi (x) $ is injective (or, equivalently, has full rank) for all $x \in V$;
 		\item $\psi$ is a homeorphism with its image, that is $\psi$ as a map from $V \to \psi(V)$ is
@@ -670,9 +671,10 @@ continuous.
 	TODO: thm 9.9
 \end{proof}
 
+\subsection{Spaces on manifolds}
 \subsubsection{Tangent space}
 
-\begin{definition}{Tangent space}
+\begin{definition}{Tangent space}{tangent-space}
 	Let $M$ be a manifold and $p \in M$. The tangent space to $M$ at point $p$ is defined as
 	\begin{equation}
 		T_p M = \{ \gamma'(0) \mid \gamma: [0, \varepsilon] \to M \text{ of class } C^1 \text{ with }
@@ -688,7 +690,123 @@ travelling along $M$.
 \end{proposition}
 
 \begin{proof}
-	TODO: prop 9.14
+	TODO: prop 10.2
 \end{proof}
+
+\subsubsection{Tangent cone}
+
+\begin{definition}{Tangent cone}{tangent-cone}
+	Given a set $S \subseteq \R^n$ and $p \in S$, we define the tangent cone of $S$ at $p$ as
+	\begin{equation}
+		T_p S = \left\{ \lambda v \mid \lambda \geq 0,
+		v = \lim_{i \to \infty} \frac{p^{(i)} - p}{\abs{p^{(i)} - p}}\right\}
+	\end{equation}
+	where we consider any sequence $p^{(i)} \in S \setminus \{p\}$ such that $p^{(i)} \to p$ and
+	$\frac{p^{(i)} - p}{\abs{p^{(i)} - p}}$ also converges.
+
+	If $p$ is isolated in $S$ we let $T_p S = \varnothing$.
+\end{definition}
+
+In other words, we consider all possible limit directions of approaching $p$ within $S$ and we
+consider all non-negative multiples of them.
+
+\begin{proposition}{Tangent cone are necessary for manifold}{cone-necessary-manifold}
+	If $S$ is a $k$-dimensional manifold, then $T_p S$ is a $k$-dimensional vector space.
+\end{proposition}
+
+Note that this condition is not sufficient, counterexample in remark 10.6.
+Moreover, if $S$ is convex, the tangent cone ends up being equivalent to the closure of the one we
+defined in advanced programming.
+
+\begin{proof}
+	TODO: prop 10.5
+\end{proof}
+
+\subsection{Smooth maps between manifolds}
+
+For us smooth means $C^1$ although some time it may be more strict.
+We want to define what it means for a function $f: M \to N$ to be smooth, where $M \subseteq \R^m$
+and $N \subseteq \R^n$ are both manifolds.
+
+\begin{definition}{Smooth maps to a manifold}{}
+	Given a set $U \subseteq \R^m$ and a function $f: U \to N$ we say that $f$ is smooth if
+	$f: U \to \R^n$ is of class $C^1$ in the usual way, that is, differentiable with continuous
+	differential.
+\end{definition}
+
+\begin{definition}{Smooth maps from a manifold}{smooth-map-from-manifold}
+	Let $f: M \to \R^n$. $f$ is smooth if for all parametrizations $\psi: V \to M$
+	(as in \cref{def:manifold-3}) defined on an open set $V \subseteq \R^k$ so that the composition
+	\begin{equation}
+		f \circ \psi: V \to \R^k
+	\end{equation}
+	is of class $C^1$.
+\end{definition}
+
+We would need to check this for infinitely many parametrizations, however, luckily, it is usually
+enough to check finitely many of them.
+
+\begin{proposition}{}{}
+	Let $\psi^{(i)}: V^{(i)} \to M$ be a family of parametrizations for $i \in I$ so that
+	$M = \bigcup_{i \in I} \psi^{(i)}(V^{(i)})$.
+	Then a map $f: M \to \R^n$ is smooth if and only if each composition $f \circ \psi^{(i)}$ is
+	$C^1$.
+\end{proposition}
+
+\begin{proof}
+	skip.
+\end{proof}
+
+\begin{proposition}{}{}
+	A function $f: M \to \R^n$ is of class $C^1$ if and only if, for any $p \in M$, there exists an
+	open set $U$ such that $p \in U$ and $\tilde f: U \to \R^n$ of class $C^1$ such that
+	\begin{equation}
+		f |_{M \cap U} = \tilde f |_{M \cap U}
+	\end{equation}
+\end{proposition}
+
+\begin{proof}
+	TODO: prop 12.6
+\end{proof}
+
+\begin{definition}{Smooth map between manifolds}{}
+	A function $f: M \to N$ is smooth if it is smooth according to \cref{def:smooth-map-from-manifold}
+	when viewed as a map $f: M \to \R^n$.
+\end{definition}
+
+\begin{definition}{Diffeomorphism between manifolds}{}
+	A function $f: M \to N$ is a diffeomorphism it is bijective and $f$ and $f^{-1}$ are both smooth.
+\end{definition}
+
+\subsubsection{Differential of smooth functions between manifolds}
+
+\begin{definition}{Differential of a smooth function between manifolds}{differential-smooth}
+	Given a $C^1$ function $f: M \to N$ between two manifolds $M, N$, for any point $p \in M$ we
+	define the differential of $f$ at $p$ as the \emph{linear} map
+	\begin{equation}
+		Df(p): T_p M \to T_{f(p)} N
+	\end{equation}
+	defined as
+	\begin{equation}
+		Df(p)[\gamma'(0)] = (f \circ \gamma)' (0)
+	\end{equation}
+	for any $\gamma: [0, \varepsilon] \to M$ of class $C^1$ with $\gamma(0) = p$.
+\end{definition}
+
+\begin{proposition}{Differential is well defined}{}
+	The differential is well-defined (i.e. for two different $\gamma_1, \gamma_2$ we would obtain the
+	same result) and linear.
+	Moreover, given any $p \in M$ and a local $C^1$ extension $\tilde f: U \to \R^n$ near $p$, we have
+	\begin{equation}
+		Df(p)[v] = D\tilde f (p)[v]
+	\end{equation}
+	for any $v \in T_p M$.
+\end{proposition}
+\begin{proof}
+	TODO: prop 13.3
+\end{proof}
+
+
+
 
 \end{document}

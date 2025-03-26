@@ -1706,5 +1706,175 @@ Observe that $P$ is an integer polyhedron if and only if all of its vertices are
 
 TODO: lec 18
 
+\subsubsection{Directed graphs and flows}
+
+\paragraph{Incidence matrix}
+Let $G = (V, E)$ be a directed graph. The \emph{incidence matrix} $M$ is defined as
+\begin{equation}
+	M_{ve} = \begin{cases}
+		+1 & \text{if $e$ leaves $v$} \\
+		-1 & \text{if $e$ enters $v$} \\
+		0  & \text{otherwise}
+	\end{cases}
+\end{equation}
+
+\begin{theorem}{Incidence of directed graph is TU}{incidence-tu}
+	The incidence matrix $M$ of any directed graph is totally unimodular.
+\end{theorem}
+
+\begin{proof}
+	Let $B_t$ be a square submatrix of $M$ of size $t\cross t$.
+	We proceed by induction on $t$.
+
+	At $t = 1$ this is trivial since all the entries of $M$ are in $\{-1, 0, +1\}$.
+	At $t > 1$ we need to consider 3 cases:
+	\begin{itemize}
+		\item $B$ has an all-$0$ column.
+
+		      Then $\det(B) = 0$
+
+		\item $B$ has a column containing a single non-zero value.
+
+		      Then we can write $B$ as
+		      \begin{equation}
+			      B = \begin{pmatrix}
+				      \pm 1 & b^T \\
+				      0     & B'
+			      \end{pmatrix}
+		      \end{equation}
+		      with $B'$ of size $t-1$.
+		      Then $\det(B) = \pm 1 \cdot \det (B') \in \{\pm 1, 0\}$.
+
+		\item $B$ has two non-$0$ values in each column.
+
+		      Then the rows of $B$ sum up to $0$ since each column of $M$ contains exactly a single $+1$, a
+		      single $-1$, and all other entries are $0$.
+		      Then $\det(B) = 0$.
+		      \qedhere
+	\end{itemize}
+\end{proof}
+
+
+\paragraph{s-t flow}
+
+We also define the \emph{circulation}: intuitively, if the flow doesn't disappear anywhere we have a
+circulation. Formally:
+\begin{equation}
+	\sum_{e \in \delta^\text{in}(v)} x_e = \sum_{e \in \delta^\text{out}(v)} x_e \quad \forall v \in V
+	\label{eq:circulation}
+\end{equation}
+Note that \cref{eq:circulation} is equivalent to saying that $M \vec x = 0$ where $M$ is the
+incidence matrix.
+
+An $s$-$t$ \emph{flow} is a vector $\vec x \in \R^{\abs{E}}$ so that \cref{eq:circulation} holds for
+all $v \in V \setminus \{s, t\}$.
+
+We can write a linear program which finds the max flow $\vec w$ for a graph with capacity $\vec c$:
+\begin{equation}
+	\begin{array}{rr}
+		\max              & \vec w^T \vec x    \\
+		\text{subject to} & M' \vec x = 0      \\
+		                  & \vec x \leq \vec c \\
+		                  & \vec x \geq 0
+	\end{array}
+	\label{eq:st-flow}
+\end{equation}
+where $M'$ is the matrix $M$ with rows corresponding to $s$ and $t$ removed, while $\vec w$ is
+$M_s$, that is, the row of $M$ corresponding to $s$.
+
+We can write the dual as
+\begin{equation}
+	\begin{array}{rr}
+		\min              & \vec c^T \vec y                 \\
+		\text{subject to} & (M')^T \vec z + \vec y = \vec w \\
+		                  & \vec y \geq 0
+	\end{array}
+\end{equation}
+
+Another way of looking at this problem is adding an edge $(t, s)$ with infinite capacity and then
+look for a circulation. Now we can write the problem in a nicer way:
+\begin{equation}
+	\begin{array}{rr}
+		\max              & x_{ts}                \\
+		\text{subject to} & M \vec x = 0          \\
+		                  & I' \vec x \leq \vec c \\
+		                  & \vec x \geq 0
+	\end{array}
+\end{equation}
+Where $M$ is the incidence matrix of the modified graph, and $I'$ is the $m\cross (m + 1)$ identity
+matrix with the row corresponding to $e_{ts}$ removed (since it has no capacity constraint).
+
+The corresponding dual is
+\begin{equation}
+	\begin{array}{rr}
+		\min              & \vec c^T \vec y                               \\
+		\text{subject to} & (M')^T \vec z + (I')^T\vec y = \vec \chi^{ts} \\
+		                  & \vec y \geq 0
+	\end{array} \quad \text{where }
+	\chi^{ts}_e = \begin{cases}
+		1 & \text{if } e = (t, s) \\
+		0 & \text{otherwise}
+	\end{cases}
+\end{equation}
+This is the problem for the minimum cut.
+
+
+Then, we can write the constraints of the minimum cost flow as
+\begin{equation}
+	\begin{array}{lcr}
+		M \vec x & =    & 0      \\
+		I \vec x & \leq & \vec c \\
+		I \vec x & \geq & \vec d
+	\end{array} \quad \text{so that} \quad
+	\begin{pmatrix}
+		M  \\
+		-M \\
+		I  \\
+		-I
+	\end{pmatrix} \text{ is still TU}
+\end{equation}
+where $\vec d$ is some kind of bound for the flow we put in place to preserve unimodularity.
+Then, if exists $\vec d \leq \vec x \leq \vec c$, then there exists an optimal
+$\vec x^* \in \Z^{\abs{E}}$ so that $\vec d \leq \vec x^* \leq \vec c$.
+
+\paragraph{Minimum cost flow}
+We now define a new problem, the \emph{min-cost flow}: given a directed graph $G$, a capacity vector
+$\vec c$ and a cost vector $\vec \kappa$, we want to find the flow $\vec x$ of size $\alpha$ that
+minimizes $\vec \kappa^T \vec x$.
+
+This however requires an additional constrain $\vec 1^T \vec x \geq \alpha$ (where $\vec 1$ is
+vector of all $1$) and $\begin{pmatrix}M \\ \vec 1 \end{pmatrix}$ is no longer TU.
+
+Note however that $\alpha= \max \{\vec w^T \vec x \mid x \in P \}$ for some integer polyhedron $P$.
+Then $P' = \{ x \mid x \in P, \vec w^T \vec x = \alpha \}$ is a face of $P$ and therefore it is also
+an integer polyhedron.
+We have that $\forall \vec c \in \R^n$, $\argmax \{ \vec c^T \vec x \mid x \in P'\}$ is a face of
+$P'$, therefore it contains an integer vector.
+
+We can formulate a minimum cost flow problem as
+\begin{equation}
+	\begin{array}{rr}
+		\min              & \vec \kappa^T \vec x        \\
+		\text{subject to} & M'^T \vec x = 0             \\
+		                  & \vec x \geq \vec c          \\
+		                  & \vec w^T \vec x \geq \alpha \\
+		                  & \vec x \geq 0
+	\end{array}
+\end{equation}
+where $\alpha = \max \{\vec w^T \vec x \mid M'\vec x = 0, x \leq c, x \geq 0 \}$ is the maximum
+$s$-$t$ flow in $G$ and $M'$ and $\vec w$ are defined as in \cref{eq:st-flow}.
+
+Note that $\vec c \in Z^\abs{E}_+$, otherwise we could have an unbounded problem which is NP-hard.
+If $\vec c$ respects this constraint we are guaranteed to have an integer optimal solution.
+
+\begin{theorem}{Max-flow minimum-cut}{max-flow-min-cut}
+	Let $G = (V, E)$ be a directed graph, $s, t \in V$, and $\vec c \in \R^\abs{E}_+$.
+	Then the maximum $s$-$t$ flow of $G$ subject to capacities $\vec c$ is equal to the minimum
+	capacity of an $s$-$t$ cut.
+\end{theorem}
+
+\begin{proof}
+	TODO: lec 19, thm 6.
+\end{proof}
 
 \end{document}

@@ -8,8 +8,7 @@
 
 \usepackage{preamble}
 
-%\renewcommand{\vec}[1]{\uvec{#1}}
-\renewcommand{\vec}[1]{\bm{#1}}
+\renewcommand{\vec}[1]{\bvec{#1}}
 
 \begin{document}
 
@@ -604,12 +603,12 @@ where $\eta \in \R$ is the learning rate.
 
 	For $B_{t+1}$ we have
 	\begin{align}
-		B_{t+1} & = \norm{\vec w_t + \vec z^\mu}^2                             \\
-		        & = \norm{\vec w_t}^2 + 2 \vec w_t \vec z^\mu + \norm{z^\mu}^2 \\
-		        & < B_t + K^2                                                  \\
+		B_{t+1} & = \norm{\vec w_t + \vec z^\mu}^2                                  \\
+		        & = \norm{\vec w_t}^2 + 2 \vec w_t \vec z^\mu + \norm{\vec z^\mu}^2 \\
+		        & < B_t + K^2                                                       \\
 		        & < (t+1)K^2
 	\end{align}
-	where we have used the same induction as before and the fact that $\vec w_t z^\mu < 0$.
+	where we have used the same induction as before and the fact that $\vec w_t \vec z^\mu < 0$.
 
 	Now, since $A_t < \sqrt{B_t}$ for all $t$ we have
 	\begin{align}

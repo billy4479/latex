@@ -65,7 +65,8 @@
 \def\munderbar#1{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
 \makeatother
 
-\newcommand{\uvec}[1]{\munderbar{\bm{#1}}}
+\newcommand{\bvec}[1]{\bm{\mathrm{#1}}}
+\newcommand{\uvec}[1]{\munderbar{\bvec{#1}}}
 
 % https://tex.stackexchange.com/a/5255
 \DeclareMathOperator*{\argmax}{arg\,max}

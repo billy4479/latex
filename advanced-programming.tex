@@ -1665,12 +1665,31 @@ Why?
 \end{theorem}
 
 \begin{proof}
-	TODO: lec 18, thm 3
+	Let $z$ be a vertex of $P$, then $\{ \vec z \} = \{ \vec x \mid A^{(z)} \vec x = \vec b^{(z)}\}$,
+	for some subsystem $A^{(z)} \vec x \leq \vec b^{(z)}$ of $A \vec x \leq \vec b$.
+	Let $A'$ be a non-singular $n\cross n$ submatrix of $A^{(z)}$ and $\vec b'$ be the part of
+	$\vec b$ which corresponds to the rows of $A'$.
+
+	We have that $A' \vec z = \vec b'$, which means that $\vec z = (A')^{-1} \vec b'$.
+	We claim that, since $\abs{\det (A')} = 1$, all of the entries of $(A')^{-1}$ are integers.
+	Once we know this we obtain that $\vec z = (A')^{-1} \vec b'$ must be an integer.
+
+	To prove the claim consider $\overline{\vec a}_i$ be the $i$-th column of $(A')^{-1}$.
+	Since $A'(A')^{-1} = \mathds 1$, we have that $A' \overline{\vec a}_i = \vec e_i$ where $\vec e_i$
+	is the $i$-th element of the canonical basis of $\R^n$.
+	Now use Cramer's rule to note that
+	\begin{equation}
+		(\overline{\vec a}_i)_j = \frac{\det(A'_{j \to \vec e_i})}{\det(A')}
+	\end{equation}
+	where $A'_{j \to \vec e_i}$ is $A'$ with the $j$-th column replaced by $\vec e_i$.
+	Since $A'_{j \to \vec e_i}$ has all integer entries $\det(A'_{j \to \vec e_i})$ is also integer
+	and because $\det(A') = \pm 1$ we have that $(\overline{\vec a}_i)_j$ is also integer, proving the
+	claim.
 \end{proof}
 
 \begin{definition}{Integer polyhedra}{integer-polyhedra}
 	We say that $P$ is an integer polyhedron if for each $\vec c$ so that
-	$M = \max\{\vec c^T \vec x \mid x \in P\}$ exists, then $M$ is attained at an integer point.
+	$M = \max\{\vec c^T \vec x \mid \vec x \in P\}$ exists, then $M$ is attained at an integer point.
 \end{definition}
 
 Observe that $P$ is an integer polyhedron if and only if all of its vertices are integer points.
@@ -1681,10 +1700,25 @@ Observe that $P$ is an integer polyhedron if and only if all of its vertices are
 \end{corollary}
 
 \begin{proof}
-	TODO: lec 18, cor 5
+	Let $\vec x^*$ be an optimal solution of $\max \{ \vec c^T \vec x \mid \vec x \in P \}$ and choose
+	$\vec d', \vec d'' \in \Z^n$ so that $\vec d' \leq \vec x^* \leq \vec d''$.
+	Consider
+	\begin{equation}
+		Q = \{ \vec x \in \R^n \mid A \vec x \leq \vec b, \vec d' \leq \vec x \leq \vec d''\}
+		= \left\{ \vec x \in \R^n \, \left| \, \begin{pmatrix} A \\ - \mathds 1 \\ \mathds 1
+		\end{pmatrix} \right.
+		\vec x \leq \begin{pmatrix} \vec b \\ \vec d' \\ \vec d''\end{pmatrix} \right\}
+	\end{equation}
+	where $Q$ is a polytope (since all the variables are bounded) and
+	$\begin{pmatrix} A \\ - \mathds 1 \\ \mathds 1 \end{pmatrix}$ is totally unimodular.
+	Then $Q$ is an integer polytope and $\tilde{\vec x} = \max \{\vec c^T \vec x \mid \vec x \in Q\}$
+	is an integer.
+	Moreover $\tilde{\vec x} \in P$ and, since $\vec x^* \in Q$, we also have
+	$\vec c^T \tilde{\vec x} \geq \vec c^T \vec x^*$ which means that $\tilde{\vec x}$ is an integer
+	optimal solution to $\max \{\vec c^T \vec x \mid \vec x \in P \}$.
 \end{proof}
 
-\begin{corollary}{}{}
+\begin{corollary}{}{tu-dual}
 	Let $A$ be totally unimodular, $\vec b \in \R^m$ and $\vec c \in \R^n$. Then, if both the primal
 	and the dual defined by these parameters have a finite optima, they have an integer optimal
 	solution.
@@ -1702,9 +1736,144 @@ Observe that $P$ is an integer polyhedron if and only if all of its vertices are
 
 \begin{proof} Not required. \end{proof}
 
+\subsection{Applications of total unimodularity}
+
 \subsubsection{Max cardinality matching in bipartite graphs}
 
-TODO: lec 18
+Consider an undirected graph $G = (V, E)$.
+Recall that a \emph{matching} $M$ is a subset of $E$ so that
+\begin{equation}
+	M = \{ e \mid e \in E, \forall e' \in M : e \neq e' \implies e \cap e' = \varnothing \}
+\end{equation}
+that is, a subset of the edges so that each vertex is present at most once.
+
+Our goal is to find a matching $M$ which contains as many edges as possible, that is, it has maximum
+cardinality.
+
+We will consider the special case in which $G$ is \emph{bipartite}, which means that $V = X \cup Y$,
+$X \cap Y = \varnothing$ and $(u, v) \in E \implies u \in X, v \in Y$.
+In this case we can model the problem as an ILP.
+
+Let $A \in \R^{\abs{V} \cross \abs{E}}$ be the \emph{incidence matrix} of $G$, so that
+\begin{equation}
+	A_{v, e} = \begin{cases}
+		1 & \text{if } v \in e \\
+		0 & \text{otherwise}
+	\end{cases}
+\end{equation}
+then
+\begin{equation}
+	\begin{array}{lrr}
+		                  & \displaystyle \max \sum_{e \in E} x_e             &                 \\
+		\text{subject to} & \displaystyle \sum_{e \in E : v \in e} x_e \leq 1 & \forall v \in V \\
+		                  & x_e \geq 0                                        & \forall e \in E \\
+		                  & x_e \in \Z                                        & \forall e \in E
+	\end{array}
+	\label{eq:ilp-max-cardinality}
+\end{equation}
+where $x_e$ is a binary variable which tells us whether we consider the vertex $e$ or not and,
+the first constraint tells us that we cannot repeat vertices.
+
+\begin{proposition}{Incidence matrix of a bipartite graph}{}
+	The incidence matrix of a bipartite graph is totally unimodular.
+\end{proposition}
+\begin{proof}
+	Let $A$ be the incidence matrix of a bipartite graph.
+	Note that each column may contain at most two $1$s.
+
+	Consider each $t \cross t$ submatrix $B$ of $A$ and proceed by induction on $t$.
+
+	The base case when $t = 1$ is trivial since each entry of $A$ is either $1$ or $0$.
+
+	At time $t+1$ we have three cases:
+	\begin{itemize}
+		\item $B$ has a column which is all zeros.
+
+		      In this case $\det(B) = 0$ and we are done.
+		\item $B$ has a column with a single $1$.
+
+		      This means we can reorder the rows and columns of $B$ to obtain
+		      $B = \begin{pmatrix} 1 & \vec b^T \\ 0 B' \end{pmatrix}$, which doesn't change the absolute
+		      value of the determinant.
+		      Then, expanding on the first column, we get $\det(B) = \det(B')$, however $B'$ is a
+		      $t \cross t$ submatrix of $A$ (up to reordering columns and rows again), therefore we can
+		      apply the inductive hypothesis and conclude.
+
+		\item All the columns of $B$ have two $1$s.
+
+		      Rearrange $B=\begin{pmatrix} B_X \\ B_Y \end{pmatrix}$ so that $B_X$ corresponds to the
+		      vertices in $X$ and $B_Y$ to the vertices in $Y$.
+
+		      Then each column of $B_X$ contains exactly one $1$ and the same holds for $B_Y$.
+		      This means that the rows of $B_X$ sum up to the all-one vector, and so do the rows of
+		      $B_Y$.
+		      In turns, this tells us that the rows of $B$ are linearly dependent,
+		      therefore $\det(B) = 0$.
+		      \qedhere
+	\end{itemize}
+\end{proof}
+
+\subsubsection{Min vertex cover}
+
+Given a graph $G = (V, E)$ recall that a vertex cover is a set $C \subseteq V$ so that each edge in
+$E$ has at least one of its vertices in $C$. Formally
+\begin{equation}
+	C = \{ v \mid v \in V \land ((u, w) \in E \implies (u = v \lor w = v)) \}
+\end{equation}
+
+Finding a vertex cover of minimum cardinality can be done through an integer linear program, namely
+the dual to \cref{eq:ilp-max-cardinality}.
+\begin{equation}
+	\begin{array}{lrr}
+		                  & \displaystyle \min \sum_{v \in V} y_v &                      \\
+		\text{subject to} & y_u + y_v \geq 1                      & \forall (u, v) \in E \\
+		                  & y_v \geq 0                            & \forall v \in V      \\
+		                  & \vec y \in \Z^{\abs{V}}               &
+	\end{array}
+\end{equation}
+where each $y_v$ is a binary variable telling us whether $v$ is part of the cover or not, and the
+first constraint tells us that for each edge we need at least one vertex.
+
+If we write the constraints in matrix form we obtain that
+\begin{equation}
+	\begin{pmatrix} A^T \\ \mathds 1 \end{pmatrix} \vec y \geq
+	\begin{pmatrix} \mathds 1 \\ 0 \end{pmatrix}
+\end{equation}
+where $A$ is the incidence matrix of $G$.
+
+\begin{theorem}{König's matching theorem}{konig}
+	Let $G$ be a bipartite graph. Then the maximum cardinality of matching in $G$ is equal to the
+	minimum cardinality of a vertex cover in $G$.
+\end{theorem}
+
+\begin{proof}
+	Note that the programs are dual to each other and since weak duality holds in ILPs we have that
+	$\abs{M} \leq \abs{C}$.
+
+	Then we can take the LP relaxations (i.e. removing the integer constraint) and apply strong
+	duality to get that
+	\begin{equation}
+		\max \{ \vec 1^T \vec x \mid A \vec x \leq \vec 1, \vec x \geq 0\} =
+		\min \{ \vec y^T \vec 1 \mid \vec y \geq 0, \vec y^T A \geq \vec 1 \}
+	\end{equation}
+	where $A$ is the incidence matrix of $G$ and $\vec 1$ is the all-one vector.
+	Note that the optima are attained by integer vectors $\vec x^*, \vec y^*$ according to
+	\cref{cor:tu-dual}.
+
+	Note that $\vec x^* \in \{0, 1\}^\abs{E}$ since $\vec x^* \geq 0$ and $A \vec x^* \leq \vec 1$
+	(and $A$ is TU).
+	Then $M = \{ e \in E \mid x^*_e = 1 \}$ is a matching (because $A \vec x^* \leq \vec 1$) and
+	$\abs{M} = \vec 1^T \vec x^*$.
+
+	Similarly, $\vec y^* \in \{0, 1\}^\abs{V}$ since $\vec y^* \geq 0$ and since if any coordinate
+	$y^*_v \geq 2$ it could be decreased to $1$ improving the objective value (we can do this
+	respecting the other constraint since $A$ is TU).
+	Then $C = \{ v \in V \mid y^*_v = 1 \}$ is a vertex cover (since $A^T \vec y^* \geq \vec 1$) and
+	$\abs{C} = \vec 1^T \vec y^*$.
+
+	We have shown before that the optimal values for the objectives are the same, therefore
+	$\abs{M}=\abs{C}$.
+\end{proof}
 
 \subsubsection{Directed graphs and flows}
 

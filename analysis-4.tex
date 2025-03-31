@@ -806,7 +806,110 @@ enough to check finitely many of them.
 	TODO: prop 13.3
 \end{proof}
 
+\subsection{Area}
 
+Let $k \in \{1, \dots, k\}$ be an integer.
+Then there exists a \say{good} way to we define the $k$-dimensional area of any $S \subseteq \R^n$.
 
+\begin{definition}{Area ($k$-dimensional Hausdorff measure)}{area}
+	Given $\delta > 0$, we cover $S$ with an at-most countable collection of sets $E_i \subseteq \R^n$
+	with $\mathrm{diam}(E_i) \leq \delta$, so that $S \subseteq \bigcup_{i \in I} E_i$.
+	Then the area is defined as
+	\begin{equation}
+		\mathcal H_\delta^k (S) = \inf \sum_{i \in I} \frac{\omega_k}{2^k} \mathrm{diam}(E_i)^k
+	\end{equation}
+	where we take the infimum over all the possible choices of sequences $(E_i)_{i \in I}$ and
+	$\omega_k$ is the area of the $k$-dimensional unit ball.
+
+	We can also write
+	\begin{equation}
+		\mathcal H^k (S) = \lim_{\delta \to 0} \mathcal H_\delta^k(S)
+	\end{equation}
+\end{definition}
+
+We notice the following properties of the area:
+\begin{itemize}
+	\item If $k = 0$ then $\mathcal H^0(S) = \# S$ (the cardinality of $S$ if $S$ is finite and
+	      infinity otherwise) $\forall S$.
+
+	\item $\mathcal H^k (\varnothing) = 0$.
+
+	\item $\mathcal H^k(rS + a) = r^k \mathcal H^k (S)$.
+
+	\item For a finite or countable sequence $(S_j)_{j \in J}$ of Borel sets we have
+	      \begin{equation}
+		      \mathcal H^k\left(\bigcup_{j \in J} S_j\right) \leq \sum_{j \in J} \mathcal H^k (S_j)
+	      \end{equation}
+
+	\item If $S$ includes in a non-empty $k$-dimensional manifold, then $\mathcal H^k(S) > 0$.
+	\item If $S$ is included in a compact $k$-dimensional manifold, then $\mathcal H^k(S) < +\infty$.
+
+	\item If $\mathcal H^k(S) >0$ and $\ell < k$, then $\mathcal H^\ell(S) = + \infty$.
+	\item If $\mathcal H^k (S) < +\infty$ (or $S$ is included in a countable union of $k$-dimensional
+	      manifolds) and $\ell > k$, then $\mathcal H^\ell (S) = 0$.
+\end{itemize}
+
+\begin{definition}{Jacobian}{jacobian}
+	Let $M \subseteq \R^r, N \subseteq \R^\ell$ be two $k$-dimensional manifolds.
+	Given $f: M \to N$ of class $C^1$ and $x \in M$, the Jacobian of $f$ at $x$ is defined as
+	\begin{equation}
+		J_f(x) = \abs{\det(A)}
+	\end{equation}
+	where $A$ is the $k\cross k$ matrix representing the differential $Df(x): T_x M \to T_{f(x)} N$.
+\end{definition}
+
+\begin{proposition}{}{}
+	Consider the differential as a map to $R^s$: $Df(x): T_x M \to \R^s$.
+	Let $\{v_1, \dots, v_k\}$ be an orthonormal basis of $T_x M$ and consider
+	\begin{equation}
+		B = \begin{pmatrix}
+			Df(x) [v_1] & \dots & Df(x) [v_k]
+		\end{pmatrix}
+	\end{equation}
+
+	Then $J_f(x) = \sqrt{\det(B^T B)}$.
+\end{proposition}
+
+\begin{proof}
+	Take an orthonormal basis $\{w_1, \dots, w_k \}$ of $T_{f(x)} N$ so that we can define the $A$ in
+	the original definition.
+	Consider $Df(x)$ as the composition of two maps so that $T_x M \to T_{f(x)} N \to \R^s$.
+	Note that the last map is just an inclusion, therefore we just need a change of basis from
+	$\{w_1, \dots, w_k\}$ to the canonical basis, that is
+	\begin{equation}
+		B =
+		\begin{pmatrix}
+			w_1 & \dots & w_k
+		\end{pmatrix} A
+	\end{equation}
+
+	Then
+	\begin{equation}
+		B^T B = A^T \begin{pmatrix} w_1^T \\ \dots \\ w_k^T \end{pmatrix}
+		\begin{pmatrix} w_1 & \dots & w_k \end{pmatrix} A
+		= A^T \mathds 1_{k \cross k} = A^T A
+	\end{equation}
+	which means $\det(B^T B) = \det(A^T A) = \det(A)^2$.
+\end{proof}
+
+\begin{theorem}{Area formula}{area-formula}
+	Let $f: M \to N$ be a $C^1$ map between two $k$-dimensional manifolds and
+	$h : N \to [0, + \infty]$.
+
+	If $f$ is injective then
+	\begin{equation}
+		\int_{f(S)} h(y) \dd \mathcal H^k(y) = \int_S h \circ f(x) J_f(x) \dd \mathcal H^k(x)
+	\end{equation}
+
+	If $f$ is not injective then
+	\begin{equation}
+		\int_{f(S)} h(y) \cdot \nu(y) \dd \mathcal H^k(y) = \int_S h \circ f(x) J_f(x) \dd \mathcal H^k(x)
+	\end{equation}
+	where $\nu(y) = \# \{ x \in S : f(x) = y\}$
+\end{theorem}
+
+\begin{proof}
+	TODO: lec 14
+\end{proof}
 
 \end{document}

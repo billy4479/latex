@@ -1740,12 +1740,14 @@ Observe that $P$ is an integer polyhedron if and only if all of its vertices are
 
 \subsubsection{Max cardinality matching in bipartite graphs}
 
-Consider an undirected graph $G = (V, E)$.
-Recall that a \emph{matching} $M$ is a subset of $E$ so that
-\begin{equation}
-	M = \{ e \mid e \in E, \forall e' \in M : e \neq e' \implies e \cap e' = \varnothing \}
-\end{equation}
-that is, a subset of the edges so that each vertex is present at most once.
+\begin{definition}{Matching}{matching}
+	Consider an undirected graph $G = (V, E)$.
+	A \emph{matching} $M$ is a subset of $E$ so that
+	\begin{equation}
+		M = \{ e \mid e \in E, \forall e' \in M : e \neq e' \implies e \cap e' = \varnothing \}
+	\end{equation}
+	that is, a subset of the edges so that each vertex is present at most once.
+\end{definition}
 
 Our goal is to find a matching $M$ which contains as many edges as possible, that is, it has maximum
 cardinality.
@@ -1815,11 +1817,13 @@ the first constraint tells us that we cannot repeat vertices.
 
 \subsubsection{Min vertex cover}
 
-Given a graph $G = (V, E)$ recall that a vertex cover is a set $W \subseteq V$ so that each edge in
-$E$ has at least one of its vertices in $W$. Formally
-\begin{equation}
-	W = \{ v \mid v \in V \land ((u, w) \in E \implies (u = v \lor w = v)) \}
-\end{equation}
+\begin{definition}{Cover}{cover}
+	Given a graph $G = (V, E)$ a vertex cover is a set $W \subseteq V$ so that each edge in
+	$E$ has at least one of its vertices in $W$. Formally
+	\begin{equation}
+		W = \{ v \mid v \in V \land ((u, w) \in E \implies (u = v \lor w = v)) \}
+	\end{equation}
+\end{definition}
 
 Finding a vertex cover of minimum cardinality can be done through an integer linear program, namely
 the dual to \cref{eq:ilp-max-cardinality}.
@@ -1886,9 +1890,9 @@ First, let us define the incidence matrix for a directed graph $G=(V, E)$.
 	\end{cases}
 \end{equation}
 
-\begin{theorem}{Incidence of directed graph is TU}{incidence-tu}
+\begin{proposition}{Incidence of directed graph is TU}{incidence-tu}
 	The incidence matrix $M$ of any directed graph is totally unimodular.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 	Let $B_t$ be a square submatrix of $M$ of size $t\cross t$.
@@ -2129,5 +2133,171 @@ $s$-$t$ flow in $G$ and $M'$ and $\vec w$ are defined as in \cref{eq:st-flow}.
 
 Note that $\vec c \in Z^\abs{E}_+$, otherwise we could have an unbounded problem which is NP-hard.
 If $\vec c$ respects this constraint we are guaranteed to have an integer optimal solution.
+
+\subsection{Combinatorial polytopes}
+
+\begin{definition}{Characteristic vector}{characteristic-vector}
+	Consider a set $X$ and let $F \subseteq X$.
+	Then the characteristic vector $\vec \chi^F \in \in \{0, 1\}^\abs{X}$ of $F$ is defined as
+	\begin{equation}
+		\chi^F_i = \begin{cases}
+			1 & \text{if } i \in F \\
+			0 & \text{otherwise}
+		\end{cases}
+	\end{equation}
+\end{definition}
+
+\begin{definition}{Matching polytope}{matching-polytope}
+	Consider a graph $G = (V, E)$, the matching polytope of $G$ is defined as
+	\begin{equation}
+		P_\text{matching} = \mathrm{conv}\{ \vec \chi^M \mid M \subseteq E\}
+	\end{equation}
+	where $M$ is a matching (\cref{def:matching})
+\end{definition}
+
+\begin{lemma}{Matching polytope of bipartite graphs}{}
+	Let $G$ be a bipartite graph and $A$ its incidence matrix. Then
+	\begin{equation}
+		P_\text{matching} = \mathrm{conv}\{ \vec x \in R^\abs{E} \mid A \vec x \leq 1, \vec x \geq 0\}
+	\end{equation}
+\end{lemma}
+
+\begin{proof}
+	Let $Q = \mathrm{conv}\{ \vec x \in R^\abs{E} \mid A \vec x \leq 1, \vec x \geq 0\}$.
+	Then $P_\text{matching} \subseteq Q$ because every matching satisfies the constraints, and
+	$Q \subseteq P_\text{matching}$ we have that $A$ is TU, therefore $Q$ is a convex hull of integer
+	vertices, which in turn means that for each integer vector $\vec x \in Q$ we have
+	$\vec x = \vec \chi^M$ for some matching $M$.
+\end{proof}
+
+\begin{definition}{Perfect matching polytope}{perfect-matching-polytope}
+	A matching polytope is perfect if all the matchings used are perfect, i.e. $\abs{M} = \abs{V}$ for
+	all $M$.
+\end{definition}
+
+\begin{lemma}{Perfect matching polytope of bipartite graphs}{}
+	Let $G$ be a bipartite graph and $A$ its incidence matrix. Then
+	\begin{equation}
+		P_\text{matching} = \{ \vec x \in \R^\abs{E} \mid A \vec x = 1, \vec x \geq 0\}
+	\end{equation}
+\end{lemma}
+
+However, if $G$ is not bipartite, finding a marching polytope is harder.
+Define $\mathcal U$ as
+\begin{equation}
+	\mathcal U = \{ U \subset V \mid \abs{U} \text{ is odd}, \abs{U} \geq 3 \}
+\end{equation}
+and $\delta(U)$ be the set of edges connecting $U$ to the rest of the graph.
+Then the matching polytope of $G$ is
+\begin{equation}
+	P_\text{matching} = \{ \vec x \in R^\abs{E} \mid A \vec x \leq 1,
+	\sum_{e \in U} x_e \leq \floor{\abs{U}} \enspace \forall U \in \mathcal U,
+	\vec x \geq 0\}
+\end{equation}
+This polytope has exponentially many constraints, however we can still optimize on it in polynomial
+time: there exist some fast oracle for the ellipsoid method and there are also some ad-hoc
+combinatorial primal-dual algorithms.
+
+\subsubsection{Maximum independent set}
+
+\begin{definition}{Independent set}{independent-set}
+	Let $G = (V, E)$ be a graph. $I \subseteq V$ is an independent set on $G$ if all vertices in $I$
+	have no edge connecting them. Formally
+	\begin{equation}
+		I = \{ v \in V \mid u \in I \implies (u, v) \notin E \}
+	\end{equation}
+\end{definition}
+
+We can write an ILP which looks for the independent set of maximum cardinality:
+\begin{equation}
+	\begin{array}{rrcl}
+		\max              & \vec 1^T \vec y &      &                  \\
+		\text{subject to} & A^T \vec y      & \leq & \vec 1           \\
+		                  & \vec y          & \geq & 0                \\
+		                  & \vec y          & \in  & \{0, 1\}^\abs{V}
+	\end{array}
+\end{equation}
+or equivalently, we could use the constraint $y_u + y_v \leq 1$ $\forall (u, v) \in E$.
+
+We define the independent set polytope of $G$ as
+\begin{equation}
+	P_\text{i.s.} = \{ \vec y \in \R^\abs{V} \mid A \vec y \leq 1, \vec y \geq 0\}
+\end{equation}
+
+If $G$ is bipartite we can prove that the LP relaxation has an integer solution, since $A$ is TU,
+even if we replace the $\vec 1$s with other integer vectors. Its polytope is
+\begin{equation}
+	P_{i.s.} = \mathrm{conv}\{ \vec \chi^I \mid I \subseteq V \text{ is an independent set of } G\}
+\end{equation}
+
+If $G$ is not bipartite this problem is NP-hard, even finding an approximate solution.
+
+\section{Primal-dual method}
+
+\begin{definition}{$\alpha$-approximation algorithm}{approximation-algo}
+	An approximation algorithm runs in polynomial time and returns a solution with objective value at
+	most a factor of $\alpha$ from the actual optimal solution.
+\end{definition}
+
+To build this algorithm we will start from scratch, without using any LP solver under the hood.
+We will use an approximation of complementary slackness conditions
+(cf. \cref{thm:complementary-slackness}).
+
+\begin{proposition}{$\alpha$-approximate complementary slackness conditions}{approx-cs}
+	On the primal we have that for $\alpha \geq 1$
+	\begin{equation}
+		x_i > 0 \implies (A^T \vec y)_i \leq \alpha c_i \enspace \forall i \in \{1, \dots, n\}
+		\implies \vec x^T(A^T \vec y - \alpha \vec c) \leq 0
+	\end{equation}
+
+
+	On the dual we have that for $\alpha \leq 1$
+	\begin{equation}
+		y_i > 0 \implies (A \vec x)_i \leq \alpha b_i \enspace \forall i \in \{1, \dots, m\}
+		\implies \vec y^T(\alpha \vec b - A \vec x) \leq 0
+	\end{equation}
+\end{proposition}
+
+\begin{proof}
+	This is just a consequence of complementary slackness with an error.
+\end{proof}
+
+\begin{proposition}{}{}
+	Suppose that $\vec x, \vec y$ are feasible and satisfy CS-P and CS-D-$\alpha$,
+	for $\alpha \leq 1$. Then $\vec c^T \vec x \leq \alpha \vec b^T \vec y$, i.e. $\vec x$ is an
+	$\alpha$-approximate solution of P.
+
+	Similarly, if $\vec x, \vec y$ are feasible and satisfy CS-D and CS-P-$\alpha$,
+	for $\alpha \leq 1$. Then $\vec b^T \vec y \leq \alpha \vec c^T \vec x$, i.e. $\vec x$ is an
+	$\alpha$-approximate solution to D.
+\end{proposition}
+
+\begin{proof}
+	TODO: lec 20, lemma 5
+\end{proof}
+
+\paragraph{Algorithm general idea}
+
+We start with some trivial dual feasible solution, (e.g. $\vec y = 0$).
+Then look for a primal solution which satisfies CS-P with $\vec y$ and satisfies the primal LP; if
+no such solution exists increase $\vec y$ until some new constraint becomes tight and repeat, in
+this way CS-P allows us to increase more primal variables.
+When we find a feasible solution $\vec x$ which satisfies CS-P and CS-D we are done since we have
+found an optimal solution; if it just satisfies CS-D-$\alpha$, $\vec x$ is an $\alpha$-approximate
+solution.
+
+\subsubsection{Vertex cover}
+
+\begin{definition}{Vertex cover}{vertex-cover}
+	Let $G = (V, E)$ be a graph. A vertex cover is a set $S \subseteq V$ such that each edge has an
+	end in $S$. Formally
+	\begin{equation}
+		S = \{ v \in V \mid (u, v) \in E \implies (u \in S \lor v \in S) \}
+	\end{equation}
+\end{definition}
+
+TODO: rest of lec 20
+
+
 
 \end{document}

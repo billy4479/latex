@@ -1815,10 +1815,10 @@ the first constraint tells us that we cannot repeat vertices.
 
 \subsubsection{Min vertex cover}
 
-Given a graph $G = (V, E)$ recall that a vertex cover is a set $C \subseteq V$ so that each edge in
-$E$ has at least one of its vertices in $C$. Formally
+Given a graph $G = (V, E)$ recall that a vertex cover is a set $W \subseteq V$ so that each edge in
+$E$ has at least one of its vertices in $W$. Formally
 \begin{equation}
-	C = \{ v \mid v \in V \land ((u, w) \in E \implies (u = v \lor w = v)) \}
+	W = \{ v \mid v \in V \land ((u, w) \in E \implies (u = v \lor w = v)) \}
 \end{equation}
 
 Finding a vertex cover of minimum cardinality can be done through an integer linear program, namely
@@ -1848,7 +1848,7 @@ where $A$ is the incidence matrix of $G$.
 
 \begin{proof}
 	Note that the programs are dual to each other and since weak duality holds in ILPs we have that
-	$\abs{M} \leq \abs{C}$.
+	$\abs{M} \leq \abs{W}$.
 
 	Then we can take the LP relaxations (i.e. removing the integer constraint) and apply strong
 	duality to get that
@@ -1868,17 +1868,16 @@ where $A$ is the incidence matrix of $G$.
 	Similarly, $\vec y^* \in \{0, 1\}^\abs{V}$ since $\vec y^* \geq 0$ and since if any coordinate
 	$y^*_v \geq 2$ it could be decreased to $1$ improving the objective value (we can do this
 	respecting the other constraint since $A$ is TU).
-	Then $C = \{ v \in V \mid y^*_v = 1 \}$ is a vertex cover (since $A^T \vec y^* \geq \vec 1$) and
-	$\abs{C} = \vec 1^T \vec y^*$.
+	Then $W = \{ v \in V \mid y^*_v = 1 \}$ is a vertex cover (since $A^T \vec y^* \geq \vec 1$) and
+	$\abs{W} = \vec 1^T \vec y^*$.
 
 	We have shown before that the optimal values for the objectives are the same, therefore
-	$\abs{M}=\abs{C}$.
+	$\abs{M}=\abs{W}$.
 \end{proof}
 
-\subsubsection{Directed graphs and flows}
+\subsubsection{Maximum flow}
 
-\paragraph{Incidence matrix}
-Let $G = (V, E)$ be a directed graph. The \emph{incidence matrix} $M$ is defined as
+First, let us define the incidence matrix for a directed graph $G=(V, E)$.
 \begin{equation}
 	M_{ve} = \begin{cases}
 		+1 & \text{if $e$ leaves $v$} \\
@@ -1923,9 +1922,6 @@ Let $G = (V, E)$ be a directed graph. The \emph{incidence matrix} $M$ is defined
 	\end{itemize}
 \end{proof}
 
-
-\paragraph{s-t flow}
-
 We also define the \emph{circulation}: intuitively, if the flow doesn't disappear anywhere we have a
 circulation. Formally:
 \begin{equation}
@@ -1940,53 +1936,85 @@ all $v \in V \setminus \{s, t\}$.
 
 We can write a linear program which finds the max flow $\vec w$ for a graph with capacity $\vec c$:
 \begin{equation}
-	\begin{array}{rr}
-		\max              & \vec w^T \vec x    \\
-		\text{subject to} & M' \vec x = 0      \\
-		                  & \vec x \leq \vec c \\
-		                  & \vec x \geq 0
+	\begin{array}{rrcl}
+		\max              & \vec w^T \vec x &      &        \\
+		\text{subject to} & M' \vec x       & =    & 0      \\
+		                  & \vec x          & \leq & \vec c \\
+		                  & \vec x          & \geq & 0
 	\end{array}
 	\label{eq:st-flow}
 \end{equation}
 where $M'$ is the matrix $M$ with rows corresponding to $s$ and $t$ removed, while $\vec w$ is
 $M_s$, that is, the row of $M$ corresponding to $s$.
 
-We can write the dual as
-\begin{equation}
-	\begin{array}{rr}
-		\min              & \vec c^T \vec y                 \\
-		\text{subject to} & (M')^T \vec z + \vec y = \vec w \\
-		                  & \vec y \geq 0
-	\end{array}
-\end{equation}
-
 Another way of looking at this problem is adding an edge $(t, s)$ with infinite capacity and then
 look for a circulation. Now we can write the problem in a nicer way:
 \begin{equation}
-	\begin{array}{rr}
-		\max              & x_{ts}                \\
-		\text{subject to} & M \vec x = 0          \\
-		                  & I' \vec x \leq \vec c \\
-		                  & \vec x \geq 0
+	\begin{array}{rrcl}
+		\max              & x_{ts}    &      &        \\
+		\text{subject to} & M \vec x  & =    & 0      \\
+		                  & I' \vec x & \leq & \vec c \\
+		                  & \vec x    & \geq & 0
 	\end{array}
+	\label{eq:st-flow-mod}
 \end{equation}
-Where $M$ is the incidence matrix of the modified graph, and $I'$ is the $m\cross (m + 1)$ identity
+where $M$ is the incidence matrix of the modified graph, and $I'$ is the $m\cross (m + 1)$ identity
 matrix with the row corresponding to $e_{ts}$ removed (since it has no capacity constraint).
 
-The corresponding dual is
+\subsubsection{Minimum cut}
+
+Given a graph $G = (V, E)$ a \emph{cut} $C = (S, T)$ is a partition of $V$ that divides $V$ in two.
+Every cut defines a \emph{cut-set}, which is a subset of $E$ where each edge has one endpoint in $S$
+and one in $T$.
+Formally
+\begin{align}
+	C   & = (S, T) \text{ s.t. } (S, T \subseteq V) \land (S \cap T = \varnothing) \\
+	D_C & = \{ (u, v) \in E \mid u \in S, v \in T \}
+\end{align}
+
+Consider a directed graph $G = (V, E)$ and a capacity vector $\vec c \in \R^{\abs{E}}$.
+We want to find the cut $\vec y \in \Z^\abs{E}$ so that the capacity of the cut $\vec c^T \vec y$ is
+minimal.
+
+We can formulate this problem using an ILP, which we will see is the dual to \cref{eq:st-flow}.
 \begin{equation}
-	\begin{array}{rr}
-		\min              & \vec c^T \vec y                               \\
-		\text{subject to} & (M')^T \vec z + (I')^T\vec y = \vec \chi^{ts} \\
-		                  & \vec y \geq 0
+	\begin{array}{rrcl}
+		\min              & \vec c^T \vec y        &      &        \\
+		\text{subject to} & (M')^T \vec z + \vec y & =    & \vec w \\
+		                  & \vec y                 & \geq & 0
+	\end{array}
+\end{equation}
+Or equivalently, we can rewrite the first constraint as
+\begin{equation}
+	\begin{cases}
+		-z_v + y_{(s, v)} \geq 1      & \forall v \in v, (s, v) \in E            \\
+		z_u - z_v + y_{(s, v)} \geq 0 & \forall (u, v) \in E, u \neq s, v \neq t \\
+		z_v + y_{(v, t)} \geq 0       & \forall v \in V, (v, t) \in E
+	\end{cases}
+	\label{eq:min-cut-alt-constraints}
+\end{equation}
+The idea is that the $e=(u, v)$ entry of $\vec y$ is $1$ when $e \in D_C$. Ideally, we'd like
+$\vec y$ to be all zeros because otherwise we would need to \say{pay} for each edge we take.
+But we still need to respect the constraints: if we want to set $y_{(s, u)} = 0$ we need $z_u = -1$,
+then for the \say{next} edge $(u, v)$, if we still want $y_{(u, v)} = 0$ we need to set $z_v = -1$,
+but at this point, for $(v, t)$, we must set $y_{(v, t)} = 1$ and \say{pay} for it, since we already
+have that $z_v = -1$.
+
+In other words, we need to choose which edges to pay for now and which ones to pay for later.
+Ideally we'd choose the right edge based on its cost.
+
+Equivalently we can write the same ILP as the dual of \cref{eq:st-flow-mod}:
+\begin{equation}
+	\begin{array}{rrcl}
+		\min              & \vec c^T \vec y              &      &                \\
+		\text{subject to} & (M')^T \vec z + (I')^T\vec y & =    & \vec \chi^{ts} \\
+		                  & \vec y                       & \geq & 0
 	\end{array} \quad \text{where }
 	\chi^{ts}_e = \begin{cases}
 		1 & \text{if } e = (t, s) \\
 		0 & \text{otherwise}
 	\end{cases}
 \end{equation}
-This is the problem for the minimum cut.
-
 
 Then, we can write the constraints of the minimum cost flow as
 \begin{equation}
@@ -2006,28 +2034,94 @@ where $\vec d$ is some kind of bound for the flow we put in place to preserve un
 Then, if exists $\vec d \leq \vec x \leq \vec c$, then there exists an optimal
 $\vec x^* \in \Z^{\abs{E}}$ so that $\vec d \leq \vec x^* \leq \vec c$.
 
-\paragraph{Minimum cost flow}
-We now define a new problem, the \emph{min-cost flow}: given a directed graph $G$, a capacity vector
-$\vec c$ and a cost vector $\vec \kappa$, we want to find the flow $\vec x$ of size $\alpha$ that
-minimizes $\vec \kappa^T \vec x$.
+\begin{theorem}{Maximum-flow minimum-cut}{max-flow-min-cut}
+	Let $G = (V, E)$ be a directed graph, $s, t \in V$, and $\vec c \in \R^\abs{E}_+$.
+	Then the maximum $s$-$t$ flow of $G$ subject to capacities $\vec c$ is equal to the minimum
+	capacity of an $s$-$t$ cut.
+\end{theorem}
 
-This however requires an additional constrain $\vec 1^T \vec x \geq \alpha$ (where $\vec 1$ is
+\begin{proof}
+	By weak duality we have that the size of any $s$-$t$ flow is at less than or equal to the size of
+	any $s$-$t$ cut.
+	We need to show that, for the optimal flow, we can find a cut which is less than or equal to it.
+
+	Now, notice that relaxing the integer requirement, we can use LP strong duality to get that
+	\begin{align}
+		\alpha & = \max \{ \vec w^T \vec x \mid M'\vec x = 0, \vec x \leq \vec c, \vec x \geq 0 \}   \\
+		       & = \min \{ \vec c^T \vec y \mid (M')^T \vec z + \vec y \geq \vec w, \vec y \geq 0 \}
+	\end{align}
+
+	The constraint matrix of the dual is
+	\begin{equation}
+		\begin{pmatrix}
+			(M')^T & \mathds 1 \\
+			0      & \mathds 1
+		\end{pmatrix} \text{ is TU}
+	\end{equation}
+	therefore the minimum is attained at an integer point
+	$\begin{pmatrix}\vec z \\ \vec y \end{pmatrix}$.
+
+	Let $W = \{ v \in V \mid z_v \leq -1 \} \cup \{s\}$, so that if we consider the number of edges of
+	each $v \in W$ which are not part of the cut-set, most of them are leaving $v$ instead of entering
+	it.
+
+	Then let $F = \{(u, v) \in E \mid u \in W, v\in V \setminus W \}$: we claim that $F$ is the
+	cut-set and therefore $e \in F \implies y_e \geq 1$
+	If this is true we have that $\vec c^T \vec \chi^F \leq \vec c^T \vec y = \alpha$ and we are done.
+
+	Define $\tilde{\vec z}$ as follows:
+	\begin{equation}
+		\tilde z_v = \begin{cases}
+			-1  & \text{if } v = s \\
+			0   & \text{if } v = t \\
+			z_v & \text{otherwise}
+		\end{cases}
+	\end{equation}
+	so that we can rewrite \cref{eq:min-cut-alt-constraints} as $M^T \tilde{\vec z} + \vec y \geq 0$,
+	or equivalently
+	\begin{equation}
+		\begin{cases}
+			\tilde z_s -z_v + y_{(s, v)} \geq 0  & \forall v \in v, (s, v) \in E            \\
+			z_u - z_v + y_{(s, v)} \geq 0        & \forall (u, v) \in E, u \neq s, v \neq t \\
+			z_v - \tilde z_t + y_{(v, t)} \geq 0 & \forall v \in V, (v, t) \in E
+		\end{cases}
+		\label{eq:min-cut-alt-constraints-tilde}
+	\end{equation}
+
+	Consider $v \in V\setminus W$, then $\tilde z_v \geq 0$ since we need $\tilde z_v > -1$ (by
+	definition of $W$) and $\tilde{\vec z}$ is an integer vector.
+	Then if $u \in V$ and $v \notin W$ we get that $\tilde z_v - \tilde z_u \geq 1$ and, rewriting the
+	constraints in \cref{eq:min-cut-alt-constraints-tilde}, we obtain
+	\begin{equation}
+		y_{u, v} \geq \tilde z_v - \tilde z_u \geq 1
+	\end{equation}
+	as claimed.
+\end{proof}
+
+\subsubsection{Minimum cost flow}
+We now define a new problem, the \emph{min-cost flow}: given a directed graph $G$, a capacity vector
+$\vec c$ and a cost vector $\vec \kappa$, we want to find the flow $\vec x$ of size (at least)
+$\alpha$ that minimizes $\vec \kappa^T \vec x$.
+We will focus on the case where $\alpha$ is the size of the maximum flow, that is, we want to find
+which flow, between the ones of maximum capacity, has minimum cost.
+
+This, however, requires an additional constrain $\vec 1^T \vec x \geq \alpha$ (where $\vec 1$ is
 vector of all $1$) and $\begin{pmatrix}M \\ \vec 1 \end{pmatrix}$ is no longer TU.
 
 Note however that $\alpha= \max \{\vec w^T \vec x \mid x \in P \}$ for some integer polyhedron $P$.
-Then $P' = \{ x \mid x \in P, \vec w^T \vec x = \alpha \}$ is a face of $P$ and therefore it is also
-an integer polyhedron.
-We have that $\forall \vec c \in \R^n$, $\argmax \{ \vec c^T \vec x \mid x \in P'\}$ is a face of
-$P'$, therefore it contains an integer vector.
+Then $P' = \{ \vec x \mid \vec x \in P, \vec w^T \vec x = \alpha \}$ is a face of $P$ and therefore
+it is also an integer polyhedron.
+We have that $\forall \vec c \in \R^n$, $\argmax_{\vec x} \{ \vec c^T \vec x \mid \vec x \in P'\}$
+is a face of $P'$, therefore it contains an integer vector.
 
 We can formulate a minimum cost flow problem as
 \begin{equation}
-	\begin{array}{rr}
-		\min              & \vec \kappa^T \vec x        \\
-		\text{subject to} & M'^T \vec x = 0             \\
-		                  & \vec x \geq \vec c          \\
-		                  & \vec w^T \vec x \geq \alpha \\
-		                  & \vec x \geq 0
+	\begin{array}{rrcl}
+		\min              & \vec \kappa^T \vec x &      &        \\
+		\text{subject to} & (M')^T \vec x        & =    & 0      \\
+		                  & \vec x               & \leq & \vec c \\
+		                  & \vec w^T \vec x      & \geq & \alpha \\
+		                  & \vec x               & \geq & 0
 	\end{array}
 \end{equation}
 where $\alpha = \max \{\vec w^T \vec x \mid M'\vec x = 0, x \leq c, x \geq 0 \}$ is the maximum
@@ -2035,15 +2129,5 @@ $s$-$t$ flow in $G$ and $M'$ and $\vec w$ are defined as in \cref{eq:st-flow}.
 
 Note that $\vec c \in Z^\abs{E}_+$, otherwise we could have an unbounded problem which is NP-hard.
 If $\vec c$ respects this constraint we are guaranteed to have an integer optimal solution.
-
-\begin{theorem}{Max-flow minimum-cut}{max-flow-min-cut}
-	Let $G = (V, E)$ be a directed graph, $s, t \in V$, and $\vec c \in \R^\abs{E}_+$.
-	Then the maximum $s$-$t$ flow of $G$ subject to capacities $\vec c$ is equal to the minimum
-	capacity of an $s$-$t$ cut.
-\end{theorem}
-
-\begin{proof}
-	TODO: lec 19, thm 6.
-\end{proof}
 
 \end{document}

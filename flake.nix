@@ -67,7 +67,6 @@
             circuitikz
             pgfplots
             makecell
-            tipa
 
             # Indirect dependencies
             environ

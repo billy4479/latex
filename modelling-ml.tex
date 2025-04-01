@@ -817,4 +817,82 @@ There are many choices of these functions but the most popular are
 
 \end{itemize}
 
+
+\section{Deep networks}
+
+\subsection{Limitations of perceptrons}
+As we saw, the perceptron has a lot of limitations, as we are only able to classify inputs which are
+linearly separable.
+We could solve this problem by adding more dimensions but this is kind of cumbersome and doesn't
+always work.
+
+Take for instance the problem of classifying some vectors $\vec x^\mu \in \{0, 1\}^n$.
+We want to put each vector into a basket: basket $A$ if there exists some $j$ so that
+\begin{equation}
+	x^\mu_j = x^\mu_{j+1} = 1
+\end{equation}
+and in the basket $B$ otherwise.
+
+Assume there exists a perceptron capable of correctly classifying any of these patterns. Since the
+perceptron is linear any linear combination of any two input patterns will be classified in the same
+way. But this will inevitably lead to some errors in this case, therefore we have a contradiction
+and no perceptron is able to perfectly solve this problem.
+
+\subsection{Multilayer non-linear networks}
+
+To fix this problem we introduce non-linearity and multiple perceptron.
+
+We will have a number $L$ of layers and for each layer will have $N_\ell$,
+for $\ell \in \{1, \dots, L\}$, number of non-linear perceptrons.
+Each perceptron in a certain layer is connected to every perceptron in the next one, except for
+perceptrons in $\ell = 0$ which don't have any incoming connections (they are the input of the
+network), and for $\ell = L$ which doesn't have any outgoing connections (they are the output of the
+network).
+
+Each perceptron has its weight vector $\vec w^\ell_i$, each component $w^\ell_{ij}$ is the weight of
+the connection from perceptron $i$ in layer $\ell -1$ to perceptron $j$ in layer $\ell$.
+Sometimes we consider also a bias $b^\ell_{ij}$ for each neuron which gets added on at the end, this
+is the same as having an additional neuron in the previous layer which always output $1$.
+
+Upon receiving some input $\vec x$ from the previous layer, each perceptron calculates the
+preactivation value $a = \vec w \cdot \vec x + b$. Then the preactivation value is passed through a
+non-linear function $f$ (which is usually the same for all neurons, except maybe for the output
+layer) and then the result $f(a)$ is passed to the next layer.
+
+This function $f$ (or some times referred as $\sigma$) is called activation function and there
+are different choices of it:
+\begin{itemize}
+	\item \emph{ReLU (Rectified Linear Unit)}
+	      \begin{equation}
+		      f(x) = \max \{0, x \}
+	      \end{equation}
+	\item \emph{Soft ReLU}
+	      \begin{equation}
+		      f(x) = \ln(1 + e^x)
+	      \end{equation}
+	\item \emph{Hard Threshold}
+	      \begin{equation}
+		      f(x) =
+		      \begin{cases}
+			      1, & \text{if } x > 0 \\
+			      0, & \text{otherwise}
+		      \end{cases}
+	      \end{equation}
+	\item \emph{Logistic (Sigmoid)}
+	      \begin{equation}
+		      f(x) = \frac{1}{1 + e^{-x}}
+	      \end{equation}
+	\item \emph{Tanh (Hyperbolic Tangent)}
+	      \begin{equation}
+		      f(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+	      \end{equation}
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{./assets/modelling-ml/deep-network.png}
+	\caption{Scheme of a deep network.}
+\end{figure}
+
+
 \end{document}

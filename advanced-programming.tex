@@ -2298,6 +2298,172 @@ solution.
 
 TODO: rest of lec 20
 
+\section{Matroids}
 
+\begin{definition}{Matroid}{matroid}
+	Let $X$ be a finite set and $\mathcal I \subseteq \mathcal P(X)$.
+	Then $(X, \mathcal I)$ is a matroid if
+	\begin{enumerate}
+		\item $\varnothing \in \mathcal I$.
+		\item If $Y \in \mathcal I$ and $Z \in Y$, then $Z \in \mathcal I$.
+		\item If $Y, Z \in \mathcal I$ and $\abs{y} < \abs{z}$, then $\exists x \in Z \setminus Y$ we
+		      have $Y \cup \{x\} \in \mathcal I$.
+	\end{enumerate}
+\end{definition}
+
+A matroid is some kind of abstract structure (like graph), where greedy algorithms \say{work}
+particularly well.
+
+\begin{lemma}{Equivalent third axiom}{}
+	In the definition of a matroid we can replace the third axiom with the following proposition:
+	\begin{enumerate}
+		\setcounter{enumi}{2}
+		\item For all $Y \subseteq X$, every two bases of $Y$ have the same cardinality.
+	\end{enumerate}
+\end{lemma}
+
+Note that $S \subseteq Y$ is a basis of $Y$ if it is an \emph{inclusion-wise maximal} independent
+subset of $Y$.
+This means that for all $y \in Y \setminus S$ the set $S \cup \{y\}$ is no longer independent.
+
+\begin{proof}
+	TODO: exercise
+\end{proof}
+
+\begin{definition}{Rank of a matroid}{rank-matroid}
+	If $(X, \mathcal I)$ is a matroid we define the $\mathrm{rank}(Y)$ of any $Y \subseteq X$ as the
+	cardinality of a basis of $Y$. Similarly, the rank of the matroid is the cardinality of a basis
+	of $X$.
+\end{definition}
+
+\begin{proposition}{Forests are matroids}{forests-matroid}
+	Let $G=(V, E)$ be a graph and $\mathcal I \subseteq \mathcal P(E)$ be a collection of forests in
+	$G$. Then $(E, \mathcal I)$ is a matroid.
+\end{proposition}
+
+\begin{proof}
+	The first axiom is true since a graph with no edges is a forest.
+
+	The second axioms is true since a subgraph of a forest is still a forest.
+
+	For the third axiom consider $E' \subseteq E$: the basis of $S$ is the inclusion-wise maximal
+	forest contained in $E'$, then $S$ forms a spanning tree in each component of $(V, E')$ and
+	$\abs{S} = \abs{V} - k$ where $k$ is the number of components in $(V, E')$ and this holds for any
+	basis $S \subseteq E'$.
+\end{proof}
+
+Observe that if $G$ is connected the bases of $(E, \mathcal I)$ are exactly spanning trees of $G$.
+
+Let us consider some other examples of matroids:
+\begin{description}
+	\item[Graphic matroid] A collection of subgraphs of some $G$ which are forests.
+	\item[Linear matroid] Given $X \subseteq \R^d$ finite, we take the collection of all subsets $Y$
+	      which are linearly independent.
+	\item[Transversal matroid] Consider $X_1, \dots, X_m \subseteq X$ with $X$ finite. A set
+	      $Y = \{y_1, \dots, y_n \} \in \mathcal I$ if there are distinct indices $i_1, \dots, i_n$ such
+	      that $y_j \in X_{i_j}$ for all $j \in \{1, \dots, n\}$.
+
+	\item[Partitional matroid] A Transversal matroid where $X_1, \dots, X_m$ are disjoint,
+	      therefore we can take at most one $y$ from each set.
+\end{description}
+
+\subsection{The greedy algorithm}
+
+The \textbf{general problem} with matroids is to find a basis of maximum weight, that is, given a
+function $w: X \to \R$, find a $Y \in \mathcal I$ maximizing
+\begin{equation}
+	w(Y) = \sum_{y \in Y} w(y)
+\end{equation}
+
+Consider the following algorithm:
+\begin{enumerate}
+	\item Start at $t = 0$ from an empty basis $S_0 = \varnothing$
+	\item Let the set of candidates be
+	      \begin{equation}
+		      \mathcal C_t = \{ y \in X \mid y \notin S_t, S_t \cup \{y\} \in \mathcal I \}
+	      \end{equation}
+	      If $\mathcal C_t = \varnothing$ stop.
+
+	\item Let $y^* = \argmax_{y \in \mathcal C} w(y)$
+	\item Set $S_{t+1} = S_t \cup \{y^*\}$
+	\item Increase $t$ and go to step 2.
+\end{enumerate}
+
+\begin{theorem}{Greedy on matroids}{greedy-matroids}
+	If $(X, \mathcal I)$ is a matroid the greedy algorithm finds a basis of maximum weight.
+\end{theorem}
+
+\begin{proof}
+	TODO: lec 21, thm 3
+\end{proof}
+
+\begin{proposition}{Greedy characterization of matroids}{greedy-matroids-char}
+	If the greedy algorithm finds a basis of maximum weight on $(X, \mathcal I)$ for all
+	$w: X \to \R^+$, then $(X, \mathcal I)$ is a matroid.
+\end{proposition}
+
+\section{Submodular functions}
+\begin{definition}{Submodular function}{submodular-function}
+	Let $X$ be a finite set and $f: \mathcal P(X) \to \R$.
+	We say that $f$ is submodular if for all $A, B \subseteq X$ we have
+	\begin{equation}
+		f(A) + f(B) \geq f(A \cup B) + f(A \cap B)
+	\end{equation}
+\end{definition}
+
+\begin{proposition}{Diminishing returns}{diminishing-returns}
+	A function $f: X \to \R$ is submodular if and only if, for each $A \subseteq B \subseteq X$ and
+	for all $x \notin B$, we have
+	\begin{equation}
+		f(A \cup \{x\}) - f(A) \geq f(B \cup \{ x\}) - f(B)
+	\end{equation}
+\end{proposition}
+
+\begin{proof}
+	TODO: lec 21, thm 5
+\end{proof}
+
+\subsection{Examples}
+Consider the following examples of submodular functions:
+\begin{description}
+	\item[Linear functions]
+	      \begin{equation}
+		      f(A) = \sum_{i \in A} w(i)
+	      \end{equation}
+	      for all $w: X \to \R$.
+	\item[Budged additive functions]
+	      \begin{equation}
+		      f(A) = \min \left\{\sum_{i \in A} w(i), \mathcal B \right\}
+	      \end{equation}
+	      for all $w: X \to \R$ and $\mathcal B \geq 0$.
+	\item[Combinatorial auctions] $f$ gives the value of some set of items $S$. If the buyer already
+	      has an item $s \in S$ the value of the bundle $S$ decreases for the buyer.
+
+	\item[Cut functions in graphs] Let $G = (V, E)$ be a graph, $c: E \to \R^+$ an edge cost function
+	      and $f: \mathcal P(V) \to \R^+$ defined as $f(S) = c(\delta(S))$ (the cost of all the edges
+	      going in and out of $S$). Then $f$ is submodular.
+\end{description}
+
+\subsection{Operations}
+
+We now consider which operations are possible on submodular functions while preserving
+submodularity.
+\begin{itemize}
+	\item If $f, g$ are submodular and $\alpha, \beta \geq 0$ then $\alpha f + \beta g$ is submodular.
+	\item If $f$ is submodular and $g$ is linear then $f - g$ is submodular.
+	\item TODO: there is another one here
+\end{itemize}
+
+\subsection{Algorithms}
+
+For minimization there is a polynomial time algorithm in the unconstrained case, while in the
+constrained scenario it could be NP-hard, depends on the constraint.
+Maximization is always NP-hard but it has a nice approximation algorithm if $f$ is monotone.
+
+\begin{theorem}{Fisher, Nemhauser, Wolsey}{submodular-greedy}
+	Greedy is a $\alpha$-approximation algorithm with $\alpha = \frac{1}{2}$ for maximizing a monotone
+	submodular function under matroid constraints, i.e. if $(X, \mathcal I)$ is a matroid, assuming
+	$f(\varnothing) = 0$.
+\end{theorem}
 
 \end{document}

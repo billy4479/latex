@@ -8,7 +8,7 @@
 
 \usepackage{preamble}
 \usepackage{preamble_svg}
-%\usepackage{preamble_code}
+\usepackage{preamble_code}
 
 \renewcommand{\vec}[1]{\bvec{#1}}
 
@@ -2375,22 +2375,26 @@ function $w: X \to \R$, find a $Y \in \mathcal I$ maximizing
 	w(Y) = \sum_{y \in Y} w(y)
 \end{equation}
 
-Consider the following algorithm:
-\begin{enumerate}
-	\item Start at $t = 0$ from an empty basis $S_0 = \varnothing$
-	\item Let the set of candidates be
-	      \begin{equation}
-		      \mathcal C_t = \{ y \in X \mid y \notin S_t, S_t \cup \{y\} \in \mathcal I \}
-	      \end{equation}
-	      If $\mathcal C_t = \varnothing$ stop.
+\begin{algorithm}
+	\caption{Greedy algorithm for matroids}
+	\label{alg:greedy-matroids}
 
-	\item Let $y^* = \argmax_{y \in \mathcal C} w(y)$
-	\item Set $S_{t+1} = S_t \cup \{y^*\}$
-	\item Increase $t$ and go to step 2.
-\end{enumerate}
+	$t \gets 0$\;
+	$S_t \gets \varnothing$\;
+	\While{true}{
+		$\mathcal C_t \gets \{ y \in X \mid y \notin S_t, S_t \cup \{y\} \in \mathcal I \}$ \;
+		\If{$\mathcal C_t = \varnothing$}{
+			\Return{$S_t$}
+		}
+		$y^* \gets \argmax_{y \in \mathcal C} w(y)$\;
+		$S_{t+1} \gets S_t \cup \{ y^* \}$\;
+		$t \gets t+1$
+	}
+\end{algorithm}
 
 \begin{theorem}{Greedy on matroids}{greedy-matroids}
-	If $(X, \mathcal I)$ is a matroid the greedy algorithm finds a basis of maximum weight.
+	If $(X, \mathcal I)$ is a matroid then algorithm \ref{alg:greedy-matroids} finds a basis of
+	maximum weight.
 \end{theorem}
 
 \begin{proof}
@@ -2398,8 +2402,8 @@ Consider the following algorithm:
 \end{proof}
 
 \begin{proposition}{Greedy characterization of matroids}{greedy-matroids-char}
-	If the greedy algorithm finds a basis of maximum weight on $(X, \mathcal I)$ for all
-	$w: X \to \R^+$, then $(X, \mathcal I)$ is a matroid.
+	If algorithm \ref{alg:greedy-matroids} finds a basis of maximum weight on $(X, \mathcal I)$
+	for all $w: X \to \R^+$, then $(X, \mathcal I)$ is a matroid.
 \end{proposition}
 
 \section{Submodular functions}
@@ -2461,9 +2465,9 @@ constrained scenario it could be NP-hard, depends on the constraint.
 Maximization is always NP-hard but it has a nice approximation algorithm if $f$ is monotone.
 
 \begin{theorem}{Fisher, Nemhauser, Wolsey}{submodular-greedy}
-	Greedy is a $\alpha$-approximation algorithm with $\alpha = \frac{1}{2}$ for maximizing a monotone
-	submodular function under matroid constraints, i.e. if $(X, \mathcal I)$ is a matroid, assuming
-	$f(\varnothing) = 0$.
+	Algorithm \ref{alg:greedy-matroids} is a $\alpha$-approximation algorithm with
+	$\alpha = \frac{1}{2}$ for maximizing a monotone submodular function under matroid constraints,
+	i.e. if $(X, \mathcal I)$ is a matroid, assuming $f(\varnothing) = 0$.
 \end{theorem}
 
 \end{document}

@@ -67,6 +67,7 @@
             circuitikz
             pgfplots
             makecell
+            algorithm2e
 
             # Indirect dependencies
             environ
@@ -80,6 +81,8 @@
             transparent
             hyperxmp
             luacode
+            ifoddpage
+            relsize
           ]
         );
 

@@ -2296,7 +2296,57 @@ solution.
 	\end{equation}
 \end{definition}
 
-TODO: rest of lec 20
+We want to find a vertex cover, given a vector $\vec w$ of vertex weights, which has minimum cost.
+We formulate an ILP:
+\begin{equation}
+	\begin{array}{rrcll}
+		\min              & \vec w^T \vec x &      &   &                      \\
+		\text{subject to} & x_u + x_v       & \geq & 1 & \forall (u, v) \in E \\
+		                  & \vec x          & \geq & 0 &
+	\end{array}
+\end{equation}
+and its dual
+\begin{equation}
+	\begin{array}{rrcll}
+		\max              & \sum_{e \in E} y_e                &      &     &                 \\
+		\text{subject to} & \sum_{v: (u, v) \in E} y_{(u, v)} & \geq & w_u & \forall u \in V \\
+		                  & \vec y                            & \geq & 0   &
+	\end{array}
+\end{equation}
+
+Complementary slackness conditions tell us:
+\begin{itemize}
+	\item CS-P: $x_u > 0 \implies \sum_{v: (u, v) \in E} y_{(u, v)} = w_u$, $\forall u \in V$.
+	\item CS-D-$\alpha$: $y_e > 0 \implies x_u + x_v \leq \alpha$, $\forall e \in E$.
+\end{itemize}
+
+Therefore we can implement an algorithm as follows:
+\begin{algorithm}
+	\caption{Min cost vertex cover}
+	$\vec x \gets 0$ \tcp{Primal infeasible}
+	$\vec y \gets 0$ \tcp{Dual feasible}
+
+	\While{$\exists y_e$ not frozen}{
+		$y_{(u, v)} \gets$ choose an edge which is not frozen \;
+		Raise its value until a constraint for some $v$ becomes tight \;
+		Freeze $y_{(u, v)}$ \;
+		$x_v \gets 1$\;
+	}
+\end{algorithm}
+
+At the end of the algorithm we have that $x, y$ are feasible and respect CS-P and CS-D-$\alpha$ with
+$\alpha = 2$.
+
+\begin{proof}
+	Feasibility of D and CS-P are maintained at every step of the algorithm.
+
+	Assume by contradiction that $x$ is not feasible and violates $x_u + x_v \geq 1$. In this case
+	we'd have $x_u = x_v = 0$, but then $y_{(u, v)}$ would not be frozen.
+
+	CS-D-2 is satisfied since for each $(u, v) \in E$ the algorithm sets $x_u, x_v$ to either $0$ or
+	$1$. In any case we have $x_u + x_v \leq 2$.
+\end{proof}
+
 
 \section{Matroids}
 
@@ -2469,5 +2519,76 @@ Maximization is always NP-hard but it has a nice approximation algorithm if $f$ 
 	$\alpha = \frac{1}{2}$ for maximizing a monotone submodular function under matroid constraints,
 	i.e. if $(X, \mathcal I)$ is a matroid, assuming $f(\varnothing) = 0$.
 \end{theorem}
+
+\section{Branch and bound algorithm}
+
+This is an algorithm to solve ILPs. If an optimal solution exists it always finds it but it also
+requires exponential time.
+
+The pseudocode is shown in algorithm \ref{alg:branch-and-bound}: $\tilde{\vec x}$ is the currently
+optimal integer solution, which we initialize with $-\infty$. At each step we solve the LP
+relaxation and decide what to do: if it is infeasible or worse than the currently best integer
+solution we stop, otherwise if we have an integer solution we return it because it is our best
+solution so far.
+If we have a rational solution which is better than our current $\tilde{\vec x}$ we start the
+branching process by forcing some variable $x_i$ less or greater than its floored optimal value and
+repeat.
+
+It is generally recommended to travel this tree DFS, since the \say{good} solutions are usually deep
+in the tree. Once we find a good solution we can prune a lot of branches faster and save time.
+Moreover, from a parent to the children we are adding a single constraint: with the simplex method
+we can just modify the existing tableau and save computations.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.75\textwidth]{./assets/advanced-programming/branch-and-bound.png}
+	\caption{The Branch \& Bound algorithm on an example ILP.}
+\end{figure}
+
+\begin{algorithm}
+	\caption{Branch \& bound}
+	\label{alg:branch-and-bound}
+
+	\SetKwProg{Fn}{Function}{:}{}
+	\SetKwFunction{FBranchBound}{BranchAndBound}
+
+	\Fn{\FBranchBound{$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, \vec x \in \Z^n\}$,
+			$\tilde{\vec x}$}}{
+		$\vec x^* \gets \argmax\{ \vec c^T \vec x \mid A \vec x \leq \vec b\}$\;
+
+		\If{LP relaxation is infeasible \textbf{or}
+			$\vec c^T \vec x^* < \vec c^T \tilde{\vec x}$}{
+			\Return Nothing\;
+		}
+		\ElseIf{$\vec x^* \in \Z^n$}{
+			\Return $\vec x^*$\;
+		}
+
+		Choose $i \in \{1, \dots, n\}$ such that $x+i^* \notin \Z$\;
+		$\tilde{\vec x} \gets $ \FBranchBound(
+		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \leq \floor{x_i^*}, \vec x \in \Z^n\}$
+		) \;
+		$\tilde{\vec x} \gets $ \FBranchBound(
+		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \geq \floor{x_i^*}+1, \vec x \in \Z^n\}$
+		) \;
+
+		\Return $\tilde{\vec x}$\;
+	}
+\end{algorithm}
+
+Choosing which variable to branch on is kind of an open problem: there exists different heuristics
+on it, some even try to us machine learning to find the best one.
+
+\subsection{Total dual integrality}
+\begin{definition}{Total dual integrality}{}
+	A system $A\vec x \leq \vec b$ (or its polyhedron) is TDI if its dual is attains its minimum at an
+	integer point $\vec y^*$ for any integer $\vec c$ such that the optimum exists and is finite.
+\end{definition}
+
+\begin{lemma}{}{}
+	If $A$ is TU, then $A \vec x \leq \vec b$ is TDI for any integer $\vec b$.
+\end{lemma}
+
+TODO: end of lec 22
 
 \end{document}

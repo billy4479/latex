@@ -2232,7 +2232,7 @@ even if we replace the $\vec 1$s with other integer vectors. Its polytope is
 
 If $G$ is not bipartite this problem is NP-hard, even finding an approximate solution.
 
-\section{Primal-dual method}
+\subsection{Primal-dual method}
 
 \begin{definition}{$\alpha$-approximation algorithm}{approximation-algo}
 	An approximation algorithm runs in polynomial time and returns a solution with objective value at
@@ -2348,7 +2348,7 @@ $\alpha = 2$.
 \end{proof}
 
 
-\section{Matroids}
+\subsection{Matroids}
 
 \begin{definition}{Matroid}{matroid}
 	Let $X$ be a finite set and $\mathcal I \subseteq \mathcal P(X)$.
@@ -2417,7 +2417,7 @@ Let us consider some other examples of matroids:
 	      therefore we can take at most one $y$ from each set.
 \end{description}
 
-\subsection{The greedy algorithm}
+\subsubsection{The greedy algorithm}
 
 The \textbf{general problem} with matroids is to find a basis of maximum weight, that is, given a
 function $w: X \to \R$, find a $Y \in \mathcal I$ maximizing
@@ -2456,7 +2456,7 @@ function $w: X \to \R$, find a $Y \in \mathcal I$ maximizing
 	for all $w: X \to \R^+$, then $(X, \mathcal I)$ is a matroid.
 \end{proposition}
 
-\section{Submodular functions}
+\subsection{Submodular functions}
 \begin{definition}{Submodular function}{submodular-function}
 	Let $X$ be a finite set and $f: \mathcal P(X) \to \R$.
 	We say that $f$ is submodular if for all $A, B \subseteq X$ we have
@@ -2477,7 +2477,7 @@ function $w: X \to \R$, find a $Y \in \mathcal I$ maximizing
 	TODO: lec 21, thm 5
 \end{proof}
 
-\subsection{Examples}
+\subsubsection{Examples}
 Consider the following examples of submodular functions:
 \begin{description}
 	\item[Linear functions]
@@ -2498,7 +2498,7 @@ Consider the following examples of submodular functions:
 	      going in and out of $S$). Then $f$ is submodular.
 \end{description}
 
-\subsection{Operations}
+\subsubsection{Operations}
 
 We now consider which operations are possible on submodular functions while preserving
 submodularity.
@@ -2508,7 +2508,7 @@ submodularity.
 	\item TODO: there is another one here
 \end{itemize}
 
-\subsection{Algorithms}
+\subsubsection{Algorithms}
 
 For minimization there is a polynomial time algorithm in the unconstrained case, while in the
 constrained scenario it could be NP-hard, depends on the constraint.
@@ -2520,7 +2520,7 @@ Maximization is always NP-hard but it has a nice approximation algorithm if $f$ 
 	i.e. if $(X, \mathcal I)$ is a matroid, assuming $f(\varnothing) = 0$.
 \end{theorem}
 
-\section{Branch and bound algorithm}
+\subsection{Branch and bound algorithm}
 
 This is an algorithm to solve ILPs. If an optimal solution exists it always finds it but it also
 requires exponential time.
@@ -2594,8 +2594,8 @@ on it, some even try to us machine learning to find the best one.
 	If $A\vec x \leq \vec b$ is TDI, then $\{x \mid A \vec x \leq \vec b \}$ is an integer polyhedron.
 \end{theorem}
 
-\begin{proof}
-	TODO: sketch in lec 22 thm 2
+\begin{proof}[Proof (sketch)]
+	TODO: lec 22 thm 2
 \end{proof}
 
 \begin{theorem}{Giles-Pulleyblank}{}
@@ -2605,9 +2605,88 @@ on it, some even try to us machine learning to find the best one.
 	Moreover, $P$ is integer if and only if $\vec b$ is integer.
 \end{theorem}
 
-\begin{proof}
-	Skip?
+\begin{proof}[Proof (idea)]
+	For any minimal face $F$ of $P$ there exists some $\vec c$ so that $\vec c^T \vec x$ is maximized
+	there.
+	Indeed, there is a cone of such vectors $\vec c$: this cone is defined by the vectors
+	perpendicular to the faces whose intersections form $F$.
+
+	Consider the set of such vectors
+	\begin{equation}
+		K_F = \{ \vec c \mid \vec c^T \vec z = \max \{ \vec c^T \vec x \mid \vec x \in P\} \ \forall \vec z \in
+		F \}
+	\end{equation}
+	and a set of vectors $\vec a_1, \dots, \vec a_t \in \Z^n_+$ such that
+	every integer vector in $K_F$ is a non-negative combination of such vectors.
+	This is called an Hilbert basis of $K_F$ and we can prove it always exists.
+
+	Let $A^F$ be the matrix whose rows are the vectors $\vec a_1, \dots, \vec a_t$ and $\vec b^F$ be
+	the vector where each entry is the solution of $\max \{\vec a^T_i \vec x \mid \vec \in P\}$ for
+	$i \in \{1, \dots, t\}$.
+	Then take $A$ be the concatenation of the rows of $A_F$ for all faces $F$ and the same for $\vec b$ and
+	$\vec b^F$.
+	In this way we are guaranteed to satisfy TDI.
 \end{proof}
 
+\subsection{Cutting planes}
+
+Consider an halfspace $H = \{ \vec x \mid \vec c^T \vec x \leq \vec \delta \}$ and its integer hull
+$H_I$, then $H_I \subseteq \{ \vec x \mid \vec c^T \vec x \leq \floor{\vec \delta} \}$.
+Therefore we have found a way to \say{cut} some stuff without removing any integer point.
+
+\begin{definition}{Gomory-Chvátal truncation}{gomory-chvatal}
+	Let $P$ be a convex set.
+	We define a truncation as
+	\begin{equation}
+		P' = \bigcup \{\vec x \mid \vec c^T \vec x \leq \floor{\vec \delta} \}
+	\end{equation}
+	where $\vec c$ is such that $P \subseteq \{ \vec x \mid \vec c^T \vec x \leq \vec \delta \}$.
+\end{definition}
+
+\begin{theorem}{Schrijver}{schrijver-1}
+	Let $P = \{ \vec x \mid A \vec x \leq \vec b \}$ such that its system is TDI, $A$ is integer and
+	$\vec b$ is rational.
+	Then $P' = \{ \vec x \mid A\vec x \leq \floor{\vec b}\}$ is a valid truncation.
+\end{theorem}
+
+This is useful since we know we can always complete a polyhedron to a TDI system: after the first
+truncation $P'$ may no longer be TDI, therefore we complete it again to be TDI, and truncate again,
+and so on.
+
+\begin{theorem}{Schrijver}{schrijver-2}
+	For every rational polyhedron $P$ there exists $t \in \N_0$ finite such that the $t$-th truncation
+	of $P$, $P^{(t)} = P_I$.
+
+	We call $t$ the Chavátal rank of $P$.
+\end{theorem}
+
+\subsubsection{Gomory cuts}
+
+We now look at how we can use this knowledge to speed up the execution of the branch and bound
+algorithm. At each step of the algorithm we solve an LP relaxation, assume we are using the dual
+simplex method.
+
+We have reached an optimal tableau of the relaxation where there are some fractional variables, say
+$x_i$ is fractional.
+
+We now look at the $x_i$ row in the simplex tableau:
+\begin{equation}
+	x_i = p - k_1 x_{i_1} - \dots - k_e x_{i_\ell}
+	- \alpha_1 x_{j_1} - \dots - \alpha_{\ell'} x_{j_{\ell'}}
+\end{equation}
+where we have ordered the coefficients so that $k_1, \dots, k_\ell \in \Z$ and
+$\alpha_1, \dots, \alpha_{\ell'} \in \R$.
+Then, since $\vec x$ is non-negative we can write
+\begin{equation}
+	x_i + k_1 x_{i_1} + \dots + k_e x_{i_\ell}
+	+ \floor{\alpha_1} x_{j_1} + \dots + \floor{\alpha_{\ell'}} x_{j_{\ell'}} \leq p
+\end{equation}
+which is a valid inequality.
+Then consider the truncation
+\begin{equation}
+	x_i + k_1 x_{i_1} + \dots + k_e x_{i_\ell}
+	+ \floor{\alpha_1} x_{j_1} + \dots + \floor{\alpha_{\ell'}} x_{j_{\ell'}} \leq \floor{p}
+\end{equation}
+and we add it as constraint to the original LP and we continue iterating.
 
 \end{document}

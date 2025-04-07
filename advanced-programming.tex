@@ -2581,7 +2581,8 @@ on it, some even try to us machine learning to find the best one.
 
 \subsection{Total dual integrality}
 \begin{definition}{Total dual integrality}{}
-	A system $A\vec x \leq \vec b$ (or its polyhedron) is TDI if its dual is attains its minimum at an
+	A system $A\vec x \leq \vec b$ is TDI if its dual
+	$\min\{\vec b^T \vec y\mid A^T \vec y = c, \vec y \geq 0 \}$ attains its minimum at an
 	integer point $\vec y^*$ for any integer $\vec c$ such that the optimum exists and is finite.
 \end{definition}
 
@@ -2589,6 +2590,24 @@ on it, some even try to us machine learning to find the best one.
 	If $A$ is TU, then $A \vec x \leq \vec b$ is TDI for any integer $\vec b$.
 \end{lemma}
 
-TODO: end of lec 22
+\begin{theorem}{}{}
+	If $A\vec x \leq \vec b$ is TDI, then $\{x \mid A \vec x \leq \vec b \}$ is an integer polyhedron.
+\end{theorem}
+
+\begin{proof}
+	TODO: sketch in lec 22 thm 2
+\end{proof}
+
+\begin{theorem}{Giles-Pulleyblank}{}
+	Any rational $P$ can be written as $P = \{ \vec x \mid A \vec x \leq \vec b \}$ such that $A$ is
+	integer and $A \vec x \leq \vec b$ is TDI.
+
+	Moreover, $P$ is integer if and only if $\vec b$ is integer.
+\end{theorem}
+
+\begin{proof}
+	Skip?
+\end{proof}
+
 
 \end{document}

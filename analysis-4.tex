@@ -1105,5 +1105,67 @@ This is particularly useful if we choose to apply \cref{prop:jacobian-sqrt-det}.
 	TODO: prove that there are at most 2
 \end{proof}
 
+TODO: parametrization map?? lec 15
+
+\begin{definition}{Orientation of manifold}{orientation-manifold}
+	An orientation of an $n$-dimensional manifold $M$ is a choice of an orientation $\tau(p)$ of
+	$T_pM$ which is continuous over $p$.
+
+	If a manifold admits an orientation we say that the manifold is orientable and, once we choose
+	one, we call the pair of manifold and orientation the oriented manifold.
+\end{definition}
+
+In this context continuous means that whenever we take a parametrization
+$\psi: V \subseteq \R^n \to M$, with $V$ connected, so that $\forall x \in V$ the differential
+$D\psi (x): \R^n \to T_{\psi(x)} M$ is an invertible linear map, then
+$(D\psi (x)^{-1})_*(\tau(\psi(x)))$ is constant.
+
+\begin{proposition}{}{}
+	If $M = \{ x \in \R^N \mid h(x) = 0 \}$ (which is $n$ dimensional), where $h: \R^N \to \R^{N-n}$
+	is $C^1$ and $Dh(x)$ has full rank for all $x \in M$, then $M$ is oriented:
+	given $x \in M$ we have that
+	$T_x M = \mathrm{span} \{\grad h_1(x), \dots, \grad h_{N-n}(x)\}^\perp$ and we complete it to a
+	basis of $\R^N$ using $v_1, \dots, v_n \in T_xM$ so that the result is equivalent $\sim$ to the
+	canonical basis of $\R^N$.
+	Then we can take $\tau(x)$ to be the equivalence class of $(v_1, \dots, v_n)$ and we obtain a
+	well-defined and continuous orientation.
+\end{proposition}
+
+\begin{definition}{Parallelizable manifold}{parallelizable-manifold}
+	We say that a manifold $M$ is parallelizable if we can choose a basis of $T_x M$ in a continuous
+	way.
+	This means that $(v_1(x), \dots, v_n(x))$ is a basis of $T_x M$ and for all
+	$i \in \{1, \dots, n\}$ we have that $v_i: M \to \R^N$ is continuous.
+\end{definition}
+
+Being parallelizable is a very strong result: even $S^n$ is not always parallelizable. Notably only
+$S^n$ is parallelizable only for $n = 0, 1, 3, 7$.
+
+\section{a bit of algebra}
+
+\begin{definition}{Multilinear alternating $k$-form}{}
+	A function $\alpha: \underbrace{V \cross \dots \cross V}_k \to \R$ is a multilinear alternating
+	$k$-form if we freeze all entries but one it is linear in the remaining one and if we flip two
+	entries we get the opposite result.
+\end{definition}
+
+Note that the set of these forms is a vector space denoted by $\Lambda^k V$. Note that when $k = 1$
+we obtain the dual of $V$.
+
+\begin{definition}{Wedge product}{wedge-product}
+	Let $\alpha \in \Lambda^k V$ and $\beta \in \Lambda^\ell V$.
+	The wedge (or exterior) product of $\alpha$ and $\beta$ is
+	\begin{equation}
+		\alpha \land \beta (v_1, \dots, v_{k+\ell}) = \sum_{\sigma \in S_{k+\ell}}
+		\frac{\mathrm{sgn}(\sigma)}{k! \ell!} \alpha(v_{\sigma(1)}, \dots, v_{\sigma(k)})
+		\beta(v_{\sigma(k+1)}, \dots, v_{\sigma(k+\ell)})
+	\end{equation}
+	where $\sigma$ is a permutation of the indices and $\mathrm{sgn}$ is the sign of the permutation,
+	i.e. $(-1)^q$ where $q$ is the number of flips which we need to create the permutation.
+\end{definition}
+
+The wedge product maintains multilinearity and the alternating property.
+
+TODO: is there more of lec 15?
 
 \end{document}

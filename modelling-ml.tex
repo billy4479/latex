@@ -894,5 +894,49 @@ are different choices of it:
 	\caption{Scheme of a deep network.}
 \end{figure}
 
+\section{Hopfield model}
+
+We now tackle to problem of \say{memorizing} certain patterns so that similar patterns will be able
+be recognized by our network.
+
+Consider a network of $N$ binary neurons so that $S_i = \pm 1$ is the activation of the neuron $i$.
+A pattern is a vector $\vec \xi \in \{\pm 1\}^N$ so that $\vec \xi_i = S_i$ is the desired
+activation of $S_i$ for that pattern. We will have $p$ patterns we want to memorize, let us denote
+them as $\vec \xi^\mu$ with $\mu \in \{1, \dots, p\}$.
+Assume no correlation between the patterns.
+
+To retrieve a memory from the network we initialize the network with some pattern and we let it run.
+If it converges to some $\vec \xi^\mu$ we have successfully recognized the new pattern as
+$\vec \xi^\mu$. Formally we want
+\begin{equation}
+	m_\mu(t) = \frac{1}{N} \sum_{i = 1}^N S_i \xi^\mu_i \to 1
+\end{equation}
+which will tell us that the new pattern is recognized as $\vec \xi^\mu$. If $m_\mu(t)$ stays around
+$0$ we know that the new pattern is not correlated to $\vec \xi^\mu$.
+
+What is the best way of connecting our neurons? We will use the result hypothesised by Hebb which
+tells us that we should weight the connection as the average of the patterns involved in the
+connection:
+\begin{equation}
+	J_{ij} = \frac{1}{N} \sum_{\mu = 1}^p \xi_i^\mu \xi_j^\mu
+\end{equation}
+
+With this weights we notice that the input patterns $\vec \xi^\mu$ are fixed points of the network
+when $N \gg p$.
+Let us consider the pattern $\nu$.
+At $t = 0$ we initialize the network to so that $S_i(t=0) = \xi^\nu_i$ for all $i$.
+At the next step we will have
+\begin{align}
+	S_i(t=1) & = \mathrm{sign}\left( \sum_{j \neq i} J_{ij} S_j \right)                                                                                                        \\
+	         & = \mathrm{sign}\left( \sum_{j \neq i} J_{ij} \xi^\nu_j \right)                                                                                                  \\
+	         & = \mathrm{sign}\left( \sum_{j \neq i} \left(\frac{1}{N} \sum_{\mu = 1}^p \xi_i^\mu \xi_j^\mu\right) \xi^\nu_j \right)                                           \\
+	         & = \mathrm{sign}\left( \frac{1}{N} \sum_{j \neq i} \xi^\nu_i \cancelto{1}{(\xi^\nu_j)^2} + \frac{1}{N} \sum_{\mu \neq \nu} \xi_i^\mu \xi_j^\mu \xi^\nu_j \right) \\
+	         & = \mathrm{sign}\left( \xi^\nu_i + \frac{1}{N} \sum_{j \neq i} \sum_{\mu \neq \nu} \xi_i^\mu \xi_j^\mu \xi^\nu_j \right)
+\end{align}
+where we notice that the second (noise) term goes to $0$ as $N \gg p$.
+
+However, how much bigger does $N$ has to be?
+Assume $p = \alpha N$, then we can show using probability sorcery to show that the minimum $\alpha$
+such that equilibrium points still exist is $\alpha_c = 0.14$.
 
 \end{document}

@@ -694,6 +694,7 @@ TODO
 \section{Auto encoder}
 
 \subsection{Gradient descent}
+\label{sec:gradient-descent}
 \subsubsection{Loss function}
 
 To do supervised learning ideally we'd like to minimize the error rate on the training set.
@@ -893,6 +894,109 @@ are different choices of it:
 	\includegraphics[width=0.9\textwidth]{./assets/modelling-ml/deep-network.png}
 	\caption{Scheme of a deep network.}
 \end{figure}
+
+\begin{theorem}{Hornik}{hornik}
+	Let $\sigma: \R \to \R$ be a nonconstant, bounded, non-decreasing, and continuous function.
+	Let $S \subseteq \R^d$ be closed and bounded.
+	Then, for any $f: S \to \R$ continuous and any $\varepsilon > 0$, there exists a neural network
+	with one hidden layer containing finitely many nodes which we can write as
+	\begin{equation}
+		h(\vec x) = \sum_{j = 1}^k w^\text{out}_j \sigma(\vec w_j^T \vec x + b_j)
+	\end{equation}
+	so that, $\forall x \in S$, we have
+	\begin{equation}
+		\abs{f(\vec x) - h(\vec x)} < \varepsilon
+	\end{equation}
+\end{theorem}
+
+This is a key theorem which tells us that any function can be learned by a neural network, however,
+in practice, this has little to no utility: it doesn't tell us anything about the performance of
+some specific network and doesn't tell us how to compute the weights; moreover the network of the
+theorem has just one hidden layer, when in practice we have evidence that multiple hidden layers
+provide significantly better results.
+
+\subsection{Backpropagation}
+
+The key concept behind backpropagation is gradient descent, as we covered in
+\cref{sec:gradient-descent}, in practice we need to apply many times the chain rule.
+
+Recall that at layer $\ell$, the preactivation value, given by the output $\vec z^{(\ell - 1)}$ of
+layer $\ell - 1$, is defined as
+\begin{equation}
+	a^{(\ell)}_j = \left( \sum_{i = 1}^{d^{(\ell - 1)}} w_{ji}^{(\ell)} z_i^{(\ell - 1)}\right) +
+	b_j^{(\ell)}
+\end{equation}
+for ease of notation we will omit the bias term since the procedure remains the same.
+
+The output of each neuron is $z_j^{(\ell)} = \sigma(a_j^{(\ell)})$, while the output of the network
+is the preactivation value of layer $L + 1$: $\hat{y} = a^{(L+1)}$.
+(Note that the output is a single node).
+
+Our loss function $L$ is defined as
+\begin{equation}
+	L(\vec w^{(1)}, \dots \vec w^{(L+1)}) = \frac{1}{N} \sum_{n = 1}^N \ell(y_n, \hat y_n)
+	= \frac{1}{2N} \sum_{n = 1}^N (y_n - \hat y_n)^2
+\end{equation}
+where we used the square loss function.
+
+Our goal is then to compute $\grad \ell (y_n, \hat y_n)$ with respect to all parameters, this
+means we want to compute
+\begin{equation}
+	\pdv{\ell(y_n, \hat y_n)}{w_{ji}^{(\ell)}} =
+	\underbrace{\pdv{\ell(y_n, \hat y_n)}{a_{j}^{(\ell)}}}_{\delta^{(\ell)}_j}
+	\pdv{a_{j}^{(\ell)}}{w_{ji}^{(\ell)}}
+\end{equation}
+where we used the chain rule to separate the derivative. We call the first term $\delta^{(\ell)}_j$
+and claim that the second term is equal to $z_i^{(\ell - 1)}$. This is due to the fact that
+\begin{equation}
+	a^{(\ell)}_j = \vec w_j \cdot \vec z^{(\ell -1)} = \sum_c w_{jc}^{(\ell)} z_c^{(\ell - 1)}
+\end{equation}
+from which we notice that taking the derivative w.r.t. $w^{(\ell)}_{ji}$ makes all the terms of the
+sum go to zero except for $z_i^{(\ell - 1)}$.
+
+We are now left with
+\begin{equation}
+	\pdv{\ell(y_n, \hat y_n)}{w_{ji}^{(\ell)}} = \delta^{(\ell)}_j z_i^{(\ell - 1)}
+\end{equation}
+Lets now work on $\vec \delta^{(\ell)}$.
+
+At $L + 1$ we have a single node, therefore we can write
+\begin{equation}
+	\delta^{(L + 1)} = \pdv{\ell(y, \hat y)}{a^{(L+1)}} =  -(y- \hat y) = -\left(y - a^{(L+1)}\right)
+\end{equation}
+then
+\begin{equation}
+	\pdv{\ell(y_n, \hat y_n)}{w_{j}^{(L+1)}} =-\left(y - a^{(L+1)}\right) z_j^{(L+1)}
+\end{equation}
+
+We now want to proceed recursively: we will compute $\vec \delta^{(\ell)}$ by knowing
+$\vec \delta^{(\ell + 1)}$.
+\begin{equation}
+	\delta^{(\ell)} = \pdv{\ell(y, \hat y)}{a_j^{(\ell)}}
+	= \sum_{k = 1}^{d^{(\ell + 1)}} \pdv{\ell(y, \hat y)}{a_k^{(\ell+1)}}\pdv{a_k^{(\ell + 1)}}{a_j^{\ell}}
+	= \sum_{k = 1}^{d^{(\ell + 1)}} \delta^{(\ell + 1)}_k \pdv{a_k^{(\ell + 1)}}{a_j^{\ell}}
+\end{equation}
+
+Now we are left with computing $\pdv{a_k^{(\ell + 1)}}{a_j^{\ell}}$. Since, by definitiion,
+$a_k^{(\ell + 1)}$ is
+\begin{equation}
+	a_k^{(\ell + 1)} = \sum^{d^{(\ell + 1)}}_{c = 1} w_{kc}^{(\ell + 1)} z_c^{\ell}
+	= \sum^{d^{(\ell + 1)}}_{c = 1} w_{kc}^{(\ell + 1)} \sigma(a_c^{\ell})
+\end{equation}
+giving us that
+\begin{equation}
+	\pdv{a_k^{(\ell + 1)}}{a_j^{\ell}} = w_{kj}^{(\ell + 1)} \sigma(a_j^{\ell})
+\end{equation}
+and substituting into $\vec \delta$ we obtain
+\begin{equation}
+	\delta^{(\ell)}_j = \sigma(a_j^{\ell}) \sum_{k = 1}^{d^{(\ell + 1)}}
+	\delta_k^{(\ell + 1)} w_{kj}^{(\ell + 1)}
+\end{equation}
+
+Now that we have an formula which works we can apply gradient descent: we start by doing a
+\emph{forward pass}, which means we run the network with some arbitrary weights, so that we get a
+value for $\vec a^{(\ell)}$; then we compute the gradient as shown starting from the last layer
+(hence the name backpropagation) and perform gradient descent to update the weights.
 
 \section{Hopfield model}
 

@@ -1141,7 +1141,7 @@ $(D\psi (x)^{-1})_*(\tau(\psi(x)))$ is constant.
 Being parallelizable is a very strong result: even $S^n$ is not always parallelizable. Notably only
 $S^n$ is parallelizable only for $n = 0, 1, 3, 7$.
 
-\section{a bit of algebra}
+\subsection{Multilinear \texorpdfstring{$k$}{k}-forms}
 
 \begin{definition}{Multilinear alternating $k$-form}{}
 	A function $\alpha: \underbrace{V \cross \dots \cross V}_k \to \R$ is a multilinear alternating
@@ -1167,5 +1167,102 @@ we obtain the dual of $V$.
 The wedge product maintains multilinearity and the alternating property.
 
 TODO: is there more of lec 15?
+
+\begin{proposition}{}{}
+	Given a basis $e_1, \dots, e_n$ of $V$,
+	\begin{equation}
+		e_{i_1}^* \land \dots \land e_{i_n}^*
+	\end{equation}
+	where $(i_j)_{j \in \{ 1, \dots, k \}}$ is a combination of the indices from $1$ to $n$ and
+	$e_i^*$ are the elements of the dual basis, as $i_k$ vary, form a basis of $\Lambda^k V$ for
+	$0<k\leq n$.
+\end{proposition}
+
+\begin{proof}
+	TODO: lec 16 ??
+\end{proof}
+
+\begin{lemma}{}{}
+	In the setting of the previous proposition if $k > n$, then $\Lambda^k V = \{ 0 \}$.
+\end{lemma}
+\begin{proof}
+	Let $\alpha \in \Lambda^k V$ and we claim that for every $k$ vectors $v_1, \dots v_k$
+	$\alpha(v_1, \dots v_k) = 0$.
+
+	Write each vector as $v_i = \sum_j a_{ij} e_j$, therefore we have
+	\begin{equation}
+		\alpha(v_1, \dots v_k) = \alpha\left(\sum_j a_{1j} e_j, \dots, \sum_j a_{kj} e_j \right)
+	\end{equation}
+	and once at the time take them out of $\alpha$. In this way we obtain a huge linear combination of
+	terms which look like
+	\begin{equation}
+		\alpha(e_{j_1}, \dots, e_{j_k})
+	\end{equation}
+	however, necessarily we have a repetition, since there are only $n$ elements in the basis and
+	$k > n$, therefore the result of each one of these combination is zero since if we have a
+	repetition in an alternating $k$-form the result is always zero.
+\end{proof}
+
+\begin{definition}{Differential $k$-form}{}
+	Let $U \subseteq \R^n$ open. A differential $k$-form of class $C^1$ is a function
+	$\alpha: U \to \Lambda^k \R^n$ of class $C^1$.
+
+	Equivalently, $\alpha(x) \in \Lambda^k \R^n$ and
+	\begin{equation}
+		\alpha(x) = \sum_{1 \leq i_i \leq i_k \leq n} a_{i_1, \dots, i_k}(x)
+		\dd x_{i_1} \land \dots \dd x_{i_k}
+	\end{equation}
+	(where $\dd x_i = e_i^*$ w.r.t. the canonical basis) we have that each coefficient
+	$a_{i_1, \dots, i_k}(x)$ is $C^1$.
+\end{definition}
+
+\begin{definition}{Pullback}{pullback}
+	Let $F: U \subseteq \R^m \to V \subseteq \R^n$ with $U, V$ open of class $C^2$,
+	and $\alpha$ a differentiable $k$-form on $V$.
+	The pullback of $\alpha$ (by $F$) is $F^* \alpha$, a $k$-form on $U$ given by
+	\begin{equation}
+		F^* \alpha (x) [v_1, \dots, v_k] = \alpha(F(x))[DF(x)[v_1], \dots, DF(x)[v_k]]
+	\end{equation}
+\end{definition}
+
+\begin{definition}{Exterior differential}{}
+	If $\alpha$ is a differential $k$-form on $U \subseteq \R^n$, writing it as
+	\begin{equation}
+		\alpha(x) = \sum a_{i_1, \dots, i_k} \dd x_{i_1} \land \dots \land \dd x_{i_k}
+	\end{equation}
+	its exterior differential is the differential $(k+1)$-form defined as
+	\begin{equation}
+		\dd \alpha(x) = \sum_{1 \leq i_i \leq i_k \leq n} \left( \sum_j^n \pdv{a_{i_1, \dots, i_k}(x)}{x_j} \dd x_j \right)
+		\land \dd x_{i_1} \land \dots \land \dd x_{i_k}
+	\end{equation}
+\end{definition}
+
+Note that if $k = 1$ we have that $\Lambda^1 V = V^*$ and, for a differential $0$-form $f: U \to \R$
+of class $C^1$, its exterior differential is $\dd f(x) = Df(x)$.
+
+\begin{proposition}{}{}
+	If $\alpha$ is a differential $k$-form and $\beta$ a differential $\ell$-form, then
+	\begin{equation}
+		\dd(\alpha \land \beta) \dd \alpha \land \beta + (-1)^k \alpha \land \dd \beta
+	\end{equation}
+\end{proposition}
+
+\begin{proof}
+	No proof.
+\end{proof}
+
+\begin{proposition}{}{}
+	If $\alpha$ is a $C^2$ differential $k$-form, then $\dd(\dd \alpha) = 0$.
+\end{proposition}
+\begin{proof}
+	TODO: lec 16
+
+	proof by example on $k=1, n=3$.
+\end{proof}
+
+\begin{proposition}{}{}
+	Let $F: U \to V$ of class $C^2$ and $\alpha$ a differential $k$-form on $V$.
+	Then $\dd(F^* \alpha) = F^*(\dd \alpha)$.
+\end{proposition}
 
 \end{document}

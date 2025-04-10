@@ -740,6 +740,7 @@ The costly part of our algorithm is the sum we over $N$: at every iteration the 
 the dataset is very expensive.
 
 \subsubsection{Mini-batch}
+\label{sec:mini-batch}
 
 Instead of averaging over the whole dataset, at each iteration $t$ we choose a set $B_t$ with
 $\abs{B_t} = m$ uniformly at random within the data set.
@@ -977,7 +978,7 @@ $\vec \delta^{(\ell + 1)}$.
 	= \sum_{k = 1}^{d^{(\ell + 1)}} \delta^{(\ell + 1)}_k \pdv{a_k^{(\ell + 1)}}{a_j^{\ell}}
 \end{equation}
 
-Now we are left with computing $\pdv{a_k^{(\ell + 1)}}{a_j^{\ell}}$. Since, by definitiion,
+Now we are left with computing $\pdv{a_k^{(\ell + 1)}}{a_j^{\ell}}$. Since, by definition,
 $a_k^{(\ell + 1)}$ is
 \begin{equation}
 	a_k^{(\ell + 1)} = \sum^{d^{(\ell + 1)}}_{c = 1} w_{kc}^{(\ell + 1)} z_c^{\ell}
@@ -1042,5 +1043,74 @@ where we notice that the second (noise) term goes to $0$ as $N \gg p$.
 However, how much bigger does $N$ has to be?
 Assume $p = \alpha N$, then we can show using probability sorcery to show that the minimum $\alpha$
 such that equilibrium points still exist is $\alpha_c = 0.14$.
+
+\section{Boltzmann machines}
+This is a type of network to do unsupervised learning: given a set of examples it tries to recover
+the original distribution and can be then used to generate new samples from the same distribution.
+
+A Boltzmann machine is made of $N$ binary neurons $S_i(t) \in \{0, 1\}$ with symmetric connectivity.
+The neurons in this network can be divided in two layer: an input layer and a hidden one.
+If the neurons are connected in such way that the input and hidden layer form two parties of a
+bipartite graph we have a \emph{restricted Boltzmann machine} (RBM).
+We will focus on RBMs as the learning algorithm is much simpler and faster.
+
+\subsection{Updating}
+
+In an RBM each neuron is updated as follows:
+\begin{itemize}
+	\item Compute the weighted sum of its inputs:
+	      \begin{equation}
+		      z_i = b_i + \sum_j w_{ij} S_j
+	      \end{equation}
+	      where $b_i$ is the bias.
+	\item The state of each neuron is not deterministic, instead the probability of the neuron
+	      firing is given by
+	      \begin{equation}
+		      P(S_i = 1) = \frac{1}{1 + e^{-z}}
+	      \end{equation}
+
+	\item Eventually the network reaches a stationary distribution called
+	      \emph{Boltzmann distribution} given by
+	      \begin{equation}
+		      P(S) = \frac{1}{Z} \exp (-E(S))
+	      \end{equation}
+	      where
+	      \begin{align}
+		      Z    & = \sum_{S} E(S)                                  \\
+		      E(S) & = - \sum_{i < j} w_{ij} S_i S_j - \sum_i b_i S_i
+	      \end{align}
+	      where $Z$ is the sum of the energy of all states and $E(S)$ is the energy of the state $S$,
+	      which is given by the weighted sum of the activation of the neurons (the first term
+	      represents the connection between the two layers and the second one the bias of each
+	      neuron).
+\end{itemize}
+
+\subsection{Training}
+
+We train this network with the goal to maximize the log-likelihood of the data, i.e.
+\begin{equation}
+	C = \frac{1}{M} \sum_{\mu = 1}^M \log P(x^\mu)
+\end{equation}
+
+To do this we use gradient descent (how original!), therefore we need to compute the derivatives
+w.r.t. the parameters $\theta = (\vec w, \vec b)$.
+\begin{equation}
+	\pdv{C}{\theta} = \frac{1}{M} \sum^M_{\mu = 1}
+	\E\left[ \pdv{E(x^\mu, h)}{\theta} \right] - \E\left[ \pdv{E(x, h)}{\theta} \right]
+\end{equation}
+where we are taking the mean over $S$ using the Boltzmann distribution.
+
+In practice, it is impossible to average over all neurons, therefore we use techniques like
+mini-batch (cf. \cref{sec:mini-batch}) or contrastive divergence $k$ algorithm (??).
+
+
+\subsection{In practice}
+
+We need to choose the right number of nodes per layer, learning rate, initial values, batch sizes,
+etc.
+
+Moreover we often stack more RBMs: we train them one layer at the time and then the hidden neurons
+of one layer become the inputs to the next one.
+
 
 \end{document}

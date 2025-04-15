@@ -2262,7 +2262,7 @@ in the tree. Once we find a good solution we can prune a lot of branches faster 
 Moreover, from a parent to the children we are adding a single constraint: with the simplex method
 we can just modify the existing tableau and save computations.
 
-\begin{figure}
+\begin{figure}[hb!]
 	\centering
 	\includegraphics[width=0.75\textwidth]{./assets/advanced-programming/branch-and-bound.png}
 	\caption{The Branch \& Bound algorithm on an example ILP.}
@@ -2287,12 +2287,14 @@ we can just modify the existing tableau and save computations.
 			\Return $\vec x^*$\;
 		}
 
-		Choose $i \in \{1, \dots, n\}$ such that $x+i^* \notin \Z$\;
+		Choose $i \in \{1, \dots, n\}$ such that $x_i^* \notin \Z$\;
 		$\tilde{\vec x} \gets $ \FBranchBound(
-		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \leq \floor{x_i^*}, \vec x \in \Z^n\}$
+		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \leq \floor{x_i^*}, \vec x \in \Z^n\}$,
+    $\tilde{\vec x}$
 		) \;
 		$\tilde{\vec x} \gets $ \FBranchBound(
-		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \geq \floor{x_i^*}+1, \vec x \in \Z^n\}$
+		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \geq \floor{x_i^*}+1, \vec x \in \Z^n\}$,
+    $\tilde{\vec x}$
 		) \;
 
 		\Return $\tilde{\vec x}$\;

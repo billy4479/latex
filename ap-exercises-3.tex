@@ -1,0 +1,137 @@
+\documentclass[12pt]{extarticle}
+
+\title{Advanced Programming and Optimization Algorithms \\ Homework 03}
+\author{Giacomo Ellero}
+\date{16/04/2025}
+
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+
+\renewcommand{\vec}[1]{\bvec{#1}}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\maketitle
+
+\section*{Exercise 1}
+\stepcounter{section}
+
+Let $A$ be the incidence matrix of $G$ and assume that the odd cycle $C$ is made of the vertices
+$v_1, \dots v_n$.
+If $A$ is totally unimodular, then every square submatrix of $A$ is also TU.
+
+Consider $A'$, the submatrix of $A$ containing the vertices and the edges which are part of the
+cycle.
+Since all the rows in $A'$ represent a node in the cycle, each row and each column has exactly two
+$1$s.
+We can rearrange the rows of the matrix so that
+\begin{equation}
+	A' = \begin{pmatrix}
+		1      & 0 & \dots  & 0 & 1 \\
+		1      & 1 & \dots  & 0 & 0 \\
+		0      & 1 & \dots  & 0 & 0 \\
+		\vdots &   & \ddots &   &   \\
+		0      & 0 & \dots  & 1 & 1
+	\end{pmatrix}
+\end{equation}
+
+We now want to compute the determinant of will now perform some row operations on $A'$: iterate over
+$k \in \{2, \dots, n\}$ and add set $R_1$ to $R_1 + (-1)^k R_k$. In this manner, since $n$ is odd,
+we will obtain a matrix such that
+\begin{equation}
+	\det A' =
+	\begin{vmatrix}
+		2      & 0 & \dots  & 0 & 0 \\
+		1      & 1 & \dots  & 0 & 0 \\
+		0      & 1 & \dots  & 0 & 0 \\
+		\vdots &   & \ddots &   &   \\
+		0      & 0 & \dots  & 1 & 1
+	\end{vmatrix} =
+	2 \cdot
+	\begin{vmatrix}
+		1      & 0 & \dots  & 0 & 0 \\
+		1      & 1 & \dots  & 0 & 0 \\
+		0      & 1 & \dots  & 0 & 0 \\
+		\vdots &   & \ddots &   &   \\
+		0      & 0 & \dots  & 1 & 1
+	\end{vmatrix} = 2 \cdot \det(\mathds{1} ) = 2
+\end{equation}
+were we have used the $1$ in $R_1$ to remove the first $1$ in $R_2$, the $1$ in $R_2$ for the first
+$1$ in $R_3$ and so on until we obtained the identity matrix.
+
+Which means that $A$ cannot be TU because the determinant of its submatrix $A'$ is not in
+$\{\pm 1 , 0\}$.
+
+\section*{Exercise 2}
+\stepcounter{section}
+
+We model the problem as a min-cost flow.
+
+Consider a directed bipartite graph $G = (V, E)$ where $V = M \cup R$: each node in $M$ represents
+a mechanic and each node in $R$ represents a repair. We connect each node in $M$ to each node in
+$R$, as each mechanic can perform any repair, however, each edge has a cost $c_{(u, v)}$.
+
+Then consider another graph $G' = (V', E')$ such that $V' = V \cup \{s, t\}$ and
+\begin{equation}
+	E' = E \cup \{ (s, v) \mid v \in M \} \cup \{ (u, t) \mid u \in R\}
+\end{equation}
+The cost for these new edges is $0$ so that we form a new cost vector $\vec \kappa$ where the cost
+for the original edges in $E$ is the one indicated by $\vec c$ while the missing spots are filled
+with zeroes.
+
+Set the capacity of all edges to $1$, then the max $s$-$t$ flow in $G'$ is
+$\alpha = \abs{M} = \abs{R} = n$.
+Let $M$ be the incidence matrix of $G$ and $M'$ the incidence matrix of $G'$.
+Then we can write the problem as an ILP:
+\begin{equation}
+	\begin{array}{rrcl}
+		\min              & \vec \kappa^T \vec x                    &      &        \\
+		\text{subject to} & M^T \vec x                              & =    & 0      \\
+		                  & \vec x                                  & \leq & 1      \\
+		                  & \vec x                                  & \geq & 0      \\
+		                  & \displaystyle \sum_{u \in M} x_{(s, u)} & \geq & \alpha
+	\end{array}
+\end{equation}
+where we have one variable for each edge: the first constraint is the conservation of flow, the
+second one is the capacity constraint (which is $1$ for all edges), the third one is the
+non-negativity of the flow, and the last one tells us that we have to find a flow of at least
+$\alpha$.
+
+This program will always match all mechanics to a repair since this is the only way to obtain a flow
+of at least $\alpha$.
+Moreover, since $M$ is TU and $\alpha$ is already an integer solution coming from a face of an
+integer polyhedron, as shown in class, the optimal solution to this program will be an integer (as
+long as the cost vector is positive).
+
+\section*{Exercise 3}
+\stepcounter{section}
+
+Consider $b = n$, $c_i = 1$ and $a_i = 2$ for all $i \in \{ 1, \dots, n\}$.
+We can write the first constraint as
+\begin{equation}
+	\sum_{i = 1}^n x_i \leq \frac{n}{2}
+\end{equation}
+
+If $n$ is even the optimal face will have all integer vertices as we are able to fill the knapsack
+up to the very limit.
+
+If $n$ is odd we will need to leave some space empty in the knapsack, which will trick the Branch
+and Bound algorithm into doing a lot of work.
+Indeed, the first LP relaxation will have some non-integer variable. We proceed by choosing one of
+those variables to bound: this will create two branches, one where we take for sure item $i$ and one
+where we discard item $i$, effectively becoming \say{frozen}.
+
+But even these new LP relaxations will have the same issue as we will find another variable which
+will become fractional. This branching will proceed until there are exactly $\floor{n/2}$ variables
+left, as, by then, the algorithm will have already frozen all the items needed to fill the knapsack.
+
+However, Branch and Bound will continue to traverse the whole tree, as it will always think that
+there is a better solution possible: all LP relaxations will have a better objective than any
+integer solution, meanwhile all the integer solutions have the same objective value so we cannot
+easily discard one branch for another.
+
+The Branch and Bound algorithm will end up solving $2^{\floor{\frac{n}{2}}+1}$ subproblems.
+
+\end{document}

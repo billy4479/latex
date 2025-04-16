@@ -119,19 +119,64 @@ up to the very limit.
 
 If $n$ is odd we will need to leave some space empty in the knapsack, which will trick the Branch
 and Bound algorithm into doing a lot of work.
-Indeed, the first LP relaxation will have some non-integer variable. We proceed by choosing one of
-those variables to bound: this will create two branches, one where we take for sure item $i$ and one
-where we discard item $i$, effectively becoming \say{frozen}.
 
-But even these new LP relaxations will have the same issue as we will find another variable which
-will become fractional. This branching will proceed until there are exactly $\floor{n/2}$ variables
-left, as, by then, the algorithm will have already frozen all the items needed to fill the knapsack.
+Indeed, every LP relaxation will have a better objective than any ILP, since it will try to fill the
+empty space with an \say{half} item.
+Since the variable are between 0 and 1, when we choose one to bound, we are effectively
+\say{freezing} it to be either 0 or 1.
 
-However, Branch and Bound will continue to traverse the whole tree, as it will always think that
-there is a better solution possible: all LP relaxations will have a better objective than any
-integer solution, meanwhile all the integer solutions have the same objective value so we cannot
-easily discard one branch for another.
+In this manner, the branching will halt only when we have
+$k = \floor{\frac{n}{2}} + 1 = \frac{n+1}{2}$ variables
+frozen \emph{with the same value}:
+\begin{itemize}
+	\item If we have frozen $k$ variables with value $1$, we will have that the problem is
+	      infeasible;
+	\item If we have frozen $k$ variables with value $0$, the LP relaxation will give an integer
+	      solution, which is kind of \say{forced} as we need to set to $1$ all the other variables
+	      which are not frozen.
+\end{itemize}
 
-The Branch and Bound algorithm will end up solving $2^{\floor{\frac{n}{2}}+1}$ subproblems.
+Note, however, that even when we reach a leaf of the tree, either because we have found an integer
+solution or we have an unfeasible problem, the algorithm will continue on other branches because the
+best integer solution will always be worse than the solution given by the LP relaxations.
+This, in turns, will ensure that the Branch and Bound algorithm always builds a full binary tree,
+where the leaves have $k$ variables fixed of the same type.
+
+We now want to count how many leaves our tree has. To do this we count how many combinations of with
+$k$ frozen variables of the same type we have.
+\begin{itemize}
+	\item First we count the number of combinations with $k$ zeroes: $\binom{n}{\frac{n+1}{2}}$;
+	\item Then we count the number of combinations where we froze $n - k = \frac{n-1}{2}$ ones:
+	      $\binom{n}{\frac{n+1}{2}}$.
+\end{itemize}
+Calling $\ell$ the total number of leaves we get
+\begin{equation}
+	\ell = \binom{n}{\frac{n+1}{2}} + \binom{n}{\frac{n-1}{2}}
+\end{equation}
+
+Then, since we have shown that we have a full binary tree, we can compute the number of nodes as
+$2 \ell -1$, giving the final result of
+\begin{equation}
+	2 \left(\binom{n}{\frac{n+1}{2}} + \binom{n}{\frac{n-1}{2}} \right) -1
+\end{equation}
+
+We can prove that the number of nodes $m$ in a full binary tree is $2 \ell + 1$ by induction on the
+number of leaves $\ell$
+\begin{description}[font=\normalfont\itshape]
+	\item[Base case] If $\ell = 1$ then there is just one node, therefore $m = 1$ and our formula
+	      holds: $2(1) -1 = 1 = m$.
+	\item[Inductive step] At $\ell + 1 > 1$ we have that the root node will have two children.
+	      This will allow us to split the tree in two smaller ones, so that the children of the root
+	      node are the new roots of the new trees. Each one of these new trees will have at least $1$
+	      leaf (since it is not possible to create a tree without leaves) and they are still going to
+	      be full binary trees.
+	      The number of leaves of the original tree $\ell + 1$ is the sum of the number of leaves of the
+	      subtrees $\ell_1 + \ell_2$. But these trees will necessarily have $\ell_1 < \ell + 1$, and
+	      $\ell_2 < \ell + 1$, therefore we can apply the inductive hypothesis to get
+	      \begin{equation}
+		      m = (2 \ell_1 - 1) + (2 \ell_2 - 1) + 1 = 2 (\ell_1 + \ell_2) - 1 = 2 (\ell + 1) -1
+	      \end{equation}
+	      as desired. We have used the fact that the total number of nodes is $m = m_1 + m_2 + 1$.
+\end{description}
 
 \end{document}

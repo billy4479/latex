@@ -319,23 +319,23 @@ We define the convex hull of a set $X$ as the intersection of all convex sets co
 Moreover we define a convex combination as $\sum \alpha_i x_i$ such that $x_i \in X$ and
 $\sum \alpha_i = 1$.
 
-The convex hull of $X$, i.e. $\mathrm{conv}(X)$ has the following properties:
+The convex hull of $X$, i.e. $\conv(X)$ has the following properties:
 \begin{itemize}
-	\item $\mathrm{conv}(X)$ is convex itself
-	\item $\mathrm{conv}(X)$ is the set of convex combinations of elements of $X$, that is
+	\item $\conv(X)$ is convex itself
+	\item $\conv(X)$ is the set of convex combinations of elements of $X$, that is
 	      \begin{equation}
-		      \mathrm{conv}(X) =
+		      \conv(X) =
 		      \left\{ \left.\sum_{i = 1}^k \alpha_i x_i \,\right|\, k \in \N^+ , x_i \in X, \sum_{i = 1}^k \alpha_i = 1 \right\}
 	      \end{equation}
-	\item $\mathrm{conv}(X) \subseteq X$
-	\item For $X$ finite $\mathrm{conv}(X)$ is compact (closed and bounded)
+	\item $\conv(X) \subseteq X$
+	\item For $X$ finite $\conv(X)$ is compact (closed and bounded)
 \end{itemize}
 
 \begin{theorem}{Caratheodory}{caratheodory}
 	Let $X \subseteq \R^n$ and $d = \dim X$.
 	Then
 	\begin{equation}
-		\mathrm{conv}(X) =
+		\conv(X) =
 		\left\{ \left.\sum_{i = 1}^{d+1} \alpha_i x_i \,\right|\, x_i \in X, \sum_{i = 1}^k \alpha_i = 1 \right\}
 	\end{equation}
 \end{theorem}
@@ -401,7 +401,7 @@ The convex hull of $X$, i.e. $\mathrm{conv}(X)$ has the following properties:
 
 	By contradiction assume that $a^Tx > a^Tc$.
 	We have $a^T(x-c)>0$ which means that the angle $d, c, x$ is sharp (acuto) and we can draw
-	a right-angle triangle we can form with $x' \in \mathrm{conv}(\{c, x\})$ and
+	a right-angle triangle we can form with $x' \in \conv(\{c, x\})$ and
 	$\norm{x'-d}<\norm{c-d}$, but this contradicts the fact that $c$ is minimal.
 \end{proof}
 
@@ -724,18 +724,18 @@ There are some notable types of polyhedra:
 
 \begin{theorem}{Minkowski-Weyl for polytopes}{minkowski-weyl-polytopes}
 	$P \subseteq \R^n$ is a polytope if and only if $\exists V \subseteq \R^n$ finite such that
-	$P = \mathrm{conv}(V)$ (convex hull of $V$).
+	$P = \conv(V)$ (convex hull of $V$).
 \end{theorem}
 
 \begin{theorem}{Minkowski-Weyl for polyhedra}{minkowski-weyl-polyhedra}
 	$P \subseteq \R^n$ is a polytope if and only if $\exists V, Y \subseteq \R^n$ finite such that
-	$P = \mathrm{conv}(V) + \mathrm{cone}(Y)$ (convex hull of $V$ plus
+	$P = \conv(V) + \mathrm{cone}(Y)$ (convex hull of $V$ plus
 	the convex cone of $Y$ (as in \cref{def:convex-cone}),
 	the sum is defined as $A + B = \{ x+ y \mid x \in A, y \in B$).
 \end{theorem}
 
 Therefore, as a consequence of these theorems we have two ways of writing each polytope:
-$P = \{x \mid A x \leq b\} = \mathrm{conv}(V)$.
+$P = \{x \mid A x \leq b\} = \conv(V)$.
 There formulation are equivalent from the meaning point of view, but they are very different from
 the computational point of view: we saw how cross polytopes have $2^n$ constraints but just $2n$
 vertices.
@@ -846,17 +846,17 @@ then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, l
 	where $\tilde A x \leq \tilde b$ is a subsystem of $A '' x \leq b ''$.
 	Then $\dim(F) \leq n - \rank\begin{pmatrix} A' \\ \tilde A \end{pmatrix}$.
 
-	If $\rank\begin{pmatrix} A' \\ \tilde A \end{pmatrix} = \mathrm{rank}(A')$ then
+	If $\rank\begin{pmatrix} A' \\ \tilde A \end{pmatrix} = \rank(A')$ then
 	either each inequality of $\tilde A x = \tilde b$ is a linear combination of $A' x = b'$
 	and $F = P$, otherwise we have
 	\begin{equation}
 		\rank \begin{pmatrix} A' & b' \\ \tilde A & \tilde b \end{pmatrix} >
-		\rank \begin{pmatrix} A' \\ \tilde A \end{pmatrix} = \mathrm{rank}(A')
+		\rank \begin{pmatrix} A' \\ \tilde A \end{pmatrix} = \rank(A')
 	\end{equation}
 	which implies $F = \varnothing$.
 
 	Otherwise we have that
-	$\rank \begin{pmatrix} A' \\ \tilde A \end{pmatrix} \geq \mathrm{rank}(A') + 1$
+	$\rank \begin{pmatrix} A' \\ \tilde A \end{pmatrix} \geq \rank(A') + 1$
 	and
 	\begin{equation}
 		\dim(F) \leq n - \rank(A') - 1 = \dim(P) -1 \qedhere
@@ -892,7 +892,7 @@ then there exists $z \in P$ such that $A''z < b$ (see lecture notes for proof, l
 
 	Then, by \cref{lemma:dim-faces}, we get
 	\begin{equation}
-		\dim(F) = n - \rank\begin{pmatrix} A'\\a^T \end{pmatrix} = n- \mathrm{rank}(A') + 1
+		\dim(F) = n - \rank\begin{pmatrix} A'\\a^T \end{pmatrix} = n- \rank(A') + 1
 	\end{equation}
 	since $a^Tx \leq b$ is not redundant.
 	Then $\dim(F) = \dim(P) -1$ which means $F$ is a facet.
@@ -998,32 +998,32 @@ We make the following observations about this construct:
 
 \begin{theorem}{}{}
 	Let $P$ be a polytope and $V$ its vertices.
-	Let $V_\text{ext} = \{ x \in P \mid x \notin \mathrm{conv}(P\setminus{x})\}$ be the set of its
+	Let $V_\text{ext} = \{ x \in P \mid x \notin \conv(P\setminus{x})\}$ be the set of its
 	extremal points.
-	Then $V_\text{ext} = V$ and $P = \mathrm{conv}(V)$.
+	Then $V_\text{ext} = V$ and $P = \conv(V)$.
 \end{theorem}
 
 \begin{proof}
-	Let $V_0$ be the smallest subset of $V$ such that $P = \mathrm{conv}(V_0)$,
+	Let $V_0$ be the smallest subset of $V$ such that $P = \conv(V_0)$,
 	by \cref{thm:minkowski-weyl-polytopes} such set exists.
 	We want to show that $V \subseteq V_\text{ext} \subseteq V_0 \subseteq V$.
 
 	Let $z \in V$, then $c^T z = t$ for some $c, t$ such that $c^T x < t$
 	for all $x \in P \setminus \{z\}$ by the definition of vertex.
-	Whenever $y \in \mathrm{conv}(P\setminus \{z\})$, then $c^T y < t$, therefore
-	$z \notin \mathrm{conv}(P\setminus \{z\})$ and $z \in V_\text{ext}$,
+	Whenever $y \in \conv(P\setminus \{z\})$, then $c^T y < t$, therefore
+	$z \notin \conv(P\setminus \{z\})$ and $z \in V_\text{ext}$,
 	which implies $V \subseteq V_\text{ext}$.
 
 	Now let $z \in P$ and $z \notin V_0$.
-	Then $z \in \mathrm{conv}(V_0) \subseteq \mathrm{conv}(P \setminus \{z\})$
+	Then $z \in \conv(V_0) \subseteq \conv(P \setminus \{z\})$
 	therefore $V_\text{ext}$ and by contrappositive $V_\text{ext} \subseteq V_0$.
 
 	To conclude the proof we need to show that $V_0 \subseteq V$. To do so we let $z \in V_0$
-	and $D = \mathrm{conv}(V_0 \setminus \{z\})$. By minimality of $V_0$, $V_0$ and $D$ are disjoint,
+	and $D = \conv(V_0 \setminus \{z\})$. By minimality of $V_0$, $V_0$ and $D$ are disjoint,
 	moreover they are closed, hence by \cref{thm:strong-conv-sep}, we can find an hyperplane defined
 	by $c \in \R^n$ and $r \in \R$ such that $c^T z > r$ and $c^T x < r$ for all $x \in D$.
 	Let $t = c^T z$, then $c^T x < r < t$ for all $x \in V_0$:
-	we have that $\forall x \in \mathrm{conv}(V_0) \setminus \{z\} =
+	we have that $\forall x \in \conv(V_0) \setminus \{z\} =
 		P \setminus \{z\} \text{ s.t. } c^T x < t$,	which means that $h = \{ x \mid c^T x = t \}$
 	is a supporting hyperplane of $P$ and $h \cap P = \{z\}$, therefore $z \in V$.
 \end{proof}
@@ -1061,7 +1061,7 @@ and still obtain a basic feasible solution.
 	If $\abs{K} = m$ then $K = B$ and we are done; if $\abs{K} < m$ then set $B = K$ and
 	iterate $m- \abs{K}$ times: for each iteration find a column of $A$ which is linearly independent
 	from $A_B$ and add its index to $B$.
-	At the end we are guaranteed to have $\abs{B} = m$ since $\mathrm{rank}(A) = m$.
+	At the end we are guaranteed to have $\abs{B} = m$ since $\rank(A) = m$.
 \end{proof}
 
 \begin{proposition}{Uniqueness of basic feasible basis}{uniqueness-basic-feasible-basis}
@@ -1873,7 +1873,7 @@ If $\vec c$ respects this constraint we are guaranteed to have an integer optima
 \begin{definition}{Matching polytope}{matching-polytope}
 	Consider a graph $G = (V, E)$, the matching polytope of $G$ is defined as
 	\begin{equation}
-		P_\text{matching} = \mathrm{conv}\{ \vec \chi^M \mid M \subseteq E\}
+		P_\text{matching} = \conv\{ \vec \chi^M \mid M \subseteq E\}
 	\end{equation}
 	where $M$ is a matching (\cref{def:matching})
 \end{definition}
@@ -1881,12 +1881,12 @@ If $\vec c$ respects this constraint we are guaranteed to have an integer optima
 \begin{lemma}{Matching polytope of bipartite graphs}{}
 	Let $G$ be a bipartite graph and $A$ its incidence matrix. Then
 	\begin{equation}
-		P_\text{matching} = \mathrm{conv}\{ \vec x \in R^\abs{E} \mid A \vec x \leq 1, \vec x \geq 0\}
+		P_\text{matching} = \conv\{ \vec x \in R^\abs{E} \mid A \vec x \leq 1, \vec x \geq 0\}
 	\end{equation}
 \end{lemma}
 
 \begin{proof}
-	Let $Q = \mathrm{conv}\{ \vec x \in R^\abs{E} \mid A \vec x \leq 1, \vec x \geq 0\}$.
+	Let $Q = \conv\{ \vec x \in R^\abs{E} \mid A \vec x \leq 1, \vec x \geq 0\}$.
 	Then $P_\text{matching} \subseteq Q$ because every matching satisfies the constraints, and
 	$Q \subseteq P_\text{matching}$ we have that $A$ is TU, therefore $Q$ is a convex hull of integer
 	vertices, which in turn means that for each integer vector $\vec x \in Q$ we have
@@ -1950,7 +1950,7 @@ We define the independent set polytope of $G$ as
 If $G$ is bipartite we can prove that the LP relaxation has an integer solution, since $A$ is TU,
 even if we replace the $\vec 1$s with other integer vectors. Its polytope is
 \begin{equation}
-	P_{i.s.} = \mathrm{conv}\{ \vec \chi^I \mid I \subseteq V \text{ is an independent set of } G\}
+	P_{i.s.} = \conv\{ \vec \chi^I \mid I \subseteq V \text{ is an independent set of } G\}
 \end{equation}
 
 If $G$ is not bipartite this problem is NP-hard, even finding an approximate solution.
@@ -2104,7 +2104,7 @@ This means that for all $y \in Y \setminus S$ the set $S \cup \{y\}$ is no longe
 \end{proof}
 
 \begin{definition}{Rank of a matroid}{rank-matroid}
-	If $(X, \mathcal I)$ is a matroid we define the $\mathrm{rank}(Y)$ of any $Y \subseteq X$ as the
+	If $(X, \mathcal I)$ is a matroid we define the $\rank(Y)$ of any $Y \subseteq X$ as the
 	cardinality of a basis of $Y$. Similarly, the rank of the matroid is the cardinality of a basis
 	of $X$.
 \end{definition}
@@ -2816,7 +2816,7 @@ in the case for Lipschitz functions.
 \subsubsection{Strong convexity}
 
 \begin{definition}{Strong convexity}{strong-convexity}
-	Let $f$ be convex and differential. Let $X \subseteq \mathrm{dom}(f)$ convex and a parameter
+	Let $f$ be convex and differential. Let $X \subseteq \dom(f)$ convex and a parameter
 	$\mu > 0$.
 	We say that $f$ is $\mu$-strongly convex over $X$ if
 	\begin{equation}
@@ -2849,5 +2849,187 @@ that the growth should be at least quadratic.
 	$x \notin B_R(x_0)$ since $f(x_0) < f(x)$.
 \end{proof}
 
+TODO: lec 27
+
+\subsubsection{Projection gradient descent}
+
+TODO: lec 27
+
+\subsubsection{Subgradient descent}
+
+Sometimes we will have to work with non-differentiable functions: even if we are not able to compute
+the gradient we can use a surrogate.
+
+\begin{definition}{Subgradient}{subgradient}
+	Let $f: \dom(f) \subseteq \R^d \to \R$. Then $g \in \R^d$ is a subgradient of $f$ at
+	$x \in \dom(f)$ if
+	\begin{equation}
+		f(y) \geq f(x) + g^T(y - x) \quad \forall g \in \dom(f)
+	\end{equation}
+
+	We denote $\partial f(x)$ the set of subgradients of $f$ at point $x$.
+\end{definition}
+
+\begin{remark}{}{}
+	If $f$ is differentiable at $x \in \dom(f)$, then
+	$\partial f(x) \subseteq \{ \grad f(x) \}$.
+\end{remark}
+
+\begin{remark}{}{}
+	\begin{equation}
+		f: \dom(f) \to \R \text{ is convex } \iff \dom(f) \text{ is convex and }
+		\partial f(x) \neq \varnothing \enspace \forall x \in \mathrm{int. dom}(f)
+	\end{equation}
+\end{remark}
+
+\begin{remark}{}{}
+	Let $f: \dom (f) \to \R^d$ is convex, $\dom(f)$ is open and $B \in \R_+$.
+	Then
+	\begin{equation}
+		\norm{g} \leq B \enspace \forall x \in \dom(f), g \in \partial f(x) \iff \abs{f(x) - f(y)} \leq
+		B \norm{x-y}
+	\end{equation}
+\end{remark}
+
+\begin{remark}{}{}
+	If $0 \in \partial f(x)$, then $x$ is a global minimizer of $f$.
+\end{remark}
+
+\begin{proof}
+	\begin{equation}
+		f(y) \geq f(x) + 0^T (y-x) = f(x)
+	\end{equation}
+\end{proof}
+
+\begin{remark}{}{}
+	If $f: \dom (f) \to \R^d$ is convex and $\dom(f) \subseteq \R^d$ is open, for $x \in \dom(f)$ we
+	have
+	\begin{equation}
+		\partial f(x) =
+		\conv \left( \{ \lim_{n \to \infty} \grad f(x_n) \mid \lim_{n \to \infty} x_n = x \} \right)
+	\end{equation}
+\end{remark}
+
+\begin{theorem}{Subgradient descent}{subgradient-descent}
+	Choose any $g_t \in \partial f(x_t)$ and define $x_{t+1} = x_t - \gamma_t g_t$. Then, in the same
+	setting as TODO: Lipschitz gradient descent, we obtain the same error bound.
+\end{theorem}
+
+\begin{proof}
+	This is exactly the same proof, we just substitute the gradient with the subgradient.
+\end{proof}
+
+We will not consider the case of smooth functions as this doesn't make sense in the case of non
+differentiable functions.
+
+\begin{definition}{Strong convexity for non-differentiable functions}{strong-convexity-for-non-differentiable-functions}
+	Let $f: \dom(f) \to \R$ convex and $\mu > 0$.
+	$f$ is $\mu$-strongly convex if
+	\begin{equation}
+		f(y) \geq f(x) + g^T(y- x) + \frac{\mu}{2} \norm{y - x}^2 \quad \forall x, y \in \dom (f),
+		\forall g \in \partial f(x)
+	\end{equation}
+\end{definition}
+
+\begin{theorem}{Subgradient descent for strong convex functions}{subgradient-descent-for-strong-convex-functions}
+	Let $f: \R^d \to \R$ be $\mu$-strongly convex and $x^*$ the global minimum of $f$.
+	Let $\gamma_t = \frac{2}{\mu(t+1)}$, then
+	\begin{equation}
+		f\left( \frac{2}{T(T+1)} \sum_{}^{} t x_t \right) - f(x^*) \leq \frac{2 B^2}{\mu(T+1)}
+	\end{equation}
+	where $B = \max_{t} \norm{g_t}$.
+\end{theorem}
+\begin{proof}
+	Start with vanilla analysis:
+	\begin{equation}
+		g_t^T(x_t - x^*) = \frac{\gamma_t}{t} \norm{g_t}^2 + \frac{1}{2 \gamma_t} ( \norm{x_t - x^*}^2 -
+		\norm{x_{t+1} - x^*}^2)
+	\end{equation}
+	and apply strong convexity. We get
+	\begin{equation}
+		f(x_t) - f(x^*) \leq \frac{\gamma_t}{2} B^2 + \frac{\gamma_t^{-1} - \mu}{2} \norm{x_t - x^*}^2 -
+		\frac{\gamma_t^{-1}}{2} \norm{x_{t+1} - x^*}^2
+	\end{equation}
+
+	We now want to sum over all the iterations and obtain a telescopic sum. However we have different
+	coefficients on the second part, therefore we have to do a little more work.
+
+	In order for the sum to telescope we need to impose
+	\begin{equation}
+		\frac{\gamma^{-1}_{t+1} - \mu}{2} = \frac{\gamma_t^{-1}}{2} \implies
+		\gamma_{t}^{-1} = \mu(t+1)
+	\end{equation}
+
+	We get
+	\begin{equation}
+		\sum_{t = 1}^{T} \left( f(x_t) - f(x^*) \right) \leq \frac{B^2}{2} \sum_{t = 1}^{T} \gamma_t +
+		\frac{\mu}{2} \sum_{t = 1}^{T} \left( t \norm{x_t - x^*}^2 - (t-1) \norm{x_{t+1} - x^*}^2
+		\right)
+	\end{equation}
+	then we divide by $T$ and obtain
+	\begin{equation}
+		\frac{1}{T} \sum_{t = 1}^{T} \left( f(x_t) - f(x^*) \right) \leq \frac{B^2}{2T} \sum_{t = 1}^{T}
+		\gamma_t + \frac{\mu}{2} \left( \norm{x_t - x^*}^2 \right)
+	\end{equation}
+	where the sum over $\gamma_t$ gives us
+	\begin{equation}
+		\frac{1}{\mu} \sum_{t = 1}^{T} \frac{1}{t + 1} = \frac{1}{\mu} O(\log T)
+	\end{equation}
+	from some analysis trickery.
+
+	We therefore get a bound of $\O\left(\frac{\log T}{T} \right)$.
+
+	But this is not the best bound, if instead we choose $\gamma$ as in the theorem statement we get
+	\begin{equation}
+		f(x_t) - f(x^*) \leq \frac{B^2}{\mu(t+1)} + \frac{\mu}{4} \left((t-1) \norm{x_t - x^*}^2 -
+		(t+1) \norm{x_{t+1} - x^*}^2\right)
+	\end{equation}
+	and to make the sum telescope we multiply both sides by $t$
+	\begin{equation}
+		t\left(f(x_t) - f(x^*)\right) \leq \frac{B^2 t}{\mu(t+1)} + \frac{\mu}{4}
+		\left(t(t-1) \norm{x_t - x^*}^2 - t(t+1) \norm{x_{t+1} - x^*}^2\right)
+	\end{equation}
+
+	We can now expand the sum to get
+	\begin{equation}
+		\sum_{t = 1}^{T} t\left(f(x_t) - f(x^*)\right) \leq \frac{T B^2}{\mu(t+1)} -
+		\frac{\mu}{4} \left( T(T+1) \norm{x_{t+1} - x^*}^2\right) \leq \frac{TB^2}{\mu}
+	\end{equation}
+
+	Then, by Jensen inequality, we get
+	\begin{equation}
+		f\left(\frac{2}{T(T+1)} \sum_{t = 1}^{T} x_t\right) - f(x^*) \leq
+		\frac{2}{T(T+1)} \sum_{t = 1}^{T} t(f( x_t) - f(x^*)) \leq \frac{2B^2}{\mu(T+1)}
+	\end{equation}
+
+	Note that $R$ does not appear in this result. This is because our function is strongly convex,
+	therefore the further away we start, the larger $B$ will be; hence $R$ is somehow implicit in $B$.
+\end{proof}
+
+\begin{theorem}{Nesterov}{nesterov}
+	For all $T \leq d-1$ and starting point $x_0$, $\exists f$ $B$-Lipschitz over $\R^d$ such that any
+	(sub)-gradient method has an error
+	\begin{equation}
+		f(x_T) - f(x^*) \geq \frac{RB}{2(1+\sqrt{T + 1})}
+	\end{equation}
+\end{theorem}
+
+
+\begin{theorem}{Nesterovski-Yudin}{nesterovski-yudin}
+	For all $T \leq d-1$ and starting point $x_0$, $\exists f$ $L$-smooth over $\R^d$ such that any
+	(sub)-gradient method has an error
+	\begin{equation}
+		f(x_T) - f(x^*) \geq \frac{3L \norm{x_0 - x^*}^2}{32 T^2}
+	\end{equation}
+\end{theorem}
+
+\subsubsection{Accelerated gradient descent}
+
+Start with $z_0 = y_0 = x_0$,
+take $y_{t+1} = x_t - \frac{1}{L} \grad f(x_t)$,
+$z_{t+1} = z_t - \frac{t+1}{2L} \grad f(x_t)$ and
+$x_{t+1} = \frac{t+1}{t+3} y_{t+1} + \frac{2}{t+3} z_{t+1}$.
+
+This algorithms has convergence rate of $\O\left(\frac{1}{T^2}\right)$ but nobody knows why.
 
 \end{document}

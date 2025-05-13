@@ -887,7 +887,7 @@ We notice the following properties of the area:
 	\begin{equation}
 		B^T B = A^T \begin{pmatrix} w_1^T \\ \dots \\ w_k^T \end{pmatrix}
 		\begin{pmatrix} w_1 & \dots & w_k \end{pmatrix} A
-		= A^T \mathds 1_{k \cross k} = A^T A
+		= A^T \mathds 1_{k \cross k} A = A^T A
 	\end{equation}
 	which means $\det(B^T B) = \det(A^T A) = \det(A)^2$.
 \end{proof}
@@ -986,8 +986,8 @@ We notice the following properties of the area:
 	\cref{prop:jacobian-sqrt-det}. However in this case we are lucky since we will be able to apply
 	\cref{rk:jacobian-on-differentials}:
 	\begin{align}
-		Df(s, \theta)[e_1] = \pdv{f}{s}{}(s, \theta)      & = (1, g'(s) \cos \theta, g'(s) \sin \theta) \\
-		Df(s, \theta)[e_2] = \pdv{f}{\theta}{}(s, \theta) & = (0, -g(s) \sin \theta, g(s) \cos \theta)
+		Df(s, \theta)[e_1] = \pdv{f}{s}()(s, \theta)      & = (1, g'(s) \cos \theta, g'(s) \sin \theta) \\
+		Df(s, \theta)[e_2] = \pdv{f}{\theta}()(s, \theta) & = (0, -g(s) \sin \theta, g(s) \cos \theta)
 	\end{align}
 	which are orthogonal.
 

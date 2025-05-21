@@ -1,0 +1,305 @@
+\documentclass[12pt]{extarticle}
+
+\title{Analysis 3 Theorems}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+
+% \renewcommand{\vec}[1]{\uvec{#1}}
+\numberwithin{equation}{subsection}
+
+\begin{document}
+
+\section{First partial}
+
+\subsection{Cauchy's integral theorem for rectangles}
+
+\begin{theorem}{Cauchy's integral theorem for rectangles}{cauchys-integral-theorem-for-rectangles}
+	Let $f: U \to \C$ be holomorphic and $R_0 = [a, b] \cross [c, d]$ is a compact rectangle s.t.
+	$R_0 \subseteq U$ and $\gamma$ is a loop parametrizing its boundary counterclockwise.
+	Then
+	\begin{equation}
+		\int_\gamma f(z) \dd z = 0
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	Assume by contradiction that
+	\begin{equation}
+		\eta = \int_{\partial R_0}^{} f(z) \dd z \neq 0
+	\end{equation}
+
+	We can split $R_0$ in four compact rectangles of the same size named $A, B, C, D$.
+	Then
+	\begin{equation}
+		\int_{\partial R_0} f(z) \dd z =
+		\int_{\partial A} f(z) \dd z +
+		\int_{\partial B} f(z) \dd z +
+		\int_{\partial C} f(z) \dd z
+		+\int_{\partial D} f(z) \dd z
+	\end{equation}
+	since the common sides of the adjacent rectangles are travelled in opposite directions.
+
+	At least one of the four integrals must be at least $\abs{\eta}/4$ in absolute value by the
+	pigeonhole principle. Call $R_1$ this rectangle.
+
+	We now repeat this process infinitely many times so that we obtain a sequence of rectangles
+	$R_0 \supseteq R_1 \supseteq R_2 \supseteq \dots$ such that
+	\begin{equation}
+		\abs{\int_{\partial R_k}^{} f(z) \dd z} \geq \frac{\abs{\eta}}{4^k}
+	\end{equation}
+
+	Let $z_k$ be the center of $R_k$, then the sequence $(z_k)$ over $\C$ is a Cauchy sequence (since
+	$\ell, m \geq k \implies z_\ell, z_m \in R_k$ and $\mathrm{diam}(R_k) \to 0$ as $k \to \infty$).
+	Since $\C$ is complete the sequence converges to some number $w \in \C$ so that $w \in R_k$ for
+	all $k$ (since $R_k$ is closed and $\ell \geq k \implies z_\ell \in R_k$).
+
+	Write the Taylor expansion of $f$ in $w$:
+	\begin{equation}
+		f(z) = f(w) + f'(w)(z-w) + \o(\abs{z-w})
+	\end{equation}
+	where, for a point $z \in R_k$, the error becomes $\o(2^{-k})$.
+	The perimeter of $R_k$ is $\abs{\partial R_k} = \O(2^{k})$.
+
+	We can easily show that
+	\begin{equation}
+		\int_{\partial R_k}^{} [f(w) + f'(w)(z-w)] \dd z = 0
+	\end{equation}
+	since we are integration over an affine function.
+
+	Then we can compute the integral of the error
+	\begin{equation}
+		\abs{\int [f(z) - f(w) - f'(w)(z-w)] \dd z} \leq \o(4^{-k})
+	\end{equation}
+	which is a contradiction.
+\end{proof}
+
+\subsection{Existence of holomorphic function on a disk}
+
+\begin{theorem}{Existence of holomorphic function on a disk}{existence-of-holomorphic-function-on-a-disk}
+	Any holomorphic function admits a local primitive on a disk (a simply connected open set).
+\end{theorem}
+
+\begin{proof}
+	Let $f: B_r(z_0) \to \C$ be holomorphic and let $z \in B_r(z_0)$.
+	Consider two ways to travel from $z$ to $z_0$: $\gamma$ moves first vertically then horizontally,
+	while $\delta$ does the opposite.
+	We want to show that
+	\begin{equation}
+		F(z) = \int_\gamma f(w) \dd w = \int_\delta f(w) \dd w
+	\end{equation}
+	is a primitive of $f$. The fact that the two integrals are equal comes from the fact that
+	$\gamma * -\delta$ is a rectangle, therefore \cref{thm:cauchys-integral-theorem-for-rectangles}
+	applies.
+
+	Now consider what happens for $F(z + \varepsilon)$ for $\varepsilon > 0$:
+	\begin{align}
+		F(z + \varepsilon) & = \int_\gamma f(w) \dd w + \int_{[z, z+\varepsilon]} f(w) \dd w \\
+		                   & = F(z) + \int_0^1 f(z + \varepsilon \tau) \varepsilon \dd \tau
+	\end{align}
+	for a parametrization with unit speed.
+	We can now compute the derivative
+	\begin{align}
+		\pdv{F(z)}{x} & = \lim_{\varepsilon \to 0} \frac{F(z + \varepsilon) - F(z)}{\varepsilon} \\
+		              & = \lim_{\varepsilon \to 0} \int_{0}^{1} f(z + \varepsilon \tau) \dd \tau \\
+		              & = \int_{0}^{1} \lim_{\varepsilon \to 0} f(z + \varepsilon \tau) \dd \tau \\
+		              & f(z)
+	\end{align}
+	where the exchange of limit and integral is justified since $f$ is uniformly continuous and the
+	convergence is uniform.
+
+	Similarly we can compute $\pdv{F(z)}{y} = i \cdot f(z)$ and now we can show that $F$ satisfies
+	Cauchy-Riemann equations, therefore $F$ is holomorphic with $F'(z) = f(z)$.
+\end{proof}
+
+\subsection{Liouville and fundamental theorem of algebra}
+
+\begin{theorem}{Liouville}{liouville}
+	If $f: \C \to \C$ is holomorphic and $\lim_{\abs{z} \to \infty} f(z) = 0$ then $f = 0$ everywhere.
+\end{theorem}
+
+\begin{proof}
+	Fix $z_0 \in \C$ and $\varepsilon > 0$. Find $R > 0$ such that
+	$\abs{z} > R \implies \abs{f(z)} < \varepsilon$ (this exists by hypothesis).
+
+	Take $r > R + \abs{z_0}$, so that
+	$z \in \partial B_r(z_0) \implies \abs{z} > R \implies \abs{f(z)} < \varepsilon$.
+	By Cauchy's integral formula we get
+	\begin{equation}
+		\abs{f(z_0)} \leq \abs{1}{2 \pi i} \int_{\partial B_r(z_0)} \frac{f(z)}{z - z_0} \abs{\dd z}
+		= \frac{1}{2\pi} \int_0^{2\pi} \abs{f(z_0 + r e^{i\theta})} \dd \theta
+		\leq \max_\theta \abs{f(z_0 + r e^{i\theta}} < \varepsilon
+	\end{equation}
+	Since $\varepsilon$ was arbitrary we conclude that $\abs{f(z_0)} = 0$.
+\end{proof}
+
+\begin{corollary}{Fundamental theorem of algebra}{fundamental-theorem-of-algebra}
+	Given a non-constant polynomial $p(z) \in \C[z]$, there exists $\alpha \in \C$ such that
+	$p(\alpha) = 0$.
+\end{corollary}
+
+\begin{proof}
+	By contradiction, assume the opposite.
+	Then $f(z) = \frac{1}{p(z)}$ is holomorphic and non-vanishing on the full complex plane.
+
+	Let $n > 0$ be the degree of the polynomial and $a_0, \dots, a_n$ the coefficients of
+	$z^0, \dots, z^n$ ($a_n \neq 0$).
+	We now note that
+	\begin{equation}
+		\lim_{\abs{z} \to \infty} \frac{1}{\abs{p(z)}} = \lim_{\abs{z} \to \infty}
+		\frac{1}{\abs{a_n}\abs{z^n} + \o(\abs{z^n})} = 0
+	\end{equation}
+	proving that $\abs{f(z)}$ is infinitesimal as $\abs{z} \to \infty$ contradicting
+	\cref{thm:liouville}.
+\end{proof}
+
+\subsection{Rigidity of holomorphic functions and order of vanishing}
+
+\begin{theorem}{Order of vanishing}{order-of-vanishing}
+	Let $f: U \to \C$ be holomorphic and $U$ connected and open.
+	Given $z_0 \in U$ either $f = 0$ or there exists an unique $k_0 \in \N$ such that
+	\begin{equation}
+		f(z) = (z-z_0)^{k_0} g(z)
+	\end{equation}
+	for $z$ close enough to $z_0$ where $g$ is holomorphic and $g(z_0) \neq 0$.
+	This $k_0$ is given by
+	\begin{equation}
+		k_0 = \min \left\{ k \in \N \mid \dv[k]{f}{z}()(z_0) \neq 0 \right\}
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	If $f \neq 0$ and there exists $k_0$ as in the statement, then $\alpha_i = 0$ for every $i < k_0$,
+	so $\frac{f(z)}{(z-z_0)^{k_0}} = \sum_{\ell = 0}^\infty \alpha_{k_0+\ell} (z - z_0)^\ell$ which is
+	holomorphic and no other value of $k_0$ would work.
+
+	Now we want to show that such $k_0$ exists when $f \neq 0$, i.e. we cannot have $\alpha_k = 0$ for
+	all $k \in \N$. We assume by contrapositive that there exists a non-empty set $V \subseteq U$ such
+	that
+	\begin{equation}
+		V = \left\{ z \in U \, \mid \, \dv[k]{f}{z}()(z) = 0 \enspace \forall k \in \N \right\}
+	\end{equation}
+
+	If we can show that both $V$ and $U \setminus V$ are open, since $V$ is non-empty and $U$ is
+	connected, we have that $U \setminus V = \varnothing \implies U = V \implies f = 0$ everywhere as
+	desired (take $k = 0$ in the definition of $V$).
+
+	$V$ is open since taking $z_0 \in V$ we can expand $f$ as a power series around $z_0$, but, by
+	definition of $V$, each coefficient $\beta_k = 0$, meaning $f = 0$ on $B_r(z_0) \subseteq U$ for
+	some $r > 0$ small enough.
+
+	$U \setminus V$ is open since taking $z_0 \in U \setminus V$ there exists $k \in N$ such that
+	$\dv[k]{f}{z} \neq 0$. Since the derivative is continuous, the same holds for all points
+	sufficiently close to $z_0$.
+\end{proof}
+
+\begin{theorem}{Rigidity of holomorphic functions}{rigidity-of-holomorphic-functions}
+	If $f_1, f_2: U \to \C$ are holomorphic functions defined on a connected open set $U$ such that
+	there exists a sequence $(z_n) \in U$ converging to $z \in U$ (with $z_i \neq z \ \forall i$)
+	where $f_1(z_i) = f_2(z_i)$ for all $i$, then $f_1 = f_2$ everywhere.
+\end{theorem}
+
+\begin{proof}
+	Let $f = f_1 - f_2$ we want to show that $f = 0$ everywhere.
+	Let $z_0$ be a zero of order $k_0$ for $f$ and assume $f \neq 0$, then we can write
+	\begin{equation}
+		f(z) = (z - z_0)^{k_0} g(z)
+	\end{equation}
+	for $z$ close enough to $z_0$.
+	Evaluating at $z_i$ we obtain that $0 = (z_i - z_0)^{k_0} g(z_i)$ for all $i$ large enough.
+	However $f(z_i)$ cannot be $0$ in the limit since $z_i \neq z_0$ but $g(z_i) \neq 0$ for all $i$
+	large enough since $g$ is continuous and $g(z_0) \neq 0$.
+	This is a contradiction.
+\end{proof}
+
+\section{Second partial}
+
+\subsection{Tangent space}
+
+\begin{theorem}{The tangent space is a linear subspace}{the-tangent-space-is-a-linear-subspace}
+	The tangent space $T_p M$ is a $k$-dimensional linear subspace of $\R^n$ for any $p \in M$.
+\end{theorem}
+
+\begin{proof}
+	By the definition of manifold we obtain a $C^1$ function $h: U \to \R^{n-k}$ so that $p \in U$,
+	$M \cap U = \{x \in U: h(x) = 0 \}$ and $Dh(p)$ has full rank, i.e. $\ker(Dh(p))$ has dimension
+	$k$.
+
+	Moreover, for any curve $\gamma: [0, \varepsilon] \to M$ (as in the definition of tangent space)
+	there holds $h \circ \gamma(t) = 0$ for all $t \in [0, \varepsilon]$ (up to shrinking
+	$\varepsilon$ so that $\Im(\gamma) \subseteq M \cap U$).
+	Then, by the chain rule, we have that $Dh(p)[\gamma'(0)] = 0$ (where we have used
+	$\gamma(0) = p$). This means that
+	\begin{equation}
+		T_p M \subseteq \ker(Dh(p))
+	\end{equation}
+
+	On the other hand, by another definition of manifold, we can obtain the $C^1$ map $\psi: V \to U$
+	with $\Im(\psi) = M \cup U$ and $V \subseteq \R^k, U \subseteq \R^n$ both open with $p \in U$ and
+	$D \psi(x_0)$ injective (where $\psi(x_0) = p$).
+	Let $\gamma_v: [0, \varepsilon] \to M$ be defined as
+	\begin{equation}
+		\gamma_v(t) = \psi(p + tv)
+	\end{equation}
+	with $v \in \R^k$ and $\varepsilon >0$ such that $[p, p + \varepsilon v] \subseteq V$.
+	Since $\gamma_v(0) = p$, $\gamma'(0) \in T_p M$. This allows us to use the chain rule and write
+	\begin{equation}
+		D\psi(p)[v] = \gamma'(0) = T_pM \implies \Im(D \psi(p)) \subseteq T_pM
+	\end{equation}
+
+	But now $T_pM$ is sandwiched between two $k$-dimensional linear subspaces, giving
+	\begin{equation}
+		\Im(D\psi(p)) = T_pM = \ker(Dh(p))
+	\end{equation}
+\end{proof}
+
+\subsection{Differential}
+
+\begin{theorem}{The differential is well defined and linear}{the-differential-is-well-defined-and-linear}
+	The differential between a smooth map between two manifolds is well-defined and linear.
+	Moreover, for any $p \in M$ and any local $C^1$ extension $\tilde f: U \to \R$ such that
+	$\tilde f \eval_{M \cap U} = f$ we have
+	\begin{equation}
+		Df(p)[v] = D \tilde f(p)[v]
+	\end{equation}
+	for any $v \in T_pM$.
+\end{theorem}
+
+\begin{proof}
+	We know from previous knowledge that $\tilde f$ always exists.
+
+	Letting $v \in T_pM$, use the definition of tangent space to get $\gamma: [0, \varepsilon] \to M$
+	of class $C^1$ so that $\gamma(0) = p$ and $\gamma'(0) = v$.
+	Then, by the chain rule,
+	\begin{equation}
+		(f\circ \gamma)'(0) = (\tilde f \gamma')(0) = D \tilde f(\gamma(0))[\gamma'(0)] = D \tilde
+		f(p)[v]
+	\end{equation}
+	for $\varepsilon$ small enough.
+	This proves $Df(p)$ is well defined.
+
+	Also, $Df(p)$ is linear since it is obtained by restricting the linear map $D \tilde f(p)$ to the
+	linear subspace $T_pM$.
+\end{proof}
+
+\subsection{Lagrange multipliers}
+
+\begin{theorem}{Lagrange multipliers principle}{lagrange-multipliers-principle}
+
+\end{theorem}
+\begin{proof}
+
+\end{proof}
+
+
+\begin{corollary}{Spectral theorem}{spectral-theorem}
+
+\end{corollary}
+\begin{proof}
+
+\end{proof}
+
+
+\end{document}

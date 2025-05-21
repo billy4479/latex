@@ -255,7 +255,7 @@
 	\end{equation}
 \end{proof}
 
-\subsection{Differential}
+\subsection{Maps between manifolds}
 
 \begin{theorem}{The differential is well defined and linear}{the-differential-is-well-defined-and-linear}
 	The differential between a smooth map between two manifolds is well-defined and linear.
@@ -287,18 +287,104 @@
 \subsection{Lagrange multipliers}
 
 \begin{theorem}{Lagrange multipliers principle}{lagrange-multipliers-principle}
-
+	If $x_0$ is a constrained minimum (or maximum) point from $f$ among points $x \in U$ subject to
+	the constraint $h_1(x) = \dots h_\ell(x) = 0$, then there exists $\mu_1, \dots, \mu_\ell \in \R$,
+	such that
+	\begin{equation}
+		\grad f(x_0) + \mu_1 \grad h_1 (x_0) + \dots + \mu_\ell \grad h_\ell(x_0) = 0
+	\end{equation}
+	provided that $\grad h_1, \dots, \grad h_\ell$ are linearly independent.
 \end{theorem}
-\begin{proof}
 
+\begin{proof}
+	Combine the $h_1, \dots, h_\ell$ into a single function $h: U \to \R^\ell$ so that its
+	differential at $x_0$ is an $\ell \cross n$ matrix of rank $\ell$.
+	Moreover, $Dh(x)$ is continuous in $x$, therefore we deduce that for all $x$ in a neighborhood of
+	$x_0$ $Dh(x)$ also has full rank (up to shrinking $U$).
+
+	We deduce that
+	\begin{equation}
+		M = \{ x \in U \mid h(x) = 0 \}
+	\end{equation}
+	is a manifold of dimension $n-\ell$ with tangent space
+	\begin{equation}
+		T_{x_0}M = \ker(Dh(x_0)) = \{ v : \grad h_i(x_0) \cdot v = 0 \enspace \forall i \in \{1, \dots,
+		\ell\}\}
+	\end{equation}
+	which means that $T_{x_0}M$ is the orthogonal complement of
+	$W = \mathrm{span} \{\grad{h_i}(x_0) \mid i \in \{1, \dots, \ell \} \}$.
+
+	Since $x_0$ is a critical point for $\hat f = f \eval_M$, we have that $D\hat f(x_0) = 0$, which
+	in turns means that
+	\begin{equation}
+		\grad f(x_0) \cdot v = Df(x_0)[v] = D\hat f(x_0)[v] = 0 \quad \forall v \in T_{x_0} M
+	\end{equation}
+	since $\hat f$ is a $C^1$ extension of $f$ on an open set $U$.
+	This means that $\grad f(x_0) \perp T_{x_0} M \implies \grad f(x_0) \in W$.
 \end{proof}
 
 
 \begin{corollary}{Spectral theorem}{spectral-theorem}
-
+	Let $f: \R^n \to \R^n$ be a linear map given by $f(x) = Ax$ for a symmetric matrix $A$.
+	Then, there exists an orthonormal basis $\{v_1, \dots, v_n \}$ of eigenvectors.
 \end{corollary}
 \begin{proof}
+	First we will prove that There always exist an eigenvector $w$ for a given symmetric matrix $A$.
 
+	To show this we want to find the minimum of the function $f(x) = x^T A x$ on the sphere $S^{n-1}$,
+	i.e. the zero level set of $h(x) = \abs{x}^2 - 1$.
+	Since $f$ is continuous and $S^{n-1}$ is compact a minimum point $w$ exists by Weierstrass.
+	Moreover, $\grad h(w) = 2w$ which is different from $0$ for all $w \in S^{n-1}$, therefore we can
+	apply Lagrange multipliers principle:
+	\begin{equation}
+		\grad f(w) + \mu \grad h(w) = 0
+	\end{equation}
+	Let us compute the differential using the definition: we fix $w$ and for any $v$ we have
+	\begin{align}
+		Df(w)[v] & = \lim_{\varepsilon \to 0} \frac{f(w + \varepsilon v) - f(w)}{\varepsilon}                                                 \\
+		         & = \lim_{\varepsilon \to 0} \frac{(w + \varepsilon v)^T A (w + \varepsilon v) - w^T A w}{\varepsilon}                       \\
+		         & = \lim_{\varepsilon \to 0} \frac{w^T A w + \varepsilon (w^T A v + v^T A w) + \varepsilon^2 v^T A v - w^T A w}{\varepsilon} \\
+		         & = w^T A v + v^T A w                                                                                                        \\
+		         & = 2 v^T A w
+	\end{align}
+	As this is valid for every $v \in \R^n$ we deduce that $\grad f(w) = 2Aw$.
+	We have obtained that
+	\begin{equation}
+		2Aw + 2 \mu w = 0
+	\end{equation}
+	which implies that $w \neq 0$ is an eigenvector of $A$ with eigenvalue $\gamma = -\mu$.
+
+	Now we can proceed by induction on $n$ to find an orthonormal basis of eigenvectors of $A$.
+	For $n = 1$ there is nothing to prove since $[\gamma]$ is already diagonalized.
+	Assuming the statement is true for $k < n$ we now prove it for $k = n$.
+	We have proven in the first part that an eigenvector $w_1$ exists (we can assume wlog that it is
+	normalized) and then we complete it to an orthonormal basis $\{ w_1, \dots, w_n \}$
+	with Grahm-Schmidt.
+	Let $P = \begin{pmatrix} w_1 & \dots & w_n \end{pmatrix}$ be the change of basis matrix so that
+	\begin{equation}
+		\tilde A = P^{-1} A P = \begin{pmatrix}
+			\lambda_1 & 0 \\
+			0         & B
+		\end{pmatrix}
+	\end{equation}
+	where $\lambda_1$ is the eigenvalue associated with $w_1$ and $B$ is an $(n-1)\cross (n-1)$
+	symmetric matrix (since the set of symmetric matrices is closed under orthogonal change of
+	basis).
+	But by inductive hypothesis we know that $\tilde B = Q^{-1} B Q$ is diagonal for some $Q$ made of
+	eigenvectors of $B$.
+	We have
+	\begin{equation}
+		R^{-1} A R = \begin{pmatrix}
+			\gamma & 0          \\
+			0      & Q^{-1} B Q
+		\end{pmatrix}
+		\qquad \text{with} \quad
+		R = P \begin{pmatrix}
+			1 & 0 \\
+			0 & Q
+		\end{pmatrix}
+	\end{equation}
+	is diagonal. Then the columns of $R$ are the desired basis.
 \end{proof}
 
 

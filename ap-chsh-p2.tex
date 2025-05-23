@@ -1,0 +1,176 @@
+\documentclass[12pt]{extarticle}
+
+\title{Advanced programming cheat sheet\\First partial}
+\author{Giacomo Ellero}
+\date{a.y. 2024/2025}
+
+\usepackage{preamble_base}
+\usepackage{preamble_math}
+\usepackage{preamble_code}
+
+\renewcommand{\vec}[1]{\bvec{#1}}
+\numberwithin{equation}{subsection}
+
+\begin{document}
+
+\oldfirstpage
+
+\section{Integer programming}
+
+\begin{definition}{Integer hull}{integer-hull}
+	Let $P$ be a polyhedron, then the integer hull of $P$ is denoted as $P_I$ and is the set of all
+	the integer vectors included in $P$.
+\end{definition}
+
+\subsection{Matroid}
+
+\begin{definition}{Matroid}{matroid}
+	Let $X$ be a finite set and $\mathcal I \subseteq \mathcal P(X)$ (a subset of the power set of
+	$X$). Then $(X, \mathcal I)$ is a matroid if and only if
+	\begin{enumerate}
+		\item $\varnothing \in \mathcal I$.
+		\item If $Y \in \mathcal I$ and $Z \subseteq Y$, then $Z \in \mathcal I$.
+		\item We can have at our choice one of the following equivalent properties
+		      \begin{itemize}
+			      \item If $Y, Z \in \mathcal I$ and $\abs{Y} < \abs{Z}$, then
+			            $\exists x \in Z \setminus Y$ and $Y \cup \{x\} \in \mathcal I$
+			      \item For all $Y \subseteq X$, every two bases of $Y$ have the same cardinality.
+			            ($S \subseteq Y$ is a basis if $y \in Y \setminus S \implies S \cup \{y\}$ is not
+			            an independent set)
+		      \end{itemize}
+	\end{enumerate}
+\end{definition}
+
+Some examples of matroids are:
+\begin{itemize}
+	\item A collection of subgraphs of $G$ which form a forest.
+	\item $X \subseteq \R^d$ finite and $\mathcal I$ is such that $Y \in \mathcal I \implies Y$
+	      linearly independent.
+	\item Given $X_1, \dots, X_m \subseteq X$ finite, a set $Y = \{y_1, \dots, y_n \} \in \mathcal I$
+	      if there exists $i_1, \dots, i_n$ distinct such that $y_j \in X_{i_j}$ for all
+	      $j \in \{1, \dots, n\}$.
+\end{itemize}
+
+On matroids, given $w: X \to \R$
+\begin{equation}
+	\argmax_{Y \in \mathcal I} \sum_{y \in Y}^{} w(y) = S
+\end{equation}
+where $S$ is a basis $X$ which was constructed in a greedy way.
+
+\subsection{Submodular functions}
+
+\begin{definition}{Submodular function}{submodular-function}
+	Let $X$ be finite and $f: \mathcal P(X) \to \R$, then $f$ is submodular if
+	$\forall A, B \subseteq X$ there holds
+	\begin{equation}
+		f(A) + f(B) \geq f(A \cup B) + f(A \cap B)
+	\end{equation}
+\end{definition}
+
+\subsection{Branch \& Bound}
+
+\begin{algorithm}[H]
+	\caption{Branch \& bound}
+	\label{alg:branch-and-bound}
+
+	\SetKwProg{Fn}{Function}{:}{}
+	\SetKwFunction{FBranchBound}{BranchAndBound}
+
+	\Fn{\FBranchBound{$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, \vec x \in \Z^n\}$,
+			$\tilde{\vec x}$}}{
+		$\vec x^* \gets \argmax\{ \vec c^T \vec x \mid A \vec x \leq \vec b\}$ using Simplex\;
+
+		\If{LP relaxation is infeasible \textbf{or}
+			$\vec c^T \vec x^* < \vec c^T \tilde{\vec x}$}{
+			\Return Nothing\;
+		}
+		\ElseIf{$\vec x^* \in \Z^n$}{
+			\Return $\vec x^*$\;
+		}
+
+		Choose $i \in \{1, \dots, n\}$ such that $x_i^* \notin \Z$\;
+		$\tilde{\vec x} \gets $ \FBranchBound(
+		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \leq \floor{x_i^*}, \vec x \in \Z^n\}$,
+		$\tilde{\vec x}$
+		) \;
+		$\tilde{\vec x} \gets $ \FBranchBound(
+		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \geq \floor{x_i^*}+1, \vec x \in \Z^n\}$,
+		$\tilde{\vec x}$
+		) \;
+
+		\Return $\tilde{\vec x}$\;
+	}
+\end{algorithm}
+
+Nice to know: a binary tree has $2n -1$ nodes (where $n$ is the number of leaves)
+
+\subsection{Graphs}
+
+\begin{definition}{Incidence matrix}{incidence-matrix}
+	Let $G$ be a graph, then $A \in \R^{\abs{V} \cross \abs{E}}$ is the incidence matrix of $G$ if
+	\begin{equation}
+		A_{v, e} = \begin{cases}
+			1 & \text{if } v \in e \\
+			0 & \text{otherwise}
+		\end{cases}
+	\end{equation}
+	when $G$ is undirected, while if $G$ is directed
+	\begin{equation}
+		A_{v, e} = \begin{cases}
+			+1 & \text{if $e$ leaves $v$} \\
+			-1 & \text{if $e$ enters $v$} \\
+			0  & \text{otherwise}
+		\end{cases}
+	\end{equation}
+\end{definition}
+
+
+\begin{definition}{Matching}{matching}
+	Consider an undirected graph $G = (V, E)$.
+	A \emph{matching} $M$ is a subset of $E$ so that
+	\begin{equation}
+		M = \{ e \mid e \in E, \forall e' \in M : e \neq e' \implies e \cap e' = \varnothing \}
+	\end{equation}
+	that is, a subset of the edges so that each vertex is present at most once.
+\end{definition}
+
+\begin{definition}{Vertex cover}{vertex-cover}
+	Let $G = (V, E)$ be a graph. A vertex cover is a set $S \subseteq V$ such that each edge has an
+	end in $S$. Formally
+	\begin{equation}
+		S = \{ v \in V \mid (u, v) \in E \implies (u \in S \lor v \in S) \}
+	\end{equation}
+\end{definition}
+
+\begin{definition}{Cover}{cover}
+	Given a graph $G = (V, E)$ a vertex cover is a set $W \subseteq V$ so that each edge in
+	$E$ has at least one of its vertices in $W$. Formally
+	\begin{equation}
+		W = \{ v \mid v \in V \land ((u, w) \in E \implies (u = v \lor w = v)) \}
+	\end{equation}
+\end{definition}
+
+\subsection{Combinatorial polytopes}
+
+\begin{definition}{Matching polytope}{matching-polytope}
+	Consider a graph $G = (V, E)$, the matching polytope of $G$ is defined as
+	\begin{equation}
+		P_\text{matching} = \conv\{ \vec \chi^M \mid M \subseteq E\}
+	\end{equation}
+	where $M$ is a matching (\cref{def:matching})
+\end{definition}
+
+\begin{definition}{Perfect matching polytope}{perfect-matching-polytope}
+	A matching polytope is perfect if all the matchings used are perfect, i.e. $\abs{M} = \abs{V}$ for
+	all $M$.
+\end{definition}
+
+\section{Convex optimization}
+
+\subsection{Types of convex functions}
+
+\subsection{Types of gradient decent}
+
+\subsection{Table}
+
+\end{document}

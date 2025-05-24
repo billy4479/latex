@@ -7,6 +7,7 @@
 \usepackage{preamble_base}
 \usepackage{preamble_math}
 \usepackage{preamble_code}
+\usepackage{makecell}
 
 \renewcommand{\vec}[1]{\bvec{#1}}
 \numberwithin{equation}{subsection}
@@ -35,8 +36,8 @@
 			      \item If $Y, Z \in \mathcal I$ and $\abs{Y} < \abs{Z}$, then
 			            $\exists x \in Z \setminus Y$ and $Y \cup \{x\} \in \mathcal I$
 			      \item For all $Y \subseteq X$, every two bases of $Y$ have the same cardinality.
-			            ($S \subseteq Y$ is a basis if $y \in Y \setminus S \implies S \cup \{y\}$ is not
-			            an independent set)
+			            ($S \subseteq Y$ is a basis if
+			            $y \in Y \setminus S \implies S \cup \{y\} \notin \mathcal I$)
 		      \end{itemize}
 	\end{enumerate}
 \end{definition}
@@ -169,8 +170,86 @@ Nice to know: a binary tree has $2n -1$ nodes (where $n$ is the number of leaves
 
 \subsection{Types of convex functions}
 
+\begin{definition}{Convex function}{convex-function}
+	$f$ is convex if $\mathrm{dom}(f)$ is convex and
+	\begin{equation}
+		f(\vec y) \geq f(\vec x) + \grad f(\vec x)^T (\vec y - \vec x)
+	\end{equation}
+\end{definition}
+
+For functions which are convex but are not differentiable we can define a subgradient, i.e. a
+function $g$ which takes the place of $\grad f$ in the definition.
+
+\begin{definition}{$L$-smooth function}{L-smooth-function}
+	$f$ is $L$-smooth if $f$ is convex and
+	\begin{equation}
+		f(\vec y) \leq f(\vec x) + \grad f(\vec x)^T (\vec y - \vec x)
+		+ \frac{L}{2} \norm{\vec x - \vec y}^2
+	\end{equation}
+	for some $L > 0$ constant.
+\end{definition}
+
+This means that the function grows at most in a quadratic way.
+
+\begin{definition}{$\mu$-strongly convex function}{mu-strongly-convex-function}
+	$f$ is $\mu$-strongly convex if $f$ is convex and
+	\begin{equation}
+		f(\vec y) \geq f(\vec x) + \grad f(\vec x)^T (\vec y - \vec x) + \frac{\mu}{2} \norm{\vec x - \vec y}^2
+	\end{equation}
+	for some $\mu > 0$ constant.
+\end{definition}
+This means that the functions grows at least in a quadratic way.
+
 \subsection{Types of gradient decent}
 
+\subsubsection{Vanilla}
+
+\begin{equation}
+	\vec x_{t+1} = \vec x_t - \gamma \grad f(\vec x_t)
+\end{equation}
+
+\subsubsection{Projected}
+
+\begin{equation}
+	\vec x_{t+1} = \argmin_{\vec x \in X}\norm{ \vec x - (\vec x_t - \gamma \grad f(\vec x_t)) }^2
+\end{equation}
+
+\subsubsection{Stochastic}
+
+Many times the loss function $f$ is the sum of many losses over the individual training datapoints.
+Instead of iterating through all of them we sample only $m$ of them and compute the gradient only on
+those.
+
+This saves compute and it is easier to parallelize.
+
 \subsection{Table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		                                                              &
+		\textbf{Lipschitz}                                            &
+		\textbf{Smooth}                                               &
+		\textbf{Strong}                                               &
+		\textbf{Smooth and Strong}
+		\\
+		\hline
+		\makecell{Vanilla, Stochastic,
+		\\ Subgradient, Projected}                   &
+		$ \displaystyle \O \left(\frac{1}{\varepsilon^2} \right) $    &
+		$ \displaystyle \O \left(\frac{1}{\varepsilon} \right)$       &
+		$ \displaystyle \O \left(\frac{1}{\varepsilon} \right)$       &
+		$ \displaystyle \O \left(\log\left(\frac{1}{\varepsilon} \right)\right)$
+		\\
+		\hline
+		Accelerated                                                   &
+		                                                              &
+		$ \displaystyle \O \left(\frac{1}{\sqrt \varepsilon} \right)$ &
+		                                                              &
+		\\
+		\hline
+	\end{tabular}
+\end{table}
 
 \end{document}

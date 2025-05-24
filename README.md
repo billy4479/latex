@@ -1,15 +1,8 @@
-# Stuff I write in Latex
+# University notes
 
 See [LICENSE](LICENSE).
 
-## How to read the file names
+You can get precompiled documents from the "Actions" tab.
 
-File names have the following scheme:
+For past semesters look into the releases.
 
-- Semester number
-- Partial exam number
-- Course name
-
-Example: "Computer Science 2, Semester 2, Partial 1" would become "S2_P1_CS2".
-
-For stuff done in past years see releases.

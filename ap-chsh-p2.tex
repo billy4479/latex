@@ -149,14 +149,6 @@ Nice to know: a binary tree has $2n -1$ nodes (where $n$ is the number of leaves
 	\end{equation}
 \end{definition}
 
-\begin{definition}{Cover}{cover}
-	Given a graph $G = (V, E)$ a vertex cover is a set $W \subseteq V$ so that each edge in
-	$E$ has at least one of its vertices in $W$. Formally
-	\begin{equation}
-		W = \{ v \mid v \in V \land ((u, w) \in E \implies (u = v \lor w = v)) \}
-	\end{equation}
-\end{definition}
-
 \begin{definition}{Independent set}{independent-set}
 	Let $G = (V, E)$ be a graph. $I \subseteq V$ is an independent set on $G$ if all vertices in $I$
 	have no edge connecting them. Formally
@@ -304,6 +296,8 @@ unprojected value to update gradient).
 \end{table}
 
 \subsubsection{Online}
+
+In learning rate we should have $T$ instead of $2^i$, however we might not know ahead of time.
 
 \begin{table}[H]
 	\centering

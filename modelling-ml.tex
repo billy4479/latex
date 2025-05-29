@@ -819,6 +819,75 @@ There are many choices of these functions but the most popular are
 
 \end{itemize}
 
+\subsection{Variational Autoencoders}
+
+This methods takes a sample $\vec x$, compresses it using a traditional MLP autoencoder, and
+interprets the encoded values as the parameters to a normal distribution.
+This means that the output of the encoder is a mean $\mu(\vec x)$ and a standard deviation
+$\sigma(\vec x)$.
+
+Then the decoder samples a $\vec z$ from a distribution which looks like
+\begin{equation}
+	\vec z \sim q_\gamma(\vec z \mid \vec x) = \mathrm N (\mu(\vec x), \sigma^2(\vec x) \mathds 1)
+\end{equation}
+Then it decodes it back to a vector of the same dimension of $\vec x$.
+
+This is particularly interesting as this kind of model can generate new kind of outputs similar to
+the inputs it has already received.
+
+\subsubsection{ELBO}
+
+We'd like to maximize the MLE but this is computationally too expensive.
+Instead we introduce a lower bound called ELBO.
+
+We derive it from the MLE by introducing an approximate distribution $q(\vec z \mid \vec x)$.
+\begin{align}
+	\log p(\vec x) & = \E_{q(\vec z \mid \vec x)}[\log p(\vec x)]                                                             \\
+	               & = \E_{q(\vec z \mid \vec x)}\left[ \log p(\vec x) - \log \frac{p(\vec x, \vec z)}{q(\vec z \mid \vec x)}
+	+ \log \frac{p(\vec x, \vec z)}{q(\vec z \mid \vec x)}\right]                                                             \\
+	               & = \E_{q(\vec z \mid \vec x)}\left[ \log \frac{p(\vec x)q(\vec z \mid \vec x)}{p(\vec x, \vec z)} \right]
+	+ \E_{q(\vec z \mid \vec x)}\left[\log \frac{p(\vec x, \vec z)}{q(\vec z \mid \vec x)}\right]                             \\
+	               & = \underbrace{\E_{q(\vec z \mid \vec x)}\left[ \log {p(\vec x \mid \vec z)} \right]}_{D_{KL}}
+	+ \underbrace{\E_{q(\vec z \mid \vec x)}\left[\log \frac{p(\vec x, \vec z)}{q(\vec z \mid \vec x)}\right]}_{\mathrm{ELBO}}
+\end{align}
+where we have obtained that the log likelihood is just the KL divergence
+$D_{KL}(q(\vec z \mid \vec x) \parallel p(\vec x \mid \vec x))$ plus this other term we will call
+ELBO:
+\begin{align}
+	\mathrm{ELBO}(\vec x; \theta, \gamma) & =
+	\E_{q_\gamma(\vec z \mid \vec x)}\left[\log \frac{p_\theta(\vec x, \vec z)}{q_\gamma(\vec z \mid \vec x)}\right] \\
+	                                      & =
+	\int q_\gamma(\vec z \mid \vec x) \log \frac{p_\theta(\vec x, \vec z)}{q_\gamma(\vec z \mid \vec x)} \dd \vec z
+\end{align}
+with $\gamma \in \Gamma$ and $\theta \in \Theta$ which are the parameters for the distributions $q$
+and $p$.
+
+Note that since $D_{KL} \geq 0$ always, we get
+$\log p(x) \geq \mathrm{ELBO}(\vec x; \theta, \gamma)$.
+
+\subsubsection{Optimization}
+
+Now we would proceed to run gradient descent on ELBO, updating first $\gamma$ and then $\theta$,
+but this is quite tricky because stochastic sampling complicates the process.
+Instead we use a reparametrization trick to remove the stochasticity from the backpropagation step.
+
+Consider $q_\gamma(\vec z \mid \vec x)$:
+\begin{equation}
+	q_\gamma(\vec z \mid \vec x) = \mathrm N(g(\vec x), h(\vec x)^2)
+\end{equation}
+for some mean $g$ and some standard deviation $h$.
+
+To get a $z$, instead of sampling from this distribution, we sample
+$\varepsilon \sim \mathrm{N}(0, \mathds 1)$ and define $z$ as
+\begin{equation}
+	\vec z = g(\vec x) + \varepsilon h(\vec x)
+\end{equation}
+where $\varepsilon$ represents the noise, which is sampled beforehand and therefore does not effect
+the computation of the gradient.
+In fact we get
+\begin{equation}
+	\pdv{\vec z}{\mu} = 1, \qquad \pdv{\vec z}{\sigma} = \varepsilon
+\end{equation}
 
 \section{Deep networks}
 

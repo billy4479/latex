@@ -1050,10 +1050,18 @@ To retrieve a memory from the network we initialize the network with some patter
 If it converges to some $\vec \xi^\mu$ we have successfully recognized the new pattern as
 $\vec \xi^\mu$. Formally we want
 \begin{equation}
-	m_\mu(t) = \frac{1}{N} \sum_{i = 1}^N S_i \xi^\mu_i \to 1
+	m_\mu(t) = \frac{1}{N} \sum_{i = 1}^N S_i \xi^\mu_i \xrightarrow{ N \to \infty } 1
 \end{equation}
-which will tell us that the new pattern is recognized as $\vec \xi^\mu$. If $m_\mu(t)$ stays around
-$0$ we know that the new pattern is not correlated to $\vec \xi^\mu$.
+i.e. the average overlap should stay around $1$ as we increase the number of neurons, this tells us
+that the new pattern is recognized as $\vec \xi^\mu$.
+On the other hand, if the new pattern is uncorrelated from $\vec \xi^\mu$ we can apply the central
+limit theorem to obtain that $m_\mu(t) \sim \mathrm{N}(0, N^{-1})$ and $m_\mu(t)$ converges to $0$.
+The variance of $m_\mu(t)$ is calculated as
+\begin{equation}
+	\var (m_\mu(t)) = \frac{1}{N^2} \sum_i^N \var(S_i(t)) = \frac{1}{N}
+\end{equation}
+
+
 
 What is the best way of connecting our neurons? We will use the result hypothesised by Hebb which
 tells us that we should weight the connection as the average of the patterns involved in the

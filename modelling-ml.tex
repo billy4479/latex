@@ -1054,6 +1054,10 @@ If the neurons are connected in such way that the input and hidden layer form tw
 bipartite graph we have a \emph{restricted Boltzmann machine} (RBM).
 We will focus on RBMs as the learning algorithm is much simpler and faster.
 
+We will call $\vec w$ the 2D matrix of weights, while $\vec h$ value taken by the hidden neurons,
+$\vec v$ are the values taken by the visible layer. Finally $\vec b$ is the bias of the hidden
+neurons and $\vec c$ is the bias of the visible neurons.
+
 \subsection{Updating}
 
 In an RBM each neuron is updated as follows:
@@ -1083,6 +1087,20 @@ In an RBM each neuron is updated as follows:
 	      which is given by the weighted sum of the activation of the neurons (the first term
 	      represents the connection between the two layers and the second one the bias of each
 	      neuron).
+
+	\item Then we proceed by updating the hidden units:
+	      \begin{equation}
+		      P(\vec h_j = 1) = \sigma \left( \sum_k \vec w_{jk} \vec x_k + \vec b_j \right)
+	      \end{equation}
+	      and then the visible units
+	      \begin{equation}
+		      P(\vec x_k = 1) = \sigma \left( \sum_j \vec w_{kj} \vec h_j + \vec c_j \right)
+	      \end{equation}
+	      where $\sigma$ is the sigmoid function
+	      \begin{equation}
+		      \sigma(x) = \frac{1}{1 + e^{-x}}
+	      \end{equation}
+
 \end{itemize}
 
 \subsection{Training}
@@ -1092,17 +1110,41 @@ We train this network with the goal to maximize the log-likelihood of the data, 
 	C = \frac{1}{M} \sum_{\mu = 1}^M \log P(x^\mu)
 \end{equation}
 
-To do this we use gradient descent (how original!), therefore we need to compute the derivatives
+\subsubsection{Gradient descent}
+
+Of course we can use GD, therefore we need to compute the derivatives
 w.r.t. the parameters $\theta = (\vec w, \vec b)$.
 \begin{equation}
 	\pdv{C}{\theta} = \frac{1}{M} \sum^M_{\mu = 1}
-	\E\left[ \pdv{E(x^\mu, h)}{\theta} \right] - \E\left[ \pdv{E(x, h)}{\theta} \right]
+	\E\left[ \pdv{E(\vec x^\mu, \vec h)}{\theta} \right] - \E\left[ \pdv{E(\vec x, \vec h)}{\theta} \right]
+	\label{eq:rbm-gd}
 \end{equation}
 where we are taking the mean over $S$ using the Boltzmann distribution.
 
-In practice, it is impossible to average over all neurons, therefore we use techniques like
-mini-batch (cf. \cref{sec:mini-batch}) or contrastive divergence $k$ algorithm (??).
+Then we update the parameters as follows
+\begin{align}
+	\Delta \vec w_{jk} & = \eta
+	\left( \frac{1}{M} \sum_{\mu}^{} \E_h[\vec h_j \vec x_k^\mu] - \E_{x, h}[\vec h_j \vec x_k] \right) \\
+	\Delta \vec b_{j}  & = \eta
+	\left( \frac{1}{M} \sum_{\mu}^{} \E_h[\vec h_j] - \E_{h}[\vec h_j] \right)                          \\
+	\Delta \vec c_{k}  & = \eta
+	\left( \frac{1}{M} \sum_{\mu}^{} \vec x_k - \E_{x}[\vec x_k] \right)
+\end{align}
+where $\eta$ is the learning rate.
 
+However computing the average over all possible values of $\vec x$ and $\vec h$ is impractical.
+We often choose a mini-batch approach instead or a different technique all together.
+
+\subsubsection{Contrastive divergence}
+
+To avoid the computational cost we replace the negative term in \cref{eq:rbm-gd} with a single point
+estimate $\tilde {\vec x}, \tilde {\vec h}$.
+
+We perform $k$ steps of Gibbs sampling: we start with a training example $\vec x^{(0)}$, then we
+sample a hidden state $\vec{h}^{(0)}$ from \(P(\vec{h}|\vec{v}^{(0)})\). We then proceed by
+reconstructing a visible state \(\vec{x}^{(1)}\) from \(\vec{h}^{(0)}\) by sampling from
+\(P(\vec{v}|\vec{h}^{(0)})\), then we sample a new hidden state \(\vec{h}^{(1)}\) from it and so on,
+until we reach $k$.
 
 \subsection{In practice}
 

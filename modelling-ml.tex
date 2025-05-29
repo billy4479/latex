@@ -999,6 +999,42 @@ Now that we have an formula which works we can apply gradient descent: we start 
 value for $\vec a^{(\ell)}$; then we compute the gradient as shown starting from the last layer
 (hence the name backpropagation) and perform gradient descent to update the weights.
 
+\subsection{Soft-max}
+
+Assume now no longer have a binary classification problem but we want to distinguish between $K$
+classes.
+
+We train a network with $K$ output neurons $z_k$, then, we apply the soft-max function to each of
+them, giving us the probability that the sample belongs to a certain class:
+\begin{equation}
+	P(y = \ell \mid \vec x) = a_\ell = \frac {e^{z_\ell}}{\sum_{k = 1}^{K} e^{z_k}}
+\end{equation}
+
+Note that the likelihood for a one-hot encoded target vector $\vec y$ is
+\begin{equation}
+	\prod_{k = 1}^K a^{y_k}_k = a_\ell
+\end{equation}
+where $\ell$ is the true class.
+
+We can also define the \emph{cross entropy loss}
+\begin{equation}
+	L = - \sum_{k = 1}^{K} y_k \log (a_k)
+\end{equation}
+note that when $a_k$ correctly classifies every input the loss is exactly zero.
+
+We now want to integrate this into the backpropagation algorithm. To do so we will need to compute
+$\pdv{L}{w_kj}$, however we start by looking at $\pdv{L}{z_k}$.
+
+\begin{align}
+	\pdv{L}{z_k} & = \sum_{i = 1}^{K} \pdv{L}{a_i} \pdv{a_i}{z_k}                                                \\
+	             & = \sum_{i = 1}^{K} \left( - \frac{y_i}{a_i} \right) \left( a_i (\delta_{i = k} - a_k) \right) \\
+	             & = - \sum_{i = 1}^{K} y_i (\delta_{i = k} - a_k)                                               \\
+	             & = - y_k + a_k \sum_{i = 1}^{K} y_i                                                            \\
+	             & = a_k - y_k
+\end{align}
+where $\delta_{i = k}$ is the delta function and the last simplification is due to the fact that
+$\vec y$ is one-hot encoded.
+
 \section{Hopfield model}
 
 We now tackle to problem of \say{memorizing} certain patterns so that similar patterns will be able

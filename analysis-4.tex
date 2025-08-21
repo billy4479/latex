@@ -1397,4 +1397,49 @@ $\partial(\partial M) = \varnothing$.
 
 TODO: last 5 minutes missing, lec 17?
 
+\section{Lagrange multipliers}
+
+Consider $f: U \to \R$ of class $C^1$ and let $p$ be a maximum or minimum point of $f$. We know that
+$\grad f(p) = 0$.
+In a constraint scenario we have a similar theorem:
+
+\begin{theorem}{Lagrange multipliers}{lagrange-multipliers}
+	Consider $f: U \to \R$ and look for $S \subseteq U$, defined
+	as $S = \{ x \in U \mid h_1(x) = 0, \dots, h_\ell(x) = 0 \}$ where each $h_i : U \to \R$ of class
+	$C^1$. Assume that $p$ is a constrained maximum point of $f$, i.e. $p \in S$ and
+	$q \in S \implies f(q) \leq f(p)$.
+	Then, if $\grad h_1(p), \dots \grad h_\ell(p)$ are linearly independent,
+	$\exists \lambda_1, \dots \lambda_\ell$ s.t.
+	\begin{equation}
+		\grad f(p) + \sum_{i = 1}^{\ell} \lambda_i \grad h_i(p) = 0
+	\end{equation}
+\end{theorem}
+
+In practice we will have a system of $(n+\ell)$ equations in $(n+\ell)$ unknown real numbers,
+$p_1,\dots, p_n$ and $\lambda_1, \dots, \lambda_\ell$.
+\begin{equation}
+	\begin{cases}
+		\left.
+		\begin{array}{c}
+			\displaystyle
+			\pdv{f}{x_1} () (p_1, \dots, p_n) + \sum_{\ell}^{i = 1} \lambda_i \pdv{h_i}{x_i} (p_1, \dots,
+			p_n) = 0 \\
+			\vdots
+		\end{array}
+		\right\} n \text{ equations} \\
+		\left.
+		\begin{array}{c}
+			\displaystyle
+			h_1(p_1, \dots p_n) = 0 \\
+			\vdots
+		\end{array}
+		\right\} \ell \text{ equations}
+	\end{cases}
+\end{equation}
+
+\begin{proof}
+	TODO: there is a sketch here
+\end{proof}
+
+
 \end{document}

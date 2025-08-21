@@ -2290,11 +2290,11 @@ we can just modify the existing tableau and save computations.
 		Choose $i \in \{1, \dots, n\}$ such that $x_i^* \notin \Z$\;
 		$\tilde{\vec x} \gets $ \FBranchBound(
 		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \leq \floor{x_i^*}, \vec x \in \Z^n\}$,
-    $\tilde{\vec x}$
+		$\tilde{\vec x}$
 		) \;
 		$\tilde{\vec x} \gets $ \FBranchBound(
 		$\max\{ \vec c^T \vec x \mid A \vec x \leq \vec b, x_i \geq \floor{x_i^*}+1, \vec x \in \Z^n\}$,
-    $\tilde{\vec x}$
+		$\tilde{\vec x}$
 		) \;
 
 		\Return $\tilde{\vec x}$\;
@@ -3031,5 +3031,55 @@ $z_{t+1} = z_t - \frac{t+1}{2L} \grad f(x_t)$ and
 $x_{t+1} = \frac{t+1}{t+3} y_{t+1} + \frac{2}{t+3} z_{t+1}$.
 
 This algorithms has convergence rate of $\O\left(\frac{1}{T^2}\right)$ but nobody knows why.
+
+\subsubsection{Stochastic gradient descent}
+
+While training neural networks we want to minimize some kind of loss function
+\begin{equation}
+	L(\vec w) = \sum_{x \in X} \ell(\vec w, x)
+\end{equation}
+but in order to compute its gradient we will have to compute the gradient of all the points in the
+dataset, which, depending on the size of the dataset, could be unfeasible.
+
+In general, assume we have
+\begin{equation}
+	f(x) = \frac{1}{n} \sum_{i = 1}^{n} f_i(x)
+\end{equation}
+and stochastic gradient descent comes to our help. We sample $i \in \{ 1, \dots, n\}$ uniformly
+at random and let $x_{t+1} = x_t - \gamma_t \grad f_i(x_t)$.
+
+We let $g_t = \grad f_i(x_t)$, which will be the gradient used at iteration $t$.
+We note that $g_t$ is an unbiased estimator of $\grad f(x_t)$ given $x_t$:
+\begin{equation}
+	\E[g_t] = \sum_{i = 1}^{n} \frac{1}{n} \grad f_i (x_t) = \grad f(x_t)
+\end{equation}
+
+In particular, we'd like to compute $\E[g_t^T (x_t - x^*)]$. Conditioning on $x_t = x$ we get that
+\begin{equation}
+	\E[g_t^T (x_t - x^*) \mid x_t = x] = \E[g_t \mid x_t = x]^T (x - x^*) = \grad f(x)^T(x - x^*)
+\end{equation}
+We now want to remove the conditioning on $x_t = x$. Since $X$ is finite, $x_t = x$ can only occur a
+finite amount of times, therefore
+\begin{align}
+	\E(g_t \mid x_t = x) & = \sum_{x \in X}  \E[g_t^T (x_t - x^*) \mid x_t = x]  P(x_t = x) \\
+	                     & = \sum_{x \in X} \grad f(x)^T(x - x^*)  P(x_t = x)               \\
+	                     & = \E[\grad f(x_t)^T(x_t-x^*)]
+                       & \geq \E[f(x_t) - f(x^*)]
+\end{align}
+by convexity of $f$.
+
+\begin{theorem}{Stochastic gradient descent}{stochastic-gradient-descent}
+  Let $f: \R^d \to \R$ be a convex differentiable function and $x^*$ one of its global minimums.
+  Let $\norm{x_0 - x^*} \leq R$ and $\E[\norm{g_t}^2] \leq B^2$.
+  With learning rate $\gamma = \frac{R}{B \sqrt{T}}$ we have
+  \begin{equation}
+    \frac{1}{T} \sum_{t = 0}^{T - 1} \E[f(x_t)] - f(x^*) \leq \frac{RB}{\sqrt{T}}
+  \end{equation}
+\end{theorem}
+\begin{proof}
+  TODO: basically vanilla analysis, maybe nice exercise?
+\end{proof}
+
+
 
 \end{document}

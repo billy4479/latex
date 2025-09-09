@@ -96,7 +96,11 @@
             with pkgs;
             [
               mupdf-headless
+
               typstyle
+              tinymist
+
+              nixd
             ]
             ++ map (x: x.watchScript) typixDerivations;
         };

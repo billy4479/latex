@@ -1,8 +1,0 @@
-compiler: lualatex
-output-folder: build
-aux-dir: build/aux
-shell-escape: true
-additional-flags: []
-include-files:
-    - '*.tex'
-parallel: 0

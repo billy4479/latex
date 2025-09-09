@@ -18,29 +18,6 @@
         "type": "github"
       }
     },
-    "latex-build": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1736592717,
-        "narHash": "sha256-32v3l4QRBp6OjNZOmJVv4l456R5LyBBecJNrA6VCYR4=",
-        "owner": "billy4479",
-        "repo": "latex-build",
-        "rev": "9db8968a170712da5d4c8385ae1ab850bd70a152",
-        "type": "github"
-      },
-      "original": {
-        "owner": "billy4479",
-        "repo": "latex-build",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1734119587,
@@ -59,8 +36,8 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "latex-build": "latex-build",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "typix": "typix"
       }
     },
     "systems": {
@@ -75,6 +52,26 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "typix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1757234666,
+        "narHash": "sha256-yOvQn99hMmpHhQzW5kvak6MK+xGQ+z3YDOYz/JpjIho=",
+        "owner": "loqusion",
+        "repo": "typix",
+        "rev": "44573c222b828d448166d1b2cbf27a783f6ea32b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "loqusion",
+        "repo": "typix",
         "type": "github"
       }
     }

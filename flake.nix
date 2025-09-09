@@ -50,15 +50,14 @@
 
           unstable_typstPackages = [
             {
-              name = "cetz";
-              version = "0.4.2";
-              hash = "sha256-qBIEHqtiMSG/WoXHPC/rQ9VkestSvVNlUwTmAMX1wAs=";
+              name = "headcount";
+              version = "0.1.0";
+              hash = "sha256-60Mf/TKEOgsd+kpvV151L4Au1E4tO0FMgQLu3JY18BA=";
             }
-            # Required by cetz
             {
-              name = "oxifmt";
-              version = "1.0.0";
-              hash = "sha256-edTDK5F2xFYWypGpR0dWxwM7IiBd8hKGQ0KArkbpHvI=";
+              name = "great-theorems";
+              version = "0.1.2";
+              hash = "sha256-AsEQ4VpiYaOchBgQSnv5DayAOwCtAZp2UWzkjwN6AvU=";
             }
           ];
         };

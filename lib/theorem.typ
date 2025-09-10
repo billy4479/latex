@@ -18,6 +18,7 @@
     inset: (
       y: 8pt,
       left: 3pt + 8pt,
+      right: 8pt,
     ),
   )
 }

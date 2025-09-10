@@ -179,7 +179,7 @@ Define the probability of from state $i$ to return to state $i$ as
 $
   f_i & = P(X_t = i "for some" t>=1 | X_0 = i) \
       & = P(union.big_(t >= 1) {X_t = i} | X_0 = i)
-$
+$<eq:def-fi>
 A state $i in cal(X)$ is *recurrent* if $f_i = 1$ and *transient* if $f_i < 1$.
 
 In @ex:gamblers-ruin we have that state $0$ and state $N$ are recurrent, while all the others
@@ -200,4 +200,70 @@ $
   T_k = S_k - S_(k-1)
 $
 
-TODO: start from lemma 2, page 13
+#lemma()[
+  Let $k >= 1$. Conditional on $S_(k-1) < infinity$, the random variable $T_k$ is independent of
+  $(X_0, ..., X_(S_(k-1)))$ and it is equal in distribution to $T_1$.
+]<lemma:t-indep>
+#proof[ Skip. Intuitively it's because of the time-homogeneity of Markov chains.]
+
+This means that basically $T_1$ are iid random variables.
+
+Let $V_i$ denote the number of visits to $i$:
+$
+  V_i = sum_(t=0)^infinity bb(1)(X_t = i)
+$
+so that $V_i$ is a random variable with values in $NN union {oo}$.
+
+#proposition()[
+  For each $i in cal(X)$, we have
+  $
+    P(V_i > r | X_0 = i) = f_i^r wide r >= 0
+  $
+  where $f_i$ is defined as @eq:def-fi.
+]<prop:prob-vi>
+#proof[
+  Follows by induction from @lemma:t-indep.
+]
+
+This means that $V_i = oo$ almost surely if $i$ is recurrent and $V_i tilde "Geom"(1-f_i)$ if $i$ is
+transient (recall the
+#link("https://en.wikipedia.org/wiki/Geometric_distribution")[geometric distribution]).
+
+#proposition[
+  A state $i$ is recurrent if and only if
+  $
+    sum^oo_(t=0) P^t_(i i) = oo
+  $
+  and transient if and only if
+  $
+    sum^oo_(t=0) P^t_(i i) < oo
+  $
+]<prop:sum-pt-recurrent>
+#proof[
+  We have that
+  $
+    EE[V_i | X_0 = i] = sum_(t=0)^oo EE[bb(1)(X_t = i) | X_0 = i] = sum_(t=0)^oo P^t_(i i)
+  $
+  where we have used the definition of $V_i$ and the definition of expectation.
+  Then $EE[V_i | X_0 = i] = oo$ if and only if $i$ is recurrent, by @prop:prob-vi.
+]
+
+#proposition[
+  If $i$ and $j$ communicate either they are both transient or both recurrent.
+]
+#proof[
+  Assume $i$ is recurrent. By @prop:sum-pt-recurrent we have that $sum^oo_(t=0) P^t_(i i) = oo$.
+  Now, since $i$ and $j$ communicate, there exists some $ell, r > 0$ such that $P^ell_(i j) > 0$ and
+  $P^r_(i j)$. Thus
+  $
+    P_(j j)^(ell + t + r) >= P_(j i)^ell P^t_(i i) P^r_(i j) wide t >= 0
+  $
+  and
+  $
+    sum_(n = 0)^oo P^n_(j j) >= sum_(t = 0)^oo P_(j j)^(ell + t + r)
+    >= P_(j i)^ell P^r_(i j) sum_(n = 0)^oo P^t_(i i) = oo
+  $
+  meaning that $j$ is also recurrent.
+]
+
+

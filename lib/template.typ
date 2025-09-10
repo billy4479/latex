@@ -1,16 +1,37 @@
 #let template(title: none, author: none, date: "today", doc) = {
-  import "@preview/headcount:0.1.0": *
-
   set page(paper: "a4", numbering: "1 of 1", margin: (x: 1.5cm, y: 1.5cm))
   set text(font: "Ubuntu", size: 12pt)
   set par(justify: true)
 
+  let linkColor = aqua.darken(20%).saturate(40%)
+  show ref: it => underline(text(linkColor, it))
+  show link: it => underline(text(linkColor, it))
 
   set heading(numbering: "1.")
-  set math.equation(
-    numbering: dependent-numbering("(Eq 1.1)", levels: 2),
-    // number-align: start + horizon,
-  )
+
+  // start - https://sitandr.github.io/typst-examples-book/book/snippets/math/numbering.html
+  /// original author: laurmaedje
+
+  // reset counter at each chapter
+  // if you want to change the number of displayed
+  // section numbers, change the level there
+  show heading.where(level: 2): it => {
+    counter(math.equation).update(0)
+    it
+  }
+
+  set math.equation(numbering: n => {
+    // numbering("(1.1)", counter(heading).get().first(), n)
+    // if you want change the number of number of displayed
+    // section numbers, modify it this way:
+    let count = counter(heading).get()
+    let h1 = count.first()
+    let h2 = count.at(1, default: 0)
+    numbering("(1.1.1)", h1, h2, n)
+  })
+
+  // end
+
 
   align(center)[
     #text(17pt)[ * #title * ]

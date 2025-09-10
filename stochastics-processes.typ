@@ -1,6 +1,5 @@
 #import "lib/template.typ": template
 #import "lib/theorem.typ": *
-
 #show: template.with(
   title: "Mathematical Modelling for Finance",
   author: "Giacomo Ellero",
@@ -47,7 +46,7 @@ $cal(X)$.
   Each $X_t$ is the "trajectory" that the money that the gambler owns takes.
 ]
 
-== Discrete-time Markov chains
+= Discrete-time Markov chains
 
 This is a way to model discrete-time stochastic processes with $n$ random variables.
 First we need to specify the law (i.e. the joint distribution)
@@ -97,8 +96,108 @@ Going back to @ex:gamblers-ruin we see that it can be modelled using a Markov ch
 probability of the gambler's money at the next state $t + 1$ to be $x_(t+1)$ is
 $
   cases(
-    p & "if" x_{t+1} = x_t + 1,
-    1-p & "if" x_{t+1} = x_t - 1,
-    0 & "otherwise",
+    p & " if" x_{t+1} = x_t + 1,
+    1-p & " if" x_{t+1} = x_t - 1,
+    0 & " otherwise",
   )
 $
+
+=== Chapman-Kolmogorov equations
+
+We define the *transitional probability* $P_(i j)$, which is the probability of going to state $j$
+from state $i$:
+$
+  P_(i j) = P(X_(t+1) = j | X_t = i) wide i, j in cal(X)
+$
+Note tat we can construct a *transition matrix* $P$ of all the combinations of transitional
+probabilities in $cal(X)$.
+
+A common problem is to compute the probability that a certain event $j$ occurs after $n$ steps:
+$
+  P^n_(i j) = P(X_(t+n) = j | X_t = i)
+$
+
+#proposition(title: "Chapman-Kolmogorov equations")[
+  The $n$-step transition probability satisfy
+  $
+    P^(n+m)_(i j) = sum_(k in cal(X)) P_(i k)^n P_(k j)^m wide i, j in cal(X); n, m >= 0
+  $
+]
+#proof[
+  We have
+  $
+    P_(i j)^(n + m) & = P(X_(n+m) = j | X_0 = i) \
+    & = sum_(k in cal(X)) P(X_(n+m) | X_n = k, X_0 = i) P(X_n = k | X_0 = i) \
+    & = sum_(k in cal(X)) P(X_(n+m) = j | X_n = k) P(X_n = k | X_0 = i) \
+    & = sum_(k in cal(X)) P_(i k)^n P_(k j)^m
+  $
+  by conditioning on $X_n$ and applying Markov property.
+]
+
+#corollary()[
+  The $n$ steps transitional matrix $P^n$ coincides with
+  $
+    P^n = product^n_(i = 1) P
+  $
+  as in normal matrix exponentiation.
+]
+
+=== Marginals
+
+Define
+$
+  alpha_i^((t)) = P(X_t = i)
+$
+then, if we know the distribution of $X_0$, i.e. the value of $alpha_i^((0))$ for all $i in cal(X)$
+we can compute the marginals at any step as
+$
+  alpha^((t)) = alpha^((0)) P^t
+$
+where we are interpreting $alpha^((t))$ and $alpha^((0))$ as row vectors with one entry for each
+$i in cal(X)$.
+
+== Classification of states and recurrence
+
+We start to explore the long-run behavior of a Markov chain.
+
+- A state $j$ is *accessible* from $i$ if $P^t_(i j) > 0$ for some $t in T$
+- Two states $i$, $j$ *communicate* if $i$ is accessible from $j$ and $j$ is accessible from $i$
+
+#lemma()[
+  Communication between two states is an equivalence relation, therefore we can divide $cal(X)$ in
+  equivalence classes.
+]
+
+If all states communicate with each other we say that the Markov chain is *irreducible*.
+
+An equivalence class $C$ is *closed* if the chain cannot escape from $C$, i.e.
+$
+  i in C ==> j in C quad forall j "accessible from" i
+$
+
+Define the probability of from state $i$ to return to state $i$ as
+$
+  f_i & = P(X_t = i "for some" t>=1 | X_0 = i) \
+      & = P(union.big_(t >= 1) {X_t = i} | X_0 = i)
+$
+A state $i in cal(X)$ is *recurrent* if $f_i = 1$ and *transient* if $f_i < 1$.
+
+In @ex:gamblers-ruin we have that state $0$ and state $N$ are recurrent, while all the others
+are transient.
+
+We also define
+$
+  S_k = "time of the" k"-th return to" i "of" (X_t)_(t >= 0) wide k>=0
+$
+and we set $S_k = infinity$ if $(X_t)_(t >= 0)$ returns to $i$ less than $k$ times.
+Formally, we define $S$ recursively: $S_0 = 1$ and
+$
+  S_k = min {t >= S_(k-1) + 1 | X_t = i }
+$
+and we set $min nothing.rev = infinity$.
+We also define the length of the $k$-th tour as
+$
+  T_k = S_k - S_(k-1)
+$
+
+TODO: start from lemma 2, page 13

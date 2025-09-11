@@ -1,6 +1,6 @@
 #let template(title: none, author: none, date: "today", doc) = {
   set page(paper: "a4", numbering: "1 of 1", margin: (x: 1.5cm, y: 1.5cm))
-  set text(font: "Ubuntu", size: 12pt)
+  set text(font: "Google Sans", size: 12pt, weight: "medium")
   set par(justify: true)
 
   let linkColor = aqua.darken(20%).saturate(40%)

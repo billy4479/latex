@@ -7,6 +7,14 @@
       url = "github:loqusion/typix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    myPackages = {
+      url = "github:billy4479/nix-packages";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
   outputs =
@@ -14,6 +22,7 @@
       nixpkgs,
       flake-utils,
       typix,
+      myPackages,
       ...
     }:
     let
@@ -22,16 +31,20 @@
         "finance"
         "stochastics-processes"
       ];
+
     in
     flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        myPkgs = myPackages.packages.${system};
         fonts = with pkgs; [
           nerd-fonts.fira-code
           ubuntu_font_family
           fg-virgil # excalidraw font
           noto-fonts-color-emoji
+
+          myPkgs.google-sans
         ];
 
         typixLib = typix.lib.${system};

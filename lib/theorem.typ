@@ -11,6 +11,7 @@
     titlix: title => text(color.darken(darken))[ #title
 
     ],
+    breakable: true,
     fill: color.lighten(90%),
     stroke: (left: 3pt + color),
     inset: (
@@ -26,6 +27,7 @@
   return mathblock(
     blocktitle: name,
     prefix: [_#name._ #h(0.5em)],
+    breakable: true,
     // suffix: place(bottom + right, $square$), // https://github.com/jbirnick/typst-great-theorems/issues/8
     suffix: [#h(1fr) $square$],
   )
@@ -35,6 +37,7 @@
 #let proposition = makeThm("Proposition", orange)
 #let lemma = makeThm("Lemma", purple)
 #let corollary = makeThm("Corollary", maroon)
+#let remark = makeThm("Remark", gray)
 #let definition = makeThm("Definition", blue)
 #let example = makeThm("Example", green)
 

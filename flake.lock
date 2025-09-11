@@ -18,6 +18,29 @@
         "type": "github"
       }
     },
+    "myPackages": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1757581596,
+        "narHash": "sha256-vSDDHq8eKDquUJAsXcUrrilDLYZ3fu8oKoOeH4S8HxM=",
+        "owner": "billy4479",
+        "repo": "nix-packages",
+        "rev": "fef14c8be43373e0f00ee040201716ecf1c2e4b3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "billy4479",
+        "repo": "nix-packages",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1757347588,
@@ -36,6 +59,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "myPackages": "myPackages",
         "nixpkgs": "nixpkgs",
         "typix": "typix"
       }

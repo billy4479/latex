@@ -1,6 +1,6 @@
 #let template(title: none, author: none, date: "today", doc) = {
   set page(paper: "a4", numbering: "1 of 1", margin: (x: 1.5cm, y: 1.5cm))
-  set text(font: "Google Sans", size: 12pt, weight: "medium")
+  set text(font: "Google Sans", size: 14pt, weight: "regular")
   set par(justify: true)
 
   let linkColor = aqua.darken(20%).saturate(40%)
@@ -19,6 +19,9 @@
     counter(math.equation).update(0)
     it
   }
+
+  // import "@preview/equate:0.3.2": equate
+  // show: equate.with(breakable: true, sub-numbering: true)
 
   set math.equation(numbering: n => {
     // numbering("(1.1)", counter(heading).get().first(), n)

@@ -1,5 +1,5 @@
 #import "@preview/headcount:0.1.0": *
-#import "@preview/great-theorems:0.1.0": *
+#import "@preview/great-theorems:0.1.2": *
 
 #let thmCounter = counter("thm")
 #let makeThm = (name, color, darken: 0%) => {

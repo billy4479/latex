@@ -72,6 +72,11 @@
               version = "0.1.2";
               hash = "sha256-AsEQ4VpiYaOchBgQSnv5DayAOwCtAZp2UWzkjwN6AvU=";
             }
+            {
+              name = "equate";
+              version = "0.3.2";
+              hash = "sha256-i9FRB+byS9atlU0DvMWmNxIVEEYO85/4wEDJaitWSVA=";
+            }
           ];
         };
 

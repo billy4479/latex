@@ -8,10 +8,8 @@
     prefix: count => text(color.darken(darken))[*#name #count* #h(0.5em)],
     counter: thmCounter,
     numbering: dependent-numbering("1.1", levels: 1),
-    titlix: title => text(color.darken(darken))[ #title
-
-    ],
-    breakable: true,
+    titlix: title => text(color.darken(darken))[ #title ],
+    breakable: false,
     fill: color.lighten(90%),
     stroke: (left: 3pt + color),
     inset: (
@@ -20,6 +18,10 @@
       left: 3pt + 8pt,
       right: 8pt,
     ),
+    bodyfmt: body => [
+
+      #body
+    ],
   )
 }
 
@@ -29,7 +31,7 @@
     prefix: [_#name._ #h(0.5em)],
     breakable: true,
     // suffix: place(bottom + right, $square$), // https://github.com/jbirnick/typst-great-theorems/issues/8
-    suffix: [#h(1fr) $square$],
+    suffix: [#h(1fr) #sym.square],
   )
 }
 

@@ -77,6 +77,17 @@
               version = "0.3.2";
               hash = "sha256-i9FRB+byS9atlU0DvMWmNxIVEEYO85/4wEDJaitWSVA=";
             }
+            {
+              name = "hydra";
+              version = "0.6.2";
+              hash = "sha256-soNQLPonThDhunHQEfpiXJ/cpRGzz48D4E0Nmg3w/Js=";
+            }
+            # dependency of hydra
+            {
+              name = "oxifmt";
+              version = "1.0.0";
+              hash = "sha256-edTDK5F2xFYWypGpR0dWxwM7IiBd8hKGQ0KArkbpHvI=";
+            }
           ];
         };
 

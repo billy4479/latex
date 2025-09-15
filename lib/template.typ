@@ -1,7 +1,32 @@
 #let template(title: none, author: none, date: "today", doc) = {
-  set page(paper: "a4", numbering: "1 of 1", margin: (x: 1.5cm, y: 1.5cm))
-  set text(font: "Google Sans", size: 14pt, weight: "regular")
+  let textSize = 14pt
+  set text(font: "Google Sans", size: textSize, weight: "regular")
   set par(justify: true)
+
+  import "@preview/hydra:0.6.2": hydra
+  set page(
+    paper: "a4",
+    margin: (x: 2em, y: 4em),
+    numbering: "1 of 1",
+    header: context {
+      if (here().page() != 1) {
+        emph(upper(hydra(1)))
+        h(1fr)
+        emph(hydra(2))
+        line(length: 100%)
+      }
+    },
+    footer: context {
+      set align(center)
+      set text(textSize - 2pt)
+      counter(page).display(
+        "1 of 1",
+        both: true,
+      )
+      linebreak()
+      author
+    },
+  )
 
   let linkColor = aqua.darken(20%).saturate(40%)
   show ref: it => underline(text(linkColor, it))

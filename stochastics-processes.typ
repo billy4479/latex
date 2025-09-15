@@ -58,8 +58,8 @@ However, when $n$ is very large it is convenient to decompose it using condition
 #lemma(title: "Sequential decomposition")[
   Given a random vector $(X_0, ..., X_n)$ on $cal(X)^(n+1)$ we have
   $
-    P(X_0, ..., X_n) = P(X_0 = x_0) product^(n-1)_(i = 0) P(X_(i+1) = x_(i+1) | X_i = x_i, ...,
-      X_0 = x_0)
+    cal(P)(X_0, ..., X_n) = cal(P)(X_0 = x_0) product^(n-1)_(i = 0) cal(P)(X_(i+1) = x_(i+1) |
+      X_i = x_i, ..., X_0 = x_0)
   $
 ]
 
@@ -80,7 +80,7 @@ increasing.
 #definition(title: "Markov chain")[
   A discrete-time stochastic process is a Markov chain if
   $
-    P(X_(t+1) = x_(t+1) | X_t = x_t, ..., X_0 = x_0) = P(X_(t+1) = x_(t+1) | X_t = x_t)
+    cal(P)(X_(t+1) = x_(t+1) | X_t = x_t, ..., X_0 = x_0) = cal(P)(X_(t+1) = x_(t+1) | X_t = x_t)
   $
   for all $t in NN$ and $forall (X_0, ..., X_(t+1)) in cal(X)^(t+1)$.
 ]
@@ -107,28 +107,28 @@ $
 We define the *transitional probability* $P_(i j)$, which is the probability of going to state $j$
 from state $i$:
 $
-  P_(i j) = P(X_(t+1) = j | X_t = i) wide i, j in cal(X)
+  P_(i j) = cal(P)(X_(t+1) = j | X_t = i) wide i, j in cal(X)
 $
 Note tat we can construct a *transition matrix* $P$ of all the combinations of transitional
 probabilities in $cal(X)$.
 
 A common problem is to compute the probability that a certain event $j$ occurs after $n$ steps:
 $
-  P^n_(i j) = P(X_(t+n) = j | X_t = i)
+  P^n_(i j) = cal(P)(X_(t+n) = j | X_t = i)
 $
 
 #proposition(title: "Chapman-Kolmogorov equations")[
   The $n$-step transition probability satisfy
   $
-    P^(n+m)_(i j) = sum_(k in cal(X)) P_(i k)^n P_(k j)^m wide i, j in cal(X); n, m >= 0
+    P^(n+m)_(i j) = sum_(k in cal(X)) cal(P)_(i k)^n cal(P)_(k j)^m wide i, j in cal(X); n, m >= 0
   $
 ]
 #proof[
   We have
   $
-    P_(i j)^(n + m) & = P(X_(n+m) = j | X_0 = i) \
-    & = sum_(k in cal(X)) P(X_(n+m) | X_n = k, X_0 = i) P(X_n = k | X_0 = i) \
-    & = sum_(k in cal(X)) P(X_(n+m) = j | X_n = k) P(X_n = k | X_0 = i) \
+    P_(i j)^(n + m) & = cal(P)(X_(n+m) = j | X_0 = i) \
+    & = sum_(k in cal(X)) cal(P)(X_(n+m) | X_n = k, X_0 = i) cal(P)(X_n = k | X_0 = i) \
+    & = sum_(k in cal(X)) cal(P)(X_(n+m) = j | X_n = k) cal(P)(X_n = k | X_0 = i) \
     & = sum_(k in cal(X)) P_(i k)^n P_(k j)^m
   $
   by conditioning on $X_n$ and applying Markov property.
@@ -146,7 +146,7 @@ $
 
 Define
 $
-  alpha_i^((t)) = P(X_t = i)
+  alpha_i^((t)) = cal(P)(X_t = i)
 $
 then, if we know the distribution of $X_0$, i.e. the value of $alpha_i^((0))$ for all $i in cal(X)$
 we can compute the marginals at any step as
@@ -177,8 +177,8 @@ $
 
 Define the probability of from state $i$ to return to state $i$ as
 $
-  f_i & = P(X_t = i "for some" t>=1 | X_0 = i) \
-      & = P(union.big_(t >= 1) {X_t = i} | X_0 = i)
+  f_i & = cal(P)(X_t = i "for some" t>=1 | X_0 = i) \
+      & = cal(P)(union.big_(t >= 1) {X_t = i} | X_0 = i)
 $<eq:def-fi>
 A state $i in cal(X)$ is *recurrent* if $f_i = 1$ and *transient* if $f_i < 1$.
 
@@ -217,7 +217,7 @@ so that $V_i$ is a random variable with values in $NN union {oo}$.
 #proposition()[
   For each $i in cal(X)$, we have
   $
-    P(V_i > r | X_0 = i) = f_i^r wide r >= 0
+    cal(P)(V_i > r | X_0 = i) = f_i^r wide r >= 0
   $
   where $f_i$ is defined as @eq:def-fi.
 ]<prop:prob-vi>
@@ -266,4 +266,109 @@ transient (recall the
   meaning that $j$ is also recurrent.
 ]
 
+#corollary[
+  If a Markov chain is irreducible, then either all states are transient or all recurrent. In these
+  cases we say that the whole chain is transient or recursive.
+]
+
+#corollary[
+  If the set of outcomes $cal(X)$ is finite, then some state must be recurrent, thus all states in a
+  finite irreducible chain are recurrent.
+]
+
+== Random walks in $d$ dimension
+
+In this case $abs(cal(X)) = +oo$, therefore it is not clear whether states are transient or
+recurrent.
+
+#example(title: [Random walk on $ZZ$])[
+  Consider a drunken man walking a long a straight line. Assume that all steps are of size $1$ and
+  that the man goes right with probability $1-p$ independently of the previous steps.
+]
+
+#model[
+  The location of the man $X_t$ after $t$ steps is a Markov chain with state space $cal(X) = ZZ$ and
+  transitional probabilities
+  $
+    P_(i j) = cases(
+      p & wide text("if") j = i + 1,
+      1-p & wide text("if") j = i - 1,
+      0 & wide text("otherwise")
+    )
+  $
+  In this case all states communicate with each other, so there is just one class, thus either all
+  states are transient or all states are recurrent.
+]
+
+#theorem[
+  The random walk on $ZZ$ is recurrent if $p = 1/2$ and transient otherwise.
+]
+
+#proof[
+  By @prop:sum-pt-recurrent we can look at $sum_(n = 0)^oo P^n_(i i)$ to determine if the chain is
+  transient or recurrent.
+  Without loss of generality, we can assume that $i = 0$ (since there is only one equivalence
+  class).
+
+  Note that $P_(0 0)^n = 0$ if $n$ is odd by the definition of the random walk, then
+  $sum_(n = 0)^oo P^n_(0 0) = sum_(n = 0)^oo P^(2n)_(00)$.
+
+  For every $n in NN$ we have
+  $
+    P^(2n)_(00) & = cal(P)(X_(2n) | X_0 = 0) \
+                & = cal(P)(Z_(2n) = n) wide "with" Z_(2n) tilde "Bin"(2n, p) \
+                & = binom(2n, n) p^n q^n \
+                & = ((2n)!)/(n! n!) p^n q^n
+  $
+  where $q = 1-p$.
+
+  We give the following two lemmas from analysis 1 without proof, where
+  the symbol #sym.asymp denotes "is asymptotic to", i.e. if $a_n asymp b_n$ as $n -> oo$ then
+  $lim_(n -> oo) a_n / b_n = 1$.
+
+  #lemma[
+    Consider two sequences $a_n$ and $b_n$ with values in $[0, oo)$. If $a_n asymp b_n$ as
+    $n -> oo$ then $sum_(n = 0)^oo a_n = +oo <==> sum_(n = 0)^oo b_n = +oo$
+  ]
+
+  #lemma(title: "Stirling")[
+    $
+      n! asymp sqrt(2 pi n) (n/e)^n
+    $
+  ]
+
+  Using the second lemma we obtain
+  $
+    P^(2n)_(00) & asymp (sqrt(2 pi 2 n))/(sqrt(2 pi n))^n (((2n)/e)^(2n))/((n/e)^(2n)) p^n q^n & wide "as" n -> oo \
+    & = 1/sqrt(pi) n^(-1/2) 2^(2n) p^n q^n \
+    & = 1/sqrt(pi) n^(-1/2) rho^n & wide "where" rho = 4 p q
+  $
+  and, by the first lemma, the asymptotic behavior of this series is the same of $P^n_00$.
+
+  - If $p == 1/2$ then $rho = 1$ and
+    $
+      sum^oo_(n = 1) rho^n n^(-1/2) = sum^oo_(n = 1) n^(-1/2) = + oo
+    $
+    and the random walk is recurrent.
+  - If $p != 1/2$ then $rho = 4p(1-p) < 1$ and
+    $
+      sum^oo_(n = 1) rho^n n^(-1/2) < sum^oo_(n = 1) rho^n = 1/(1-rho) < + oo
+    $
+    and the random walk is transient.
+]
+
+#example(title: [Symmetric random walk on $ZZ^d$])[
+  A random walk on $ZZ^d$ is a Markov chain with state space $cal(X) = ZZ^d$ and transitional
+  probabilities
+  $
+    P_(i j) = cases(
+      1/(2d) & wide "if" norm(i - j) = 1,
+      0 & wide "otherwise"
+    )
+  $
+]
+
+#theorem(title: [Random walk on $ZZ^d$])[
+  The symmetric random walk on $ZZ^d$ is recurrent if $d <= 2$ and transient if $d >= 3$.
+]
 

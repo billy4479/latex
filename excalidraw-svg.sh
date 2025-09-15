@@ -3,7 +3,8 @@
 set -euxo pipefail
 
 temp=$(mktemp)
-grep -v -E '(defs)|(@font-face)|(</style>)|(<style)' "$1" | sed 's/Virgil, Segoe UI Emoji/Virgil 3 YOFF/g' > "$temp"
+svgo --pretty "$1"
+grep -v -E '(defs)|(@font-face)|(</style>)|(<style)' "$1" > "$temp" # TODO: this likely doesn't work
 
 cat "$temp" > "$1"
 

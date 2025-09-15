@@ -41,7 +41,7 @@
         fonts = with pkgs; [
           nerd-fonts.fira-code
           ubuntu_font_family
-          fg-virgil # excalidraw font
+          excalifont # excalidraw font
           noto-fonts-color-emoji
 
           myPkgs.google-sans
@@ -113,6 +113,7 @@
             with pkgs;
             [
               mupdf-headless
+              nodePackages_latest.svgo
 
               typstyle
               tinymist

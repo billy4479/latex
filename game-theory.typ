@@ -113,3 +113,87 @@ $
   better off by choosing to shoot on one side or another rather than in the center.
 ]
 
+#definition(title: "Conjecture")[
+  The conjecture of some player $i$ is $mu^i in Delta(A_(-i))$ which is what player $i$ thinks is
+  the distribution over actions of other players.
+]
+
+In the previous example, no matter the conjecture, it is always better to choose a side rather than
+shooting in the middle.
+
+#definition(title: "Mixed action")[
+  A mixed action $alpha_i$ by player $i$ is a probability distribution over the set of action $A_i$
+  where $alpha_i (a_i)$ denotes the probability that action $a_i in A_i$ is taken.
+]
+
+If the distribution is degenerate (i.e. $alpha_i (a_i) = 1$ and $0$ for all actions different from
+$a_i$) we say that the action is *pure*.
+
+A conjecture for a certain action is true if $mu^j (a_i) = alpha_i (a_i)$.
+
+We say that a mixed action $alpha_i^*$ is the best reply to conjecture $mu^i$ if
+$
+  alpha_i^* in limits("arg max")_(alpha_i in Delta(A_i)) med u_i (alpha_i, mu_i)
+$
+note that there might be more than one.
+Therefore, we can define the *best-reply correspondence* $r_i: Delta(A_(-i)) arrows A_i$ as
+$
+  r_i (mu^i) = A_i inter limits("arg max")_(alpha_i in Delta(A_i)) med u_i (alpha_i, mu_i)
+$
+
+We say that an action is *justifiable* if there exists a conjecture for which that strategy is the
+best reply.
+
+#lemma[
+  Fix a player $i in I$ and a conjecture $mu_i in Delta (A_(-i))$ and a mixed action $alpha_i^*$.
+  Then $alpha^*_i$ is a best reply to $mu^i$ if and only if for every pure action in the support of
+  $alpha^*_i$ is the best reply to $mu^i$.
+
+  $
+    alpha^*_i in limits("arg max")_(alpha_i in Delta(A_i)) med u_i (alpha_i, mu_i) <==> "supp"
+    alpha^*_i subset.eq r_i (mu^i)
+  $
+]
+
+#proof[
+  First we prove that if $alpha_i^*$ is a BR against $mu_i$ then $"supp"(alpha_i^*)$ is a BR too.
+
+  We prove it by contrapositive, i.e. we want to show that
+  if $exists a_i in "supp"(alpha_i^*)$ that is not a BR given $mu^i$, then $alpha^*_i$ is dline is next Tuesdaynot a BR
+  given $mu^i$.
+
+  If $alpha_i^*$ is not a BR given $mu_i$ then
+  $
+    exists a_i ' in A_i : u_i (alpha_i^*, mu^*) < u_i (a_i^*, mu^i)
+  $
+
+  Consider the mixed action
+  $
+    alpha_i' (a_i) = cases(
+      0 & wide "if" a_i = a_i^*,
+      alpha_i (a'_i) + alpha_i^* (a_i^*) & wide "if" a_i = a'_i,
+      alpha_i^* (a_i) & wide "if" a_i != a^*_i \, a_i',
+    )
+  $
+  but then the difference in utility is
+  $
+    u_i (alpha_i^*, mu^i) - u_i (alpha_i', mu^i) =
+    alpha_i^* (a_i^*) (u_i (a_i^*, mu_i) - u_i (a_i', mu^i)) < 0
+  $
+  by definition of $a_i'$, implying that $alpha_i^*$ is not the best reply.
+
+  Now we prove the second implication: if $"supp" alpha_i^* subset.eq r_i (mu^i)$ then $a_i^*$ is a
+  BR against $mu_i$.
+
+  Let $overline(u)_i = max_(alpha_i in Delta (A_i)) u_i (alpha_i, mu^i)$
+
+  TODO: see Lemma 3.1, page 18 of lecture notes
+]
+
+#lemma[
+  If there exists an optimal action there exists also an optimal pure action.
+]
+
+#proof[
+  TODO: see Lemma 3.2, page 19
+]

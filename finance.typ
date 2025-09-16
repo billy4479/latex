@@ -30,7 +30,7 @@ $
     dots.v, dots.v, dots.down, dots.v;
     1+r, S_1 (1)(omega_k), ..., S_N(1)(omega_k)
   )
-$
+$<eq:cashflow-matrix>
 where each row represents the cost of selling said security and the first column represents $B$,
 which is safe by definition and therefore its revenue is not influenced by $omega$.
 We can also define the _payoff matrix_ $cal(A)$ by removing the first row of $cal(M)$.
@@ -107,6 +107,8 @@ strategies.
 
 These tell us that if we want to get a zero payoff it will cost us zero.
 
+=== Linear Pricing Functional (LPF)
+
 #definition(title: "Linear Pricing Functional (LPF)")[
   $
     pi (z) = { V_theta (0) | A theta = z}
@@ -120,10 +122,12 @@ These tell us that if we want to get a zero payoff it will cost us zero.
   LOP holds $<==> exists$ an LPF.
 ]
 
+=== Stochastic Discount Factor (SDF)
+
 #definition(title: "Stochastic Discount Factor (SDF)")[
   The SDF is a random vector $m$ such that
   $
-    S_j (0) & = EE[m S_j (0)] wide forall j in {1, ..., N} \
+    S_j (0) & = EE[m S_j (1)] wide forall j in {1, ..., N} \
        B(0) & = EE[m B(1)]
   $
 ]
@@ -144,12 +148,12 @@ $
 #proof[
   We prove 2.: we define
   $
-    pi(z) & = EE[m z]          & wide & z in A \
-          & = E[m A theta]     & wide & "for some" theta \
-          & = E[m V_theta (1)] \
+    pi(z) & = EE[m z]           & wide & z in A \
+          & = EE[m A theta]     & wide & "for some" theta \
+          & = EE[m V_theta (1)] \
           & = V_theta (0)
   $
-  which is our LPF since the expectation is linear and
+  which is our LPF since the expectation is linear.
 ]
 
 #theorem(title: "Equivalent characterizations of LOP")[
@@ -172,7 +176,7 @@ $
     Set $w = y/(pi(y))$ so that $pi(w) = 1$.
     Then, take any $z in A without A_0$ and write it as
     $
-      z = pi(z) w + underbrace((z - pi(z) w), pi(dot) = 0 ==> in A_0)
+      z = pi(z) w + underbrace((z - pi(z) w), pi(dot) = 0 med ==> med in A_0)
     $
     now we multiply by $w$ and take the expectation
     $
@@ -183,4 +187,147 @@ $
       pi(z) = EE[ w/(EE[w^2]) z]
     $
     and we define $m$ as $w/(EE[w^2])$.
+]
+
+#remark[
+  - Under the LOP, $m$ can be both positive and negative;
+  - The $m$ we have constructed is such that $m in A$.
+]
+
+#proposition(title: "The SDF is unique")[
+  Under the LOP, $exists! med m in A$ which we will call $m^*$.
+]
+
+#proof[
+  Suppose there exists $m', m'' in A$ both SDFs.
+  Then
+  $
+    EE[m'(m'' - m')] = EE[m''(m'' - m')]
+  $
+  This is because $(m'' - m') in A$ (by linearity of $A$). But both $m'$ and $m''$ are SDFs so they
+  correctly price every element of $A$ and, under the LOP, these are equal.
+  $
+    ==> EE[(m' - m'')^2] = 0 ==> m' = m''
+  $
+]
+
+Consider $m = m^* + epsilon$ with $epsilon in A^perp$ (this means that $m in.not A$, i.e. it cannot
+be bought). This $m$ is still an SDF since
+$
+  EE[(m^* + epsilon) x] = EE[m^* x] + underbrace(EE[epsilon x], = 0)
+$
+
+=== State-Price Vectors (SPV)
+
+#definition(title: "State-Price Vectors (SPV)")[
+  A vector $psi in RR^K_(++)$ such that
+  $
+    S_j (0) = sum^K_(k = 1) psi (omega_k) S_j (1) (omega_k)
+    quad
+    "and"
+    quad
+    sum^K_(k = 1) psi (omega_k) = 1/(1+r)
+  $
+  where
+  $
+    psi = vec(psi(omega_1), psi(omega_2), dots.v, psi(omega_K))
+  $
+]
+
+Note that we can easily obtain a positive SDF from $psi$:
+$
+  m(omega_k) = psi(omega_k) / (cal(P)(omega_k))
+$
+
+We can interpret it as "$psi_k$ is the right amount of money to get tomorrow if $omega_k$ happens".
+This is some kind of insurance: "how much should I spend to ensure against $omega_k$".
+
+#definition(title: "Risk-Neutral Probabilities (RNP)")[
+  A RNP is a probability measure $cal(Q)$ such that $cal(Q)(omega_k) = q_k > 0$ for all $k in K$ and
+  $sum^K_(k=1) q_k = 1$. Moreover
+  $
+    S_j(0) & = EE^(cal(Q)) [(S_j (i))/(1 + r)] \
+           & = sum^K_(k = 1) (q_k S_j (1) (w_k))/(1+r)
+  $
+  or equivalently
+  $
+    EE^cal(Q) [(S_j (1) - S_j (0))/(S_j(0))] = r
+  $<eq:exp-rnp>
+]
+
+In @eq:exp-rnp, the argument of the expectation is the "return per unit invested" and this equation
+basically tells us that the expected gain is $r$, as in the risk-free security.
+
+Note that this $cal(Q)$ is a way for us to model that all investors are risk neutral. Of course
+investors are _not_ risk neutral, however, this will come in handy later.
+
+To summarize, we have:
+- $
+    m(omega_k) = (psi(omega_k))/cal(P)(omega_k)
+  $
+- $
+    psi(omega_k) = (cal(Q)(omega_k))/(1+r)
+  $
+- $
+    m(omega_k) = 1/(1+r) (cal(Q)(omega_k))/(cal(P)(omega_k))
+  $
+
+== Fundamental Theorem of Finance
+
+#definition(title: "Arbitrage strategy")[
+  This is a strategy $theta$ such that:
+  1. $V_theta (0) <= 0$
+  2. $V_theta (1) (omega_k) >= 0 wide forall k$
+  3. At least one of $V_theta (0) > 0$ or $exists overline(k) "s.t." V_theta (1) (omega_overline(k)) > 0$
+]
+
+This basically means that there are ways to trick the market to make money out of nothing, either by
+shorting it or by having some magic "free" lottery ticket.
+
+#theorem(title: "(First) Fundamental Theorem of Finance")[
+  The following statements are equivalent:
+  1. No-Arbitrage conditions
+  2. $exists$ SPVs
+  3. $exists$ RNPs
+  4. $exists$ strictly positive SDFs.
+]
+
+#proof[
+  The equivalence of 2, 3, and 4 is trivial, we can easily show it from what we saw in the previous
+  section.
+
+  We will show that no-arbitrage is equivalent to the existence of SPVs.
+
+  / 2. $==>$ 1.: By the existence of an SPV we have that $forall theta$
+    $
+      V_theta (0) = sum^K_(k = 1) psi (omega_k) V_theta (1) (omega_k)
+    $
+    Then, to have an arbitrage opportunity we need to have that $V_theta (0) <= 0$, but all the
+    terms in the sum are either $> 0$ (like $psi$) or $>= 0$ (like $V_theta (1)$) and we have ruled
+    out arbitrage condition 3.1.
+    Similarly, for condition 3.2, we would need at least one $omega_k$ such that
+    $V_theta (1)(omega_k) > 0$, but then the sum would be stricly positive.
+
+  / 1. $==>$ 2.:
+    Recall the definition of cashflow matrix (@eq:cashflow-matrix):
+    $
+      vec(delim: "[", -S(0), A) theta = vec(delim: "[", -V_theta (0), V_theta (1))
+    $
+    We see that we have an arbitrage condition if and only if
+    $
+      exists theta : M theta > 0
+    $
+
+    Let $cal(M)$ be the linear space generated by the columns of $M$.
+    Then, there doesn't exists an arbitrage if and only if
+    $
+      cal(M) inter RR^(K + 1)_+ = {0}
+    $
+
+    Now we look for a separating hyperplane between $cal(M)$ (which is closed and convex, since it
+    is a finite dimensional linear space) and the unit simplex.
+    #figure(
+      image("./assets/finance/unit-simplex.png", width: 25%),
+      caption: "Unit simplex.",
+    )
 ]

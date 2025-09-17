@@ -120,9 +120,9 @@ $
 #proposition(title: "Chapman-Kolmogorov equations")[
   The $n$-step transition probability satisfy
   $
-    P^(n+m)_(i j) = sum_(k in cal(X)) cal(P)_(i k)^n cal(P)_(k j)^m wide i, j in cal(X); n, m >= 0
+    P^(n+m)_(i j) = sum_(k in cal(X)) P_(i k)^n P_(k j)^m wide i, j in cal(X); n, m >= 0
   $
-]
+]<prop:chapman-kolmogorov>
 #proof[
   We have
   $
@@ -372,3 +372,76 @@ recurrent.
   The symmetric random walk on $ZZ^d$ is recurrent if $d <= 2$ and transient if $d >= 3$.
 ]
 
+== Convergence to stationarity
+
+=== Stationary distributions
+
+Sometimes a Markov chain converges to stationarity: this means that, regardless of the starting
+point $k$, the distribution of $X_t$ converges to a fixed distribution $pi$.
+$
+  cal(P) (X_t = j | X_0 = k) = P^t_(k j) -> pi_j wide "as" t -> +oo, med forall k, j in cal(X)
+$<eq:limiting-distrib>
+If this holds we say that $pi$ is the *limiting distribution* of the Markov chain and
+$(pi_i)_(i in cal(X))$ are the limiting probabilities.
+
+If @eq:limiting-distrib holds, then, by @prop:chapman-kolmogorov we have
+$
+  pi_j & = lim_(t -> oo) P_(k j)^t = lim_(t -> oo) sum_(i in cal(X)) P_(k i)^(t-1) P_(i j) \
+  & = sum_(i in cal(X)) (lim_(t -> oo) P_(k i)^(t - 1)) P_(i j) = sum_(i in cal(X)) pi_i P_(i j)
+$<eq:limiting-distrib-stationary>
+(we can switch limit and sum since $cal(X)$ is finite and we are assuming the limit exists).
+
+#definition(title: "Stationary distribution")[
+  A distribution $pi$ on $cal(X)$ is stationary for a Markov chain if
+  $
+    pi_j = sum_(i in cal(X)) pi_i P_(i j) wide forall j in cal(X)
+  $
+]<def:stationary-distrib>
+
+The definition of stationary distribution can be rewritten in matrix form as $ pi P = pi $
+where $pi$ is a $1 times abs(cal(X))$ row vector.
+
+We see from @eq:limiting-distrib-stationary that being stationary is a necessary condition for $pi$
+to be a limiting distribution.
+
+We can interpret @def:stationary-distrib as
+$
+  X_0 tilde pi ==> X_t tilde pi wide forall t >= 0
+$
+
+#theorem(title: [Existance and uniqueness of $pi$])[
+  1. If $cal(X)$ is finite, a stationary distribution always exists.
+  2. If $(X_t)_(t >= 0)$ is irreducible there is at most one stationary distribution.
+]
+
+#proof[Not required.]
+
+=== Convergence in distribution
+
+#definition(title: "Aperiodicity")[
+  A Markov chain is aperiodic if, for all $i in cal(X)$, the greatest common divisor of the set
+  ${t >= 1 | P^t_(i i) > 0}$ is $1$.
+]
+
+In short, it means that there are no cycles.
+
+#theorem(title: "Convergence theorem")[
+  Let $(X_t)_(t >= 0)$ be an irreducible and aperiodic Markov chain with stationary distribution
+  $pi$.
+  Then
+  $
+    P^t_(i j) -> pi_j wide "as" t -> oo, med forall i, j in cal(X)
+  $
+]
+
+Since $cal(P) (X_t = j) = sum_(j in cal(X)) P^t_(i j) cal(P) (X_0 = i)$, the convergence theorem
+implies that, regardless of the initial distribution of $X_0$, we have $cal(P)(X_t = j) = pi_j$ as
+$t -> oo$.
+
+This also tells us that, if the chain is aperiodic and irreducible, stationarity is necessary
+*and sufficient* for $pi$ to be a limiting distribution, in this case we say that the chain
+"converges to stationarity" (or "to equilibrium").
+
+#remark[This is a convergence in distributions, not of fixed values.]
+
+TODO: stopped before 1.4.3

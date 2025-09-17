@@ -83,6 +83,8 @@ $
   continuous.
 ]
 
+== Justifiable actions
+
 #example[
   A soccer player has to shoot. He can choose to shoot on the right (R), center (C) or left (L).
   At the same time the goalkeeper can choose to jump either right (R) or left (L).
@@ -197,3 +199,102 @@ best reply.
 #proof[
   TODO: see Lemma 3.2, page 19
 ]
+
+#definition(title: "Domination")[
+  A (mixed) action $alpha_i$ dominates a pure or mixed action $beta_i$ if, independently from the
+  choices of other players, it yields a strictly higher payoff.
+  $
+    u_i (alpha_i, a_(-i)) > u_i (beta_i, a_(-i)) wide forall a_(-i) in A_(-i)
+  $
+]
+
+We denote the set of actions which are *not dominated* by any other action as
+$
+  "ND"_i = A_i without { a_i in A_i |
+    exists alpha_i in Delta(A_i),
+    a_(-i) in A_(-i),
+    u_i (alpha_i, a_(-i)) > u_i (beta_i, a_(-i)) }
+$
+
+#lemma(title: [ND Action $<==>$ Justifiable Action])[
+  Fix player $i$ and an action $a^*_i in A_i$. There exists a conjecture $mu_i in Delta(A_(-i))$
+  such that $a_i^*$ is the best reply to $mu^i$ if and only if $a_i^*$ is not dominated by any mixed
+  action.
+
+  Thus the set of undominated pure actions and the set of justifiable actions coincide:
+  $
+    "ND"_i = r_i (Delta (A_(-i))
+  $
+]
+
+#proof[
+  TODO: Lemma 3.3, page 20
+]
+
+From this lemma we learn that every rational player always chooses undominated actions and that each
+undominated action is justifiable as a best reply to some belief.
+
+#example(title: "Linear Public Good Game")[
+  Consider a community composed of $n$ individuals.
+  With an input of $x$, a public good can be produced according to $y(x) = k x$ and $k in (1/n, 1)$
+  ($x$ and $y$ have the same monetary unit).
+  Each individual $i$ has wealth $W_i > 0$ and can choose how much money to contribute to the
+  production of the public good: $a_i in A_I = [0, W_i]$.
+
+  Therefore, the payoff function for each individual is
+  $
+    u_i (a_1, ..., a_n) = W_i - a_i + k sum^n_(j=1) a_j
+  $
+]
+
+#definition(title: "Cautious player")[
+  A player $i$ is cautious if their conjecture does not rule out any $a_(-i) in A_(-i)$.
+
+  The space of all cautious conjectures for player $i$ is
+  $
+    Delta^C (A_(-i)) = {mu^i in Delta (A_(-i)) | "supp" mu^i = A_(-i)}
+  $
+]
+
+A player which is both rational and cautious chooses action within $r_i (Delta^C (A_(-i)))$.
+
+#definition(title: "Weak domination")[
+  A mixed action $alpha_i$ weakly dominates another mixed action $beta_i$ if it yields at least the
+  same expected payoff for every action profile $a_(-i)$ of the other players and strictly more for
+  at least one $hat(a)_(-i)$:
+  $
+    forall a_(-i) in A_(-i), wide u_i (alpha_i, a_i) >= u_i (beta_i, a_(-i)) \
+    exists hat(a)_(-i) in A_(-i), wide u_i (alpha_i, a_i) > u_i (beta_i, a_(-i)) \
+  $
+]
+
+The set of non weakly dominated actions is denoted by $"NWD"_i$.
+
+#lemma()[
+  In _finite_ games
+  $
+    r_i (Delta^C (A_(-i)) = "NWD"_i
+  $
+]
+
+= Elimination of Dominated Actions
+
+We assume *complete information*, that is, the rules of the game and everyone's preferences are
+common knowledge.
+
+A fact is *common knowledge* if everyone knows the fact, everyone knows that everyone knows the
+fact, and so on.
+
+#example(title: [Cournot Competition])[
+  $N$ firms compete in a market and have to choose the quantity of a certain product to produce
+  $q_i in [0, overline(q)]$.
+  The utility of each firm is given by
+  $
+    u_i (q_i, q_(-i)) = q_i P(q_1, ..., q_N) - C_i (q_i)
+  $
+
+  It is common knowledge that the firms maximize expected profit, the price function $P$ and all the
+  cost functions $(C_i)_(i in I)$.
+]
+
+

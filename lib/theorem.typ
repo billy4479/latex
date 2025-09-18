@@ -30,8 +30,8 @@
     blocktitle: name,
     prefix: [_#name._ #h(0.5em)],
     breakable: true,
-    // suffix: place(bottom + right, $square$), // https://github.com/jbirnick/typst-great-theorems/issues/8
-    suffix: [#h(1fr) #sym.square],
+    suffix: place(bottom + right, $square$), // https://github.com/jbirnick/typst-great-theorems/issues/8
+    // suffix: [#h(1fr) #sym.square],
   )
 }
 

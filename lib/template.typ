@@ -1,6 +1,15 @@
-#let template(title: none, author: none, date: "today", doc) = {
-  let textSize = 14pt
-  set text(font: "Google Sans", size: textSize, weight: "regular")
+#let template(
+  title: none,
+  author: none,
+  date: "today",
+  toc: true,
+  header: true,
+  nameInFooter: true,
+  font: "Google Sans",
+  fontSize: 14pt,
+  doc,
+) = {
+  set text(font: font, size: fontSize)
   set par(justify: true)
 
   import "@preview/hydra:0.6.2": hydra
@@ -9,7 +18,7 @@
     margin: (x: 2em, y: 4em),
     numbering: "1 of 1",
     header: context {
-      if (here().page() != 1) {
+      if (here().page() != 1 and header) {
         emph(upper(hydra(1)))
         h(1fr)
         emph(hydra(2))
@@ -18,13 +27,15 @@
     },
     footer: context {
       set align(center)
-      set text(textSize - 2pt)
+      set text(fontSize - 2pt)
       counter(page).display(
         "1 of 1",
         both: true,
       )
-      linebreak()
-      author
+      if (nameInFooter) {
+        linebreak()
+        author
+      }
     },
   )
 
@@ -69,8 +80,10 @@
     #text(author)
   ]
 
-  outline()
-  pagebreak()
+  if (toc) {
+    outline()
+    pagebreak()
+  }
 
   doc
 }

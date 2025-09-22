@@ -3,7 +3,7 @@
 #show: template.with(
   title: "Game Theory - Problem Set 1",
   author: "Giacomo Ellero - 3243701",
-  date: "22/09/2025",
+  date: "23/09/2025",
   header: false,
   nameInFooter: false,
   toc: false,

@@ -30,6 +30,8 @@
         "game-theory"
         "finance"
         "stochastics-processes"
+
+        "gt-ps1"
       ];
 
     in

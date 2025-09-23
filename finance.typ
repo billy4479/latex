@@ -492,3 +492,130 @@ With this lemma we can now prove the second fundamental theorem of finance:
   / 2. $==>$ 1.: There exists an unique SPV, then $"rank"(cal(M)) = K = dim(A)$.
   TODO: what?
 ]
+
+= Mean-Variance Theory
+
+We are still in the context of one-period models, where $t in {0, 1}$, and assume that we have $N$
+securities, _all risky_.
+
+We use a slightly different notation: $S_j$ is the price at time $0$ of asset $j$, while $x_j$ is
+its payoff at time $1$.
+We have that $x_j in cal(L)^2 (Omega, 7, cal(P))$ where $cal(L)^2$ is the space of distributions
+with finite variance.
+
+Then we define the *gross return rate* as
+$
+  R_j = x_j / S_j
+$
+
+Also recall the definition of the variance-covariance matrix:
+$
+  Sigma_(i j) = "cov"(R_i, R_j)
+$
+we will assume that the matrix is non-singular, i.e. $abs(Sigma) != 0$, therefore it is invertible.
+This constraint tells us that it is not possible to create a strategy with no risk.
+
+Define the *portfolio weights* as $(w_j)_(j in {1, ..., N})$ and we require that $sum_j w_j = 1$,
+these should be interpreted as the fraction of my wealth which is invested in each asset.
+Note that eventually I need to spend all of my money, therefore if I want to short sell something I
+want to spend all the money that I earn at $t = 0$ from short selling, therefore we are ruling out a
+complete short-sell position.
+
+Fix a certain average return we desire (e.g. $10%$) and call it $overline(E)$, we assume we don't
+like risk, therefore I like investments with a lower variance.
+Therefore we end up with a quadratic minimization problem:
+$
+  min_w w^T Sigma w wide "s.t." w^T dot E = overline(E)
+$<eq:mv-min>
+where $E$ is the vector of the expectations $E_j = EE[R_j]$. We assume that $Sigma$ is known.
+Eventually we will want to find the optimal portfolio for each possible $overline(E)$.
+
+=== Hansen-Richard
+
+This is an approach to solve @eq:mv-min.
+
+If $abs(Sigma) != 0$ then $x_1, ..., x_N$ are linearly independent, which in turns means that LOP
+hold.
+Since LOP holds $exists$ LPF and $exists$ SDF.
+
+Note also that the second-moment matrix (or Gram matrix) $E[x x^T]$, where
+$E[x x^T]_(i j) = EE[x_i x_j]$, is also non singular.
+
+As we know, the SDF $m^* = theta^* dot x$ and $theta^*$ is a valid strategy. We want to find this
+$theta^*$ from
+$
+  EE[(theta^* x) x_j] = S_j, wide j in 1, ..., N
+$
+or equivalently
+$
+                 & EE[(theta^*)^T (x x^T)] \
+               = & (theta^*)^T EE[x x^T] = S^T \
+  <==> theta^* = & EE^(-1)[x x^T] S \
+      <==> m^* = & S^T EE^(-1)[x x^T] x
+$
+where we know that we can invert $EE[x x^T]$ since it is non-singular.
+
+The space of payoffs $A = "span"(x_1, ..., x_N)$ can be decomposed by using $R^*$ which is defined
+as the payoff on $m^*$:
+$
+  R^* = m^* / pi(m^*) = m^* / EE[(m^*)^2] in A_1 = {R in A | pi(R) = 1}
+$
+moreover, define
+$
+  A_0 = {R^e in A | pi(R^e) = 0}
+$
+Note that $A_1$ is affine, while $A_0$ is linear. $R^e$ is the excess returns: $exists R, R' in A_1$
+such that $R^e = R - R' in A_0$, this is due to the fact that, since all $w$ sum up to 1, the
+difference between any of them is zero, then $A_0$ is the space of returns of the differences of
+$w$.
+
+Consider $R^e^*$ defined as
+$
+  R^e^* = "Proj"[1 \/ A_0] in A_0
+$
+this is the closest excess return which gives us $1$ by investing $0$, this is a obvious arbitrage
+condition, therefore it does not exists, but we look for the closest one.
+
+Note that
+$
+  m^* = R^* / EE[(R^*)^2]
+$
+this is because $EE[m^* R] = 1$ for all $R in A_1$.
+Similarly
+$
+  EE[m^* R^e] = 0 ==> EE[R^* R^e] wide forall R^e in A_0
+$
+in particular $EE[R^* R^e^*] = 0$, which means that $A = "span"(R^*) plus.circle A_0$.
+Moreover
+$
+  EE[(R^e^*)^2] = EE[R^e^*]
+$
+
+From these properties we get that
+$
+  "Var"(R^e^*) = EE[R^e^*] (1 - EE[R^e^*])
+$
+
+With some magic we get that
+$
+  A & = {alpha R^* plus.circle beta R^e^* plus.circle n | alpha, beta in RR, EE[n] = 0} \
+  A_1 & = {R^* plus.circle w R^e^* plus.circle n | w in RR, n in A_0, EE[n] = 0}
+$
+
+Take $R in A$, which means that $R = R^* plus.circle w R^e^* plus.circle n$. Then
+$
+  EE[R] = EE[R^*] + w EE[R^e^*] ==> w = (EE[R] - EE[R^*]) / EE[R^e^*]
+$
+where $EE[R]$ is chosen through $overline(E)$.
+
+Moreover
+$
+  "Var"(R) = "Var"(R^* + w R^e^*) + "Var"(n) + 0
+$
+where the $0$ represents the covariance which, since $n$ is orthogonal to everything else, can be
+cancelled.
+Then, to minimize the variance we choose $n = 0$. $n$ represents the *idiosyncratic risk* (the risk
+which can be avoided).
+
+Since now we have $w$ which is the optimal return we work backwards to find the portfolio which
+gives that return.

@@ -8,6 +8,10 @@
 
 #show: great-theorems-init
 
+#show "MC": [Markov chain]
+#show "RV": [random variable]
+#show "iid": [i.i.d.]
+
 = Introduction
 Stochastic processes are mathematical tools to model uncertainty and randomness.
 We will discuss two types of applications: modelling of stochastic phenomena and computational
@@ -194,11 +198,11 @@ Formally, we define $S$ recursively: $S_0 = 1$ and
 $
   S_k = min {t >= S_(k-1) + 1 | X_t = i }
 $
-and we set $min nothing.rev = infinity$.
+and we set $min nothing = infinity$.
 We also define the length of the $k$-th tour as
 $
   T_k = S_k - S_(k-1)
-$
+$<eq:ktour>
 
 #lemma()[
   Let $k >= 1$. Conditional on $S_(k-1) < infinity$, the random variable $T_k$ is independent of
@@ -432,7 +436,7 @@ In short, it means that there are no cycles.
   $
     P^t_(i j) -> pi_j wide "as" t -> oo, med forall i, j in cal(X)
   $
-]
+]<thm:convergence>
 
 Since $cal(P) (X_t = j) = sum_(j in cal(X)) P^t_(i j) cal(P) (X_0 = i)$, the convergence theorem
 implies that, regardless of the initial distribution of $X_0$, we have $cal(P)(X_t = j) = pi_j$ as
@@ -444,4 +448,119 @@ This also tells us that, if the chain is aperiodic and irreducible, stationarity
 
 #remark[This is a convergence in distributions, not of fixed values.]
 
-TODO: stopped before 1.4.3
+Define the number of visits to state $i$ after $n$ iterations as
+$
+  V_i (n) = sum^n_(t = 1) bb(1) (X_t = i)
+$<eq:def-vi>
+and the average excursion time from $i$ as
+$
+  m_i = EE [T_1 | X_0 = i] wide "with" T_1 = min {t >= 1 | X_t = i}
+$
+as in @eq:ktour.
+
+#theorem(title: [Asymptotic frequencies])[
+  Let $(X_t)_(t >= 0)$ be an irreducible MC. Then
+  1. Regardless of the starting distribution of $X_0$
+    $
+      (V_i (n))/n -> 1/m_i "almost surely as" n -> oo
+    $
+  2. If $pi$ is a stationary distribution for $(X_t)_(t >= 0)$, then
+    $
+      1/m_i = pi_i
+    $
+]<thm:asym-freq>
+
+#proof[
+  TODO: page 22
+]
+
+#theorem(title: [Ergodic theorem])[
+  Let $(X_t)_(t >= 0)$ be an irreducible MC with stationary distribution $pi$.
+  Then, for any bounded function $g: X -> RR$, we have
+  $
+    1/n sum^n_(t = 1) g(X_t) -> sum_(i in cal(X)) pi_i g(i) eq.colon EE_pi [g] wide "as" n->oo
+  $
+]
+
+#proof[
+  Assume $cal(X)$ is finite.
+
+  By definition of $V_i$ in @eq:def-vi and by @thm:asym-freq we get
+  $
+    1/n sum^n_(t = 1) g(X_t) = sum^n_(t = 1) (V_i (n)) / n g(i) -> sum_(i in cal(X)) pi_i g(i) wide "as" n->oo
+  $
+]
+
+This theorem is basically the Law of Large Numbers for MCs: in terms of approximated expectations
+$EE_pi [g]$ we can treat MC states as iid RVs.
+
+== Hitting times and probabilities
+
+#definition(title: [Hitting time and probability])[
+  Let $C subset cal(X)$.
+  The hitting time of $C$ is
+  $
+    tau_C = min {t >= 0 | X_t in C}
+  $
+  while its hitting probability is
+  $
+    h(i) = cal(P)(tau_C < oo | X_0 = i)
+  $
+]
+
+Note that for any $i in cal(X) without C$ we have
+$
+  h(i) & = sum_(j in cal(X)) cal(P) (tau_C < oo | X_1 = j, X_0 = i) cal(P)(X_1 = j | X_0 = i) \
+  & = sum_(j in cal(X)) cal(P) (tau_C < oo | X_0 = j) cal(P)(X_1 = j | X_0 = i) \
+  & = sum_(j in cal(X)) h(j) P_(i j)
+$
+
+Therefore we have a set of equations we can use to compute ${h(i)}_(i in cal(X))$:
+$
+  h(i) = cases(
+    sum_(j in cal(X)) h(j) P_(i j) wide & "if" i in cal(X) without C \
+                                 1 wide & "if" i in C
+  )
+$
+
+TODO: add section 1.6.1 in lecture notes
+
+== Reversibility
+
+#definition(title: [Reversible MC])[
+  A MC $(X_t)_(t >= 0)$ with transitional probabilities $P_(i j)$ is reversible if, for some
+  distribution $pi$,
+  $
+    pi_i P_(i j) = pi_j P_(j i) wide forall i, j in cal(X)
+  $
+]
+
+#proposition[
+  If a MC is reversible with distribution $pi$, then it is also $pi$-stationary.
+]
+
+#proof[
+  We have
+  $
+    sum_(i in cal(X)) pi_i P_(i j) = sum_(i in cal(X)) pi_j P_(j i) = pi_j sum_(i in cal(X)) P_(j i)
+  $
+  then $(X_t)_(t <= 0)$ is $pi$-stationary.
+]
+
+We have two possible interpretations of reversibility:
+/ Detailed-vs-Global balance: Note that $pi_i P_(i j)$ is the probability of observing
+  $(X_t, X_(t+1)) = (i, j)$. Reversibility implies the "exchange" of probabilities between each
+  state to be balanced, therefore we say that the chain is _detailed balanced_ w.r.t. $pi$.
+
+  In contrast, stationarity can be written as
+  $
+    sum_(i in I) pi_i P_(i j) = sum_(i in I) pi_j P_(j i)
+  $
+  where the left term can be interpreted as the total probability going "into $j$", while the right
+  side can be seen as the total probability going "out of $j$". In accordance with this intuition we
+  can say that the chain is _globally balanced_ w.r.t. $pi$.
+
+/ Time reversibility: If a MC is reversible then we cannot tell if we are running the chain
+  "forwards" or "backwards". Formally, let $Y_0 = X_n, Y_1 = X_(n - 1), ..., Y_n = X_0$, then, if $X_t$
+  is reversible, $(X_0, ..., X_n)$ and $(Y_0, ..., Y_n)$ have the same distribution.
+

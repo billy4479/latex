@@ -1,4 +1,5 @@
 #import "lib/template.typ": template
+#import "lib/utils.typ": *
 #import "lib/theorem.typ": *
 
 #show: template.with(
@@ -530,7 +531,11 @@ $<eq:mv-min>
 where $E$ is the vector of the expectations $E_j = EE[R_j]$. We assume that $Sigma$ is known.
 Eventually we will want to find the optimal portfolio for each possible $overline(E)$.
 
-=== Hansen-Richard
+== Hansen-Richard
+
+#let rstar = $R^*$
+#let restar = $R^e^*$
+#let rmv = $R^"MV"$
 
 This is an approach to solve @eq:mv-min.
 
@@ -589,7 +594,7 @@ in particular $EE[R^* R^e^*] = 0$, which means that $A = "span"(R^*) plus.circle
 Moreover
 $
   EE[(R^e^*)^2] = EE[R^e^*]
-$
+$<eq:restar-second-moment>
 
 From these properties we get that
 $
@@ -619,3 +624,142 @@ which can be avoided).
 
 Since now we have $w$ which is the optimal return we work backwards to find the portfolio which
 gives that return.
+
+Then, every $rmv$ on the *mean-variance frontier* can be written as
+$
+  R^(M V) = R^* + w R^e^*
+$
+for some $w$ in $RR$.
+
+#show "mvfront": [mean-variance frontier]
+
+Moreover, $rmv$ is on the mean variance frontier if and only if there exists $R'$ and $R''$ on
+the mvfront and $alpha in RR$ such that
+$
+  rmv = alpha R' + (1-alpha) R''
+$
+
+#proof[
+  TODO: there's a long ass proof, hopefully it is not required. Theorem 58
+]
+
+== Proxies for the risk-free asset
+
+Until now we have considered the case where there is no risk-free asset, however, before analyzing
+the case where we introduce one, we look at three criteria which can be used as risk-free proxies:
+alternatives when the risk free asset does not exist.
+
+1. The global minimum portfolio return, that displays the lowest possible variance;
+2. The zero-beta (i.e. uncorrelated) portfolio on the mvfront that displays a zero covariance with a
+  fixed starting portfolio on the frontier;
+3. The constant-mimicking portfolio return, which is the normalized projection of the risk free
+  asset on the space of traded payoffs.
+
+We now analyze these possibilities one by one.
+
+=== Global minimum variance portfolio return
+
+The global minimum variance portfolio return solves the following optimization problem
+$
+  min_(w in RR) var[R^* + w R^e^* + n] & = min_(w in RR) var[R^* + w R^e^*] \
+  & = min_(w in RR) var[R^*] + w^2 var[R^e^*] + 2w cov[R^*, R^e^*] \
+$
+where we can cancel the terms with $n$ since it is orthogonal to both $R^*$ and $R^e^*$ and since
+$EE[n] = 0$.
+
+Note that
+$
+  cov[R^*, R^e^*] = cancel(EE[R^* R^e^*]) - EE[R^*] EE[R^e^*]
+$
+which can be different from zero.
+
+
+We conclude that the first order condition of the minimization problem is
+$
+  2w var[restar] - 2 EE[rstar] EE[restar] = 0
+$
+Then, we can compute $w_("MIN")$ by using @eq:restar-second-moment:
+$
+  w_("MIN") & = (EE[rstar] EE[restar])/ var[restar]
+              = (EE[rstar] EE[restar])/ (EE[(restar)^2] - (EE[restar])^2 ) \
+            & = (EE[rstar] EE[restar])/ (EE[restar] (1 - EE[restar]))
+              = EE[rstar] / (1 - EE[restar])
+$
+therefore
+$
+  R_("MIN") = rstar + EE[rstar] / (1 - EE[restar]) restar
+$
+is the global minimum variance portfolio return.
+
+#remark[
+  $
+    EE[R_"MIN"] = w_("MIN")
+  $
+]
+#proof[
+  TODO: remark 62
+]
+
+#definition(title: "Efficient return")[
+  A return $rmv$ on the mvfront is efficient if $EE[rmv] > EE[R_("MIN")]$.
+]
+
+=== Zero-beta portfolio
+
+#let zcr = $z c [R]$
+
+Given any $R != R_("MIN")$ there exists an unique portfolio $zcr$ which in uncorrelated from $R$ on
+the frontier.
+Assuming that $R$ is on the mvfront, we can decompose it as usual and get that
+$zcr = rstar + w_zcr restar$ imposing that
+$
+  cov (R, zcr) = 0
+$
+and from some algebra (see page 45 in lecture notes) we get
+$
+  w_zcr = (w EE[rstar] EE[restar] - var[rstar])/(w var[restar] - EE[rstar] EE[restar])
+$
+
+#remark[
+  Any other return with the same expected return of $R$ is still uncorrelated from $zcr$.
+]
+
+An intuitive way to find $zcr$ is to start from $R$, draw the tangent line to the frontier passing
+through it, follow the line until $sigma = 0$, then move horizontally until we intercept the
+frontier again (see figure 4.2 in lecture notes).
+
+=== Constant mimicking portfolio return
+
+This is the traded return which is closest to $1$:
+$
+  "proj"[1 | A]
+$
+and its return is
+$
+  R_("CMR") = "proj"[1|A]/pi("proj"[1|A])
+$
+
+Recall that $cal(L)^2$ (i.e. the space of distributions with finite variance) can we decomposed as
+the sum of $A^perp$, $"span"(rstar)$ and $A_0$, therefore we can write
+$
+  1 = "proj"[1|A^perp] + "proj"[1|rstar] + "proj"[1|A_0]
+$
+and (after computing the least squares) we get
+$
+  1- "proj"[1|A^perp] = EE[rstar]/EE[(rstar)^2] rstar + restar = "proj"[1|A]
+$
+by our decomposition. Finally
+$
+  pi("proj"[1|A]) = EE[rstar]/EE[(rstar)^2] != 0
+$
+as $pi(rstar) = 1$ and $pi(restar) = 0$ and the fact that it is $!= 0$ comes from the assumption of
+no risk-neutrality.
+
+We get
+$
+  R_("CMR") & = ("proj"(1|A))/(pi("proj"(1 | A )))= rstar + (EE[(rstar)^2]) / (EE [rstar]) restar \
+  w_("CMR") & = (EE[(rstar)^2]) / (EE [rstar]) \
+  EE[R_("CMR")] & = (EE[(rstar)]^2 + EE[(rstar)^2] EE[restar]) / (EE [rstar]) \
+$
+
+Moreover, it can be shown (see remark 65 in lecture notes), that $EE[R_"CMR"] > EE[R_"MIN"]$.

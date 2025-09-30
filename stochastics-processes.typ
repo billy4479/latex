@@ -1,14 +1,15 @@
 #import "lib/template.typ": template
 #import "lib/theorem.typ": *
+#import "lib/utils.typ": *
+
 #show: template.with(
-  title: "Mathematical Modelling for Finance",
+  title: "Stochastic processes",
   author: "Giacomo Ellero",
   date: "A.Y. 2025/2026",
 )
 
 #show: great-theorems-init
 
-#show "MC": [Markov chain]
 #show "RV": [random variable]
 #show "iid": [i.i.d.]
 
@@ -564,3 +565,195 @@ We have two possible interpretations of reversibility:
   "forwards" or "backwards". Formally, let $Y_0 = X_n, Y_1 = X_(n - 1), ..., Y_n = X_0$, then, if $X_t$
   is reversible, $(X_0, ..., X_n)$ and $(Y_0, ..., Y_n)$ have the same distribution.
 
+
+== Examples
+
+On the lecture notes, in chapter 2, we can find 3 examples of discrete time MCs.
+
+We report the one about Hidden Markov Models: in this model at each time $t$ we observe a signal
+$S_t$ which we assume is coming from some underlying MC. To construct this model we need a MC
+$(X_t)_(t >= 0)$ with starting distribution $alpha$, a set of possible signals $cal(S)$ and
+a function which tells us the probability that, given each state of the MC, a certain signal is
+observed
+$
+  cal(P)(S_t = s | X_t = j) = f(s | j) wide s in cal(S), j in cal(X)
+$
+where independence holds
+$
+  S_t perp (X_i, S_i)_(i != t) | X_t
+$
+
+This is just the basic mathematical structure, more examples can be found on the lecture notes.
+
+= Continuous-time Markov chains
+
+This time we consider stochastic processes where $t in [0, +oo)$ but discrete space (i.e. $cal(X)$
+finite or countable).
+
+== Tools
+
+=== Exponential distribution
+
+Recall that a random variable $X tilde "Exp"(lambda)$ with rate $lambda > 0$ if its pdf is
+$
+  f(x) = cases(lambda e^(-lambda x) & wide x>0, 0 & wide x <= 0)
+$
+and the corresponding cdf is
+$
+  F(x) = cases(1-e^(-lambda x) & wide x>0, 0 & wide x <= 0)
+$
+
+The mean and the variance are both equal to $lambda^(-1)$.
+
+#definition(title: "Memoryless property")[
+  A random variable $X$ valued in $(0, oo)$ is memoryless if
+  $
+    cal(P)(X>s+t | X>t) = cal(P)(X>s)
+  $
+]
+
+Intuitively the memoryless property has the following interpretation: if an event hasn't occurred
+yet at some time $t$, the probability that happens in the next $s$ units of time is the same as if
+we started "looking for" the event now.
+
+#proposition[
+  $X tilde "Exp"(lambda)$ is memoryless.
+]
+
+=== Hazard rates
+
+When $X$ represents the lifetime of some item or the time until an event occurs we can introduce the
+hazard rate function $r(t)$ defined as
+$
+  r(t) = f(t) / (1-F(t))
+$
+where $f$ and $F$ are the pdf and the cdf of $X$. The hazard rate function represents the
+probability of the event happening at time $t$ given that it has not happened yet before $t$.
+
+The survival function of a RV $X$ is denoted as
+$
+  macron(F) (t) = cal(P)(X > t) = 1 - F(t)
+$
+
+#proposition(title: "hrf characterize distributions")[
+  Let $X$ be a positive valued random variable and $r$ its hazard rate function.
+  Then
+  $
+    macron(F)(t) = e^(-integral_0^t r(s) dif s)
+  $
+]<prop:hrf-characterization>
+
+#proof[TODO: page 44]
+
+The hazard rate function for the exponential distribution is constant and equal to $lambda$. This is
+what we expect from any memoryless distribution.
+As the hazard rate function characterizes the distribution, the exponential distribution is the only
+memoryless distribution.
+
+#show "hrf": [hazard rate function]
+
+#proposition(title: "First event")[
+  Given $(X_i)_(i = 1, ..., n)$ independent rvs with hrf $r_i$ we have that the random variable
+  defined as
+  $
+    X colon.eq min_(i = 1, ..., n) X_i
+  $
+  has hrf of
+  $
+    r(t) = sum^n_(i = 1) r_i (t)
+  $
+]
+#proof[
+  By definition of $X$ we have
+  $
+    macron(F) = cal(P)(X > t) = cal(P)(union.big_(i = 1)^n {X_i > t})
+    = product_(i = 1)^n cal(P)(X_i > t) = product_(i = 1)^n macron(F)_i (t)
+  $
+  Then, by @prop:hrf-characterization we have
+  $
+    macron(F)(t) = product^n_(i = 1) exp (- integral_0^t r_i (s) dif s) = exp (-integral_0^t r(s) dif s)
+  $
+  with $r(s) = sum^n_(i = 1) r_i (s)$, meaning that $r(s)$ hrf of $X$
+]
+
+#proposition(title: "Hazard race")[
+  Given $(X_i)_(i = 1, ..., n)$ independent rvs with hrf $r_i$ we have that the random variable
+  defined as
+  $
+    I colon.eq limits("arg min")_(i = 1, ..., n) med X_i
+  $
+  satisfies
+  $
+    cal(P)(I = i | X = t) = (r_i (t)) / (sum_(j=1)^n r_j (t))
+  $
+  where $X$ is defined as in the previous proposition.
+]
+
+#proof[
+  TODO: part two, page 46
+]
+
+#corollary[
+  Let $X_i tilde "Exp"(lambda_i)$ independent for $i = 1, ..., n$. Then the RVs
+  $
+    X colon.eq min_(i = 1, ..., n) X_i wide "and" wide
+    I colon.eq limits("arg min")_(i = 1, ..., n) med X_i
+  $
+  have distributions
+  $
+    X tilde "Exp"(sum^n_(i = 1) lambda_i) \
+    cal(P)(I = i) = lambda_i / (sum^n_(j = 1) lambda_j)
+  $
+
+  Moreover, $X perp I$.
+]
+
+== Markov property
+
+#definition(title: "Markov property")[
+  A continuous-time stochastic process $(X(t))_(t in [0, +oo])$ with discrete space $cal(X)$
+  satisfies the Markov property if
+  $
+    cal(P)(X(t+s) = j | X(s) = i, X(u) = x(u) "for" 0 <= u <= s) \
+    = cal(P)(X(t+s) = j | X(s) = i)
+  $
+]
+
+A continuous-time MC (CTMC) is *time homogeneous* if the transition probabilities
+$
+  P_(i j)(t) colon.eq cal(P)(X(t + s) = j | X(s) = i)
+$
+do not depend on $s$. We will always consider time-homogeneous CTMCs unless otherwise stated.
+
+#proposition(title: "Chapman-Kolmogorov equations")[
+  The transition probabilities satisfy
+  $
+    P_(i j) (s + t) = sum_(k in cal(X)) P_(i k) (s) P_(k j) (t)
+  $
+]
+
+#proof[
+  Same as @prop:chapman-kolmogorov.
+]
+
+When $abs(cal(X)) < oo$ we can rewrite it as
+$
+  P(t + s) = P(t) P(s)
+$
+where $P$ denote the transition probability matrix.
+
+=== Generator/Jump rates
+
+Unlike in discrete time we no longer have any minimal discrete unit of time e.g. $t = 1$. Instead,
+to reason about the behavior of CTMCs we look at the behavior of $(P(t))_(t in [0, epsilon))$ for
+some small $epsilon > 0$.
+
+#definition(title: "Jump rate")[
+  We define the jump rate (or instantaneous transition rate) from $i$ to $j$ of a CTMC as
+  $
+    Q_(i j) colon.eq lim_(h -> 0) (P_(i j)(h))/h
+  $
+]
+
+The jump rate can be interpreted as the "hazard rate" at which the MC currently in state $i$ jumps
+to $j$ in the next infinitesimal instant.

@@ -28,9 +28,12 @@
     footer: context {
       set align(center)
       set text(fontSize - 2pt)
-      counter(page).display(
-        "1 of 1",
-        both: true,
+      link(
+        (page: 1, x: 0pt, y: 0pt),
+        counter(page).display(
+          "1 of 1",
+          both: true,
+        ),
       )
       if (nameInFooter) {
         linebreak()

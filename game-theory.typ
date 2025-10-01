@@ -1,4 +1,5 @@
 #import "lib/template.typ": template
+#import "lib/utils.typ": *
 #import "lib/theorem.typ": *
 
 #show: template.with(
@@ -282,19 +283,113 @@ The set of non weakly dominated actions is denoted by $"NWD"_i$.
 We assume *complete information*, that is, the rules of the game and everyone's preferences are
 common knowledge.
 
-A fact is *common knowledge* if everyone knows the fact, everyone knows that everyone knows the
-fact, and so on.
 
-#example(title: [Cournot Competition])[
-  $N$ firms compete in a market and have to choose the quantity of a certain product to produce
-  $q_i in [0, overline(q)]$.
-  The utility of each firm is given by
-  $
-    u_i (q_i, q_(-i)) = q_i P(q_1, ..., q_N) - C_i (q_i)
-  $
-
-  It is common knowledge that the firms maximize expected profit, the price function $P$ and all the
-  cost functions $(C_i)_(i in I)$.
+#definition(title: "Common knowledge")[
+  A fact is common knowledge if everyone knows the fact, everyone knows that everyone knows the
+  fact, and so on.
 ]
+
+We know that there if a player is rational he will never choose actions which are dominated by some
+other, but what happens if player $i$ believes that all other players are also rational?
+The set of action profiles which are reasonable to be played by others (weakly) shrinks, therefore,
+every conjecture of player $i$ $mu^i$ which assigns a non-zero probability to some action
+$a_j in A_j$ which dominated by some other action $alpha_j in A_j$ is immediately discarded, since
+it is not consistent with player's $i$ belief.
+
+We will define the set of *rationalizable actions* as the set of actions which are compatible to the
+common knowledge of rationality.
+
+== Notation
+
+Let $R_i$ denote the _event_ that player $i$ is rational, then $R = inter.big_(i in I) R_i$ denotes
+the event that all players are rational.
+Let $"ND" = times_(i in I) "ND"_i$ be the set of all non-dominated action profiles, then $"ND"$ is
+the set of action profiles compatible with the event $R$.
+
+Let $E$ denote a generic event. If everybody believes $E$, then we write $B(E)$. If everyone
+believes that everyone believes $E$ we write $B(B(E)) = B^2(E)$ and so on.
+
+We want to study the action profiles which are compatible with the sequence of events
+$
+  R inter B(R), wide R inter B(R) inter B^2(R), wide ..., wide R inter (inter.big^K_(k = 1) B^k (R))
+$
+
+Consider the set $A = times_(i in I) A_i$ and let $cal(C) subset.eq cal(P)(A)$ be a collection of
+action profiles.
+Each element of $cal(C)$ is a set
+$
+  C = { times_(i in I) C_i | C_i subset.eq A = times_(i in I) A_i}
+$
+
+#example[
+  In a $3 times 3$ with two players game we have that there are $2^3 - 1 = 7$ action profiles (the
+  $-1$ comes from the removal of the empty set), then $abs(cal(C)) = 7^2 = 49$.
+]
+
+#definition(title: "Rationalization oeperator")[
+  Let $Delta(C_i)$ denote the set of conjectures $mu^i$ such that $mu^i (C_(-i)) = 1$.
+  Let the set of justifiable conjectures for actions profiles in $C_(-i)$
+  $
+    r_i (Delta (C_(-i)) = union.big_(mu^i | mu^i (C_(-1)) = 1) r_i (mu^i)
+  $
+  The map $rho : cal(C) -> cal(C)$ defined as
+  $
+    rho(C) = times_(i in I) r_i (Delta (C_(-i)))
+  $
+]
+
+Note that $rho (A)$ is just the set of justifiable actions (i.e. consistent with event $R$) and by
+iterating $rho(rho(A))$ is the set of actions consistent with $B(R)$ and so on.
+
+== Iterated applications of $rho$.
+
+#remark[
+  - The statement $rho(C) subset.eq C$ is *not* true in general.
+  - The rationalization operator is monotone: let $E, F in cal(C)$ such that $E subset.eq F$, then
+    $rho(E) subset.eq rho(F)$.
+]
+
+#lemma[
+  For every $k in NN$, $rho^(k + 1) (A) subset.eq rho^k (A)$.
+]
+#proof[
+  Proceed by induction. We know that $rho(A) subset.eq A = rho^0(A)$.
+  Then we have that
+  $
+    rho^(t + 1) (A) = rho(rho^t (A)) subset.eq rho(rho^(t-1)(A)) = rho^r (A)
+  $
+  by the induction hypothesis $rho^t (A) subset.eq rho^(t -1) (A)$ and by monotonicity of $rho$.
+]
+
+#definition(title: "Rationalizable action profiles")[
+  Let
+  $
+    rho^oo (A) = inter.big_(k >= 1) rho^k (A)
+  $
+  denote the set of rationalizable action profiles, that is, the set of action profiles compatible
+  with the _common knowledge_ of rationality.
+]
+
+We have that the sequence $(rho^k(A))_(k in NN)$ is a decreasing sequence in a finite game,
+therefore it must converge.
+
+#theorem[
+  If $G$ is a finite game, then there exists a positive integer $K$ such that
+  $rho^(K+1) (A) = rho^K (A) = rho^oo (A) != nothing$.
+]
+
+
+// #example(title: [Cournot Competition])[
+//   $N$ firms compete in a market and have to choose the quantity of a certain product to produce
+//   $q_i in [0, overline(q)]$.
+//   The utility of each firm is given by
+//   $
+//     u_i (q_i, q_(-i)) = q_i P(q_1, ..., q_N) - C_i (q_i)
+//   $
+//
+//   It is common knowledge that the firms maximize expected profit, the price function $P$ and all the
+//   cost functions $(C_i)_(i in I)$.
+// ]
+//
 
 

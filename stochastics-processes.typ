@@ -757,3 +757,181 @@ some small $epsilon > 0$.
 
 The jump rate can be interpreted as the "hazard rate" at which the MC currently in state $i$ jumps
 to $j$ in the next infinitesimal instant.
+
+#example(title: [Poisson Process])[
+  The one-dimensional Poisson Process, which we denote as $(X(t))_(t in [0, oo)) tilde "PP"(lambda)$
+  is a CTMC with $cal(X) = NN$ and jump rates
+  $
+    cases(
+      Q_(i, i+1) = lambda & wide forall i in cal(X),
+      Q_(i, j) = 0 & wide "for all other cases"
+    )
+  $
+]<ex:poisson-process-1d>
+
+== Kolmogorov differential equations
+
+We want to compute the transition probabilities now, i.e. the probability that starting from $i$ and
+after a certain time $t$, we end up in $j$. This is quite a bit harder than in the discrete case,
+since now we don't know how many transition happen in the time interval $t$, in theory we could have
+infinitely many.
+
+Let us define $Q_(i i) = - sum_(j != i) Q_(i j) = - nu$ so that the matrix $Q$ is a full
+$cal(abs(X)) times abs(cal(X))$ matrix, called the _generator matrix_.
+
+#lemma[
+  $
+    Q = P'(0)
+  $
+  or equivalently
+  $
+    Q_(i j) = lr(dif / (dif t) P_(i j) (t) |)_t(0)
+  $
+]
+#proof[
+  See page 51, idea is that it is easily shown that $Q_(i j) = P'_(i j)$ for $i != j$, while if $i =
+  j$, since $sum_(j in cal(X)) P_(i j) = 1$ we have $P_(i i) = 1 - sum_(j != i) P_(i j)$ and taking
+  derivatives we obtain the result.
+]
+
+#theorem(title: [Kolmogorov forwards and backwards equations])[
+  Let $X$ be a CTMC with finite $cal(X)$ and with a well-defined $Q$.
+  Then the following equations are satisfied:
+  / Backwards:
+  $
+    P'_(i j)(t) = sum_(k != j) Q_(i k) P_(k j) (t) - nu_i P_(i j) = (Q P(t))_(i j)
+  $
+  / Forwards:
+  $
+    P'_(i j)(t) = sum_(k != j) Q_(k j) P_(i k) (t) - nu_i P_(i j) = (P(t) Q)_(i j)
+  $
+]
+
+#proof[
+  TODO: page 51
+]
+
+These equations can be hard to solve, however they always allow a solution of the form
+$
+  P(t) = e^(t Q) = sum^oo_(n = 0) (t Q)^n / n!
+$
+as in matrix exponentiation.
+It can be shown that this series always converges and solves the equations (no proof required).
+
+== Jump chain and holding time
+
+We will assume that the trajectory $t mapsto X(t)$ satisfies the following _cadlad_ assumptions:
+$
+  lim_(h -> 0) X(t + h) & = X(t) \
+  lim_(h -> 0) X(t - h) & "exists"
+$
+this rule out trajectories which have an uncountable number of discontinuity points. However, this
+is weaker than continuity, since otherwise when $cal(X)$ is discrete we only allow for constant
+trajectories.
+
+Under these assumptions chains can be represented by the *jump chain* $(Y_n)_(n = 0, 1, 2, ...)$
+where $Y_n$ represents the $n$-th state visited by the chain $X_t$. Similarly we can define the
+*holding times* $(T_n)_(n = 0, 1, 2, ...)$ where $T_n$ represents the amount of time spent in the
+$n$-th visited state $Y_n$.
+
+$
+  X(t) = i <==> cases(
+    T_0 + ... + T_(n-1) <= t <= T_0 + ... + T_n \
+    Y_n = i
+  )
+$
+
+Moreover, we can show (see page 55) that, by the Markov property and time homogeneity of the chain
+$(T_0 | Y_0 = i) tilde "Exp"(nu_i)$ for some $nu_i$ which can depend on the state. This is because
+we can show that $T_0 | Y_0$ satisfies the memoryless property.
+
+When $X(t)$ makes a jump out of $i$ it will go to $j$ with some probability which we will denote as
+$
+  K_(i j) = cal(P)(Y_1 = j | Y_0 = i)
+$
+Then the matrix $K$ is a matrix of transition probabilities and $(Y_n)$ is a discrete time Markov
+chain. This means that, given $K$ and $(nu_n)_(n = 0, 1, 2,...)$, the CTMC spends
+$T tilde "Exp"(nu_i)$ time in state $i$, then jumps to state $j$ with probability $K_(i j)$.
+(mathematical formulation at eq 3.35 in lecture notes)
+
+=== Connections between $(nu, K)$ and $Q$
+
+#lemma[
+  Let $X_t$ be a CTMC defined through jumping and holding times.
+  Then, the jump rates $Q$ are well defined and
+  $
+    nu_i & = sum_(j != i) Q_(i j)& wide i in cal(X)\
+    K_(i j) & = Q_(i j) / (sum_(ell != i) Q_(i ell)) & wide i, j in cal(X) "and" i != j
+  $
+]
+
+#proof[
+  IMPORTANT TODO: section 3.5.1 in lecture notes
+]
+
+== Limiting behavior of CTMCs
+
+We want to see what happens in
+$
+  lim_(t -> oo) P(t)
+$
+
+#definition(title: "Stationary distribution")[
+  $pi$ is a stationary distribution for a CTMC $X_t$ if
+  $
+    pi P(t) = pi
+  $
+]
+
+#proposition[
+  $pi$ is a stationary distribution if and only if
+  $
+    pi Q = underline(0)
+  $
+  (a vector of zeros).
+]
+
+#proof[
+  Note that $pi$ is stationary if and only if $dif/ (dif t) pi P(t) = 0$.
+
+  Assume that $pi Q = 0$, then we can use Kolmogorov equations to get
+  $
+    dif / (dif t) pi P(t) = pi P'(t) = pi Q P(t) = 0
+  $
+  which means that $pi P(t)$ is constant and since $P(0) = pi$ we conclude.
+
+  Now assume that $pi$ is stationary, we have
+  $
+    0 = dif / (dif t) pi P(t) = pi P'(t) wide forall t >= 0
+  $
+  therefore at $t = 0$ we have $0 = pi P'(t) = pi Q$.
+]
+
+By expanding $pi Q = 0$ we get the *balance equations*:
+$
+  nu_j pi_j = sum_(i != j) pi_i Q_(i j)
+$
+called *global balance*. We can also impose a stronger *detailed balance*
+$
+  pi_j Q_(j i) = pi_i Q_(i j)
+$
+
+Both of these equations can be interpreted as "flows of probabilities" in the stationary state.
+
+#lemma[
+  Let $X$ be an irreducible CTMC.
+  Then
+  $
+    P_(i j) (t) > 0
+  $
+  (strictly positive)
+]
+#proof[Skip.]
+
+#theorem(title: [Convergence theorem for CTMCs])[
+  Let $X$ be an irreducible CTMC with stationary distributino $pi$, then
+  $
+    P_(i j) (t) -> pi_j
+  $
+]
+#proof[Skip.]

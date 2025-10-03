@@ -70,11 +70,11 @@ We start with some definitions.
 #definition(title: "Spaces of payoffs and cashflows")[
   Let the *space of traded payoffs* be
   $
-    A = {z in RR^k | z = A theta, theta in RR^(k+1)}
+    A = {z in RR^k | z = cal(A) theta, theta in RR^(k+1)}
   $
   and the *space of traded cashflows* be
   $
-    M = {x in RR^(k+1) | x = M theta, theta in RR^(k+1)}
+    M = {x in RR^(k+1) | x = cal(M) theta, theta in RR^(k+1)}
   $
 ]
 
@@ -92,17 +92,17 @@ $t=1$ we close all of our positions but by definition we will get the same payof
 strategies.
 
 #remark[
-  If $"rank"(A) = k$ then LOP holds. This makes sure that there are no redundant securities whose
-  payoff can be obtained by a linear combination of the others.
+  If $"rank"(cal(A)) = k$ then LOP holds. This makes sure that there are no redundant securities
+  whose payoff can be obtained by a linear combination of the others.
   $
-    A(theta' - theta'') = 0
+    cal(A) (theta' - theta'') = 0
   $
 ]
 
 #proposition[
   LOP holds iff
   $
-    A theta = 0 ==> V_theta (0)
+    cal(A) theta = 0 ==> V_theta (0) = 0
   $
 ]
 
@@ -111,16 +111,34 @@ These tell us that if we want to get a zero payoff it will cost us zero.
 === Linear Pricing Functional (LPF)
 
 #definition(title: "Linear Pricing Functional (LPF)")[
+  The Linear Pricing Functional is a correspondence $pi: A -> RR$
   $
-    pi (z) = { V_theta (0) | A theta = z}
+    pi (z) = { V_theta (0) | cal(A) theta = z}
   $
   such that
   1. $pi(z)$ is single-valued (i.e. is a function)
   2. $pi(z)$ is linear
 ]
 
+Given a payoff $z in A$, the LPF gives us the price at $t = 0$ of the portfolio that generates that
+payoff.
+
 #proposition[
   LOP holds $<==> exists$ an LPF.
+]
+
+#proof[
+  / LPF implies LOP: Trivial, since the LPF is single-valued we have that $pi(0) = 0$ which gives us
+    the LOP by the previous proposition.
+
+  / LOP implies LPF: Consider $theta'$ and $theta''$ such that $cal(A) theta' = cal(A) theta''$
+    then, by LOP,
+    $
+      V_theta' (0) = V_theta'' (0) ==> pi(cal(A) theta') = pi (cal(A) theta'') ==> V_theta' (0) =
+      V_theta'' (0)
+    $
+    which tells us that $pi$ is single-valued. Linearity can be also be proven with some algebra,
+    see Proposition 15 in lecture notes.
 ]
 
 === Stochastic Discount Factor (SDF)
@@ -501,8 +519,8 @@ securities, _all risky_.
 
 We use a slightly different notation: $S_j$ is the price at time $0$ of asset $j$, while $x_j$ is
 its payoff at time $1$.
-We have that $x_j in cal(L)^2 (Omega, 7, cal(P))$ where $cal(L)^2$ is the space of distributions
-with finite variance.
+We have that $x_j in cal(L)^2 (Omega, 7, cal(P))$, where $cal(L)^2$ is the space of distributions
+with finite variance, are the values which $S_j (1)$ can take.
 
 Then we define the *gross return rate* as
 $
@@ -546,8 +564,8 @@ Since LOP holds $exists$ LPF and $exists$ SDF.
 Note also that the second-moment matrix (or Gram matrix) $E[x x^T]$, where
 $E[x x^T]_(i j) = EE[x_i x_j]$, is also non singular.
 
-As we know, the SDF $m^* = theta^* dot x$ and $theta^*$ is a valid strategy. We want to find this
-$theta^*$ from
+As we know, the SDF $m^* = theta^* dot x in A$, which means that $theta^*$ is a valid strategy.
+We want to find this $theta^*$ from
 $
   EE[(theta^* x) x_j] = S_j, wide j in 1, ..., N
 $
@@ -559,47 +577,86 @@ $
       <==> m^* = & S^T EE^(-1)[x x^T] x
 $
 where we know that we can invert $EE[x x^T]$ since it is non-singular.
+$S$ is the vector of all the prices $S = [S_1 (0), ..., S_N (0)]^T$.
 
-The space of payoffs $A = "span"(x_1, ..., x_N)$ can be decomposed by using $R^*$ which is defined
-as the payoff on $m^*$:
-$
-  R^* = m^* / pi(m^*) = m^* / EE[(m^*)^2] in A_1 = {R in A | pi(R) = 1}
-$
-moreover, define
-$
-  A_0 = {R^e in A | pi(R^e) = 0}
-$
-Note that $A_1$ is affine, while $A_0$ is linear. $R^e$ is the excess returns: $exists R, R' in A_1$
-such that $R^e = R - R' in A_0$, this is due to the fact that, since all $w$ sum up to 1, the
-difference between any of them is zero, then $A_0$ is the space of returns of the differences of
-$w$.
+=== Definitions
 
-Consider $R^e^*$ defined as
-$
-  R^e^* = "Proj"[1 \/ A_0] in A_0
-$
-this is the closest excess return which gives us $1$ by investing $0$, this is a obvious arbitrage
+Let us define two subsets of the space of payoffs $A = "span"(x_1, ..., x_N)$.
+#definition(title: [$A_1$ and $A_0$])[
+  Define the space of returns $A_1$ and the space of excess returns $A_0$ as
+  $
+    A_1 & = {R in A | pi(R) = 1} \
+    A_0 & = {R^e in A | pi(R) = 0}
+  $
+]
+
+The interpretation we can give to each one of these sets is the following:
+/ Space of returns: $A_1$ is the space where the gross return lie. Indeed, every gross return is
+  defined as the ratio between its payoff $y$ and its initial price $pi(y)$. Then
+  $
+    pi(y/pi(y)) = 1/pi(y) pi(y) = 1
+  $
+  which tells us that all the elements of $A_1$ can be written as a gross return for some $y in A$.
+
+  $A_1$ is affine.
+
+/ Space of excess returns: $A_0$ is the set of traded payoffs with zero initial price. Since we know
+  that $S_k (0) != 0$ for all $k$ we get that $A_0 subset.neq A$.
+
+  $A_0$ is linear.
+
+  Each element of $R^e in A_0$ is an excess returns: $exists R, R' in A_1$ such that
+  $R^e = R - R' in A_0$. This is due to the fact that, since all $w$ sum up to 1, the difference
+  between any of them is zero, then $A_0$ is the space of returns of the differences of $w$.
+
+We now define two special elements of these two sets.
+
+#definition(title: [#rstar and #restar])[
+  Define $rstar$ and $restar$ as follows
+  $
+     rstar & = m^* /pi(m^*) in A_1 \
+    restar & = "proj"[1 | A_0] in A_0
+  $
+]
+
+#restar is the closest excess return which gives us $1$ by investing $0$, this is a obvious arbitrage
 condition, therefore it does not exists, but we look for the closest one.
 
-Note that
-$
-  m^* = R^* / EE[(R^*)^2]
-$
-this is because $EE[m^* R] = 1$ for all $R in A_1$.
-Similarly
-$
-  EE[m^* R^e] = 0 ==> EE[R^* R^e] wide forall R^e in A_0
-$
-in particular $EE[R^* R^e^*] = 0$, which means that $A = "span"(R^*) plus.circle A_0$.
-Moreover
-$
-  EE[(R^e^*)^2] = EE[R^e^*]
-$<eq:restar-second-moment>
+#proposition(title: [Properties of #rstar and #restar])[
+  1. $EE[restar] = EE[m^*]/EE[(m^*)^2]$
+  2. $m^* = rstar/EE[(rstar)^2]$
+  3. $EE[rstar R] = EE[(rstar)^2]$ for all $R in A_1$
+  4. $EE[rstar R^e] = 0$ for all $R^e in A_0$
+  5. $EE[restar n] = E[n]$ for all $n in A_0$, in particular
+  $
+    EE[(restar)^2] = EE[restar]
+  $<eq:restar-second-moment>
+]
+#proof[
+  TODO: see proposition 52
+]
 
-From these properties we get that
-$
-  "Var"(R^e^*) = EE[R^e^*] (1 - EE[R^e^*])
-$
+#remark(title: [Variance of $R^e$])[
+  Thanks to @eq:restar-second-moment we have
+  $
+    var[R^e] = EE[R^e](1 - EE[R^e])
+  $
+  Moreover, $EE[R^e] != 0$, which implies $var[R^e] > 0$.
+]
+#proof[
+  For the first identity we have
+  $
+    var[R^e] & = EE[(R^e)^2] - EE[R^e]^2 \
+             & = EE[R^e] - EE[R^e]^2 \
+             & = EE[R^e](1 - EE[R^e]^2)
+  $
+
+  TODO: second part.
+]
+
+=== Decomposition
+
+TODO: rewrite this shit
 
 With some magic we get that
 $

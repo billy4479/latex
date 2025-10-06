@@ -797,7 +797,7 @@ gives that return.
   $
     rmv = alpha R' + (1-alpha) R''
   $
-]
+]<thm:two-fund>
 
 #proof[
   - Let $R'$ and $R''$ belong to the mvfront, we show that $rmv$ is also on the mvfront.
@@ -956,3 +956,103 @@ $
 $
 
 Moreover, it can be shown (see remark 65 in lecture notes), that $EE[R_"CMR"] > EE[R_"MIN"]$.
+
+== Frontier with riskless asset
+
+Introduce a riskless asset $B$ with $R_f = B(1)/B(0) > 0$.
+We can now define a variant of every object we defined before, note that in general these new
+version of $rstar, restar$, etc are different from the ones we found without the risk-free asset.
+The decompositions of $A$, $A_1$ and $rmv$ still hold.
+
+#proposition(title: [$R_f$ is on the mvfront])[
+  $R_f$ is on the mvfront and it can be decomposed as
+  $
+    R_f = rstar + R_f restar
+  $
+]
+
+#proof[
+  $R_f$ is obviously on the mvfront since $var[R_f] = 0$.
+
+  Since $R_f$ is on the mvfront, there must exist $tilde(w)$ such that
+  $
+    R_f = rstar + tilde(w) restar
+  $
+
+  By the existence of $R_f$ we deduce that $1 in A$, therefore there must exist $alpha$ such that
+  $
+    1 = alpha rstar + restar
+  $
+  since $restar = "proj"[1 | A_0]$.
+
+  Moreover, we have
+  $
+    1 / R_f & = pi(1) = EE[m^*] \
+            & = EE[m^* (alpha rstar + restar)] \
+            & = alpha EE [m^* rstar] + EE[m^* restar] \
+            & = alpha
+  $
+  which means
+  $
+    1 = 1/R_f rstar + restar
+  $
+  which is equivalent to
+  $
+    R_f = rstar + R_f restar
+  $
+  as desired.
+]
+
+#proposition[
+  $EE[rmv] - R_f > 0$ if and only if $alpha < 0$ according to @thm:two-fund.
+]
+
+#proof[
+  We have $rmv = (1-alpha) R_f + alpha rstar$ and taking the expectation we get
+  $
+    EE[rmv] & = (1 - alpha) R_f + alpha EE[rstar] \
+            & = R_f + alpha (EE[rstar] - R_f)
+  $
+  then $EE[rmv] - R_f = alpha(EE[rstar] - R_f)$.
+  Moreover, since $R_f = EE[R_f] = EE[rstar] + R_f EE[restar]$, we get
+  $
+    EE[rstar] - R_f & = EE[rstar] - EE[rstar] - R_f EE[restar] \
+                    & = - R_f EE[restar] \
+                    & = - R_f EE[(restar)^2] < 0
+  $
+  by @eq:restar-second-moment.
+  We conclude that $EE[rmv] - R_f > 0$ iff $alpha < 0$.
+]
+
+It can be shown again with some algebra that the mvfront is two lines which touch in $(R_f, 0)$, see
+Figure 4.3 in lecture notes.
+
+=== Optimal Risky Portfolio
+
+#let rorp = $R^"ORP"$
+
+#definition(title: [Optimal Risky Portfolio return])[
+  Assume $R_f < EE[R^"MIN"]$ and consider the tangent from $(0, R_f)$ to the frontier of risky-only
+  assets in the $sigma[R]-EE[R]$.
+  We call optimal risky portfolio return $rorp in A_1$ such that $(sigma[rorp], EE[rorp])$ are the
+  coordinates of the point of tangency.
+]
+
+#proposition[
+  Assume that $R_f < EE[R^"MIN"]$. Then the frontier when the riskless asset is traded coincides
+  with the tangent on the $sigma[R]-EE[R]$ plane from $(0, R_f)$ to the mvfront with risky asset
+  only.
+  As a consequence $rorp$ is the unique return that belongs to both frontiers.
+]
+
+#proof[
+  TODO: Proposition 71
+]
+
+#remark[
+  By @thm:two-fund we can write any $R in A_1$ on the frontier iff
+  $
+    R = (1 - alpha) R_f + alpha rorp
+  $
+]
+

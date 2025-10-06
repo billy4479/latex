@@ -989,3 +989,147 @@ Both of these equations can be interpreted as "flows of probabilities" in the st
   $
 ]
 #proof[Skip.]
+
+== Example: Poisson processes
+
+#definition(title: [Independent increment])[
+  A stochastic process $N = (N(t))_(t in [0, +oo])$ has independent increment if $forall n >= 1$ and
+  $forall t_1 <= t_2 <= ... <= t_n$ the random variables
+  $
+    N(t_1), wide N(t_2) - N(t_1), wide ..., wide N(t_n) - N(t_(n-1))
+  $
+  are independent.
+]
+
+#definition(title: [Stationary increment])[
+  A stochastic process $N = (N(t))_(t in [0, +oo])$ has stationary increment if $forall n >= 1$ and
+  $forall t, s > 0$ the random variables
+  $
+    N(t + s) - N(s)
+  $
+  does not depend on $s$.
+]
+
+#definition(title: [Counting process])[
+  A stochastic process $N = (N(t))_(t in [0, +oo])$ is a counting process if
+  1. $N(0) = 0$;
+  2. $N(t)$ is an $NN$-valued random variable $forall t$;
+  3. $t mapsto N(t)$ is almost surely right-continuous and non-decreasing.
+]
+
+Then, given a counting process, *inter-arrival times* are the sequence $T_0 ,T_1, ...$ defined as
+$
+  N(t) > n <==> T_0 + ... + T_n <= t
+$
+#definition(title: [Poisson Process (PP)])[
+  A counting process $N = (N(t))_(t in [0, oo])$ is a PP with rate $lambda > 0$, i.e.
+  $N tilde "PP"(lambda)$ iff one of the following equivalent conditions holds:
+  / Infinitesimal definition: $N$ has independent increments and
+    $
+      cases(
+        prob (N(t+h) = N(t) = 1 | N(t) = i) = lambda h + o(h) wide "as" h -> 0,
+        prob (N(t + h) - N(t) > 1) = o(h)
+      )
+    $
+
+  / Arrivals times: the inter-arrival times $T_0, T_1, ...$ satisfy
+    $
+      T_0, T_1, T_2, ... attach(tilde, t: "i.i.d.") "Exp"(lambda)
+    $
+
+  / Poisson Increments: $N$ has independent increments and
+    $
+      N(t + s) - N(s) tilde "Poisson"(lambda t)
+    $
+]
+
+In 1 dimension this is a special case of CTMC with $cal(X) = NN$ where we jump to the right with
+rate $lambda$.
+
+#remark[
+  Recall that $"Poisson"(lambda_1) * "Poisson"(lambda_2) = "Poisson"(lambda_1 + lambda_2)$.
+  This means that the sum of two independent rvs with Poisson distribution with parameters
+  $lambda_1, lambda_2$ is a rv with Poisson distribution and parameter $lambda_1 + lambda_2$.
+]
+
+=== Non-homogeneous generalization
+
+#definition(title: [Non-Homogeneous Poisson Process])[
+  A stochastic process $N = (N(t))_(t in [0, oo)$ is a NHPP with intensity function
+  $
+    lambda(t) : [0, +oo) -> [0, +oo)
+  $
+  if one of the following conditions holds:
+  1. $N$ has independent increments and
+  $
+    N(t + s) - N(s) tilde "Poisson"( integral_s^(t + s) lambda(y) dif y)
+  $
+  2. $N$ has independent increments and
+  $
+    cases(
+      prob (N(t + h) - N (t) = 1) = lambda (t) h + o (h),
+      prob (N(t + h) + N(t) > 1) = o(h)
+    )
+  $
+]
+
+In the NHPP case the inter-arrival times $T_0, T_1, ...$ are no longer independent nor
+exponentially distributed.
+
+=== General domains generalization
+
+So far we have considered events happening in time, i.e. $cal(D) = [0, +oo)$. Now we consider the
+general case where our domain is $cal(D) subset.eq RR^d$ for $d >= 1$.
+
+Given a domain $cal(D)$, we define the set of _point patterns_ as
+$
+  macron(cal(D)) = { D in cal(P)(cal(D)) | D "is finite" }
+$
+
+Then, a *point process* is a random object with values in $macron(cal(D))$, i.e. a measurable
+function
+$
+  N: Omega -> macron(cal(D))
+$
+where $(Omega, F, prob)$ is some probability space.
+Equivalently, a point process can be written as
+$
+  N = (N(A))_(A subset.eq cal(D))
+$
+where $N(A)$ is the number of points in $A$.
+
+#definition(title: [General Domain Poisson Process])[
+  A point process $N = (N(A))_(A subset.eq cal(D))$ is a Poisson Process with intensity measure
+  $lambda$, where $lambda$ is a measure on $cal(D)$, if one of the following equivalent definitions
+  holds
+  1. $N(A) prop N(B)$ for all $A, B subset.eq cal(D)$ such that $A inter B = nothing$;
+  2. $N(A) tilde "Poisson"(lambda(A))$ for all $A subset.eq cal(D)$.
+]
+
+When $cal(D)$ is general, there is no natural notion of inter-arrival times as $cal(D)$ may not be
+totally ordered.
+
+=== Properties of PP models
+
+#proposition(title: [Superposition])[
+  Let $N_1 = (N_1 (A))_(A subset.eq cal(D))$ and $N_2 (N_2 (A))_(A subset.eq cal(D))$ be two
+  independent PPs on a domain $cal(D)$ with intensity measures $lambda_1$ and $lambda_2$, then
+  $N_3 = N_1 + N_2$ is a also a PP on $cal(D)$ with intensity measure
+  $lambda_3 = lambda_1 + lambda_2$.
+]
+
+#proposition(title: [Thinning])[
+  Let $N tilde "PP"(lambda)$ on domain $cal(D)$.
+  Suppose that each point in $N$ is either of type 1 or 2, with probability $p$ or $1-p$
+  independently of the others. Then, we define $N_1$ and $N_2$ to be the point process which
+  considers only the points of the associated type: $N_1 tilde "PP"(lambda_1)$ and
+  $N_2 tilde "PP"(lambda_2)$ where $lambda_1 = lambda p$ and $lambda_2 = lambda (1-p)$.
+]
+
+#remark[
+  It is possible to show that (under regularity assumptions) any point process with independent
+  increment is a PP with
+  $
+    lambda (A) = EE [N(A)]
+  $
+]

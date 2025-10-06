@@ -520,7 +520,7 @@ securities, _all risky_.
 
 We use a slightly different notation: $S_j$ is the price at time $0$ of asset $j$, while $x_j$ is
 its payoff at time $1$.
-We have that $x_j in cal(L)^2 (Omega, 7, cal(P))$, where $cal(L)^2$ is the space of distributions
+We have that $x_j in cal(L)^2 (Omega, F, cal(P))$, where $cal(L)^2$ is the space of distributions
 with finite variance, are the values which $S_j (1)$ can take.
 
 Then we define the *gross return rate* as
@@ -632,7 +632,7 @@ condition, therefore it does not exists, but we look for the closest one.
   $
     EE[(restar)^2] = EE[restar]
   $<eq:restar-second-moment>
-]
+]<prop:properties-rstar>
 #proof[
   TODO: see proposition 52
 ]
@@ -657,49 +657,184 @@ condition, therefore it does not exists, but we look for the closest one.
 
 === Decomposition
 
-TODO: rewrite this shit
+#let span(body) = $angle.l body angle.r$
 
-With some magic we get that
-$
-  A & = {alpha R^* plus.circle beta R^e^* plus.circle n | alpha, beta in RR, EE[n] = 0} \
-  A_1 & = {R^* plus.circle w R^e^* plus.circle n | w in RR, n in A_0, EE[n] = 0}
-$
+#theorem(title: [Decomposition of $A$])[
+  The space of traded payoffs $A$ decomposes orthogonally as
+  $
+    A = span(alpha rstar) plus.circle A_0
+  $
+  where $span(alpha rstar) = "span"(rstar)$.
+]
 
-Take $R in A$, which means that $R = R^* plus.circle w R^e^* plus.circle n$. Then
-$
-  EE[R] = EE[R^*] + w EE[R^e^*] ==> w = (EE[R] - EE[R^*]) / EE[R^e^*]
-$
-where $EE[R]$ is chosen through $overline(E)$.
+#proof[
+  Let $y in A$, with initial price $pi(y) in RR$. We add and subtract the same quantity
+  $pi(y) rstar$ from $y$:
+  $
+    y = pi(y) rstar + (y - pi(y) rstar)
+  $
 
-Moreover
-$
-  "Var"(R) = "Var"(R^* + w R^e^*) + "Var"(n) + 0
-$
-where the $0$ represents the covariance which, since $n$ is orthogonal to everything else, can be
-cancelled.
-Then, to minimize the variance we choose $n = 0$. $n$ represents the *idiosyncratic risk* (the risk
-which can be avoided).
+  Note that
+  - $pi(y) rstar in span(alpha rstar)$
+  - Taking the price of $y - pi(y) rstar$ we get
+    $
+      pi(y - pi(y) rstar) = pi(y) - pi(y) underbrace(pi(rstar), =1)
+      = pi(y) - pi(y) = 0
+    $
+    which means $y - pi(y) rstar in A_0$.
+
+  Now we need to prove that this is an orthogonal decomposition, i.e. we want to show that
+  $EE[(alpha rstar) R^e] = 0$ for any $R^e in A_0$. Indeed
+  $
+    EE[(alpha rstar) R^e] = alpha EE[rstar R^e] = alpha EE[m^* / pi(m^*) R^e ] =
+    alpha / pi(m^*) EE[m^* R^e] = 0
+  $
+  by definition of $rstar$ and of SDF.
+]
+
+#theorem(title: [Decomposition of $A_0$])[
+  The space $A_0$ decomposes orthogonally as
+  $
+    A_0 = span(beta restar) plus.circle {n in A_0 | EE[restar n] = 0}
+  $
+  or equivalently
+  $
+    A_0 = span(beta restar) plus.circle {n in A_0 | EE[n] = 0}
+  $
+  (since $n perp restar$).
+]
+
+#proof[
+  Let $z in A_0$ and $beta = EE[z] / EE[restar]$,
+  We add and subtract the same quantity from $z$:
+  $
+    z = beta restar + (z - beta restar)
+  $
+
+  First, note that $z - beta restar in A_0$ since it is the linear combination of two elements of
+  $A_0$.
+  Then we prove that $EE[restar (z - beta restar)] = 0$:
+  $
+    EE[restar (z - beta restar)] & = EE[restar z] - beta EE[restar^2] \
+                                 & = EE[z] - beta EE[restar] \
+                                 & = EE [z] - EE[z] / EE[restar] EE[restar] \
+                                 & = EE[z] - EE[z] = 0
+  $
+  where we have used point 5 of @prop:properties-rstar.
+]
+
+#corollary[
+  The space of traded payoffs decomposes orthogonally as
+  $
+    A & = span(alpha rstar) plus.circle span(beta restar) plus.circle {n in A_0 | EE[n] = 0} \
+    & = {alpha rstar + beta restar + n | alpha, beta in RR, n in A_0, EE[n] = 0}
+  $<eq:decomposition-of-a>
+]
+
+#proof[
+  Immediate from the two previous theorems.
+]
+
+#corollary(title: [Characterization of elements of $A_1$])[
+  The space of returns $A_1$ can be written as
+  $
+    A_1 = {rstar + w restar + n | w in RR, n in A_0, EE[n] = 0}
+  $
+]
+#proof[
+  Let $x in A$ with $pi(x) != 0$, then $R_x = x/pi(x)$.
+  Since $x in A$, it can be written as
+  $
+    x = R_x pi(x) = pi(x) rstar + beta restar + n'
+  $
+  according to @eq:decomposition-of-a. Then we divide both sides by $pi(x)$ to get
+  $
+    R_x = rstar + beta/pi(x) restar + 1/pi(x) n'
+  $
+  and to conclude we set $w = beta/pi(x)$ and $n = 1/pi(x) n'$.
+]
+
+=== The frontier without a risk-free asset
+
+#theorem(title: [Characterization of the MV frontier])[
+  $rmv in A$ is on the mean-variance frontier if and only if
+  $
+    rmv = rstar + w restar
+  $
+]<thm:char-mvfront>
+
+#proof[
+  We know that any $R in A_1$ can be written as
+  $
+    R = rstar + w restar + n quad "with" w in RR, n in A_0, EE[n] = 0
+  $
+
+  Fix $k = EE[R]$: to do so, we uniquely identify $w$ as
+  $
+    w = (k - EE[restar] - cancel(EE[n])) / EE[restar]
+  $
+
+  Now we minimize the variance of $R$:
+  $
+    var[R] & = var[rstar + w restar] + var [n] + cancel(2 cov[rstar + w restar, n]) \
+           & >= var[rstar + w restar]
+  $
+  where we have cancelled the covariance since the two terms are orthogonal.
+  Note that equality holds if and only if $n = 0$, therefore $rmv = rstar + w restar$ has the
+  desired value of $k$ while displaying the lowest possible variance.
+]
+
+In the above proof, $n$ represents the *idiosyncratic risk*: the risk which can be avoided.
 
 Since now we have $w$ which is the optimal return we work backwards to find the portfolio which
 gives that return.
 
-Then, every $rmv$ on the *mean-variance frontier* can be written as
-$
-  R^(M V) = R^* + w R^e^*
-$
-for some $w$ in $RR$.
-
 #show "mvfront": [mean-variance frontier]
 
-Moreover, $rmv$ is on the mean variance frontier if and only if there exists $R'$ and $R''$ on
-the mvfront and $alpha in RR$ such that
-$
-  rmv = alpha R' + (1-alpha) R''
-$
+#theorem(title: [Two-fund Separation Theorem])[
+  $rmv$ is on the mean variance frontier if and only if there exists $R'$ and $R''$ on
+  the mvfront and $alpha in RR$ such that
+  $
+    rmv = alpha R' + (1-alpha) R''
+  $
+]
 
 #proof[
-  TODO: there's a long ass proof, hopefully it is not required. Theorem 58
+  - Let $R'$ and $R''$ belong to the mvfront, we show that $rmv$ is also on the mvfront.
+
+    From @thm:char-mvfront we know that
+    $
+       R' & = rstar + w' restar \
+      R'' & = rstar + w'' restar
+    $
+    then
+    $
+      rmv & =alpha R' + (1-alpha) R'' \
+      & = alpha rstar + alpha w' restar + rstar - alpha rstar + w '' - alpha w '' restar \
+      & = rstar + (alpha w' + (1 - alpha) w'') restar
+    $
+    and we can define $tilde(w) colon.eq alpha w' + (1 - alpha) w'')$ which is the value of $w$ for
+    $rmv$.
+
+  - Let $rmv$ be on the mvfront, we shot what $R', R'', alpha$ exist.
+
+    By @thm:char-mvfront we know that $rmv = rstar + w restar$ for some $w in RR$.
+    Now take any $tilde(R) = rstar + tilde(w) restar$ on the mvfront with $tilde(w) != 0$ and set
+    $R' = rstar$ and $R'' = tilde(R)$.
+
+    Then
+    $
+      restar = 1/tilde(w) (R'' - R')
+    $
+    and
+    $
+      rmv = rstar + w/tilde(w) (tilde(R) - rstar) = alpha R' + (1- alpha) R''
+    $
+    where $alpha = 1 - w/tilde(w)$.
 ]
+
+With some magic algebra tricks we can show that the mvfront is a hyperbola in the $sigma[R]-EE[R]$
+plane, see figure 4.1 in the lecture notes.
 
 == Proxies for the risk-free asset
 

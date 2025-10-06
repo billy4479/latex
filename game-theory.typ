@@ -379,17 +379,87 @@ therefore it must converge.
 ]
 
 
-// #example(title: [Cournot Competition])[
-//   $N$ firms compete in a market and have to choose the quantity of a certain product to produce
-//   $q_i in [0, overline(q)]$.
-//   The utility of each firm is given by
-//   $
-//     u_i (q_i, q_(-i)) = q_i P(q_1, ..., q_N) - C_i (q_i)
-//   $
-//
-//   It is common knowledge that the firms maximize expected profit, the price function $P$ and all the
-//   cost functions $(C_i)_(i in I)$.
-// ]
-//
+= Nash Equilibrium
 
+#definition(title: [Nash Equilibrium])[
+  An action profile $a^*$ is a NE if for every $i in I$ the action $a^*_i$ is the best reply against
+  the conjecture $mu^i (a_(-i)^*) = 1$.
+]
+
+Nash equilibrium requires that all players hold correct conjectures about all other players actions.
+NE is compatible with common knowledge of rationality.
+
+To find the Nash Equilibrium in finite games we fix one player and iterate over all other players'
+actions and mark the best reply to each one. Repeat the process for each player: NE are the action
+profiles where there is a mark for each player.
+
+#example(title: [Cournot Competition])[
+  $N$ firms compete in a market and have to choose the quantity of a certain product to produce
+  $q_i in [0, overline(q)]$.
+  The utility of each firm is given by
+  $
+    u_i (q_i, q_(-i)) = q_i P(q_1, ..., q_N) - C_i (q_i)
+  $
+
+  It is common knowledge that the firms maximize expected profit, the price function $P$ and all the
+  cost functions $(C_i)_(i in I)$.
+]
+
+#solution[
+  Consider the simple case where $N = 2$, we want to find the Nash Equilibrium.
+
+  Each firm $i$ wants to maximize its own quantity $q_i$, then, the best reply function is just the
+  first order condition:
+  $
+    q_i^(B R) (q_(-i)) = (1 - q_(-i) - c) / 2
+  $
+  To find the Nash equilibrium we need to find the intersection of the two best reply functions.
+]
+
+== Existence of Nash equilibrium
+
+Let $r_i: A_(-i) arrows A_i$ be the best reply correspondence and let $r: A arrows A$ be the
+joint best-reply correspondence:
+$
+  r(a) = times_(i in I) r_i(a_(-i)) wide forall a in A
+$
+this correspondence delivers the best reply for each player given the action profile $a$.
+
+Nash Equilibria are fixed-points in the best-reply correspondence.
+
+#theorem(title: [Existence of NE in compact-continuous games])[
+  Let $G$ be a compact-continuous game. If, for all $i in I$, $A_i$ is convex and the function
+  $u_i (dot, a_(-i)) : A_i -> RR$ is quasi-concave for every $a_(-i) in A_(-i)$ then $G$ has a Nash
+  Equilibrium.
+]
+
+#proof[
+  Not required.
+]
+
+=== Finite games
+
+In finite games we can get some cases where no _pure_ NE exists, however it can be shown that it is
+always possible to find a _mixed_ NE.
+
+Recall that, given a mixed strategy $alpha_i$ where pure strategies $a'_i$ and $a''_i$ have
+non-zero probability, $alpha_i$ is the best reply to some conjecture $mu^i$ only if
+$u(a'_i, mu^i) = u(a''_i, mu^i)$.
+
+#definition(title: [Mixed extension of finite games])[
+  Given a finite game $G = angle.l I, (A_i, u_i)_(i in I) angle.r$ we define the mixed extension
+  $macron(G) = angle.l I, (Delta(A_i), macron(u)_i)_(i in I) angle.r$ with
+  $
+    macron(u)_i (alpha) = sum_(a in A) u_i (a) product_(j in I) alpha_j (a_j)
+  $
+]
+
+#theorem[
+  Every finite game $G$ has at least one mixed Nash equilibrium.
+]
+
+#proof[
+  This is just a matter to prove that finite games satisfy all the requirements for existence of NE
+  in compact-continuous games.
+]
 

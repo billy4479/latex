@@ -1,12 +1,11 @@
 #import "@preview/headcount:0.1.0": *
 #import "@preview/great-theorems:0.1.2": *
 
-#let thmCounter = counter("thm")
 #let makeThm = (name, color, darken: 0%) => {
   return mathblock(
     blocktitle: [#name],
     prefix: count => text(color.darken(darken))[*#name #count* #h(0.5em)],
-    counter: thmCounter,
+    counter: counter("thm"),
     numbering: dependent-numbering("1.1", levels: 1),
     titlix: title => text(color.darken(darken))[ #title ],
     breakable: false,
@@ -23,6 +22,17 @@
       #body
     ],
   )
+}
+
+#let thm-init(body) = {
+  show: great-theorems-init
+
+  show heading.where(level: 1): it => {
+    counter("thm").update(0)
+    it
+  }
+
+  body
 }
 
 #let makeProof = name => {

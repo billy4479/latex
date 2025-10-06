@@ -8,7 +8,7 @@
   date: "A.Y. 2025/2026",
 )
 
-#show: great-theorems-init
+#show: thm-init
 
 #show "RV": [random variable]
 #show "iid": [i.i.d.]

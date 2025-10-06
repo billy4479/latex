@@ -7,7 +7,8 @@
   author: "Giacomo Ellero",
   date: "A.Y. 2025/2026",
 )
-#show: great-theorems-init
+
+#show: thm-init
 
 = One-period models
 

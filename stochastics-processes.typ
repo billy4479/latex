@@ -63,8 +63,10 @@ However, when $n$ is very large it is convenient to decompose it using condition
 #lemma(title: "Sequential decomposition")[
   Given a random vector $(X_0, ..., X_n)$ on $cal(X)^(n+1)$ we have
   $
-    cal(P)(X_0, ..., X_n) = cal(P)(X_0 = x_0) product^(n-1)_(i = 0) cal(P)(X_(i+1) = x_(i+1) |
-      X_i = x_i, ..., X_0 = x_0)
+    prob(X_0, ..., X_n) = prob(X_0 = x_0) product^(n-1)_(i = 0) prob(
+      X_(i+1) = x_(i+1) |
+      X_i = x_i, ..., X_0 = x_0
+    )
   $
 ]
 
@@ -85,7 +87,7 @@ increasing.
 #definition(title: "Markov chain")[
   A discrete-time stochastic process is a Markov chain if
   $
-    cal(P)(X_(t+1) = x_(t+1) | X_t = x_t, ..., X_0 = x_0) = cal(P)(X_(t+1) = x_(t+1) | X_t = x_t)
+    prob(X_(t+1) = x_(t+1) | X_t = x_t, ..., X_0 = x_0) = prob(X_(t+1) = x_(t+1) | X_t = x_t)
   $
   for all $t in NN$ and $forall (X_0, ..., X_(t+1)) in cal(X)^(t+1)$.
 ]
@@ -112,14 +114,14 @@ $
 We define the *transitional probability* $P_(i j)$, which is the probability of going to state $j$
 from state $i$:
 $
-  P_(i j) = cal(P)(X_(t+1) = j | X_t = i) wide i, j in cal(X)
+  P_(i j) = prob(X_(t+1) = j | X_t = i) wide i, j in cal(X)
 $
 Note tat we can construct a *transition matrix* $P$ of all the combinations of transitional
 probabilities in $cal(X)$.
 
 A common problem is to compute the probability that a certain event $j$ occurs after $n$ steps:
 $
-  P^n_(i j) = cal(P)(X_(t+n) = j | X_t = i)
+  P^n_(i j) = prob(X_(t+n) = j | X_t = i)
 $
 
 #proposition(title: "Chapman-Kolmogorov equations")[
@@ -131,9 +133,9 @@ $
 #proof[
   We have
   $
-    P_(i j)^(n + m) & = cal(P)(X_(n+m) = j | X_0 = i) \
-    & = sum_(k in cal(X)) cal(P)(X_(n+m) | X_n = k, X_0 = i) cal(P)(X_n = k | X_0 = i) \
-    & = sum_(k in cal(X)) cal(P)(X_(n+m) = j | X_n = k) cal(P)(X_n = k | X_0 = i) \
+    P_(i j)^(n + m) & = prob(X_(n+m) = j | X_0 = i) \
+    & = sum_(k in cal(X)) prob(X_(n+m) | X_n = k, X_0 = i) prob(X_n = k | X_0 = i) \
+    & = sum_(k in cal(X)) prob(X_(n+m) = j | X_n = k) prob(X_n = k | X_0 = i) \
     & = sum_(k in cal(X)) P_(i k)^n P_(k j)^m
   $
   by conditioning on $X_n$ and applying Markov property.
@@ -151,7 +153,7 @@ $
 
 Define
 $
-  alpha_i^((t)) = cal(P)(X_t = i)
+  alpha_i^((t)) = prob(X_t = i)
 $
 then, if we know the distribution of $X_0$, i.e. the value of $alpha_i^((0))$ for all $i in cal(X)$
 we can compute the marginals at any step as
@@ -182,8 +184,8 @@ $
 
 Define the probability of from state $i$ to return to state $i$ as
 $
-  f_i & = cal(P)(X_t = i "for some" t>=1 | X_0 = i) \
-      & = cal(P)(union.big_(t >= 1) {X_t = i} | X_0 = i)
+  f_i & = prob(X_t = i "for some" t>=1 | X_0 = i) \
+      & = prob(union.big_(t >= 1) {X_t = i} | X_0 = i)
 $<eq:def-fi>
 A state $i in cal(X)$ is *recurrent* if $f_i = 1$ and *transient* if $f_i < 1$.
 
@@ -222,7 +224,7 @@ so that $V_i$ is a random variable with values in $NN union {oo}$.
 #proposition()[
   For each $i in cal(X)$, we have
   $
-    cal(P)(V_i > r | X_0 = i) = f_i^r wide r >= 0
+    prob(V_i > r | X_0 = i) = f_i^r wide r >= 0
   $
   where $f_i$ is defined as @eq:def-fi.
 ]<prop:prob-vi>
@@ -320,8 +322,8 @@ recurrent.
 
   For every $n in NN$ we have
   $
-    P^(2n)_(00) & = cal(P)(X_(2n) | X_0 = 0) \
-                & = cal(P)(Z_(2n) = n) wide "with" Z_(2n) tilde "Bin"(2n, p) \
+    P^(2n)_(00) & = prob(X_(2n) | X_0 = 0) \
+                & = prob(Z_(2n) = n) wide "with" Z_(2n) tilde "Bin"(2n, p) \
                 & = binom(2n, n) p^n q^n \
                 & = ((2n)!)/(n! n!) p^n q^n
   $
@@ -384,7 +386,7 @@ recurrent.
 Sometimes a Markov chain converges to stationarity: this means that, regardless of the starting
 point $k$, the distribution of $X_t$ converges to a fixed distribution $pi$.
 $
-  cal(P) (X_t = j | X_0 = k) = P^t_(k j) -> pi_j wide "as" t -> +oo, med forall k, j in cal(X)
+  prob (X_t = j | X_0 = k) = P^t_(k j) -> pi_j wide "as" t -> +oo, med forall k, j in cal(X)
 $<eq:limiting-distrib>
 If this holds we say that $pi$ is the *limiting distribution* of the Markov chain and
 $(pi_i)_(i in cal(X))$ are the limiting probabilities.
@@ -439,8 +441,8 @@ In short, it means that there are no cycles.
   $
 ]<thm:convergence>
 
-Since $cal(P) (X_t = j) = sum_(j in cal(X)) P^t_(i j) cal(P) (X_0 = i)$, the convergence theorem
-implies that, regardless of the initial distribution of $X_0$, we have $cal(P)(X_t = j) = pi_j$ as
+Since $prob (X_t = j) = sum_(j in cal(X)) P^t_(i j) prob (X_0 = i)$, the convergence theorem
+implies that, regardless of the initial distribution of $X_0$, we have $prob(X_t = j) = pi_j$ as
 $t -> oo$.
 
 This also tells us that, if the chain is aperiodic and irreducible, stationarity is necessary
@@ -505,14 +507,14 @@ $EE_pi [g]$ we can treat MC states as iid RVs.
   $
   while its hitting probability is
   $
-    h(i) = cal(P)(tau_C < oo | X_0 = i)
+    h(i) = prob(tau_C < oo | X_0 = i)
   $
 ]
 
 Note that for any $i in cal(X) without C$ we have
 $
-  h(i) & = sum_(j in cal(X)) cal(P) (tau_C < oo | X_1 = j, X_0 = i) cal(P)(X_1 = j | X_0 = i) \
-  & = sum_(j in cal(X)) cal(P) (tau_C < oo | X_0 = j) cal(P)(X_1 = j | X_0 = i) \
+  h(i) & = sum_(j in cal(X)) prob (tau_C < oo | X_1 = j, X_0 = i) prob(X_1 = j | X_0 = i) \
+  & = sum_(j in cal(X)) prob (tau_C < oo | X_0 = j) prob(X_1 = j | X_0 = i) \
   & = sum_(j in cal(X)) h(j) P_(i j)
 $
 
@@ -576,7 +578,7 @@ $(X_t)_(t >= 0)$ with starting distribution $alpha$, a set of possible signals $
 a function which tells us the probability that, given each state of the MC, a certain signal is
 observed
 $
-  cal(P)(S_t = s | X_t = j) = f(s | j) wide s in cal(S), j in cal(X)
+  prob(S_t = s | X_t = j) = f(s | j) wide s in cal(S), j in cal(X)
 $
 where independence holds
 $
@@ -608,7 +610,7 @@ The mean and the variance are both equal to $lambda^(-1)$.
 #definition(title: "Memoryless property")[
   A random variable $X$ valued in $(0, oo)$ is memoryless if
   $
-    cal(P)(X>s+t | X>t) = cal(P)(X>s)
+    prob(X>s+t | X>t) = prob(X>s)
   $
 ]
 
@@ -632,7 +634,7 @@ probability of the event happening at time $t$ given that it has not happened ye
 
 The survival function of a RV $X$ is denoted as
 $
-  macron(F) (t) = cal(P)(X > t) = 1 - F(t)
+  macron(F) (t) = prob(X > t) = 1 - F(t)
 $
 
 #proposition(title: "hrf characterize distributions")[
@@ -666,8 +668,8 @@ memoryless distribution.
 #proof[
   By definition of $X$ we have
   $
-    macron(F) = cal(P)(X > t) = cal(P)(union.big_(i = 1)^n {X_i > t})
-    = product_(i = 1)^n cal(P)(X_i > t) = product_(i = 1)^n macron(F)_i (t)
+    macron(F) = prob(X > t) = prob(union.big_(i = 1)^n {X_i > t})
+    = product_(i = 1)^n prob(X_i > t) = product_(i = 1)^n macron(F)_i (t)
   $
   Then, by @prop:hrf-characterization we have
   $
@@ -684,7 +686,7 @@ memoryless distribution.
   $
   satisfies
   $
-    cal(P)(I = i | X = t) = (r_i (t)) / (sum_(j=1)^n r_j (t))
+    prob(I = i | X = t) = (r_i (t)) / (sum_(j=1)^n r_j (t))
   $
   where $X$ is defined as in the previous proposition.
 ]
@@ -702,7 +704,7 @@ memoryless distribution.
   have distributions
   $
     X tilde "Exp"(sum^n_(i = 1) lambda_i) \
-    cal(P)(I = i) = lambda_i / (sum^n_(j = 1) lambda_j)
+    prob(I = i) = lambda_i / (sum^n_(j = 1) lambda_j)
   $
 
   Moreover, $X perp I$.
@@ -714,14 +716,14 @@ memoryless distribution.
   A continuous-time stochastic process $(X(t))_(t in [0, +oo])$ with discrete space $cal(X)$
   satisfies the Markov property if
   $
-    cal(P)(X(t+s) = j | X(s) = i, X(u) = x(u) "for" 0 <= u <= s) \
-    = cal(P)(X(t+s) = j | X(s) = i)
+    prob(X(t+s) = j | X(s) = i, X(u) = x(u) "for" 0 <= u <= s) \
+    = prob(X(t+s) = j | X(s) = i)
   $
 ]
 
 A continuous-time MC (CTMC) is *time homogeneous* if the transition probabilities
 $
-  P_(i j)(t) colon.eq cal(P)(X(t + s) = j | X(s) = i)
+  P_(i j)(t) colon.eq prob(X(t + s) = j | X(s) = i)
 $
 do not depend on $s$. We will always consider time-homogeneous CTMCs unless otherwise stated.
 
@@ -753,7 +755,7 @@ some small $epsilon > 0$.
   $
     Q_(i j) colon.eq lim_(h -> 0) (P_(i j)(h))/h
   $
-]
+]<def:jump-rates>
 
 The jump rate can be interpreted as the "hazard rate" at which the MC currently in state $i$ jumps
 to $j$ in the next infinitesimal instant.
@@ -776,7 +778,7 @@ after a certain time $t$, we end up in $j$. This is quite a bit harder than in t
 since now we don't know how many transition happen in the time interval $t$, in theory we could have
 infinitely many.
 
-Let us define $Q_(i i) = - sum_(j != i) Q_(i j) = - nu$ so that the matrix $Q$ is a full
+Let us define $Q_(i i) = - sum_(j != i) Q_(i j)$ so that the matrix $Q$ is a full
 $cal(abs(X)) times abs(cal(X))$ matrix, called the _generator matrix_.
 
 #lemma[
@@ -805,7 +807,7 @@ $cal(abs(X)) times abs(cal(X))$ matrix, called the _generator matrix_.
   $
     P'_(i j)(t) = sum_(k != j) Q_(k j) P_(i k) (t) - nu_i P_(i j) = (P(t) Q)_(i j)
   $
-]
+]<thm:kolmogorov-differential>
 
 #proof[
   TODO: page 51
@@ -839,7 +841,7 @@ $
     T_0 + ... + T_(n-1) <= t <= T_0 + ... + T_n \
     Y_n = i
   )
-$
+$<eq:equi-def-ctmc>
 
 Moreover, we can show (see page 55) that, by the Markov property and time homogeneity of the chain
 $(T_0 | Y_0 = i) tilde "Exp"(nu_i)$ for some $nu_i$ which can depend on the state. This is because
@@ -847,12 +849,21 @@ we can show that $T_0 | Y_0$ satisfies the memoryless property.
 
 When $X(t)$ makes a jump out of $i$ it will go to $j$ with some probability which we will denote as
 $
-  K_(i j) = cal(P)(Y_1 = j | Y_0 = i)
+  K_(i j) = prob(Y_1 = j | Y_0 = i)
 $
 Then the matrix $K$ is a matrix of transition probabilities and $(Y_n)$ is a discrete time Markov
 chain. This means that, given $K$ and $(nu_n)_(n = 0, 1, 2,...)$, the CTMC spends
 $T tilde "Exp"(nu_i)$ time in state $i$, then jumps to state $j$ with probability $K_(i j)$.
 (mathematical formulation at eq 3.35 in lecture notes)
+
+Mathematically, we can write the joint distribution of the jumping chain and holding times as
+$
+  cases(
+    (Y_n)_(n = 0, 1, ...) "is a DTMC with transitional probabilities" K,
+    T_n | Y_n = i tilde "Exp"(nu_i) "for every" i in cal(X),
+    T_n perp ((Y_i, T_i)_(i != n) | Y_n)
+  )
+$<eq:jump-holding-distrib>
 
 === Connections between $(nu, K)$ and $Q$
 
@@ -866,7 +877,50 @@ $T tilde "Exp"(nu_i)$ time in state $i$, then jumps to state $j$ with probabilit
 ]
 
 #proof[
-  IMPORTANT TODO: section 3.5.1 in lecture notes
+  We will prove that
+  $
+    Q_(i j) = nu_i K_(i j)
+  $
+  from which, we can easily prove the lemma, since $sum_(i != j) K_(i j) = 1$.
+
+  Assume $i != j$, then we have
+  $
+    P_(i j) & = prob (X(h) = j | X(0) = i) \
+    & >= prob (T_0 < h, Y_i = j, T_1 > h | Y_0 = i) \
+    & = prob (T_0 < h | Y_0 = i) prob (Y_1 = j | Y_0 = i) prob (T_1 > h | Y_j = j) \
+    & = (1 - e^(- nu_i h)) K_(i j) e^(nu_j h)
+  $
+  for $h > 0$, where the first step is the definition of CTMC, the second one is @eq:equi-def-ctmc,
+  and the last two steps are due to the property of the jumping chain and holding times described
+  in @eq:jump-holding-distrib.
+
+  Thus, by definition of $Q_(i j)$ we have
+  $
+    Q_(i j) = lim_(h -> 0) (P_(i j)(h))/h >= lim_(h -> 0) (1 - e^(- nu_i h))/h K_(i j) e^(nu_j h) =
+    nu_i K_(i j)
+  $
+
+  We also have
+  $
+    P_(i i) = prob (X(h) = i | X(0) = i) >= prob (T_0 > h | Y_0 = i) = e^(- nu_i h)
+  $
+  again by @eq:equi-def-ctmc and @eq:jump-holding-distrib. From this inequality we get that
+  $
+    sum_(j != i) Q_(i j) = lim_(h -> 0) (1 - P_(i i)(h))/h <= lim_(h -> 0) (1 - e^(- nu_i h))/h = nu_i
+  $
+
+  Now we can combine $sum_(j != i) Q_(i j) <= nu_i$ with $Q_(i j) >= nu_i K_(i j)$ to get that
+  $sum_(j != i) Q_(i j) = nu_i$. Finally, we can combine $sum_(j != i) Q_(i j) = nu_i$ with
+  $Q_(i j) >= nu_i K_(i j)$ to obtain $Q_(i j) = nu_i K_(i j)$ as desired.
+]
+
+#remark(title: [Equivalent characterizations of CTMCs])[
+  By now, we have shown three equivalent characterizations of CTMCs:
+  1. Jump chains and holding times (@eq:equi-def-ctmc and @eq:jump-holding-distrib)
+  2. Jump rates (@def:jump-rates)
+  3. Kolmogorov differential equations (@thm:kolmogorov-differential)
+
+  We have proven (1.) $==>$ (2.) $==>$ (3.). Proof that (3.) $==>$ (1.) is omitted.
 ]
 
 == Limiting behavior of CTMCs

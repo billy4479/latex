@@ -1054,5 +1054,51 @@ Figure 4.3 in lecture notes.
   $
     R = (1 - alpha) R_f + alpha rorp
   $
-]
+]<rmk:two-fund-orp>
 
+= Beta-pricing equations
+
+TODO
+
+= Capital Asset Pricing Model
+
+In this chapter we will assume that all risky assets are in a fixed supply: for all
+$j in {1, ..., N}$, $macron(theta)_j$ is the fixed supply of shares of $j$, while $S_j
+macron(theta)_j$ is the market cap of $j$. The total market cap is defined as
+$sum_(j = 1)^N S_j macron(theta)_j$.
+
+The risk-free asset instead is in _zero-net-supply_, this means that I can only borrow if someone
+else is lending. Mathematically
+$
+  sum_(i = 1)^I W^i (0) (1 - alpha^i) = 0
+$
+where $I$ is the set of all "players", $W^i (0)$ is the wealth of player $i$, and the equation comes
+from @rmk:two-fund-orp. This in turns means that the aggregate wealth, defined as
+$
+  W(0) = sum^I_(i = 1) alpha^i W^i (0)
+$
+is fully invested in (risky) stocks.
+
+For risky assets we have instead
+$
+  S_j macron(theta)_j = sum^I_(i = 1) alpha^i W^i (0) w_j^i
+$
+where the left is the supply for $j$, while the right is the demand. The term $w_j^i$ indicates the
+ratio of wealth of $i$ which is invested in $j$: $w_j^i = theta_j^i / W^i (0)$, which means that
+clearly its sum over $j$ is $1$.
+
+Then, summing up the above equation over $j$ we get
+$
+  sum_(j = 1)^N S_j macron(theta)_j & = sum^N_(j = 1) sum^I_(i = 1) alpha^i W^i (0) w_j^i \
+  & = sum^I_(i = 1) alpha^i W^i (0) = W(0)
+$
+which gives us
+$
+  omega_j^i = (S_j macron(theta)_j) / (sum^N_(j = 1) S_j macron(theta)_j) = w_j^M
+$
+this means that all the investors invest in the same manner.
+
+By the beta-pricing equation we get the CAPM equation.
+$
+  EE[R] = R_f beta_(R R^M) (EE[R^M] - R_f)
+$

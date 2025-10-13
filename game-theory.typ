@@ -463,3 +463,47 @@ $u(a'_i, mu^i) = u(a''_i, mu^i)$.
   in compact-continuous games.
 ]
 
+= Correlated Equilibrium
+
+This will be a merge conflict later but who cares
+
+== Finding a correlated equilibrium
+
+Since we are looking for equilibria, players have no incentive to deviate from the strategy,
+therefore we should assume that all players respond correctly to the signals.
+To enforce this intuition we write $sum_(i in I) abs(A_i)$ inequalities, one for each action every
+player can take, for each chance it has to deviate from the agreed strategy, for every player.
+$
+  & sum_(a_(-i) in A_(-i)) p(a_i, a_(-i)) u_i (a_i, a_(-i)) wide &\
+  >= & sum_(a_(-i) in A_(-i)) p(a_i, a_(-i)) u_i (tilde(a)_i, a_(-i)) wide & \
+  & & forall tilde(a)_i in A_i without {a_i} \
+  & & forall a_i in A_i \
+  & & forall i in I \
+$<eq:ce-constraints>
+where the left part of the inequality is the payoff if player $i$ follows the strategy and the right
+part is the payoff if it deviates; $tilde(a)_i$ represents the deviation while $gamma(a_i, a_(-i))$
+represents the probability that the signal to play $(a_i, a_(-i))$ is displayed.
+Moreover, we have to impose
+$
+               p(a) & > 0 wide forall a in A \
+  sum_(a in A) p(a) & = 1
+$<eq:ce-constraints-prob>
+so that they form a probability distribution.
+
+Then, we want to maximize some sort of global utility function, which, for example, could be the
+$
+  max_(p(a) med forall a in A) sum_(a in A) (p(a) (sum_(i in I) u_i (a)))
+$
+This utility function is just the weighted average of all the utilities of all players, with
+an equal weight, of course we could have different ones too, for example if we wanted to advantage a
+player over another.
+
+From here it is just a matter of solving an optimization problem, in $2 times 2$ games this is
+easily solvable by hand since we would have only 4 constraints from @eq:ce-constraints and, since
+$abs(A) = 4$, we would also have only 5 constraints from @eq:ce-constraints-prob
+
+#remark(title: [Computational cost])[
+  While Nash Equilibrium is a PPAD-hard problem, the computation of correlated equilibrium is
+  trivial: it is just an optimization problem with linear equations on a convex set. There are
+  algorithms which guarantee convergence in linear time.
+]

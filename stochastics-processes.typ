@@ -886,9 +886,9 @@ $<eq:jump-holding-distrib>
   Assume $i != j$, then we have
   $
     P_(i j) & = prob (X(h) = j | X(0) = i) \
-    & >= prob (T_0 < h, Y_i = j, T_1 > h | Y_0 = i) \
-    & = prob (T_0 < h | Y_0 = i) prob (Y_1 = j | Y_0 = i) prob (T_1 > h | Y_j = j) \
-    & = (1 - e^(- nu_i h)) K_(i j) e^(nu_j h)
+    & >= prob (T_0 < h, Y_1 = j, T_1 > h | Y_0 = i) \
+    & = prob (T_0 < h | Y_0 = i) prob (Y_1 = j | Y_0 = i) prob (T_1 > h | Y_1 = j) \
+    & = (1 - e^(- nu_i h)) K_(i j) e^(-nu_j h)
   $
   for $h > 0$, where the first step is the definition of CTMC, the second one is @eq:equi-def-ctmc,
   and the last two steps are due to the property of the jumping chain and holding times described

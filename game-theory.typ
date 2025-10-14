@@ -1,7 +1,6 @@
 #import "lib/template.typ": template
 #import "lib/utils.typ": *
 #import "lib/theorem.typ": *
-
 #show: template.with(
   title: "Mathematical Modelling for Finance",
   author: "Giacomo Ellero",
@@ -442,10 +441,6 @@ Nash Equilibria are fixed-points in the best-reply correspondence.
 In finite games we can get some cases where no _pure_ NE exists, however it can be shown that it is
 always possible to find a _mixed_ NE.
 
-Recall that, given a mixed strategy $alpha_i$ where pure strategies $a'_i$ and $a''_i$ have
-non-zero probability, $alpha_i$ is the best reply to some conjecture $mu^i$ only if
-$u(a'_i, mu^i) = u(a''_i, mu^i)$.
-
 #definition(title: [Mixed extension of finite games])[
   Given a finite game $G = angle.l I, (A_i, u_i)_(i in I) angle.r$ we define the mixed extension
   $macron(G) = angle.l I, (Delta(A_i), macron(u)_i)_(i in I) angle.r$ with
@@ -463,9 +458,45 @@ $u(a'_i, mu^i) = u(a''_i, mu^i)$.
   in compact-continuous games.
 ]
 
+=== Finding a Nash Equilibrium
+
+Recall that, given a mixed strategy $alpha_i$ where pure strategies $a'_i$ and $a''_i$ have
+non-zero probability, $alpha_i$ is the best reply to some conjecture $mu^i$ only if
+$u(a'_i, mu^i) = u(a''_i, mu^i)$.
+
+We can proceed as follows:
+1. Fix player $i$ and the pure actions $a_i$ this player is mixing over;
+2. Find the conjectures about the other players' actions that make player $i$ indifferent between
+  actions $a_i$;
+3. Repeat for all players;
+4. Impose that the conjectures are correct and player follow the computed conjectures.
+
 = Correlated Equilibrium
 
-This will be a merge conflict later but who cares
+We will discuss how players can coordinate based on some external random signal to maximize utility.
+The external signal makes sure that the decision is still "fair" to all players.
+
+#definition(title: [Correlated Equilibrium])[
+  A correlated equilibrium is a list $angle.l Omega, prob, (T_i, tau_i, sigma_i)_(i in I) angle.r$
+  where
+  - $(Omega, p)$ is a finite probability space;
+  - The sets $T_i$ are finite;
+  - The functions $tau_i : Omega -> T_i$ and $sigma_i : T_i -> A_i$ are such that
+    $
+          & forall i in I, forall t_i in T_i,
+            "if " p({omega' in Omega : tau_i (omega') = t_i}) > 0 \
+      ==> & sum_(omega in Omega) p(omega | t_i) u_i (sigma_i (t_i), sigma_(-i) (tau_(-i)
+              (omega)) \
+          & >= sum_(omega in Omega) p(omega | t_i) u_i (a_i), sigma_(-i) (tau_(-i) (omega)) wide
+            forall a_i in A_i
+    $
+]
+
+This definition tells us that if some external event $omega in Omega$, then the function $tau_i$
+gives to the player a signal $t_i$, then given the signal the function $sigma_i$ gives back the
+action that players have agreed they would play on a certain signal.
+Finally, $p(omega | t_i)$ is the belief of player $i$ that the world in state $omega$ after having
+observed $t_i$.
 
 == Finding a correlated equilibrium
 
@@ -507,3 +538,5 @@ $abs(A) = 4$, we would also have only 5 constraints from @eq:ce-constraints-prob
   trivial: it is just an optimization problem with linear equations on a convex set. There are
   algorithms which guarantee convergence in linear time.
 ]
+
+

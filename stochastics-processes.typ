@@ -521,8 +521,8 @@ $
 Therefore we have a set of equations we can use to compute ${h(i)}_(i in cal(X))$:
 $
   h(i) = cases(
-    sum_(j in cal(X)) h(j) P_(i j) wide & "if" i in cal(X) without C \
-                                 1 wide & "if" i in C
+    sum_(j in cal(X)) h(j) P_(i j) wide & "if" i in cal(X) without C,
+    1 wide & "if" i in C
   )
 $
 
@@ -838,7 +838,7 @@ $n$-th visited state $Y_n$.
 
 $
   X(t) = i <==> cases(
-    T_0 + ... + T_(n-1) <= t <= T_0 + ... + T_n \
+    T_0 + ... + T_(n-1) <= t <= T_0 + ... + T_n,
     Y_n = i
   )
 $<eq:equi-def-ctmc>
@@ -1133,3 +1133,206 @@ totally ordered.
     lambda (A) = EE [N(A)]
   $
 ]
+
+= Processes with continuous time and space
+
+== TODO: Brownian Motion
+
+== Gaussian Processes
+
+This is, in some way, a "generalization" BM.
+While the canonical case is $T = [0, +oo)$ and $cal(X) = RR$, the general case is $T = RR^m_+$ and
+$cal(X) = RR^d$.
+
+#definition(title: [Gaussian Process (GP)])[
+  $X = (X_t)_(t in T)$ is a Gaussian Process if, for every finite $k in NN$ and every collection
+  $t_(1:k) in T^k$, the random vector $X_(t_(1:k)) = (X_(t_1), ..., X_(t_k))$ has multivariate
+  Gaussian distribution (MVG).
+]
+
+This is equivalent to saying that $X$ has MVG finite dimensional distribution.
+
+#proposition[
+  $X tilde "BM"(sigma)$ is a Gaussian Process.
+]
+
+#proof[
+  For $t_(1:h) in [0, +oo]^h$ we have that
+  $
+    X_(t_(1:h)) = (X_(t_1), ..., X_(t_h))
+  $
+  can be written as
+  $
+    X_(t_(1:h)) = M z wide "for" z = vec(X_(t_1), X_(t_2) - X_(t_1), dots.v, X_(t_h) - X_(t_(h-1)))
+    "and" M "is an appropriate" h times h "matrix"
+  $
+  Then, since MVG is closed under linear transformation we can conclude.
+]
+
+#remark[
+  If $X, Y$ are two stochastic processes with continuous trajectories and
+  $
+    X_(t_(1:k)) = Y_(t_(1:k)) wide forall k in NN
+  $
+  then
+  $
+    X = Y
+  $
+]
+
+=== Mean and covariance
+
+Let, for all $t, s in T$,
+$
+     m(t) & = EE [X_t] \
+  C(t, s) & = cov (X_t, X_s)
+$
+
+Then, if $X$ is a Gaussian Process, $m, C$ uniquely characterize the processes.
+
+#example(title: [Brownian Motion])[
+  Let $X tilde "BM"(sigma)$. Then
+  $
+    m(t) = EE[X_t] = 0
+  $
+  and
+  $
+    C(t, s) & = EE[X_t X_s] \
+            & = EE[X_t (X_t +(X_s - X_t))] \
+            & = EE[X_t^2] + EE[X_t (X_s - X_t)] \
+            & = sigma^2 t + EE[X_t] EE[X_s - X_t] \
+            & = sigma^2 t
+  $
+]
+
+#example(title: [Brownian Bridge])[
+  Let $X tilde "BM"(sigma)$ and
+  $
+    (Y_t)_(t in [0, 1]) = (X_t)_(t in [0, 1]) | X_1 = 0
+  $
+  Since MVGs are closed under conditioning, $Y tilde "GP"$ too.
+
+  In this case we have
+  $
+    cases(
+      m(t) = EE[Y_t] = EE[X_t | X_1 = 0] = 0 wide &,
+      C(t, s) = sigma^2 t (1 - s) wide & 0 <= t < s <= 1
+    )
+  $
+]
+
+#definition(title: [Brownian Bridge])[
+  A Brownian Bridge with variance variance $sigma^2$ ending at $Y_s = y$ is a Gaussian Process with
+  $T = [0, s]$ and
+  $
+    cases(
+      m(t) = t/s y wide & t in [0, s],
+      C(t, t') = sigma^2 t (s - t') wide & 0 <= t < t' <= s
+    )
+  $
+]
+
+#figure(
+  image("./assets/stochastic-processes/brownian-bridge.png"),
+  caption: [Trajectories of a one-dimensional Brownian bridge],
+)
+
+#lemma[
+  If $X tilde "GP"(0, C)$, then
+  $
+    Y_t = X_t + m(t)
+  $
+  satisfies $Y tilde "GP"(m, C)$.
+]
+
+This means we can focus on zero-mean GPs without loss of generality.
+Then, the only key parameter is $C$. A function $C$
+$
+  C: T times T -> RR
+$
+is a valid covariance parameter if is a symmetric positive (semi) definite (SPD) function.
+Any valid $C$ induces a valid GP: SPD functions in this contexts are called _kernels_.
+
+
+#figure(
+  image("./assets/stochastic-processes/spd-examples.png"),
+  caption: [
+    In the top row: 3 examples of one-dimensional SPD functions with different regularity conditions
+    at $0$. On the bottom row: the resulting trajectories of GPs with the above $C$ functions.
+  ],
+)
+
+== Diffusion Processes
+
+The starting point is the infinitesimal definition of BM, which can also be written in the following
+equivalent way:
+$X tilde "BM"(sigma)$ is the only continuous Markov Process on $RR$ such that the increments
+$Delta_(t, h) := X_(t+h) + X_t$ satisfy the following properties as $h -> 0$:
+1. (zero drift)
+  $
+    EE[Delta_(t, h) | X_t = x] = 0 + o(h)
+  $
+2. (instantaneous variance of $sigma^2$)
+  $
+    EE[Delta_(t, h)^2 | X_t = x] = sigma^2 t + o(h)
+  $
+3. (no jumps)
+  $
+    prob (abs(Delta_(t, h)) > epsilon X_t = x) = o (h)
+  $
+
+We can generalize the above definition as follows:
+
+#definition(title: [Diffusion process])[
+  A continuous Markov Process $X$ with continuous trajectories is a diffusion process with drift
+  function $mu(x, t)$ and instantaneous variance (volatility) $sigma^2 (x, t)$ if, as $h -> 0$, the
+  following hold:
+  1. Drift:
+    $
+      EE[Delta_(t, h) | X_t = x] = mu (x, t) h + o(h)
+    $
+  2. Volatility
+    $
+      EE[Delta_(t, h)^2 | X_t = x] = sigma^2 (x, t) t + o(h)
+    $
+  3. No jumps
+    $
+      prob (abs(Delta_(t, h)) > epsilon X_t = x) = o (h)
+    $
+]
+
+If the above holds, we say that the stochastic process $X$ solves the stochastic differential
+equation (SDE)
+$
+  dif X_t = mu(X_t, t) dif t + sigma (X_t, t) dif B_t
+$
+
+We can compare this SDE with an ODE (let $t mapsto X_t$ be deterministic):
+$
+  (dif X_t)/(dif t) = mu (X_t, t)
+$
+which is equivalent to
+$
+  lim_(h -> 0) (X_(t + h) - X_t)/h = mu(X_t, t)
+$
+
+Meanwhile, in the SDE case (there $t mapsto X_t$ is _not_ deterministic) we have that
+$
+  & lim_(h -> 0) EE[(X_(t + h) - X_t)/h mid(|) X_t = x]   &    = mu(x, t) \
+  & lim_(h -> 0) EE[(X_(t + h) - X_t)^2/h mid(|) X_t = x] & = sigma(x, t)
+$
+Note that the second equation is satisfied in the deterministic case only if $sigma(x, t) = 0$
+anywhere.
+
+Meanwhile, the notation $dif B_t$ comes from the fact that, for some small $h > 0$ we can write
+$
+  X_(t + h) approx X_t + mu(X_t, t) + sigma (X_t, t) sqrt(h) Z
+$
+where $Z tilde N(0, 1)$ independent of the rest is the noise term, which is scaled by a larger
+$sqrt(h)$ factor.
+
+Then
+$
+  X_(t + h) = X_t + mu(X_t, t) + sigma (X_t, t) (B_(t + h) + B_t)
+$
+where $B tilde "BM"(1)$ is the "driving" Brownian motion.

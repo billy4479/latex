@@ -1,5 +1,30 @@
 {
   "nodes": {
+    "calendar-proxy": {
+      "inputs": {
+        "flake-utils": [
+          "myPackages",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "myPackages",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1760104997,
+        "narHash": "sha256-dX8NBdNpVyhwjgzqUa0kjixNlJfEP5GFz+tPbTwDOZU=",
+        "owner": "billy4479",
+        "repo": "calendar-proxy",
+        "rev": "dc96611c2d5162f97c85b9cbf79e8cbcf885fc4b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "billy4479",
+        "repo": "calendar-proxy",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -20,19 +45,21 @@
     },
     "myPackages": {
       "inputs": {
+        "calendar-proxy": "calendar-proxy",
         "flake-utils": [
           "flake-utils"
         ],
         "nixpkgs": [
           "nixpkgs"
-        ]
+        ],
+        "server-tool": "server-tool"
       },
       "locked": {
-        "lastModified": 1757581596,
-        "narHash": "sha256-vSDDHq8eKDquUJAsXcUrrilDLYZ3fu8oKoOeH4S8HxM=",
+        "lastModified": 1760108183,
+        "narHash": "sha256-emiLdw1uM+BqlrrvfXeFHG965QgEzhRnm8NRvUUoKoU=",
         "owner": "billy4479",
         "repo": "nix-packages",
-        "rev": "fef14c8be43373e0f00ee040201716ecf1c2e4b3",
+        "rev": "934699f51d2078329eab80795ec109e0342956dd",
         "type": "github"
       },
       "original": {
@@ -43,11 +70,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1757347588,
-        "narHash": "sha256-tLdkkC6XnsY9EOZW9TlpesTclELy8W7lL2ClL+nma8o=",
+        "lastModified": 1761373498,
+        "narHash": "sha256-Q/uhWNvd7V7k1H1ZPMy/vkx3F8C13ZcdrKjO7Jv7v0c=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "b599843bad24621dcaa5ab60dac98f9b0eb1cabe",
+        "rev": "6a08e6bb4e46ff7fcbb53d409b253f6bad8a28ce",
         "type": "github"
       },
       "original": {
@@ -62,6 +89,31 @@
         "myPackages": "myPackages",
         "nixpkgs": "nixpkgs",
         "typix": "typix"
+      }
+    },
+    "server-tool": {
+      "inputs": {
+        "flake-utils": [
+          "myPackages",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "myPackages",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1738607787,
+        "narHash": "sha256-jbuJBOfXYQQGmrfZ/CitDrni9tRRp8UZNAjijwz48GQ=",
+        "owner": "billy4479",
+        "repo": "server-tool",
+        "rev": "c980a1ac538a29721864469db0e01aad342aa8bf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "billy4479",
+        "repo": "server-tool",
+        "type": "github"
       }
     },
     "systems": {
@@ -86,11 +138,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1757234666,
-        "narHash": "sha256-yOvQn99hMmpHhQzW5kvak6MK+xGQ+z3YDOYz/JpjIho=",
+        "lastModified": 1761122907,
+        "narHash": "sha256-mlsMnRPQhp3fI0yo2H3CwNmvh+P/82QAdnx3xSZfbHE=",
         "owner": "loqusion",
         "repo": "typix",
-        "rev": "44573c222b828d448166d1b2cbf27a783f6ea32b",
+        "rev": "5d5d5d701f2423a713f38a66e631cca73d79c501",
         "type": "github"
       },
       "original": {

@@ -182,7 +182,7 @@ $
   i in C ==> j in C quad forall j "accessible from" i
 $
 
-Define the probability of from state $i$ to return to state $i$ as
+Define the probability of returning to state $i$, starting from state $i$, as
 $
   f_i & = prob(X_t = i "for some" t>=1 | X_0 = i) \
       & = prob(union.big_(t >= 1) {X_t = i} | X_0 = i)
@@ -201,7 +201,7 @@ Formally, we define $S$ recursively: $S_0 = 1$ and
 $
   S_k = min {t >= S_(k-1) + 1 | X_t = i }
 $
-and we set $min nothing = infinity$.
+and we set $min varnothing = infinity$.
 We also define the length of the $k$-th tour as
 $
   T_k = S_k - S_(k-1)
@@ -1102,7 +1102,7 @@ where $N(A)$ is the number of points in $A$.
   A point process $N = (N(A))_(A subset.eq cal(D))$ is a Poisson Process with intensity measure
   $lambda$, where $lambda$ is a measure on $cal(D)$, if one of the following equivalent definitions
   holds
-  1. $N(A) prop N(B)$ for all $A, B subset.eq cal(D)$ such that $A inter B = nothing$;
+  1. $N(A) prop N(B)$ for all $A, B subset.eq cal(D)$ such that $A inter B = varnothing$;
   2. $N(A) tilde "Poisson"(lambda(A))$ for all $A subset.eq cal(D)$.
 ]
 
@@ -1136,7 +1136,99 @@ totally ordered.
 
 = Processes with continuous time and space
 
-== TODO: Brownian Motion
+== Brownian Motion
+
+The Brownian Motion (BM) is defined as the limit of a random walk on $ZZ$: consider
+$delta x, delta t > 0$ and define a continuous-time stochastic process $X$ as
+$
+  X_t = delta x Y_(ceil(t / (delta t)))
+$
+This process makes jumps of size $delta x$ either up or down (with
+probability $1/2$) every $delta t$.
+
+Therefore we can write
+$
+  Y_n = Z_1 + ... + Z_n wide "where"
+  quad cases(prob(Z_i = 1) = 1/2, prob(Z_i = -1) = 1/2, Z_i perp Z_j)
+  quad forall i in {1, ..., n}
+$
+This means that
+$
+  & EE[Y_n]  & = & n EE[Z_1]  & = 0 \
+  & var[Y_n] & = & n var[Z_1] & = n \
+$
+which gives us
+$
+  & EE[X_t] = 0 \
+  & var[Y_n] = (delta x)^2 ceil(t/(delta t))
+$
+and by taking $delta x = O(sqrt(delta t))$ we get
+$
+  lim_(delta t -> 0) var(X_t) = lim_(delta t -> 0) sigma^2 delta t ceil(t / (delta t)) = sigma^2 t
+$
+for some $sigma >0$.
+
+Moreover, since $Z_1, ..., Z_n$ are iid, by the central limit theorem we get
+$
+  X_t ->^d N(0, sigma^2 t) wide "as" delta x -> 0, forall t > 0
+$
+Then, we fix $T > 0$ and $delta x = sigma sqrt(delta t)$ such that
+$
+  ( X_t )_(t in [0, T]) ->^d ( B_t )_(t in [0, T]) wide delta t -> 0
+$
+converges in distribution to the Brownian Motion with variance $sigma^2$.
+The sequence of distributions over trajectories converges to a limiting distribution over
+trajectories.
+
+#definition(title: [Brownian Motion])[
+  A continuous-time stochastic process $X = (X_t)_(t in [0, oo))$ on $cal(X) = RR$ is a Brownian
+  Motion with variance $sigma^2$ if
+  1. $prob (X_0 = 0) = 1$
+  2. $prob (t mapsto X_t "is continuous" forall t in [0, oo)) = 1$
+  3. The process has stationary and independent increments
+  4. $X_t tilde N(0, sigma^2 t)$ for every $t in [0, oo)$
+]<def:brownian-motion>
+
+Brownian motion can also be defined on $RR^d$, where each component $X_t^((i))$ of the random vector
+$X_t$ is a one dimensional BM.
+
+#theorem(title: "Wiener")[
+  A distribution over the space of functions $t mapsto X_t$ from $[0, oo)$ to $RR$ which
+  satisfies @def:brownian-motion exists.
+]
+
+=== Properties
+
+==== Invariances
+
+#proposition(title: [Invariances of BM])[
+  Let $X tilde "BM"(sigma)$. Then
+  1. (*Rescaling*) Let $a, b > 0$ and $Y_t = a X_(t/b)$ for all $t$.
+    Then $(Y_t) tilde "BM"((a sigma)/sqrt(b))$
+  2. (*Time reversal*) Let $Y_t = X_(1 - t) - X_1$ for all $t$. Then $(Y_t) =^d (X_t)$
+  3. (*Inversion*) Let $Y_0 = 0$ and $Y_t = t X_(1/t)$ for all $t$. Then $(Y_t) tilde "BM"(sigma)$.
+]
+
+==== Trajectories
+
+The following properties of the trajectories of a BM are satisfied with probability 1:
+1. (*Continuity*):
+  $
+    prob (t mapsto X_t "is continuous" forall t in [0, oo)) = 1
+  $
+2. (*Nowhere differentiability*):
+  $
+    prob (t mapsto X_t "is not differentiable" forall t in [0, oo)) = 0
+  $
+3. (*Recurrence*):
+  $
+    prob (t mapsto X_t "crosses 0 infinitely many times" forall t in [0, oo)) = 0
+  $
+4. (*Recurrence near zero*): for any $epsilon > 0$
+  $
+    prob (t mapsto X_t "crosses 0 infinitely many times" forall t in [0, epsilon)) = 0
+  $
+
 
 == Gaussian Processes
 

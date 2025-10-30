@@ -1370,7 +1370,7 @@ $Delta_(t, h) := X_(t+h) + X_t$ satisfy the following properties as $h -> 0$:
   $
 3. (no jumps)
   $
-    prob (abs(Delta_(t, h)) > epsilon X_t = x) = o (h)
+    prob (abs(Delta_(t, h)) > epsilon | X_t = x) = o (h)
   $
 
 We can generalize the above definition as follows:
@@ -1389,7 +1389,7 @@ We can generalize the above definition as follows:
     $
   3. No jumps
     $
-      prob (abs(Delta_(t, h)) > epsilon X_t = x) = o (h)
+      prob (abs(Delta_(t, h)) > epsilon | X_t = x) = o (h)
     $
 ]
 
@@ -1428,3 +1428,29 @@ $
   X_(t + h) = X_t + mu(X_t, t) + sigma (X_t, t) (B_(t + h) + B_t)
 $
 where $B tilde "BM"(1)$ is the "driving" Brownian motion.
+
+=== Transition kernels
+
+Let $(X_t)$ be a time-homogeneous, continuous-time Markov process on $cal(X) = RR$.
+We define the transition kernel $P^t (x, y)$ with $x, y in RR, t > 0$ as the density of $X_t$ at $y$
+given that $X_0 = x$, i.e. $P^t (x, y)$ is such that
+$
+  prob (X_t in A | X_0 = x) = integral_A P^t (x, y) dif y wide A subset.eq RR
+$
+
+#example(title: [Transition Kernel of a BM])[
+  For $X tilde "BM"(sigma)$, we have that
+  $
+    P^t (x, y) = 1 / sqrt(2 pi t sigma^2) exp (- (x-y)^2 / (2 t sigma^2))
+  $
+]
+
+The transition kernel can also be seen as an operator on functions: for every $f: RR -> RR$ we
+define $P^t f : RR -> RR$ as
+$
+  P^t f (x) = integral f(y) P^t (x, y) dif y = EE[f(X_t) | X_0 = x]
+$
+where the following property also holds:
+$
+  P^t P^s f = P^(t + s)
+$

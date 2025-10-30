@@ -4,3 +4,6 @@
 
 #let argmin = math.op($"arg min"$, limits: true)
 #let argmax = math.op($"arg max"$, limits: true)
+
+// https://github.com/johanvx/typst-undergradmath/issues/10#issuecomment-1500662390
+#let varnothing = $text(font: "New Computer Modern", nothing)$

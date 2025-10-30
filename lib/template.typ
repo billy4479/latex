@@ -1,5 +1,5 @@
 #let template(
-  title: none,
+  titleString: none,
   author: none,
   date: "today",
   toc: true,
@@ -81,14 +81,25 @@
 
   // end
 
+  show heading.where(level: 1): set text(size: fontSize + 20pt)
+  show heading.where(level: 2): set text(size: fontSize + 10pt)
+  show heading.where(level: 3): set text(size: fontSize + 5pt)
+  show heading.where(level: 4): set text(size: fontSize + 2pt)
+  show title: set text(size: fontSize + 30pt)
 
   align(center)[
-    #text(17pt)[ * #title * ]
+    #title[ * #titleString * ]
 
-    #text(15pt, date)
+    #text(fontSize + 5pt, date)
 
     #text(author)
   ]
+
+  show heading.where(level: 1): it => {
+    pagebreak()
+    it
+  }
+
 
   if (toc) {
     outline()

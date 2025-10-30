@@ -3,7 +3,7 @@
 #import "lib/utils.typ": *
 
 #show: template.with(
-  title: "Stochastic processes",
+  titleString: "Stochastic processes",
   author: "Giacomo Ellero",
   date: "A.Y. 2025/2026",
 )

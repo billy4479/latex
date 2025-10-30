@@ -2,7 +2,7 @@
 #import "lib/utils.typ": *
 #import "lib/theorem.typ": *
 #show: template.with(
-  title: "Mathematical Modelling for Finance",
+  titleString: "Mathematical Modelling for Finance",
   author: "Giacomo Ellero",
   date: "A.Y. 2025/2026",
 )

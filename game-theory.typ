@@ -539,4 +539,28 @@ $abs(A) = 4$, we would also have only 5 constraints from @eq:ce-constraints-prob
   algorithms which guarantee convergence in linear time.
 ]
 
+= Incomplete information
 
+We will analyze the so called Aumann model for incomplete information.
+Let $Omega$ be the set of states of the world, we will assume $Omega$ is finite.
+Then consider $cal(F)_i$ for all $i in I$, each one being a partition of $Omega$. Each element of
+$cal(F)_i$ is the set of the states of the world that player $i$ cannot discriminate between.
+
+Let $A subset Omega$ be an event. Then, player $i$ knows $A$ if $cal(F)_i (omega) subset.eq A$. We
+denote all such states, i.e. all the states $omega$ in which $i$ knows $A$, as
+$
+  K_i (A) = {omega in Omega | cal(F)_i (omega) subset.eq A}
+$
+
+#definition(title: [Common knowledge])[
+  Let $A$ be an event and $omega in A$ be the state of the world. Then $A$ is common knowledge in
+  $omega$ if for every finite sequence of players $i_1, ..., i_m$ where holds
+  $
+    omega in K_(i_1) ( K_(i_2) (... (K_(i_m) (A))))
+  $
+]
+
+#theorem[
+  If an event $A$ is common knowledge in $omega$ and if there exists $omega' in cal(F)_i (omega)$
+  for some $i in I$, then the event $A$ is common knowledge also in $omega'$.
+]

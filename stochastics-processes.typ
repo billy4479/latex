@@ -1454,3 +1454,110 @@ where the following property also holds:
 $
   P^t P^s f = P^(t + s)
 $
+
+= Monte-Carlo Methods
+
+These are algorithms which rely on repeatedly sampling at random to obtain some result of interest.
+
+== Pseudo-Random Number Generators
+
+=== Uniform distribution
+
+Pseudo-random number generators (PRNGs) produce a _deterministic_ way to produce a sequence of
+numbers in $[0, 1]$ which _imitates_ a sequence of iid uniform random variables $cal(U)_[0, 1]$.
+
+PRNGs need a _seed_ $X_0$ which is the initial value for this sequence and it is "secret": given
+$(X_1, ..., X_n)$ but not $X_0$ it should be impossible to predict $X_(n+1)$.
+
+#example(title: [Linear congruential generator])[
+  Given a seed $X_0$, consider the sequence
+  $
+    X_(i + 1) = (a X_i + c) op(%) m
+  $
+  defined by induction, where $a, c, m in NN$ are chosen such as $a < 0 < m$ and $0 <= c < m$.
+  Note that $m$ is the "modulus" which means that after $m$ samples, $X_m = X_0$, therefore $m$
+  should be chosen big enough.
+
+  More sophisticated LCGs may introduce extra permutation steps.
+]
+
+There are many tests we could make to make sure that the above algorithm yields actually an uniform
+distribution.
+
+=== Other distributions
+
+Given $y tilde cal(U)_[0, 1]$ we can generate a pseudo-random variable $x$ which mimics another
+distribution using the cdf $F(x) = integral_(-oo)^x P(z) dif z$ of that distribution:
+$
+  x = F^(-1) (y) "with" y tilde cal(U)_[0, 1] "has the desired distribution"
+$
+
+#example(title: [Exponential distribution])[
+  Given $y tilde cal(U)_[0,1]$,
+  $
+    x = - 1/lambda log y
+  $
+  is distributed as $"Exp"(lambda)$.
+]
+#proof[
+  We know that the cdf of the exponential distribution is $F(x) = 1 - e^(- lambda x)$.
+  Then, we can invert it as follows:
+  $
+    e^(-lambda x) & = 1 - F(x) \
+        -lambda x & = log (1 - F(x)) \
+                x & = - 1/lambda log(1-F(x))
+  $
+  which gives us $F^(-1)(y) = - 1/lambda log (1-F(y))$.
+]
+
+#example(title: [Gaussian distribution: Box-Muller method])[
+  Given $y_1, y_2 tilde U_[0,1]$ independent, then
+  $
+    x_1 & = sqrt(- 2 log (y_1)) cos(2 pi y_2) \
+    x_2 & = sqrt(- 2 log (y_2)) sin(2 pi y_2)
+  $
+  are independent and distributed as $cal(N)(0, 1)$.
+
+  We can then scale them such that
+  $
+    z = mu + x sigma tilde N(mu, sigma)
+  $
+]
+
+#proof[
+  This is just a sketch.
+
+  The key idea is that, given $x_1, x_2 tilde N(0, 1)$,
+  $
+    x_1^2 + x_2^2 tilde "Exp"(1/2)
+  $
+
+  Then, we write the combined pdf in polar coordinates, and integrate it to obtain the cdf and we
+  invert it.
+]
+
+== Motivation
+
+Our goal is to compute the integral of a function $f$ in $D$ dimensions on a bounded domain where we
+are allowed $N$ evaluations of $f$ itself.
+
+Using classical methods we would use an $N$ elements Riemann sum or some other more sophisticated
+method. With these methods the error is $O(1/N^(k/D))$ (where $k$ depends on the method chosen,
+$k in {1, ..., 4}$), however this means that most likely $D >> k$ and that the error is exponential
+in the number of dimensions.
+
+When using a MC method instead we sample $x_i$ iid with $i in {1, ..., N}$ and let the approximated
+integral $I_N$
+$
+  I_N = 1/N sum_i f(x_i)
+$
+By the central limit theorem, $I_n -> I$ as $N -> oo$, where $I$ is the true integral, and
+$
+  norm(I_N - I) tilde 1/sqrt(N)
+$
+This is actually worse than classical methods when $D = 1$, however it becomes quickly better in
+more dimensions.
+
+#example(title: [Poisson process])[
+  We sample $T_i tilde "Exp"(lambda)$ and let $t_(i+1) = t_i + T_i$, then $(t) tilde "PP"(lambda)$.
+]

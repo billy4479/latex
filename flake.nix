@@ -29,7 +29,7 @@
       documents = [
         "game-theory"
         "finance"
-        "stochastics-processes"
+        "stochastic-processes"
 
         "gt-ps1"
       ];
@@ -120,7 +120,7 @@
           }
         ) documents;
       in
-      rec {
+      {
         devShells.default = typixLib.devShell {
           packages =
             with pkgs;
@@ -149,7 +149,7 @@
           }
         ) { } typixDerivations;
 
-        packages = builtins.foldl' (a: x: a // { "${x.name}" = x.buildDrv; }) (rec {
+        packages = builtins.foldl' (a: x: a // { "${x.name}" = x.buildDrv; }) rec {
           all-typst = pkgs.linkFarm "typst-documents" (
             map (x: {
               name = "${x.name}.pdf";
@@ -158,7 +158,7 @@
           );
 
           default = all-typst;
-        }) typixDerivations;
+        } typixDerivations;
       }
     );
 }

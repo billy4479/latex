@@ -1199,8 +1199,6 @@ $X_t$ is a one dimensional BM.
 
 === Properties
 
-==== Invariances
-
 #proposition(title: [Invariances of BM])[
   Let $X tilde "BM"(sigma)$. Then
   1. (*Rescaling*) Let $a, b > 0$ and $Y_t = a X_(t/b)$ for all $t$.
@@ -1209,9 +1207,9 @@ $X_t$ is a one dimensional BM.
   3. (*Inversion*) Let $Y_0 = 0$ and $Y_t = t X_(1/t)$ for all $t$. Then $(Y_t) tilde "BM"(sigma)$.
 ]
 
-==== Trajectories
+#proof[Skip.]
 
-The following properties of the trajectories of a BM are satisfied with probability 1:
+Moreover, the following properties of the trajectories of a BM are satisfied with probability 1:
 1. (*Continuity*):
   $
     prob (t mapsto X_t "is continuous" forall t in [0, oo)) = 1
@@ -1455,7 +1453,7 @@ $
   P^t P^s f = P^(t + s)
 $
 
-= Monte-Carlo Methods
+= Monte-Carlo methods
 
 These are algorithms which rely on repeatedly sampling at random to obtain some result of interest.
 

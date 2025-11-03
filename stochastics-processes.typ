@@ -1268,7 +1268,7 @@ This is equivalent to saying that $X$ has MVG finite dimensional distribution.
   $
   then
   $
-    X = Y
+    X =^d Y
   $
 ]
 

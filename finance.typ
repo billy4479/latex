@@ -12,6 +12,8 @@
 
 = One-period models
 
+== Describing one-period markets
+
 In this kind of models we have that $t in {0, 1}$.
 We consider $N$ securities $S_j$ and $B$ being the risk free asset
 which always costs $1$ and always returns $1 + r$, where $r$ is the safe rate;
@@ -64,7 +66,7 @@ $
   at $t=1$ we will have to buy back our debt.
 ]
 
-== Law of one price
+=== Law of one price
 This is a weak requirement to make sure that markets work as intended.
 We start with some definitions.
 
@@ -109,7 +111,7 @@ strategies.
 
 These tell us that if we want to get a zero payoff it will cost us zero.
 
-=== Linear Pricing Functional (LPF)
+==== Linear Pricing Functional (LPF)
 
 #definition(title: "Linear Pricing Functional (LPF)")[
   The Linear Pricing Functional is a correspondence $pi: A -> RR$
@@ -142,7 +144,7 @@ payoff.
     see Proposition 15 in lecture notes.
 ]
 
-=== Stochastic Discount Factor (SDF)
+==== Stochastic Discount Factor (SDF)
 
 #definition(title: "Stochastic Discount Factor (SDF)")[
   The SDF is a random vector $m$ such that
@@ -237,7 +239,7 @@ $
   EE[(m^* + epsilon) x] = EE[m^* x] + underbrace(EE[epsilon x], = 0)
 $
 
-=== State-Price Vectors (SPV)
+==== State-Price Vectors (SPV)
 
 #definition(title: "State-Price Vectors (SPV)")[
   A vector $psi in RR^K_(++)$ such that
@@ -292,9 +294,9 @@ To summarize, we have:
     m(omega_k) = 1/(1+r) (cal(Q)(omega_k))/(cal(P)(omega_k))
   $
 
-== Fundamental Theorem of Finance
+=== Fundamental Theorem of Finance
 
-=== First Fundamental Theorem of Finance
+==== First Fundamental Theorem of Finance
 
 #definition(title: "Arbitrage strategy")[
   This is a strategy $theta$ such that:
@@ -407,7 +409,7 @@ shorting it or by having some magic "free" lottery ticket.
     and we conclude the proof.
 ]
 
-=== Complete Markets
+==== Complete Markets
 
 #definition(title: [Hedging])[
   $x in RR$ can be perfectly hedged if $exists theta$ such that $V_theta (1) = A theta = x$.
@@ -462,7 +464,7 @@ money we can invest, since covering all possible risks is likely very expensive.
     but then if $A$ generates $RR^K$ we get that $A^perp = {0}$ and we have an unique $m$.
 ]
 
-=== Second Fundamental Theorem of Finance
+==== Second Fundamental Theorem of Finance
 
 #theorem(title: [Second Fundamental Theorem of Finance])[
   The following statements are equivalent:
@@ -513,7 +515,7 @@ With this lemma we can now prove the second fundamental theorem of finance:
   TODO: what?
 ]
 
-= Mean-Variance Theory
+== Mean-Variance Theory
 
 We are still in the context of one-period models, where $t in {0, 1}$, and assume that we have $N$
 securities, _all risky_.
@@ -550,7 +552,7 @@ $<eq:mv-min>
 where $E$ is the vector of the expectations $E_j = EE[R_j]$. We assume that $Sigma$ is known.
 Eventually we will want to find the optimal portfolio for each possible $overline(E)$.
 
-== Hansen-Richard
+=== Hansen-Richard
 
 #let rstar = $R^*$
 #let restar = $R^e^*$
@@ -580,7 +582,7 @@ $
 where we know that we can invert $EE[x x^T]$ since it is non-singular.
 $S$ is the vector of all the prices $S = [S_1 (0), ..., S_N (0)]^T$.
 
-=== Definitions
+==== Definitions
 
 Let us define two subsets of the space of payoffs $A = "span"(x_1, ..., x_N)$.
 #definition(title: [$A_1$ and $A_0$])[
@@ -655,7 +657,7 @@ condition, therefore it does not exists, but we look for the closest one.
   TODO: second part.
 ]
 
-=== Decomposition
+==== Decomposition
 
 #let span(body) = $chevron.l body chevron.r$
 
@@ -754,7 +756,7 @@ condition, therefore it does not exists, but we look for the closest one.
   and to conclude we set $w = beta/pi(x)$ and $n = 1/pi(x) n'$.
 ]
 
-=== The frontier without a risk-free asset
+==== The frontier without a risk-free asset
 
 #theorem(title: [Characterization of the MV frontier])[
   $rmv in A$ is on the mean-variance frontier if and only if
@@ -836,7 +838,7 @@ gives that return.
 With some magic algebra tricks we can show that the mvfront is a hyperbola in the $sigma[R]-EE[R]$
 plane, see figure 4.1 in the lecture notes.
 
-== Proxies for the risk-free asset
+=== Proxies for the risk-free asset
 
 Until now we have considered the case where there is no risk-free asset, however, before analyzing
 the case where we introduce one, we look at three criteria which can be used as risk-free proxies:
@@ -850,7 +852,7 @@ alternatives when the risk free asset does not exist.
 
 We now analyze these possibilities one by one.
 
-=== Global minimum variance portfolio return
+==== Global minimum variance portfolio return
 
 The global minimum variance portfolio return solves the following optimization problem
 $
@@ -897,7 +899,7 @@ is the global minimum variance portfolio return.
   A return $rmv$ on the mvfront is efficient if $EE[rmv] > EE[R_("MIN")]$.
 ]
 
-=== Zero-beta portfolio
+==== Zero-beta portfolio
 
 #let zcr = $z c [R]$
 
@@ -921,7 +923,7 @@ An intuitive way to find $zcr$ is to start from $R$, draw the tangent line to th
 through it, follow the line until $sigma = 0$, then move horizontally until we intercept the
 frontier again (see figure 4.2 in lecture notes).
 
-=== Constant mimicking portfolio return
+==== Constant mimicking portfolio return
 
 This is the traded return which is closest to $1$:
 $
@@ -957,7 +959,7 @@ $
 
 Moreover, it can be shown (see remark 65 in lecture notes), that $EE[R_"CMR"] > EE[R_"MIN"]$.
 
-== Frontier with riskless asset
+=== Frontier with riskless asset
 
 Introduce a riskless asset $B$ with $R_f = B(1)/B(0) > 0$.
 We can now define a variant of every object we defined before, note that in general these new
@@ -1027,7 +1029,7 @@ The decompositions of $A$, $A_1$ and $rmv$ still hold.
 It can be shown again with some algebra that the mvfront is two lines which touch in $(R_f, 0)$, see
 Figure 4.3 in lecture notes.
 
-=== Optimal Risky Portfolio
+==== Optimal Risky Portfolio
 
 #let rorp = $R^"ORP"$
 
@@ -1056,11 +1058,108 @@ Figure 4.3 in lecture notes.
   $
 ]<rmk:two-fund-orp>
 
-= Beta-pricing equations
+== Beta-pricing equations
 
-TODO
+A beta-pricing equation relates the expected return of a security with its systematic risk, i.e. the
+risk that investors still need to face to after having followed a proper diversification strategy
+(like the one presented in the previous chapter).
 
-= Capital Asset Pricing Model
+Assuming the risk-free asset is not traded, a general beta-pricing equation takes the form of
+$
+  EE[R] = gamma + sum^L_(ell = 1) beta_(R, ell) lambda_ell wide R in A_1
+$
+where $gamma$ is a constant representing a "proxy" for the risk-free asset. The underlying idea is
+that the return of each asset is governed by the sum of some underlying functions $f_1, ..., f_ell$:
+for each factor $ell = {1, ..., L}$, $beta_(R, ell)$ represents the amount of "risk" for $R$, while
+$lambda_ell$ represents the right remuneration per unit-risk.
+
+We will only investigate *single factor* beta equations, which take the form of
+$
+  EE[R] = gamma + beta_(R, f) lambda
+$
+this means that
+$
+  beta_(R, f) = cov[f, R]/var[f]
+$
+The idea is that $beta_(R, f)$ is the fraction of total risk (represented by $var[f]$) which is
+"due" to $R$ (represented by $cov[f, R]$).
+
+=== Relationship with SDFs
+
+#theorem[
+  Assume $var[f] != 0$. Then, there exist $lambda, gamma in RR$, $gamma != 0$ such that
+  $
+    EE[R] = gamma + beta_(R, f) lambda wide "with" cases(
+      beta_(R, f) = cov[R, f]/var[f],
+      R in A_1
+    )
+  $
+  if and only if $exists a, b in RR$ with $a + b EE[f] != 0$ such that
+  $
+    m = a + b f wide "is an SDF"
+  $
+]
+
+#proof[
+  We prove each implication separately.
+
+  / SDF $==>$ Beta: Assume $exists a, b in RR$ with $a + b EE[f] != 0$ such that $m = a + b f$ is an
+    SDF.
+    This means that $forall R in A_1$ we have $EE[(a + b f) R] = 1$ and by linearity of the
+    expectation we get
+    $
+      a EE[R] + b (cov[f, R] + EE[f] EE[R]) = 1
+    $<eq:proof-beta-sdf-1>
+    By assumption, we know that $a + b EE[f] != 0$, therefore we can define
+    $
+       gamma & = 1/(a + b EE[f]) \
+      lambda & = - b var[f] gamma
+    $
+    and by solving for $EE[R]$ and substituting $gamma, lambda$ where needed we obtain the result.
+  / Beta $==>$ SDF: Assume $EE[R] = gamma + beta_(R, f) lambda$ for all $R in A_1$ with
+    $gamma, lambda != 0$ and $gamma != 0$. We want to find $a, b in RR$ such that $m = a + b$ is an
+    SDF.
+
+    We use @eq:proof-beta-sdf-1 and substitute the assumption that $EE[R] = gamma + beta_(R, f)
+    lambda$ obtaining
+    $
+      & a (gamma + beta_(R, f) lambda) + b (cov[f, R] + EE[f](gamma + beta_(R, f) lambda) &= 1 \
+      ==> & (a + b EE[f]) (gamma + beta_(R, f) lambda) + b cov[f, R] & = 1 \
+      ==> & gamma (a + b EE[f]) + beta_(R, f) (lambda (a + b EE[f]) + b var[f]) &= 1
+    $
+    where the last implication is by the definition of $beta_(R, f)$.
+
+    Note that $beta_(R, f) != 0$, as otherwise $EE[R] = gamma$ for all $R in A_1$, which is against
+    the assumption of no risk neutrality.
+
+    Then, we must (TODO: why?) have that
+    $
+      cases(
+        lambda (a + b EE[f]) + b var[f] = 0,
+        gamma (a + b EE[f]) = 1
+      )
+    $
+    and by solving the system for $a, b$ we obtain the result.
+]
+
+
+#corollary[
+  Let $tilde(f) := "proj"[f | A]$ such that $pi(tilde(f)) != 0$.
+  Define $R' = tilde(f) / pi(tilde(f))$.
+  Then $exists gamma != 0$ such that
+  $
+    EE[R] = gamma + beta_(R, R')(EE[R'] - gamma) wide "with" beta_(R, R') = cov(R, R')/var(R')
+  $
+  if and only if there exist $a, b in RR$ such that $a + b EE[R] != 0$ and
+  $
+    m = a + b R' wide "is an SDF"
+  $
+]
+
+=== TODO: MV return without risk-free asset
+=== TODO: MV return with a risk-free asset
+
+== Capital Asset Pricing Model
 
 In this chapter we will assume that all risky assets are in a fixed supply: for all
 $j in {1, ..., N}$, $macron(theta)_j$ is the fixed supply of shares of $j$, while $S_j

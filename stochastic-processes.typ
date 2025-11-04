@@ -1063,7 +1063,7 @@ rate $lambda$.
   1. $N$ has independent increments and
   $
     N(t + s) - N(s) tilde "Poisson"( integral_s^(t + s) lambda(y) dif y)
-  $
+  $<eq:non-homo-pp-inc>
   2. $N$ has independent increments and
   $
     cases(
@@ -1557,5 +1557,50 @@ This is actually worse than classical methods when $D = 1$, however it becomes q
 more dimensions.
 
 #example(title: [Poisson process])[
-  We sample $T_i tilde "Exp"(lambda)$ and let $t_(i+1) = t_i + T_i$, then $(t) tilde "PP"(lambda)$.
+  We sample $T_i tilde "Exp"(lambda)$ and let $t_(i+1) = t_i + T_i$, then
+  $(t)_(i) tilde "PP"(lambda)$. Therefore this is very easy to simulate, we can just draw from the
+  exponential distribution, which is way more efficient than discretizing time.
+
+  In the inhomogeneous case this is quite harder, however, defining the _integrated rate function_
+  as
+  $
+    Lambda (t) = integral_0^t lambda(u) dif u
+  $
+  we get that, given $t_n = t$, the next inter-event time $t_(n+1) = t + x$ has cdf
+  $
+    F(x) = 1 - exp(- (Lambda (t+x) - Lambda(t)))
+  $
 ]
+
+#solution[
+  We start by discretizing time:
+  $
+    prob(t_(n+1) > t + x) & = product^(x/(dif t))_(k = 1) (1 - lambda(t + k dif t) dif t) \
+    & = exp (sum^(x/(dif t))_(k = 1) log (1 - lambda(t + k dif t) dif t) ) \
+    & = exp (sum^(x/(dif t))_(k = 1) - lambda(t + k dif t) dif t + o(dif t^2)) \
+    & = exp (- integral_t^(t+x) lambda (u) dif u) \
+    & = exp (- (Lambda(t+x) - Lambda(t))) \
+  $
+  where in the second step we Taylor expanded the logarithm and in the third one we used the
+  definition of Riemann integral.
+
+  This gives us that
+  $
+    prob (t_(n+1) < t + x) = F(x) = 1 - exp(-(Lambda(t + x) - Lambda(t)))
+  $
+
+  Then
+  $
+    t_(n+1) = Lambda^(-1) (E + Lambda (t_n)) wide "with" E tilde "Exp"(1)
+  $
+  which gives us an easy way to simulate the process. However, this still assumes we can compute
+  $Lambda^(-1)$, which is not always the case.
+
+  If $Lambda$ is not easy to invert we can instead use the *thinning method*.
+  Consider a function $mu$ easy to invert such that $mu(t) >= lambda(t)$ for all $t$.
+  Then, generate events using the dominating rate function $mu(t)$ and each event is accepted with
+  probability $lambda(t) / mu (t)$. We can show that the set of accepted events forms a Poisson
+  process with the desired distribution.
+]
+
+== Simulating CTMCs - Gillespie algorithms

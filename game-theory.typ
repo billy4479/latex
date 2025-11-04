@@ -541,7 +541,8 @@ $abs(A) = 4$, we would also have only 5 constraints from @eq:ce-constraints-prob
 
 = Incomplete information
 
-We will analyze the so called Aumann model for incomplete information.
+== Aumann model
+
 Let $Omega$ be the set of states of the world, we will assume $Omega$ is finite.
 Then consider $cal(F)_i$ for all $i in I$, each one being a partition of $Omega$. Each element of
 $cal(F)_i$ is the set of the states of the world that player $i$ cannot discriminate between.
@@ -560,7 +561,65 @@ $
   $
 ]
 
+In this model, either a player knows $A$ or it knows that it doesn't know $A$.
+
 #theorem[
   If an event $A$ is common knowledge in $omega$ and if there exists $omega' in cal(F)_i (omega)$
   for some $i in I$, then the event $A$ is common knowledge also in $omega'$.
 ]
+
+=== Graph representation
+
+Construct a undirected graph $G = (V, E)$ as follows:
+- $V = Omega$ i.e. there's a vertex for each state of the world
+- Then, $(omega, omega') in E$ if $exists i in I$ who cannot discriminate between $omega$ and
+  $omega'$, i.e. $omega' in cal(F) (omega)$.
+- It is useful to consider some function which associates an edge to the set of players that require
+  it
+- Let $C(omega)$ denote the connected component which contains $omega$.
+
+#proposition[
+  An event $A$ is common knowledge in $omega$ if and only if $C(omega) subset.eq A$.
+]
+
+#corollary[
+  In the state $omega$, $C(omega)$ is common knowledge and it is the smallest event which is common
+  knowledge in $omega$.
+]
+
+=== Belief
+
+We now also consider a prior probability distribution $p$ over $Omega$ such that $p(omega) > 0$ for
+all $omega in Omega$. This $p$ is shared between all players, of course this is a very strong
+assumption to make but we will focus on this simpler case for now.
+
+#proposition[
+  Each player $i$ knows an event $A$ in state $omega$ if it attributes a probability of $1$ to that
+  event.
+  $
+    P(A | F_i (omega)) = 1 <==> F_i (omega) subset.eq A
+  $
+]
+
+#theorem(title: [Aumann])[
+  Consider an Aumann model of incomplete with two players $I = {1, 2}$ and an event
+  $A subset.eq Omega$.
+  Consider also two events
+  - $Q_1$ is the event that player $1$ assigns probability $q_1$ to event $A$
+  - $Q_2$ is the event that player $2$ assigns probability $q_2$ to event $A$
+
+  If $Q_1$ and $Q_2$ are both common knowledge in $omega$, then $q_1 = q_2$.
+]
+
+#proof[TODO.]
+
+TODO: complete here
+
+== Harsanyi model
+
+TODO
+
+
+Prove that bayesian equilibrium is also nash equilibrium. THM 8.6
+
+

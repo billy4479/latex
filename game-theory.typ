@@ -31,7 +31,7 @@ To define one of these games we need the following elements:
 
 Then we define a *static game* as
 $
-  G = angle.l I, Y, (A_i)_(i in I), g, (v_i)_(i in I) angle.r
+  G = angle(I, Y, (A_i)_(i in I), g, (v_i)_(i in I))
 $
 where
 - $I$ is the set of players
@@ -46,7 +46,7 @@ and $"supp" mu = {x in X | mu(x) > 0}$ to be the support of the probability meas
 
 Usually we can summarize a static game just with
 $
-  G = angle.l I, Y, (A_i, u_i)_(i in I) angle.r
+  G = angle(I, Y, (A_i, u_i)_(i in I))
 $
 where $u_i: times A_i -> RR$ is player's $i$ payoff function, defined as $u_i = v_i compose g$.
 
@@ -442,8 +442,8 @@ In finite games we can get some cases where no _pure_ NE exists, however it can 
 always possible to find a _mixed_ NE.
 
 #definition(title: [Mixed extension of finite games])[
-  Given a finite game $G = angle.l I, (A_i, u_i)_(i in I) angle.r$ we define the mixed extension
-  $macron(G) = angle.l I, (Delta(A_i), macron(u)_i)_(i in I) angle.r$ with
+  Given a finite game $G = angle(I, (A_i, u_i)_(i in I))$ we define the mixed extension
+  $macron(G) = angle(I, (Delta(A_i), macron(u)_i)_(i in I))$ with
   $
     macron(u)_i (alpha) = sum_(a in A) u_i (a) product_(j in I) alpha_j (a_j)
   $
@@ -477,7 +477,7 @@ We will discuss how players can coordinate based on some external random signal 
 The external signal makes sure that the decision is still "fair" to all players.
 
 #definition(title: [Correlated Equilibrium])[
-  A correlated equilibrium is a list $angle.l Omega, prob, (T_i, tau_i, sigma_i)_(i in I) angle.r$
+  A correlated equilibrium is a list $angle(Omega, prob, (T_i, tau_i, sigma_i)_(i in I))$
   where
   - $(Omega, p)$ is a finite probability space;
   - The sets $T_i$ are finite;
@@ -543,9 +543,16 @@ $abs(A) = 4$, we would also have only 5 constraints from @eq:ce-constraints-prob
 
 == Aumann model
 
-Let $Omega$ be the set of states of the world, we will assume $Omega$ is finite.
-Then consider $cal(F)_i$ for all $i in I$, each one being a partition of $Omega$. Each element of
-$cal(F)_i$ is the set of the states of the world that player $i$ cannot discriminate between.
+#definition(title: [Aumann model])[
+  An Aumann model consists of three components $angle(I, Omega, (cal(F)_i)_(i in I), p/2)$:
+  - $I$ is a finite set of players.
+  - $Omega$ is a finite set of states of the world.
+  - $cal(F)_i subset cal(P)(Omega)$ is a partition of $Omega$ for each player $i$
+]
+
+Each element of $cal(F)_i$ is the set of the states of the world that player $i$ cannot discriminate
+between.
+With the notation $cal(F)_i (omega)$ we denote the element of $cal(F)_i$ which contains $omega$.
 
 Let $A subset Omega$ be an event. Then, player $i$ knows $A$ if $cal(F)_i (omega) subset.eq A$. We
 denote all such states, i.e. all the states $omega$ in which $i$ knows $A$, as
@@ -568,6 +575,11 @@ In this model, either a player knows $A$ or it knows that it doesn't know $A$.
   for some $i in I$, then the event $A$ is common knowledge also in $omega'$.
 ]
 
+#proof[
+  TODO: Lemma 8.1
+]
+
+
 === Graph representation
 
 Construct a undirected graph $G = (V, E)$ as follows:
@@ -589,9 +601,12 @@ Construct a undirected graph $G = (V, E)$ as follows:
 
 === Belief
 
-We now also consider a prior probability distribution $p$ over $Omega$ such that $p(omega) > 0$ for
-all $omega in Omega$. This $p$ is shared between all players, of course this is a very strong
-assumption to make but we will focus on this simpler case for now.
+#definition(title: [Aumann model with belief])[
+  An Aumann model with belief is an Aumann model where we add an extra component $p$:
+  a probability distribution over $Omega$ such that $p(omega) > 0$ for all $omega in Omega$.
+
+  The distribution $p$ is shared between all players.
+]
 
 #proposition[
   Each player $i$ knows an event $A$ in state $omega$ if it attributes a probability of $1$ to that
@@ -617,9 +632,133 @@ TODO: complete here
 
 == Harsanyi model
 
-TODO
+#definition(title: [Harsanyi model])[
+  An Harsanyi game of incomplete information is given by the following list
+  $
+    angle(
+      I, Theta_0,
+      (Theta_i)_(i in I), p, S, (s_theta)_(theta in times_(i in I union {0}) Theta_i)
+    )
+  $
+  where:
+  - $I$ is a finite set of players.
+  - $Theta_0$ it a finite set of _types_ for a fictitious player $0$.
+  - $Theta_i$ is a finite set of _types_ for player $i$.
+  - $p in Delta(Theta)$ where $Theta = times_(i in I union {0}) Theta_i$ and $Delta(Theta)$ is the
+    set of distributions over $Theta$. Each type profile $theta in Theta$ is assigned with strictly
+    positive probability.
+  - $S$ is the set of states of nature, where each element $s$ is a game
+    $angle(I, (A_i, u_i)_(i in I))$
+  - $s_theta = angle(I, (A_i(theta), u_i(theta))_(i in I))$ is the _stage game_ which is played for
+    type profile $theta in Theta$.
+]
+
+Each set $Theta_i$ is private to player $i$, therefore players don't know each others' type.
+At the same time, all players don't know about which type of the world $theta_0 in Theta_0$ will be
+drawn.
+The probability distribution $p$ is common knowledge.
+
+=== Bayesian equilibrium
+
+#definition(title: [Strategy])[
+  A strategy $sigma_i$ of a player $i$ is a function which maps the players' type to a distribution
+  over the feasible actions for that type.
+  $
+    sigma_i : Theta_i -> Delta(A_i)
+  $
+]
+
+This means that each player may have different actions available depending on their type.
+
+#definition(title: [Bayesian equilibrium])[
+  A Bayesian Nash equilibrium is a strategy profile $sigma^* = (sigma_i^*)_(i in I)$ such that
+  $
+    sigma^*_i (theta_i) in argmax_(sigma_i) EE[u_i (sigma_i (theta_i), sigma^*_(-i)) | theta_i] wide
+    cases(
+      delim: #none,
+      forall i in I,
+      forall theta_i in Theta_i
+    )
+  $
+]
+
+In this definition, a strategy must be optimal for all possible typo realizations of all players.
+
+=== Nash equilibrium in incomplete information games
+
+In Bayesian equilibrium, each player $i$ chooses a strategy $sigma_i$ _after_ having realized which
+type $theta_i$ he is.
+
+However, we can also analyze what is the best strategy _before_ knowing the realization of its own
+type.
+Let us define the expected ex-ante utility of player $i$:
+$
+  U_i (sigma_i, sigma(-i)) = sum_(theta_i in Theta_i) p(theta_i) sum_(theta_(-i) in Theta_(-i))
+  p(theta_(-i) | theta_i) u_i (theta_i, theta_(-i), sigma_i, sigma_(-i))
+$
+
+#definition(title: [Nash equilibrium with incomplete information])[
+  A Nash equilibrium in an incomplete information game is the strategy profile
+  $(sigma^*_i)_(i in I)$ such that
+  $
+    sigma_i^* in argmax_(sigma_i) U_i (sigma_i, sigma^*_(-i)) wide forall i in I
+  $
+]
+
+#theorem()[
+  In a finite game of incomplete information $G$, a strategy profile $(sigma_i^*)_(i in I)$ is a
+  Bayesian equilibrium if and only if it is also a Nash equilibrium.
+]
+
+#proof[
+  TODO: !IMPORTANT!
+]
+
+= Multistage games
+
+== Complete information
+
+#definition(title: [Multistage game (extensive form)])[
+  A multistage game with perfect information in extensive form is a list
+  $
+    G = angle(I, (V, E, x_0), (V_i, u_i)_(i in I))
+  $
+  where
+  - $I$ is a finite set of players
+  - $(V, E, x_0)$ is the _game tree_ where $V$ is the set of vertices, $E$ the edges and $x_0 in V$
+    is the root of the tree. The set of leaves are denoted by $X^ell$. This is a finite tree.
+  - $(V_i)_(i in I)$ is a partition of $V without X^ell$. Each $V_i$ denotes the set of vertices
+    where player $i$ takes action.
+  - $u_i : X^ell -> RR$ is the utility function for player $i$ based on the leaf we end up in.
+]
+
+#definition(title: [Subgame])[
+  Given a multistage game $G$, a subgame $G(x)$, with $x in V without X^ell$, is the subgraph of
+  $(V, E)$ which includes the vertex $x$ and all its descendants.
+
+  Note that $G = G(x_0)$ therefore $G$ is a subgame of itself.
+]
+
+To introduce randomness in multistage game we define also a fictitious player which plays the role
+of "luck": this player gets assigned some vertices in the graph and it chooses at random between the
+available options, according to some common knowledge distribution.
+
+=== Subgame-perfect equilibrium
+
+#definition(title: [Subgame-perfect equilibrium])[
+  A strategy profile $sigma$ is a subgame-perfect equilibrium if, for every subgame, the restriction
+  to the strategy profile to this subgames, is a Nash equilibrium for that subgame.
+]
+
+Note that there could exist Nash equilibria which are not subgame perfect.
 
 
-Prove that bayesian equilibrium is also nash equilibrium. THM 8.6
+== Incomplete information
+
+We will not give a formal definition of incomplete information multistage games, however the idea is
+that it is possible that, when it's player $i$ to choose an action, he doesn't know some previous
+decision that was taken higher up in the tree (he knows that a decision was taken, he doesn't know
+which one). Then the *information sets* is the partition of vertices of player $i$ which he cannot
+distinguish between.
 
 

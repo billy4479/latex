@@ -187,7 +187,7 @@ $
 
 #proof[
   / 1. $==>$ 3.: Consider $A$ and define an inner product on it as
-    $chevron.l z', z'' chevron.r = EE[z' z'']$, so that we have an Hilbert space.
+    $angle(z', z'') = EE[z' z'']$, so that we have an Hilbert space.
     We want to show that $pi(z) = E[m z]$.
     Define $A_0 = { z in A | pi(z) = 0}$ (i.e. the kernel of $A$) and
     $A_0^perp = {y in A | EE[y z] = 0 "for all" z in A_0}$ (being the orthogonal space to the
@@ -659,14 +659,12 @@ condition, therefore it does not exists, but we look for the closest one.
 
 ==== Decomposition
 
-#let span(body) = $chevron.l body chevron.r$
-
 #theorem(title: [Decomposition of $A$])[
   The space of traded payoffs $A$ decomposes orthogonally as
   $
-    A = span(alpha rstar) plus.o A_0
+    A = angle(alpha rstar) plus.o A_0
   $
-  where $span(alpha rstar) = "span"(rstar)$.
+  where $angle(alpha rstar) = "span"(rstar)$.
 ]
 
 #proof[
@@ -677,7 +675,7 @@ condition, therefore it does not exists, but we look for the closest one.
   $
 
   Note that
-  - $pi(y) rstar in span(alpha rstar)$
+  - $pi(y) rstar in angle(alpha rstar)$
   - Taking the price of $y - pi(y) rstar$ we get
     $
       pi(y - pi(y) rstar) = pi(y) - pi(y) underbrace(pi(rstar), =1)
@@ -697,11 +695,11 @@ condition, therefore it does not exists, but we look for the closest one.
 #theorem(title: [Decomposition of $A_0$])[
   The space $A_0$ decomposes orthogonally as
   $
-    A_0 = span(beta restar) plus.o {n in A_0 | EE[restar n] = 0}
+    A_0 = angle(beta restar) plus.o {n in A_0 | EE[restar n] = 0}
   $
   or equivalently
   $
-    A_0 = span(beta restar) plus.o {n in A_0 | EE[n] = 0}
+    A_0 = angle(beta restar) plus.o {n in A_0 | EE[n] = 0}
   $
   (since $n perp restar$).
 ]
@@ -728,8 +726,8 @@ condition, therefore it does not exists, but we look for the closest one.
 #corollary[
   The space of traded payoffs decomposes orthogonally as
   $
-    A & = span(alpha rstar) plus.o span(beta restar) plus.o {n in A_0 | EE[n] = 0} \
-      & = {alpha rstar + beta restar + n | alpha, beta in RR, n in A_0, EE[n] = 0}
+    A & = angle(alpha rstar) plus.o angle(beta restar) plus.o {n in A_0 | EE[n] = 0} \
+    & = {alpha rstar + beta restar + n | alpha, beta in RR, n in A_0, EE[n] = 0}
   $<eq:decomposition-of-a>
 ]
 

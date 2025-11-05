@@ -7,3 +7,8 @@
 
 // https://github.com/johanvx/typst-undergradmath/issues/10#issuecomment-1500662390
 #let varnothing = $text(font: "New Computer Modern", nothing)$
+
+// Inspired by https://github.com/Leedehai/typst-physics/blob/38ceed750b74f3577147a3b22fe5e2d61be21245/physica.typ#L206
+#let angle = (..body) => {
+  $lr(chevron.l #(body.pos().join(math.comma)) chevron.r)$
+}

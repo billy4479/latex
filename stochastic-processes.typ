@@ -1603,4 +1603,141 @@ more dimensions.
   process with the desired distribution.
 ]
 
-== Simulating CTMCs - Gillespie algorithms
+== Simulating CTMCs - Gillespie algorithm
+
+1. Initialize $t = 0$ and choose the initial state $X(0)$.
+2. Let $a_i (t)$ be the transition rate at time $t$ for state $i$.
+3. Let $a_"tot"(t) = sum_i a_i (t)$.
+4. Draw the next transition time $tau$ from $"Exp"(a_"tot" (t))$.
+5. Draw the state identity from probabilities $p_i = (a_"tot" (t))/a_i$.
+6. Set $t <- t + tau$ and the state of the system to the selected one.
+7. Go to step 2.
+
+== Metropolis-Hastings algorithm
+
+We want to build an irreducible Markov chain such that its stationary distribution converges to a
+desired distribution. Then we can simulate the MC with Monte-Carlo methods and then use the result
+to simulate the desired probability:
+$
+  angle(f(x))_"MC" = 1/N_s sum^(N_s)_(i = 1) f(x_i)
+$
+where $(x_i)_(i)$ are $N_s$ samples from the distribution obtained by the algorithm. Then
+$angle(f(x))_"MC" tilde angle(f(x)) = integral f(x) P(x) dif x$ as $N_s -> oo$ (by the LLN).
+
+=== Motivation
+
+This algorithm was invented to approximate sampling from the Boltzmann distribution:
+$
+  P_B (x) = 1/Z exp (- E(x) beta) wide "with" cases(
+    Z = integral exp(E(x) beta) dif x,
+    beta = (k T)^(-1)
+  )
+$
+where $k$ is the Boltzmann constant, $T$ is the (constant) temperature, and $E(x)$ is the energy
+associated with state $x$ of the system. The issue here is to compute the normalization factor $Z$,
+as computing the integral over all the possible states of the system is virtually impossible.
+
+=== Definition
+
+#definition(title: [Metropolis-Hastings])[
+  1. Choose an initial state $x_0$.
+  2. Choose a set of "moves" associated with probabilities $q(x -> x')$ such that
+    $
+      sum_(x') q(x -> x') = 1
+    $
+  3. Draw a _proposed_ move from $q$:
+    1. If $P_B (x') q(x' -> x) >= P_B (x) q(x -> x')$ we accept the move with probability 1.
+    2. Else we accept the move with probability
+      $
+        (P_B (x') q(x' -> x))/(P_B (x) q(x -> x'))
+      $
+  4. Go to step 3.
+]
+
+Note that in this case to sample from $P_B$ we don't need to know $Z$, as it cancels with the one
+from the other $P_B$.
+
+=== Properties
+
+The probability to accept a move with probability
+$
+  min(1, (P_B (x') q(x' -> x))/(P_B (x) q(x -> x')))
+$
+and if we assume symmetric probabilities, i.e. $q(x -> x') = q(x' -> x)$ we can simplify the
+acceptance probability to the ratio of the Boltzmann probabilities.
+Moreover, in systems with an energy function the ratio of probabilities is
+$
+  P_B (x') / P_B (x) = exp ( -beta(E(x') - E(x)))
+$
+
+We write the probability of $x -> x'$ as
+$
+  W(x -> x') = q(x -> x') min(1, (P_B (x') q(x' -> x))/(P_B (x) q(x -> x')))
+$
+
+=== Convergence
+
+The proposed Markov chain is irreducible and aperiodic, this means that the convergence theorem
+guarantees that it will converge to a stationary distribution $P_M$.
+
+$
+  P_M (x, t + 1) & = sum_(x') P_M (x', t) W(x' -> x) \
+  & = P_M (x, t) + sum_(x' != x) P_M(x', t) W(x' -> x) - P_M (x, t) W(x' -> x)
+$
+
+To prove convergence we want to show that the derivative of the $D_"KL"$ divergence is always
+negative, therefore the divergence is monotonically decreasing:
+1. Compute the $D_"KL"$ divergence
+2. Compute it's derivative
+3. Use the Forward Kolmogorov Equation to get
+$
+  (dif P_M (x, t))/(dif t) = sum_(x' != x) P_M (x', t) W(x' -> x) - P_M (x, t) W(x -> x')
+$
+4. Use the fact that, in the stationary state, $P_M^*$ must obey to detailed balance
+$
+  P_M^* (x') W(x' -> x) = P_M^* (x) W(x -> x') wide forall x, x'
+$
+
+TODO: see photo of the board
+
+The issue here is that the convergence can be very slow. Moreover, if the temperature is very low we
+can easily get stuck in a local minima and not explore the whole distribution.
+
+=== Example: Ising model
+
+This is a simplified model for ferromagnetic material. There are $N$ atoms with a spin
+$S_i in {-1, 1}$ which are located on a $D$ dimensional grid, here we will consider $D = 2$.
+
+The energy of the system is defined as
+$
+  E(S) = -J sum_(angle(i, j)) S_i S_j
+$
+where in this case the sum goes through over all the pairs of $(i, j)$ which are neighbors on the
+grid (in $D = 2$ each atom has 3 neighbors). $J > 0$ is the strength of the ferromagnetic
+interactions.
+
+To minimize energy we want all spins oriented in the same direction.
+
+==== Goal
+
+Our goal is to compute the following quantities depending on the temperature $T$:
+$
+  angle(E) & = sum_S E(S) P_B (S) wide          &        "average energy" \
+  angle(M) & = sum_S 1/N sum_i S_i P_B (S) wide & "average magnetization" \
+$
+the issue here is that we cannot compute the sum over all possible states $S$.
+
+==== The algorithm
+
+The allowed moves are flipping a single spin: we select an atom at random and we accept to flip its
+spin with probability
+$
+  cases(
+    1 wide & "if" Delta E < 0,
+    exp(- (Delta E) / T) & "otherwise"
+  ) wide "where" Delta E "is the difference in energy"
+$
+
+In $D = 2$, $Delta E in { -8, -4, 0, 4, 8 }$. At low temperature we expect our system to be close to
+the global minima $E = -2 N$ (where the spins are all 1 or -1), while at high temperature we expect
+$angle(E) -> 0$ (as the Boltzmann distribution becomes a uniform distribution).

@@ -1741,3 +1741,16 @@ $
 In $D = 2$, $Delta E in { -8, -4, 0, 4, 8 }$. At low temperature we expect our system to be close to
 the global minima $E = -2 N$ (where the spins are all 1 or -1), while at high temperature we expect
 $angle(E) -> 0$ (as the Boltzmann distribution becomes a uniform distribution).
+
+=== TODO: missing one class here
+
+== Ordinary Differential Equations (ODEs)
+
+We will learn how to approximate a system of ODEs:
+$
+  (dif u) / (dif t) = F(u(t), t)
+$
+(recall that higher order ODEs can be rewritten as a first order system of ODEs, see analysis 3).
+Recall that if $F(u, t) = alpha(t) u + beta(t)$ we say that the ODE is linear and can be solved
+analytically, while id $F(u, t)$ is independent of $t$ we say that the ODE is autonomous.
+If $F$ is $L$-Lipschitz there exists an unique $u(t)$ which solves the initial value problem.

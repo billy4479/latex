@@ -1667,7 +1667,7 @@ and if we assume symmetric probabilities, i.e. $q(x -> x') = q(x' -> x)$ we can 
 acceptance probability to the ratio of the Boltzmann probabilities.
 Moreover, in systems with an energy function the ratio of probabilities is
 $
-  P_B (x') / P_B (x) = exp ( -beta(E(x') - E(x)))
+  (P_B (x')) / (P_B (x)) = exp ( -beta(E(x') - E(x)))
 $
 
 We write the probability of $x -> x'$ as
@@ -1742,7 +1742,70 @@ In $D = 2$, $Delta E in { -8, -4, 0, 4, 8 }$. At low temperature we expect our s
 the global minima $E = -2 N$ (where the spins are all 1 or -1), while at high temperature we expect
 $angle(E) -> 0$ (as the Boltzmann distribution becomes a uniform distribution).
 
-=== TODO: missing one class here
+=== Problems with Metropolis-Hastings algorithm
+
+The classic MH algorithm has various drawbacks: while it works well with simple energy landscapes
+and far from critical point (like phase transitions), the algorithm is extremely slow near phase
+shifts and can fail to escape local minima.
+
+==== Wolff algorithm
+
+This is a variation of the classic MH algorithm which belongs to the class of cluster algorithms.
+
+The algorithm picks a random spin to flip called "seed", then starting from the seed it looks for
+neighbours of the seed with the same spin: each neighbour is added to the cluster with probability
+$P_"add"$ and the process repeats until all neighbours are checked.
+
+Moreover, we can compute that detailed balance is obeyed if and only if
+$
+  (q(x -> x') A(x -> x')) / (q(x -> x') A(x -> x')) &= (1 - P_"add")^(m-n) (A(x-> x'))/(A(x' -> x))\
+  & = exp(-beta(E(x') - E(x))) \
+  & = exp(-2 beta(m - n)) \
+  ==> (A(x-> x'))/(A(x' -> x)) &= (e^(2 beta) (1 - P_"add"))^(n - m)
+$
+where
+- $A(x -> x')$ is the acceptance probability for $x -> x'$.
+- $m$ is the number of bonds that are broken by flipping $x -> x'$ while $n$ is the number broken by
+  flipping $x' -> x$.
+- $E(x') - E(x) = 2(m - n)$.
+Therefore by choosing $P_"add" = 1 - e^(-2 beta)$ we get that we can choose $A = 1$ for all $x, x'$
+so that the cluster is always accepted.
+
+==== Varying temperature algorithms
+
+These are algorithms which help to escape local minima.
+
+The idea is to simulate the physical process of annealing, where an object is cooled very slowly to
+enhance physical properties.
+
+The simulation starts with a very high temperature $T_"max"$ and every $n_T$ steps the temperature
+is reduced: $T <- T/alpha$, so that as the system cools down it settles into a low-energy state
+which is hopefully the global minimum.
+This method however depends heavily on the cooling schedule which must be chosen empirically.
+
+Another option is to treat temperature as another variable in the system which can change based on a
+random walk: $W(x, beta -> x, beta')$.
+
+We can further refine this model by running $N$ replicas of the system in parallel, each one at a
+fixed temperature $T_n$. Each replica evolves independently using the standard MH algorithm but
+periodically after $M$ steps we swap the entire configuration of two replicas with adjacent
+temperature.
+
+=== Example: Edward-Anderson model
+
+This is a model similar to the Ising model, however in this case the interactions between neighbours
+are random:
+$
+  J_(i j) tilde N(0, J) wide E(S) = - sum_((i, j) "neighbours") J_(i j) S_i S_j
+$
+this leads to a phenomena called "frustration" where the system cannot find a configuration which
+satisfies all interactions simultaneously which in turns leads to a very rugged energy landscape.
+
+To measure "order" we can no longer use magnetization, therefore we use the overlap between states:
+$
+  q_(alpha beta) = 1/N sum_i S_i^alpha S_i^beta
+$
+where $S_i^alpha$ and $S_i^beta$ are the spins of $i$ in replica $alpha$ and $beta$ respectively.
 
 == Ordinary Differential Equations (ODEs)
 

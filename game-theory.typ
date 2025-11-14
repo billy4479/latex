@@ -693,9 +693,9 @@ However, we can also analyze what is the best strategy _before_ knowing the real
 type.
 Let us define the expected ex-ante utility of player $i$:
 $
-  U_i (sigma_i, sigma(-i)) = sum_(theta_i in Theta_i) p(theta_i) sum_(theta_(-i) in Theta_(-i))
+  U_i (sigma_i, sigma_(-i)) = sum_(theta_i in Theta_i) p(theta_i) sum_(theta_(-i) in Theta_(-i))
   p(theta_(-i) | theta_i) u_i (theta_i, theta_(-i), sigma_i, sigma_(-i))
-$
+$<eq:ex-ante-utility>
 
 #definition(title: [Nash equilibrium with incomplete information])[
   A Nash equilibrium in an incomplete information game is the strategy profile
@@ -711,7 +711,57 @@ $
 ]
 
 #proof[
-  TODO: !IMPORTANT!
+  First note that @eq:ex-ante-utility can be written as
+  $
+    U_i (sigma_i, sigma_(-i)) & = sum_(theta_i in Theta_i) p(theta_i) dot
+    EE[u_i (theta_i, theta_(-i), sigma_i, sigma_(-i)) | theta_i] \
+    & = sum_(theta_i in Theta_i) p(theta_i) dot
+    underbrace(
+      EE[u_i lr(size: #150%, (sigma_i (theta_i), sigma_(-i))) | theta_i],
+      text("Bayesian expected utility")
+    )
+  $
+  where we are highlighting that strategies $sigma$ are maps from the space of types $Theta$ to the
+  space of distributions over actions $Delta(A)$.
+
+  Moreover, we note that we can find the Bayesian expected utility within the ex-ante utility.
+  This means that if $sigma^*$ is a Bayesian equilibrium, by definition, it maximizes the expected
+  utility function for each $theta_i in Theta_i$: for all $sigma_i: Theta_i -> Delta(A_i)$ we have
+  $
+    EE[u_i lr(size: #150%, (sigma_i^* (theta_i), sigma_(-i)^*)) | theta_i] & >=
+    EE[u_i lr(size: #150%, (sigma_i (theta_i), sigma_(-i)^*)) | theta_i] \
+    ==>
+    p(theta_i) dot EE[u_i lr(size: #150%, (sigma_i^* (theta_i), sigma_(-i)^*)) | theta_i] & >=
+    p(theta_i) dot EE[u_i lr(size: #150%, (sigma_i (theta_i), sigma_(-i)^*)) | theta_i] \
+    ==> sum_(theta_i in Theta_i) p(theta_i) dot
+    EE[u_i lr(size: #150%, (sigma_i^* (theta_i), sigma_(-i)^*)) | theta_i] & >=
+    sum_(theta_i in Theta_i) p(theta_i) dot
+    EE[u_i lr(size: #150%, (sigma_i (theta_i), sigma_(-i)^*)) | theta_i] \
+    ==>U_i (sigma_i^*, sigma^*_(-i)) &>= U_i (sigma_i, sigma_(-i)^*)
+  $
+
+  Conversely, suppose that $sigma^*$ is an ex-ante Nash equilibrium, but, by contradiction, assume
+  that $exists hat(theta)_i in Theta_i$ with $p(theta_i) > 0$ such that $exists a_i in A_i$ such that
+  $
+    EE[u_i (a_i, sigma^*_(-i)) | theta_i] > EE[u_i (sigma^*_i (theta_i), sigma^*_(-i)) | theta_i]
+  $
+  which would mean that $sigma^*$ is not a Bayesian equilibrium.
+
+  However, this means that if we define the strategy
+  $
+    hat(sigma)_i (theta_i) = cases(
+      a_i wide & "if" theta_i = hat(theta)_i,
+      sigma^*_i (theta_i) wide & text("otherwise")
+    )
+  $
+  we would have
+  $
+    U_i (hat(sigma)_i, sigma^*_(-i)) & = U_i (sigma^*_i, sigma^*_(-i))
+    + p(theta_i) ( EE[u_i (a_i, sigma^*_(-i)) | theta_i]
+      - EE[u_i (sigma^*_i(theta_i), sigma^*_(-i)) | theta_i]) \
+    & > U_i (sigma^*_i, sigma^*_(-i))
+  $
+  contradicting that $sigma^*_i$ is an ex-ante Nash equilibrium.
 ]
 
 = Multistage games

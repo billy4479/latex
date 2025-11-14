@@ -811,4 +811,114 @@ decision that was taken higher up in the tree (he knows that a decision was take
 which one). Then the *information sets* is the partition of vertices of player $i$ which he cannot
 distinguish between.
 
+= Repeated Games
+
+Simply repeating a game multiple times doesn't mean that we will be able to improve the outcome.
+
+This is because, if the game has a single Nash equilibrium, at the last period every player will
+play it since there are no incentive to do otherwise; then, we can recourse backwards and at
+every period we are back to playing the same game, where each player will play rationally since
+there is no incentive to do otherwise, they cannot change what will be played in the future.
+We can generalize this game for every $n$-period game ($n$ finite).
+
+However, if there is more than one Nash equilibrium, at the last period we can "choose" between
+which one to play based on what happened in the previous periods.
+This intuition helps us to justify formally why is this.
+
+A *strategy* in a repeated game is a function
+$
+  sigma_i^t : times_(tau in {0, ..., t-1}) A -> A_i
+$
+where each element of the domain is a "history" of the game $h^t$ i.e. the collection of all actions
+profiles played up to $t-1$.
+This means that players can choose their next action based on what happened in the previous periods.
+
+This allows us, when we play the game long enough and there are multiple Nash equilibria, to
+"punish" or "reward" the other player for choosing a suboptimal action.
+
+To do this we construct a strategy which plays the desired outcome at time $0$ and, at any
+subsequent time, it plays one of the Nash equilibria: if the players "cooperated" and chose the
+desired action we play for the remaining periods the "best" Nash equilibrium, otherwise we play the
+"bad" Nash equilibrium.
+
+When building such strategy we need to have a large enough difference between the payoffs of the
+Nash equilibria _or_ we need to play the game a lot of times. If the conditions are satisfied
+however, we can use this mechanism to increase the payoff of the desired outcome at time $0$.
+
+However, players may have a discount factor $delta_i in [0, 1]$ which indicates how much they value
+the future payoff w.r.t. the present one. Fixed the amount of times we can play the games and the
+payoffs we will get an inequality for the minimum $delta$ such that our strategy can be played.
+
+Note that in this way we can construct a repeated Nash equilibrium, however in repeated games there
+are often _many_ Nash equilibria. It is hard to predict which one players are going to play and it
+may seem counter-intuitive sometimes that players are actually going to play that strategy, however
+we just need to check that a certain strategy is the best reply against the correct conjecture that
+the other players are also playing according to that Nash equilibrium.
+
+#example[
+  Consider a game with payoff matrix
+  $
+    mat(
+      1\,1, -1\, 3;
+      3\, -1, 0\,0
+    )
+  $
+  where the $(1, 1)$ payoff is obtained if both players cooperate, while $(0, 0)$ if both defect.
+
+  Assume that this game is played indefinitely: at each round there is a probability of
+  $lambda in [0, 1)$ which the game goes on another round.
+]
+
+#solution[
+  One possible Nash equilibrium in this case is to play "cooperate" at $t = 0$ and if all previous
+  actions profiles played $a^(s < t)$ were $("C", "C")$, otherwise we play $"D"$.
+
+  At any time, we want to look at the following inequality:
+  $
+    u("C", "C") + sum^oo_(tau = 1) lambda^tau u("C", "C") >=
+    u("D", "C") + sum^oo_(tau = 1) lambda^tau u("D", "D")
+  $
+  where on the left we have the expected utility if both players cooperate indefinitely, while on
+  the right we have the expected utility if the first players decides to deviate from the strategy
+  at some point (from there on the other player will start playing $"D"$ all the times).
+
+  As long as this inequality is valid, rational players will always choose to cooperate.
+  Substituting numbers we get:
+  $
+    1 + sum^oo_(tau = 1) lambda^tau dot 1 >= 3 + sum^oo_(tau = 1) lambda^tau dot 1 \
+    1 + lambda / (1 - lambda) >= 3 \
+    lambda >= 2/3
+  $
+
+  Therefore, for this specific game, we need $lambda >= 2/3$.
+]
+
+#definition(title: [One-shot deviation])[
+  Fix a strategy $sigma_i$. Then, a one-shot deviation from $sigma_i$ is a strategy
+  $hat(sigma)_i != sigma_i$ such that there exists an _unique_ history $tilde(h)^t in cal(H)$ such
+  that
+  $
+     sigma_i (h^t) = hat(sigma)_i (h^t) wide & forall h^t != tilde(h)^t \
+    sigma_i (h^t) != hat(sigma)_i (h^t) wide & h^t = tilde(h)^t
+  $
+]
+
+We say that a one-shot deviation is profitable if at the history $tilde(h)^t$ the expected utility
+from playing according to $hat(sigma)_i$ (while other players play according to $sigma_(-i)$) is
+higher than sticking to $sigma_i$.
+
+#theorem[
+  A strategy profile $sigma$ is a subgame perfect equilibrium in a repeated game if and only there
+  are no profitable one-shot deviations for any player $i in I$.
+]
+
+#proof[
+  If a strategy is a subgame perfect equilibrium it is easy to check that there is no profitable
+  one-shot deviation. Indeed, the definition of subgame perfect tells us that at every period $t$
+  the strategy $sigma$ makes us play a Nash equilibrium, therefore there is no incentive to deviate.
+
+  The converse is a bit more involved.
+
+  TODO: proved in class idk if needed (theorem 11.1)
+]
 

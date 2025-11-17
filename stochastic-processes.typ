@@ -1817,3 +1817,124 @@ $
 Recall that if $F(u, t) = alpha(t) u + beta(t)$ we say that the ODE is linear and can be solved
 analytically, while id $F(u, t)$ is independent of $t$ we say that the ODE is autonomous.
 If $F$ is $L$-Lipschitz there exists an unique $u(t)$ which solves the initial value problem.
+
+TODO: there was some other stuff about fixed points, stability, chaos etc.
+
+=== Multisteps methods
+
+The idea is to discretize time, in this case a constant one: $t_n = n k$, $k$ is fixed.
+Assume we have already computed a sequence of values $v_n tilde u(t_n)$, then we can find our
+approximate derivative as $f_n := F(v_n, t_n)$.
+
+A *linear $s$-step method* will compute $v_(n + s)$ as a function of $v_(n+j)$ and $f_(n+j)$ for
+$j = 0, ..., s-1$.
+
+==== Euler method
+
+This is the simplest and older method:
+$
+  v_(n + 1) = v_n + k f_n
+$
+
+This is an example of a one-step method ($s = 1$) which is also *explicit*: we compute the new value
+from past values of $v$ and $f$.
+
+We can also find some variations of Euler's method:
+/ Backwards Euler method: This is an *implicit* method.
+  $
+    v_(n + 1) = v_n + k f_(n + 1) \
+    ==> v_(n + 1) - k (dif u)/(dif t) (t_(n+1)) = v_n
+  $
+  To solve the non-linear equation which arises we use some numerical method (like Newton-Raphson).
+
+/ Trapezoid rule: This is also an *implicit* method.
+  $
+    v_(n + 1) = v_n + k/2 (f_n + f_(n+1))
+  $
+  This method considers the average between the current and the next slope. This is the most
+  accurate of the three but still involves using a numerical method to compute $f_(n + 1)$
+
+==== More steps
+
+The *midpoint rule* is a two-step explicit method:
+$
+  v_(n + 1) = v_(n - 1) + 2 k f_n
+$
+Since we need more than one step in the past we need either multiple initial conditions or we need
+to use a one-step method to compute $v_1$.
+
+There are many other methods, usually of 4th order, named after Adams, which take some kind of
+weighted sum over past derivatives to find the right slope. Some are also implicit.
+
+==== Arbitrary $s$-step linear formula
+
+The most general $s$-step linear formula can be written as
+$
+  sum^s_(j = 0) alpha_j v_(n + j) = k sum^s_(j = 0) beta_j f_(n + j)
+$
+where we can assume wlog that $alpha_s = 1$.
+If $beta_s = 0$ we have an explicit formula, while if $beta_s != 0$ we have an implicit one.
+
+#example[
+  For Euler method we have
+  $ cases(s &= 1, alpha_1 &= 1, alpha_0 &= -1, beta_0 &= 1, beta_1 & = 0) $
+]
+
+We also introduce two *characteristic polynomial*
+$
+    rho (z) & = sum^s_(j = 0) alpha_j z^j \
+  sigma (z) & = sum^s_(j = 0) beta_j z^j
+$
+and a *time-shift operator*:
+$
+   Z v_n & = v_(n + 1) \
+  Z u(t) & = u(t + k)
+$
+
+Then, using this notation we can rewrite the multi-step formula as
+$
+  rho(Z) v_n - k sigma (Z) f_n = 0
+$
+
+We also introduce the *local discretization error*.
+We start by defining the local discretization operator:
+$
+  cal(L) := rho(Z) - k cal(D) sigma(Z) wide cases(
+    delim: #none, "where" cal(D) "is the time",
+    "differentiation operator"
+  )
+$
+Then, the local discretization error is
+$
+  cal(L) u(t_n) = rho(Z) u(t_n) - k sigma(Z) (dif u (t_n))/(dif t)
+$
+
+The idea is then to Taylor expand over $k$: we want that $cal(L) u(t_n) = O(k^(p+1))$ with $p$ as
+big as possible, i.e. $C_0 = ... = C_p = 0$ and $C_(p + 1) != 0$, where $C_n$ are the coefficients
+of the Taylor expansion, which can be computed as
+$
+  C_m = sum^s_(j = 0) j^m / m! alpha_j - sum^s_(j = 0) j^(m - 1) / (m - 1)! beta_j
+$
+
+For one-step methods we can compute that Euler method has an accuracy $p = 1$, while for the
+trapezoid rule we have $p = 2$, which we can prove to be the best possible result for $s = 1$.
+
+To achieve an accuracy (or order) of $p$ we need to satisfy $p + 1$ equations ($C_j = 0$ for
+$j = 0, ..., p$). An $s$-steps method has $2s$ parameters if explicit and $2s + 1$ if implicit,
+therefore, _in theory_, we can achieve an order of $p = 2s - 1$ or $p = 2s$ for explicit and
+implicit methods respectively.
+
+However, some resulting formulas can be unstable! It is possible to prove that the maximum accuracy
+we can achieve while still preserving stability is $p = min(2s, s + 2)$ for implicit formulas, while
+$p = s$ for explicit formulas. This means that, when $s$ is large enough, we have the freedom to
+choose some parameters arbitrarily.
+
+The family of Adams formulas always have $alpha_s = 1, alpha_(s - 1) = -1$ and $alpha_j = 0$ for all
+$j = 0, ..., s - 2$:
+$
+  v_(n + s) = v_(n + s - 1) + k sum^k_(j = 0) beta_j f_(n + j)
+$
+This basically is a generalization of the Euler method where we take a weighted sum over the past
+slopes.
+
+See the lecture notes for a table of coefficients of this family of formulas.

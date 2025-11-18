@@ -32,6 +32,7 @@
         "stochastic-processes"
 
         "gt-ps1"
+        "gt-ps2"
       ];
 
     in

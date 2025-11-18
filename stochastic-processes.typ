@@ -1894,7 +1894,7 @@ $
 Then, using this notation we can rewrite the multi-step formula as
 $
   rho(Z) v_n - k sigma (Z) f_n = 0
-$
+$<eq:general-multi-step>
 
 We also introduce the *local discretization error*.
 We start by defining the local discretization operator:
@@ -1938,3 +1938,47 @@ This basically is a generalization of the Euler method where we take a weighted 
 slopes.
 
 See the lecture notes for a table of coefficients of this family of formulas.
+
+==== Stability
+
+There are two main way to compute stability:
+- *Stability*: Fix $t > 0$ and let $k -> 0$. Does $v_n$ stay bounded?
+- *Eigenvalue stability*: Fix $k > 0$ and let $t -> oo$. Does $v_n$ stay bounded?
+
+As $k -> 0$ we get that @eq:general-multi-step reduces to
+$
+  rho (Z) v_n = sum^s_(j = 0) alpha_j v_(n + j) = 0
+$
+this means that we have a stable formula if all the equations are bounded as $n -> oo$.
+
+We get that if $z^n$ is a root of $rho(z)$, then $v_n = z^n$ is a solution for the above equation,
+while if $z$ has multiplicity $m > 1$, then $v_n in {n z^n, ..., n^(m - 1) z^n}$ is also a solution.
+$
+  sum^s_(j = 0) alpha_j z^(n + j) = z^n sum^s_(j = 0) alpha_j z^j = 0
+$
+
+#proposition[
+  A linear multi-step formula is stable if and only if all the roots of $rho(z)$ satisfy
+  $abs(z) <= 1$ and if $abs(z) = 1$ then $z$ is a simple root (multiplicity of 1).
+]
+
+This is due to the above reasoning: indeed it is easy to see that if the root is larger than $1$ in
+absolute value, as $n -> oo$ the term diverges to infinity.
+
+#theorem(title: [Dahlquist stability frontier])[
+  The order of accuracy $p$ of a stable linear multi-step formula satisfies
+  $
+    p <= cases(
+      s + 2 wide & "if" s "is even",
+      s + 1 wide & "if" s "is odd",
+      s wide & "if the formula is explicit"
+    )
+  $
+]
+
+Now we look into *stability regions*, that is the set of values of $k$ where the formula is stable.
+To find it we want to write $z$ as a function of $k$, and check when $abs(z) < 1$ (note that we
+might want $k in CC$).
+
+See the lecture notes to see the stability regions of some of the most common methods, note that, in
+general, implicit methods have a larger stability region compared to explicit ones.

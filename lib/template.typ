@@ -7,6 +7,8 @@
   nameInFooter: true,
   font: "Google Sans",
   fontSize: 14pt,
+  bigHeading: true,
+  pageBreaksAfterHeadings: true,
   doc,
 ) = {
   set text(font: font, size: fontSize)
@@ -81,11 +83,41 @@
 
   // end
 
-  show heading.where(level: 1): set text(size: fontSize + 20pt)
-  show heading.where(level: 2): set text(size: fontSize + 10pt)
-  show heading.where(level: 3): set text(size: fontSize + 5pt)
-  show heading.where(level: 4): set text(size: fontSize + 2pt)
-  show title: set text(size: fontSize + 30pt)
+  show heading.where(level: 1): it => {
+    if bigHeading {
+      text(it, size: fontSize + 20pt)
+    } else {
+      it
+    }
+  }
+  show heading.where(level: 2): it => {
+    if bigHeading {
+      text(it, size: fontSize + 10pt)
+    } else {
+      it
+    }
+  }
+  show heading.where(level: 3): it => {
+    if bigHeading {
+      text(it, size: fontSize + 5pt)
+    } else {
+      it
+    }
+  }
+  show heading.where(level: 4): it => {
+    if bigHeading {
+      text(it, size: fontSize + 2pt)
+    } else {
+      it
+    }
+  }
+  show title: it => {
+    if bigHeading {
+      text(it, size: fontSize + 30pt)
+    } else {
+      it
+    }
+  }
 
   align(center)[
     #title[ * #titleString * ]
@@ -96,14 +128,18 @@
   ]
 
   show heading.where(level: 1): it => {
-    pagebreak()
+    if pageBreaksAfterHeadings {
+      pagebreak()
+    }
     it
   }
 
 
   if (toc) {
     outline()
-    pagebreak()
+    if pageBreaksAfterHeadings {
+      pagebreak()
+    }
   }
 
   doc

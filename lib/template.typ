@@ -8,7 +8,8 @@
   font: "Google Sans",
   fontSize: 14pt,
   bigHeading: true,
-  pageBreaksAfterHeadings: true,
+  pageBreaksAfterHeadings: false,
+  horizontalInlineFractions: true,
   doc,
 ) = {
   set text(font: font, size: fontSize)
@@ -82,6 +83,10 @@
   )
 
   // end
+
+  show math.equation.where(block: false): set math.frac(
+    style: if horizontalInlineFractions { "horizontal" } else { "vertical" },
+  )
 
   show heading.where(level: 1): it => {
     if bigHeading {

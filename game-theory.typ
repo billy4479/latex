@@ -2,7 +2,7 @@
 #import "lib/utils.typ": *
 #import "lib/theorem.typ": *
 #show: template.with(
-  titleString: "Mathematical Modelling for Finance",
+  titleString: "Game Theory &\n Mechanism Design",
   author: "Giacomo Ellero",
   date: "A.Y. 2025/2026",
 )
@@ -917,8 +917,137 @@ higher than sticking to $sigma_i$.
   one-shot deviation. Indeed, the definition of subgame perfect tells us that at every period $t$
   the strategy $sigma$ makes us play a Nash equilibrium, therefore there is no incentive to deviate.
 
-  The converse is a bit more involved.
+  The converse is a bit more involved and gets proven by contrapositive.
+  We say that if a strategy $sigma$ is not subgame perfect, then there is a one-shot deviation.
+  If $sigma$ is not subgame perfect, then there is _some_ profitable deviation $tilde(sigma)$ but it
+  might deviate from $sigma$ at multiple points in history.
 
-  TODO: proved in class idk if needed (theorem 11.1)
+  At history $tilde(h)^t$ there is the chance to deviate according to $tilde(sigma)$ and earn
+  $epsilon > 0$ from this deviation. However, since there is a discount, we can choose to deviate
+  from $sigma$ only for $T$ periods and still get some fraction of $epsilon$. Therefore we can
+  define $hat(sigma)$ as the strategy which follows $sigma$ up to $tilde(h)^t$, then for the next
+  $T$ periods follows $tilde(sigma)$, and finally switches back to $sigma$ for the remaining
+  periods.
+
+  This means that at history $tilde(h)^t compose h^T$ one of the two strategies $hat(sigma)$ and
+  $sigma$ has a better payoff:
+  - Assume that $hat(sigma)$ has a higher payoff than $sigma$. This means that at
+    $tilde(h)^t compose h^T$ the two strategy only differ by a one-shot deviation.
+    Then
+    $
+      caron(sigma) = cases(
+        tilde(sigma) wide & "at history" tilde(h)^t compose h^T,
+        sigma wide & "otherwise"
+      )
+    $
+    is a profitable one-shot deviation.
+  - If $sigma$ has a higher payoff that $hat(sigma)$ at $tilde(h)^t compose h^T$, then it means that
+    it was not necessary to deviate from $sigma$ for $T$ periods. Let $macron(sigma)$ be the
+    strategy which is defined as $hat(sigma)$ but follows $tilde(sigma)$ only for $T-1$ periods.
+    We can then proceed by induction and either find the right deviation or reach a contradiction.
 ]
+
+#theorem[
+  Consider a repeated game with discount factor $delta$. Let $a^"NE"$ be a Nash equilibrium in the
+  stage game with associated payoff $v^"NE"$. Let $a^*$ be the "desirable" action profile with
+  associated payoff $v^*$ that strictly Pareto-dominates $a^"NE"$.
+
+  Consider the strategy
+  $
+    sigma_i (h) = cases(
+      a_i^* wide & "if" h = varnothing "or" h = {a^*, ..., a^* },
+      a_i^"NE" wide & "otherwise"
+    )
+  $
+
+  Then $sigma$ is a subgame perfect equilibrium if and only if
+  $
+    v_i^* (a^*) >= (1 - delta) sup_(a_i in A_i) v_i (a_i, a_i^*)
+    + delta v_i^"NE" wide forall i in I
+  $<eq:sgp-condition>
+
+  This means that $sigma$ is subgame perfect if and only if
+  $
+    delta >= (sup_(a_i in A_i) v_i (a_i, a_i^*) - v_i (a_i^*)) /
+    (sup_(a_i in A_i) v_i (a_i, a_i^*) - v_i(a^"NE")) in [0, 1)
+  $<eq:sgp-delta-condition>
+]
+
+#proof[
+  Start by doing some algebra, indeed to prove that @eq:sgp-condition is correct we need
+  $
+    v_i^* (a^*) & >= (1 - delta) sup_(a_i in A_i) v_i (a_i, a_i^*) +
+                  (1 - delta) sum^oo_(t = 1) delta^t v_i (a^"NE") \
+                & = (1 - delta) sup_(a_i in A_i) v_i (a_i, a_i^*) +
+                  cancel((1 - delta)) delta/cancel(1 - delta) v_i (a^"NE") \
+                & = underbrace(
+                    (1 - delta) sup_(a_i in A_i) v_i (a_i, a_i^*),
+                    "most profitable\none-shot deviation"
+                  ) + delta v_i^"NE"
+  $
+  and isolating $delta$ we get @eq:sgp-delta-condition.
+
+  Moreover, note that, at histories where there was the deviation, the player who deviates always
+  plays $a^"NE"$ and since it is a Nash equilibrium there is no profitable one-shot deviation.
+
+  In @eq:sgp-delta-condition where the numerator represents the "temptation" to deviate today and the
+  denominator is the "severity" of the punishment.
+
+  The converse implication is skipped.
+]
+
+#remark[
+  This theorem holds even for more complex strategies (like alternating cooperation and
+  deviation at each period).
+]
+
+#example(title: [Repeated Cournot duopoly])[
+  Consider the Cournot duopoly with demand $p(q_1, q_2) = max {0, 1-q_1 - q_2}$ and zero production
+  cost.
+  Show that the firms can achieve monopoly profit in a subgame perfect equilibrium if the discount
+  factor is high enough.
+]
+#solution[
+  We have that
+  $
+    u_i(q_i, q_(-i)) = q_i dot p(q_i, q_(-i))
+  $
+  and that $q_i^"NE" = 1/3$ is a Nash equilibrium with $v_i^"NE" = (1 - 2/3) 1/3 = 1/9$.
+
+  A monopolist would maximize $pi(Q) = Q(1-Q)$ instead, therefore $Q^M = 1/2$ and $v^M = 1/4$.
+
+  Indeed if firms choose $q_1 = q_2 = 1/4$ we get that $q_1 + q_2 = q_M$ and achieve monopolist
+  outcome. In this way each firm would earn $pi^M / 2$ (since they need to split the profit),
+  however $v_i^M = pi^M / 2 = 1/8 > v_i^"NE" = 1/9$, therefore firms should prefer that outcome over
+  the NE.
+
+  We can choose a trigger strategy such that
+  $
+    q_i = cases(
+      1/4 wide & "when in the whole history" q_(-i) = 1/4,
+      1/3 wide & "otherwise"
+    )
+  $
+
+  Then, to find the right $delta$ we need to solve
+  $
+    pi^M/2 >= (1 - delta) max_(q_i) ((1 - q_i - q^M/2) q_i)
+    + (1 - delta) sum^oo_(t = 1) delta^t v_i^"NE"
+  $
+  with $pi^M = 1/4$ and $q^M = 1/2$. We get
+  $
+    1/8 >= (1 - delta) max_(q_i) ((3/4 - q_i)q_i) + delta dot 1/9 \
+    ==> 1/8 >= (1 - delta) dot 9/64 + delta dot 1/9 \
+    ==> delta >= 9/17
+  $
+]
+
+This example illustrates that we can obtain a collusive outcome even if the two firms do not talk to
+each other. In the real world this would be harder to achieve as there are random factor to take
+into account which could be interpreted as deviation from the other firm and bring us back to a Nash
+equilibrium.
+
+_In theory_, there are some studies which show that it is still possible, even with some randomness,
+to achieve a collusive outcome, but in practice these strategies are so complicated that it is very
+unlikely for them to be used in practice.
 

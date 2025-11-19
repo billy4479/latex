@@ -43,7 +43,7 @@
         myPkgs = myPackages.packages.${system};
         fonts = with pkgs; [
           nerd-fonts.fira-code
-          ubuntu_font_family
+          ubuntu-sans
           excalifont # excalidraw font
           noto-fonts-color-emoji
 
@@ -84,6 +84,11 @@
               name = "hydra";
               version = "0.6.2";
               hash = "sha256-soNQLPonThDhunHQEfpiXJ/cpRGzz48D4E0Nmg3w/Js=";
+            }
+            {
+              name = "physica";
+              version = "0.9.7";
+              hash = "sha256-G2M428hUZ8g7IwDjK9gRji9owpTiqn5I+QYMS4XcyfA=";
             }
             # dependency of hydra
             {

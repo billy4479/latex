@@ -1,3 +1,5 @@
+#import "@preview/physica:0.9.7": *
+
 #let template(
   titleString: none,
   author: none,

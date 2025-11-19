@@ -462,6 +462,7 @@ $
 as in @eq:ktour.
 
 #theorem(title: [Asymptotic frequencies])[
+  #set enum(numbering: "a)")
   Let $(X_t)_(t >= 0)$ be an irreducible MC. Then
   1. Regardless of the starting distribution of $X_0$
     $
@@ -474,12 +475,40 @@ as in @eq:ktour.
 ]<thm:asym-freq>
 
 #proof[
-  TODO: page 22
+  #set enum(numbering: "a)")
+  1. Fix $i in cal(X)$. If $i$ is transient, then $m_i = oo$ and $lim_{n -> oo} V_i (n) = V_i$ is
+    finite (by @prop:prob-vi), therefore $lim_(n -> oo) V_i (n)/n = 0 = 1/m_i$.
+
+    Assume now that $X_0 = i$ and $i$ is recurrent. Then, since $T_1, T_2, ...$ are iid, by the
+    strong law of large numbers we have that
+    $
+      S_k / k ->^"a.s." m_i wide "as" k -> oo
+    $
+
+    Moreover, by definition of $(S_k)_(k >= 0)$ and $V_i$, we have
+    $
+      S_(V_i (n)) <= n <= S_(V_i (n) + 1) \
+      ==> S_(V_i (n)) / (V_i (n)) <= n/(V_i (n)) <= S_(V_i (n) + 1) / (V_i (n))
+    $
+
+    By recurrence we have that $V_i (n) -> oo$ almost surely as $n -> oo$, this means that
+    $
+      m_i &= lim_(k -> oo) S_k / k = lim_(n -> oo) S_(V_i (n)) / (V_i (n)) \
+      &<= lim_(n -> oo) n/(V_i (n)) <= lim_(n -> oo)S_(V_i (n) + 1) / (V_i (n) + 1) \
+      &= lim_(k -> oo) S_k / k = m_i
+    $
+    which implies $lim_(n -> oo) n/(V_i (n)) = m_i$ as desired.
+  2. By part a) we have that $lim_(n -> oo) EE[(V_i (n))/n] = m_i$ (by some magic??) then
+    $
+      1/m_i = lim_(n -> oo) EE[(V_i (n))/n] = lim_(n -> oo) (sum^n_(t = 1) EE[bb(1) (X_t = i)])/n
+      = lim_(n -> oo) (sum^n_(t = 1) pi_i)/n = pi_i
+    $
+    as desired.
 ]
 
 #theorem(title: [Ergodic theorem])[
   Let $(X_t)_(t >= 0)$ be an irreducible MC with stationary distribution $pi$.
-  Then, for any bounded function $g: X -> RR$, we have
+  Then, for any bounded function $g: cal(X) -> RR$, we have
   $
     1/n sum^n_(t = 1) g(X_t) -> sum_(i in cal(X)) pi_i g(i) eq.colon EE_pi [g] wide "as" n->oo
   $
@@ -496,6 +525,9 @@ as in @eq:ktour.
 
 This theorem is basically the Law of Large Numbers for MCs: in terms of approximated expectations
 $EE_pi [g]$ we can treat MC states as iid RVs.
+
+Note that this theorem _does not_ require aperiodicity. Indeed aperiodicity is needed for the
+convergence of the average "time" spent on each state (which is what the ergodic theorem says).
 
 == Hitting times and probabilities
 
@@ -983,12 +1015,16 @@ Both of these equations can be interpreted as "flows of probabilities" in the st
 #proof[Skip.]
 
 #theorem(title: [Convergence theorem for CTMCs])[
-  Let $X$ be an irreducible CTMC with stationary distributino $pi$, then
+  Let $X$ be an irreducible CTMC with stationary distribution $pi$, then
   $
     P_(i j) (t) -> pi_j
   $
 ]
 #proof[Skip.]
+
+Note that we do not require periodicity here (as we did in the convergence theorem for DTMCs) since
+periodicity itself doesn't really make sense for CTMCs: since holding times are random themselves
+there is not such thing as periodicity.
 
 == Example: Poisson processes
 

@@ -1,4 +1,4 @@
-#import "lib/template.typ": template
+#import "lib/template.typ": *
 #import "lib/theorem.typ": *
 #import "lib/utils.typ": *
 
@@ -1856,8 +1856,6 @@ If $F$ is $L$-Lipschitz there exists an unique $u(t)$ which solves the initial v
 
 TODO: there was some other stuff about fixed points, stability, chaos etc.
 
-=== Multisteps methods
-
 The idea is to discretize time, in this case a constant one: $t_n = n k$, $k$ is fixed.
 Assume we have already computed a sequence of values $v_n tilde u(t_n)$, then we can find our
 approximate derivative as $f_n := F(v_n, t_n)$.
@@ -1865,7 +1863,7 @@ approximate derivative as $f_n := F(v_n, t_n)$.
 A *linear $s$-step method* will compute $v_(n + s)$ as a function of $v_(n+j)$ and $f_(n+j)$ for
 $j = 0, ..., s-1$.
 
-==== Euler method
+=== Euler method
 
 This is the simplest and older method:
 $
@@ -1890,7 +1888,7 @@ We can also find some variations of Euler's method:
   This method considers the average between the current and the next slope. This is the most
   accurate of the three but still involves using a numerical method to compute $f_(n + 1)$
 
-==== More steps
+=== More steps
 
 The *midpoint rule* is a two-step explicit method:
 $
@@ -1902,9 +1900,7 @@ to use a one-step method to compute $v_1$.
 There are many other methods, usually of 4th order, named after Adams, which take some kind of
 weighted sum over past derivatives to find the right slope. Some are also implicit.
 
-==== Arbitrary $s$-step linear formula
-
-The most general $s$-step linear formula can be written as
+The most *general $s$-step linear formula* can be written as
 $
   sum^s_(j = 0) alpha_j v_(n + j) = k sum^s_(j = 0) beta_j f_(n + j)
 $
@@ -1975,7 +1971,7 @@ slopes.
 
 See the lecture notes for a table of coefficients of this family of formulas.
 
-==== Stability
+=== Stability
 
 There are two main way to compute stability:
 - *Stability*: Fix $t > 0$ and let $k -> 0$. Does $v_n$ stay bounded?
@@ -2012,9 +2008,52 @@ absolute value, as $n -> oo$ the term diverges to infinity.
   $
 ]
 
+==== Stability regions
+
 Now we look into *stability regions*, that is the set of values of $k$ where the formula is stable.
 To find it we want to write $z$ as a function of $k$, and check when $abs(z) < 1$ (note that we
 might want $k in CC$).
 
+TODO: how to compute stability regions when $dv(u, t) = a u$ for a constant $a$.
+
 See the lecture notes to see the stability regions of some of the most common methods, note that, in
 general, implicit methods have a larger stability region compared to explicit ones.
+
+==== Eigenvalue stability
+
+This idea generalizes even in more complex ODEs:
+1. Start with
+  $
+    dv(u, t) = F(u, t)
+  $
+2. Linearize around a particular solution $u^*$
+  $
+    dv(u, t) = M(t) u
+  $
+  where $M$ is the Jacobian matrix
+  $
+    M_(i j) (t) = pdv(F_i, u_j) (u^*, t)
+  $
+3. Freeze $M(t) = M^*$.
+4. Diagonalize $M^*$.
+5. All eigenvalues $lambda$ of $M^*$ should be such that $k lambda$ is inside the stability region.
+
+We say that a formula is $A(alpha)$ stable if for the angle $alpha in (0, pi/2)$ the stability
+region includes the infinite sector of the complex plane
+${rho e^(i theta) | theta in (-alpha, -alpha - pi/2)}$.
+We say that a formula is $A(0)$-stable if there exists some $alpha > 0$ such that it is
+$A(alpha)$-stable.
+
+=== Runge Kutta
+
+This is another family of linear multi-step formulas which take into account multiple evaluations of
+the function $u$ per step. They use a high order Taylor expansion to compute the estimate.
+
+==== Adaptive methods
+
+The idea is to start with a high $k$ and estimate the error: when the error is above or below a
+certain threshold we scale $k$ to make the algorithm either faster or more accurate.
+
+A popular way to estimate the error is to run the algorithm twice, in parallel. One copy will be
+running at $k$ and one at $k/2$ and check for the difference between the two. Another option is to
+run RK4 along with RK5.

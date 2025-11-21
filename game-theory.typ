@@ -1051,3 +1051,269 @@ _In theory_, there are some studies which show that it is still possible, even w
 to achieve a collusive outcome, but in practice these strategies are so complicated that it is very
 unlikely for them to be used in practice.
 
+== Folk Theorem
+
+We define the set of *feasible payoffs* as $V = "convex hull"{v | v = u(a), a in A}$.
+Then, we define the set of *feasible and strictly rational payoffs* as
+$
+  V^* = {v in V mid(|) v > max_(a_i) min_(a_(-i)) u(a_i, a_(-i))}
+$
+where the max-min term is the maximum payoff player $i$ can get if all other players decide to
+coordinate and minimize $i$'s payoff.
+
+#theorem(title: [Infinite Nash Folk theorem])[
+  Let $v^* in V^*$ for the stage game $G$. Then, there exists $delta$ such that
+  $Gamma^(delta, oo)(G)$ has a Nash equilibrium with that payoff.
+
+  TODO: mhh not sure about this one
+]
+
+#theorem(title: [Infinite SPE Folk theorem])[
+  Same as the first one but with subgame perfect equilibrium. There are also some extra conditions:
+  we need for the game to be flexible enough to allow players to "follow through" threats and
+  punishments.
+]
+
+#theorem(title: [Finitely Nash Folk theorem])[
+  In finite multistage games we can achieve a certain payoff if there is a Nash equilibrium which is
+  higher than the minmax payoff.
+]
+
+#theorem(title: [Finitely SPE Folk theorem])[
+  In finite multistage games we can achieve a certain payoff if there are two Nash equilibria with
+  two different payoffs.
+
+  This is so we can punish the game even at the last stage.
+]
+
+= Mechanism Design
+
+== Social choice
+
+#[
+  #let prefer = $op(succ.curly)$
+  #let prefern = n => $prefer^(#n)$
+
+  The traditional model of voting there are $i in cal(N)$ citizens and $x in X$ feasible outcomes.
+  Each citizen has a preference $prefer_i$ over outcomes.
+
+  For the beginning of this class we will assume that all the $prefer_i$ are known and all citizens
+  voted truthfully. We will consider incentives on following the preferences later.
+  Moreover we assume that $prefer_i$ is complete and transitive for all $i in cal(N)$.
+
+  #definition(title: [Social preference])[
+    A social preference $Phi$ is a function which goes from the space of preference profiles over $X$
+    and $N$ to a preference over $X$.
+  ]
+
+  === Arrow impossibility theorem
+
+  #definition(title: [Unanimity])[
+    The social preference $Phi$ satisfies unanimity if, $x prefer_i y$ for all $i in cal(N)$ then
+    $x prefer_Phi y$.
+  ]
+
+  #definition(title: [Independence of irrelevant alternatives (IIA)])[
+    Let $x, y, z in X$. The idea is that if all citizens prefer $x$ over $y$, then the addition of a
+    third element $z$ should not influence the fact that still $x prefer y$.
+  ]
+
+  With majority rule sometimes the ranking can be non-transitive.
+
+  #definition(title: [Dictatorship])[
+    A social preference $Phi$ is dictatorial if $exists ! i in cal(N)$ such that $x prefer_i y$ then
+    $x prefer_Phi y$.
+  ]
+
+  #theorem(title: [Arrow, 1951])[
+    Assume $abs(X) >= 3$. If $Phi$ satisfies unanimity, IIA and transitivity, then $Phi$ is
+    dictatorial.
+  ]
+
+  The proof of Arrow's theorem we are going to present was written by
+  #link(
+    "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=275510",
+    [Geanakoplos],
+  )
+  and uses four mostly independent lemmas to conclude the result.
+
+  #let I = $(upright(I))$
+  #let II = $(upright(I I))$
+  #let III = $(upright(I I I))$
+
+  #remark(title: "Notation")[
+    During the proof we will consider three recurrent preference profiles which, for brevity, will be
+    named as follows
+    $
+      #(1, 2, 3).map(n => [$#numbering("(I)", n) = (prefern((#n))_i)_(i in cal(N))$]).join[$, quad$]
+    $
+
+    The preference $prefern(#I)_Phi$ is the social preference induced by $Phi$ in the preference
+    profile $(prefern((1))_i)_(i in cal(N))$.
+  ]
+
+  #lemma(title: [External Lemma])[
+    Pick an arbitrary $y in X$. Whenever $(prefer_i)_(i in cal(N))$ is such that
+    $
+      x prefer_i y "or" y prefer_i x wide forall i in cal(N), forall x in X
+    $
+    i.e. either $y$ is ranked first or $y$ is ranked last for each individual, then $Phi$ must be such
+    that $x prefer_Phi y$ or $y prefer_Phi x$ for all $x in X$ (i.e. $Phi$ places $y$ on the very top
+    or in the very bottom).
+  ]
+
+  #proof[
+    By contradiction, suppose that $Phi$ does not rank $y$ in an extreme location (i.e.
+    $x prefer_Phi y prefer_Phi z$ for some $x, z in X$).
+    We will show that we can find an individual preference profile $prefer'_i$ such that $Phi$
+    violates some assumption.
+
+    Consider the preference profile $(prefer')_(i in cal(N))$ which ranks $z$ above $x$ for all
+    $i in cal(N)$ but leaves unaffected the ranking of $y$ against $z$.
+
+    - By IIA, since $x prefer'_Phi y$ we should still have that $x prefer'_i y$ for all $i in cal(N)$.
+    - By unanimity we must have that $z prefer'_Phi x$ since $z prefer'_i y$ for all $i in cal(N)$.
+    - Combining the above, by transitivity, we have that $z prefer'_Phi x prefer'_Phi y$.
+
+    However this means that now $z$ is chosen over $y$, which was not the case before. This means that
+    $Phi$ violates IIA because from $(prefer_i)_(i in cal(N))$ to $(prefer'_i)_(i in cal(N))$ the ranking of $y$
+    against $z$ was not affected.
+  ]
+
+  #lemma(title: [Extremely pivotal voter])[
+    There exists an individual $i^* (y) in N$ and a preference profile $(prefer_i)_(i in cal(N))$ for which
+    $i^*(y)$ is an extremely pivotal voter for $y in X$.
+
+    This means that if $i^* (y)$'s preferences change, $i^* (y)$ has the "power" to move $y$ from the
+    very bottom of the social preference ranking to the very top.
+  ]
+
+  #proof[
+    Consider a preference profiled where $x prefer_i y$ for all $x in X$ and for all $i in cal(N)$.
+
+    - By unanimity we have that $x prefer_Phi y$ for all $x in X$.
+    - By unanimity, if all $i in cal(N)$ prefer $y prefer_i x$, then we must have that $y prefer_Phi x$ for
+      all $x in X$.
+
+    Now proceed iteratively: at each step change the preference of voter $i$ such that $y$ is now the
+    first ranked alternative, rather than the last one.
+
+    Note that at each step $y$ remains extremal $forall i$, this means that, by the previous lemma,
+    $y$ will still be extremal for $Phi$.
+
+    But by unanimity $y$ should change from the bottom position to the top one. This happens for sure
+    when the last voter changes their preference, therefore there exists some citizen $i^*(y)$ where
+    the shift in the social preference occurs.
+
+    Denote with #I the preference profile right before $i^* (y)$ changes their preference about $y$
+    and #II the preference profile right after.
+  ]
+
+  #lemma(title: [Local dictatorship])[
+    If an extremely pivotal voter $i^* (y)$ exists, then they are a limited dictator over all the
+    pairs of alternatives $x, z in X$ such that $y != x, z$.
+
+    This means that $i^*(y)$ has the "power" to change the social preference outcome for $x$ and $z$.
+  ]
+
+  #proof[
+    Consider $x, z in X$ as in the statement and construct the preference profile #III as follows:
+    modify #2 such that $x prefern((3))_(i^* (y)) y$ for some $x != y in X$ and allow all other
+    $i != i^*(y)$ to change their preference with respect to $x, z$, as long as $y$ remains in its
+    extreme position.
+
+    Now we analyze what $Phi$ does when we are in $III$:
+    - We have that the ranking of $x$ and $y$ hasn't changed from #I for any voter $i in cal(N)$. Then,
+      by IIA we can find another preference profile which leaves unchanged the ranking of $x$ and
+      $y$ but ranks $y$ at the bottom for each voter. By the extremal lemma, we get that $y$ should
+      be an extrema also in $prefern(III)_Phi$ and since the ranking of $x$ and $y$ hasn't changed
+      from #I we get that $x prefern(III)_Phi y$.
+    - We have that the ranking of $y$ and $z$ hasn't changed from #II for any voter $i in cal(N)$. Then,
+      we can repeat the same argument from the previous point, but this time $y$ is ranked on top,
+      therefore we get that $y prefern(III)_Phi z$.
+
+    By transitivity we conclude $x prefern(III)_Phi y prefer(III)_Phi z$.
+    However, by IIA we have that $x prefern(III)_Phi z$ independently of $y$.
+    This conclusion was reached just by moving $x$ on the top of the ranking of $i^* (y)$, while all
+    other voter could have chosen their rankings for $x$ and $z$ arbitrary.
+
+    This means that $i^* (y)$ is a local dictator.
+  ]
+
+  #lemma(title: [Global dictatorship])[
+    The extremely pivotal voter $i^* (y)$ we defined in the previous lemmas is a dictator over all
+    pairs of alternatives $x, y in X$
+  ]
+
+  #proof[
+    Consider a third element $z in X$ and a preference profile $(prefer_i)_(i in cal(N))$ derived from
+    #III which places $z$ at the bottom $forall i in cal(N)$.
+
+    In this preference profile we know by the previous lemmas that $z$ must be ranked at the bottom
+    of $prefer_Phi$ and that there exists a player $i^* (z)$ who is a local dictator for all
+    $u, v in X$ such that $u, v in X without {z}$.
+
+    Assume by contradiction that $i^*(z) != i^*(y)$.
+
+    In the particular case in which $u = x$ and $v = y$ we have that $i^* (y)$ can change the social
+    ranking of $x$ and $y$ in preference profiles #I and #II, defined above, but this would
+    contradict the fact that $i^*(z)$ is a local dictator, therefore $i^*(z)$ and $i^*(y)$ must be
+    the same person.
+
+    Since the choice of $z$ was arbitrary $i^* (y)$ is a global dictator for all pairs $x, y in X$.
+  ]
+
+  ==== What to give up
+
+  We are stuck in a situation where we have to give up some assumption in order to have a
+  non-dictatorship, despite all the assumptions seem quite reasonable.
+
+  Our choices are:
+  - Violate transitivity, e.g. with majority vote.
+  - Violate unanimity, such as fixing a social preference without a vote.
+  - Violate IIA, e.g. with runoff or plurality vote.
+  - Have a dictator.
+
+  We can however put a constraint on the domain of $Phi$.
+
+  For example, if we assume all preferences are single-peaked, i.e. $X$ is ordered by $>$ and if
+  $x > y > z$, then either $y prefer x$ or $y prefer z$ or both, majority rule is a non-dictatorial
+  social preference which satisfies all the assumptions. (Think like the left-right spectrum).
+
+  Moreover if $abs(X) = 2$ plurality vote is also a non-dictatorial social preference which satisfies
+  all assumptions.
+
+  === Strategic voting
+
+  We now assume that players have a private preference, hold some conjecture about what are other
+  players' private preferences, and will play strategically and alter their vote according to their
+  strategy.
+
+  As the designer of this game we want the outcome to be Pareto efficient and non-manipulative (i.e.
+  we want all players to tell the truth about their preferences).
+
+  Equivalently to Arrow theorem, there is also a theorem that the only strategic social voting which
+  is Pareto efficient and non-manipulative is dictatorship.
+
+  == Matching Markets
+
+  There are two sides and each side has a preference over the other side.
+  We are going to cover one-to-one matchings (e.g. marriage, organ donors, ...), while we are not
+  covering many-to-one matchings (many students go to one school).
+
+  In both cases we would want a non-price mechanism to find the match.
+
+  === Classical marriage market
+
+  Let $M$ be the set of men and $W$ the set of women. A match is a pair of functions
+  $(mu : M -> W union {u}, nu : W -> M union {u})$ such that if $mu (m) = w$ then $nu (w) = m$ and $u$
+  represents being single.
+
+  #definition(title: [Stable match])[
+    A match $(mu, nu)$ is stable if
+    - It is individually rational: each individual $i in M union W$ prefers their match rather than
+      being single.
+    - There are no blocking pairs: it's impossible that two individual will meet and there find out
+      they like each other better than their current match.
+  ]
+]

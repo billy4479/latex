@@ -1103,7 +1103,7 @@ coordinate and minimize $i$'s payoff.
 
   #definition(title: [Social preference])[
     A social preference $Phi$ is a function which goes from the space of preference profiles over $X$
-    and $N$ to a preference over $X$.
+    and $cal(N)$ to a preference over $X$.
   ]
 
   === Arrow impossibility theorem
@@ -1114,11 +1114,16 @@ coordinate and minimize $i$'s payoff.
   ]
 
   #definition(title: [Independence of irrelevant alternatives (IIA)])[
-    Let $x, y, z in X$. The idea is that if all citizens prefer $x$ over $y$, then the addition of a
-    third element $z$ should not influence the fact that still $x prefer y$.
-  ]
+    Let $x, y in X$ and consider two preference profiles $(prefer_i)_(i in cal(N))$ and
+    $(prefer'_i)_(i in cal(N))$ such that
+    $
+      x prefer_i y <==> x prefer'_i y wide forall i in cal(N)
+    $
 
-  With majority rule sometimes the ranking can be non-transitive.
+    Then $Phi$ is IIA if and only if $x prefer_Phi y$.
+  ]
+  The idea is that if all citizens prefer $x$ over $y$, then the addition of other elements $z in X$
+  should not influence the fact that $x$ is preferred to $y$.
 
   #definition(title: [Dictatorship])[
     A social preference $Phi$ is dictatorial if $exists ! i in cal(N)$ such that $x prefer_i y$ then

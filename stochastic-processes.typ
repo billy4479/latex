@@ -1026,7 +1026,7 @@ Note that we do not require periodicity here (as we did in the convergence theor
 periodicity itself doesn't really make sense for CTMCs: since holding times are random themselves
 there is not such thing as periodicity.
 
-== Example: Poisson processes
+= Processes with continuous time and space
 
 #definition(title: [Independent increment])[
   A stochastic process $N = (N(t))_(t in [0, +oo])$ has independent increment if $forall n >= 1$ and
@@ -1045,6 +1045,8 @@ there is not such thing as periodicity.
   $
   does not depend on $s$.
 ]
+
+== Poisson processes
 
 #definition(title: [Counting process])[
   A stochastic process $N = (N(t))_(t in [0, +oo])$ is a counting process if
@@ -1170,9 +1172,7 @@ totally ordered.
   $
 ]
 
-= Processes with continuous time and space
-
-== Brownian Motion
+== Brownian Motion <sec:brownian-motion>
 
 The Brownian Motion (BM) is defined as the limit of a random walk on $ZZ$: consider
 $delta x, delta t > 0$ and define a continuous-time stochastic process $X$ as
@@ -1843,6 +1843,8 @@ $
 $
 where $S_i^alpha$ and $S_i^beta$ are the spins of $i$ in replica $alpha$ and $beta$ respectively.
 
+= Differential equations
+
 == Ordinary Differential Equations (ODEs)
 
 We will learn how to approximate a system of ODEs:
@@ -2057,3 +2059,58 @@ certain threshold we scale $k$ to make the algorithm either faster or more accur
 A popular way to estimate the error is to run the algorithm twice, in parallel. One copy will be
 running at $k$ and one at $k/2$ and check for the difference between the two. Another option is to
 run RK4 along with RK5.
+
+== Stochastic Differential Equations (SDEs)
+
+This is a way to incorporate the knowledge of noise within differential equations.
+$
+  dd(X_t) = mu (X_t, t) dd(t) + sigma (X_t, t) dd(B_t)
+$
+where $B_t$ is the standard Brownian motion.
+This can also be written as
+$
+  dv(X, t) = mu (X, t) + sigma (X, t) eta (t)
+$
+where $eta$ is white noise.
+
+We now want to find a way to simulate this Brownian motion. The answer is, as expected, to
+discretize time:
+$
+  X_(n + 1) = X_n + sigma sqrt(dd(t)) z_n wide "with" z_n tilde N(0, 1)
+$
+where $dd(t)$ is a discrete time step (in the previous section we used $k$ for this).
+We can easily show that $X_(n)$ defined as above is distributed as $N(0, sigma^2, t_n)$.
+
+Of course, we no longer have a notion of accuracy, since there is no "true" path to follow.
+
+The "standard" Brownian motion, defined in @sec:brownian-motion, has several variances to it: the
+"standard" one has $mu (x, t) = 0$ and $sigma (x, t) = sigma^2$, however these could actually be
+arbitrary functions of $x$ and $t$, in particular if $sigma(x, t)$ is independent of $x$ we say that
+the noise is *additive*, if it depends on $x$ it is *multiplicative*.
+
+We can simulate these processes with methods like Euler-Maruyama
+$
+  X_(n + 1) = X_n + mu (X_n, t_n) dd(t) + sigma (X_n, t_n) sqrt(dd(t)) z_n wide "with" z_n tilde N(0, 1)
+$
+note that higher order methods (like stochastic RK) also exist.
+
+#theorem(title: [Fokker-Plank equation])[
+  $
+    pdv(P(x, t), t) = - pdv(, x) (mu (x, t) P(x, t)) + 1/2 pdv(, x, 2) (sigma^2 (x, t) P(x, t))
+  $
+  This is also known as Kolmogorov forwards equation.
+]
+
+This equation describes the evolution of the probability over time.
+
+#proof[
+  No fucking way, look at the slides, part 9.
+]
+
+There is also the backwards equation but I don think it really matters.
+
+We define the probability flux $J$ as the difference between the probability of going through $x$
+from below and from below at time $t$ per unit time.
+$
+  pdv(P(x, t), t) = - pdv(J (x, t), x)
+$

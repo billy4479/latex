@@ -2114,3 +2114,93 @@ from below and from below at time $t$ per unit time.
 $
   pdv(P(x, t), t) = - pdv(J (x, t), x)
 $
+
+=== Stochastic integrals
+
+TODO
+
+= First Passage Times (FTPs)
+
+What is the first time a stochastic process hits a certain value?
+
+In general we want to check if a particle in still inside a certain domain. Consider a particle
+diffusing in $(-oo, x_T)$ where $x_T$ is the threshold: if the particle reaches $x_T$ it is
+absorbed.
+We can then define the survival probability:
+$
+  G(x, t) = integral_(-oo)^(x_T) dd(y) p(y, t | x, 0)
+$
+
+We can rewrite $p(y, t | x, 0) = p(y, 0 | x, -t)$ so that we can use KBE to get that
+$
+  pdv(G(x, t), t) = mu (x) pdv(G(x, t), x) + (sigma^2 (x)) / 2 pdv(G(x, t), x, 2)
+$
+with boundary conditions
+$
+  cases(
+    G(x, 0) = 1 wide & forall x < x_T,
+    G(x_T, t) = 0 wide & forall t
+  )
+$
+
+Then, the probability that the first passage time $T$ is after a certain $t$ is
+$
+  P(T >= t | x) = G(x, t) ==> P(t | x) = - pdv(G(x, t), t)
+$
+
+Let us define the moments of the FTP
+$
+  T_n (x) = EE[T^n | x] \
+  ==> cases(
+    -1 & = mu(x) pdv(T_1 (x), x) + (sigma^2 (x)) / 2 pdv(T_1 (x), x, 2),
+    -n T_(n - 1) & = mu(x) pdv(T_n (x), x) + (sigma^2 (x)) / 2 pdv(T_n (x), x, 2),
+  )
+$
+
+From these relations we can obtain the general formula for the FPT:
+$
+  T_1 (x) = 2 integral_x^(x_T) exp(-psi(y)) dd(y) integral_(-oo)^y exp(psi(z))/(sigma^2 (z)) dd(z)
+$
+with
+$
+  psi(x) = 2 integral_(-oo)^x mu(y)/(sigma^2 (y)) dd(y)
+$
+
+== Kramer rate
+
+Let $mu(x) = - U'(x)$ where $U(x)$ is a potential with a local minima at $x_0$
+and consider a constant variance $sigma$.
+
+We want to compute the FTP for the process to reach $x_T > x_0$, assuming that $U$ is monotonically
+increasing from $x_0$ to $x_T$.
+
+If $sigma$ is small, we can Taylor expand and get Kramer's formula.
+
+We have two cases, wither $x_T$ is a local maxima or it is not.
+
+=== Local maxima
+This means that $U'(x_T) = 0$ and that we want to pass an energy barrier $U(x_T)$ high.
+
+$
+  T_1 (x) = pi/sqrt(U''(x_0) abs(U''(x_T))) exp(2/sigma^2 U(x_T))
+$
+Then the Kramer's rate is $R = 1 / T_1$.
+
+We note that the mean FPT increase exponentially with $U(x_T)$.
+
+=== Not a local maxima
+
+We now have that $U'(x_T) > 0$ where $x_T$ is still the point with maximum potential.
+
+This time the expansion gives us
+$
+  T_1 (x) = sigma/(U'(x_T)) sqrt(pi/U''(x_0)) exp(2/sigma^2 U(x_T))
+$
+
+=== Density
+
+In the small noise scenario we have that
+$
+  T_n (x) = n! T_1^n
+$
+

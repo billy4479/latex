@@ -1412,7 +1412,225 @@ preference, so that they reject a suboptimal candidate which proposes first.
 
 = Mechanism design
 
+== Vickrey-Clarke-Groves mechanism
+
 #example[
   The government wants to build an airport. Let $X$ be the set of options and for each $x in X$ have
   an associated cost $c(x)$. Each individual has a private type $Theta_i$.
+]
+
+#model[
+  We want to maximize
+  $
+    V(x) = sum_(i in cal(N)) V_i (x)
+  $
+  if $V(x) <= 0$ the airport will not be built.
+
+  We might want to ask each citizen to evaluate each option $x$, giving us, for each citizen, a
+  vector $hat(v)_i in RR^abs(X)$ containing the score of each option and then maximize
+  $
+    hat(V)(x) = sum_(i in cal(N)) hat(v)_i (x)
+  $
+  but we might have a problem where citizens are incentivised to misrepresent their preferences.
+
+  We can solve this by giving to each citizen an additional payoff, given by
+  $
+    t_i (x) = sum_(j != i) hat(v)_j (x)
+  $
+  so that reporting their actual strategy is a weakly dominant strategy. This is called the VCG
+  mechanism.
+
+  This works, however it is very expensive to implement.
+
+  In the model proposed above each citizen gets the same payoff in the end (a part given by their
+  preference and one part given by $t_i$).
+
+  To reduce the cost of this design we can select a function $b_i$ which maps others' citizens report
+  into a bill to be paid by $i$. The total bill that each citizen $i$ will need to pay is
+  $
+    b_i (hat(v)_(-i)) - sum_(j != i) hat(v)_j (x)
+  $
+  this allows us to reduce the cost of the strategy while we are not influencing the report of each
+  citizen, since, for each $i$, $b_i$ is constant as it depends on preferences they cannot influence.
+
+  This is mechanism is called the *pivot mechanism*.
+
+  Let us use as $b_i$ the function
+  $
+    b_i (hat(v)_i) = max{ 0, max_(x in X) sum_(j != i) hat(v)_j (x)}
+  $
+  where the sum is the value of the socially optimal option without citizens $i$.
+
+  This is a good choice because if the outcome with ($x^*$) or without ($x'$) citizen $i$
+  participating changes, then $i$ will pay
+  $
+    sum_(j != i) hat(v)_j (x') - sum_(j != i) hat(v)_j (x^*)
+  $
+  i.e. $i$ will pay the change of preference of all other citizens if they are the pivotal voter.
+
+  Since it is optimal for each citizen to truthfully reveal their preference we know that
+  $
+    V_i (x^*) + sum_(j != i) hat(v)_j (x^*) >= V_i (x') + sum_(j != i) hat(v)_j (x') \
+    ==> V_i (x^*) + sum_(j != i) hat(v)_j (x^*) - sum_(j != i) hat(v)_j (x') >= V_i (x')
+  $
+  which means that $i$ is weakly better if $x^*$ is implemented rather than $x'$, this means that
+  there is always an incentive to participating in the mechanism.
+]
+
+== Example: selling a coffee
+
+A seller wants to sell a coffee at the highest possible profit and he has a cost function
+$c(q) = q^2/2$.
+
+There is just one buyer which has a type $theta in {theta_"high", theta_"low"}$ with
+$theta_"high" > theta_"low" > 0$. The buyer's payoff is $theta q - p$.
+
+The seller has a conjecture on the type of the buyer: $P(theta_"high") = mu$.
+
+If the seller knew for sure the type of the buyer we would have a very simple maximization problem
+$
+  q_i^* = argmax_q (theta_i q - q^2 /2)
+$
+which gives us as result
+$
+  cases(
+    q_i^* = theta_i,
+    p_i^* = theta_i^2
+  )
+$
+
+But most likely the seller doesn't know the type of the buyer. An intuitive approach would be to
+have two items in the menu: a large coffee (which maximizes the seller's payoff when the buyer is
+$theta_"high"$) and a small coffee (meant for when the buyer is $theta_"low"$).
+
+However, then each buyer will have an incentive to misrepresent their preference: say $theta =
+theta_"high"$. If the buyer buys the small coffee he gets
+$
+  theta_H q_L - p_L = theta_H theta_L - theta_L^2 \
+  ==> underbrace((theta_H - theta_L), >0) underbrace(theta_L, >0) > 0
+$
+
+Therefore, in order to maximize my profits as a seller I need to satisfy some constraints:
+$
+  cases(
+    delim: #none,
+    display(
+      cases(
+        theta_H q_H - p_H >= theta_H q_L - p_L wide & "IC-H",
+        theta_L q_L - p_L >= theta_L q_H - p_H wide & "IC-L"
+      )
+    ) wide & "incentive constraint (IC)",
+    display(
+      cases(
+        theta_H q_H - p_H >= 0 wide & "PC-H",
+        theta_L q_L - p_L >= 0 wide & "PC-L",
+      )
+    ) wide & "participating constraint (PC)\nor individual rationality (IR)"
+  )
+$
+
+But not all these constrains are necessary:
+- IC-H and PC-L imply PC-H.
+  #proof[
+    $
+      theta_H q_H - p_H >=^"(IC-H)" theta_H q_L p_L >^(theta_H > theta_L) theta_L q_L - p_L >=^"(PC-L)" 0
+    $
+  ]
+- IC-H and IC-L imply $q_H > q_L$.
+  #proof[
+    Sum IC-H and IC-L and simplify to get
+    $
+      underbrace((theta_H + theta_L), >0) (q_L - q_H) >= 0 \
+      ==> q_H >= q_L
+    $
+  ]
+- PC-L must hold with equality at optimum.
+  #proof[
+    Consider $theta_L q_L - p_L > 0$, we argue that we can increase the $p_L$ by $epsilon > 0$.
+    We need to make sure that IC-L still holds: to do so we also increase $p_H$ by $epsilon$.
+
+    PC-L holds and we can find $epsilon$ by hypothesis and IC-L also holds since $epsilon$ cancels
+    out on the two sides. The same reasoning applies for IC-H, while PC-H...TODO
+  ]
+- IC-H must hold with equality at optimum.
+  #proof[
+    Consider $theta_H q_H p_H > theta_H q_L - p_L$, we argue that we can increase $p_H$ by
+    $epsilon > 0$.
+
+    $exists epsilon$ since IC-H is still satisfied, PC-L is unaffected and IC-L is still satisfied
+    as choosing $(q_H, p_H)$ as $theta_L$ is even less appealing.
+  ]
+
+- IC-H holding with equality and $q_H >= q_L$ together imply IC-L
+  #proof[
+    Write IC-H as
+    $
+      p_H - p_L = theta_H (q_H - q_L)
+    $
+    and IC-L as
+    $
+      p_H - p_L >= theta_L (q_H - q_L)
+    $
+
+    This means that
+    $
+      theta_H (q_H - q_L) >= theta_L (q_H - q_L)
+    $
+    since $q_H >= q_L$ we get that $theta_H >= theta_L$ which is indeed true.
+
+    Since all these steps are "if and only if" we conclude that IC-L holds.
+  ]
+
+We conclude that we just need PC-L and IC-H both with equality and $q_H >= q_L$.
+$
+  cases(
+    theta_L q_L - p_L = 0,
+    theta_H q_H - p_H = theta_H q_L - p_L,
+    q_H >= q_L
+  )
+$
+therefore
+$
+  cases(
+    p_L = theta_L q_L,
+    p_H = theta_H q_H - (theta_H - theta_L) q_L
+  )
+$
+where the discount we apply to $theta_H$ is called "discount information rent", which is applied
+because the seller doesn't know the true type of the buyer, therefore the seller needs to give a
+discount in order for the buyer to reveal their true type.
+
+The seller therefore needs to solve
+$
+  & max_((q_H, q_L)) mu(theta_H q_H - (theta_H - theta_L) q_L - q_M^2 / 2)
+    + (1 - mu) (theta_L q_L - q_L^2/2) \
+  & "s.t." q_H >= q_L
+$
+We can just use the first order conditions:
+$
+  cases(
+    q_H^* = theta_H,
+    q_L^* = theta_L - mu/(1-mu) (theta_H - theta_L)
+  )
+$
+
+== General definition
+
+There is a way to formally define a mechanism design problem, however, in short, a mechanism is a
+tuple $Gamma = (A, (q, t))$, where $A$ is the set of action profiles, $q$ is a function which maps
+strategies into outcomes and $t$ is a function which maps strategies to transfers to the designer
+(e.g. taxes).
+
+We put the following assumptions:
+- The payoff function is quasi-linear: $u_i (theta, q(a), t_i(a)) = u_i(q(a), theta) - t_i(a)$
+- The types are independent: $p(theta) = product_(i in I) p_i (theta)$
+- The space of types is one-dimensional and convex:
+  $Theta_i = [overline(theta), underline(theta)] subset.eq RR$.
+
+For now we assume that players are smart enough to play according to Bayesian equilibrium.
+
+#lemma(title: [Revelation principle])[
+  Any mechanism can be reduced to a mechanism where the only action of each player is reveal a type
+  (players can lie), however the mechanism designer should make sure that the players report their
+  type truthfully.
 ]

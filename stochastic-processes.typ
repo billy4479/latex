@@ -1639,8 +1639,65 @@ more dimensions.
   process with the desired distribution.
 ]
 
-== Simulating CTMCs - Gillespie algorithm
+== Gillespie algorithm
 
+Recall the definition of the transition matrix $Q$ and KFE (@thm:kolmogorov-differential).
+
+#example(title: [Protein synthesis model])[
+  Let $K_R$ be the rate of RNA production, $gamma_R$ be the rate of RNA degradation, $K_P$ the rate
+  of protein production and $gamma_P$ the rate of protein degradation.
+
+  The state of the system is described by the number of RNA molecules $R$ and the number of proteins
+  $P$.
+
+  #figure(
+    table(
+      columns: (auto, auto, auto),
+      table.header([*Reaction*], [*State*], [*Rate*]),
+      [RNA synthesis], [$R -> R + 1$], [$K_R$],
+      [RNA degradation], [$R -> R - 1$], [$gamma_R R$],
+      [Protein synthesis], [$P -> P + 1$], [$K_P R$],
+      [Protein degradation], [$P -> P - 1$], [$gamma_P P$],
+    ),
+  )
+]
+
+#model[
+  Given that the system is in state $(R, P)$ we have that the rate of change of the joint
+  probability is given by
+  $
+    dv(p_(R, P), t) & = K_R (p_(R-1, P) - p_(R, P)) + gamma_R ((R + 1) p_(R + 1, P) - R p_(R, P)) \
+    & = K_P R (p_(R, P - 1) - p_(R, P)) + gamma_P ((P + 1) p_(R, P + 1) - P p_(R, P))
+  $
+
+  To write it down we need to sum over each state, then, for each state, we add the "probability
+  inflow" and subtract the "probability outflow" that is the rate at the previous state times the
+  probability of being in the previous state minus the rate at the next state times the probability
+  of being in the next state.
+
+  Then, let us define the expected number of proteins and RNA as
+  $
+    macron(R) (t) & = sum_(R, P) R p_(R, P) (t) \
+    macron(P) (t) & = sum_(R, P) P p_(R, P) (t)
+  $
+  These quantities evolve according to
+  $
+    dv(macron(R) (t), t) & = K_R - gamma_R macron(R) (t) \
+    dv(macron(P) (t), t) & = K_P macron(R) (t) - gamma_P macron(P) (t) \
+  $
+
+  Do derive these equations we take the definition of $macron(R) (t)$, differentiate it, and
+  substitute the KFE into it. This gives a very long equation but working it out term by term it
+  simplifies a lot.
+
+  Then we need to solve the fucking equations, multiply by $e^(integral b(t) dd(t))$ where $b(t)$ is
+  the coefficient of $u(t)$ (in these cases $gamma_R$ and $gamma_p$). Then note that we can find the
+  derivative of a multiplication and from there we can just integrate again.
+
+  Once solved we can find the limit as $t -> oo$.
+]
+
+The algorithm works as follows:
 1. Initialize $t = 0$ and choose the initial state $X(0)$.
 2. Let $a_i (t)$ be the transition rate at time $t$ for state $i$.
 3. Let $a_"tot"(t) = sum_i a_i (t)$.

@@ -12,10 +12,17 @@
   bigHeading: true,
   pageBreaksAfterHeadings: false,
   horizontalInlineFractions: true,
+  numberEquationsAtHeader: 2,
   doc,
 ) = {
   set text(font: font, size: fontSize)
   set par(justify: true)
+
+  assert(numberEquationsAtHeader <= 2, message: "TODO: not implemented")
+  assert(
+    numberEquationsAtHeader >= 0,
+    message: "numberEquationsAtHeader should be greater than 0",
+  )
 
   import "@preview/hydra:0.6.2": hydra
   set page(
@@ -53,18 +60,19 @@
 
   set heading(numbering: "1.")
 
-  // start - https://sitandr.github.io/typst-examples-book/book/snippets/math/numbering.html
+  // https://sitandr.github.io/typst-examples-book/book/snippets/math/numbering.html
   /// original author: laurmaedje
 
-  // reset counter at each chapter
-  // if you want to change the number of displayed
-  // section numbers, change the level there
   show heading.where(level: 2): it => {
-    counter(math.equation).update(0)
+    if numberEquationsAtHeader >= 2 {
+      counter(math.equation).update(0)
+    }
     it
   }
   show heading.where(level: 1): it => {
-    counter(math.equation).update(0)
+    if numberEquationsAtHeader >= 1 {
+      counter(math.equation).update(0)
+    }
     it
   }
 
@@ -73,13 +81,16 @@
 
   set math.equation(
     numbering: n => {
-      // numbering("(1.1)", counter(heading).get().first(), n)
-      // if you want change the number of number of displayed
-      // section numbers, modify it this way:
-      let count = counter(heading).get()
-      let h1 = count.first()
-      let h2 = count.at(1, default: 0)
-      numbering("(1.1.1)", h1, h2, n)
+      if numberEquationsAtHeader == 1 {
+        numbering("(1.1)", counter(heading).get().first(), n)
+      } else if numberEquationsAtHeader == 2 {
+        let count = counter(heading).get()
+        let h1 = count.first()
+        let h2 = count.at(1, default: 0)
+        numbering("(1.1.1)", h1, h2, n)
+      } else {
+        numbering("(1)", n)
+      }
     },
     supplement: "Eq.",
   )

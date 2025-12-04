@@ -12,3 +12,6 @@
 #let angle = (..body) => {
   $lr(chevron.l #(body.pos().join(math.comma)) chevron.r)$
 }
+
+#let bigO = math.op($cal(O)$)
+#let littleO = math.op($cal(o)$)

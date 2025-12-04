@@ -673,11 +673,28 @@ $
   Let $X$ be a positive valued random variable and $r$ its hazard rate function.
   Then
   $
-    macron(F)(t) = e^(-integral_0^t r(s) dif s)
+    macron(F)(t) = e^(-integral_0^t r(s) dd(s))
   $
 ]<prop:hrf-characterization>
 
-#proof[TODO: page 44]
+#proof[
+  By definition of $macron(F)$ we have that $macron(F)' = -F'$.
+  Then
+  $
+    r(t) = - (macron(F)'(t)) / (macron(F)(t)) = - dv(, t) (log macron(F) (t))
+  $
+
+  Since $macron(F)(0) = 1$ we get
+  $
+    integral_0^t r(s) dd(s) = -log macron(F) (t) + log macron(F) (0) = -log macron(F) (t)
+  $
+
+  Therefore
+  $
+    macron(F)(t) = exp(- integral_0^t r(s) dd(s))
+  $
+  as desired.
+]
 
 The hazard rate function for the exponential distribution is constant and equal to $lambda$. This is
 what we expect from any memoryless distribution.
@@ -724,7 +741,20 @@ memoryless distribution.
 ]
 
 #proof[
-  TODO: part two, page 46
+  By definition of $I$ we have that
+  $
+    prob(I = i | X = t) & = prob(X_i = t, X_j > t "for all" j > i) \
+                        & = f_i (t) dot product_(j != i) macron(F)_j (t) \
+                        & = r_i (t) macron(F) (t)
+  $
+  where $macron(F), macron(F)_i$ represent the survival functions for $X$ and $X_i$ respectively.
+
+  Then we can exploit the fact that probabilities sum up to one to write
+  $
+    prob(I = i | X = t) & = (prob(I = i | X = t)) / (sum_(j = 1)^n prob(I = j, X = t)) \
+    & = (r_i (t) macron(F) (t)) / (sum_(j = 1)^n r_j (t) macron(F) (t)) \
+    & = (r_i (t)) / (sum_(j = 1)^n r_j (t))
+  $
 ]
 
 #corollary[

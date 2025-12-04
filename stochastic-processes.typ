@@ -1026,7 +1026,7 @@ Note that we do not require periodicity here (as we did in the convergence theor
 periodicity itself doesn't really make sense for CTMCs: since holding times are random themselves
 there is not such thing as periodicity.
 
-= Processes with continuous time and space
+== Example: Poisson process
 
 #definition(title: [Independent increment])[
   A stochastic process $N = (N(t))_(t in [0, +oo])$ has independent increment if $forall n >= 1$ and
@@ -1046,7 +1046,7 @@ there is not such thing as periodicity.
   does not depend on $s$.
 ]
 
-== Poisson processes
+=== Standard definition
 
 #definition(title: [Counting process])[
   A stochastic process $N = (N(t))_(t in [0, +oo])$ is a counting process if
@@ -1172,22 +1172,25 @@ totally ordered.
   $
 ]
 
+= Processes with continuous time and space
+
 == Brownian Motion <sec:brownian-motion>
 
-The Brownian Motion (BM) is defined as the limit of a random walk on $ZZ$: consider
-$delta x, delta t > 0$ and define a continuous-time stochastic process $X$ as
-$
-  X_t = delta x Y_(ceil(t / (delta t)))
-$
-This process makes jumps of size $delta x$ either up or down (with
-probability $1/2$) every $delta t$.
-
-Therefore we can write
+Consider
 $
   Y_n = Z_1 + ... + Z_n wide "where"
   quad cases(prob(Z_i = 1) = 1/2, prob(Z_i = -1) = 1/2, Z_i perp Z_j)
   quad forall i in {1, ..., n}
 $
+
+Then the Brownian Motion (BM) is defined as the limit of a random walk on $ZZ$: let
+$delta x, delta t > 0$ and define a continuous-time stochastic process $X$ as
+$
+  X_t = delta x Y_(ceil(frac(t, delta t, style: "horizontal")))
+$
+This process makes jumps of size $delta x$ either up or down (with probability $1/2$) every
+$delta t$.
+
 This means that
 $
   & EE[Y_n]  & = & n EE[Z_1]  & = 0 \
@@ -1198,7 +1201,7 @@ $
   & EE[X_t] = 0 \
   & var[Y_n] = (delta x)^2 ceil(t/(delta t))
 $
-and by taking $delta x = O(sqrt(delta t))$ we get
+and by taking $delta x = bigO(sqrt(delta t))$ we get
 $
   lim_(delta t -> 0) var(X_t) = lim_(delta t -> 0) sigma^2 delta t ceil(t / (delta t)) = sigma^2 t
 $
@@ -1290,7 +1293,7 @@ This is equivalent to saying that $X$ has MVG finite dimensional distribution.
   can be written as
   $
     X_(t_(1:h)) = M z wide "for" z = vec(X_(t_1), X_(t_2) - X_(t_1), dots.v, X_(t_h) - X_(t_(h-1)))
-    "and" M "is an appropriate" h times h "matrix"
+    "and" cases(delim: #none, M "is an appropriate", h times h "matrix")
   $
   Then, since MVG is closed under linear transformation we can conclude.
 ]
@@ -1327,7 +1330,7 @@ Then, if $X$ is a Gaussian Process, $m, C$ uniquely characterize the processes.
             & = EE[X_t (X_t +(X_s - X_t))] \
             & = EE[X_t^2] + EE[X_t (X_s - X_t)] \
             & = sigma^2 t + EE[X_t] EE[X_s - X_t] \
-            & = sigma^2 t
+            & = sigma^2 t wide "for" t < s
   $
 ]
 
@@ -1425,7 +1428,7 @@ We can generalize the above definition as follows:
     $
       prob (abs(Delta_(t, h)) > epsilon | X_t = x) = o (h)
     $
-]
+]<def:diffusion-process>
 
 If the above holds, we say that the stochastic process $X$ solves the stochastic differential
 equation (SDE)
@@ -1487,6 +1490,55 @@ $
 where the following property also holds:
 $
   P^t P^s f = P^(t + s)
+$
+
+=== Generators
+
+Intuitively the generator is the derivative of $P^t$:
+$
+  Q = lr(dv(P^t, t) |)_(t=0)
+$
+
+#definition(title: "Generator")[
+  The generator of a diffusion process on $RR$ is the operator $Q$ which sends a function
+  $f: RR -> RR$ to $Q f: RR -> RR$ defined as follows
+  $
+    Q f (x) & = lr(dv(, t) P^t f(x) |)_(t = 0) = lim_(t -> 0) (P^h f(x) - f(x))/h \
+            & = lim_(t -> 0) (EE[f(X_h) | X_0 = x] - f(x)) / h
+  $
+]
+
+#lemma[
+  Let $X = (X_t)_(t in [0, oo))$ be a diffusion process which solves the SDE
+  $
+    dd(X_t) = mu(X_t) + sigma(X_t) dd(B_t)
+  $
+
+  Then, for a smooth enough $f$, we have
+  $
+    Q f(x) = mu (x) pdv(f, x) (x) + 1/2 sigma^2 (x) pdv(f, x, 2) (x)
+  $
+]
+
+#proof[
+  This is a sketch.
+
+  Let $Delta_h = (X_h - X_0 | X_0 = x)$, then
+  #set math.equation(numbering: n => {})
+  $
+    Q f(x) & = lim_(h -> 0) (EE[f(X_h) | X_0 = x] - f(x))/h wide & "definition of" Q \
+    & = lim_(h -> 0) (EE[f(X_h) - f(X_0) | X_0 = x])/h wide & \
+    & = lim_(h -> 0) (EE[f'(X_0) Delta_h + f''(X_0) Delta_h^2 + littleO(Delta_h)])/h wide &
+    cases(delim: #none, "Taylor expand" f(X_h), "around" X_0". " f(X_h) "cancels.") \
+    & = f'(x) lim_(h -> 0) EE[Delta_h]/h + f''(x) EE[Delta_h^2]/h wide &
+    "assuming" EE[o(Delta_h)] = o(h) \
+    & = mu(x) f'(x) + (sigma^2 (x))/2 f''(x) wide & "by" #[@def:diffusion-process]
+  $
+]
+
+We can therefore define a *generator operator* $Q$ as
+$
+  Q = mu pdv(, x) + sigma^2 /2 pdv(, x, 2)
 $
 
 = Monte-Carlo methods
@@ -1702,7 +1754,7 @@ The algorithm works as follows:
 2. Let $a_i (t)$ be the transition rate at time $t$ for state $i$.
 3. Let $a_"tot"(t) = sum_i a_i (t)$.
 4. Draw the next transition time $tau$ from $"Exp"(a_"tot" (t))$.
-5. Draw the state identity from probabilities $p_i = (a_"tot" (t))/a_i$.
+5. Draw the state identity from probabilities $p_i = a_i / (a_"tot" (t))$.
 6. Set $t <- t + tau$ and the state of the system to the selected one.
 7. Go to step 2.
 

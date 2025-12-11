@@ -498,7 +498,7 @@ as in @eq:ktour.
       &= lim_(k -> oo) S_k / k = m_i
     $
     which implies $lim_(n -> oo) n/(V_i (n)) = m_i$ as desired.
-  2. By part a) we have that $lim_(n -> oo) EE[(V_i (n))/n] = m_i$ (by some magic??) then
+  2. By part a) we have that $lim_(n -> oo) EE[(V_i (n))/n] = 1/m_i$ then
     $
       1/m_i = lim_(n -> oo) EE[(V_i (n))/n] = lim_(n -> oo) (sum^n_(t = 1) EE[bb(1) (X_t = i)])/n
       = lim_(n -> oo) (sum^n_(t = 1) pi_i)/n = pi_i
@@ -743,16 +743,16 @@ memoryless distribution.
 #proof[
   By definition of $I$ we have that
   $
-    prob(I = i | X = t) & = prob(X_i = t, X_j > t "for all" j > i) \
-                        & = f_i (t) dot product_(j != i) macron(F)_j (t) \
-                        & = r_i (t) macron(F) (t)
+    prob(I = i, X = t) & = prob(X_i = t, X_j > t "for all" j > i) \
+                       & = f_i (t) dot product_(j != i) macron(F)_j (t) \
+                       & = r_i (t) macron(F)_X (t)
   $
-  where $macron(F), macron(F)_i$ represent the survival functions for $X$ and $X_i$ respectively.
+  where $macron(F)_X, macron(F)_i$ represent the survival functions for $X$ and $X_i$ respectively.
 
-  Then we can exploit the fact that probabilities sum up to one to write
+  Then, by the definition of conditional probability, we have
   $
-    prob(I = i | X = t) & = (prob(I = i | X = t)) / (sum_(j = 1)^n prob(I = j, X = t)) \
-    & = (r_i (t) macron(F) (t)) / (sum_(j = 1)^n r_j (t) macron(F) (t)) \
+    prob(I = i | X = t) & = (prob(I = i, X = t)) / (sum_(j = 1)^n prob(I = j, X = t)) \
+    & = (r_i (t) macron(F)_X (t)) / (sum_(j = 1)^n r_j (t) macron(F)_X (t)) \
     & = (r_i (t)) / (sum_(j = 1)^n r_j (t))
   $
 ]
@@ -958,7 +958,7 @@ $<eq:jump-holding-distrib>
 
   Thus, by definition of $Q_(i j)$ we have
   $
-    Q_(i j) = lim_(h -> 0) (P_(i j)(h))/h >= lim_(h -> 0) (1 - e^(- nu_i h))/h K_(i j) e^(nu_j h) =
+    Q_(i j) = lim_(h -> 0) (P_(i j)(h))/h >= lim_(h -> 0) (1 - e^(- nu_i h))/h K_(i j) e^(-nu_j h) =
     nu_i K_(i j)
   $
 
@@ -1095,7 +1095,7 @@ $
   / Infinitesimal definition: $N$ has independent increments and
     $
       cases(
-        prob (N(t+h) = N(t) = 1 | N(t) = i) = lambda h + o(h) wide "as" h -> 0,
+        prob (N(t + h) - N(t) = 1 | N(t) = i) = lambda h + o(h) wide "as" h -> 0,
         prob (N(t + h) - N(t) > 1) = o(h)
       )
     $
@@ -1498,12 +1498,14 @@ where $B tilde "BM"(1)$ is the "driving" Brownian motion.
 
 === Transition kernels
 
-Let $(X_t)$ be a time-homogeneous, continuous-time Markov process on $cal(X) = RR$.
-We define the transition kernel $P^t (x, y)$ with $x, y in RR, t > 0$ as the density of $X_t$ at $y$
-given that $X_0 = x$, i.e. $P^t (x, y)$ is such that
-$
-  prob (X_t in A | X_0 = x) = integral_A P^t (x, y) dif y wide A subset.eq RR
-$
+#definition(title: [Transition kernel])[
+  Let $(X_t)$ be a time-homogeneous, continuous-time Markov process on $cal(X) = RR$.
+  The transition kernel $P^t (x, y)$ with $x, y in RR, t > 0$ is the density of $X_t$ at $y$
+  given that $X_0 = x$, i.e. $P^t (x, y)$ is such that
+  $
+    prob (X_t in A | X_0 = x) = integral_A P^t (x, y) dif y wide A subset.eq RR
+  $
+]
 
 #example(title: [Transition Kernel of a BM])[
   For $X tilde "BM"(sigma)$, we have that
@@ -1520,7 +1522,7 @@ $
 where the following property also holds:
 $
   P^t P^s f = P^(t + s)
-$
+$<eq:kernel-decomp>
 
 === Generators
 
@@ -1533,8 +1535,7 @@ $
   The generator of a diffusion process on $RR$ is the operator $Q$ which sends a function
   $f: RR -> RR$ to $Q f: RR -> RR$ defined as follows
   $
-    Q f (x) & = lr(dv(, t) P^t f(x) |)_(t = 0) = lim_(t -> 0) (P^h f(x) - f(x))/h \
-            & = lim_(t -> 0) (EE[f(X_h) | X_0 = x] - f(x)) / h
+    Q f (x) = lr(dv(, t) P^t f(x) |)_(t = 0) = lim_(t -> 0) (P^h f(x) - f(x))/h
   $
 ]
 
@@ -1556,7 +1557,8 @@ $
   Let $Delta_h = (X_h - X_0 | X_0 = x)$, then
   #set math.equation(numbering: n => {})
   $
-    Q f(x) & = lim_(h -> 0) (EE[f(X_h) | X_0 = x] - f(x))/h wide & "definition of" Q \
+    Q f(x) & = lim_(t -> 0) (P^h f(x) - f(x))/h wide & "def. of" Q \
+    & = lim_(h -> 0) (EE[f(X_h) | X_0 = x] - f(x))/h wide & "def. of transition kenrnel"\
     & = lim_(h -> 0) (EE[f(X_h) - f(X_0) | X_0 = x])/h wide & \
     & = lim_(h -> 0) (EE[f'(X_0) Delta_h + f''(X_0) Delta_h^2 + littleO(Delta_h)])/h wide &
     cases(delim: #none, "Taylor expand" f(X_h), "around" X_0". " f(X_h) "cancels.") \
@@ -1569,7 +1571,96 @@ $
 We can therefore define a *generator operator* $Q$ as
 $
   Q = mu pdv(, x) + sigma^2 /2 pdv(, x, 2)
+$<eq:generator-op>
+
+=== Fokker-Plank equations
+
+We can use the generator operator to compute the KFE for diffusion processes. This equation is often
+referred as the Fokker-Plank equation.
+
+#theorem(title: [Fokker-Plank])[
+  Let $(X_t)_(t in [0, +oo))$ be a diffusion process with (smooth enough) drift and diffusion
+  functions $mu(x)$ and $sigma^2(x)$. Then
+  $
+    pdv(P^t (x, y), t) = - pdv(, y) (P^t(x, y) mu (y)) + 1/2 pdv(, y, 2) (P^t (x, y) sigma^2 (y))
+  $
+]
+
+#proof[
+  This is a sketch as we don't provide the full reasoning on why we exchange derivatives and
+  integrals.
+
+  For any test function $f: RR -> RR$ we have
+  $
+    integral f(y) pdv(P^t (x, y), t) dd(y) & = dv(, t) integral f(y) P^t (x, y) dd(y) wide &
+    "magic" \
+    & = dv(, t) P^t f(x) wide & "def. of" P^t\
+    & = lim_(h -> 0) (P^(t + h) f(x) - P^t f(x)) / h wide & "def. of derivative" \
+    & = lim_(h -> 0) (P^t (P^h f - f) (x) ) / h wide & #[@eq:kernel-decomp] \
+    & = P^t (lim_(h -> 0) (P^h f - f) / h) (x) & \
+    & = P^t Q f(x) wide & "def. of" Q
+  $
+
+  Then, assuming $f in C^2$ (two continuous derivatives and bounded support), we can use
+  @eq:generator-op to write
+  $
+    P^t Q f(x) & = integral (f' (z) mu (z) + 1/2 f'' (z) sigma^2 (z)) P^t (x, z) dd(z) \
+    & = - integral f(z) pdv(, z) (P^t (x, z) mu(z)) dd(z) + integral f(z) pdv(, z, 2) (1/2 P^t (x, z)
+      sigma^2 (z)) dd(z)
+  $
+  where we have used integration by parts and boundedness of the support of $f$.
+
+  This means that
+  $
+    integral f(y) pdv(P^t (x, y), t, 2) dd(y) = integral f(y) g(y) dd(y)
+  $
+  where
+  $
+    g(y) := - pdv(, y) (P^t (x, y) mu(y)) + 1/2 pdv(, y, 2) (P^t (x, y) sigma^2 (y))
+  $
+
+  But this holds for every $f$, therefore
+  $
+    pdv(P^t (x, y), t) = g(y) = - pdv(, y) (P^t (x, y) mu(y)) + 1/2 pdv(, y, 2) (P^t (x, y) sigma^2 (y))
+  $
+  for almost every $y$.
+]
+
+=== Stationary distributions
+
+The formula above can be used to find stationary distributions for a given diffusion process.
+
+To do so we consider the pdf of $X_t$ denoted by $h(y, t)$. By the law of total probability we have
+that
 $
+  h(y, t) = integral_RR P^t (x, y) h(x, 0) dd(x)
+$
+then, combining this with the Fokker-Plank equation we get that
+$
+  pdv(h(y, t), t) = - pdv(, y) (h(y, t) mu(y)) + 1/2 pdv(, y, 2) (h(y ,t) sigma^2 (y))
+$
+which means that a stationary distribution $h(y, t) = pi(y)$ will satisfy
+$
+  0 = - pdv(, y) (pi(y) mu(y)) + 1/2 pdv(, t, 2) (pi(y) sigma^2 (y))
+$
+or in short
+$
+  (mu pi)' = 1/2 (sigma^2 pi)''
+$
+
+Integrating both sides we get
+$
+  mu pi = 1/2 (sigma^2 pi)' + "constant"
+$
+this means that there is an infinite number of diffusion processes with the same stationary
+distribution.
+
+Interestingly if we fix $sigma^2 (x) = sigma^2$ to be constant we get
+$
+  mu (x) = 1/2 sigma^2 (dv(, x) pi(x)) / pi(x) = sigma^2 / 2 (log pi)' (x)
+$
+giving us that any distribution $pi$ (such that $log pi$ is well defined and differentiable), when
+$sigma^2$ is constant and $mu$ is as above, leads to a $pi$-invariant diffusion process.
 
 = Monte-Carlo methods
 
@@ -1674,6 +1765,8 @@ $
 This is actually worse than classical methods when $D = 1$, however it becomes quickly better in
 more dimensions.
 
+== Poisson process
+
 #example(title: [Poisson process])[
   We sample $T_i tilde "Exp"(lambda)$ and let $t_(i+1) = t_i + T_i$, then
   $(t)_(i) tilde "PP"(lambda)$. Therefore this is very easy to simulate, we can just draw from the
@@ -1721,7 +1814,7 @@ more dimensions.
   process with the desired distribution.
 ]
 
-== Gillespie algorithm
+= Gillespie algorithm
 
 Recall the definition of the transition matrix $Q$ and KFE (@thm:kolmogorov-differential).
 
@@ -1788,7 +1881,7 @@ The algorithm works as follows:
 6. Set $t <- t + tau$ and the state of the system to the selected one.
 7. Go to step 2.
 
-== Metropolis-Hastings algorithm
+= Metropolis-Hastings algorithm
 
 We want to build an irreducible Markov chain such that its stationary distribution converges to a
 desired distribution. Then we can simulate the MC with Monte-Carlo methods and then use the result
@@ -1799,12 +1892,12 @@ $
 where $(x_i)_(i)$ are $N_s$ samples from the distribution obtained by the algorithm. Then
 $angle(f(x))_"MC" tilde angle(f(x)) = integral f(x) P(x) dif x$ as $N_s -> oo$ (by the LLN).
 
-=== Motivation
+== Motivation
 
 This algorithm was invented to approximate sampling from the Boltzmann distribution:
 $
   P_B (x) = 1/Z exp (- E(x) beta) wide "with" cases(
-    Z = integral exp(E(x) beta) dif x,
+    Z = integral exp(-E(x) beta) dif x,
     beta = (k T)^(-1)
   )
 $
@@ -1812,7 +1905,7 @@ where $k$ is the Boltzmann constant, $T$ is the (constant) temperature, and $E(x
 associated with state $x$ of the system. The issue here is to compute the normalization factor $Z$,
 as computing the integral over all the possible states of the system is virtually impossible.
 
-=== Definition
+== Definition
 
 #definition(title: [Metropolis-Hastings])[
   1. Choose an initial state $x_0$.
@@ -1832,7 +1925,7 @@ as computing the integral over all the possible states of the system is virtuall
 Note that in this case to sample from $P_B$ we don't need to know $Z$, as it cancels with the one
 from the other $P_B$.
 
-=== Properties
+== Properties
 
 The probability to accept a move with probability
 $
@@ -1850,7 +1943,7 @@ $
   W(x -> x') = q(x -> x') min(1, (P_B (x') q(x' -> x))/(P_B (x) q(x -> x')))
 $
 
-=== Convergence
+== Convergence
 
 The proposed Markov chain is irreducible and aperiodic, this means that the convergence theorem
 guarantees that it will converge to a stationary distribution $P_M$.
@@ -1878,7 +1971,7 @@ TODO: see photo of the board
 The issue here is that the convergence can be very slow. Moreover, if the temperature is very low we
 can easily get stuck in a local minima and not explore the whole distribution.
 
-=== Example: Ising model
+== Example: Ising model
 
 This is a simplified model for ferromagnetic material. There are $N$ atoms with a spin
 $S_i in {-1, 1}$ which are located on a $D$ dimensional grid, here we will consider $D = 2$.
@@ -1888,12 +1981,12 @@ $
   E(S) = -J sum_(angle(i, j)) S_i S_j
 $
 where in this case the sum goes through over all the pairs of $(i, j)$ which are neighbors on the
-grid (in $D = 2$ each atom has 3 neighbors). $J > 0$ is the strength of the ferromagnetic
+grid (in $D = 2$ each atom has 4 neighbors). $J > 0$ is the strength of the ferromagnetic
 interactions.
 
 To minimize energy we want all spins oriented in the same direction.
 
-==== Goal
+=== Goal
 
 Our goal is to compute the following quantities depending on the temperature $T$:
 $
@@ -1902,7 +1995,7 @@ $
 $
 the issue here is that we cannot compute the sum over all possible states $S$.
 
-==== The algorithm
+=== The algorithm
 
 The allowed moves are flipping a single spin: we select an atom at random and we accept to flip its
 spin with probability
@@ -1917,13 +2010,13 @@ In $D = 2$, $Delta E in { -8, -4, 0, 4, 8 }$. At low temperature we expect our s
 the global minima $E = -2 N$ (where the spins are all 1 or -1), while at high temperature we expect
 $angle(E) -> 0$ (as the Boltzmann distribution becomes a uniform distribution).
 
-=== Problems with Metropolis-Hastings algorithm
+== Problems with MH algorithm
 
 The classic MH algorithm has various drawbacks: while it works well with simple energy landscapes
 and far from critical point (like phase transitions), the algorithm is extremely slow near phase
 shifts and can fail to escape local minima.
 
-==== Wolff algorithm
+=== Wolff algorithm
 
 This is a variation of the classic MH algorithm which belongs to the class of cluster algorithms.
 
@@ -1936,7 +2029,7 @@ $
   (q(x -> x') A(x -> x')) / (q(x -> x') A(x -> x')) &= (1 - P_"add")^(m-n) (A(x-> x'))/(A(x' -> x))\
   & = exp(-beta(E(x') - E(x))) \
   & = exp(-2 beta(m - n)) \
-  ==> (A(x-> x'))/(A(x' -> x)) &= (e^(2 beta) (1 - P_"add"))^(n - m)
+  => (A(x-> x'))/(A(x' -> x)) &= (e^(2 beta) (1 - P_"add"))^(n - m)
 $
 where
 - $A(x -> x')$ is the acceptance probability for $x -> x'$.
@@ -1946,7 +2039,7 @@ where
 Therefore by choosing $P_"add" = 1 - e^(-2 beta)$ we get that we can choose $A = 1$ for all $x, x'$
 so that the cluster is always accepted.
 
-==== Varying temperature algorithms
+=== Varying temperature algorithms
 
 These are algorithms which help to escape local minima.
 
@@ -1966,7 +2059,7 @@ fixed temperature $T_n$. Each replica evolves independently using the standard M
 periodically after $M$ steps we swap the entire configuration of two replicas with adjacent
 temperature.
 
-=== Example: Edward-Anderson model
+== Example: Edward-Anderson model
 
 This is a model similar to the Ising model, however in this case the interactions between neighbours
 are random:

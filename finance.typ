@@ -268,12 +268,12 @@ This is some kind of insurance: "how much should I spend to ensure against $omeg
   A RNP is a probability measure $cal(Q)$ such that $cal(Q)(omega_k) = q_k > 0$ for all $k in K$ and
   $sum^K_(k=1) q_k = 1$. Moreover
   $
-    S_j(0) & = EE^(cal(Q)) [(S_j (i))/(1 + r)] \
-           & = sum^K_(k = 1) (q_k S_j (1) (w_k))/(1+r)
+    S_j (0) & = EE^(cal(Q)) [(S_j (1))/(1 + r)] \
+            & = sum^K_(k = 1) (q_k S_j (1) (w_k))/(1+r)
   $
   or equivalently
   $
-    EE^cal(Q) [(S_j (1) - S_j (0))/(S_j(0))] = r
+    EE^cal(Q) [(S_j (1) - S_j (0))/(S_j (0))] = r
   $<eq:exp-rnp>
 ]
 
@@ -285,7 +285,7 @@ investors are _not_ risk neutral, however, this will come in handy later.
 
 To summarize, we have:
 - $
-    m(omega_k) = (psi(omega_k))/cal(P)(omega_k)
+    m(omega_k) = (psi(omega_k))/(cal(P)(omega_k))
   $
 - $
     psi(omega_k) = (cal(Q)(omega_k))/(1+r)

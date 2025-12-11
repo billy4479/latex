@@ -136,6 +136,7 @@
             with pkgs;
             [
               mupdf-headless
+              pandoc
               nodePackages_latest.svgo
 
               typstyle

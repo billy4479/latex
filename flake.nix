@@ -34,6 +34,7 @@
         "gt-ps1"
         "gt-ps2"
         "gt-ps3"
+        "gt-ps4"
 
         "finance-chsh"
       ];

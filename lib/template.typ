@@ -152,6 +152,10 @@
     it
   }
 
+  set terms(
+    separator: "\n",
+  )
+
 
   if (toc) {
     outline()

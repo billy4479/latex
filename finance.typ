@@ -564,23 +564,34 @@ If $abs(Sigma) != 0$ then $x_1, ..., x_N$ are linearly independent, which in tur
 hold.
 Since LOP holds $exists$ LPF and $exists$ SDF.
 
-Note also that the second-moment matrix (or Gram matrix) $E[x x^T]$, where
-$E[x x^T]_(i j) = EE[x_i x_j]$, is also non singular.
+Let $A$ be the (random) vector space of traded payoffs: $A = angle(x_1, ..., x_n)$.
 
-As we know, the SDF $m^* = theta^* dot x in A$, which means that $theta^*$ is a valid strategy.
-We want to find this $theta^*$ from
-$
-  EE[(theta^* x) x_j] = S_j, wide j in 1, ..., N
-$
-or equivalently
-$
-                 & EE[(theta^*)^T (x x^T)] \
-               = & (theta^*)^T EE[x x^T] = S^T \
-  <==> theta^* = & EE^(-1)[x x^T] S \
-      <==> m^* = & S^T EE^(-1)[x x^T] x
-$
-where we know that we can invert $EE[x x^T]$ since it is non-singular.
-$S$ is the vector of all the prices $S = [S_1 (0), ..., S_N (0)]^T$.
+#proposition[
+  If LOP holds, there exists an SDF $m^* in A$ which can be written explicitly as
+  $
+    m^* = S^T (EE[x x^T])^(-1) x
+  $
+]
+#proof[
+  Since LOP holds, there exists an SDF $m$. Use an orthogonal decomposition to write
+  $m = m^* + epsilon$ where $m^* = "proj"[m | A] in A$ and $epsilon in A^perp$.
+  Then
+  $
+    S_j = EE[(m^* + epsilon) x_j] = EE[m^* x_j] + EE[epsilon x_j] = EE[m^* x_j]
+  $
+  since $epsilon perp x_j$, proving that $m^*$ is also an SDF.
+
+  Now, since $m^* in A$, there exists a strategy $theta^*$ such that $m^* = theta^* x$.
+  Since $m^*$ is an SDF we have $EE[(theta^* x) x_j] = S_j$. We get
+  $
+    &      & EE[(theta^*)^T (x x^T)] = & (theta^*)^T EE[x x^T] = S^T \
+    & <==> &                 theta^* = & S^T (EE[x x^T])^(-1) \
+    & <==> &                     m^* = & S^T (EE^[x x^T])^(-1) x
+  $
+
+  Note also that the second-moment matrix (or Gram matrix) $E[x x^T]$, where
+  $E[x x^T]_(i j) = EE[x_i x_j]$, is invertible since we are assuming that $abs(Sigma) != 0$.
+]
 
 ==== Definitions
 

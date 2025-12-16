@@ -293,128 +293,287 @@ $
 $
 where $"zc"(R)$ is such that $cov("zc"(R), R) = 0$.
 
-//
-//
-// == Exercise: Utility Maximization (One Period)
-// <exercise-type-utility-maximization-one-period>
-// #strong[Reasoning:] In a complete market, you can solve for the optimal
-// wealth $W_T$ that equates marginal utility to the state price density.
-//
-// - #strong[First Order Condition:] $u' \( W_T \) = lambda L / B_T$ (where
-//   $L$ is the Radon-Nikodym derivative $d bb(Q) \/ d bb(P)$).
-//
-// = Multiperiod & Derivative Pricing
-//
-// == Definitions
-// - #strong[Risk-Neutral Measure ($bb(Q)$):] A probability measure under
-//   which the discounted price process $S_t \/ \( 1 + r \)^t$ is a
-//   martingale (constant expected value).
-//
-// - #strong[Martingale Property:]
-//   $bb(E)^(bb(Q)) \[ S_(t + 1) divides cal(F)_t \] = S_t \( 1 + r \)$.
-//
-// - #strong[American Option:] A derivative that can be exercised at any
-//   time $t lt.eq T$. Its value is the maximum of the immediate payoff and
-//   the continuation value.
-//
-// - #strong[Barrier Option:] A path-dependent option. #emph[Knock-out]
-//   becomes worthless if the barrier is crossed; #emph[Knock-in] only
-//   becomes active if the barrier is crossed.
-//
-// - #strong[Running Maximum ($M_t$):] The maximum price observed up to
-//   time $t$: $M_t = max_(0 lt.eq s lt.eq t) S \( s \)$.
-//
-// == Pricing with Backward Induction
-// <exercise-type-pricing-with-trees-backward-induction>
-// #strong[Reasoning:] Calculate the \"risk-neutral\" probability $q$, then
-// work backward from maturity.
-//
-// + #strong[Step 1: Compute $q$ (Risk-Neutral Probability)]
-//   $ q = frac(\( 1 + r \) - d, u - d) $ Ensure $d < 1 + r < u$ for No
-//   Arbitrage.
-//
-// + #strong[Step 2: Backward Induction]
-//
-//   - #strong[At $T$:] Value = Payoff (e.g., $\( K - S_T \)^(+)$).
-//
-//   - #strong[At $t < T$:] Value = Discounted Expectation.
-//     $ V_t = frac(1, 1 + r) \[ q V_u + \( 1 - q \) V_d \] $
-//
-// + #strong[Step 3: Check for American Exercise]
-//
-//   - At each node, compare $V_t$ (Continuation Value) vs. Intrinsic Value
-//     (Payoff if exercised now).
-//
-//   - $"Price"_t = max \( upright("Payoff")_t \, upright("Continuation")_t \)$.
-//
-//
-// = Portfolio Optimization
-//
-// This section deals with finding optimal strategies over time to maximize
-// utility of terminal wealth or consumption.
-//
-// == Definitions
-//
-// - #strong[Value Function $F \( t \, w \)$:] The maximum expected utility
-//   achievable from time $t$ onwards, given current wealth $w$.
-//
-// - #strong[Bellman Principle (Dynamic Programming):] Breaks the problem
-//   into recursive steps:
-//   $
-//     F \( t \, w \) = max_alpha bb(E) \[ u \( dots.h \) + F \( t + 1 \, dots.h \) \]
-//   $
-//
-// - #strong[Martingale Method:] Solves the static problem of optimal
-//   terminal wealth first, then finds the replicating strategy.
-//
-// - #strong[State Price Density ($L$):] The ratio of risk-neutral to real
-//   probabilities:
-//   $ L = frac(d bb(Q), d bb(P)) = (q / p)^(N_u) (frac(1 - q, 1 - p))^(N_d) $
-//
-// == Optimal Portfolio Weight in Binomial Model
-//
-// #strong[Reasoning:] Determining the constant fraction of wealth invested
-// in the risky asset ($S$) to maximize power/log utility.
-//
-// - #strong[Log Utility ($gamma = 1$):]
-//   $ x^(*) = frac(R, u - d) frac(p - q, q \( 1 - q \)) $ Where
-//   $R = 1 + r$. Condition for $x^(*) > 0$: $p > q$.
-//
-// - #strong[Power Utility ($gamma eq.not 1$):]
-//   $ x^(*) = frac(R \( 1 - A \), A \( u - R \) + R - d) $ Where
-//   $A = (frac(q, 1 - q) frac(1 - p, p))^(1 \/ gamma)$. Note: The weight
-//   $x^(*)$ is constant over time and independent of wealth.
-//
-// == Optimal Terminal Wealth
-//
-// #strong[Reasoning:] Finding the optimal wealth profile $V^(*)$ directly
-// using the state price density $L$.
-//
-// - #strong[General Condition:]
-//   $
-//     u' \( V^(*) \) = lambda frac(L, B \( T \)) arrow.r.double.long V^(*) = \( u' \)^(- 1) (lambda frac(L, B \( T \)))
-//   $
-//
-// - #strong[Log Utility Result:] $ V^(*) = w frac(B \( T \), L) $
-//
-// - #strong[Power Utility Result:]
-//   $
-//     V^(*) = w \( 1 + r \)^T (p / q)^(N \( T \)) (frac(1 - p, 1 - q))^(T - N \( T \))
-//   $
-//   Where $N \( T \)$ is the number of \"up\" moves.
-//
-// == Optimal Consumption
-//
-// #strong[Reasoning:] Balancing intermediate consumption $c \( t \)$ and
-// terminal wealth $W \( T \)$.
-//
-// - #strong[First Order Conditions:]
-//
-//   - For consumption at $t$:
-//     $u'_"intermediate" \( c \( t \) \) = lambda beta^(- t) frac(L \( t \), B \( t \))$.
-//
-//   - For terminal wealth:
-//     $u'_"terminal" \( W \( T \) \) = lambda beta^(- T) frac(L \( T \), B \( T \))$.
-//
-// - This implies the ratio of marginal utilities equals the ratio of state
-//   prices (discounted).
+
+#pagebreak()
+
+= Multiperiod
+
+== Definitions
+
+/ Notation: We denote the set of "layer" as $cal(P)_t$, this is the set of all possible scenario
+  (node) $f^t_k$ which can realize at time $t$. Conditioning on $cal(P)_t$ means we know which state
+  we are in at time $t$.
+
+/ Martingale Property: The expected value of the next observation is equal to the (discounted
+  previous value.
+
+/ Risk-Neutral Measure ($bb(Q)$): A probability measure under which the discounted price process is
+  a martingale
+  $
+    S_j (t) = EE^QQ [(S_j (t + 1))/(1 + r(t)) mid(|) cal(P)_t]
+  $
+
+/ Self-financing:
+  A strategy $theta$ is self financing if
+  $
+    V_theta (t + 1) = theta_0 (t) B(t + 1) + theta_1 (t) S_1 (t + 1)
+  $
+
+/ American Option: A derivative that can be exercised at any
+  time $t lt.eq T$. Its value is the maximum of the immediate payoff and
+  the continuation value.
+
+/ Barrier Option: A path-dependent option. _Knock-out_ becomes worthless if the barrier is crossed;
+  _Knock-in_ only becomes active if the barrier is crossed.
+
+/ Running Maximum ($M_T$): The maximum price observed up to time $T$:
+  $ M_T = max_(0 lt.eq t lt.eq T) S (t) $
+
+== Binomial model
+
+There are just two assets: a riskless security $B$ with rate $r$ and a risky asset $S$.
+
+/ Values of $S$:
+  $
+    S(t + 1) = cases(
+      S(t) u wide & "with probability" p,
+      S(t) d wide & "with probability" 1-p,
+    )
+  $
+  Therefore
+  $
+    prob (S(t) = S u^k d^(t - k)) = binom(t, k) p^k (1 - p)^(t - k)
+  $
+
+/ No Arbitrage: We need $d < 1 + r < u$, otherwise we have an arbitrage opportunity.
+/ Completeness: Same as NA.
+
+/ Risk neutral probabilities:
+  $
+    QQ (S(t + 1) = S(t) u) = q = (1 + r - d) / u - d
+  $
+  then
+  $
+    QQ(S(t) = S u^k d^(t - k)) = binom(t, k) q^k (1 - q)^(t - k)
+  $
+
+== Computing $QQ$
+
+/ General case: For each node solve the system
+  $
+    cases(
+      display(S(t) = 1/(1+r) sum_k S(omega_k) QQ(omega_k)),
+      display(sum_k QQ(omega_k) = 1)
+    )
+  $
+  Then we can find the probability of a certain path by multiplying the probability at each node
+  $QQ("path") = q_(t = 1) dot.op q_(t = 2) dot.op ...$.
+
+/ Binomial model:
+  $
+    q = ((1 + r) - d)/(u - d)
+  $
+  Then, letting $k$ be the number of "up" movements,
+  $
+    QQ(omega) = q^k (1 - q)^(T-k)
+  $
+
+== Market properties
+
+/ Arbitrage free: If $exists QQ$, then the market is arbitrage free.
+
+  If there is an arbitrage opportunity then there exists at least one one-period submarket with an
+  arbitrage opportunity in it. Find it by checking in which one $QQ$ would be negative and then use
+  the same techniques as in the one-period case to find an explicit arbitrage opportunity.
+
+  In binomial models we have an arbitrage if $1 + r < d$ or $1 + r > u$.
+
+/ Completeness: If $QQ$ is unique then the market is complete. We can also check that each submarket
+  is complete.
+
+== Pricing European option
+
+Note that $c(t) = V(t) / (1 + r)$.
+
+/ Risk neutral valuation:
+  + Compute $q$.
+  + Compute the terminal payoff $c(T)$ for each $omega$.
+  + Starting from $t = T - 1$ compute
+  $
+    c(t) = 1/(1 + r) EE^QQ [c_omega (t + 1) | cal(P)_t]
+  $
+
+/ Replication:
+  We look for a portfolio $theta^*$ which perfectly replicates the derivative.
+
+  Starting at $t = T$, we recourse backwards and at each $f^t_k$ we solve the
+  following linear system for the vector $theta(t - 1) (f_k^(t - 1))$
+  $
+    cal(A)(t - 1) (f^(t - 1)_k) dot.op theta(t - 1)(f_k^(t - 1)) = V_theta (t)
+  $
+  imposing $V_theta (T) = V_X (T)$, where $cal(A)(t - 1) (f^(t - 1)_k)$ is the cashflow matrix at
+  time $t-1$ in node $f^(t - 1)_k$.
+
+  In the case of the binomial model we have
+  $
+    mat(
+      delim: "[",
+      (1 + r)^t, S(t - 1)(f^(t - 1)_k) u;
+      (1 + r)^t, S(t - 1)(f^(t - 1)_k) d;
+    )
+    vec(delim: "[", theta_0 (t - 1) (f_k^(t - 1)), theta_1 (t - 1) (f_k^(t - 1)))
+    = V_theta (t)
+  $
+
+/ Hedging: In a market with one riskless and one risky security we have
+  $
+        V_X (t) & = EE^QQ [tilde(V)_X (t + 1) mid(|) cal(P)_t] \
+    theta_1 (t) & = (cov^QQ [tilde(V)_X (t + 1), Delta tilde(S)_1 (t) mid(|) cal(P)_t])/(var^QQ
+                  [Delta tilde(S)_1 (t) | cal(P)_t]) \
+    theta_0 (t) & = tilde(V)_X (t) - theta_1 (t) tilde(S)_1 (t)
+  $
+  where
+  $
+    tilde(V)_X (t) = (V_X (t)) / (B(t)), wide
+    tilde(S)_1 (t) = (S_1 (t)) / (B(t)), wide
+    Delta tilde(S)_1 (t) = (S_1 (t + 1)) / B(t + 1) - (S_1 (t)) / B(t)
+  $
+
+  In the binomial model
+  $
+    theta_1 (t) = (V_X (t + 1 | S(t + 1) = S_t u) - V_X (t + 1 | S(t + 1) = S_t d)) / (S_t (u - d))
+  $
+
+== Pricing American option
+
+$
+  tilde(V) (t) = sup_(t <= tau <= T) EE^QQ [X(tau)/B(tau) mid(|) cal(P)_t]
+$
+
+The optimal $tau$ is
+$
+  tau^* (omega) = min {t | tilde(V) (t) (omega) = tilde(X) (t) (omega)}
+$
+therefore we exercise the option as soon as the value of the option is equal to the underlying
+payoff.
+
+$
+  tilde(V) (t) = max {tilde(X)(t), #h(0.75em) EE^QQ [tilde(V)(t + 1) | cal(P)_t]}
+$
+
+/ Continuation value:
+  This is the value the holder gains if they decide to wait until $t + 1$.
+  $
+    "CV"(t) = B(t) dot.op EE^QQ [tilde(V) (t + 1) | cal(P)_t]
+  $
+
+/ Hedging:
+  Let $C(t)$ be the cumulative consumption in the interval $[0, t)$. The writer wants to find the
+  super-replicating portfolio-consumption pair $Phi$ with minimal cost. (We introduce the
+  consumption since the Early Exercise Premium decreases with time). We get that
+  $tilde(V)_(Phi^*) (t) = tilde(V)(t)$.
+
+  $
+    tilde(V) (t) & = max{tilde(X)(t), #h(0.75em) EE^QQ [tilde(V)_X (t + 1) mid(|) cal(P)_t]} \
+    theta_1^* (t) & = (cov^QQ [tilde(V) (t + 1), Delta tilde(S)_1 (t) mid(|) cal(P)_t])/(var^QQ
+    [Delta tilde(S)_1 (t) | cal(P)_t]) \
+    theta_0^* (t) & = tilde(V)_X (t) - theta_1^* (t) tilde(S)_1 (t) \
+    Delta tilde(C)^* (t) & = - EE^QQ [Delta tilde(V) (t) | cal(P)_t]
+  $
+
+  If (and only if) the holder does not exercise the option optimally, the writer can consume $Delta
+  tilde(C)^* (t)$ by selling some $B$.
+
+
+= Portfolio Optimization
+
+This section deals with finding optimal strategies over time to maximize
+utility of terminal wealth or consumption.
+
+== Definitions
+
+/ Relative portfolio weights: $alpha_i (t)$ is the fraction of $w$ invested in asset $i$ at time
+  $t$.
+
+/ Value Function $F (t, w)$: The maximum expected utility achievable from time $t$ onwards, given
+  current wealth $w$.
+  $
+    F (t, w) = max_alpha EE [ sum^T_(s = t) u(V(s), alpha(s)) mid(|) V(t) = w ]
+  $
+
+/ State Price Density ($L$): Density of one probability compared to the other.
+  $
+    EE^QQ [X] = sum X(omega_k) QQ(omega_k)/PP(omega_k) PP(omega_K) = EE^PP [X dot.op L]
+  $
+  In the binomial model we have
+  $
+    L = dv(QQ, PP) = (q / p)^(N_u) ((1 - q) /(1 - p))^(N_d)
+  $
+
+
+== Optimal Portfolio Weight in Binomial Model
+
+We want to solve
+$
+  max_alpha EE[sum^T_(t = 1) u(V(t), alpha(t))]
+$
+
+Determining the constant fraction of wealth invested in the risky asset ($S$) to maximize power/log
+utility.
+$
+  u(w) = cases(
+    display((w^(1 - gamma) - 1) / (1 - gamma)) wide & gamma != 1,
+    ln w wide & gamma = 1
+  )
+$
+where $gamma$ represents risk aversion.
+
+/ Backwards recursion:
+  Set $F(T, w) = u(w)$, then recourse backwards
+  $
+    F(t, w) = max_(alpha(t)) ( u(w, alpha(t)) + EE[F(t + 1, V(t + 1)) | V(t) = w])
+  $
+  where
+  $
+    V (t + 1) = V(t) (alpha_0 (t) (1 + r(t)) + sum^N_(i = 0) alpha_i (t) xi_i (t + 1))
+  $
+
+/ Log Utility ($gamma = 1$):
+  $
+    x_t^* = frac(R, u - d) frac(p - q, q \( 1 - q \))
+    wide "with" R = 1 + r, thick forall t
+  $
+  Therefore $x^* > 0 <==> p > q$.
+
+  $
+    V_theta (1) = (1 - x_1^*) R + x^*_1 xi_1 \
+    (V_theta (2)) / (V_theta (1)) = (1 - x^*) R + x_1^* xi_2
+  $
+
+/ Power Utility ($gamma eq.not 1$):
+  $
+    x^(*) = frac(R \( 1 - A \), A \( u - R \) + R - d)
+    wide "with" A = (frac(q, 1 - q) frac(1 - p, p))^(1 \/ gamma)
+  $
+  Note: The weight $x^(*)$ is constant over time and independent of wealth.
+
+== Martingale method
+
+Finding the optimal wealth profile $V^(*)$ directly using the state price density $L$.
+
+/ General Condition:
+  $
+    u' (V^*) = lambda L/B(T) ==> V^* = (u')^(-1) (lambda L/B(T))
+  $
+
+/ Log Utility:
+  $
+    V^(*) = w B(T)/L
+  $
+
+/ Power Utility:
+  $
+    V^* = w/H (L/B(T))^(-1/gamma) wide "with" H = EE[(L/B(T))^((gamma - 1)/gamma)]
+  $
+
+

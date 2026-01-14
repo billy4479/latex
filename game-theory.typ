@@ -1802,3 +1802,42 @@ $
   )
 $
 
+== Welfare maximising mechanism design
+
+We want to implement an alternative $a in A$ such that the utility of all agents $i in I$ with
+private type $theta_i in Theta_i$ is maximized.
+
+In this chapter we will focus on dominant-strategy incentive compatible mechanisms.
+By the revelation principle we know that
+$
+  u_i (q(theta_i, theta_(-i)), theta_i) - t_i (theta_i, theta_(-i)) >=
+  u_i (q(theta'_i, theta_(-i)), theta_i) - t_i (theta'_i, theta_(-i))
+$
+
+We say that a decision rule $q^*$ is efficient if, for any allocation $a in A$ and for any
+$theta in Theta$, we have
+$
+  sum_(i in I) u_i (q^* (theta), theta_i) >= sum_(i in I) u_i (a, theta_i)
+$
+
+We define the class of VCG mechanisms as those which are efficient and where
+$
+  t_i (theta) = - sum_(j != i) u_j (q(theta), theta_j) + tau_i (theta_(-i))
+$
+where $tau_i : Theta_(-i) -> RR$ for all $i in I$.
+
+#theorem[
+  VCG mechanisms are dominant-strategy incentive compatible.
+]
+
+#proof[
+  The utility of each agent is given by
+  $
+    U_i (theta) & = u_i (q(theta), theta_i) + sum_(j != i) u_j (q(theta), theta_j) - tau_i
+                  (theta_(-i)) \
+                & = sum_(j in I) u_j (q(theta), theta_j) - tau_i (theta_(-i))
+  $
+  Since $tau_i$ is independent of $theta_i$, each agent $i$ just needs to maximize the sum. However
+  the sum represents the social utility. Since $q$, by definition of VCG mechanism, is an efficient
+  allocation, no agent has an incentive to misrepresent their type.
+]

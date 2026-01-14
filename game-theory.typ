@@ -1,4 +1,4 @@
-#import "lib/template.typ": template
+#import "lib/template.typ": *
 #import "lib/utils.typ": *
 #import "lib/theorem.typ": *
 #show: template.with(
@@ -1118,7 +1118,7 @@ Moreover we assume that $prefer_i$ is complete and transitive for all $i in cal(
     x prefer_i y <==> x prefer'_i y wide forall i in cal(N)
   $
 
-  Then $Phi$ is IIA if and only if $x prefer_Phi y$.
+  Then $Phi$ is IIA if $x prefer_Phi y <==> x prefer'_Phi y$.
 ]
 The idea is that if all citizens prefer $x$ over $y$, then the addition of other elements $z in X$
 should not influence the fact that $x$ is preferred to $y$.
@@ -1513,92 +1513,99 @@ $
 Therefore, in order to maximize my profits as a seller I need to satisfy some constraints:
 $
   cases(
-    delim: #none,
-    display(
-      cases(
-        theta_H q_H - p_H >= theta_H q_L - p_L wide & "IC-H",
-        theta_L q_L - p_L >= theta_L q_H - p_H wide & "IC-L"
-      )
-    ) wide & "incentive constraint (IC)",
-    display(
-      cases(
-        theta_H q_H - p_H >= 0 wide & "PC-H",
-        theta_L q_L - p_L >= 0 wide & "PC-L",
-      )
-    ) wide & "participating constraint (PC)\nor individual rationality (IR)"
+    theta_H q_H - p_H & #h(1em)>= & #h(1em) theta_H q_L - p_L wide & "IC-H",
+    theta_L q_L - p_L & #h(1em)>= & #h(1em) theta_L q_H - p_H wide & "IC-L",
+    theta_H q_H - p_H & #h(1em)>= & #h(1em) 0 wide & "IR-H",
+    theta_L q_L - p_L & #h(1em)>= & #h(1em) 0 wide & "IR-L",
   )
 $
+Where IC-H and IC-L are the *incentive constraints*, i.e. we want that the option the seller
+prepared for a certain type of customer is actually more appealing to that type of customer than the
+alternative; IR-H and IR-L represent *individual rationality*, i.e. buyers should still get a
+non-negative utility from buying coffee.
 
-But not all these constrains are necessary:
-- IC-H and PC-L imply PC-H.
-  #proof[
-    $
-      theta_H q_H - p_H >=^"(IC-H)" theta_H q_L p_L >^(theta_H > theta_L) theta_L q_L - p_L >=^"(PC-L)" 0
-    $
-  ]
-- IC-H and IC-L imply $q_H > q_L$.
-  #proof[
-    Sum IC-H and IC-L and simplify to get
-    $
-      underbrace((theta_H + theta_L), >0) (q_L - q_H) >= 0 \
-      ==> q_H >= q_L
-    $
-  ]
-- PC-L must hold with equality at optimum.
-  #proof[
-    Consider $theta_L q_L - p_L > 0$, we argue that we can increase the $p_L$ by $epsilon > 0$.
-    We need to make sure that IC-L still holds: to do so we also increase $p_H$ by $epsilon$.
+But not all these constrains are necessary.
+#lemma[
+  IC-H and IR-L imply IR-H.
+]
+#proof[
+  $
+    theta_H q_H - p_H >=^"(IC-H)" theta_H q_L p_L >^(theta_H > theta_L) theta_L q_L - p_L >=^"(IR-L)" 0
+  $
+]
 
-    PC-L holds and we can find $epsilon$ by hypothesis and IC-L also holds since $epsilon$ cancels
-    out on the two sides. The same reasoning applies for IC-H, while PC-H...TODO
-  ]
-- IC-H must hold with equality at optimum.
-  #proof[
-    Consider $theta_H q_H p_H > theta_H q_L - p_L$, we argue that we can increase $p_H$ by
-    $epsilon > 0$.
+#lemma[
+  IC-H and IC-L imply $q_H > q_L$.
+]
+#proof[
+  Sum IC-H and IC-L and simplify to get
+  $
+    underbrace((theta_H + theta_L), >0) (q_L - q_H) >= 0 \
+    ==> q_H >= q_L
+  $
+]
 
-    $exists epsilon$ since IC-H is still satisfied, PC-L is unaffected and IC-L is still satisfied
-    as choosing $(q_H, p_H)$ as $theta_L$ is even less appealing.
-  ]
+#lemma[
+  IR-L must hold with equality at optimum.
+]
+#proof[
+  By hypothesis we can find $epsilon > 0$ such that we can increase $p_L$ by $epsilon$ and IR-L
+  still holds.
 
-- IC-H holding with equality and $q_H >= q_L$ together imply IC-L
-  #proof[
-    Write IC-H as
-    $
-      p_H - p_L = theta_H (q_H - q_L)
-    $
-    and IC-L as
-    $
-      p_H - p_L >= theta_L (q_H - q_L)
-    $
+  We also increase $p_H$ by $epsilon$ so that $epsilon$ cancels and we are sure that IC-L and IC-R
+  still holds.
+  IR-H holds since it is implied by IC-H and IR-L.
+]
+#lemma[
+  IC-H must hold with equality at optimum.
+]
+#proof[
+  Consider $theta_H q_H p_H > theta_H q_L - p_L$, we argue that we can increase $p_H$ by
+  $epsilon > 0$.
 
-    This means that
-    $
-      theta_H (q_H - q_L) >= theta_L (q_H - q_L)
-    $
-    since $q_H >= q_L$ we get that $theta_H >= theta_L$ which is indeed true.
+  $exists epsilon$ since IC-H is still satisfied, IR-L is unaffected and IC-L is still satisfied
+  as choosing $(q_H, p_H)$ as $theta_L$ is even less appealing.
+]
 
-    Since all these steps are "if and only if" we conclude that IC-L holds.
-  ]
+#lemma[
+  IC-H holding with equality and $q_H >= q_L$ together imply IC-L.
+]
 
-We conclude that we just need PC-L and IC-H both with equality and $q_H >= q_L$.
-$
-  cases(
-    theta_L q_L - p_L = 0,
-    theta_H q_H - p_H = theta_H q_L - p_L,
-    q_H >= q_L
-  )
-$
-therefore
-$
-  cases(
-    p_L = theta_L q_L,
-    p_H = theta_H q_H - (theta_H - theta_L) q_L
-  )
-$
-where the discount we apply to $theta_H$ is called "discount information rent", which is applied
-because the seller doesn't know the true type of the buyer, therefore the seller needs to give a
-discount in order for the buyer to reveal their true type.
+#proof[
+  Write IC-H as
+  $
+    p_H - p_L = theta_H (q_H - q_L)
+  $
+  and IC-L as
+  $
+    p_H - p_L >= theta_L (q_H - q_L)
+  $
+
+  This means that
+  $
+    theta_H (q_H - q_L) >= theta_L (q_H - q_L)
+  $
+  since $q_H >= q_L$ we get that $theta_H >= theta_L$ which is indeed true.
+
+  Since all these steps are "if and only if" we conclude that IC-L holds.
+]
+
+#proposition[
+  The constraints reduce to
+  $
+    cases(
+      p_L = theta_L q_L,
+      p_H = theta_H q_H - (theta_H - theta_L) q_L
+      q_H >= q_L
+    )
+  $
+]
+#proof[
+  Immediate from the lemmas above.
+]
+
+In the new solution we apply a "discount information rent" to $theta_H$, this is needed as an
+incentive for $theta_H$ to reveal their true type.
 
 The seller therefore needs to solve
 $
@@ -1613,6 +1620,7 @@ $
     q_L^* = theta_L - mu/(1-mu) (theta_H - theta_L)
   )
 $
+where $mu$ is the weight of $theta_H$ compared to $theta_L$.
 
 == General definition
 
@@ -1627,10 +1635,170 @@ We put the following assumptions:
 - The space of types is one-dimensional and convex:
   $Theta_i = [overline(theta), underline(theta)] subset.eq RR$.
 
+=== Bayesian equilibrium mechanism design
+
 For now we assume that players are smart enough to play according to Bayesian equilibrium.
 
 #lemma(title: [Revelation principle])[
-  Any mechanism can be reduced to a mechanism where the only action of each player is reveal a type
-  (players can lie), however the mechanism designer should make sure that the players report their
-  type truthfully.
+  Given a mechanism $Gamma$ and $sigma$ a BNE strategy in $Gamma$, there exists another mechanism
+  $Gamma'$ where $A_i = Theta$ for all $i in I$ which has a BNE strategy $sigma'$ such that the
+  equilibrium outcome of $sigma$ under $Gamma$ and $sigma'$ under $Gamma'$ coincide.
+
+  Then, $sigma'_i (theta_i) = theta_i$ for all $theta_i in Theta_i$ and for all $i in I$.
 ]
+
+This means that the designer can optimize just between direct games, i.e. the ones where players are
+just asked to reveal a type. This lemma tells us that if we had a BNE in the original mechanism,
+players will reveal their true type.
+
+#definition(title: [Bayesian incentive compatibility])[
+  A mechanism is Bayesian incentive compatible if $forall i in I$ and $forall theta_i in Theta_i$ we
+  have
+  $
+    sigma_i (theta_i) in argmax_(tilde(sigma)_i) EE[v_i (q (a_i, a_(-i)); theta_i) - t_i (a_i, a_(-i)
+      | theta_i, tilde(sigma)_i, sigma_(-i)]
+  $
+]
+
+This means that for any agent $i$ of type $theta_i$, given that all other agents choose strategies
+$sigma_(-i)$, it is optimal for $i$ to choose $sigma_i (theta_i)$.
+This is equivalent to saying that the players play according to a Bayesian equilibrium in the game
+induced by the mechanism.
+
+We will now prove sufficient and necessary conditions for a mechanism to respect Bayesian incentive
+compatibility as in the definition above. Assuming types are IIDs, let $F(theta_i)$ denote the cdf
+of the distribution of types $forall i in I$.
+We further simplify agents' preferences and assume they are linear in
+$theta_i$: $v_i (q; theta_i) = theta_i v(q)$, where $v(q)$ is increasing and weakly concave.
+
+Let $V_i (theta'_i) = theta_i EE[(q_i (theta'_i, theta_(-i))]$ (note that $v(q) = q$) and
+$T_i (theta'_i) = EE[t_i (theta'_i, theta_(-i)]$, where expectations are taken over the types of
+other agents.
+
+
+#theorem[
+  A direct mechanism $Gamma = (q, (t_i)_(i in I))$ is incentive compatible if and only if for all
+  $i in I$:
+  - $V_i (theta_i)$ is increasing
+  - $forall theta_i in [underline(theta), macron(theta)]$ we have
+    $
+      T_i (theta_i) = T_i (underline(theta)) + (theta_i V_i (theta_i)
+      - underline(theta) V_i (underline(theta)) - integral_(underline(theta))^(theta_i) V_i (x) dd(x)
+    $
+]
+
+#proof[
+  TODO
+]
+
+=== Dominant-strategy mechanism design
+
+If instead we assume that players are too stupid to play BNEs we get dominant-strategy mechanism
+design, where we only assume that players play weakly dominant strategies.
+
+Turns out that the revelation principle also holds for dominant strategies, therefore the
+dominant-strategy incentive compatibility states that each players should play rational strategies.
+
+== Revenue maximizing mechanism design
+
+Here we want to maximize the profit from selling a certain product.
+
+=== Monopoly screening
+
+Consider a single buyer with two possible types, and a seller who has a cost of $C(q) = c q$ with
+$c > 0$.
+Let the utility that a buyer gets be $theta v(q) - t$ where $t$ is the price for $q$ units. We can
+interpret $theta v(q)$ as the "willingness to buy".
+
+Let $v(0) = 0$, $v'(q) > 0$, $v''(q) < 0$ for all $q$. Let $macron(theta) v'(0) > c$ and
+$lim_(q -> oo) macron(theta) v'(q) < c$ so that some buyer will buy something but no one will buy an
+infinite quantity.
+
+From the theorem above we get that
+$
+  t(theta) = t(underline(theta)) + (theta v(q(theta)) - underline(theta) v(q(underline(theta)))
+  - integral_(underline(theta))^theta v(q(theta)) dd(x)
+$
+imposing $t(underline(theta)) = underline(theta) v(q(underline(theta)))$ (participation constraint
+is satisfied with equality for the lowest type) we get
+$
+  t(theta) = theta v(q(theta)) - underbracket(
+    integral_(underline(theta))^theta v(q(theta)) dd(x),
+    "information rent"
+  )
+$
+
+We can take the expectation over the distribution of $theta$ to get the expected profit
+$
+  EE[pi(theta)] & = integral_(underline(theta))^macron(theta) (theta v(q(theta)) -
+    integral_(underline(theta))^theta v(q(theta)) dd(x) - c q(theta)) f(theta) dd(theta) \
+  & = integral_underline(theta)^macron(theta) underbracket(
+    (v(q(theta))(theta - (1- F(theta))/f(theta)) - c
+      q(theta)), "virtual surplus"
+  ) f(theta) dd(theta)
+$
+where we have done some Fubini magic. This is the seller's profit, the objective they maximize:
+$
+  max_(q(dot)) EE[pi(theta)] \
+  "s.t." q(theta) "is increasing"
+$
+
+To solve this problem we first ignore the constraint on $q$, then we check if the $q$ we found is
+increasing. If it is we are done, otherwise we cry.
+
+We can find $q$ by maximizing the integral pointwise, i.e. for each $theta$. We compute the
+derivative of the integrand and we get:
+$
+  v'(q(theta)) (theta - (1-F(theta))/f(theta)) - c
+$
+We have the following cases:
+- If $theta - (1- F(theta))/f(theta) < 0$ the expression is always negative, therefore we set
+  $q(theta) = 0$.
+- Else, if $v'(0) (theta - (1-F(theta))/f(theta)) - c <= 0$ we also set $q(theta) = 0$ as the
+  derivative is negative.
+- Else, it means that there exists a strictly positive quantity which solves
+  $
+    v'(q(theta)) (theta - (1-F(theta))/f(theta)) = c
+  $
+
+Therefore, the optimal allocation is
+$
+  q^* (theta) = cases(
+    0 wide & "if" display(v'(q(theta)) (theta - (1-F(theta))/f(theta)) - c < 0),
+    display({q : v'(q) (theta - (1-F(theta))/f(theta)) = c}) wide & "otherwise"
+  )
+$
+
+Moreover, a sufficient condition for $q$ to be increasing is that the hazard rate
+$f(theta)/(1-F(theta))$ is increasing.
+
+=== Auctions
+
+Consider now a setting where multiple buyers with type
+$theta_i in [underline(theta), macron(theta)]$ compete for a single item. Here the allocation rule
+$q_i (theta)$ is the probability that the buyer $i$ gets the item.
+
+From the buyer prospective, the expected probability of getting the item is
+$
+  Q_i (theta) = integral_(Theta_(-i)) q_i (theta, theta_(-i)) f(theta_(-i)) dd(theta_(-i))
+$
+Let $T_i (theta)$ be the expected transfer for buyer $i$, therefore the buyer expected utility is
+$U_i (theta_i) = theta_i Q_i (theta_i) - T_i (theta_i)$.
+
+The seller's revenue is
+$
+  sum_(i in I) (integral_(Theta_i) q_i (theta_i) (theta_i - (1-F(theta_i))/f(theta_i)) f(theta) dd(theta))
+$
+
+As before the virtual surplus is
+$
+  psi_i (theta_i) = theta_i - (1 - F(theta_i))/(f(theta_i))
+$
+therefore the optimal allocation rule is
+$
+  q^*_i (theta) = cases(
+    1 wide & "if" i = argmax_(i in I) psi_i (theta_i) "and" psi_i (theta_i) > 0,
+    0 wide & "otherwise"
+  )
+$
+

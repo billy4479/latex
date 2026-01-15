@@ -1640,11 +1640,35 @@ We put the following assumptions:
 For now we assume that players are smart enough to play according to Bayesian equilibrium.
 
 #lemma(title: [Revelation principle])[
-  Given a mechanism $Gamma$ and $sigma$ a BNE strategy in $Gamma$, there exists another mechanism
+  Given a mechanism $Gamma$ and $sigma^*$ a BNE strategy in $Gamma$, there exists another mechanism
   $Gamma'$ where $A_i = Theta$ for all $i in I$ which has a BNE strategy $sigma'$ such that the
-  equilibrium outcome of $sigma$ under $Gamma$ and $sigma'$ under $Gamma'$ coincide.
+  equilibrium outcome of $sigma^*$ under $Gamma$ and $sigma'$ under $Gamma'$ coincide.
 
   Then, $sigma'_i (theta_i) = theta_i$ for all $theta_i in Theta_i$ and for all $i in I$.
+]
+
+#proof[
+  Construct $Gamma'$ where $A'_i = Theta_i$ such that $sigma'_i (theta_i) = theta_i$ is a BNE with
+  the same outcome as $Gamma$ for the same type profile $theta$.
+
+  Let $q'(theta) = q(sigma^*(theta))$ and $t'_i(theta) = q(sigma^*(theta))$. This means that the
+  allocation rule and transfers in $Gamma'$ are the same ones which would be obtained in $Gamma$ if
+  players play $sigma^*$.
+
+  By contradiction, suppose that $sigma'$ is not a BNE of $Gamma'$. Then there must exist a player
+  $i in I$ and types $theta'_i, theta''_i in Theta_i$ such that
+  $
+    & EE[v_i (q'(theta'_i, theta_(-i)), theta'_i) - t'_i (theta'_i, theta_(-i)) | theta'_i ] \
+    <= & EE[v_i (q'(theta''_i, theta_(-i)), theta'_i) - t'_i (theta''_i, theta_(-i)) | theta'_i ]
+  $
+  but this means that
+  $
+       & EE[v_i (q(sigma^*_i (theta'_i)), sigma^*_(-i) (theta_(-i))), theta'_i))
+         - t_i (sigma^*_i (theta'_i), sigma^*_(-i) (theta_(-i))) | theta'_i ] \
+    <= & EE[v_i (q(sigma^*_i (theta''_i), sigma^*_(-i) (theta_(-i)), theta'_i)))
+         - t_i (sigma^*_i (theta''_i), sigma^*_(-i) (theta_(-i))) | theta'_i ]
+  $
+  which contradicts the fact that $sigma^*$ is a BNE.
 ]
 
 This means that the designer can optimize just between direct games, i.e. the ones where players are

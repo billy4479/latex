@@ -39,6 +39,7 @@
         "finance-chsh"
 
         "information-theory-evolutionary-models"
+        "neuroscience"
       ];
 
     in

@@ -37,6 +37,8 @@
         "gt-ps4"
 
         "finance-chsh"
+
+        "information-theory-evolutionary-models"
       ];
 
     in

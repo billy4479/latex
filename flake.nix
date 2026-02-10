@@ -40,6 +40,7 @@
 
         "information-theory-evolutionary-models"
         "neuroscience"
+        "quantum-physics"
         "ml-ai"
         "theoretical-cs"
       ];

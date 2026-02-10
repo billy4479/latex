@@ -40,6 +40,7 @@
 
         "information-theory-evolutionary-models"
         "neuroscience"
+        "theoretical-cs"
       ];
 
     in

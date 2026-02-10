@@ -167,14 +167,50 @@ $
 But $tilde(f)(k + (2 pi N)/L) = tilde(f)(k)$, therefore we can compute $tilde(f)(k)$ for
 $k in [0, (2 pi N)/L]$. Let $k = (2 pi p)/L$ and $tilde(f)_p = tilde(f)_p ((2 pi p)/L)$.
 
+Then (substitute $k = (2 pi p)/L$)
+$
+  tilde(f)_p = exp(-i k a)/sqrt(2 pi) L/n
+  underbracket(sum^(N - 1)_(n = 0) f_n exp(- i (2 pi p n)/N), S_p)
+$
+but this is $bigO(N^2)$ to compute.
+
+The trick is to group the terms of the sum $S_p$ in a smart way.
+Assuming $N$ is even, let
+$
+  E_p & = sum^(N/2 - 1)_(n = 0) f_(2n) exp (-i (2 pi p)/N 2n) \
+  O_p & = sum^(N/2 - 1)_(n = 0) f_(2n + 1) exp (-i (2 pi p)/N (2n + 1))
+$
+and let $p = N/2 dot.op p'$ for $p' in {0, 1, ..., N/2-1}$.
 Then
 $
-  tilde(f)_p = exp(-i k a)/sqrt(2 pi) L/n sum^(N - 1)_(n = 0) f_n exp(- i (2 pi p n)/N)
+  S_(N/2 + p') = E_p - exp(-i (2 pi)/N p') O_p
 $
-but this is $O(N^2)$.
-
-TODO: complete FFT
+therefore by computing the even and odd part of the sum for $N/2$ point we can reuse the sum terms
+for the second half. This can be done recursively, subdividing $E_p$ and $O_p$ again and again,
+giving us a final complexity of $bigO(n log n)$.
 
 === Convolutions
 
+Recall that given two functions $g, h$ their convolution $f$ is defined as
+$
+  f(x) = (g star h)(x) = integral g(y) h(x - y) dd(y)
+$
+
+#theorem(title: [Parseval-Plancherel])[
+  $
+    f(x) = (g star h)(x) <==> tilde(f)(k) = sqrt(2 pi) tilde(g) (k) tilde(h) (k)
+  $
+]
+
+#proof[
+  $
+    tilde(f)(k)
+    & = integral dd(x)/sqrt(2 pi) exp(-i x k) integral g(y) h(x - y) dd(y) \
+    & = integral dd(y) integral dd(x)/sqrt(2 pi) exp(-i k (x - y)) exp(- i k y) g(y) h(x - y) \
+    & = integral dd(y) integral dd(u)/sqrt(2 pi) exp(-i k u) exp(- i k y) g(y) h(u) & u = x - y\
+    & = sqrt(2 pi) tilde(g)(k) tilde(h)(k)
+  $
+]
+
 == Random Walks
+

@@ -70,7 +70,7 @@ and it is often sparse: only a small fraction of neurons fire given a stimulus a
 neuron responds only to a small fraction of stimuli.
 
 To look which neurons activate when we use *spike-triggered average* (STA).
-Let $n$ be the number of trials, $s(t)$ be a time-varying stimulus and $delta(t)$ be a neuron's
+Let $n$ be the number of spikes, $s(t)$ be a time-varying stimulus and $delta(t)$ be a neuron's
 signal.
 $
   rho(t) & = "spike train" = sum^n_(i = 1) delta(t - t_i) \
@@ -79,6 +79,104 @@ $
 
 The spike train is the number of signals until $t$.
 
-TODO: add correlation between $rho$ and $C$.
+#proposition[
+  $
+    C(tau) = 1/angle(r)_"trial" Q_"rs" (- tau)
+  $
+]
+
+
+#proof[
+  Let $angle(dot)_"trials"$ denote the average over the trials:
+  $
+    angle(rho(t))_"trials" = 1/N sum^N_(alpha = 1) rho^alpha (t)
+  $
+
+  Let us consider the average STA over the trials.
+  $
+    angle(C(tau)) & = angle(1/n sum^n_(i = 1) s(t_i - tau)) \
+                  & approx^(T >> 1) 1/angle(n) angle(sum^n_(i = 1) s(t_i - tau))
+  $
+  This is because, over a large number of trials, the number of spikes will be constant.
+
+  We continue by looking at the sum:
+  $
+    sum^n_(i = 1)
+  $
+  TODO: complete proof
+]
+
+We define the *inter-spike interval* (ISI) as the time between spikes.
+The coefficient of variation $"CV"_"ISI" = sigma/mu$ has been measured experimentally and it is
+close to $1$
+
+#proposition[
+  Since $"CV_ISI" = 1$ experimentally, the ISI is well described by a Poisson process.
+]
+
+#proof[
+  We will describe the neuron firing with an homogeneous Poisson process and show that then the CV
+  is also 1.
+  $
+       P("spike in bin") & = r Delta t \
+    P("no spike in bin") & = 1 - r Delta t
+  $
+
+  Then the probability of $n$ spikes in $T$ is distributed as Poisson
+  $
+    P_T (n) = ((r T)^n e^(- r T) ) / n!
+  $
+
+  Now we shift the time so that at $t_0 = 0$ we have a spike. We discretize time using bins of size
+  $Delta t$.
+
+  Then at some time $t_1$ another spike will occur and, because of our discretization, we will have
+  that $t_1 in [t_0 + tau, t_0 + tau + Delta t]$.
+
+  The $"ISI" = t_1 - t_0$. By our Poisson distribution we get
+  $
+    P(tau <= t_1 - t_0 < tau + Delta t) & = P_tau (n = 0) P_(Delta t) (n = 1) \
+                                        & e^(-r tau) r Delta t
+  $
+
+  To compute the coefficient of variation of the ISI we need $mu$ and $sigma$:
+  $
+    mu = angle(tau) & = integral_0^infinity tau n r e^(- tau r) dd(tau) = 1/r \
+    sigma^2 = angle(tau^2) - angle(tau)^2 & =
+    integral^infinity_0 tau^2 r e^(- tau r) dd(tau) - 1/r^2 = 2/r^2 - 1/r^2 = 1/r^2
+  $
+  This means that $sigma = 1/r$ and $"CV"_"ISI" = 1$.
+]
+
+#proposition[
+  The Fano Factor (FF) defined as $sigma^2 / mu$ of the number of events of a PP is $1$.
+]
+
+#proof[
+  To compute the moments we need to compute the derivatives of the moment-generating function at
+  $alpha = 0$.
+  $
+    g(alpha) &= sum^infinity_(n = 0) e^(alpha n) ((r T)^n e^(-r T))/n! \
+    &= e^(- r T) sum^infinity_(n = 0) ((r T e^alpha)^n )/n! \
+    & = e^(-r T) e^(e^alpha r T) \
+    & = e^((1 - e^alpha) r T) \
+    lr(dv(g(alpha), alpha, k) |)_(alpha = 0) & = sum^infinity_(n = 0) n^k ((r T)^n e^(-r T))/n!
+  $
+
+
+  We now use the result to compute the moments.
+  $
+    angle(n) & = sum^infinity_(n = 0) n P_T (n) = dv(g(alpha), alpha) |_(alpha = 0) \
+    & = e^(- r T (1 - e^alpha)) r T e^alpha |_(alpha = 0) = r T\
+    angle(n^2) & = (r T)^2 + r T \
+    sigma^2 & = r T
+  $
+
+  Then $"FF" = 1$.
+]
+
+However experimentally we get that the FF is usually greater than $1$, this means that the spiking
+is not really an homogeneous PP. A better model is a non-homogeneous PP, where the firing rate is
+a stochastic process.
 
 

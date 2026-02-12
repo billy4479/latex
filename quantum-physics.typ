@@ -214,3 +214,137 @@ $
 
 == Random Walks
 
+Let $n_1$ the number of steps to the right and $n_2 = N - n_1$ the number of steps to the left. The
+position of the particle is $x = ell (n_1 - n_2) = ell m$, where $ell$ is the step size and
+$m colon.eq n_1 - n_2$.
+
+After $N$ steps the probability of having taken exactly $n_1$ steps to the right is
+$
+  P(n_1) = binom(N, n_1) p^(n_1) q^(n_2)
+$
+and the mean number of steps to the right is
+$
+  angle(n_1) & = sum_(n_1 = 1)^N n_1 binom(N, n_1) p^(n_1) q^(N - n_1) = p N \
+  angle(x) & = ell (angle(n_1) - angle(n_2)) = N(p - q) ell \
+  angle(x^2) - angle(x)^2 & = 4 N p q ell^2
+$
+
+Note that the standard deviation grows with a factor of $N^(1/2)$.
+This factor of $1/2$ is independent of the distribution of the walk and is also independent of the
+dimension of the walk.
+
+This behavior breaks down in a few cases: when the variance is not finite and when we introduce a
+critical phenomenon (like in self-avoiding walks).
+
+== Maxwell distribution
+
+In an ideal dilute gas there is no interaction between the molecules.
+
+Maxwell made the following assumptions: $rho(arrow(v))$ is a function of the modulus of the velocity
+squared and that it depends on the product of some functions of the three components.
+
+Given these assumptions Maxwell's hypothesis was that
+$
+  rho (arrow(v)) = c e^(- a/2 v_x^2) + e^(- a/2 v_y^2) + e^(- a/2 v_z^2)
+$
+
+We start by computing the normalization constant $c$. Since $rho$ is a probability we need
+$
+  integral.triple dd(x, y, z) rho(arrow(v)) = 1
+$
+But this is the product of three Gaussian integrals, which gives us
+$
+  c ((2 pi)/a)^(3/2) = 1 ==> c = (a / (2 pi))^(3/2)
+$
+
+Computing the moments (by noticing that $rho$ is Gaussian) we get that
+$
+    angle(v_x) & = 0 \
+  angle(v_x^2) & = 1/a
+$
+
+Experimentally we know that $sqrt(angle(v_x^2)) approx 100 tilde 1000 "m"/"s"$
+
+Now we consider also the probability over position, which it's safe to assume it's uniform.
+$
+  rho(arrow(r)) = 1/V
+$
+
+Then the joint probability distribution is
+$
+  rho(arrow(v), arrow(r)) = 1/V (a / (2 pi))^(3/2) e^(- a/2 v_x^2) + e^(- a/2 v_y^2) + e^(- a/2 v_z^2)
+$
+
+When the gas is inside a chamber with a piston on the positive $x$ direction and a molecule hits the
+piston we get that the momentum on the $x$ axis gets reversed, therefore $Delta p_x = -2 m v_x$.
+Since momentum is conserved, the piston absorbs the momentum from the particle.
+
+By the law of impulse we know that $F = dv(p, t)$. We now look at the particles with velocity
+$[v_x, v_x + dd(v)_x]$. For a particle with that velocity to hit the wall we need it to be
+$ell = v_x dd(t)$ from the wall, otherwise it will not hit in time: this means that the particles
+which hit the piston in $dd(t)$ are all located in a volume of $v_x dd(t) A$.
+
+This gives us that, given the number of particle in such volume at that velocity $N$,
+$
+  dd(p)_x = N/V v_x dd(t) A dot.op 2 m v_x
+$
+
+We can then integrate this from $0$ to $infinity$ to take in account all the (positive) velocities
+$
+  F & = integral^infinity_0 rho(v_x) dd(v_x) [N/V A dot.op 2 m v^2_x] \
+    & = N/V A dot.op 2 m 1/2 angle(v_x^2)
+$
+Giving us that
+$
+  P = F/A = N/V dot.op m angle(v_x^2)
+$
+
+We can substitute the kinetic energy such that
+$
+  P V = 2/3 U
+$
+the $3$ comes from the fact that we consider all $3$ components in the energy.
+
+=== Adiabatic expansion
+
+We keep the temperature constant, we have:
+$
+  P dd(V) + V dd(P) = 2/3 dd(U)
+$
+which we combine with
+$
+  dd(U) = - P dd(V)
+$
+to get
+$
+  P dd(V) + V dd(P) = - 2/3 P dd(V) & ==> 5/3 dd(V)/V + dd(P)/P = 0 \
+                                    & ==> P V^(5/3) = "constant"
+$
+
+=== What is $a$?
+
+Confronting the law of ideal gasses with the Maxwell distribution we have that
+$
+  a = m/(k_B T) = (m cal(N)_A)/(R T)
+$
+
+Giving that
+$
+  rho(arrow(v)) = (m/(2 pi k_B T))^(3/2) exp(- (m v^2)/(2 k T))
+$
+
+== Entropy
+
+$
+  H = - k sum_n p_n log p_n
+$
+where $k$ is arbitrary, it is used to scale the logarithm (in CS we want to get to $log_2$, in
+thermodynamics is $k_B$).
+
+We note that
++ $H >= 0$.
++ $H = 0 <==> exists n^*$ s.t. $p_(n^*) = 1$ and all other $p_n = 0$.
++ $p_n = 1/N <==> H = log N$, uniform distributions have the largest entropy.
++ Let $x, y$ independent, then $H_(x, y) = H_x + H_y$, if $x, y$ not independent
+  $H_(x, y) <= H_x + H_y$.
++ Computable by composition

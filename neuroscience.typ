@@ -42,6 +42,8 @@ significant: the signal can travel very long without being attenuated.
 a voltage-gated calcium channel opens and in turns triggers the release of neurotransmitters which
 influence the post-synaptic neuron.
 
+== Modelling neuron's activity
+
 Neurons exhibit activity even when there is no external stimulus. We can use a raster plot to
 illustrate neurons' activity.
 
@@ -69,6 +71,8 @@ rotation of the stimulus the neuron fires according to a bell curve; see other e
 and it is often sparse: only a small fraction of neurons fire given a stimulus and viceversa each
 neuron responds only to a small fraction of stimuli.
 
+=== Spike-Triggered Average
+
 To look which neurons activate when we use *spike-triggered average* (STA).
 Let $n$ be the number of spikes, $s(t)$ be a time-varying stimulus and $delta(t)$ be a neuron's
 signal.
@@ -83,7 +87,7 @@ The spike train is the number of signals until $t$.
   $
     C(tau) = 1/angle(r)_"trial" Q_"rs" (- tau)
   $
-]
+]<prop:sta>
 
 
 #proof[
@@ -106,12 +110,14 @@ The spike train is the number of signals until $t$.
   TODO: complete proof
 ]
 
+=== Inter-Spike Interval
+
 We define the *inter-spike interval* (ISI) as the time between spikes.
 The coefficient of variation $"CV"_"ISI" = sigma/mu$ has been measured experimentally and it is
 close to $1$
 
 #proposition[
-  Since $"CV_ISI" = 1$ experimentally, the ISI is well described by a Poisson process.
+  Since $"CV"_"ISI" = 1$ experimentally, the ISI is well described by a Poisson process.
 ]
 
 #proof[
@@ -179,4 +185,107 @@ However experimentally we get that the FF is usually greater than $1$, this mean
 is not really an homogeneous PP. A better model is a non-homogeneous PP, where the firing rate is
 a stochastic process.
 
+=== Reverse-Correlation Method
+
+This is a method for estimating the firing rate, i.e. $r(t)$ in the previous section.
+
+Let our signal be just a function of time $S(t)$, then we have the data $r(t)$ which is what the
+neuron outputs. Our goal is to find an estimator for $r(t)$: this can be dependent just on the
+stimulus (e.g. $r_"est" = f(S)$) or it could be history dependent
+$
+  r_"est" (t) = r_0 + integral_0^oo dd(tau) S(t - tau) D(tau)
+$
+for some kernel $D(tau)$. This is a Volterra expansion, we could also add higher order terms but we
+won't need them.
+
+For example let
+$
+  S(t) & = cases(A wide & t >= 0, 0 wide & t<0) \
+  D(tau) & = 1/sigma exp(-tau/sigma) \
+  r_"est" & = r_0 + integral^oo_0 dd(tau) A/sigma exp(-tau/sigma) bb(1)_(t - tau > 0) \
+  & =integral_0^t dd(tau) A/sigma exp(-tau/sigma) = A(1 - exp(-t/sigma))
+$
+
+We are interested in the case where we know $r(t)$ but we want to find $D(tau)$.
+To do this we want to minimize the distance between the true $r$ and the estimated one.
+
+Let $T$ be the trial duration and compute the square loss:
+$
+  E = 1/T integral_0^T dd(t) abs(r_"est" (t) - r(t))^2
+$
+we then look for $r_0, D(tau)$ minimizing $E$.
+
+#proposition[
+  Assume that $integral_0^T dd(t) S(t) = 0$, that $S tilde N(0, sigma^2_S)$ and that $S$ are
+  uncorrelated i.e. $angle(S(t') S(t)) = sigma^2_S S(t - t')$.
+
+  The optimal $D(tau)$ is
+  $
+    D(tau) = (angle(r) C(tau))/sigma^2_S
+  $
+]
+
+#proof[
+  We start by discretizing time.
+  $
+    E & = (Delta t)/T sum^(N = T/(Delta t))_(i = 0) abs(r_"est" (i Delta t) - r(i Delta t))^2 \
+    & = (Delta t)/T sum^N_(i = 0)
+    abs(r_0 + Delta t sum^oo_(k = 0) D(k Delta t) S((i - k) Delta t) - r(i Delta t))^2 \
+    & = (Delta t)/T sum^N_(i = 0)
+    abs(r_0 + Delta t sum^oo_(k = 0) D^k S^(i - k) - r^i)^2
+  $
+  where in the last step we just abbreviated the notation.
+  Then this is just a function of a vector of values of $D$: we can just set the derivative to $0$.
+  $
+    pdv(E, D^j) & = (2 Delta t)/T sum^N_(i = 0) [(r_0 + Delta t sum^oo_(k = 0) D^k S^(i - k) - r^i)
+                    pdv(, D^j) (Delta t sum^oo_(k = 0) D^k S^(i - k))] \
+                & = (2 Delta t)/T sum^N_(i = 0) [(r_0 + Delta t sum^oo_(k = 0) D^k S^(i - k) - r^i)
+                    Delta t S^(i - j)] \
+                & ==> (cancel(2) Delta t)/T sum^N_(i = 0) (r^i - r_0)S^(i - j) =
+                  (cancel(2) Delta t)/T sum^N_(i = 1) Delta t
+                  sum^oo_(k = 0) D^k S^(i - k) S^(i - j) \
+                & ==> 1/T integral_0^T dd(t) (r^i - r_0) S(t - tau) =
+                  1/T integral_0^T dd(t)
+                  integral^oo_(0) dd(tau') D(tau') S(t - tau) S(t - tau') \
+  $
+  But then we can use our assumption: the LHS becomes
+  $
+    1/T integral_0^T dd(t) (r^i - r_0) S(t - tau)
+    & = 1/T integral_0^T dd(t) dot.op r^i S(t - tau) -
+    1/T integral_0^T dd(t) dot.op r_0 S(t - tau) \
+    & = 0 + Q_(r s) ( - tau)
+  $
+  and we can use the substitution $t' = t - tau$ on the RHS to get
+  $
+    1/T integral_0^T dd(t) integral^oo_(0) dd(tau') D(tau') S(t - tau) S(t - tau')
+    & = 1/T integral^(T - tau)_(-tau) dd(t') S(t' + tau- t') S(t') \
+    & = integral dd(tau') Q_(s s) (tau - t') D(tau')
+  $
+  TODO: there is something wrong in the derivation above
+
+  giving us the equation
+  $
+    Q_(r s) (- tau) = integral_0^oo dd(tau') D(tau') Q_(s s) (tau - tau')
+  $
+
+  Now we use the fact that $S$ is independent to get
+  $
+    integral^oo_0 dd(tau) D(tau') sigma^2_S delta(tau - tau') = D(tau) sigma^2_S
+  $
+
+  Showing that
+  $
+    D(tau) = (Q_(r s) (- tau))/sigma^2_S
+  $
+  and using @prop:sta we get the result.
+]
+
+The calculation also works for a generic $S(t)$, however the result is
+$
+  D(tau) = 1/(2 pi) integral^oo_(-oo) dd(omega) (tilde(Q)_(r s) (-omega))/(tilde(Q)_(s s) (omega))
+  e^(-i omega t) wide cases(delim: #none, "where" tilde "represents", "the Fourier transform")
+$
+
+Note that we can choose the stimulus to be as the assumption since we are the one designing the
+experiment.
 

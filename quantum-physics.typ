@@ -408,3 +408,119 @@ $
 $
 we can recover these formulas from computing the derivative of
 and since the covariance matrix is positive semi-definite, we get that $log Z$ is convex.
+
+== Boltzmann distribution
+
+When constructing an energy function we want the energy to be a function of all the degrees of
+freedom of the system.
+
+Sometimes the energy can be decomposed as
+$
+  E(x_1, ..., x_N) & = sum_i cal(E)_i (x_i)                &    "non-interacting" \
+                   & + sum_(i < j) cal(E)_(i j) (x_i, x_j) &   "pair-interaction" \
+                   & + med ...                             & "other interactions"
+$
+Usually $E prop N$, where $N$ is the number degrees of freedom.
+
+We now want, given the set of degrees of freedom and the energy function of our system, we want to
+find the probability $p(x_1, ..., x_N)$ that our system is in a certain state.
+
+First we want to fix the average energy for this system:
+$
+  sum_(x_1, ..., x_N) p(x_1, ..., x_N) E(x_1, ..., x_N) = U
+$
+we do this by using the maximum entropy principle, which gives us the Boltzmann distribution.
+$
+  p(x_1, ..., x_N) & = exp(-beta E(x_1, ..., x_N))/Z \
+     "with" wide Z & = sum_(x_1, ..., x_N) exp(- beta E(x_1, ..., x_Z))
+$
+
+At this point $beta$ is just a Lagrangian multiplier.
+
+#example(title: [Graph coloring])[
+  Consider the problem of coloring vertices $c_1, ..., c_N$ where $c_i$ is the color of each vertex.
+  Let us define the energy function as
+  $
+    E = sum_((i, j) in "edges") delta_(c_i, c_j)
+  $
+  i.e. the number of misconfiguration.
+
+  We have
+  $
+    p(c_1, ..., c_N) = 1/Z exp(- beta sum_((i, j) in "edges") delta_(c_i, c_j))
+  $
+
+  In this case $beta$ represents how much we "care" about constraints. As $beta -> oo$ the only
+  possible configuration is the one where coloring is done correctly.
+]
+
+If we go back to physics and recall the Maxwell distribution of velocities, we can look on how it
+would relate to Boltzmann distribution. We know that $E(arrow(v)) = 1/2 m v^2$, therefore for
+Boltzmann the probability is
+$
+  p(arrow(v)) = 1/z exp(-beta/2 m v^2)
+$
+and comparing with what we found in the Maxwell distribution chapter tells us that
+$
+  beta = 1/ (k_B T) wide "where" k_B = R / cal(N)_A
+$
+
+Most times we can describe our system with two vectors per particle: $arrow(r)_i, arrow(p)_i$
+(position and momentum). We now have to fix the dimensionality of $p$. Note that
+$dd(arrow(r)_1, arrow(p)_1)...dd(arrow(r)_N, arrow(p)_N)$ is $[r p]^(3 N)$. We then have to divide
+by some normalizing constant, which we choose to be $h^(3 N)$ (Plank constant, which has the right
+dimension).
+
+=== Internal energy
+
+The internal energy is the average energy:
+$
+  U = angle(E) = sum_n p_n E_n = 1/Z sum_n E_n exp(-beta E_n) = - pdv(, beta) log Z
+$
+and the specific heat is
+$
+  C = dv(U, T) = - k beta^2 dv(U, beta) = k beta^2 pdv(log Z, beta, 2)
+  = k beta^2 (angle(E^2) - angle(E)^2)
+$
+
+=== Entropy and free energy
+
+Let the entropy $S$ be defined as before:
+$
+  S & = -k sum_n p_n log p_n \
+    & = - k sum_n p_n (- beta E_n - log Z) \
+    & = 1/T U + k log Z
+$
+then the free energy is
+$
+  F = -1/beta log Z
+$
+such that
+$
+  F = U - T S
+$
+
+#example(title: [Paramagnets])[
+  Let $S_i in { plus.minus 1}$ with $i in {1, ..., N}$. Here the energy is
+  $
+    E(S_1, ..., S_N) = - mu B sum^N_(i = 1) S_i
+  $
+]
+#model[
+  We have
+  $
+    p(S_1, ..., S_N) & = 1/Z exp(beta mu B sum^N_(i = 1) S_i) \
+                     & prop product^N_(i = 1) exp(beta mu B S_i)
+  $
+
+  For one spin we can compute the average:
+  $
+    angle(S_1) = (exp(beta mu B) - exp(- beta mu B))/(exp(beta mu B) - exp(- beta mu N))
+    = tanh(mu B beta)
+  $
+
+  Then the total magnetization is
+  $
+    M = mu sum_i angle(S_i) = mu N tanh(mu B beta)
+  $
+]

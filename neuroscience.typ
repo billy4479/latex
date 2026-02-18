@@ -289,3 +289,44 @@ $
 Note that we can choose the stimulus to be as the assumption since we are the one designing the
 experiment.
 
+=== Most effective stimulus
+
+#proposition[
+  The function $S(t)$ that maximizes $r_"est"(t)$ given that
+  $
+    integral^T_0 dd(t') abs(S(t'))^2 = "const"
+  $
+  is
+  $
+    S(T - tau) prop D(tau)
+  $
+]
+
+#proof[
+  TODO: lagrange multipliers
+]
+
+However, usually this is not enough to estimate the firing rate accurately. This might be due to
+non-linearity of data or too little terms in the Volterra expansion.
+
+We can fix this by introducing a non linearity $F(dot)$:
+$
+  r_"est" = r_0 + F(L(t)) wide "where" L(t) = integral_0^oo D(tau) S(t - tau) dd(tau)
+$
+
+This non-linear function $F$ can be fitted with the training data.
+
+=== Visual system
+
+This model can be expanded to spacial stimuli too:
+$
+  S(t, x, y) \
+  C(tau, x, y) = sum_i S(t_i 0 tau, x, y) \
+  L(t) = integral_0^oo dd(tau) integral integral dd(x, y) D(tau, x, y) S(x, y, t - tau) \
+  D(tau, x, y) = angle(r) C(tau, x, y) /(sigma_S^2)
+$
+
+= Neural decoding
+
+Given a vector of neural responses (i.e. firing rates) we want to go back to the stimulus $theta$.
+A decoder is an estimator $hat(theta) (arrow(r))$.

@@ -123,3 +123,19 @@ $
   Eventually we will have just one root node and a tree which we can use to construct code words. In
   this constructions low-probability inputs will be mapped to the longest codes.
 ]
+
+= Communication
+
+A communication channel is a probability transition matrix which outputs the probability of seeing
+an output $y in Y$ given that the channel received an input $x in X$.
+
+The channel capacity is the maximum information taken over the possible distributions of $X$.
+$
+  C = max_(p(x)) (H(Y) - H(Y | X))
+$
+
+Define the conditional probability of error
+$
+  lambda_i = prob(g(Y^n) != i | X^n = x^n (i))
+$
+where $g$ is the decoding function and $x^n$ is the encoding function.

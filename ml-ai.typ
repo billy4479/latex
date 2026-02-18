@@ -239,7 +239,7 @@ Note that all these 3 components of the error come from different phenomena: $ep
 from the distribution of the data itself; $epsilon_"app"$ comes from the approximation which our
 classifier makes (can be reduced by increasing the VC-dimension of $cal(H)$); $epsilon_"est"$ is the
 we can reduce by increasing the number of samples and optimizing the classifier better, note that
-sometimes this can increase as the VC-dimension of $cal(H)$ grows due to over-fitting.o
+sometimes this can increase as the VC-dimensiosend them to people who missedn of $cal(H)$ grows due to over-fitting.o
 
 This theory is very pessimistic. Usually in real life the number of samples needed is much lower.
 
@@ -247,3 +247,116 @@ Moreover, according to this theory, LLMs, which have a huge VC-dimension should 
 $epsilon_"est" > 1$ and should not be able to classify anything. This is because
 @thm:pac-learnable-finite tells us that if $epsilon <= (log abs(cal(H)))/m$, we lose all confidence,
 since the bound for the probability becomes larger than 1.
+
+== Bayesian optimization
+
+We know that
+$
+  cal(D) (x, y) = cal(D)_x (x) cal(D) (y | x)
+$
+and that we want to find $cal(D) (y | x)$. But we don't have to start from scratch: sometimes we
+know some information about the data, therefore we can use some prior.
+
+We choose to fit $cal(D) (y | x)$ according to some parametric family of distributions
+$overline(p)_theta : cal(X) -> [0, 1]^abs(cal(Y))$
+
+#example(title: "Perceptron")[
+  In a perceptron we have that
+  $
+    hat(y)_(overline(w), b) (overline(x))= "sign"(overline(w) dot.op overline(x)) + b)
+  $
+  therefore our $p_theta$ could be
+  $
+    p_(overline(w), b)^y = exp(y (overline(w) dot.op overline(x) + b))/(exp(
+      overline(w) dot.op
+      overline(x) + b
+    ) + exp(- overline(w) dot.op overline(x) + b))
+  $
+  where we exponentiate so that we get a positive probability and the denominator is the
+  normalization.
+
+  Then to find the bayesian optimal we look for
+  $
+    argmax_(y = plus.minus 1) p^y_(overline(w), b) (overline(x))
+    & = argmax_(y = plus.minus 1) y (overline(w) dot.op overline(x) + b) \
+    & = hat(y)_(overline(w) dot.op overline(x) + b)
+  $
+]
+
+As we can see this does not help us with classification, since, as we saw before, the classification
+is done by a deterministic function. However it is relevant if we care about the distribution.
+
+Given a training set $S$ we have that, by using Bayes theorem,
+$
+  prob(y | S, overline(x)) & = integral dd(theta) prob(y | theta, overline(x))
+                             prob(theta | S) \
+                           & = integral dd(theta) dot.op p^y_theta (overline(x))
+                             (prob(S | theta) prob(theta))/ prob(S)
+$
+Then we can compute
+$
+  prob(S | theta) & = product_(mu in [m])
+                    prob((overline(x)^mu, y^mu) | theta) \
+                  & = product_(mu in [m]) prob(overline(x)^mu | theta)
+                    prob(y^mu | theta, overline(x^mu)) \
+                  & = product_(mu in [m]) cal(D)_x (overline(x)^mu)
+                    p^(y^mu)_theta (overline(x)^mu) \
+          prob(S) & = integral dd(theta) prob(S | theta) prob(theta) \
+                  & = (product_(mu in [m]) cal(D)_x (overline(x)^mu))
+                    integral dd(theta) (product_(mu in [m]) p_theta^(y^mu) (overline(x)^mu))
+                    prob(theta)
+$
+And substituting from above we get
+$
+  prob(y | S, overline(x)) & = integral dd(theta) dot.op p^y_theta (overline(x)^mu)
+                             (prob(S | theta) prob(theta))/ prob(S) \
+                           & = (integral dd(theta) dot.op p^(y^mu)_theta (overline(x)^mu)
+                             dot.op prob(theta) (product_(mu in [m])
+                               p^(y^mu)_theta (overline(x)^mu)))
+                             / (integral dd(theta) dot.op prob(theta) (product_(mu in [m])
+                               p_theta^(y^mu) (overline(x)^mu))) \
+                           & = EE[p^y_theta (overline(x))]
+$
+where the $cal(D)_x$ term simplified. To see that the this is actually an expectation we isolate
+$dd(theta) dot.op p_theta^y (overline(x)^mu)$ in the numerator, then everything else is a "weight"
+depending on $theta$.
+
+However note that the space of parameters $theta in Theta$ might be extremely large, and computing
+those integrals numerically is basically impossible.
+
+We will resort to some approximation. Start by rewriting the denominator
+$
+  prob(theta) (product_(mu in [m]) p^(y^mu)_theta (overline(x)^mu))
+  = exp(-m underbracket(cal(L)^"XEnt"_S (theta) - 1/m log prob(theta), phi(theta)))
+$
+where
+$
+  cal(L)^"Xent"_S (theta) &= -1/m sum_(mu in [m]) log p_theta^(y^mu) (overline(x)^mu) \
+  & = 1/m sum_(mu in [m]) ( - sum_y q^mu_y log p_theta^(y^mu) (overline(x)^mu)) \
+  & = 1/m sum_(mu in [m]) H(overline(q)^mu, overline(p)_theta (overline(x)^mu)) \
+$
+where $overline(q)^mu$ is the one-hot encoded version of $y$ and $H$ is the cross entropy. This is
+useful since the cross entropy of a one-hot encoded probability is the $D_"KL"$ divergence.
+
+Now observe that as $m -> oo$ we have that $cal(L)^"XEnt"$ is of order 1, hence it "should" converge
+to some value, while the prior (the part with $prob(theta)$) becomes less and less important.
+Also, in the large limit, our probability will concentrate towards the minimum of $phi(theta)$ and
+we could approximate the expectation as
+$
+  EE[p^y_theta (overline(x))] & approx p^y_(theta^*) (overline(x)) \
+  "where" wide theta^* & in argmin_theta phi(x) \
+  & = argmin_theta (cal(L)^"XEnt"_S (theta) - 1/m log prob(theta))
+$
+
+This is a very crude approximation. A way to refine it is to use all the global minima we find for
+$theta$ and averaging them out.
+
+To summarize until now:
++ Get a dataset $S$.
++ Choose a parametrical model $overline(p)_theta$.
++ Choose a prior $prob(theta)$.
++ Compute $theta^* = argmin_theta phi(theta)$ (THIS IS THE HARD PART), max-a-posteriori.
++ Find the Bayes optimal $hat(y)_(theta^*) (overline(x)) = argmax_y p^y_(theta^*) (overline(x))$
+  (this is usually easy to compute).
+
+TODO: add melita's notes

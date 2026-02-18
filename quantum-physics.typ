@@ -336,7 +336,7 @@ $
 == Entropy
 
 $
-  H = - k sum_n p_n log p_n
+  H = - k sum_n p_n log p_n = k angle(log 1/p_n)
 $
 where $k$ is arbitrary, it is used to scale the logarithm (in CS we want to get to $log_2$, in
 thermodynamics is $k_B$).
@@ -348,3 +348,63 @@ We note that
 + Let $x, y$ independent, then $H_(x, y) = H_x + H_y$, if $x, y$ not independent
   $H_(x, y) <= H_x + H_y$.
 + Computable by composition
+
+In the continuous case with $x in RR^d$ and pdf $rho(x)$ we consider $d$-dimensional boxes of size
+$(Delta x)^d$ and let $x_n$ be the center of the $n$-th box and $p_n$ its probability.
+
+Then
+$
+  p_n approx rho(x_n) (Delta x)^d
+$
+which gives us
+$
+  H_(Delta x) & = - sum_n rho(x_n) (Delta x)^d [ log rho (x_n) + d log Delta x] \
+              & = - integral dd(x) rho(x) log rho(x) - dd(log Delta x)
+$
+note that the constant on the right depending on $Delta x$ diverges as $Delta x$ goes to $0$,
+however, since it does not depend on $rho$, we usually just ignore it and compute the continuous
+entropy as
+$
+  H_"cont" = - integral dd(x) rho(x) log rho (x)
+$
+
+=== Maximum entropy principle
+
+Assume that the system is in some state $n in {n}$.
+Assume also we have some observables of our system $A_r (n)$ for $r = 1, ..., R$. Call $tilde(A_r)$
+the mean of $A_r$.
+
+Then the least biased probability distribution over events is, given the constraints, the one which
+maximizes entropy.
+
+The maximization problem then is to maximize entropy given that
+$
+  sum_n p_n A_r (n) = tilde(A)_n wide forall r in {1, ..., R} \
+  sum_n p_n = 1
+$
+
+We can just use Lagrangian multipliers to get
+$
+  phi.alt = - sum_n p_n log p_n - alpha (sum_n p_n - 1)
+  - sum^R_(r = 1) lambda_r (sum_n p_n A_r (n) - tilde(A)_r)
+$
+giving that
+$
+  p_n = 1/Z e^(- sum_r lambda_r A_r (n)) wide "where" Z = sum_n p_n
+$
+This distribution will always be of the exponential family.
+
+Note that $Z$ depends on lambda as well, we call it the partition function:
+$
+  Z = sum_n exp(- sum^R_(r = 1) lambda_r A_r (n))
+$
+also note that
+$
+  - pdv(, lambda_r) log Z = angle(A_r) \
+  pdv(, lambda_r, lambda_s) log Z = underbrace(
+    (A_r A_s) - angle(A_r) angle(A_s),
+    "covariance"
+  )
+$
+we can recover these formulas from computing the derivative of
+and since the covariance matrix is positive semi-definite, we get that $log Z$ is convex.

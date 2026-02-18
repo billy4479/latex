@@ -385,18 +385,6 @@ undecidable.
 ]
 
 #theorem(title: [Rice])[
-  $
-        L_1 & = { angle(M) | M "is a TM and" L(M) "is recognizable" } in R \
-        L_2 & = { angle(M) | M "is a TM and" L(M) "is finite" } in.not R \
-    L_"odd" & = { angle(M) mid(|) cases(
-                  delim: #none,
-                  M "is a TM and" L(M) subset.eq {0, 1}^*,
-                  "and" forall w in L(M)\, med abs(w) = 2n + 1\, med n in NN
-                ) } in.not R \
-  $
-]
-
-#theorem[
   Let $C subset "RE"$ be a non-empty subset of RE. Then
   $
     L_C = {angle(M) | M "is a TM and" L(M) in C} in.not R
@@ -433,3 +421,72 @@ undecidable.
     <==> & angle(M, w) in "Halt"_"TM"
   $
 ]
+
+#corollary[
+  $
+        L_1 & = { angle(M) | M "is a TM and" L(M) "is recognizable" } in R \
+        L_2 & = { angle(M) | M "is a TM and" L(M) "is finite" } in.not R \
+    L_"odd" & = { angle(M) mid(|) cases(
+                  delim: #none,
+                  M "is a TM and" L(M) subset.eq {0, 1}^*,
+                  "and" forall w in L(M)\, med abs(w) = 2n + 1\, med n in NN
+                ) } in.not R \
+  $
+]
+
+
+#example(title: [Modified Post Correspondence Problem (MPCP)])[
+  Consider a set of stings $L$ and the set of pairs $D = {(t, b) | t, b in L}$ called dominoes where
+  $t$ refers to the "top" string and "b" to the bottom one.
+  A MPCP instance $P$ is a list of elements of $D$ with repetition such that there is a "special"
+  marked element.
+
+  Then $P$ is match if concatenating all the top strings together gives the same string as the
+  concatenation of all the bottom strings.
+
+  The problem of finding a MPCP instance with a match is undecidable.
+]
+
+#proof[
+  We will prove that $A_"TM" <=_m "MPCP"$.
+
+  We construct a $f$ such that, for all pairs $angle(M, w)$, $f(angle(M, w)) = P$ such that:
+  - $P$ is a match if and only if there exists a legal sequence of configurations of $M$ running on
+    $w$ such that $M$ accepts $w$.
+  - Then $M$ accepts $w$ iff $P$ has a match.
+  - This means that $angle(M, w) in A_"TM" <==> P in "MPCP"$.
+
+  Consider a legal sequence of configurations of $M$ running on $w$ denoted by $c_1, c_2, ...$.
+  Let $q_1, q_2, ...$ be the sequence of states of $M$ corresponding to $c_1, c_2, ...$.
+  To serialize each state $c_i$ we write $angle(c_i) = u plus.o q_i plus.o v$ where $u$ is what is
+  behind the tape head and $v$ is the part of the tape which is under the head and beyond.
+
+  Construct each domino $d_i = (t_i, b_i)$ such that $t_i = angle(c_i) plus.o \#$ and
+  $b_i = angle(c_(i + 1)) plus.o \#$. At $i = 0$ we set $t_0 = \#$.
+
+  From this construction we have that the concatenation of the top strings is always longer than the
+  concatenation of the bottom string. Then, if $c_(i + 1)$ is the accept state on the next domino we
+  just complete the last part missing for matching.
+
+  This is a sketch but the main ideas are locality of the application of the $delta$ function.
+]
+
+= Complexity
+
+We look at problems which are solvable in principle but in practice require more time or memory that
+what is reasonable.
+
+== Time complexity
+
+This is the number of steps performed by a single-tape TM needed to solve the problem.
+
+The complexity can then be influenced by the algorithm used, the input representation and the
+computational model.
+
+We will also divide problems in classes:
+- $P$ can be solved in polynomial time
+- $"NP"$ can be verified in polynomial time
+- $"PSPACE"$ can be solved in polynomial time
+- $"CONP"$ their complement can be solved in polynomial time
+- $L$ can be solved in logarithmic time
+- $"NL"$ can be solved in logarithmic time when using stochastic algorithms

@@ -156,6 +156,8 @@
     separator: "\n",
   )
 
+  set list(indent: 0.5em)
+  set enum(indent: 0.5em)
 
   if (toc) {
     outline()

@@ -359,4 +359,71 @@ To summarize until now:
 + Find the Bayes optimal $hat(y)_(theta^*) (overline(x)) = argmax_y p^y_(theta^*) (overline(x))$
   (this is usually easy to compute).
 
-TODO: add melita's notes
+=== Multilayer perceptron
+
+This is the first step: choosing $overline(p)_theta$.
+
+#theorem(title: [Universal approximation])[
+  Let $K subset.eq RR^N$, a function $g: K -> RR$ and a precision $epsilon > 0$.
+  Then, there exists a 1-hidden layer network $f: K -> RR$ such that
+  $
+    sup_(x in K) abs(f(x) - g(x)) < epsilon
+  $
+
+]
+
+#definition(title: [Multilayer perceptron])[
+  A multilayer perceptron is a function $f: cal(X) subset.eq RR^N -> cal(Y)$ such that $cal(Y) = K$.
+
+  Fix $L$ the number of layers and $N_ell$ be the size of each layer at $ell = 0, 1, ..., L$, in
+  particular $N_0 = N$ and $N_L = K$.
+
+  Let $overline(x)^0 = overline(x)$, then the *pre-activation* value is
+  $
+    overline(z)^ell = W^ell overline(x)^(ell - 1) + overline(b)^ell
+  $
+  where $W^ell$ is a $N_ell times N_(ell - 1)$ matrix, $overline(x)$ is a vector with dimension
+  $N_(ell -1)$ and $overline(b)^ell$ is a vector with dimension $N_ell$.
+
+  Then the *activation* value is
+  $
+    overline(x)^ell = cases(
+      overline(z)^ell wide & "if" ell = L,
+      sigma(overline(z)^ell) wide & "otherwise"
+    )
+  $
+  where $sigma: RR -> RR$ is a possibly non-linear function which gets applied element-wise.
+
+  Then, we want our network to output probabilities, therefore we pass $overline(x)^L$ to a softmax
+  function.
+  $
+    f(overline(x)) = p^y_theta (overline(x)) = exp(x^L_y)/(sum_(y in cal(Y)) exp(x^L_y))
+  $
+]
+
+#remark[
+  The softmax function is called like that since, if we add a parameter $alpha > 0$
+  $
+    exp(alpha x^L_y)/(sum_(y in cal(Y)) exp(alpha x^L_y))
+  $
+  and let $alpha -> oo$ we get actually the $argmax$ function.
+
+  In our neural network we don't need to include $alpha$ since it is included in the weights of the
+  last layer.
+]
+
+Now that we have this model we want to compute the cross entropy.
+$
+  cal(L)^"XEnt"_mu = - log p_theta^(y_mu) (overline(x)^mu) = - x^L_(y^mu) + log sum_y' exp(x^L_(y'))
+$
+
+=== Optimizing
+
+Now we want to find the $theta^*$ which minimizes the cross entropy.
+In general we will look for $overline(x)^* = argmin f(overline(x))$, in our specific case
+$overline(x) = theta$ and $f = cal(L)^"XEnt"_S$.
+
+The main approach is an iterative one: at $t = 0$ we pick an initial guess $overline(x)^0$ and at
+$t = 1, 2, ...$ let $overline(x)^(t + 1) = overline(x)^t + delta overline(x)^t$.
+This is a very general problem description: how do we choose the initial guess? when do we stop? how
+to choose $delta$?

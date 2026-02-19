@@ -236,6 +236,8 @@ dimension of the walk.
 This behavior breaks down in a few cases: when the variance is not finite and when we introduce a
 critical phenomenon (like in self-avoiding walks).
 
+= Deriving thermodynamics
+
 == Maxwell distribution
 
 In an ideal dilute gas there is no interaction between the molecules.
@@ -479,7 +481,7 @@ $
 $
 and the specific heat is
 $
-  C = dv(U, T) = - k beta^2 dv(U, beta) = k beta^2 pdv(log Z, beta, 2)
+  c = dv(U, T) = - k beta^2 dv(U, beta) = k beta^2 pdv(log Z, beta, 2)
   = k beta^2 (angle(E^2) - angle(E)^2)
 $
 
@@ -521,6 +523,137 @@ $
 
   Then the total magnetization is
   $
-    M = mu sum_i angle(S_i) = mu N tanh(mu B beta)
+    angle(M) = mu sum_i angle(S_i) = mu N tanh(mu B beta)
+  $
+
+  We can compute the partition function as
+  $
+    Z & = underbrace(sum_(S_1, ..., S_N), 2^N "terms") exp(beta mu B sum_i S_i) \
+      & = sum_(S_1) sum_(S_2) dots.c sum_(S_N)
+        exp(beta mu B S_1) exp(beta mu B S_2) dots.c exp(beta mu B S_N) \
+      & = (sum_(S_1) exp(beta mu S_1)) (sum_(S_2) exp(beta mu S_2))
+        dots.c (sum_(S_N) exp(beta mu S_N)) \
+      & = (exp(beta mu B) + exp(- beta mu B))^N \
+      & = (2 cosh(beta mu B))^N
+  $
+
+  Then
+  $
+    U = - pdv(log Z, beta) & = - N pdv(, beta) (log 2 cosh(beta mu B)) \
+                           & = - N mu B tanh (beta mu B) \
+                           & = - mu beta angle(sum_i S_i)
+  $
+
+  Another method to compute $Z$ is noting that the sum $sum_i S_i$ has values in
+  ${N, N - 2, N-4, ..., -N}$. Then we can sum over the energy levels instead. Note that we have to
+  include a degeneracy term which indicates how many configurations have the energy level $p$.
+  $
+    Z & = sum_(S_1, ..., S_N) exp(a sum_i S_i) \
+      & = sum^N_(p = 0) binom(N, p) exp(a (N - 2p))
+  $
+  Then we can use the blessing of dimensionality: note that $p$ is a fraction of $N$ $p = x N$, such
+  that
+  $
+    exp(a(N - 2 p)) = exp(N a(1-2a))
+  $
+  and, using Stirling formula,
+  $
+    binom(N, x N) & = exp(N (-(1+x)/2 log (1+x)/2 - (1 - x)/2 log (1 - x)/2)) \
+                  & = exp(N S_"mic" (x))
+  $
+  where $S_"mic" (x)$ is the entropy (in the probabilistic sense) of a single spin.
+  Then we can compute the following integral using Laplace
+  $
+        Z & = integral dd(x) exp(N (S_"mic" (x) + a (1 - 2x))) \
+    log Z & = N (S_"mic" (x^*) + a (1 - 2x^*))) \
+      x^* & = argmax S_"mic" (x) + a(1 - 2x)
   $
 ]
+
+=== Concentration of energy distribution in Boltzmann probability
+
+In the previous class we found that
+$
+  angle(E^2) - angle(E)^2 = k T dot.op c T
+$
+
+In a large system with $N >> 1$ we have that $angle(E) prop N dot.op k T$, giving us that
+$
+  (angle(E^2) - angle(E)^2)/angle(E)^2 tilde 1/N
+$
+This means that the energy is extremely peaked around the mean.
+We observe this behavior because the degeneracy factor of each energy state is exponential in the
+degrees of freedom:
+$
+  g(E) tilde exp(N s_"mic" (E/N)) = exp(S_"mic" (E))
+$
+where $s_"mic"$ is the microscopic entropy per particle. This comes from fixing the energy and
+saying that all the configuration that five the same energy level are equiprobable.
+
+This in turns gives us that
+$
+  Z & = sum_E exp(N (s_"mic" (E/N) - beta E/N)) \
+  & = N integral dd(epsilon) exp(N (s_"mic" (epsilon) - beta epsilon)) wide "where" epsilon = E/N \
+$
+$
+          log Z & = N (s_"mic" (epsilon^*) - beta epsilon^*) \
+                & = S_"mic" (E^*) - beta E^* \
+          ==> F & = E^* - k T S_"mic" (E^*) \
+                & lr(pdv(s_"mic", epsilon)|)_(epsilon^*) = beta \
+  S_"Boltzmann" & = k S_"mic"
+$
+
+== Thermodynamics and statistical physics
+
+By now we have seen three entropies:
+- Clausius entropy in thermodynamics
+- Boltzmann entropy: $S = k log W$
+- Shannon entropy in information theory
+
+We saw already how Shannon's and Boltzmann's are equivalent, we now look into the equivalence
+between Boltzmann's and Clausius' entropy.
+
+Recall that in thermodynamics the difference in energy is given by $Delta U = Q + W$ (heat + work).
+$
+  U & = 1/2 m sum_i arrow(v)_i^2 \
+    & = 1/2 m (N arrow(V)_0^2 + sum_i arrow(u_i)^2 + 2 sum_i arrow(V)_0 vec(u)_i) \
+    & = 1/2 m_"tot" arrow(V)_0^2 + 1/2 m sum_i arrow(u_i)^2 + "negligible"
+$
+where the $arrow(V)_0$ is the velocity of the container and $arrow(u)_i$ is the velocity of each
+particle. The last term is negligible since $arrow(V)_0$ and $vec(u)_i$ are uncorrelated, therefore
+it's not extensive.
+
+Recall also the principles of thermodynamics:
+0. Two bodies in contact $A$ and $B$ will eventually have the same temperature.
+  Indeed if we look at
+  $
+    S_"mic" (E_A) = S_A (E_A) + S_B (E - E_B) wide "with" E = E_A + E_B
+  $
+  and to maximize it we take the FOC
+  $
+    dv(S_"mic", E_A) & = dv(S_A, E_A) - lr(dv(S_B, E_B)|)_(E_B = E - E_A) \
+                     & = 1/T_A - 1/T_B
+  $
+  and get that the entropy is maximum at $T_A = T_B$.
+1. This principle tells us that
+  $
+    dd(U) = delta W + delta Q
+  $
+  As we know we can write
+  $
+            U & = sum_n p_n E_n \
+    ==> dd(U) & = underbracket(sum_n p_n dd(E)_n, delta W)
+                + underbracket(sum_n E_n dd(p)_n, delta Q)
+  $
+2. We have that the change of entropy in thermodynamics is
+  $
+    Delta S_"thermo" = integral_i^f (delta Q)/T
+  $
+  In statistical physics we saw
+  $
+    dd(S) & = - k sum_n (log p_n + 1) dd(p)_n \
+          & = -k sum_n log p_n dd(p)_n \
+          & = - k sum_n (- beta E_n - log Z) dd(p)_n \
+          & = 1/T sum_n beta E_n dd(p)_n = (delta Q)/T
+  $
+

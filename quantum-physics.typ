@@ -657,3 +657,59 @@ Recall also the principles of thermodynamics:
           & = 1/T sum_n beta E_n dd(p)_n = (delta Q)/T
   $
 
+= Degrees of freedom
+
+== Non-interacting
+
+We will consider $N$ degrees of freedom $x_i in cal(I)$ such that $abs(cal(I)) = Q$ is finite.
+Then our energy function will have $Q^N$ possible values. Since the degrees of freedom are non
+interacting we can define the energy function as
+$
+  E(x_1, ..., x_N) = sum^N_(i = 1) cal(E)_i (x_i)
+$
+
+Boltzmann laws becomes
+$
+       p(x) & = 1/Z exp(-beta E(x)) \
+            & = 1/Z product^N_(i = 1) exp(-beta cal(E)_i (x_i)) \
+            & = product_i p_i (x_i) \
+  p_i (x_i) & = exp(-beta cal(E)_i (x_i)) / z_i \
+        z_i & = sum_(x_i) exp(- beta cal(E)_i (x_i)) \
+          Z & = product^N_(i = 1) z_i
+$
+
+Note that since the partition function factorizes we can compute it in $bigO(N^2 Q)$ operations,
+while if all particles have the same energy function (i.e. $z_i = z_j$ $forall i, j$) then this
+reduces to $bigO(N Q)$.
+
+The internal energy is
+$
+  U & = - dv(log Z, beta) \
+    & = - dv(, beta) sum_i log z_i \
+    & = sum_i u_i
+$
+where $u_i$ is the energy of a single particle.
+
+This also applies to the specific heat, which we can show also factorizes as the sum of specific
+heats of each particle.
+
+=== Equipartition theorem
+
+#theorem(title: [Equipartition])[
+  If the energy function of some system can be written as
+  $
+    E(x_1, ..., x_N) = a/2 x_1^2 + tilde(E) (x_2, ..., x_N)
+  $
+  then
+  $
+    u_1 = 1/2 k T
+  $
+]
+#proof[
+  $
+    p(x_1, ..., x_N) & = 1/Z exp(- beta a/2 x^2_1) exp(- beta tilde(E)(x_2, ..., x_N)) \
+    Z & = z_1 tilde(Z) \
+    z_1 & = integral dd(x)_1 exp(- a/2 beta x^2_1) = sqrt((2 pi)/(beta a)) \
+    u_1 & = - pdv(, beta) log z_1 = 1/ (2 beta) = 1/2 k T
+  $
+]

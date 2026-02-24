@@ -43,6 +43,8 @@
         "quantum-physics"
         "ml-ai"
         "theoretical-cs"
+
+        "thcs-ps1"
       ];
 
     in

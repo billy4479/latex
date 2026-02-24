@@ -427,3 +427,48 @@ The main approach is an iterative one: at $t = 0$ we pick an initial guess $over
 $t = 1, 2, ...$ let $overline(x)^(t + 1) = overline(x)^t + delta overline(x)^t$.
 This is a very general problem description: how do we choose the initial guess? when do we stop? how
 to choose $delta$?
+
+/ Newton's method: This method is based on finding a point where $gradient f(overline(x)^*) = 0$
+  which we know is a necessary condition for being a minimizer. Geometrically, we are fitting the
+  function to a parabola, and move to the next step to the minimum of that parabola.
+
+  However this is not very computationally feasible as
+  $
+    delta overline(x)^t = - H_f (overline(x)^t)^(-1) gradient f(overline(x)^t)
+  $
+  which requires to compute the inverse of the hessian matrix is $bigO(N^2) + bigO(N^3)$.
+
+/ Classical GD: Because of this computational complexity we will stick to first-order methods. Note
+  that we still require our function to be differentiable, therefore we need to choose a
+  differentiable activation function.
+
+  Of course we will do again gradient descent
+  $
+    delta overline(x)^t = - alpha_t gradient f(overline(x)^t)
+  $
+  where $alpha_t$ is the learning rate $in (0, oo)$ and we allow it to change over time.
+  Gradient descent guarantees convergence in a finite number of steps when $f$ is differentiable,
+  strictly convex and $L$-Lipschitz.
+
+  The issues we might have are *overshooting* (where the step size is too big), *$x_0$ is a maximum*
+  (even if very unlikely as maximums are unstable), *local minima*, or *saddles and inflection points*
+  (these two are the real issue!!)
+
+/ Stochastic GD: To speed up things more we can reduce the batch size by computing the gradient of
+  the loss over a limited number of samples. We say that an "epoch" has passed once the model has
+  seen the whole dataset.
+
+/ Momentum GD: Other proposed methods are to add a momentum: given $beta in [0, 1)$ we compute
+  $
+    delta overline(x)^t = - alpha_t gradient f(overline(t)^t) + beta delta overline(x)^(t-1)
+  $
+  this dampens oscillations and accumulates speed.
+
+  Another way to implement momentum is Nesterov's momentum:
+  $
+    delta overline(x)^t = - alpha_t gradient f(overline(t)^t + beta delta overline(x)^(t-1))
+    + beta delta overline(x)^(t-1)
+  $
+  this fixes oscillations around local minima and it runs at the same speed (at a slightly increased
+  memory cost).
+

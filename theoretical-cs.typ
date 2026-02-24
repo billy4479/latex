@@ -490,3 +490,63 @@ We will also divide problems in classes:
 - $"CONP"$ their complement can be solved in polynomial time
 - $L$ can be solved in logarithmic time
 - $"NL"$ can be solved in logarithmic time when using stochastic algorithms
+
+#definition(title: [Running time])[
+  Let $M$ be a TM that halts on all inputs.
+  The running time of $M$ is a function $f: NN -> NN$ where $f(n)$ is the maximum number of steps
+  that $M$ performs on any input of length $n$.
+]
+
+#definition(title: [Time complexity class])[
+  Let $t : NN -> NN$. The time complexity class $"TIME"(t(n))$ is the collection of all languages
+  which are decidable by an order $bigO(t(n))$.
+]
+
+Note that the choice of computational model might affect running time.
+We want to classify in a way which is not sensitive to "small" differences.
+
+#theorem[
+  Let $t(n)$ be a function. Every $t(n)$-time multi-tape TM has an equivalent $O(t^2(n))$-time
+  single-tape TM.
+]
+
+#proof[
+  The idea is that it takes $t(n)$ steps for each tape and $t(n)$ steps to emulate each step on a
+  single tape.
+]
+
+We will see that all reasonable deterministic computational models are polynomially equivalent,
+therefore we assume that polynomial differences in running time are "small". The only exception is
+quantum computers which are able to solve some problems in polynomial time, while classical
+algorithms cannot.
+
+We can define then some classes:
+- Polynomial time: $t(n) = n^d$.
+- Quasi-polynomial time: $t(n) = 2^bigO(log^d n)$.
+- Sub-exponential time: $t(n) = 2^(n^epsilon)$ with $epsilon < 1$.
+- Exponential: $t(n) = 2^bigO(n)$ or $t(n) = 2^(n^bigO(1))$.
+
+#definition(title: [Class P])[
+  P is the class of all languages which are decidable in polynomial time on a deterministic
+  single-tape TM.
+]
+
+This is an important class because
++ It is invariant under all models of computation.
++ Roughly corresponds to the class of problems which are realistically solvable on a computer.
+
+=== Non-deterministic TM
+
+A non-deterministic TM is a TM in which the $delta$ function which now returns an element of
+$cal(P)(Q times Gamma times {L, R})$. Then the move gets chosen at random.
+
+We model this machines as a *computational tree*: each note is a machine configuration, each edge
+is a deterministic transition and each branch (or path) is a deterministic computation. The root is
+the initial configuration, then every leaf is one of the elements of the output of $delta$.
+
+We say that a non-deterministic TM (NTM) accepts an input if $exists$ a branch which leads to
+"accept".
+
+#theorem[
+  Every NTM has an equivalent deterministic TM which runs in exponential time.
+]

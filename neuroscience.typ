@@ -322,11 +322,83 @@ This model can be expanded to spacial stimuli too:
 $
   S(t, x, y) \
   C(tau, x, y) = sum_i S(t_i 0 tau, x, y) \
-  L(t) = integral_0^oo dd(tau) integral integral dd(x, y) D(tau, x, y) S(x, y, t - tau) \
+  L(t) = integral_0^oo dd(tau) integral.double dd(x, y) D(tau, x, y) S(x, y, t - tau) \
   D(tau, x, y) = angle(r) C(tau, x, y) /(sigma_S^2)
 $
 
 = Neural decoding
 
-Given a vector of neural responses (i.e. firing rates) we want to go back to the stimulus $theta$.
-A decoder is an estimator $hat(theta) (arrow(r))$.
+Given a vector of $N$ neural responses (i.e. firing rates) we want to go back to the stimulus
+$theta$. A decoder is an estimator $hat(theta) (arrow(r))$.
+
+We will assume that
+$
+  r_(i, t) = theta + z_(i, t) wide "with" z_(i, t) tilde N(0, 1)
+$
+and choose that
+$
+  hat(theta)(arrow(r)_t) & = 1/N sum^N_(i = 1) r_(i, t) \
+                         & = 1/N sum^N_(i = 1) (theta + z_(i, t)) \
+                         & = theta + eta_t wide "with" eta_t tilde N(0, 1/N)
+$
+
+#example(title: [Wind in crickets])[
+  Crickets have sensors which can feel the direction of the wind. We will assume that the wind's
+  velocity is $arrow(v)$ such that $abs(arrow(v)) = 1$.
+
+  There are 4 different neurons which are responsible for decoding the wind direction:
+  $
+    r_a (theta) = r_"max" (cos(theta - theta_a))_+ wide "with" a in {1, 2, 3, 4}
+  $
+  where $theta_a$ is the "preferred" orientation of each neuron.
+]
+
+#figure(
+  image("./assets/neuroscience/decoders-cricket.png"),
+  caption: [Firing rates of each neuron on the $y$ axis, orientation of the wind on the $x$ axis.],
+)
+
+#model[
+  We know we can define the cosine as the dot product between two unit vectors:
+  $
+    r_a (theta) = r_"max" (arrow(v) dot.op arrow(c)_a)_+
+  $
+  which fives us a decoder
+  $
+    arrow(v)_"pop" & = sum^N_(d = 1) (arrow(v) dot.op arrow(c)_a)_+ arrow(c)_a \
+                   & = sum^N_(d = 1) (r_d (theta))/(r_"max") arrow(c)_a
+  $
+]
+
+
+== Error of the estimator
+
+First we compute the bias
+$
+  b_hat(theta) & = angle(hat(theta)(arrow(r)))_(arrow(r) | theta) - theta \
+  & = integral dd(arrow(r)) dot.op hat(theta)(arrow(r)) prob(arrow(r) | theta) - theta
+$
+We say that the decoder is unbiased if $b_hat(theta) = 0$.
+
+We also use the MSE:
+$
+  "MSE" = angle((hat(theta)(arrow(r)) - theta)^2)_(arrow(r) | theta)
+$
+
+#proposition(title: [Cramer-Rao inequality])[
+  $
+    angle((hat(theta)(arrow(r)) - theta)^2)_(arrow(r) | theta) >= 1/(cal(F)(theta))
+  $
+  where $cal(F)(theta)$ is the Fisher information.
+
+  If we have equality we say that the estimator is efficient.
+]
+
+#proof[
+  Recall that the *score* function is
+  $
+    V(theta, arrow(r)) &= pdv(, theta) log prob(arrow(r) | theta) \
+    & = 1/(prob(arrow(r) | theta)) pdv(, theta) prob(arrow(r) | theta)
+  $
+  Note that $angle(V(theta, arrow(r))) = 0$.
+]

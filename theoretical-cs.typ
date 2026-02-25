@@ -550,3 +550,71 @@ We say that a non-deterministic TM (NTM) accepts an input if $exists$ a branch w
 #theorem[
   Every NTM has an equivalent deterministic TM which runs in exponential time.
 ]
+
+#proof[
+  Let $N$ be a NTM.
+  Use BFS to traverse the computational tree of $N$ (DFS does not work as some branch might not
+  halt).
+
+  We simulate the NTM on a 3-tapes DTM, which we know can be simulated on a single-tape TM:
+  one tape stores the input, one runs the simulation from the root to the current branch, one keeps
+  track of the current branch.
+
+  Since the domain of the $delta$ of the NTM is still finite (the power set of a finite set is still
+  finite), the alphabet of the address-tape is also finite. On that tape we store the list of
+  choices of the output of $delta$ we used to get to the current leaf of the computational tree.
+]
+
+#definition(title: [Running time of NTM])[
+  Let $N$ be a NTM. Then the running time of $N$ is the function $f: NN -> NN$ where $f(n)$ is the
+  maximum number of steps that $N$ performs on any input of size $n$ on any branch.
+]
+
+#proposition[
+  Every $t(n)$-time single tape NTM has an equivalent $2^bigO(t(n))$-time single-tape DTM.
+]
+
+=== Verifiability
+
+#definition(title: [Verifier])[
+  A verifier for a language $A$ is an algorithm $V$ where
+  $
+    A = { w | exists "a string" c "s.t." V "accepts" angle(w, c)}
+  $
+]
+
+The running time of $V$ is measured in terms of $w$. We say that $A$ is polynomially verifiable if
+there exists a polynomial time $V$. We call $c$ the *certificate* or proof of membership.
+
+#definition(title: [NP])[
+  NP is the class of languages which have a polynomial time verifier.
+]
+
+Note that if a language is in $P$ then its polynomial verifier is just the (polynomial) algorithm
+which solves the original problem.
+
+#theorem[
+  A language is in NP if and only if it can be decided by some NTM in polynomial time.
+]
+
+#proof[
+  / P-verifiable implies NTM-decidable:
+    Let $A in "NP"$ and $V$ a verifier for $A$ which runs in polynomial time. The following NTM $N$
+    is a decider for $A$ in polynomial time:
+    - Accept input $w$ of length $n$.
+    - Choose non-deterministically a string $c$ of length at most $n^k$ ($k$ is some constant)
+    - Run $V(w, x)$.
+    - Accept iff $V(W, c)$ returns accept.
+
+  / NTM-decidable implies P-verifiable:
+    Build a verifier for $A$ as follows:
+    - Accept input $angle(w, c)$
+    - Simulate $N$ deterministically on $w$, where $c$ are the choices made along the
+      non-deterministic branches.
+    - Accept iff this branch of $N$ accepts.
+
+]
+
+#corollary[
+  Any language in NP can be decided in exponential time.
+]

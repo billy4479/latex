@@ -340,7 +340,7 @@ $
   hat(theta)(arrow(r)_t) & = 1/N sum^N_(i = 1) r_(i, t) \
                          & = 1/N sum^N_(i = 1) (theta + z_(i, t)) \
                          & = theta + eta_t wide "with" eta_t tilde N(0, 1/N)
-$
+$<eq:dec-pop-est>
 
 #example(title: [Wind in crickets])[
   Crickets have sensors which can feel the direction of the wind. We will assume that the wind's
@@ -401,4 +401,33 @@ $
     & = 1/(prob(arrow(r) | theta)) pdv(, theta) prob(arrow(r) | theta)
   $
   Note that $angle(V(theta, arrow(r))) = 0$.
+
+  Then, the Fisher information is defined as
+  $
+    cal(I)(theta) = angle(V(theta, arrow(r)))_(arrow(r) | theta)
+  $
+
+  TODO: finish this, it's just cauchy-schwartz
+]
+
+#example[
+  Show that the estimator defined in @eq:dec-pop-est is efficient.
+]
+#solution[
+  Compute the Fisher information:
+  $
+    cal(theta) & = angle(V(theta, arrow(r)))_(arrow(r) | theta) \
+    & = integral dd(arrow(r)) prob(arrow(r) | theta) (pdv(, theta) log prob(arrow(r) | theta))^2 \
+  $
+
+  Recall that each component of $arrow(r)$ is independent, therefore can be written as the product
+  of Gaussians.
+
+  TODO: complete here. The idea is that then you compute the log of the probability, giving a sum;
+  compute the derivative; integrate the thing, which simplifies over some indices of the sum; split
+  the integral so that we find the definition of mean and variance of the noise.
+
+  We find that $cal(I)(theta) = N$.
+
+  Similarly the MSE can be easily expanded and simplified as $1/N$.
 ]

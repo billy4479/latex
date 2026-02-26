@@ -458,17 +458,108 @@ to choose $delta$?
   the loss over a limited number of samples. We say that an "epoch" has passed once the model has
   seen the whole dataset.
 
-/ Momentum GD: Other proposed methods are to add a momentum: given $beta in [0, 1)$ we compute
+/ Classical momentum GD: Other proposed methods are to add a momentum: given $beta in [0, 1)$ we
+  compute
   $
     delta overline(x)^t = - alpha_t gradient f(overline(t)^t) + beta delta overline(x)^(t-1)
   $
   this dampens oscillations and accumulates speed.
 
-  Another way to implement momentum is Nesterov's momentum:
+/ Nesterov's momentum GD:
+  This is another way to implement momentum:
   $
     delta overline(x)^t = - alpha_t gradient f(overline(t)^t + beta delta overline(x)^(t-1))
     + beta delta overline(x)^(t-1)
   $
-  this fixes oscillations around local minima and it runs at the same speed (at a slightly increased
+  This fixes oscillations around local minima and it runs at the same speed (at a slightly increased
   memory cost).
+
+/ Adam GD:
+  This method attempts to take into consideration the previous gradients.
+  Consider the $i$-th component of the gradient at time $t$:
+  $
+    g^t_i = pdv(, x_i) f(overline(x)^t) = (gradient f(overline(x)^t))_i
+  $
+
+  #remark(title: [Exponential running averages])[
+    The idea is that we want to compute an average over the some values, but we want to bias the
+    distribution exponentially towards the most recent values.
+
+    This is also quite efficient to compute, as we just need the previous value of the average and
+    the new observation to compute the new one.
+
+    The weight is defined as $w^((tau)) = beta^(tau - t) / Z_t$ where $Z_t$ is a normalization factor.
+    Computing the average explicitly gives us the result below as $t -> oo$.
+  ]
+
+
+  Then define the exponential running averages of these gradients:
+  $
+    m_i^t & = (1 - beta_m) g_i^t + beta_m m^(t - 1)_i \
+    v_i^t & = (1 - beta_v) g_i^t + beta_v m^(t - 1)_i \
+  $
+  where the default values are $beta_m = 0.9$, $beta_v = 0.999$.
+
+  Then our $delta x^t_i$ is
+  $
+    delta x^t_i = - alpha /sqrt(v_i^t + epsilon) m_i^t
+  $
+  So that the movement is bigger along flat directions and smaller on steep ones.
+
+
+==== Scheduling of $alpha$
+
+Additionally to the methods discussed above we want to change $alpha$ as time increases.
+The idea is that we want to iteratively reduce $alpha$ so that we accurately reach the minima we are
+close to.
+
+Typically we fix the number of epochs based on the amount of time available for training.
+
+We want to decrease the learning rate as the loss function seems to stop decreasing. If the loss
+function stops decreasing it might be because we are inside some "feature" but we are stuck jumping
+on its edges (in high dimensions all the volume is on the edges, so it's hard to "get inside"). At
+this point we want to decrease the learning rate so that we manage to enter the feature and see
+other possible valleys inside.
+
+We decrease $alpha$ as in the curve of the cosine from $0$ to $pi/2$. At the beginning of the
+training we start with a warm up period with low learning rate: this helps since at the beginning
+the network is at a very bad state so the gradient might be huge, we don't want to jump too far
+because of this.
+
+=== Choosing the initial state
+
+Choose $overline(b)^ell = 0$ and $W_(i j)^ell tilde N(0, v^ell)$ for some variance $v^ell$.
+
+Then the probability of each pre-activation value in the initial configuration is
+$
+  prob(z_i^ell) = prob(sum^(N_(ell-1))_(j = 1) W^ell_(i j) x_j^(ell - 1))
+$
+this is a normal distribution with mean $hat(z)^ell$ and variance $hat(v)^ell$. We now compute these
+values
+$
+  hat(z)^ell & = sum^(N_(ell-1))_(j = 1) EE[W_(i j)^ell x_j^(ell - 1)]
+  = sum^(N_(ell-1))_(j = 1) EE[W_(i j)^ell] EE[x_j^(ell - 1)] = 0 \
+  hat(v)^ell & = sum^(N_(ell-1))_(j = 1) var[W_(i j)^ell x_j^(ell - 1)]
+  = sum^(N_(ell-1))_(j = 1) EE[(W_(i j)^ell)^2 (x_j^(ell - 1))^2] \
+  & = sum^(N_(ell-1))_(j = 1) v^ell EE[(x_j^(ell - 1))^2] \
+  EE[(x_j^(ell - 1))^2] & = EE[(max(0, z^(ell - 1)_j))^2] wide "assuming ReLU" \
+  & = integral^oo_(-oo) dd(z) 1/sqrt(2 pi hat(v)^(ell - 1)) exp (- z^2/(2 hat(v)^(ell - 1))) max(0, z)^2 \
+  & = integral^oo_0 dd(z) 1/sqrt(2 pi hat(v)^(ell - 1)) exp (- z^2/(2 hat(v)^(ell - 1))) z^2 \
+  & = (hat(v)^(ell - 1))/2
+$
+
+Which means that
+$
+  var(z^L_i) & = (product_(ell = 2, ..., L) (v^ell N_(ell - 1))/2) v^1 sum_j EE[(x_j^0)^2] \
+  & prop exp(L)
+$
+but this reveals a problem: if $(v^ell N_(ell - 1))/2$ is less than $1$ in the final layer we will
+have $overline(x)^L -> 0$; if it's more than $1$ the final layer diverges. The solution is to set
+this quantity exactly to $1$, which gives
+$
+  v^ell = 2/(N_(ell_1))
+$
+
+Note that this depends on the activation function being used, using something different than ReLU
+will change this value.
 

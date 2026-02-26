@@ -247,7 +247,7 @@ squared and that it depends on the product of some functions of the three compon
 
 Given these assumptions Maxwell's hypothesis was that
 $
-  rho (arrow(v)) = c e^(- a/2 v_x^2) + e^(- a/2 v_y^2) + e^(- a/2 v_z^2)
+  rho (arrow(v)) = c e^(- a/2 v_x^2) dot.op e^(- a/2 v_y^2) dot.op e^(- a/2 v_z^2)
 $
 
 We start by computing the normalization constant $c$. Since $rho$ is a probability we need

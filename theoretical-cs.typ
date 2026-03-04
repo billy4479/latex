@@ -618,3 +618,41 @@ which solves the original problem.
 #corollary[
   Any language in NP can be decided in exponential time.
 ]
+
+== NP Completeness
+
+#definition(title: [NP complete])[
+  NP complete is a subset of NP problems which are at least as hard as any problem in NP.
+]
+
+Empirically we noticed that most problems are either in P or NP-complete.
+
+#theorem(title: [Cook-Levin])[
+  $
+    "SAT" in P <==> P = "NP"
+  $
+]
+
+#definition(title: [Polynomial time reducibility])[
+  A problem $A$ is polynomial time mapping reducible to $B$ ($A <=_p B$) if $exists$ a polynomial
+  time computable function $f: Sigma^* -> Sigma^*$ s.t.
+  $
+    w in A <==> f(w) in B
+  $
+]
+
+#theorem[
+  3SAT $>=_p$ CLIQUE.
+]
+
+#proof[
+  Construct a mapping as follows:
+  - Let $phi = c_1 and ... and c_k$ be a 3CNF
+  - For each clause $c_i$ add 3 vertices in $G$, one for each literal
+  - Add an edge between two vertices if:
+    - They are in different triples AND
+    - Their literals are consistent (i.e. put an edge unless the vertices represent $x$ and $not x$
+      for some $x$)
+
+  Then the elements of a clique in $G$ give the truth assignment for 3SAT problem.
+]

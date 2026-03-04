@@ -563,3 +563,63 @@ $
 Note that this depends on the activation function being used, using something different than ReLU
 will change this value.
 
+=== Automatic differentiation
+
+We want to compute derivatives for functions $f: RR^n -> RR^q$, i.e. compute Jacobians. Usually
+$q = 1$, which means we compute just gradients, but the model works even for generic Jacobians.
+We will assume $f$ is differentiable.
+
+==== Prior art
+
+We could use "symbolic diff", which is quite like what we did in calculus 1: we transform the
+expression using some rules. However this is quite inefficient and not really working in numerical
+situations.
+
+Another method is approximating the limit definition of derivatives using a small $epsilon$, this is
+both inefficient (as we need $n + 1$ function evaluations) and can encounter numerical imprecisions
+if $epsilon$ is too small or too big. This is still the best method if we don't have an explicit
+definition of our function.
+
+==== State of the art
+
+The main methods we will cover are *forward and reverse differentiation*.
+The difference between the two methods is that they expand the chain rule either from the inside out
+or from outside in. Many times the optimal way is to use an hybrid version of the two, but we will
+focus on reverse diff which will satisfy our needs most of the times.
+
+==== Forward diff
+
+The idea is to represent the function as a series of intermediate function of which we know how to
+compute derivatives. At the beginning let $w_1 = x_1, ..., w_n = x_n$ and from now on we are only
+allowed to use $w_k$ variables. Each variable $w_k$ is assigned just once and never reassigned. This
+form is called SSA (static single assignment) representation.
+
+We can then represent the SSA code as a DAG.
+
+#figure(
+  image("./assets/ml-ai/autodiff-ssa.png", width: 75%),
+  caption: [Example SSA and Computational graph],
+)
+
+Then we compute the derivatives of each $w_k$. $w_1, ..., w_n$ will just be a one-hot encoded
+vector: if we want to compute $pdv(f, x_i)$ then $w_i = 1$ and everything else is zero (as in normal
+derivatives rules). Then, since all other variables are just elementary operations on previous
+variables, hence we can use a lookup table to compute each derivative $dot(w_i)$.
+
+This method is more efficient when the input space is small and the output space is big.
+
+To improve the efficiency of this method we define dual numbers: they work kind of like complex
+numbers $z = x + epsilon dot(x)$, where we define $epsilon^2 = 0$.
+This, without going into details, gives us that
+$
+  f(z) = f(x) + epsilon dot(x) f'(x) ==> f(g(z)) = f(g(x)) epsilon dot(x) g'(x) f'(g(x))
+$
+which means we kind of get the derivative automatically.
+
+==== Reverse diff
+
+Define the adjoint be $attach(limits(w), t: triangle, br: i) = pdv(f, w_i)$.
+
+TODO: reverse diff
+
+This method is more efficient when the input space is big and the output space is small.

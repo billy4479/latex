@@ -622,16 +622,10 @@ which solves the original problem.
 == NP Completeness
 
 #definition(title: [NP complete])[
-  NP complete is a subset of NP problems which are at least as hard as any problem in NP.
+  A language $B$ is NP-complete if $B in "NP"$ and $A in "NP" ==> a <=_p B$.
 ]
 
 Empirically we noticed that most problems are either in P or NP-complete.
-
-#theorem(title: [Cook-Levin])[
-  $
-    "SAT" in P <==> P = "NP"
-  $
-]
 
 #definition(title: [Polynomial time reducibility])[
   A problem $A$ is polynomial time mapping reducible to $B$ ($A <=_p B$) if $exists$ a polynomial
@@ -642,7 +636,7 @@ Empirically we noticed that most problems are either in P or NP-complete.
 ]
 
 #theorem[
-  3SAT $>=_p$ CLIQUE.
+  3SAT $<=_p$ CLIQUE.
 ]
 
 #proof[
@@ -655,4 +649,156 @@ Empirically we noticed that most problems are either in P or NP-complete.
       for some $x$)
 
   Then the elements of a clique in $G$ give the truth assignment for 3SAT problem.
+]
+
+#definition(title: [NP-Hard])[
+  A language $B$ is NP-Hard if $A in "NP" ==> A <=_p B$.
+]
+
+#proposition[
+  If $B$ is NP-Complete and $B in P$, then $P = "NP"$.
+]
+
+#proposition[
+  If $B$ is NP-Complete and $B <=_p C$ for some $C in "NP"$ then $C$ is also NP-Complete.
+]
+
+#theorem[
+  The Bounded Halting (BH) problem is NP-complete.
+]
+
+Bounded Halting is defined as
+$
+  "BH" = {
+    angle(M, x) lr(
+      | cases(
+        delim: #none,
+        M "is a TM and" exists c "such that",
+        M(x, c) = "accept in less than poly"(abs(x)) "steps"
+      )
+    )
+  }
+$
+
+#proof[
+  First note that $"BH" in "NP"$, since given the certificate $c$ by definition we halt in
+  polynomial time.
+
+  Let $A in "NP"$, we will show that $A <=_p "BH"$. Let $V_A$ be a polynomial time verifier for $A$.
+
+  Construct the reduction $f(x) = angle(V_A, x)$, then
+  $
+    angle(V_A, x) in "BH" <==> exists c "s.t." V(x, c) = "accept" <==> x in A "in poly"(abs(x))
+    "steps"
+  $
+
+  Meaning that BH is NP-Complete.
+]
+
+#theorem(title: [Cook-Levin])[
+  SAT is NP-Complete.
+]
+#proof[
+  We need to show that $"SAT" in P$ and that $A in "NP" ==> A <=_p "SAT"$.
+  The first part is trivially true.
+
+  Let $A in "NP"$. Given $w$ we construct a formula $phi$ such that $w in A <==> phi in "SAT"$.
+  Since $A in "NP"$ there exists a NTM $N$ which decides $A$ in poly-time, say $n^k$ for some $k$.
+  This means that
+  $
+    w in A <==>cases(
+      delim: #none,
+      exists c_0\, c_1\, ...\, c_m "legal configurations of" N,
+      "s.t." c_m "is accept"
+    )
+  $
+
+  Then we can build a $n^k times n^k$ tableau where
+  - Each row represents $c_0, c_1, ..., c_m$: the first row is the initial configuration, the last
+    row is either accept or reject, and consecutive rows must obey the $delta$ function of $N$.
+    This is at most $n^k$ by the definition of $N$.
+  - Each column contains the state of the machine at each configuration. This is at most $n^k$ since
+    the TM can move at most $n^k$ cells in $n^k$ steps, so we don't care about what happens beyond
+    that point.
+
+  A tableau is accepting if any row is an accept configuration.
+
+  We construct a formula $phi$ as follows
+  $
+    phi = phi_"cell" and phi_"start" and phi_"move" and phi_"accept"
+  $
+  where
+  - $phi_"cell"$ enforces that each cell contain exactly one symbol.
+  - $phi_"start"$ enforces that the first row is $q_0 w$.
+  - $phi_"move"$ enforces that each row legally follows the preceding row.
+  - $phi_"accept"$ enforces that the state $u q_"accept" v$ occurs somewhere.
+
+  We now proceed with the explicit construction of each component of $phi$.
+
+  The alphabet of the tableau is $C = Q union Gamma union {\#}$ (where \# is placed to delimit the
+  input). We define $"cell"[i, j]$ to be the cell in row $i$ and column $j$. A SAT variable
+  $x_(i, j, s)$ with $s in C$ is true if $"cell"[i, j] = s$. The number of SAT variables is
+  $abs(C) n^(2k)$.
+
+  Then
+  $
+    phi_"start" & = x_(1, 1, \#) and x_(1, 2, q_0) and x_(1, 3, w_1) and ... and x_(1, n^k, \#) \
+    phi_"accept" & = or.big_(1 <= i, j <= n^k) x_(i, j, q_"accept") \
+    phi_"cell" & = and.big_(1 <= i, j, <= n^k) [(or.big_(s in C) x_(i, j, s)) and
+      (and.big_(s, t in C \ s != t) (not (x_(i, j, s) and x_(i, j, t))))] \
+    phi_"move" & = and.big_(1 < i, j < n^k)
+    (or.big_(a_1, a_2, a_3, a_4, a_5, a_6\ "s.t. the window is legal") \
+      & x_(i, j - 1, a_1) and x_(i, j, a_2) and x_(i, j + 1, a_3) and x_(i + 1, j - 1, a_4)
+      and x_(i + 1, j, a_5) and x_(i + 1, j + 1, a_6)
+    )
+  $
+  Where $phi_"move"$ checks that every $2 times 3$ window the move was legal. This works because
+  changes happens locally, at most in a $2 times 3$ window. There are a few possibilities for this:
+  if the head is not in the window the window should be copied; if the head is in the middle of the
+  cell we check that the move that it performs is allowed by the $delta$ function; if the head is at
+  the end of the window (either in the row above or in the one below) we should always allow for
+  this construction, since we don't have enough information to know if the head (which is now out of
+  our view) is in the right state, the next window will take care of this, we just accept. Note that
+  the set of legal windows is finite, therefore the big or in $phi_"move"$ is finite and over a
+  polynomially large set.
+
+  The time complexity of this transaction is polynomial:
+  - $phi_"cell"$ is $bigO(n^(2k))$.
+  - $phi_"start"$ is $bigO(n^k)$.
+  - $phi_"move"$ is $bigO(n^(2k))$.
+  - $phi_"accept"$ is $bigO(n^(2k))$.
+  Giving a total complexity of $bigO(n^(2 k))$.
+
+  There are ways to run this reduction faster, but it's out of scope of today's class.
+]
+
+#proposition[
+  $
+    "SAT" <=_p "3SAT"
+  $
+]
+
+#theorem[
+  Vertex Cover is NP-Complete.
+]
+
+Recall the definition of Vertex Cover (VC):
+$
+  "VC" = {
+    angle(G, k) | G "is an undirected graph that has a" k"-vertex cover"
+  }
+$
+where a $k$-vertex cover is a set of $k$ vertices such that all edges in the graph are touched by
+those vertices.
+
+#proof[
+  First, VC is trivially in NP, since given a set of vertices we can quickly check if all the edges
+  are covered.
+
+  We will prove that clique reduces to VC in order to show NP-completeness.
+  To do so, we write a reduction $f(angle(G, k)) = angle(G', k')$ such that
+  $angle(G, k) in "CLIQUE" <==> angle(G', k') in "VC"$.
+
+  We define the complement $G_C$ of a graph $G$ as the graph which contains exactly all edges _not_
+  in the original graph.
 ]

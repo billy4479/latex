@@ -802,3 +802,134 @@ those vertices.
   We define the complement $G_C$ of a graph $G$ as the graph which contains exactly all edges _not_
   in the original graph.
 ]
+
+#proposition[
+  Given a 3SAT expression $phi$ with $m$ clauses, a random assignment will have
+  $
+    EE["number of satisfied clauses"] = 7/8 m
+  $
+
+  Moreover, it's NP-hard to decide if more than $7/8 + epsilon$ fraction of the clauses is
+  satisfiable, $forall epsilon > 0$.
+]
+
+#proof[
+  This is a sketch.
+
+  Every clause has $8$ possible assignment, of these $8$, $7$ are truthful (since the only false
+  assignment is all variables in the clause are false). We get the result by linearity of the
+  expectation.
+]
+
+= Zero Knowledge Proofs
+
+Let $x_A$ be the password of Alice and $f(x)$ be a function hard to invert. ZKPs are a way to prove
+that you know $x_A$ such that $f(x_A) = y_A$ without revealing anything else.
+
+#definition[
+  An NP proof system for membership in $L$ is an algorithm $V$ such that i
+  / Completeness: $ x in L => exists "proof s.t." V(x, "proof") = "accept" $
+  / Soundness: $ x in.not L => forall "proof s.t." V(x, "proof") = "reject" $
+  / Efficiency: $ V(x, "proof") "run s in poly"(abs(x)) "time" $
+  are satisfied.
+]
+
+#remark[
+  NP proofs provide more "knowledge" than just $x in L$.
+]
+
+We introduce the idea of interactive proofs: there is a proofer $P$ and a verifier $V$ which sent to
+each other a series of random messages $m_i$, then $V$ looks at the message history and decides to
+accept or reject.
+
+#definition(title: [Interactive proof])[
+  An interactive proof for $L$ is an interactive protocol between $(P, V)$ such that
+  - $x in L => V "accepts in" (P, V)(x) "with" prob >= 2/3$
+  - $x in.not L => forall P^*, V "accepts in" (P, V)(x) "with" prob <= 1/3$
+  - $V$ runs in polynomial time
+]
+
+It might look like $1/3$ probability of mistakes is quite high, however we can fix this by repeating
+the proof multiple times and invoke the CLT.
+
+In general $P$ has an advantage compared to $V$: either $P$ is computationally unbounded or it knows
+some secret which $V$ does not know (e.g. a certificate for an instance of an NP problem).
+
+#remark[
+  The space of languages which can be proved interactively contains both NP and co-NP.
+]
+
+#example(title: [Quadratic-Residuosity])[
+  $
+    L = {(N, x) | x in Q R_N }
+  $
+  where
+  $
+    Q R_N = {c in ZZ_N | exists z "s.t." z^2 = x mod N}
+  $
+  and $ZZ_N$ is the set of numbers modulo $N$.
+
+  If $N = P Q$ for two large prime numbers $P, Q$, then deciding $(N, x) in Q R_N$ is hard.
+
+  How do we prove that $x in Q R_N$.
+]
+
+#solution[
+  The naive approach would be to just give the root $z$ such that $z^2 = x mod N$. We can do better
+  though.
+
+  First note that
+  $
+    x in Q R_N <==> exists y in Q R_N and x y in Q R_N
+  $
+
+  Construct a protocol with 3 messages:
+  1. The proofer picks $r in ZZ_N^*$ and sends $t = r^2 mod N$.
+  2. The verifier will then reply with a bit $b$ at random (either 1 or 0), this is kind of a
+    "challenge".
+  3. If the proofer got a 0 it sends $s = r mod N$, if it got a 1 it sends $s = z r mod N$.
+  4. The verifier check:
+    - If $b = 0$ we check that $r^2 = t mod N$.
+    - If $b = 1$ we check that $(z r)^2 = t x$.
+
+
+  If $x in Q R_N$ then the proofer always accepts.
+  If $x in.not Q R$ then it will reject with probability at least $1/2$.
+]
+
+#definition(title: [Zero Knowledge])[
+  $(P, V)$ is Zero Knowledge if for all probabilistic polynomial verifiers $V^*$ there exists
+  a simulator $S$ such that $S(x) approx_c (P, V^*) (x)$ when $x in L$. WHAT.
+]
+
+#proposition[
+  The Quadratic-Residuosity proofer is ZK.
+]
+
+#proof[
+  Construct a simulator:
+  - Pick $s$ and $b$ at random
+  - Depending on $b$
+    - If $b = 0$ choose $t = s^2 mod N$
+    - If $b = 1$ choose $t = s^2/x mod N$
+]
+
+We went from bottom to top: indeed a simulator is more powerful than the proofer, a proofer cannot
+choose before hand which $b$ will receive from $V$.
+
+#theorem(title: [GMW '86])[
+  Every $A in "NP"$ can be proved in Zero Knowledge.
+]
+
+#proof[
+  This is a sketch.
+
+  We will prove that there exists a ZK proof for 3-coloring which is NP-complete. This will show the
+  result: given $x in L$ construct $G = f(x)$ and a certificate $d = g(c)$ such that we are working
+  just on 3-coloring.
+
+  The idea is that the proofer commits to a coloring, which sends to the verifier in such a format
+  that the verifier can then ask the proofer the color of a some vertices (but not all) and tell if
+  the proofer lied or not.
+]
+

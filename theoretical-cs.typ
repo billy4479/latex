@@ -899,7 +899,8 @@ some secret which $V$ does not know (e.g. a certificate for an instance of an NP
 
 #definition(title: [Zero Knowledge])[
   $(P, V)$ is Zero Knowledge if for all probabilistic polynomial verifiers $V^*$ there exists
-  a simulator $S$ such that $S(x) approx_c (P, V^*) (x)$ when $x in L$. WHAT.
+  a simulator $S$ such that $S(x)$ has the same distribution of $(P, V^*) (x)$ (meaning that we
+  could simulate the interaction, therefore $V^*$ learned nothing).
 ]
 
 #proposition[
@@ -907,11 +908,17 @@ some secret which $V$ does not know (e.g. a certificate for an instance of an NP
 ]
 
 #proof[
-  Construct a simulator:
+  Note that this protocol is complete with probability 1 (if the proofer is honest it can always
+  convince the verifier) and sound with probability $1/2$ (if the proofer is lying it can still
+  convince the verifier $1/2$ of the times when $b = 0$).
+
+  To show that this proof is ZK we construct a simulator:
   - Pick $s$ and $b$ at random
   - Depending on $b$
     - If $b = 0$ choose $t = s^2 mod N$
     - If $b = 1$ choose $t = s^2/x mod N$
+  This interaction is one where the verifier accepts, however, compared to an honest proofer, the
+  simulator does not know what is $sqrt(t)$..
 ]
 
 We went from bottom to top: indeed a simulator is more powerful than the proofer, a proofer cannot
@@ -928,8 +935,100 @@ choose before hand which $b$ will receive from $V$.
   result: given $x in L$ construct $G = f(x)$ and a certificate $d = g(c)$ such that we are working
   just on 3-coloring.
 
-  The idea is that the proofer commits to a coloring, which sends to the verifier in such a format
-  that the verifier can then ask the proofer the color of a some vertices (but not all) and tell if
-  the proofer lied or not.
+  To be exact we will show that 3-coloring is computational zero knowledge, which means that the
+  simulator is computationally undistinguishable from an actual proof.
+
+  The idea is
+  - The proofer commits to a coloring, which sends to the verifier in such a format that the
+    verifier cannot open it without the proofer telling it how.
+  - The verifier asks for an edge
+  - The proofer sends the coloring of just that edge and the "key" to open the commitment on just
+    that edge.
+
+  This is complete with prob 1 and sound with prob $1 - 1/abs(E)$. Note that by repeating this proof
+  multiple times the verifier could extract the coloring for all the edges: to prevent this it's
+  enough to permute the colors between each interaction, there are only $3!$ permutations but they
+  still look random in the eye of the verifier.
+]
+
+= Space complexity
+
+#definition(title: [Space complexity])[
+  Let $M$ be a TM that halts on all inputs. The space complexity of $M$ is a function $f: NN -> NN$
+  where $f(n)$ is the maximum number of cells that $M$ scans on any input of length $n$.
+]
+
+#proposition[
+  The time complexity of a $f(n)$-space TM for $f(n) > n$ is at most $2^bigO(f(n))$.
+]
+
+#proof[
+  By definition we know that the number of tape symbols in each configuration is $<= f(n)$.
+  Then we can count the number of configurations with $f(n)$ symbols to be $f(n) 2^bigO(f(n))$
+  because $abs(Gamma)$ is finite.
+  Moreover, since each configuration occurs at most once (otherwise the TM would loop) we are done.
+]
+
+Define the following spaces:
+$
+   "SPACE"(f(n)) & = {L | L "is decidable by a" bigO(f(n))"-space TM"} \
+  "NSPACE"(f(n)) & = {L | L "is decidable by a" bigO(f(n))"-space NTM"} \
+        "PSPACE" & = union.big_k "SPACE"(n^k) \
+       "NPSPACE" & = union.big_k "NSPACE"(n^k)
+$
+
+#proposition[
+  SAT is decidable in linear space.
+]
+
+#proof[
+  Enumerate all possible $x in {0, 1}^n$ and check if $phi(x) = "true"$.
+
+  This means that the runtime is $2^n$, but the space is $bigO(n)$. The reason is that space can be
+  recycled.
+]
+
+#corollary[
+  All problems in NP can be decided in linear time.
+]
+#proof[
+  Immediate from NP-completeness of SAT.
+]
+
+#theorem(title: [Savitch])[
+  $
+    "PSPACE" = "NPSPACE"
+  $
+  In particular
+  $
+    "NSPACE"(f(n)) subset.eq "SPACE"(f(n)^2)
+  $
+]
+#proof[
+  We will prove this by showing that DTMs can simulate NTMs using polynomially more space.
+
+  Consider the configuration tree of a NTM, call each configuration $c_i$. Now we turn this tree
+  into a directed graph: take the tree and make it directed from the root to the leaves, then merge
+  all the nodes with repeated configurations.
+
+  But then deciding acceptance of a NTM is the same as deciding reachability in the configuration
+  graph. We modify the configuration graph adding another special "final-accept" state, then draw
+  an edge from all accepting configurations of the NTM to this special "final-accept" node. In this
+  way we just need to decide reachability from $c_0$ to "final-accept".
+
+  The idea of the algorithm to find this path is that finding a path from $s$ to $t$ in $d$ steps is
+  equivalent to showing that there exists an intermediate vertex $z$ such that $z$ is reachable from
+  $s$ in $ceil(d/2)$ steps and $t$ is reachable from $z$ in $ceil(d/2)$ steps.
+
+  At each step of the recursion we recycle the space we used to compute the other branch, therefore
+  at each level we store $bigO(f(n))$, the depth of the recursion is
+  $log_2 (2^(bigO(f(n)))) = bigO(f(n))$. This gives a total space of $bigO(f(n)^2)$.
+]
+
+#theorem[
+  $
+    "PSPACE" = "IP"
+  $
+  where IP is the space of interactive provable languages.
 ]
 

@@ -1032,3 +1032,138 @@ $
   where IP is the space of interactive provable languages.
 ]
 
+= Quantum Computing
+
+
+A system is fully described by assigning an amplitude $alpha in CC$ to each possible configuration.
+
+The *Born rule* gives us a way to commutate amplitudes to probabilities: the probability of an
+outcome $i$ is given by $abs(alpha_i)^2 = Re(alpha_i)^2 + Im(alpha_i)^2$.
+
+We can also represents probabilities distributions as matrices:
+a *stochastic matrix* is a mapping to and from a probability distribution, we need that each entry
+is non-negative and that all columns sum up to 1.
+
+#definition(title: "Tensor product")[
+  Let $v, w$ be two vectors, the tensor product is defined as
+  $
+    (v times.o w)_(i j) = v_i w_j
+  $
+  note that this can be written both as a matrix and as a longer vector.
+]
+
+Not all vectors can be decomposed into a tensor product of other vectors.
+
+If a bit can be $0$ or $1$ with probability $p$ and $q = 1 - p$ we can write the probability of the
+bit to be in a certain position using vectors:
+$
+  vec(p, q) = p vec(1, 0) + q vec(0, 1)
+$
+
+A *qubit* is defined in a similar way:
+$
+  CC^2 in.rev vec(alpha, beta) = alpha vec(1, 0) + beta vec(0, 1)
+$
+with $abs(alpha)^2 + abs(beta)^2 = 1$ which comes by imposing Born rule.
+
+Note that a probability vector should be one $ell_1"-unit"$ long (indeed $p + q = 1$ is a Manhattan
+distance), while quantum states should be one $ell_2"-unit"$ long.
+
+#let latcross = "✝"
+
+#definition(title: "Dirac notation")[
+  We denote column vector in $CC^d$ as $ket(psi)$, this is called a "ket".
+
+  Given $ket(psi)$ we define $bra(psi)$ as
+  $
+    bra(psi) = (ket(psi))^latcross = mat(psi_1^*, ..., psi_d^*)
+  $
+  where $latcross$ denotes the transpose of the conjugate.
+
+  Then a $braket(psi, phi)= bra(psi) dot.op ket(phi)$ is the dot product (a bra-ket), which means
+  that $norm(ket(psi))_2 = sqrt(braket(psi, psi))$.
+]
+
+We then define the *computational basis* vectors as
+$
+  ket(0) & colon.eq vec(1, 0) \
+  ket(1) & colon.eq vec(0, 1)
+$
+such that this is an orthonormal basis.
+
+Given this basis we can write a qubit as $alpha ket(0) + beta ket(1)$.
+
+Another basis we will use is the *Hadamard basis*:
+$
+  ket(+) & = 1/sqrt(2) ket(0) + 1/sqrt(2) ket(1) \
+  ket(-) & = 1/sqrt(2) ket(0) - 1/sqrt(2) ket(1)
+$
+
+Another basis is the $theta$-rotated basis:
+$
+       ket(theta) & = vec(cos(theta), sin(theta)) \
+  ket(theta^perp) & = vec(-sin(theta), cos(theta)) \
+$
+
+#example[
+  If $ket(psi) = alpha ket(0) + beta ket(1)$ then we can extract $alpha$ and $beta$ as
+  $
+    alpha & = braket(0, psi) \
+     beta & = braket(1, psi) \
+  $
+]
+
+Any vector $ket(psi)$ different from an element of the basis is called a *superposition*. Note that
+the definition of superposition depends on the basis.
+
+The first axiom we saw already is the normalization of the qubit. The second axiom is about
+*measurement* of a qubit: measuring a qubit in the computational basis gives us the probability of
+the outcome being 0 or 1.
+$
+  prob("outcome is 0") & = abs(braket(0, psi))^2 \
+  prob("outcome is 1") & = abs(braket(1, psi))^2
+$
+
+The third axiom is one which says that every transformation which maps a quantum state to another
+quantum state is a valid transformation: any rotations are allowed and reflections are also allowed,
+this means that all the transformations we can apply are represented by a unitary matrix.
+
+Given a unitary matrix $U$ we can apply it to $ket(psi)$ as $U ket(psi)$.
+This third axiom is just a way to state the *Schrödinger equation*.
+
+#proposition(title: [Properties of unitary matrices])[
+  Recall that a $d times d$ is unitary if $U^latcross U = I$.
+
+  Then the following properties are also equivalent:
+
+  - $U U^latcross = I$
+  - $braket(U v, U w) = braket(v, w)$
+  - $U$ preserves $ell_2$ norms
+  - $U$ sends any orthonormal basis to an orthonormal basis
+  - $U$ sends at least one orthonormal basis to an orthonormal basis
+]
+
+The easiest example of unitary matrix is rotation matrices:
+$
+  R_theta = mat(cos theta, -sin theta; sin theta, cos theta)
+$
+
+Some other famous operations are
+$
+  X & = mat(0, 1; 1, 0) wide  &                    "flips the bit" \
+  Z & = mat(1, 0; 0, -1) wide & "keep 0 but changes the sign of 1" \
+  Y & = mat(0, -i; i, 0) wide &            "we don't talk about Y" \
+  I & = mat(1, 0; 0, 1) wide  &                         "identity" \
+  H & =
+      mat(1/sqrt(2), 1/sqrt(2); 1/sqrt(2), -1/sqrt(2))
+      wide                    &     cases(
+                                      delim: #none,
+                                      "change of basis between",
+                                      "computational and Hadamard"
+                                    )
+$
+
+Actually $H$ is just the discrete Fourier transform in 2D.
+
+The other operation we can perform is of course measuring the qubit. When we do the qubit collapses
+to a probability and the realization of the probability becomes the new value of the qubit.

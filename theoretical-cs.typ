@@ -1167,3 +1167,46 @@ Actually $H$ is just the discrete Fourier transform in 2D.
 
 The other operation we can perform is of course measuring the qubit. When we do the qubit collapses
 to a probability and the realization of the probability becomes the new value of the qubit.
+
+== More qubits
+
+If we have two qubits they will form a vector space over $CC^4$ with basis
+$ket(00), ket(01), ket(10), ket(11)$, with some amplitudes $alpha$ which give probabilities in the
+usual way.
+
+In general the state of $n$ qubits is a unit vector in $(C^2)^(times.o n)$.
+
+Given a state $ket(psi) = sum_(x in {0, 1^n}) alpha_x ket(x)$ we can measure all of them. We will
+see the outcome $x$ with probability $abs(alpha_x)^2 = abs(braket(x, psi))^2$. We also say that the
+state collapses to $ket(x)$.
+
+Again, the legal transformation can be represented by unitary matrices $U in CC^(2^n times 2^n)$
+such that $U_(x y) = braket(x, U, y)$. Note that if we specify a transformation on some basis, then
+we are done since maps are specified completely by their effect on the basis.
+
+Some examples are:
+- $"SWAP"ket(a b) = ket(b a)$
+- $"CNOT"ket(a b) = ket(a (a plus.o b))$
+- $"CZ"ket(a b) = (-1)^(a b) ket(a b)$
+
+As we saw in physics, the global phase $ket(phi) = lambda ket(psi)$, with $lambda in CC$ and
+$abs(lambda) = 1$, does not matter: $ket(phi)$ is indistinguishable $ket(psi)$.
+
+== Entanglement
+
+We define $ket(0 1) = ket(0) times.o ket(1)$. This works also in superpositions
+$ket(alpha), ket(beta) in CC^2$ their joint state is $ket(alpha) times.o ket(beta)$.
+
+Recall that
+$
+  ket(alpha) times.o ket(beta) & = (alpha_0 ket(0) + alpha_1 ket(1)) times.o (beta_0 ket(0) + beta_1 ket(1)) \
+  & = alpha_0 beta_0 ket(00) + alpha_0 beta_1 ket(01) + alpha_1 beta_0 ket(10) + alpha_1 beta_1 ket(11)
+$
+
+Not all states can be decomposed in a tensor product of smaller states. If the state is decomposable
+we call it a *product-state*, otherwise we say that the state is *entangled*.
+
+An example of entangled state is the EPR state:
+$
+  1/sqrt(2) (ket(00) + ket(11)) = 1/sqrt(2) vec(1, 0, 0, 0) + 1/sqrt(2) vec(0, 0, 0, 1)
+$

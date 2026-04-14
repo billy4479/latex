@@ -45,6 +45,8 @@
         "theoretical-cs"
 
         "thcs-ps1"
+
+        "infoth-research"
       ];
 
     in
@@ -101,6 +103,12 @@
               name = "physica";
               version = "0.9.7";
               hash = "sha256-G2M428hUZ8g7IwDjK9gRji9owpTiqn5I+QYMS4XcyfA=";
+            }
+            {
+              # TODO: update to 0.9.2 as soon as it's pushed to typst universe
+              name = "diatypst";
+              version = "0.9.1";
+              hash = "sha256-XtXbbtaJ0YG7Wbqov0wMRoa29F1gg6KKHb5bGCQqF3U=";
             }
             # dependency of hydra
             {

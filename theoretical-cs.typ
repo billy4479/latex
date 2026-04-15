@@ -1034,7 +1034,6 @@ $
 
 = Quantum Computing
 
-
 A system is fully described by assigning an amplitude $alpha in CC$ to each possible configuration.
 
 The *Born rule* gives us a way to commutate amplitudes to probabilities: the probability of an
@@ -1053,6 +1052,8 @@ is non-negative and that all columns sum up to 1.
 ]
 
 Not all vectors can be decomposed into a tensor product of other vectors.
+
+== Operations on qubits
 
 If a bit can be $0$ or $1$ with probability $p$ and $q = 1 - p$ we can write the probability of the
 bit to be in a certain position using vectors:
@@ -1168,7 +1169,7 @@ Actually $H$ is just the discrete Fourier transform in 2D.
 The other operation we can perform is of course measuring the qubit. When we do the qubit collapses
 to a probability and the realization of the probability becomes the new value of the qubit.
 
-== More qubits
+=== More qubits
 
 If we have two qubits they will form a vector space over $CC^4$ with basis
 $ket(00), ket(01), ket(10), ket(11)$, with some amplitudes $alpha$ which give probabilities in the
@@ -1192,7 +1193,7 @@ Some examples are:
 As we saw in physics, the global phase $ket(phi) = lambda ket(psi)$, with $lambda in CC$ and
 $abs(lambda) = 1$, does not matter: $ket(phi)$ is indistinguishable $ket(psi)$.
 
-== Entanglement
+=== Tensor product
 
 We define $ket(0 1) = ket(0) times.o ket(1)$. This works also in superpositions
 $ket(alpha), ket(beta) in CC^2$ their joint state is $ket(alpha) times.o ket(beta)$.
@@ -1203,6 +1204,19 @@ $
   & = alpha_0 beta_0 ket(00) + alpha_0 beta_1 ket(01) + alpha_1 beta_0 ket(10) + alpha_1 beta_1 ket(11)
 $
 
+Moreover, if $A$ and $B$ are linear maps, then their tensor product is the unique linear map such
+that
+$
+  A times.o B (ket(alpha) times.o ket(beta)) = A ket(alpha) times.o B ket(beta)
+$
+
+Multiplication of tensor products commute:
+$
+  (I times.o V) (U times.o I) = U times.o V = (U times.o I) (I times.o V)
+$
+
+=== Entanglement
+
 Not all states can be decomposed in a tensor product of smaller states. If the state is decomposable
 we call it a *product-state*, otherwise we say that the state is *entangled*.
 
@@ -1210,3 +1224,37 @@ An example of entangled state is the EPR state:
 $
   1/sqrt(2) (ket(00) + ket(11)) = 1/sqrt(2) vec(1, 0, 0, 0) + 1/sqrt(2) vec(0, 0, 0, 1)
 $
+which can be obtained with $"CNOT"(H times.o I) ket(00)$.
+
+=== Partial measurement
+
+When we have multiple qubits we can choose to measure just one.
+
+If the two qubits are disentangled we just measure it as usual way, as if it was the only qubit in
+the system.
+However even if just one qubit collapses we still need to renormalize the amplitudes of the other
+qubit so that we are still in a quantum state.
+
+$
+  ket(psi) & = alpha_(00) ket(00) + alpha_(01) ket(01) + alpha_(10) ket(10) + alpha_(11) ket(11) \
+  &==> "measure first qubit" \
+  &==> prob("seeing outcome" 0) = p_0 = abs(alpha_(00))^2 + abs(alpha_(01))^2 \
+  & ==> ket(psi) = 1/sqrt(p_0) (alpha_00 ket(00) + alpha_(01) ket(01))
+$
+
+== Quantum circuit
+
+We care about some state $ket(psi)$ which we will measure at the end of the circuit.
+If we need other registers which are not part of the final result we add "ancilla" qubits.
+
+Since we have ancillas we can defer all measurements to the end of the circuit: instead of measuring
+we CNOT the value of the qubit we want to measure in a fresh ancilla which we won't touch ever again
+until the end of the circuit.
+
+The gates H, T and CNOT are enough to describe all other gates. The proof is kind of hard: matrices
+have arbitrary precision, so we need to show that these gates give an arbitrarily good approximation
+of any gate, fast.
+
+To create a classical circuit on a quantum computer we need to create AND and NOT gates. We already
+have an equivalent of NOT, the X gate, but we don have an equivalent for AND. For that we need to
+create the Toffoli gate.

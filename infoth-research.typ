@@ -14,6 +14,23 @@
 #set heading(numbering: "1.")
 #let bu(content) = $bold(upright(content))$
 
+== Get the slides
+
+
+- #link(
+    "https://excalidraw.com/#json=p1mq3nBmn0rVnxTI1v4vx,2za5GXKqbnCGWyyJv0U8_A",
+    [Figure 1, 2 and 4],
+  )
+
+Download the slides from here:
+#align(center)[
+  #image(
+    "assets/infoth-research/qr.png",
+    width: 45%,
+  )
+]
+
+
 = Recap
 
 == Recap on Error Control Codes

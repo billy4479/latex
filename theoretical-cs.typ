@@ -1258,3 +1258,34 @@ of any gate, fast.
 To create a classical circuit on a quantum computer we need to create AND and NOT gates. We already
 have an equivalent of NOT, the X gate, but we don have an equivalent for AND. For that we need to
 create the Toffoli gate.
+
+When we are done computing the actual result we need to reset the circuit so that we are sure that
+we don't have entanglement or garbage in the circuit.
+To do so we CNOT the result to a fresh register and then we run the circuit in reverse.
+
+It can be proven that quantum circuit can compute classical circuits in polynomial time and
+classical circuits can simulate quantum circuits in exponential time (by just computing the matrix
+multiplication) but in PSPACE.
+
+== Example of problems
+
+These problems are known to be solvable efficiently with quantum computers while being hard in
+classical.
+
+=== Deutsch's problem
+
+Given a function $g: {0, 1} -> {0, 1}$ we need to decide if $g$ is constant or not.
+We are not given $g$ directly, but we can query an oracle which will compute $g(x)$ for us.
+
+A classical computer needs 2 queries. However quantum computers will manage to solve this in just
+one query.
+
+The definition of quantum oracle is some function $Q_g$ which takes $ket(x\, y)$ and returns
+$ket(x\, g(x) plus.o y)$.
+
+We see that if we use
+$
+  Q_g ket(x\, -) & = 1/sqrt(2) (Q_g ket(x\, 0) - Q_g ket(x\, 1)) \
+                 & = 1/sqrt(2) ( ket(x\, g(x)) - ket(x\, g(x) plus.o 1)) \
+                 & = (-1)^(g(x)) ket(x\, -)
+$

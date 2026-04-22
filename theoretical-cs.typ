@@ -1289,3 +1289,115 @@ $
                  & = 1/sqrt(2) ( ket(x\, g(x)) - ket(x\, g(x) plus.o 1)) \
                  & = (-1)^(g(x)) ket(x\, -)
 $
+
+=== Bernstein-Vazirani
+
+Given oracle access to a function $g: {0, 1}^n -> {0, 1}$ defined as
+$
+  g(x) = s dot.op x mod 2
+$
+for some secret $s in {0, 1}^n$, we want to find $s$.
+
+In classical computing we can send $n$ queries with the standard basis and recover $s$ in $n$ steps.
+
+In quantum computing we consider the phase oracle for $g$
+$
+  P_g ket(x) = (-1)^(g(x)) ket(x)
+$
+and consider $n$ qubits.
+Each qubit goes individually through the $H$ gate, then through the $P_g$ oracle, back to $H$ and
+then we measure. The measure will give us $s$.
+
+Step 1
+$
+  ket(0) times.o dots.c times.o ket(0) = ket(0)^(times.o n)
+$
+
+Step 2
+$
+  H^(times.o n) ket(0)^(times.o n) = ket(+)^(times.o n) = 1/sqrt(2^n) sum_(x in {0, 1}^n) ket(x)
+$
+
+Step 3
+$
+  1/sqrt(2^n) sum_(x in {0, 1}^n) (-1)^(x dot.op s) ket(x)
+  & = (ket(0) + (-1)^(s_1) ket(1))/sqrt(2) times.o dots.c times.o (ket(0) + (-1)^(s_n)
+  ket(1))/sqrt(2) \
+  & = H^(times.o n) ket(s)
+$
+
+Step 4
+$
+  H^(times.o n) H^(times.o n) ket(s) = I ket(s) = ket(s)
+$
+
+=== Siman's problem
+
+We have oracle access to $f: {0, 1}^n -> {0, 1}^n$ periodic ($exists s in {0, 1}^n != 0$ s.t
+$f(x) = f(y) <==> x = y$ or $x = y plus.o s$). Find $s$.
+
+First note that the image of $f$ is exactly half the size of the domain of $f$.
+
+Our quantum oracle will be defined as $Q ket(x\, z) = ket(x\, f(x) plus.o z)$.
+
+==== Classical algorithm
+We just run through all $2^n$ possible inputs and see if we get a collision. We can get
+a speed up by sampling $T$ distinct strings and running the oracle on them, by the birthday paradox we
+get a square root speed up $O(sqrt(2^n))$.
+$
+  EE["collisions"] & = binom(T, 2) 1/(2^n - 1) \
+$
+$
+  prob& ("no collisions with" T"-queries") \
+  & = product^(T -1)_(t = 1) prob ( "no collision in" (t + 1)"-queries" | "no collision in" t"-queries") \
+  & = product^(T - 1)_(t = 1) (1- t/(2^n - t)) \
+  & <= product^(T - 1)_(t = 1) (1- t/2^n) <= product^(T - 1)_(t = 1) exp(-t^2/2^n)
+  = exp(- sum^(T - 1)_(t = 1) t/2^n) \
+  & = exp(- bigO(T^2/2^n))
+$
+
+We claim that this algorithm is optimal.
+Given another algorithm $A$ which queries $f$ for $x_1, ..., x_t$, the uncertainty it starts with is
+$2^(-n)$, then, if in all $t$ queries there was no collision, the uncertainty becomes
+$binom(t, 2) (2^n - 1)$, which is the same of the algorithm we just found.
+
+==== Quantum algorithm
+
+We will define $x_y$ such that $f(x_y) = y$, there will be two of these, but we know that we can
+obtain the other one by computing $x_y plus.o s$.
+
+$
+  ket(psi_1) & = ket(0)^(times.o 2n) \
+  ket(psi_2) & = (H^(times.o n) times.o I^(times.o n)) ket(psi_1) \
+             & = H^(times.o n) ket(0)^(times.o n) times.o ket(0) \
+             & = 1/sqrt(2^n)
+               sum_(x in {0, 1}^n) ket(x) times.o ket(0)^(times.o n) \
+  ket(psi_3) & = Q_f ket(psi_2) \
+             & = 1/sqrt(2^n) sum_(x in {0, 1}^n) ket(x\, f(x)) \
+  ket(psi_4) & = (H^(times.o n) times.o I^(times.o n)) ket(psi_3) \
+             & = 1/sqrt(2^n) sum_(x in {0, 1}^n)
+               H^(times.o n) ket(x) times.o f(x) \
+             & = 1/sqrt(2^n) sum_(x in {0, 1}^n)
+               ( 1/sqrt(2^n) sum_(z in {0, 1}^n) (-1)^(x dot.op z) ket(z) )
+               times.o f(x) \
+             & = 1/2^n sum_(z in {0, 1}^n)
+               sum_(y in Im(f))
+               ((-1)^(x_y dot.op z) + (-1)^((x_y plus.o s) dot.op z))
+               ket(z) times.o ket(y) \
+             & = 1/2^n sum_(z in {0, 1}^n)
+               sum_(y in Im(f))
+               ((-1)^(x_y dot.op z) + (-1)^(x_y dot.op z) (-1)^(s dot.op z))
+               ket(z) times.o ket(y) \
+             & = 1/2^(n-1) sum_(z : z dot.op s = 0)
+               sum_(y in Im(f)) (-1)^(x_y dot.op z) ket(z) times.o ket(y) \
+$
+
+Measuring $ket(psi_4)$ gives us an uniformly sampled $z$ such that $s dot.op z = 0$. We run this
+algorithm enough times to collect $n - 1$ linearly independent $z$ so that we have enough to build a
+basis and solve the linear system and get $s$ (solving a linear system is always in $P$).
+
+It can be shown that
+$
+  prob(z^((1)), ..., z^((n-1)) "are linearly independent") >= 1/4
+$
+

@@ -431,3 +431,214 @@ $
 
   Similarly the MSE can be easily expanded and simplified as $1/N$.
 ]
+
+
+= Gemini
+
+== Neural Encoding: Characterizing Activity
+<neural-encoding-characterizing-activity>
+- #strong[Neuron Structure:] A neuron contains a soma (metabolic
+  processes), dendrites (receive signals), and an axon (transmits
+  signals).
+- #strong[Physical Properties:] The mammalian cortex contains
+  approximately 100,000 neurons per $m m^3$.
+- #strong[Electrical Properties:] Neurons maintain a resting membrane
+  potential of approximately -70 mV driven by $N a^(+)$ and $K^(+)$
+  channels.
+- #strong[Synapses:] When a spike reaches the axon terminal,
+  voltage-gated calcium channels open, triggering the release of
+  neurotransmitters into the synaptic cleft.
+- #strong[Characterizing Responses:] A Post-Stimulus Time Histogram
+  (PSTH) calculates average firing rate by counting spikes across
+  multiple trials over a time bin $Delta t$:
+  $upright("PSTH") = n_S \/ \( n_T Delta t \)$.
+- #strong[Tuning Curves:] Relate firing rate to continuous stimuli, such
+  as bell-shaped curves for V1 orientation or MT movement direction, and
+  monotonic curves for eye position.
+- #strong[Discrete Stimuli:] Often rely on sparse coding, where only a
+  small fraction of neurons respond to a specific complex stimulus
+  (e.g., an odor or a concept).
+- #strong[Spike-Triggered Average (STA):] Calculates the average
+  stimulus preceding a spike:
+  $C \( tau \) = 1 / n sum_(i = 1)^n s \( t_i - tau \)$.
+- #strong[Noise:] Interspike interval (ISI) variability is often modeled
+  as a Poisson process ($C V_(I S I) = 1$).
+
+== Neural Encoding: Predicting Firing Rates & Receptive Fields
+<neural-encoding-predicting-firing-rates-receptive-fields>
+- #strong[Linear Rate Prediction:] Instantaneous firing rate can be
+  modeled as a linear filter of the stimulus:
+  $r \( t \) = r_0 + integral_0^oo D \( tau \) s \( t - tau \) d tau$.
+- #strong[Static Nonlinearities:] To prevent negative firing rates and
+  set upper bounds, the linear estimate $L \( t \)$ is passed through a
+  nonlinear function (e.g., ReLu or Sigmoid).
+- #strong[LNP Model:] The Linear-Nonlinear-Poisson model generates spike
+  trains by passing a stimulus through a linear filter, a static
+  nonlinearity, and a Poisson spike generator.
+- #strong[Receptive Fields (RF):] In the retina and LGN, spatial RFs
+  have a circular center-surround structure fitted by a difference of
+  Gaussians.
+- #strong[DNN Encoding:] Deep neural networks can act as "digital twins"
+  to predict neural activity and optimize Most Exciting Inputs (MEIs).
+
+== Neural Decoding I: Reading Populations
+<neural-decoding-i-reading-populations>
+- #strong[Population Average:] For $N$ neurons responding linearly to a
+  stimulus, the estimator is
+  $hat(theta) \( arrow(r) \) = 1 / N sum_i r_i$.
+- #strong[Population Vector:] Used for neurons with preferred directions
+  (e.g., cricket wind sensing or monkey motor cortex), utilizing the
+  estimator $arrow(C)_t = 1 / N sum_i r_(i \, t) arrow(C)_i$.
+- #strong[Estimator Error:] An estimator is unbiased if its bias
+  $b_(hat(theta)) = angle(hat(theta) \( arrow(r) \)) - theta = 0$.
+- #strong[Fisher Information:]
+  $J \( theta \) = angle(\( V \( theta \, arrow(r) \) \)^2)$,
+  where the score $V$ is the gradient of the log-likelihood.
+- #strong[Cramer-Rao Inequality:] The Mean Squared Error of any unbiased
+  estimator is bounded by the inverse of Fisher Information:
+  $angle(\( hat(theta) \( arrow(r) \) - theta \)^2) gt.eq frac(1, J \( theta \))$.
+- #strong[Maximum Likelihood Estimator (MLE):] An efficient estimator
+  that achieves the Cramer-Rao bound in the large $N$ limit.
+- #strong[Independent Poisson Population:]
+  $J \( theta \) = T sum_(i = 1)^N frac(r_(i') \( theta \)^2, r_i \( theta \))$.
+
+== Neural Decoding II: Information Theory
+<neural-decoding-ii-information-theory>
+- #strong[Entropy:] A measure of uncertainty for a discrete random
+  variable, defined as $H \( X \) = - sum p_i log_2 p_i$.
+- #strong[Conditional Entropy:]
+  $H \( X \| Y \) = H \( X \, Y \) - H \( Y \)$.
+- #strong[Mutual Information:] Measures uncertainty reduction, defined
+  as
+  $I \( X ; Y \) = sum p \( x \, y \) log_2 (frac(p \( x \, y \), p \( x \) p \( y \)))$.
+- #strong[Noisy Channels:] For a binary symmetric channel,
+  $I = 1 - H_b \( p \)$.
+- #strong[Efficient Coding Hypothesis:] Sensory systems are optimized
+  for information transmission.
+
+== Neuronal Biophysics
+<neuronal-biophysics>
+- #strong[Equivalent Circuit:] A neuron is modeled as a leaky capacitor:
+  $I_e = C_m frac(d V_m, d t) + V_m / R_L$.
+- #strong[Time Constant:] The membrane time constant is
+  $tau_m = R_L C_m$, typically 10-20 ms.
+- #strong[Step Current Response:] The voltage relaxes exponentially:
+  $V \( t \) = V^oo + \( V^(e q) - V^oo \) e^(- t \/ tau_m)$.
+- #strong[Nernst Equation:] Balances concentration gradients (Fick's
+  law) and electrical drift (Ohm's law) to find single-ion equilibrium:
+  $V_(e q) = - V_T / z log frac(\[ C \]_(i n), \[ C \]_(o u t))$.
+- #strong[Goldman Equation:] Calculates the overall resting potential
+  (\~ -70mV) based on the relative permeabilities of multiple ions
+  ($K^(+)$, $N a^(+)$, $C l^(-)$).
+- #strong[Hodgkin-Huxley Model:]
+  $I_m = g_L \( V - E_L \) + g_K \( V - E_K \) + g_(N a) \( V - E_(N a) \)$.
+  Conductances are voltage-dependent. $N a^(+)$ activates rapidly then
+  inactivates, while $K^(+)$ activates slowly and persists.
+
+== Synapses
+<synapses>
+- #strong[Classification:] Chemical synapses are slow and unidirectional
+  (using neurotransmitters); electrical synapses are rapid and
+  bidirectional (using gap junctions).
+- #strong[Receptors:] Ionotropic receptors trigger immediate changes in
+  membrane potential; Metabotropic receptors trigger slower,
+  longer-lasting intracellular cascades.
+- #strong[Synaptic Current:] Modeled as $I_s = g_s \( V - E_s \)$, where
+  conductance $g_s = macron(g)_s P_s P_(r e l)$.
+- #strong[Kinetics:] Postsynaptic open probability evolves as
+  $frac(d P_s, d t) = alpha_s \( 1 - P_s \) - beta_s P_s$.
+- #strong[Common Synapses:] AMPA (Excitatory, fast, no voltage
+  dependency); NMDA (Excitatory, slow, voltage-dependent due to
+  $M g^(2 +)$ block); $G A B A_A$ (Inhibitory, fast).
+- #strong[Plasticity:] Spike-timing dependent plasticity (STDP) alters
+  EPSC amplitude based on the exact relative timing of pre- and
+  post-synaptic spikes.
+
+== Leaky Integrate-and-Fire (LIF) Models
+<leaky-integrate-and-fire-lif-models>
+- #strong[Subthreshold Dynamics:]
+  $tau_m frac(d V, d t) = - \( V - E_L \) + I_(s y n) \( t \) R_m$.
+- #strong[Spike & Reset:] When voltage reaches threshold $V_(t h)$, a
+  spike is emitted, and voltage resets to $V_(r e s e t)$.
+- #strong[f-I Curve:] Mean firing rate for constant input is
+  $r_(i s i) = \[ tau_m log \( frac(R_m I_e + E_L - V_(r e s e t), R_m I_e + E_L - V_(t h)) \) \]^(- 1)$.
+- #strong[Stochastic Inputs:] Modeling inputs as a Gaussian process
+  yields two regimes: Superthreshold (regular firing without noise) and
+  Subthreshold (irregular firing enabled by noise).
+
+== Networks of Neurons
+<networks-of-neurons>
+- #strong[Architecture:] Connectivity can be feed-forward, recurrent
+  (most common in the cortex), or feed-back.
+- #strong[Cortical Connectivity:] Cortical circuits feature large cell
+  counts (\~100,000 in a local millimeter), massive synapse counts,
+  sparse connectivity (\~0.1), and a lognormal distribution of
+  connection weights.
+- #strong[Dale's Law:] A neuron transmits the same neurotransmitter set
+  at all its postsynaptic connections (neurons are exclusively
+  Excitatory or Inhibitory).
+- #strong[Functional Specificity:] Neurons with similar response
+  profiles (e.g., orientation preference) are statistically more likely
+  to connect.
+
+== Feedforward & Linear Recurrent Networks
+<feedforward-linear-recurrent-networks>
+- #strong[Rate Models:] Approximate instantaneous network dynamics as
+  $tau_r frac(d v \( t \), d t) = - v \( t \) + F \( W u + M v \)$.
+- #strong[Feedforward Examples:] Coordinate transformations in the
+  premotor monkey cortex (combining gaze and retinal stimulus) and Hubel
+  & Wiesel's V1 model (LGN $arrow.r$ Simple Cells $arrow.r$ Complex
+  Cells).
+- #strong[1D Linear Recurrent:]
+  $tau frac(d v, d t) = - v + \( h + M v \)$. Fixed point is
+  $v_oo = frac(h, 1 - M)$. Stable if $M < 1$, unstable if $M > 1$.
+- #strong[Balanced Amplification:] In multi-population networks,
+  non-normal dynamics can lead to massive transient amplifications even
+  if the steady state is strictly stable.
+
+== Nonlinear Recurrent Networks (E-I)
+<nonlinear-recurrent-networks-e-i>
+- #strong[Mathematical Analysis:] Find fixed points by solving for
+  intersections of nullclines, then determine stability by finding the
+  eigenvalues of the Jacobian matrix associated with the linearized
+  dynamics.
+- #strong[Eigenvalues:] If the real part is negative, the fixed point is
+  stable. If positive, it is unstable. Complex eigenvalues dictate
+  oscillatory behavior.
+- #strong[Inhibition Stabilized Network (ISN):] If the excitatory
+  recurrent weights are strong ($M_(E E) > 1$), the isolated excitatory
+  subnetwork is unstable. It is stabilized dynamically by the inhibitory
+  population.
+- #strong[Paradoxical Effect:] In an ISN, injecting an external
+  excitatory current directly into the inhibitory neurons will,
+  counterintuitively, #emph[decrease] their steady-state firing rate.
+
+== Mock Exam Material
+<mock-exam-material>
+- #strong[Q1:] If $t^(\*)$ is the mean ISI, the firing frequency is
+  $1 \/ t^(\*)$.
+- #strong[Q2:] As magnesium concentration increases, NMDA receptor
+  conductance decreases (due to the voltage-dependent $M g^(2 +)$
+  block).
+- #strong[Q3:] When spiking is perfectly regular, the coefficient of
+  variation (CV) of the ISI is close to zero.
+- #strong[Q4:] A neuron uses its Axon to send information to other
+  neurons.
+- #strong[Q5:] The statement "In unsupervised learning, synaptic weight
+  dynamics depends only on activity of pre and post-synaptic neurons and
+  an error signal" is False (unsupervised learning does not use an error
+  signal).
+- #strong[Q6:] In a linear ring model with
+  $M \( theta - theta' \) = m_0 + m_1 cos \( theta - theta' \)$, if
+  $m_1 < 0$, the tuned component of the input is suppressed by recurrent
+  activity.
+- #strong[Q7:] In the Hodgkin-Huxley model, $N a^(+)$ channels activate
+  rapidly and then inactivate (transient), whereas $K^(+)$ channels
+  activate slowly and remain open (persistent).
+- #strong[Q8:] Equilibrium potential is determined by balancing the
+  concentration gradient (diffusive flux via Fick's law) with the
+  electrical field (drift flux via Ohm's law).
+- #strong[Q9:] To analyze nonlinear recurrent networks, calculate
+  nullclines to find fixed points, and perform linear stability analysis
+  (Taylor expansion/Jacobian matrix) to evaluate responses to small
+  perturbations.

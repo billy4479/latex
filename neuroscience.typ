@@ -10,635 +10,342 @@
 
 #show: thm-init
 
-= Neural coding
+#let Nap = $"Na"^+$
+#let Kp = $"K"^+$
+#let mV = $"mV"$
 
-We choose a certain neuron and, when a stimulus is shown to the subject, we record the activity of
-that neuron.
-We will try to answer the following questions:
-- How much information is contained in a single neuron (or a population of neuron) response? How
-  many neurons do I need to obtain a certain information?
-- Is there an optimal way of transmitting information?
-- Are neurons close to this optimal way?
+= Neural Encoding
 
-== Anatomy of a neuron
+== Characterizing Activity
 
-/ Soma: Body of the cell, contains the nucleus and various organelles.
-/ Dendrites: Branches which come off the soma which receive the signals from other neurons.
-/ Axon: A long branch which transmits signals off the neuron.
+A neuron contains a soma (metabolic processes), dendrites (receive signals), and an axon (transmits
+signals).
+The mammalian cortex contains approximately 100,000 neurons per $m m^3$.
 
-The number of synapses per neuron varies widely depending on the type of neuron: it can go from as
-little as 4 to 150000.
+Neurons maintain a resting membrane potential of approximately -70 $mV$ driven by $Nap$ and $Kp$
+channels.
 
-Neurons are *electrically charged*: at rest the membrane potential is $-70"mV"$. On the cell membrane
-there are ions channel which help keep the potential in balance, the main actors are $"Na"^+$ and
-$"K"^+$ channels.
+When a spike reaches the axon terminal, voltage-gated calcium channels open, triggering the release
+of neurotransmitters into the synaptic cleft.
 
-The *action potential* is a rapid electrical signal or impulse and it's caused by a change in ions
-concentration in the membrane. This signal is then transmitted through the axon to other neurons or
-muscles. The potential difference between the resting state and the peak of the action potential is
-significant: the signal can travel very long without being attenuated.
-
-*Synapses* are the junctions between neurons: when a synapse on an axon receives an action potential
-a voltage-gated calcium channel opens and in turns triggers the release of neurotransmitters which
-influence the post-synaptic neuron.
-
-== Modelling neuron's activity
-
-Neurons exhibit activity even when there is no external stimulus. We can use a raster plot to
-illustrate neurons' activity.
-
-
-#figure(
-  image("./assets/neuroscience/raster-plot.png"),
-  caption: [Raster plot: each row represents a trial; time is on the $x$ axis, stimulus occurs at
-    $t= 0$; each line represents an action potential.],
-)
-
-As we can see stimuli induce brain activity, but responses are noisy.
-A deterministic model is likely impossible, we use a probabilistic one based on Poisson processes
-with a time dependent firing rate.
-
-Let $n_T$ be the number of trials and $Delta t$ the bin size, then count the number of spikes in
-each bin $n_s$ over all trials. We define the instantaneous firing rate (PSTH) as
+A *Post-Stimulus Time Histogram (PSTH)* calculates average firing rate by counting spikes across
+multiple trials over a time bin $Delta t$:
 $
-  "PSTH" = n_s / (n_T Delta t)
+  "PSTH" = n_S / ( n_T Delta t )
 $
+where $n_S$ is the number of spikes within a specific time bin and $n_T$ is the number of trials.
 
-Neurons have different purposes, each one might have a continuous or discrete firing rate depending
-on the stimulus. An example of continuous firing rate is orientation sensitivity: depending on the
-rotation of the stimulus the neuron fires according to a bell curve; see other examples in slides
-001, page 18. Other times external stimuli cannot be mapped to a low-dimensional continuous function
-and it is often sparse: only a small fraction of neurons fire given a stimulus and viceversa each
-neuron responds only to a small fraction of stimuli.
-
-=== Spike-Triggered Average
-
-To look which neurons activate when we use *spike-triggered average* (STA).
-Let $n$ be the number of spikes, $s(t)$ be a time-varying stimulus and $delta(t)$ be a neuron's
-signal.
+The *Spike-Triggered Average (STA)* is the average stimulus preceding a spike:
 $
-  rho(t) & = "spike train" = sum^n_(i = 1) delta(t - t_i) \
-  C(tau) & = "STA" = 1/n sum^n_(i = 1) s(t_i - tau)
+  C ( tau ) = 1 / n sum_(i = 1)^n s ( t_i - tau )
+$
+where
+- $tau$ is the time delay: neurons take some time to process information so a spike at time $t$ can
+  be caused by a stimulus some time before. $tau$ is how much time in the past we should look.
+- $n$ is the number of spikes recorded during the experiment.
+- $t_i$ is the time in which the $i$-th spike occurred.
+- $s$ is the continuous stimulus which was presented, $s(t_i - tau)$ is the value of the stimulus
+  $tau$ time before the spike.
+
+The time between each spike (*InterSpike Interval (ISI)*) is well described by a Poisson process
+with time dependent $lambda$: experimentally it was shown that $"CV"_"ISI" := sigma/mu$ for the
+ISI is $"CV"_"ISI" = 1$ which is the same as a PP.
+
+
+== Predicting firing rates
+
+We now want to predict firing rates.
+
+We start with a simple model for instantaneous firing rate:
+$
+  r(t) = r_0 + L(integral_0^oo D (tau) s (t - tau) dd(tau))
+$
+where $L$ is a non-linearity and $D$ is the kernel: it tells us how much a stimulus presented at
+$tau$ time ago influences the firing rate.
+
+= Neural Decoding
+
+== Reading Populations
+For $N$ neurons responding linearly to a stimulus, the population estimator is
+$
+  hat(theta) ( arrow(r) ) = 1 / N sum_i r_i
+$
+For neurons with preferred directions we use a population vector
+$
+  arrow(C)_t = 1 / N sum_i r_(i \, t) arrow(C)_i
 $
 
-The spike train is the number of signals until $t$.
-
-#proposition[
-  $
-    C(tau) = 1/angle(r)_"trial" Q_"rs" (- tau)
-  $
-]<prop:sta>
-
-
-#proof[
-  Let $angle(dot)_"trials"$ denote the average over the trials:
-  $
-    angle(rho(t))_"trials" = 1/N sum^N_(alpha = 1) rho^alpha (t)
-  $
-
-  Let us consider the average STA over the trials.
-  $
-    angle(C(tau)) & = angle(1/n sum^n_(i = 1) s(t_i - tau)) \
-                  & approx^(T >> 1) 1/angle(n) angle(sum^n_(i = 1) s(t_i - tau))
-  $
-  This is because, over a large number of trials, the number of spikes will be constant.
-
-  We continue by looking at the sum:
-  $
-    sum^n_(i = 1)
-  $
-  TODO: complete proof
-]
-
-=== Inter-Spike Interval
-
-We define the *inter-spike interval* (ISI) as the time between spikes.
-The coefficient of variation $"CV"_"ISI" = sigma/mu$ has been measured experimentally and it is
-close to $1$
-
-#proposition[
-  Since $"CV"_"ISI" = 1$ experimentally, the ISI is well described by a Poisson process.
-]
-
-#proof[
-  We will describe the neuron firing with an homogeneous Poisson process and show that then the CV
-  is also 1.
-  $
-       P("spike in bin") & = r Delta t \
-    P("no spike in bin") & = 1 - r Delta t
-  $
-
-  Then the probability of $n$ spikes in $T$ is distributed as Poisson
-  $
-    P_T (n) = ((r T)^n e^(- r T) ) / n!
-  $
-
-  Now we shift the time so that at $t_0 = 0$ we have a spike. We discretize time using bins of size
-  $Delta t$.
-
-  Then at some time $t_1$ another spike will occur and, because of our discretization, we will have
-  that $t_1 in [t_0 + tau, t_0 + tau + Delta t]$.
-
-  The $"ISI" = t_1 - t_0$. By our Poisson distribution we get
-  $
-    P(tau <= t_1 - t_0 < tau + Delta t) & = P_tau (n = 0) P_(Delta t) (n = 1) \
-                                        & e^(-r tau) r Delta t
-  $
-
-  To compute the coefficient of variation of the ISI we need $mu$ and $sigma$:
-  $
-    mu = angle(tau) & = integral_0^infinity tau n r e^(- tau r) dd(tau) = 1/r \
-    sigma^2 = angle(tau^2) - angle(tau)^2 & =
-    integral^infinity_0 tau^2 r e^(- tau r) dd(tau) - 1/r^2 = 2/r^2 - 1/r^2 = 1/r^2
-  $
-  This means that $sigma = 1/r$ and $"CV"_"ISI" = 1$.
-]
-
-#proposition[
-  The Fano Factor (FF) defined as $sigma^2 / mu$ of the number of events of a PP is $1$.
-]
-
-#proof[
-  To compute the moments we need to compute the derivatives of the moment-generating function at
-  $alpha = 0$.
-  $
-    g(alpha) &= sum^infinity_(n = 0) e^(alpha n) ((r T)^n e^(-r T))/n! \
-    &= e^(- r T) sum^infinity_(n = 0) ((r T e^alpha)^n )/n! \
-    & = e^(-r T) e^(e^alpha r T) \
-    & = e^((1 - e^alpha) r T) \
-    lr(dv(g(alpha), alpha, k) |)_(alpha = 0) & = sum^infinity_(n = 0) n^k ((r T)^n e^(-r T))/n!
-  $
-
-
-  We now use the result to compute the moments.
-  $
-    angle(n) & = sum^infinity_(n = 0) n P_T (n) = dv(g(alpha), alpha) |_(alpha = 0) \
-    & = e^(- r T (1 - e^alpha)) r T e^alpha |_(alpha = 0) = r T\
-    angle(n^2) & = (r T)^2 + r T \
-    sigma^2 & = r T
-  $
-
-  Then $"FF" = 1$.
-]
-
-However experimentally we get that the FF is usually greater than $1$, this means that the spiking
-is not really an homogeneous PP. A better model is a non-homogeneous PP, where the firing rate is
-a stochastic process.
-
-=== Reverse-Correlation Method
-
-This is a method for estimating the firing rate, i.e. $r(t)$ in the previous section.
-
-Let our signal be just a function of time $S(t)$, then we have the data $r(t)$ which is what the
-neuron outputs. Our goal is to find an estimator for $r(t)$: this can be dependent just on the
-stimulus (e.g. $r_"est" = f(S)$) or it could be history dependent
+=== Cramer-Rao
+An estimator is unbiased if
 $
-  r_"est" (t) = r_0 + integral_0^oo dd(tau) S(t - tau) D(tau)
+  angle(hat(theta) \( arrow(r) \)) - theta = 0
 $
-for some kernel $D(tau)$. This is a Volterra expansion, we could also add higher order terms but we
-won't need them.
+Fisher Information is defined as
+$
+  J \( theta \) = angle(\( V \( theta \, arrow(r) \) \)^2)
+$
+where the score $V$ is the gradient of the log-likelihood.
 
-For example let
+The Cramer-Rao inequality tells us that the MSE of any unbiased estimator is bounded by the inverse
+of Fisher Information:
 $
-  S(t) & = cases(A wide & t >= 0, 0 wide & t<0) \
-  D(tau) & = 1/sigma exp(-tau/sigma) \
-  r_"est" & = r_0 + integral^oo_0 dd(tau) A/sigma exp(-tau/sigma) bb(1)_(t - tau > 0) \
-  & =integral_0^t dd(tau) A/sigma exp(-tau/sigma) = A(1 - exp(-t/sigma))
+  angle((hat(theta) ( arrow(r) ) - theta )^2) gt.eq frac(1, J (theta))
 $
 
-We are interested in the case where we know $r(t)$ but we want to find $D(tau)$.
-To do this we want to minimize the distance between the true $r$ and the estimated one.
+We say that an estimator is efficient if the bound is sharp in the large $N$ limit.
 
-Let $T$ be the trial duration and compute the square loss:
+For a population of independent Poisson neurons the Fisher information is
 $
-  E = 1/T integral_0^T dd(t) abs(r_"est" (t) - r(t))^2
-$
-we then look for $r_0, D(tau)$ minimizing $E$.
-
-#proposition[
-  Assume that $integral_0^T dd(t) S(t) = 0$, that $S tilde N(0, sigma^2_S)$ and that $S$ are
-  uncorrelated i.e. $angle(S(t') S(t)) = sigma^2_S S(t - t')$.
-
-  The optimal $D(tau)$ is
-  $
-    D(tau) = (angle(r) C(tau))/sigma^2_S
-  $
-]
-
-#proof[
-  We start by discretizing time.
-  $
-    E & = (Delta t)/T sum^(N = T/(Delta t))_(i = 0) abs(r_"est" (i Delta t) - r(i Delta t))^2 \
-    & = (Delta t)/T sum^N_(i = 0)
-    abs(r_0 + Delta t sum^oo_(k = 0) D(k Delta t) S((i - k) Delta t) - r(i Delta t))^2 \
-    & = (Delta t)/T sum^N_(i = 0)
-    abs(r_0 + Delta t sum^oo_(k = 0) D^k S^(i - k) - r^i)^2
-  $
-  where in the last step we just abbreviated the notation.
-  Then this is just a function of a vector of values of $D$: we can just set the derivative to $0$.
-  $
-    pdv(E, D^j) & = (2 Delta t)/T sum^N_(i = 0) [(r_0 + Delta t sum^oo_(k = 0) D^k S^(i - k) - r^i)
-                    pdv(, D^j) (Delta t sum^oo_(k = 0) D^k S^(i - k))] \
-                & = (2 Delta t)/T sum^N_(i = 0) [(r_0 + Delta t sum^oo_(k = 0) D^k S^(i - k) - r^i)
-                    Delta t S^(i - j)] \
-                & ==> (cancel(2) Delta t)/T sum^N_(i = 0) (r^i - r_0)S^(i - j) =
-                  (cancel(2) Delta t)/T sum^N_(i = 1) Delta t
-                  sum^oo_(k = 0) D^k S^(i - k) S^(i - j) \
-                & ==> 1/T integral_0^T dd(t) (r^i - r_0) S(t - tau) =
-                  1/T integral_0^T dd(t)
-                  integral^oo_(0) dd(tau') D(tau') S(t - tau) S(t - tau') \
-  $
-  But then we can use our assumption: the LHS becomes
-  $
-    1/T integral_0^T dd(t) (r^i - r_0) S(t - tau)
-    & = 1/T integral_0^T dd(t) dot.op r^i S(t - tau) -
-    1/T integral_0^T dd(t) dot.op r_0 S(t - tau) \
-    & = 0 + Q_(r s) ( - tau)
-  $
-  and we can use the substitution $t' = t - tau$ on the RHS to get
-  $
-    1/T integral_0^T dd(t) integral^oo_(0) dd(tau') D(tau') S(t - tau) S(t - tau')
-    & = 1/T integral^(T - tau)_(-tau) dd(t') S(t' + tau- t') S(t') \
-    & = integral dd(tau') Q_(s s) (tau - t') D(tau')
-  $
-  TODO: there is something wrong in the derivation above
-
-  giving us the equation
-  $
-    Q_(r s) (- tau) = integral_0^oo dd(tau') D(tau') Q_(s s) (tau - tau')
-  $
-
-  Now we use the fact that $S$ is independent to get
-  $
-    integral^oo_0 dd(tau) D(tau') sigma^2_S delta(tau - tau') = D(tau) sigma^2_S
-  $
-
-  Showing that
-  $
-    D(tau) = (Q_(r s) (- tau))/sigma^2_S
-  $
-  and using @prop:sta we get the result.
-]
-
-The calculation also works for a generic $S(t)$, however the result is
-$
-  D(tau) = 1/(2 pi) integral^oo_(-oo) dd(omega) (tilde(Q)_(r s) (-omega))/(tilde(Q)_(s s) (omega))
-  e^(-i omega t) wide cases(delim: #none, "where" tilde "represents", "the Fourier transform")
+  J \( theta \) = T sum_(i = 1)^N frac(r_(i') \( theta \)^2, r_i \( theta \))
 $
 
-Note that we can choose the stimulus to be as the assumption since we are the one designing the
-experiment.
+== Information Theory
 
-=== Most effective stimulus
-
-#proposition[
-  The function $S(t)$ that maximizes $r_"est"(t)$ given that
-  $
-    integral^T_0 dd(t') abs(S(t'))^2 = "const"
-  $
-  is
-  $
-    S(T - tau) prop D(tau)
-  $
-]
-
-#proof[
-  TODO: lagrange multipliers
-]
-
-However, usually this is not enough to estimate the firing rate accurately. This might be due to
-non-linearity of data or too little terms in the Volterra expansion.
-
-We can fix this by introducing a non linearity $F(dot)$:
+Recall the definition of entropy
 $
-  r_"est" = r_0 + F(L(t)) wide "where" L(t) = integral_0^oo D(tau) S(t - tau) dd(tau)
+       H \( X \) & = - sum p_i log_2 p_i \
+  H \( X \| Y \) & = H \( X \, Y \) - H \( Y \) \
+        I (X, Y) & = sum p(x, y) log_2 ((p(x, y))/(p(x) p(y)))
 $
 
-This non-linear function $F$ can be fitted with the training data.
+= Neuronal Biophysics
 
-=== Visual system
+== Equivalent circuit
 
-This model can be expanded to spacial stimuli too:
+A neuron is modeled as a leaky capacitor
 $
-  S(t, x, y) \
-  C(tau, x, y) = sum_i S(t_i 0 tau, x, y) \
-  L(t) = integral_0^oo dd(tau) integral.double dd(x, y) D(tau, x, y) S(x, y, t - tau) \
-  D(tau, x, y) = angle(r) C(tau, x, y) /(sigma_S^2)
+  I_e = C_m frac(d V_m, d t) + V_m / R_L
 $
 
-= Neural decoding
+We define the membrane time constant as $tau_m = R_L C_m$, typically 10-20 ms.
 
-Given a vector of $N$ neural responses (i.e. firing rates) we want to go back to the stimulus
-$theta$. A decoder is an estimator $hat(theta) (arrow(r))$.
-
-We will assume that
+The voltage relaxes exponentially:
 $
-  r_(i, t) = theta + z_(i, t) wide "with" z_(i, t) tilde N(0, 1)
+  V \( t \) = V^oo + \( V^"eq" - V^oo \) e^(- t \/ tau_m)
 $
-and choose that
+where $V^oo$ is the potential the neuron will reach at $t -> oo$ (usually defined by $V_"rest" +
+I_"ext" R_m$) and $V^"eq"$ is a constant, usually the resting potential.
+
+
+To find $V_"eq"$ we need to balance the concentration gradient and the electrical drift (Fick's and
+Ohm's law) for each ion.
+
 $
-  hat(theta)(arrow(r)_t) & = 1/N sum^N_(i = 1) r_(i, t) \
-                         & = 1/N sum^N_(i = 1) (theta + z_(i, t)) \
-                         & = theta + eta_t wide "with" eta_t tilde N(0, 1/N)
-$<eq:dec-pop-est>
-
-#example(title: [Wind in crickets])[
-  Crickets have sensors which can feel the direction of the wind. We will assume that the wind's
-  velocity is $arrow(v)$ such that $abs(arrow(v)) = 1$.
-
-  There are 4 different neurons which are responsible for decoding the wind direction:
-  $
-    r_a (theta) = r_"max" (cos(theta - theta_a))_+ wide "with" a in {1, 2, 3, 4}
-  $
-  where $theta_a$ is the "preferred" orientation of each neuron.
-]
-
-#figure(
-  image("./assets/neuroscience/decoders-cricket.png"),
-  caption: [Firing rates of each neuron on the $y$ axis, orientation of the wind on the $x$ axis.],
-)
-
-#model[
-  We know we can define the cosine as the dot product between two unit vectors:
-  $
-    r_a (theta) = r_"max" (arrow(v) dot.op arrow(c)_a)_+
-  $
-  which fives us a decoder
-  $
-    arrow(v)_"pop" & = sum^N_(d = 1) (arrow(v) dot.op arrow(c)_a)_+ arrow(c)_a \
-                   & = sum^N_(d = 1) (r_d (theta))/(r_"max") arrow(c)_a
-  $
-]
-
-
-== Error of the estimator
-
-First we compute the bias
+  V_(e q) = - V_T / z log ([C]_"in")/([C]_"out")
 $
-  b_hat(theta) & = angle(hat(theta)(arrow(r)))_(arrow(r) | theta) - theta \
-  & = integral dd(arrow(r)) dot.op hat(theta)(arrow(r)) prob(arrow(r) | theta) - theta
+where $V_T$ is the thermal voltage (constant depending on temperature), $z$ is the valence of the
+ion (e.g. +1 for $Nap$, -1 for $"Cl"^-$).
+
+Then we can compute the overall resting potential using *Goldman equation* using all the ions,
+giving a resting potential of $-70 mV$.
+
+In the *Hodgkin-Huxley model* conductances are voltage-dependent.
+$Nap$ activates rapidly then inactivates, while $Kp$ activates slowly and persists.
 $
-We say that the decoder is unbiased if $b_hat(theta) = 0$.
-
-We also use the MSE:
+  I_m = g_L \( V - E_L \) + g_K \( V - E_K \) + g_(N a) \( V - E_(N a) \)
 $
-  "MSE" = angle((hat(theta)(arrow(r)) - theta)^2)_(arrow(r) | theta)
-$
-
-#proposition(title: [Cramer-Rao inequality])[
-  $
-    angle((hat(theta)(arrow(r)) - theta)^2)_(arrow(r) | theta) >= 1/(cal(F)(theta))
-  $
-  where $cal(F)(theta)$ is the Fisher information.
-
-  If we have equality we say that the estimator is efficient.
-]
-
-#proof[
-  Recall that the *score* function is
-  $
-    V(theta, arrow(r)) &= pdv(, theta) log prob(arrow(r) | theta) \
-    & = 1/(prob(arrow(r) | theta)) pdv(, theta) prob(arrow(r) | theta)
-  $
-  Note that $angle(V(theta, arrow(r))) = 0$.
-
-  Then, the Fisher information is defined as
-  $
-    cal(I)(theta) = angle(V(theta, arrow(r)))_(arrow(r) | theta)
-  $
-
-  TODO: finish this, it's just cauchy-schwartz
-]
-
-#example[
-  Show that the estimator defined in @eq:dec-pop-est is efficient.
-]
-#solution[
-  Compute the Fisher information:
-  $
-    cal(theta) & = angle(V(theta, arrow(r)))_(arrow(r) | theta) \
-    & = integral dd(arrow(r)) prob(arrow(r) | theta) (pdv(, theta) log prob(arrow(r) | theta))^2 \
-  $
-
-  Recall that each component of $arrow(r)$ is independent, therefore can be written as the product
-  of Gaussians.
-
-  TODO: complete here. The idea is that then you compute the log of the probability, giving a sum;
-  compute the derivative; integrate the thing, which simplifies over some indices of the sum; split
-  the integral so that we find the definition of mean and variance of the noise.
-
-  We find that $cal(I)(theta) = N$.
-
-  Similarly the MSE can be easily expanded and simplified as $1/N$.
-]
-
-
-= Gemini
-
-== Neural Encoding: Characterizing Activity
-<neural-encoding-characterizing-activity>
-- #strong[Neuron Structure:] A neuron contains a soma (metabolic
-  processes), dendrites (receive signals), and an axon (transmits
-  signals).
-- #strong[Physical Properties:] The mammalian cortex contains
-  approximately 100,000 neurons per $m m^3$.
-- #strong[Electrical Properties:] Neurons maintain a resting membrane
-  potential of approximately -70 mV driven by $N a^(+)$ and $K^(+)$
-  channels.
-- #strong[Synapses:] When a spike reaches the axon terminal,
-  voltage-gated calcium channels open, triggering the release of
-  neurotransmitters into the synaptic cleft.
-- #strong[Characterizing Responses:] A Post-Stimulus Time Histogram
-  (PSTH) calculates average firing rate by counting spikes across
-  multiple trials over a time bin $Delta t$:
-  $upright("PSTH") = n_S \/ \( n_T Delta t \)$.
-- #strong[Tuning Curves:] Relate firing rate to continuous stimuli, such
-  as bell-shaped curves for V1 orientation or MT movement direction, and
-  monotonic curves for eye position.
-- #strong[Discrete Stimuli:] Often rely on sparse coding, where only a
-  small fraction of neurons respond to a specific complex stimulus
-  (e.g., an odor or a concept).
-- #strong[Spike-Triggered Average (STA):] Calculates the average
-  stimulus preceding a spike:
-  $C \( tau \) = 1 / n sum_(i = 1)^n s \( t_i - tau \)$.
-- #strong[Noise:] Interspike interval (ISI) variability is often modeled
-  as a Poisson process ($C V_(I S I) = 1$).
-
-== Neural Encoding: Predicting Firing Rates & Receptive Fields
-<neural-encoding-predicting-firing-rates-receptive-fields>
-- #strong[Linear Rate Prediction:] Instantaneous firing rate can be
-  modeled as a linear filter of the stimulus:
-  $r \( t \) = r_0 + integral_0^oo D \( tau \) s \( t - tau \) d tau$.
-- #strong[Static Nonlinearities:] To prevent negative firing rates and
-  set upper bounds, the linear estimate $L \( t \)$ is passed through a
-  nonlinear function (e.g., ReLu or Sigmoid).
-- #strong[LNP Model:] The Linear-Nonlinear-Poisson model generates spike
-  trains by passing a stimulus through a linear filter, a static
-  nonlinearity, and a Poisson spike generator.
-- #strong[Receptive Fields (RF):] In the retina and LGN, spatial RFs
-  have a circular center-surround structure fitted by a difference of
-  Gaussians.
-- #strong[DNN Encoding:] Deep neural networks can act as "digital twins"
-  to predict neural activity and optimize Most Exciting Inputs (MEIs).
-
-== Neural Decoding I: Reading Populations
-<neural-decoding-i-reading-populations>
-- #strong[Population Average:] For $N$ neurons responding linearly to a
-  stimulus, the estimator is
-  $hat(theta) \( arrow(r) \) = 1 / N sum_i r_i$.
-- #strong[Population Vector:] Used for neurons with preferred directions
-  (e.g., cricket wind sensing or monkey motor cortex), utilizing the
-  estimator $arrow(C)_t = 1 / N sum_i r_(i \, t) arrow(C)_i$.
-- #strong[Estimator Error:] An estimator is unbiased if its bias
-  $b_(hat(theta)) = angle(hat(theta) \( arrow(r) \)) - theta = 0$.
-- #strong[Fisher Information:]
-  $J \( theta \) = angle(\( V \( theta \, arrow(r) \) \)^2)$,
-  where the score $V$ is the gradient of the log-likelihood.
-- #strong[Cramer-Rao Inequality:] The Mean Squared Error of any unbiased
-  estimator is bounded by the inverse of Fisher Information:
-  $angle(\( hat(theta) \( arrow(r) \) - theta \)^2) gt.eq frac(1, J \( theta \))$.
-- #strong[Maximum Likelihood Estimator (MLE):] An efficient estimator
-  that achieves the Cramer-Rao bound in the large $N$ limit.
-- #strong[Independent Poisson Population:]
-  $J \( theta \) = T sum_(i = 1)^N frac(r_(i') \( theta \)^2, r_i \( theta \))$.
-
-== Neural Decoding II: Information Theory
-<neural-decoding-ii-information-theory>
-- #strong[Entropy:] A measure of uncertainty for a discrete random
-  variable, defined as $H \( X \) = - sum p_i log_2 p_i$.
-- #strong[Conditional Entropy:]
-  $H \( X \| Y \) = H \( X \, Y \) - H \( Y \)$.
-- #strong[Mutual Information:] Measures uncertainty reduction, defined
-  as
-  $I \( X ; Y \) = sum p \( x \, y \) log_2 (frac(p \( x \, y \), p \( x \) p \( y \)))$.
-- #strong[Noisy Channels:] For a binary symmetric channel,
-  $I = 1 - H_b \( p \)$.
-- #strong[Efficient Coding Hypothesis:] Sensory systems are optimized
-  for information transmission.
-
-== Neuronal Biophysics
-<neuronal-biophysics>
-- #strong[Equivalent Circuit:] A neuron is modeled as a leaky capacitor:
-  $I_e = C_m frac(d V_m, d t) + V_m / R_L$.
-- #strong[Time Constant:] The membrane time constant is
-  $tau_m = R_L C_m$, typically 10-20 ms.
-- #strong[Step Current Response:] The voltage relaxes exponentially:
-  $V \( t \) = V^oo + \( V^(e q) - V^oo \) e^(- t \/ tau_m)$.
-- #strong[Nernst Equation:] Balances concentration gradients (Fick's
-  law) and electrical drift (Ohm's law) to find single-ion equilibrium:
-  $V_(e q) = - V_T / z log frac(\[ C \]_(i n), \[ C \]_(o u t))$.
-- #strong[Goldman Equation:] Calculates the overall resting potential
-  (\~ -70mV) based on the relative permeabilities of multiple ions
-  ($K^(+)$, $N a^(+)$, $C l^(-)$).
-- #strong[Hodgkin-Huxley Model:]
-  $I_m = g_L \( V - E_L \) + g_K \( V - E_K \) + g_(N a) \( V - E_(N a) \)$.
-  Conductances are voltage-dependent. $N a^(+)$ activates rapidly then
-  inactivates, while $K^(+)$ activates slowly and persists.
+where $g_L, g_"K", g_"Na"$ are the gates for the "leak", potassium and sodium channel: their
+conductance is allowed to change with voltage.
 
 == Synapses
-<synapses>
-- #strong[Classification:] Chemical synapses are slow and unidirectional
-  (using neurotransmitters); electrical synapses are rapid and
-  bidirectional (using gap junctions).
-- #strong[Receptors:] Ionotropic receptors trigger immediate changes in
-  membrane potential; Metabotropic receptors trigger slower,
-  longer-lasting intracellular cascades.
-- #strong[Synaptic Current:] Modeled as $I_s = g_s \( V - E_s \)$, where
-  conductance $g_s = macron(g)_s P_s P_(r e l)$.
-- #strong[Kinetics:] Postsynaptic open probability evolves as
-  $frac(d P_s, d t) = alpha_s \( 1 - P_s \) - beta_s P_s$.
-- #strong[Common Synapses:] AMPA (Excitatory, fast, no voltage
-  dependency); NMDA (Excitatory, slow, voltage-dependent due to
-  $M g^(2 +)$ block); $G A B A_A$ (Inhibitory, fast).
-- #strong[Plasticity:] Spike-timing dependent plasticity (STDP) alters
-  EPSC amplitude based on the exact relative timing of pre- and
-  post-synaptic spikes.
+Chemical synapses are slow and unidirectional (using neurotransmitters); electrical synapses are
+rapid and bidirectional (using gap junctions).
+
+Ionotropic receptors trigger immediate changes in membrane potential;
+Metabotropic receptors trigger slower, longer-lasting intracellular cascades.
+
+Synaptic current is modeled as
+$
+  I_s = g_s (V - E_s) "with" g_s = macron(g)_s P_s P_"rel"
+$
+where $P_s$ is the probability that the receptor in the postsynaptic neuron is open, while $P_"rel"$
+is the probability that the presynaptic neuron releases a neurotransmitter when a spike arrives.
+
+Postsynaptic open probability evolves as
+$
+  dv(P_s, t) = alpha_s (1 - P_s) - beta_s P_s
+$
+
+Common synapses are
+- $"AMPA"$: excitatory, fast, no voltage dependency
+- $"NMDA"$: excitatory, slow, voltage-dependent due to $"Mg"^(2 +)$ block
+- $"GABA"_A$: inhibitory, fast
 
 == Leaky Integrate-and-Fire (LIF) Models
-<leaky-integrate-and-fire-lif-models>
-- #strong[Subthreshold Dynamics:]
-  $tau_m frac(d V, d t) = - \( V - E_L \) + I_(s y n) \( t \) R_m$.
-- #strong[Spike & Reset:] When voltage reaches threshold $V_(t h)$, a
-  spike is emitted, and voltage resets to $V_(r e s e t)$.
-- #strong[f-I Curve:] Mean firing rate for constant input is
-  $r_(i s i) = \[ tau_m log \( frac(R_m I_e + E_L - V_(r e s e t), R_m I_e + E_L - V_(t h)) \) \]^(- 1)$.
-- #strong[Stochastic Inputs:] Modeling inputs as a Gaussian process
-  yields two regimes: Superthreshold (regular firing without noise) and
-  Subthreshold (irregular firing enabled by noise).
 
-== Networks of Neurons
-<networks-of-neurons>
-- #strong[Architecture:] Connectivity can be feed-forward, recurrent
-  (most common in the cortex), or feed-back.
-- #strong[Cortical Connectivity:] Cortical circuits feature large cell
-  counts (\~100,000 in a local millimeter), massive synapse counts,
-  sparse connectivity (\~0.1), and a lognormal distribution of
-  connection weights.
-- #strong[Dale's Law:] A neuron transmits the same neurotransmitter set
-  at all its postsynaptic connections (neurons are exclusively
-  Excitatory or Inhibitory).
-- #strong[Functional Specificity:] Neurons with similar response
-  profiles (e.g., orientation preference) are statistically more likely
-  to connect.
+This model is a simplification of the HH model, which can get quite computationally expensive.
+
+Instead of modelling the $Nap$ and $Kp$ currents we just look at the leak channel. Also, when $V$
+reaches $V_"th"$, a spike is emitted and $V$ gets reset to $V_"reset"$.
+$
+  tau_m dv(V, t) = -(V - E_L) + I_"syn" (t) R_m
+$<eq:lif-ode>
+where $tau_m$ is the membrane time constant, which tells us how quickly a neuron reacts to a certain
+input; $I_"syn"$ is the sum of the currents of the pre-synaptic excitatory or inhibitory neurons:
+$
+  I_"syn" = sum^(N_E)_i g_(E, i) (V - E_E) + sum^(N_I)_i g_(I, i) (V - E_I)
+$<eq:lif-syn>
+where $g_(E, i) (V - E_E)$ is the current generated by the $i$-th excitatory pre-synaptic neuron.
+
+The mean firing rate for constant input is
+$
+  r_"isi" = [tau_m log ((R_m I_e + E_L - V_"reset")/(R_m I_e + E_L - V_"th"))]^(- 1)
+$
+
+We can further simplify @eq:lif-syn with some further assumptions to get
+$
+  I_"syn" = - tau_m J_E sum^(N_E)_i y_(E, i) + tau_m J_I sum^(N_I)_i y_(I, i)
+$
+where $J_E, J_I$ are the synaptic efficacies and $y_(dot, i)$ are the spike trains for neuron $i$
+(sum of dirac deltas of when the neuron spikes).
+
+=== Gaussian approximation
+
+With many pre-synaptic inputs we can approximate @eq:lif-ode as
+$
+  tau_m dv(V, t) = - V + mu + tau_m sigma z(t)
+$
+where $angle(z(t)) = 0$ and $angle(z(t) z(t')) = delta(t - t')$ (dirac delta).
+Furthermore we have
+$
+       mu & = N r_"pre" tau_m (J_E - J_I) + E_L \
+  sigma^2 & = N r_"pre" tau_m (J_E^2 + J_I^2)
+$
+
+= Networks of Neurons
+Connectivity can be feed-forward (good for processing and transforming information), recurrent
+(enables memory and interesting network dynamics), or feedback.
+
+*Dale's Law* states that a neuron transmits the same neurotransmitter set at all its postsynaptic
+connections.
+
+For analyzing large networks of neurons even LIF models are too computationally expensive. We resort
+to firing rate model, which take as input the firing rate of the pre-synaptic neurons, add weights
+and non-linearities and give as output the firing rate of the current neuron.
+$
+  cases(
+    display(tau_s dv(I_S (t), t) = - I_S (t) + sum_i w_i u_i (t)),
+    display(tau_r dv(v(t), t) = - v(t) + F(I_s (t)))
+  )
+$
+where $tau_s, tau_m$ are the synaptic and membrane time constants and $F$ is a non-linear activation
+function.
+
+We can also use simplified versions:
+- If we assume instantaneous responses $tau_s >> tau_m$
+$
+  cases(
+    display(tau_s dv(I_S (t), t) = - I_S (t) + sum_i w_i u_i (t)),
+    display(v(t) = F(I_s (t)))
+  )
+$
+- If we assume instantaneous synapses $tau_s << tau_m$
+$
+  cases(
+    display(I_S (t) = sum_i w_i u_i (t)),
+    display(tau_r dv(v(t), t) = - v(t) + F(I_s (t)))
+  )
+$
 
 == Feedforward & Linear Recurrent Networks
-<feedforward-linear-recurrent-networks>
-- #strong[Rate Models:] Approximate instantaneous network dynamics as
-  $tau_r frac(d v \( t \), d t) = - v \( t \) + F \( W u + M v \)$.
-- #strong[Feedforward Examples:] Coordinate transformations in the
-  premotor monkey cortex (combining gaze and retinal stimulus) and Hubel
-  & Wiesel's V1 model (LGN $arrow.r$ Simple Cells $arrow.r$ Complex
-  Cells).
-- #strong[1D Linear Recurrent:]
-  $tau frac(d v, d t) = - v + \( h + M v \)$. Fixed point is
-  $v_oo = frac(h, 1 - M)$. Stable if $M < 1$, unstable if $M > 1$.
-- #strong[Balanced Amplification:] In multi-population networks,
-  non-normal dynamics can lead to massive transient amplifications even
-  if the steady state is strictly stable.
+We assume the case of fast synapses $tau_s << tau_m$, therefore the model can be approximated by
+$
+  tau_r dv(v(t), t) = -v (t) + F(W u + M v)
+$
+where $W$ is them matrix of feed-forward weights and $M$ is the matrix of recurrent connections.
 
-== Nonlinear Recurrent Networks (E-I)
-<nonlinear-recurrent-networks-e-i>
-- #strong[Mathematical Analysis:] Find fixed points by solving for
-  intersections of nullclines, then determine stability by finding the
-  eigenvalues of the Jacobian matrix associated with the linearized
-  dynamics.
-- #strong[Eigenvalues:] If the real part is negative, the fixed point is
-  stable. If positive, it is unstable. Complex eigenvalues dictate
-  oscillatory behavior.
-- #strong[Inhibition Stabilized Network (ISN):] If the excitatory
-  recurrent weights are strong ($M_(E E) > 1$), the isolated excitatory
-  subnetwork is unstable. It is stabilized dynamically by the inhibitory
-  population.
-- #strong[Paradoxical Effect:] In an ISN, injecting an external
-  excitatory current directly into the inhibitory neurons will,
-  counterintuitively, #emph[decrease] their steady-state firing rate.
+In feed forward networks $M = 0$.
 
-== Mock Exam Material
-<mock-exam-material>
-- #strong[Q1:] If $t^(\*)$ is the mean ISI, the firing frequency is
-  $1 \/ t^(\*)$.
-- #strong[Q2:] As magnesium concentration increases, NMDA receptor
-  conductance decreases (due to the voltage-dependent $M g^(2 +)$
-  block).
-- #strong[Q3:] When spiking is perfectly regular, the coefficient of
-  variation (CV) of the ISI is close to zero.
-- #strong[Q4:] A neuron uses its Axon to send information to other
-  neurons.
-- #strong[Q5:] The statement "In unsupervised learning, synaptic weight
-  dynamics depends only on activity of pre and post-synaptic neurons and
-  an error signal" is False (unsupervised learning does not use an error
-  signal).
-- #strong[Q6:] In a linear ring model with
-  $M \( theta - theta' \) = m_0 + m_1 cos \( theta - theta' \)$, if
-  $m_1 < 0$, the tuned component of the input is suppressed by recurrent
-  activity.
-- #strong[Q7:] In the Hodgkin-Huxley model, $N a^(+)$ channels activate
-  rapidly and then inactivate (transient), whereas $K^(+)$ channels
-  activate slowly and remain open (persistent).
-- #strong[Q8:] Equilibrium potential is determined by balancing the
-  concentration gradient (diffusive flux via Fick's law) with the
-  electrical field (drift flux via Ohm's law).
-- #strong[Q9:] To analyze nonlinear recurrent networks, calculate
-  nullclines to find fixed points, and perform linear stability analysis
-  (Taylor expansion/Jacobian matrix) to evaluate responses to small
-  perturbations.
+In a 1D recurrent network we have
+$
+  tau dv(v, t) = -v + h + M v
+$
+where $h$ is the external input.
+
+The behavior of the network depends on $M$:
+- If $M < 1$ the network is stable and converges to
+  $
+    v_oo = h/(1 - M)
+  $
+- If $M > 1$ the activity diverges.
+- If $M = 1$ we can perfectly integrate the network:
+  $
+    v(t) = 1/tau integral h(t') dd(t')
+  $
+
+In $N$ dimensions we just check the eigenvalues of the matrix $M$ and do the same analysis we did
+for the 1D case on each direction.
+
+We could also define a continuous network of neurons, for example by imagining neurons which are
+sensible to a preferred orientation of the stimulus $theta in [-pi, pi]$. Then the connection
+between two neurons with preferred orientations $theta, theta'$ can be defined as
+$
+  M(theta, theta') prop cos(theta - theta')
+$
+giving that neurons which prefer similar angles excite each other strongly.
+
+== Nonlinear Recurrent Networks
+
+=== General case
+
+The equation we need to solve is
+$
+  tau_r dv(v(t), t) = -v(t) + F(h + M v)
+$
+
+First we need to find fixed points:
+$
+  v_0 = F(h + M v_0)
+$
+we could have 0, 1, or many fixed points.
+
+Then we linearize around the fixed point
+$
+  v(t) = v_0 + delta v(t) quad "with" tau_r dv(delta v, t) = lambda delta v
+$
+where
+$
+  lambda = - 1 + M lr(dv(F(I), I)|)_(v = v_0)
+$
+
+Depending on $lambda$ we can deduce the stability of the system:
+- $lambda < 0$ the fixed point is stable
+- $lambda > 0$ the fixed point is unstable
+- $lambda = 0$ the perturbation persists and the system is at the boundary of stability
+
+For $N$ dimensions the perturbation $delta bold(v)$ obeys to
+$
+  tau_r dv(delta bold(v), t) = J delta v quad "where" J "is the Jacobian"
+$
+
+Again we look at the eigenvalues of $J$:
+- The real part behaves like $lambda$ in the 1D case.
+- The imaginary part adds oscillation.
+
+=== E-I Model
+
+We group the population of neurons in two: excitatory and inhibitory; then we assume that the two
+groups behave as a single neuron, having the same firing rate and input stimulus.
+
+$
+  tau dv(v_E, t) & = -v_E + [h_E + M_(E E) v_E - M_(E I) v_I]_+ \
+  tau dv(v_I, t) & = -v_I + [h_I + M_(I E) v_E - M_(I I) v_I]_+
+$
+where $[ dot ]_+$ is ReLU.
+
+We have
+$
+  J = mat(
+    -1 + M_(E E), - M_(E I);
+    M_(I E), -1 - M_(I I)
+  )
+$
+
+We can look at the following cases where the network is stable:
+- $M_(E E) < 1$: in this case the excitatory subnetwork is stable on its own, this means that the
+  inhibitory network is not needed to stabilize the activity.
+- $M_(E E) > 1$ but the inhibition is strong enough to stabilize the network.
+
+If $M_(E E) > 1$ it is possible that increasing $h_I$ will cause $v_I$ to decrease in steady state
+since the stronger inhibitory activity will actually decrease $v_E$ enough to make $v_I$ decrease
+too.

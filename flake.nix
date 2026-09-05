@@ -153,7 +153,7 @@
             [
               mupdf-headless
               pandoc
-              nodePackages_latest.svgo
+              svgo
 
               typstyle
               tinymist

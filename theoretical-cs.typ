@@ -1401,3 +1401,18 @@ $
   prob(z^((1)), ..., z^((n-1)) "are linearly independent") >= 1/4
 $
 
+== Solving NP-Complete Problems
+
+We are given oracle access to a function $g: {0, 1}^n -> {0, 1}$ and we need to find $x$ such that
+$g(x) = 1$.
+
+This is a very general problem: we can use this formalism do represent SAT, Knapsack and many other
+NP-complete problems.
+
+Let $T$ be the number of solution a certain problem has
+$
+  T = abs({x : g(x) = 1})
+$
+
+Then a classical algorithm needs $O(N/T)$ queries. There exists a quantum algorithm which solves
+this in $O(sqrt(N/T))$ queries.

@@ -27,26 +27,7 @@
     }:
     let
       documents = [
-        "game-theory"
-        "finance"
-        "stochastic-processes"
-
-        "gt-ps1"
-        "gt-ps2"
-        "gt-ps3"
-        "gt-ps4"
-
-        "finance-chsh"
-
-        "information-theory-evolutionary-models"
-        "neuroscience"
-        "quantum-physics"
-        "ml-ai"
-        "theoretical-cs"
-
-        "thcs-ps1"
-
-        "infoth-research"
+        "nla"
       ];
 
     in

@@ -28,6 +28,8 @@
     let
       documents = [
         "nla"
+        "na"
+        "pc"
       ];
 
     in

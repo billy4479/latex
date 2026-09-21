@@ -67,7 +67,115 @@ A matrix is sparse if the number of non-zero entries is $O(n)$.
 
 = Iterative methods for sparse linear systems
 
-TODO -> lecture P2 until Richardson method
+== Introduction
+
+We want to solve a linear system
+$
+  A x = b
+$
+where $A$ is non-singular and sparse.
+
+We could work by directly manipulating $A$ and get a _direct solution_, but this is not a good fit
+for us: usually these methods are $bigO(n^3)$ and do not preserve the sparsity of $A$.
+
+We therefore introduce iterative methods.
+
+#definition(title: "Iterative method")[
+  This is a method to compute a sequence $x^((1)), ..., x^((k))$ starting from $x^((0))$ such that
+  $
+    lim_(k -> oo) x^((k)) = x
+  $
+  independently from $x^((0))$, where $x$ is the desired result.
+]
+
+In real computations we cannot have an infinite number of steps, therefore we use a stopping
+criterion, which tells us when our solution is good enough.
+
+== Linear iterative methods
+
+We study the class of iterative methods such that
+$
+  x^((k + 1)) = B x^((k)) + f
+$
+where $B$ is the _iteration matrix_ and, together with $f$, fully specify the method.
+
+The first criterion to chose these parameters is *consistency*: if $x^((k))$ is the correct
+solution, then $x^((k + 1)) = x^((k))$. This gives
+$
+  x = B x + f ==> f = (I - B)x = (I - B) A^(-1) b
+$
+
+This condition is necessary, but not sufficient. On top of consistency, we need *convergence*.
+
+#definition(title: "Error")[
+  At step $k$ we define the error as
+  $
+    e^((k)) = x - x^((k))
+  $
+  where $x$ is the true solution.
+]
+
+For convergence to hold we want the norm of the error to go to zero as $k -> oo$. This in practice
+gives
+$
+  norm(e^(k + 1)) & = norm(x - x^(k + 1)) \
+                  & = norm(x - B x^(k) - f) \
+                  & = norm(x - B x^(k) - (I - B)x) \
+                  & = norm(B e^((k))) \
+                  & <= norm(B) norm(e^((k)))
+$
+Therefore, for the error to go to zero we need $norm(B) < 1$.
+This is a sufficient condition for convergence.
+
+In practice, to make sure $norm(B) < 1$ we set its spectral radius $rho(B) > 1$.
+
+#definition(title: "Spectral radius")[
+  The spectral radius $rho(B)$ is defined as
+  $
+    rho(B) = max_j abs(lambda_j (B))
+  $
+  where $lambda_j (B)$ are the eigenvalues of $B$.
+]
+
+#proposition[
+  The spectral radius is the smallest of the induced norms.
+]
+
+=== Stopping criterion
+
+Ideally we want to stop when $norm(x - x^((k)))/norm(x) <= epsilon$, however we don't know the true
+solution $x$.
+
+#definition(title: "Conditioning number")[
+  Given a matrix $A$, its conditioning number is defined as
+  $
+    kappa(A) = norm(A) dot.op norm(A^(-1))
+  $
+]
+
+A method which can be used in practice is
+$
+  norm(x - x^((k)))/norm(x) <= kappa(A) norm(r^((k)))/norm(b)
+  ==> kappa(A) norm(r^((k)))/norm(b) < epsilon
+$
+or another one
+$
+  norm(delta^((k))):= norm(x^((k + 1)) - x^((k))) <= epsilon
+$
+and it can be shown that
+$
+  norm(e^((k))) <= 1 / (1- rho(B)) norm(delta^((k)))
+$
+
+=== Preconditioning
+
+We introduce an SPD matrix $P^(-1)$ and we solve
+$
+  P^(-1/2) A P^(-1/2) z = P^(-1/2) b
+$
+Then $x = P^(1/2) z$.
+
+We try to chose $P$ such that $kappa(P^(-1/2) A P^(-1/2)) << kappa(A)$.
 
 $
   x^((k + 1)) = x^((k)) + P^(-1) r^((k))
@@ -98,9 +206,7 @@ $
   B alpha = I - alpha P^(-1) A
 $
 such that the spectral radius of $B alpha$ is as smaller that $1$.
-
-Recall that the spectral radius $rho(B) = max_j abs(lambda_j (B))$ where $lambda_j (B)$ are the
-eigenvalues of $B$. The role of $alpha$ is to push back the eigenvalues towards $0$.
+The role of $alpha$ is to push back the eigenvalues towards $0$.
 
 #theorem(title: [$P = I, A "SPD"$])[
   The method converges if and only if
@@ -189,12 +295,6 @@ This method, in precise arithmetic, always converges.
   $
 ]
 
-#definition(title: "Conditioning number")[
-  Given a matrix $A$, its conditioning number is defined as
-  $
-    K(A) = norm(A) dot.op norm(A^(-1))
-  $
-]
 
 The speed of convergence depends on $A$:
 $

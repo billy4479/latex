@@ -30,6 +30,7 @@
         "nla"
         "na"
         "pc"
+        "amsc"
       ];
 
     in
@@ -92,6 +93,11 @@
               name = "diatypst";
               version = "0.9.1";
               hash = "sha256-XtXbbtaJ0YG7Wbqov0wMRoa29F1gg6KKHb5bGCQqF3U=";
+            }
+            {
+              name = "lovelace";
+              version = "0.3.1";
+              hash = "sha256-HKbmwLKWrXcFvoP1PHzHi0yIQSB6kutWX13FpW/YuW8=";
             }
             # dependency of hydra
             {

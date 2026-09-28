@@ -103,14 +103,14 @@
 
   show heading.where(level: 1): it => {
     if bigHeading {
-      text(it, size: fontSize + 20pt)
+      text(it, size: fontSize + 14pt)
     } else {
       it
     }
   }
   show heading.where(level: 2): it => {
     if bigHeading {
-      text(it, size: fontSize + 10pt)
+      text(it, size: fontSize + 8pt)
     } else {
       it
     }

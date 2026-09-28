@@ -1,5 +1,6 @@
 #import "lib/template.typ": *
 #import "lib/theorem.typ": *
+#import "lib/algorithm.typ": *
 #import "lib/utils.typ": *
 #import "@preview/lovelace:0.3.1": *
 
@@ -11,6 +12,7 @@
 )
 
 #show: thm-init
+#show: alg-init
 
 = Preliminaries
 
@@ -322,7 +324,7 @@ the effect of $P$ on the residual.
 
 Indeed, we can define the algorithm as
 
-#pseudocode-list[
+#algorithm(title: "Preconditioned Richardson method")[
   + Given $x^((0))$
   + Compute $r^((0)) = b - A x^((0))$
   + *While* `Stopping condition`
@@ -372,7 +374,7 @@ The problem is then reframed as "finding iteratively a base to $RR^n$ in order t
 
 This gives us this algorithm
 
-#pseudocode-list[
+#algorithm(title: "Conjugate gradient method")[
   + Given $x^((0))$.
   + Compute $r^((0)) = b - A x^((0))$.
   + Set $d^((0)) = r^((0))$.
@@ -387,7 +389,7 @@ This gives us this algorithm
 
 We can of course also use preconditioning.
 
-#pseudocode-list[
+#algorithm(title: "Preconditioned conjugate gradient method")[
   + Given $x^((0))$.
   + Compute $r^((0)) = b - A x^((0))$.
   + Set $d^((0)) = r^((0))$.
@@ -445,7 +447,7 @@ matrices, sometimes the vector which generate the space are very close to being 
 issue for stability: we could use Gram-Schmit which we can use to get orthonormal vectors instead,
 even if this could lead to additional instabilities and performance penalties.
 
-#pseudocode-list[
+#algorithm(title: "GMRES")[
   + Choose $x^((0))$.
   + Compute $r^((0)) = b - A x$.
   + *While* (`Stopping condition`)
@@ -519,7 +521,7 @@ often hard to compute the right $T$.
 If we need only a few eigenvalues we can do something better, exploiting the geometric
 interpretation of the eigenvalue problem. We introduce the *power method*.
 
-#pseudocode-list[
+#algorithm(title: "Power method")[
   + Let $lambda_1, ..., lambda_n$ be the eigenvalue of $A$,
   + Order such that $abs(lambda_1) > abs(lambda_2) >= ... >= abs(lambda_n)$.
     Note that the first one is _isolated_.
@@ -580,7 +582,7 @@ $abs(lambda_1) >= ... >= abs(lambda_(n - 1)) > abs(lambda_n)$, where the smalles
 
 We exploit this remark to apply the power method to $A^(-1)$.
 However, we cannot invert $A$, so we need to solve a linear system at each iteration:
-#pseudocode-list[
+#algorithm(title: "Inverse power method")[
   + Let $q^((0))$ such that $norm(q^((0))) = 1$
   + For each iteration
     + Solve $A z^((k+1)) = q^((k))$
@@ -651,7 +653,7 @@ This is unstable!
 
 === Basic QR algorithm
 
-#pseudocode-list[
+#algorithm(title: "Basic QR algorithm")[
   + Let $A^((0)) = A$ and $U^((0)) = I$.
   + *While* (`Stopping criterion`)
     + Find $Q^((k-1)), R^((k-1))$ such that $A^((k-1)) = Q^((k-1)) R^((k-1))$.

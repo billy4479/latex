@@ -458,3 +458,231 @@ even if this could lead to additional instabilities and performance penalties.
 
 The main issue is that $Q_k$ becomes a huge, dense matrix; in practice after a few iterations we
 start over with a fresh $Q_k$.
+
+= Eigenvalue problems
+
+In this section, given a matrix $A in CC^(n times n)$, we want to find the set of
+$(lambda, v) in CC times CC^n$ (with $v != 0$) which solves
+$
+  A v = lambda v
+$
+We call the set
+$
+  sigma(A) = {lambda_i (A) "s.t." lambda_i "is an eigenvalue of" A}
+$
+is called the *spectrum* of $A$.
+
+#definition(title: "Transpose conjugate")[
+  For a matrix or a vector over $CC$, we denote $A^H$ the transpose conjugate
+  $
+    A^H = overline(A^T)
+  $
+]
+
+#remark(title: "Rayleigh quotient")[
+  For any eigenpair $(lambda_i, v_i)$ of $A$
+  $
+    lambda_i = (v_i^H A v_i)/(v_i^H v_i)
+  $
+]<rmk:rayleigh>
+
+Note that eigenvectors are defined up to a constant: for convenience we will impose the extra
+condition
+$
+  norm(v_i) = 1
+$
+
+#definition(title: "Similarity transformation")[
+  A matrix $B$ is similar to $A$ if there exists an invertible matrix $T$ such that
+  $B = T^(-1) A T$.
+]
+
+#proposition[
+  Similarity transformations preserve the spectrum:
+  for $A, B$ similar $sigma(A) = sigma(B)$.
+]
+
+#proof[
+  Let $(lambda, y)$ be an eigenpair of $B$.
+  $
+    B y = lambda y <==> T^(-1) A T y = lambda y <==> A w = lambda w
+  $
+  with $w = T y$.
+]
+
+Therefore the plan is to massage $A$ with some $T$ such that the problem becomes easy to solve.
+This works well if we need the full spectrum, however massaging with $T$ loses sparsity and it is
+often hard to compute the right $T$.
+
+== Power method
+
+If we need only a few eigenvalues we can do something better, exploiting the geometric
+interpretation of the eigenvalue problem. We introduce the *power method*.
+
+#pseudocode-list[
+  + Let $lambda_1, ..., lambda_n$ be the eigenvalue of $A$,
+  + Order such that $abs(lambda_1) > abs(lambda_2) >= ... >= abs(lambda_n)$.
+    Note that the first one is _isolated_.
+  + Let $x^((0))$ be the initial guess, such that $norm(x^((0))) = 1$.
+  + *While* (`Stopping criterion`)
+    + Compute $y^((k+1)) <-- A x^((k))$
+    + Normalize $x^((k+1)) <-- (y^((k+1)))/norm(y^((k+1)))$
+    + Use the @rmk:rayleigh to compute $nu^((k+1)) = [x^((k+1))]^H A x^((k+1))$.
+  + *End*
+]
+
+#theorem[
+  Let $A$ be diagonalizable and $lambda_1$ (being the eigenvalue with largest modulus) is isolated.
+  Then
+  $
+    lim_(k -> oo) x^((k)) = v_1 wide
+    lim_(k -> oo) nu^((k+1)) = lambda_1
+  $
+]
+#proof[
+  Since $A$ is diagonalizable, the set of eigenvectors for a basis for $C^n$.
+  Which means that for any $x^((0))$ can be written in that basis:
+  $
+    x^((0)) = sum^n_(i = 1) alpha_i v_i wide "for suitable" alpha_1, ..., alpha_n
+  $
+
+  Then, at each step of the algorithm we compute
+  $
+    y^((1)) & = A x^((0))
+              = A (sum^n_(i = 1) alpha_i v_i) \
+            & = sum_(i = 1)^n alpha_i (A v_i)
+              = sum_(i = 1)^n alpha_i lambda_i v_i \
+    x^((1)) & = sum_(i = 1)^n alpha_i/norm(y^((1))) lambda_i v_i
+  $
+
+  Applying the formula over and over we get
+  $
+    A x^((k)) = alpha_1 lambda_1^k (v_1 + sum^n_(i = 2) alpha_i/alpha_1 (lambda_i/lambda_1) v_1)
+  $
+  where, in the limit, the sum goes to zero since $lambda_1$ is dominant.
+]
+
+The proof shows that convergence will be quicker when $lambda_1 >> lambda_2$ and slower when they
+are closer together.
+
+=== Inverse power method
+
+The power method is very efficient, and easily parallelizable, therefore we want to exploit it as
+much as possible.
+
+We now want to compute the smallest eigenvalue
+$abs(lambda_1) >= ... >= abs(lambda_(n - 1)) > abs(lambda_n)$, where the smallest one is isolated.
+
+#remark[
+  Let $A$ be invertible. Then $(lambda_i, v_i)$ is an eigenpair of $A$ iff $(1/lambda, v_i)$ is an
+  eigenpair of $A^(-1)$.
+]
+
+We exploit this remark to apply the power method to $A^(-1)$.
+However, we cannot invert $A$, so we need to solve a linear system at each iteration:
+#pseudocode-list[
+  + Let $q^((0))$ such that $norm(q^((0))) = 1$
+  + For each iteration
+    + Solve $A z^((k+1)) = q^((k))$
+    + Compute $q^((k + 1)) <-- (z^((k+1)))/norm(z^((k+1)))$
+    + $sigma^((k+1)) <-- [q^((k+1))]^H A q^((k+1))$
+]
+Note that in the last step of the loop we use plain $A$.
+
+At each step of the loop we need to solve a whole linear system. This could be very expensive: a
+possible strategy is to precompute a factorization of $A$ and use it to solve the system directly.
+
+=== Deflation methods
+
+This is just a sketch, however there are also methods to compute eigenvalues of other positions in
+the spectrum.
+
+Let $mu in.not sigma(A)$. We want to compute
+$
+  lambda_i in sigma(A) wide "s.t." i = argmin abs(lambda_i - mu)
+$
+
+Define
+$
+  M_mu = A - mu I
+$
+then, the eigenvalues of $M_mu$ satisfy
+$
+  M_mu w = xi w & <==> (A - mu I) w = xi w \
+                & <==> A w = (mu - xi) w
+$
+
+This means that the eigenvalue closest to $mu$ is the minimum eigenvalue of $M_mu$ using the inverse
+power method (with shift).
+
+== QR Factorization
+
+#definition(title: "QR factorization")[
+  Let $A in RR^(n times n)$.
+  $A$ admits a QR factorization if
+  - $exists Q in R^(n times n)$ orthogonal ($Q^T = Q^(-1)$)
+  - $exists R in R^(n times n)$ upper triangular
+  such that
+  $
+    A = Q R
+  $
+]
+
+Assume $A$ is full-rank, so that it's column vectors are linearly independent. We could do
+Gram-Schmit to create an orthogonal matrix derived from the columns of $A$, however Gram-Schmit is
+not always stable, we will see some methods to mitigate this.
+
+=== Gram-Schmit orthogonalization
+
+Let $a_1, ..., a_n$ (in this case the columns of $A$).
+
+$
+  q_j = w_j/norm(w_j) wide "with" w_j = a_j sum^(j - 1)_(k = 1) (q_k^H a_j) q_k
+$
+then
+$
+  r_(i j) = cases(
+    q_i^H a_j wide & "if" i != j,
+    norm(a_j - sum^(j-1)_(i= 1) r_(i j) q_i) wide & "if" i == j
+  )
+$
+
+This is unstable!
+
+=== Basic QR algorithm
+
+#pseudocode-list[
+  + Let $A^((0)) = A$ and $U^((0)) = I$.
+  + *While* (`Stopping criterion`)
+    + Find $Q^((k-1)), R^((k-1))$ such that $A^((k-1)) = Q^((k-1)) R^((k-1))$.
+    + Define $A^((k)) = R^((k-1)) Q^((k-1))$ (which will be different from $A^((k-1))$ since
+      products are not commutable.
+    + Define $U^((k)) = U^((k - 1)) Q^((k - 1))$.
+  + *End*
+  + *Return* $T = A^((k)), U = U^((k))$.
+]
+
+This is very expensive: $bigO(k n^3)$, but gives $T$ triangular.
+
+$
+  A^((k)) & = R^((k)) Q^((k)) = [Q^((k))]^H Q^((k)) R^((k)) Q^((k)) \
+          & = [Q^((k))]^H A^((k-1)) Q^((k)) \
+          & = [Q^((k))]^(-1) A^((k-1)) Q^((k))
+$
+Applying this arguments to the whole sequence we show that all the $A^((k))$ are similar.
+
+Assuming that all eigenvalues are isolated all elements below the diagonal converge to zero, and the
+spectrum can be read on the diagonal.
+
+=== Stopping criteria
+
+#figure(
+  table(
+    columns: (auto, auto, auto),
+    table.header("", "Power methods", "QR"),
+    [Stopping criterion],
+    [$abs(nu^((k+1)) - nu^((k)))/abs(nu^((k+1))) <= "Tol"$],
+    [The largest element below the diagonal is less than some tolerance.],
+  ),
+)
+

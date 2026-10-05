@@ -688,3 +688,70 @@ spectrum can be read on the diagonal.
   ),
 )
 
+
+== Lanzos algorithm
+
+This algorithm computes in one shot the extreme eigenvalues for a SPD matrix $A$.
+
+For this algorithm we want to decompose
+$
+  A = Q T Q^T wide "with" Q "orthonormal and"\
+  T = mat(
+    alpha_1, beta_1, 0, dots.c, 0;
+    beta_1, alpha_2, beta_2, dots.c, 0;
+    0, dots.down, dots.down, dots.v, 0;
+    0, dots.down, dots.down, dots.v, beta_(n-1);
+    0, dots.c, 0, beta_(n-1), alpha_n;
+  ) "is tri-diagonal"
+$
+
+It can be proven that this decomposition exists and is unique given the first column $q_1$ of $Q$.
+
+The decomposition is obtained by imposing $A Q = Q T$:
+$
+  A q_n = alpha_n
+$
+
+#algorithm(title: "Lanczos algorithm")[
+  + Let $r_0 = q_1$, $q_0 = 0$ and $beta_0 = 1$.
+  + *For* ($k = 1, ..., n$)
+    + *If* ($beta_(k - 1) = 0$)
+      + *Break*
+    + *End*
+    + Compute $q_k = r_(k - 1)/beta_(k-1)$.
+    + Compute $alpha_k = q_k^T A q_k$.
+    + Compute $r_k = (A - alpha_k) q_k - beta_(k - 1) q_(k - 1)$.
+    + Let $beta_k = abs(r_k)$.
+  + *End*
+]
+
+Then at each iteration the extreme eigenvalues of $T = Q^T_k A Q_k$ converge to the ones of $A$.
+
+Note that the algorithm is build on vector operations, it is matrix-free, which is very useful if
+$A$ is sparse.
+
+= Non-square systems
+
+== Over-specified systems
+
+In this kind of systems the matrices are high and thin, i.e. the number of rows is much larger
+than the number of columns.
+
+An example of this kind of matrix is *linear or polynomial regressions*: we have a lot of sample
+but only two parameters.
+
+In these systems we will never be able to have zero residuals, however the goal for a regression is
+to minimize them as much as possible in the least square.
+
+#remark[
+  If $A$ is full-rank $A^T A$ is SPD.
+]
+
+
+This means that we can solve
+$
+  A^T A x = A^T b
+$
+instead. Moreover, since $A^T A$ is SPD, this is a convex minimization problem, therefore we can
+just set the gradient to zero.
+

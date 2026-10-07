@@ -598,8 +598,8 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
     $
       A^k x^((0)) = sum^n_(i = 1) alpha_i lambda_i^k v_i
     $
-  ]
-  #proof[
+  ]<lem:power-sum>
+  #subproof(<lem:power-sum>)[
     We prove this by induction on the exponent $k$.
 
     In the base case $k = 0$, assume that $A^0 = I$ and $lambda^0 = 1$.
@@ -632,8 +632,8 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
     $
       lim_(k -> oo) norm(r^((k))) = 0
     $
-  ]
-  #proof[
+  ]<lem:residual-limit>
+  #subproof(<lem:residual-limit>)[
     Since $abs(lambda_i/lambda_1) <= abs(lambda_2 / lambda_1)$ we can write
     $
       norm(r^((k))) & = norm(sum^n_(i = 2) alpha_i/alpha_1 (lambda_i/lambda_1)^k v_i) \

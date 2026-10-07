@@ -14,6 +14,8 @@
 #show: thm-init
 #show: alg-init
 
+#let ub(it) = $upright(bold(it))$
+
 = Preliminaries
 
 We note $bold(x)$ a vector in $RR^n$, with $bold(0), bold(1)$ being the all zero and all 1 vectors,
@@ -468,11 +470,27 @@ $(lambda, v) in CC times CC^n$ (with $v != 0$) which solves
 $
   A v = lambda v
 $
-We call the set
+
+Note that eigenvectors are defined up to a constant:
 $
-  sigma(A) = {lambda_i (A) "s.t." lambda_i "is an eigenvalue of" A}
+  A v = lambda v <==> A (c v) = lambda (c v)
 $
-is called the *spectrum* of $A$.
+therefore, for convenience, we will impose the extra condition
+$
+  norm(v_i) = 1
+$
+
+== Preliminaries
+
+#definition(title: "Spectrum")[
+  Let $A in CC^(n times n)$. Then its spectrum is the set of eigenvalues of $A$.
+  $
+    sigma(A) = {lambda_i (A) "s.t." lambda_i "is an eigenvalue of" A}
+  $
+]
+
+In some problems we might not be interested in the full spectrum, we only care about the $k$ largest
+or smallest eigenvalues.
 
 #definition(title: "Transpose conjugate")[
   For a matrix or a vector over $CC$, we denote $A^H$ the transpose conjugate
@@ -481,18 +499,23 @@ is called the *spectrum* of $A$.
   $
 ]
 
-#remark(title: "Rayleigh quotient")[
+#proposition(title: "Rayleigh quotient")[
   For any eigenpair $(lambda_i, v_i)$ of $A$
   $
     lambda_i = (v_i^H A v_i)/(v_i^H v_i)
   $
-]<rmk:rayleigh>
+]<prop:rayleigh>
 
-Note that eigenvectors are defined up to a constant: for convenience we will impose the extra
-condition
-$
-  norm(v_i) = 1
-$
+#proof[
+  Start by the eigenvalues equation.
+  $
+    A v = lambda v <==> lambda v^H v = v^H A v <==> lambda = (v^H A v)/(v^H v)
+  $
+
+  Note that $v^H v$ is the norm of $v$, therefore always non-zero for a non-zero $v$.
+]
+
+=== Similarity transformations
 
 #definition(title: "Similarity transformation")[
   A matrix $B$ is similar to $A$ if there exists an invertible matrix $T$ such that
@@ -516,6 +539,26 @@ Therefore the plan is to massage $A$ with some $T$ such that the problem becomes
 This works well if we need the full spectrum, however massaging with $T$ loses sparsity and it is
 often hard to compute the right $T$.
 
+=== Blackboard method
+
+To compute eigenvalues on the blackboard we usually solve
+$
+  (A - I lambda) v = 0
+$
+
+For this equation to have a non-zero solution we need $A - I lambda$ to be singular, i.e.
+$
+  p(lambda) = det(A - I lambda) = 0
+$
+which is called the *characteristic polynomial*, its roots are the eigenvalues of $A$.
+
+==== Why it fails
+
+There exists no formula for polynomials of degree 5 and above, therefore we would have to rely on
+numerical methods.
+However methods to compute polynomial roots decrease precision substantially: a small perturbation
+to the characteristic polynomial can result in a huge deviation in the roots.
+
 == Power method
 
 If we need only a few eigenvalues we can do something better, exploiting the geometric
@@ -529,7 +572,7 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
   + *While* (`Stopping criterion`)
     + Compute $y^((k+1)) <-- A x^((k))$
     + Normalize $x^((k+1)) <-- (y^((k+1)))/norm(y^((k+1)))$
-    + Use the @rmk:rayleigh to compute $nu^((k+1)) = [x^((k+1))]^H A x^((k+1))$.
+    + Use the @prop:rayleigh to compute $nu^((k+1)) = [x^((k+1))]^H A x^((k+1))$.
   + *End*
 ]
 
@@ -547,25 +590,81 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
   $
     x^((0)) = sum^n_(i = 1) alpha_i v_i wide "for suitable" alpha_1, ..., alpha_n
   $
+  We need to assume that $alpha_1 != 0$, which is true with probability $1$ for a random $x^((0))$.
 
-  Then, at each step of the algorithm we compute
-  $
-    y^((1)) & = A x^((0))
-              = A (sum^n_(i = 1) alpha_i v_i) \
-            & = sum_(i = 1)^n alpha_i (A v_i)
-              = sum_(i = 1)^n alpha_i lambda_i v_i \
-    x^((1)) & = sum_(i = 1)^n alpha_i/norm(y^((1))) lambda_i v_i
-  $
+  We first prove this intermediate lemma:
 
-  Applying the formula over and over we get
+  #lemma[
+    $
+      A^k x^((0)) = sum^n_(i = 1) alpha_i lambda_i^k v_i
+    $
+  ]
+  #proof[
+    We prove this by induction on the exponent $k$.
+
+    In the base case $k = 0$, assume that $A^0 = I$ and $lambda^0 = 1$.
+    Then $x^((0)) = sum^n_(i = 1) alpha_i v_i$ is trivially true by construction.
+
+    For the inductive step we assume that the statement is true at $k$ and try to prove it for
+    $k + 1$.
+    Start from the expression at $k$ and multiply by $A$:
+    $
+      A^(k+1) x^((0)) & = A sum^n_(i = 1) alpha_i lambda_i^k v_i = sum^n_(i = 1) alpha_i lambda_i^k A v_i \
+      & = sum^n_(i = 1) alpha_i lambda_i^k (lambda_i v_i) = sum^n_(i = 1) alpha_i lambda_i^(k+1) v_i \
+    $
+
+    This concludes the proof of the first lemma.
+  ]
+
+  From the result of the lemma we decouple $i = 1$ from the sum and pull out $alpha_1 lambda_1$ (we
+  can do this since we are assuming that $alpha_1 != 0$).
   $
-    A x^((k)) = alpha_1 lambda_1^k (v_1 + sum^n_(i = 2) alpha_i/alpha_1 (lambda_i/lambda_1) v_1)
+    A^k x^((0)) & = alpha_1 lambda_1^k v_1 + sum^n_(i = 2) alpha_i lambda_i^k v_i \
+                & = alpha_1 lambda_1^k [ v_1 + underbrace(
+                      sum^n_(i = 2) alpha_i/alpha_1 (lambda_i/lambda_1)^k v_i,
+                      := r^((k))
+                    ) ] \
+                & = alpha_1 lambda_1^k ( v_1 + r^((k)))
   $
-  where, in the limit, the sum goes to zero since $lambda_1$ is dominant.
+  where $r^((k))$ is the residual.
+
+  #lemma[
+    $
+      lim_(k -> oo) norm(r^((k))) = 0
+    $
+  ]
+  #proof[
+    Since $abs(lambda_i/lambda_1) <= abs(lambda_2 / lambda_1)$ we can write
+    $
+      norm(r^((k))) & = norm(sum^n_(i = 2) alpha_i/alpha_1 (lambda_i/lambda_1)^k v_i) \
+                    & <= abs((lambda_2/lambda_1))^k
+                      sum^n_(i = 2) abs(alpha_i/alpha_1) underbrace(
+                        norm(v_i), =
+                        1
+                      ) \
+    $
+    and since $abs(lambda_1) > abs(lambda_2)$ the limit as $k -> oo$ is zero.
+  ]
+
+  Note that right now $A^k x^((0))$ does not converge as $k -> oo$: indeed $lambda^k$ either
+  diverges to $oo$, $0$, or has a rotating phase. This is where normalization comes in.
+
+  $
+    x^((k + 1)) & = (A^k x^((k))) / norm(A^k x^((k))) \
+                & = (alpha_1 lambda_1^k)/(abs(alpha_1) abs(lambda_1^k))
+                  (v_1 + r^((k)))/norm(v_1 + r^((k))) \
+                & = e^(i theta_k) (v_1 + r^((k)))/norm(v_1 + r^((k)))
+  $
+  and as $k -> oo$ we get
+  $
+    x^((k + 1)) = e^(i theta_k) v_1/norm(v_1)
+  $
+  where the error decays as $bigO(abs(lambda_2/lambda_1)^k)$.
+
+  When we reach the stopping condition $x^((k))$ is sufficiently close to $x_1$ that we can use
+  @prop:rayleigh to estimate the eigenvalue. The error also decays as
+  $bigO(abs(lambda_2/lambda_1)^k)$.
 ]
-
-The proof shows that convergence will be quicker when $lambda_1 >> lambda_2$ and slower when they
-are closer together.
 
 === Inverse power method
 

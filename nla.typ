@@ -666,6 +666,20 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
   $bigO(abs(lambda_2/lambda_1)^k)$.
 ]
 
+=== Deflation
+
+Assume now we have computed the largest eigenvalue $lambda_1$ and we want to compute the next
+largest $lambda_2$.
+
+To do so, we want to find a similarity transformation $S$ which satisfies $S v_1 = alpha e_1$,
+where $e_1$ is the first element of the canonical basis, such that
+$
+  S A S^(-1) = mat(lambda_1, b^T; 0, B)
+$
+where $B$ is a submatrix with the same spectrum of $A$ without $lambda_1$.
+
+To recover the right eigenvector we compute $v_2 = S^(-1) vec(alpha, z_2)$.
+
 === Inverse power method
 
 The power method is very efficient, and easily parallelizable, therefore we want to exploit it as
@@ -693,10 +707,9 @@ Note that in the last step of the loop we use plain $A$.
 At each step of the loop we need to solve a whole linear system. This could be very expensive: a
 possible strategy is to precompute a factorization of $A$ and use it to solve the system directly.
 
-=== Deflation methods
+=== Shift
 
-This is just a sketch, however there are also methods to compute eigenvalues of other positions in
-the spectrum.
+There are also methods to compute eigenvalues of other positions in the spectrum.
 
 Let $mu in.not sigma(A)$. We want to compute
 $

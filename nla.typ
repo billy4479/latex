@@ -867,3 +867,55 @@ $
 instead. Moreover, since $A^T A$ is SPD, this is a convex minimization problem, therefore we can
 just set the gradient to zero.
 
+
+= Multi-grid methods
+
+TODO
+
+= Algebraic Multi-grid methods
+
+These are methods developed when we cannot create a coarser grid because of numerical issues.
+We need to rely on a single grid and perform some algebra on just the matrix itself.
+
+#definition(title: "Associated graph")[
+  Let $A$ be a $n times n$ matrix.
+  Its associated graph is a graph $G = (V, E)$ where $V = 1, ..., n$ and
+  $
+    E = {e_(i, j) | a_(i, j) != 0 and i != j}
+  $
+]
+
+Given a matrix $A$ we generate its associated graph.
+Then we want to remove the "weak" connections.
+
+#definition(title: "Strongly connected nodes")[
+  Let $theta in (0, 1)$.
+  We say a node $i$ is strongly connected with node $j$ if
+  $
+    -a_(i, j) >= theta max_(k != i) (-a_(i, k))
+  $
+]
+
+This gives a set of vectors $S_i$ which are strongly correlated to $i$. In turns, we can construct a
+*strength matrix* $S$ where each row is $S_i forall i in 1, ..., n$.
+
+We partition $V$ in two sets $C$ (coarse) and $F$ (fine).
+
+#algorithm(title: "General coarsing algorithm")[
+  + Let $C <- varnothing$ and $F <- varnothing$.
+  + *While* $C union F != V$:
+    + Pick $i in 1, ..., n$ such that $v_i in.not C union F$.
+    + Add $v_i$ to $C$.
+    + Let $S_i$ be the set of strongly connected vertices to $i$.
+    + Add all the elements of $S_i$ to $F$.
+  + *End*.
+]
+
+= Domain decomposition
+
+We want to split the domain of the problem in subdomains, solve the problem in the subdomains in
+parallel and reconstruct the solution of the big problem.
+
+In general, sub-problems need to talk to each other because often we cannot split the problem in
+independent subdomains.
+

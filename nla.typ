@@ -711,7 +711,7 @@ possible strategy is to precompute a factorization of $A$ and use it to solve th
 
 There are also methods to compute eigenvalues of other positions in the spectrum.
 
-Let $mu in.not sigma(A)$. We want to compute
+Let $mu in RR$. We want to compute
 $
   lambda_i in sigma(A) wide "s.t." i = argmin abs(lambda_i - mu)
 $
@@ -726,49 +726,101 @@ $
                 & <==> A w = (mu - xi) w
 $
 
-This means that the eigenvalue closest to $mu$ is the minimum eigenvalue of $M_mu$ using the inverse
-power method (with shift).
+This means that the eigenvalue closest to $mu$ is the minimum eigenvalue of $M_mu$, we can compute
+it by using the inverse power method (with shift).
 
-== QR Factorization
+The convergence rate is given by
+$
+  (min_i abs(lambda_i - mu))/(min_(j != i) abs(lambda_j - mu))
+$
+
+== Tools
+
+=== QR Factorization
 
 #definition(title: "QR factorization")[
-  Let $A in RR^(n times n)$.
+  Let $A in RR^(m times n)$.
   $A$ admits a QR factorization if
-  - $exists Q in R^(n times n)$ orthogonal ($Q^T = Q^(-1)$)
-  - $exists R in R^(n times n)$ upper triangular
-  such that
+  - $exists Q in R^(m times m)$ orthogonal ($Q^T = Q^(-1)$)
+  - $exists R in R^(m times n)$ upper trapezoidal such that
   $
     A = Q R
   $
 ]
 
 Assume $A$ is full-rank, so that it's column vectors are linearly independent. We could do
-Gram-Schmit to create an orthogonal matrix derived from the columns of $A$, however Gram-Schmit is
+Gram-Schmidt to create an orthogonal matrix derived from the columns of $A$, however Gram-Schmit is
 not always stable, we will see some methods to mitigate this.
 
-=== Gram-Schmit orthogonalization
+The QR factorization could be *full* or *partial*:
+- In the full QR factorization $Q in RR^(m times m)$ is a full orthogonal matrix and $R^(n times m)$
+  is a upper trapezoidal matrix.
+- In the partial one, we note that $R$ is padded with zero-rows in the lower part, therefore the
+  last columns of $Q$ are useless. We therefore only compute $hat(Q) in RR^(m times n)$ and
+  $hat(R) in RR^(n times n)$ which is an upper triangular matrix.
 
-Let $a_1, ..., a_n$ (in this case the columns of $A$).
+#remark(title: "Unitary vs Orthogonal matrices")[
+  Orthogonal is the real-valued special case of unitary.
 
-$
-  q_j = w_j/norm(w_j) wide "with" w_j = a_j sum^(j - 1)_(k = 1) (q_k^H a_j) q_k
-$
-then
-$
-  r_(i j) = cases(
-    q_i^H a_j wide & "if" i != j,
-    norm(a_j - sum^(j-1)_(i= 1) r_(i j) q_i) wide & "if" i == j
-  )
-$
+  - Orthogonal: $Q in RR^(n times n)$ with $Q^T Q = I$.
+  - Unitary: $U in CC^(n times n)$ with $U^H U = I$.
+]
 
-This is unstable!
+=== Gram-Schmidt orthogonalization
 
-=== Basic QR algorithm
+#algorithm(title: "Gram-Schmidt orthogonalization")[
+  + Let $a_1, ..., a_n$ be a set of vectors (could be the columns of some matrix $A$).
+  + *For* $j = 1, ..., n$:
+    + Let $w_j <- a_j$.
+    + *For* $i = 1, ..., j-1$:
+      + *If* `Modified GS`:
+        + Let $r_(i, j) <- q_i^H w_j$, this is more numerically stable and yields the same results.
+      + *Else*:
+        + Let $r_(i, j) <- q_i^H a_j$.
+      + *End*
+      + Let $w_j <- w_j - r_(i, j) q_i$.
+      + *If* i = j:
+        + Assign $r_(j, j) <- norm(w_j)$.
+      + *End*
+      + Normalize $q_j <- w_j / norm(w_j)$.
+    + *End*
+  + *End*
+]
+
+This takes $bigO(m n^2)$.
+
+== Schur decomposition
+
+We want to compute $U A U^H = T$ such that $U$ is unitary and $T$ is upper triangular, so that
+$sigma(A) = sigma(T)$.
+
+Columns of $U$ are called *Schur vectors*. In general, only $u_1$ is an eigenvector of $A$.
+
+#definition(title: [Invariant subspace])[
+  Let $cal(S) subset.eq V$ be a subspace of $V$. We say $cal(S)$ is an invariant with respect to
+  some matrix $A$ if
+  $
+    v in cal(S) ==> A v in cal(S)
+  $
+]
+
+Notably, each eigenvector spans an invariant subspace of its matrix.
+A weaker version also holds for Schur vectors.
+
+#proposition(title: [Schur vectors span invariant subspaces])[
+  Let $u_1, ..., u_n$ be the Schur vectors of $A$.
+  Then
+  $
+    cal(S)_k = angle(u_1, ..., u_k) wide forall k in 1, ..., n
+  $
+  are invariant subspaces of $A$.
+]
 
 #algorithm(title: "Basic QR algorithm")[
   + Let $A^((0)) = A$ and $U^((0)) = I$.
   + *While* (`Stopping criterion`)
-    + Find $Q^((k-1)), R^((k-1))$ such that $A^((k-1)) = Q^((k-1)) R^((k-1))$.
+    + Find $Q^((k-1)), R^((k-1))$ such that $A^((k-1)) = Q^((k-1)) R^((k-1))$, this is a QR
+      factorization.
     + Define $A^((k)) = R^((k-1)) Q^((k-1))$ (which will be different from $A^((k-1))$ since
       products are not commutable.
     + Define $U^((k)) = U^((k - 1)) Q^((k - 1))$.
@@ -788,19 +840,6 @@ Applying this arguments to the whole sequence we show that all the $A^((k))$ are
 Assuming that all eigenvalues are isolated all elements below the diagonal converge to zero, and the
 spectrum can be read on the diagonal.
 
-=== Stopping criteria
-
-#figure(
-  table(
-    columns: (auto, auto, auto),
-    table.header("", "Power methods", "QR"),
-    [Stopping criterion],
-    [$abs(nu^((k+1)) - nu^((k)))/abs(nu^((k+1))) <= "Tol"$],
-    [The largest element below the diagonal is less than some tolerance.],
-  ),
-)
-
-
 == Lanzos algorithm
 
 This algorithm computes in one shot the extreme eigenvalues for a SPD matrix $A$.
@@ -819,9 +858,14 @@ $
 
 It can be proven that this decomposition exists and is unique given the first column $q_1$ of $Q$.
 
-The decomposition is obtained by imposing $A Q = Q T$:
+The decomposition is obtained by imposing $A Q = Q T$ column by column:
 $
-  A q_n = alpha_n
+  A q_n = beta_(n - 1) q_(n - 1) + alpha_n q_n + beta_(n + 1) q_(n + 1) \
+  "by orthogonality"
+  ==> cases(
+    alpha_n & = q_n^H A q_n,
+    beta_n & = q_(n + 1)^H A q_n
+  )
 $
 
 #algorithm(title: "Lanczos algorithm")[
@@ -839,8 +883,20 @@ $
 
 Then at each iteration the extreme eigenvalues of $T = Q^T_k A Q_k$ converge to the ones of $A$.
 
-Note that the algorithm is build on vector operations, it is matrix-free, which is very useful if
-$A$ is sparse.
+=== Why this is useful
+
+First of all, note that the algorithm is fully build on mat-vec multiplications, which is the only
+viable operation for big and sparse matrices.
+
+Lanczos does not yield a triangular or diagonal matrix, so eigenvalues cannot be read anywhere in
+$T$, when we are done computing $T$ we still need to solve for its eigenvalues.
+
+However, we don't need to compute the full $T$, often a few iterations are enough. This gives a
+$T in RR^(k times k)$, which can be easily solved via Schur decomposition (since $T$ is both
+Hessenberg and symmetric this allows to compute QR factorizations in $bigO(n^2)$ instead of
+$bigO(n^3)$).
+Of course the approximation of the result gets better as $k -> n$ but we can often can stop way
+before.
 
 = Non-square systems
 

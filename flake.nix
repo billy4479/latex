@@ -28,9 +28,7 @@
     let
       documents = [
         "nla"
-        "na"
         "pc"
-        "amsc"
       ];
 
     in

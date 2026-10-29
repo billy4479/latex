@@ -12,12 +12,12 @@
 
 = PRAM
 
-This is a model to approximate the behavior of RAM.
-Memory access is one of the most important thing to design around in a parallel system.
+This is a model to approximate the behavior of RAM. Memory access is one of the most important thing
+to design around in a parallel system.
 
 With this model we ask _"How much of the computation can run in parallel if memory is not the
-bottleneck"_: we remove from the equations caches, networking, schedulers, etc.
-This provides an upper bound on the computing time of the system.
+bottleneck"_: we remove from the equations caches, networking, schedulers, etc. This provides an
+upper bound on the computing time of the system.
 
 In this approximations we assume:
 - All processors $P_1, ..., P_n$ are identical.
@@ -64,8 +64,8 @@ a priority between processors.
   where $T_1 (n)$ is the serialized execution of the parallelized algorithm.
 ]
 #definition(title: "PRAM Cost")[
-  This is the allocated processors times the number of rounds.
-  A cost-optimal solution has $Theta(T_1)$.
+  This is the allocated processors times the number of rounds. A cost-optimal solution has
+  $Theta(T_1)$.
   $
     "Cost" = p T_p (n)
   $
@@ -83,9 +83,9 @@ The baseline is the *best* sequential algorithm available, our baseline is $T^*$
 We investigate what happens when multiple threads want to read *and* write to the same memory
 address.
 
-Consistency means that we chose a consistent ordering in which read and write is performed.
-Ordering memory access has a performance penalty attached, which comes from both locking mechanisms,
-as well as missed optimization opportunity.
+Consistency means that we chose a consistent ordering in which read and write is performed. Ordering
+memory access has a performance penalty attached, which comes from both locking mechanisms, as well
+as missed optimization opportunity.
 
 #definition(title: [Memory coherence])[
   All processors must agree on the order of reads and writes to address `x`.
@@ -103,8 +103,8 @@ To achieve consistency we set some rules, an example of a rule could be
 $
   W_x -> R_y
 $
-meaning that a write to `x` ($W_x$) must be fully completed before a read to `y` ($R_y$).
-Of course all combinations are supported.
+meaning that a write to `x` ($W_x$) must be fully completed before a read to `y` ($R_y$). Of course
+all combinations are supported.
 
 A simple optimization is to allow reads to `A` to happen before a write to `B` is visible to other
 processors.

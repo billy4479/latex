@@ -44,7 +44,8 @@ $
 for $A$ non-singular, $P$ a permutation, $U$ upper triangular, $L$ unit lower triangular.
 
 == Cholesky decomposition
-If $A$ is symmetric and positive definite ($x^T A x > 0 forall x != 0$), then it can be decomposed by
+If $A$ is symmetric and positive definite ($x^T A x > 0 forall x != 0$), then it can be decomposed
+by
 $
   A = L^T L
 $
@@ -128,8 +129,8 @@ $
                   & = norm(B e^((k))) \
                   & <= norm(B) norm(e^((k)))
 $
-Therefore, for the error to go to zero we need $norm(B) < 1$.
-This is a sufficient condition for convergence.
+Therefore, for the error to go to zero we need $norm(B) < 1$. This is a sufficient condition for
+convergence.
 
 In practice, to make sure $norm(B) < 1$ we set its spectral radius $rho(B) > 1$.
 
@@ -184,8 +185,8 @@ We try to chose $P$ such that $kappa(P^(-1/2) A P^(-1/2)) << kappa(A)$.
 $
   x^((k + 1)) = x^((k)) + P^(-1) r^((k))
 $
-where $r^((k)) = b - A x^((k))$ and $P$ is the preconditioner of the residual.
-In practice we never invert $P$, we solve for $P z^((k)) = r^((k))$.
+where $r^((k)) = b - A x^((k))$ and $P$ is the preconditioner of the residual. In practice we never
+invert $P$, we solve for $P z^((k)) = r^((k))$.
 
 We can also write this in matrix form:
 $
@@ -199,9 +200,8 @@ $P^(-1) r^((k))$ gives us the direction of the residual. We can however also add
 $alpha_k$ which give us the magnitude of this direction vector.
 
 This is called Richardson method. In particular if $alpha_k = alpha forall k$ this is the static
-variant, otherwise that's the dynamic version.
-In particular, if $A$ is SPD (symmetric and positive definite), there is a good method to pick these
-$alpha_k$.
+variant, otherwise that's the dynamic version. In particular, if $A$ is SPD (symmetric and positive
+definite), there is a good method to pick these $alpha_k$.
 
 === Choosing $alpha$
 
@@ -209,8 +209,8 @@ We want
 $
   B alpha = I - alpha P^(-1) A
 $
-such that the spectral radius of $B alpha$ is as smaller that $1$.
-The role of $alpha$ is to push back the eigenvalues towards $0$.
+such that the spectral radius of $B alpha$ is as smaller that $1$. The role of $alpha$ is to push
+back the eigenvalues towards $0$.
 
 #theorem(title: [$P = I, A "SPD"$])[
   The method converges if and only if
@@ -271,9 +271,9 @@ $
   x^((k + 1)) = x^((k)) - alpha_k grad Phi (x^((k))
 $
 
-To compute $alpha_k$ we can just expand $Phi(x^((k + 1)))$ and look at it as a function of
-$alpha_k$ and looking for its minimizer. Doing the algebra, we find out that $Phi(x^((k + 1)))$ is
-a 1 dimensional parabola in $alpha_k$, which is is trivial to minimize.
+To compute $alpha_k$ we can just expand $Phi(x^((k + 1)))$ and look at it as a function of $alpha_k$
+and looking for its minimizer. Doing the algebra, we find out that $Phi(x^((k + 1)))$ is a 1
+dimensional parabola in $alpha_k$, which is is trivial to minimize.
 
 This gives us
 $
@@ -292,8 +292,7 @@ This gives us a full algorithm:
 This method, in precise arithmetic, always converges.
 
 #definition(title: "Matrix-induced norm")[
-  Let $A$ be an SPD matrix.
-  For a vector $z$ we define its norm induced by $A$ as
+  Let $A$ be an SPD matrix. For a vector $z$ we define its norm induced by $A$ as
   $
     norm(z)_A = sqrt(z^T A z) quad forall z in RR^n
   $
@@ -320,9 +319,8 @@ $
 $
 
 This has the issue that, in theory, we would need both to compute $P^(1/2)$ and invert it: both very
-expensive operations.
-However, in practice, we can avoid fully materializing either $P^(1/2)$ or its inverse: we just need
-the effect of $P$ on the residual.
+expensive operations. However, in practice, we can avoid fully materializing either $P^(1/2)$ or its
+inverse: we just need the effect of $P$ on the residual.
 
 Indeed, we can define the algorithm as
 
@@ -338,8 +336,8 @@ Indeed, we can define the algorithm as
 ]
 
 This gives us a tradeoff: a $P$ which is very good at minimizing the error might be very expensive
-to compute, since at every iteration we need to solve a linear system involving $P$.
-We usually choose $P$ such that it has a good structure and the system can be computed quickly.
+to compute, since at every iteration we need to solve a linear system involving $P$. We usually
+choose $P$ such that it has a good structure and the system can be computed quickly.
 
 == Krylov space methods
 
@@ -353,8 +351,8 @@ assumption and see what we can get.
 This relaxation comes from the idea that maybe I can look at the previous residuals.
 
 #definition(title: [$A$-orthogonal])[
-  Let $A$ be a SPD matrix and $d^((0)), ..., d^((k)) in RR^n$.
-  We say that $d^((k+1))$ is $A$-orthogonal (or $A$-conjugate) to all the previous directions if
+  Let $A$ be a SPD matrix and $d^((0)), ..., d^((k)) in RR^n$. We say that $d^((k+1))$ is
+  $A$-orthogonal (or $A$-conjugate) to all the previous directions if
   $
     (d^((k+1)), d^((j)))_A := (d^((k+1)))^T A d^((j)) = 0 quad forall j <= k
   $
@@ -381,10 +379,12 @@ This gives us this algorithm
   + Compute $r^((0)) = b - A x^((0))$.
   + Set $d^((0)) = r^((0))$.
   + *While* (`Stopping criterion`):
-    + Compute $ alpha_k = ((d^((k)))^T r^((k)))/((d^((k)))^T A d^((k))) $
+    + Compute
+      $ alpha_k = ((d^((k)))^T r^((k)))/((d^((k)))^T A d^((k))) $
     + Compute $x^((k+1)) = x^((k)) + alpha_k d^((k))$.
     + Compute $r^((k+1)) = r^((k)) - alpha_k A d^((k))$.
-    + Compute $ beta_k = ((A d^((k)))^T r^((k+1)))/((A d^((k)))^T A d^((k))) $
+    + Compute
+      $ beta_k = ((A d^((k)))^T r^((k+1)))/((A d^((k)))^T A d^((k))) $
     + Set $d^((k+1)) = r^((k+1)) - beta_k d^((k))$.
   + *End*
 ]
@@ -396,11 +396,13 @@ We can of course also use preconditioning.
   + Compute $r^((0)) = b - A x^((0))$.
   + Set $d^((0)) = r^((0))$.
   + *While* (`Stopping criterion`):
-    + Compute $ alpha_k = ((z^((k)))^T r^((k)))/((z^((k)))^T A z^((k))) $
+    + Compute
+      $ alpha_k = ((z^((k)))^T r^((k)))/((z^((k)))^T A z^((k))) $
     + Compute $x^((k+1)) = x^((k)) + alpha_k d^((k))$.
     + Compute $r^((k+1)) = r^((k)) - alpha_k A d^((k))$.
     + Solve $P z^((k + 1)) = r^((k+1))$ for $z^((k+1))$.
-    + Compute $ beta_k = ((A d^((k)))^T z^((k+1)))/((A d^((k)))^T A d^((k))) $
+    + Compute
+      $ beta_k = ((A d^((k)))^T z^((k+1)))/((A d^((k)))^T A d^((k))) $
     + Set $d^((k+1)) = z^((k+1)) - beta_k d^((k))$.
   + *End*
 ]
@@ -523,8 +525,7 @@ or smallest eigenvalues.
 ]
 
 #proposition[
-  Similarity transformations preserve the spectrum:
-  for $A, B$ similar $sigma(A) = sigma(B)$.
+  Similarity transformations preserve the spectrum: for $A, B$ similar $sigma(A) = sigma(B)$.
 ]
 
 #proof[
@@ -535,9 +536,9 @@ or smallest eigenvalues.
   with $w = T y$.
 ]
 
-Therefore the plan is to massage $A$ with some $T$ such that the problem becomes easy to solve.
-This works well if we need the full spectrum, however massaging with $T$ loses sparsity and it is
-often hard to compute the right $T$.
+Therefore the plan is to massage $A$ with some $T$ such that the problem becomes easy to solve. This
+works well if we need the full spectrum, however massaging with $T$ loses sparsity and it is often
+hard to compute the right $T$.
 
 === Blackboard method
 
@@ -555,9 +556,8 @@ which is called the *characteristic polynomial*, its roots are the eigenvalues o
 ==== Why it fails
 
 There exists no formula for polynomials of degree 5 and above, therefore we would have to rely on
-numerical methods.
-However methods to compute polynomial roots decrease precision substantially: a small perturbation
-to the characteristic polynomial can result in a huge deviation in the roots.
+numerical methods. However methods to compute polynomial roots decrease precision substantially: a
+small perturbation to the characteristic polynomial can result in a huge deviation in the roots.
 
 == Power method
 
@@ -566,8 +566,8 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
 
 #algorithm(title: "Power method")[
   + Let $lambda_1, ..., lambda_n$ be the eigenvalue of $A$,
-  + Order such that $abs(lambda_1) > abs(lambda_2) >= ... >= abs(lambda_n)$.
-    Note that the first one is _isolated_.
+  + Order such that $abs(lambda_1) > abs(lambda_2) >= ... >= abs(lambda_n)$. Note that the first one
+    is _isolated_.
   + Let $x^((0))$ be the initial guess, such that $norm(x^((0))) = 1$.
   + *While* (`Stopping criterion`)
     + Compute $y^((k+1)) <-- A x^((k))$
@@ -585,8 +585,8 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
   $
 ]
 #proof[
-  Since $A$ is diagonalizable, the set of eigenvectors for a basis for $C^n$.
-  Which means that for any $x^((0))$ can be written in that basis:
+  Since $A$ is diagonalizable, the set of eigenvectors for a basis for $C^n$. Which means that for
+  any $x^((0))$ can be written in that basis:
   $
     x^((0)) = sum^n_(i = 1) alpha_i v_i wide "for suitable" alpha_1, ..., alpha_n
   $
@@ -602,12 +602,11 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
   #subproof(<lem:power-sum>)[
     We prove this by induction on the exponent $k$.
 
-    In the base case $k = 0$, assume that $A^0 = I$ and $lambda^0 = 1$.
-    Then $x^((0)) = sum^n_(i = 1) alpha_i v_i$ is trivially true by construction.
+    In the base case $k = 0$, assume that $A^0 = I$ and $lambda^0 = 1$. Then
+    $x^((0)) = sum^n_(i = 1) alpha_i v_i$ is trivially true by construction.
 
     For the inductive step we assume that the statement is true at $k$ and try to prove it for
-    $k + 1$.
-    Start from the expression at $k$ and multiply by $A$:
+    $k + 1$. Start from the expression at $k$ and multiply by $A$:
     $
       A^(k+1) x^((0)) & = A sum^n_(i = 1) alpha_i lambda_i^k v_i = sum^n_(i = 1) alpha_i lambda_i^k A v_i \
       & = sum^n_(i = 1) alpha_i lambda_i^k (lambda_i v_i) = sum^n_(i = 1) alpha_i lambda_i^(k+1) v_i \
@@ -671,8 +670,8 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
 Assume now we have computed the largest eigenvalue $lambda_1$ and we want to compute the next
 largest $lambda_2$.
 
-To do so, we want to find a similarity transformation $S$ which satisfies $S v_1 = alpha e_1$,
-where $e_1$ is the first element of the canonical basis, such that
+To do so, we want to find a similarity transformation $S$ which satisfies $S v_1 = alpha e_1$, where
+$e_1$ is the first element of the canonical basis, such that
 $
   S A S^(-1) = mat(lambda_1, b^T; 0, B)
 $
@@ -693,8 +692,8 @@ $abs(lambda_1) >= ... >= abs(lambda_(n - 1)) > abs(lambda_n)$, where the smalles
   eigenpair of $A^(-1)$.
 ]
 
-We exploit this remark to apply the power method to $A^(-1)$.
-However, we cannot invert $A$, so we need to solve a linear system at each iteration:
+We exploit this remark to apply the power method to $A^(-1)$. However, we cannot invert $A$, so we
+need to solve a linear system at each iteration:
 #algorithm(title: "Inverse power method")[
   + Let $q^((0))$ such that $norm(q^((0))) = 1$
   + For each iteration
@@ -739,8 +738,7 @@ $
 === QR Factorization
 
 #definition(title: "QR factorization")[
-  Let $A in RR^(m times n)$.
-  $A$ admits a QR factorization if
+  Let $A in RR^(m times n)$. $A$ admits a QR factorization if
   - $exists Q in R^(m times m)$ orthogonal ($Q^T = Q^(-1)$)
   - $exists R in R^(m times n)$ upper trapezoidal such that
   $
@@ -804,12 +802,11 @@ Columns of $U$ are called *Schur vectors*. In general, only $u_1$ is an eigenvec
   $
 ]
 
-Notably, each eigenvector spans an invariant subspace of its matrix.
-A weaker version also holds for Schur vectors.
+Notably, each eigenvector spans an invariant subspace of its matrix. A weaker version also holds for
+Schur vectors.
 
 #proposition(title: [Schur vectors span invariant subspaces])[
-  Let $u_1, ..., u_n$ be the Schur vectors of $A$.
-  Then
+  Let $u_1, ..., u_n$ be the Schur vectors of $A$. Then
   $
     cal(S)_k = angle(u_1, ..., u_k) wide forall k in 1, ..., n
   $
@@ -894,19 +891,18 @@ $T$, when we are done computing $T$ we still need to solve for its eigenvalues.
 However, we don't need to compute the full $T$, often a few iterations are enough. This gives a
 $T in RR^(k times k)$, which can be easily solved via Schur decomposition (since $T$ is both
 Hessenberg and symmetric this allows to compute QR factorizations in $bigO(n^2)$ instead of
-$bigO(n^3)$).
-Of course the approximation of the result gets better as $k -> n$ but we can often can stop way
-before.
+$bigO(n^3)$). Of course the approximation of the result gets better as $k -> n$ but we can often can
+stop way before.
 
 = Non-square systems
 
 == Over-specified systems
 
-In this kind of systems the matrices are high and thin, i.e. the number of rows is much larger
-than the number of columns.
+In this kind of systems the matrices are high and thin, i.e. the number of rows is much larger than
+the number of columns.
 
-An example of this kind of matrix is *linear or polynomial regressions*: we have a lot of sample
-but only two parameters.
+An example of this kind of matrix is *linear or polynomial regressions*: we have a lot of sample but
+only two parameters.
 
 In these systems we will never be able to have zero residuals, however the goal for a regression is
 to minimize them as much as possible in the least square.
@@ -930,23 +926,21 @@ TODO
 
 = Algebraic Multi-grid methods
 
-These are methods developed when we cannot create a coarser grid because of numerical issues.
-We need to rely on a single grid and perform some algebra on just the matrix itself.
+These are methods developed when we cannot create a coarser grid because of numerical issues. We
+need to rely on a single grid and perform some algebra on just the matrix itself.
 
 #definition(title: "Associated graph")[
-  Let $A$ be a $n times n$ matrix.
-  Its associated graph is a graph $G = (V, E)$ where $V = 1, ..., n$ and
+  Let $A$ be a $n times n$ matrix. Its associated graph is a graph $G = (V, E)$ where
+  $V = 1, ..., n$ and
   $
     E = {e_(i, j) | a_(i, j) != 0 and i != j}
   $
 ]
 
-Given a matrix $A$ we generate its associated graph.
-Then we want to remove the "weak" connections.
+Given a matrix $A$ we generate its associated graph. Then we want to remove the "weak" connections.
 
 #definition(title: "Strongly connected nodes")[
-  Let $theta in (0, 1)$.
-  We say a node $i$ is strongly connected with node $j$ if
+  Let $theta in (0, 1)$. We say a node $i$ is strongly connected with node $j$ if
   $
     -a_(i, j) >= theta max_(k != i) (-a_(i, k))
   $

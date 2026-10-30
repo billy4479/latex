@@ -907,22 +907,232 @@ only two parameters.
 In these systems we will never be able to have zero residuals, however the goal for a regression is
 to minimize them as much as possible in the least square.
 
-#remark[
-  If $A$ is full-rank $A^T A$ is SPD.
-]
+=== Minimizing the residual
 
-
-This means that we can solve
+Let the residual be $r = b - A x$. If the residual is the minimum in the least square sense, then it
+is orthogonal to the image of $A$. We can impose this condition by setting $A^T r = 0$ and
+substituting $r$ we get
 $
   A^T A x = A^T b
 $
-instead. Moreover, since $A^T A$ is SPD, this is a convex minimization problem, therefore we can
-just set the gradient to zero.
 
+The same result can be obtained analytically: let $Phi(x) = norm(b - A x)^2$, then
+$
+     min_x Phi(x) & <==> grad Phi(x) = 0 \
+      grad Phi(x) & = grad (b - A x)^T (b - A x) \
+                  & = grad (b^T b - b^T A x - x^T A^T b + x^T A^T A x) \
+                  & = - b^T A - A^T b + 2 A^T A x \
+                  & = 2 A^T A x - 2 A^T b \
+  grad Phi(x) = 0 & <==> A^T A x = A^T b
+$
+
+#remark[
+  If $A$ is full-rank $A^T A$ is SPD.
+]
+#proof[
+  We want to show that $x^T A^T A x > 0$ for all $x in R^n without {0}$. But
+  $x^T A^T A x = norm(A x)^2$, so that, if $A$ has full rank, $A x != 0$ for all $x != 0$. By the
+  properties of the norm we have $norm(y) > 0$ for all $y != 0$, showing that $A A^T$ is positive
+  definite.
+
+  Symmetry is just $(A^T A)^T = (A^T)^T A^T = A A^T$.
+]
+
+This gives us very powerful methods to solve this system, like conjugate gradient or the Cholesky
+factorization.
+
+This method also has a major drawback: we need to solve a system with a huge conditioning number
+$kappa(A^T A) = kappa(A)^2$: this is a nightmare in floating point math. We might get such a bad
+matrix that $A^T A$ even loses its positive definiteness.
+
+=== QR to the rescue
+
+Instead of computing $A^T A$ we try to transform $A$. The best candidate is to use orthogonal
+matrices, since $norm(Q^T (A x - b))^2 = norm(A x - b)$.
+
+#theorem[
+  Let $x^* = hat(R)^(-1) hat(Q)^T b$. Then $x^*$ is the solution to the system in the least squares
+  sense. The minimum value is $Phi(x^*) = sum_(i = n + 1)^m [(Q^T b)_i]^2$.
+]
+
+#proof[
+  Compute the QR decomposition of $A$: $A = Q R$.
+  $
+    norm(A x - b)^2 & = norm(Q^T ( A x - b))^2 \
+                    & = norm(Q^T (Q R x - b))^2 \
+                    & = norm(Q^T Q R x - Q^T b)^2 \
+                    & = norm(R x - Q^T b)^2 \
+                    & = norm(hat(R) x - hat(Q)^T b)^2 + sum_(i = n + 1)^m [(Q^T b)_i]^2
+  $
+  In the last step we split $Q$ and $R$ in their reduced forms: indeed $R$ is zero after $n$, so
+  that all those terms cancel, while the terms involving $Q$ can be brought out into their own term.
+
+  We note that the tail elements do not involve $x$, so there is nothing we can do about them, we
+  are left with minimizing $norm(hat(R) x - Q^T b)$. This happens when
+  $hat(R) x = Q^T b <==> x = R^(-1) Q^T b$ as stated.
+]
+
+We still have an issue: if $A$ is singular the whole concept of solution breaks as $hat(R)$ becomes
+singular and the inverse no longer exists. Cholesky would fail too since $A^T A$ becomes positive
+semi-definite.
+
+=== Singular Value Decomposition (SVD)
+
+The solution to the singularity problem is, between the possible solutions, select the one with
+minimal norm. The right tool to do this is the Singular Value Decomposition (SVD).
+
+#theorem(title: [Singular Value Decomposition])[
+  Let $A in RR^(m times n)$. Then there exists $U in RR^(m times m)$ and $V in RR^(n times n)$ *both
+  orthogonal* such that
+  $
+    U^T A V = Sigma := diag(sigma_1, ..., sigma_p) in RR^(m times n)
+  $
+  where $p := min {m,n}$ and $sigma_1 >= sigma_2 >= dots.c >= sigma_p$ are called the *singular
+  values* of $A$.
+
+  Equivalently we can write
+  $
+    A = U Sigma V^T
+  $
+]
+
+This has some very nice implications: first we note that we can just read off $r := rank(A)$ as the
+number of non-zero singular values; then, by writing
+$
+  A V = U Sigma <==> A v_i = sigma_i u_i
+$
+we see that
+$
+  ker(A) = "span"(v_(r+1), ..., v_n) wide "range"(A) = "span"(u_1, ..., u_r)
+$
+this gives us a concrete orthonormal basis of the image and the kernel of $A$.
+
+#definition(title: [Moore-Penrose pseudo-inverse])[
+  Let $A = U Sigma V^T$ as in the SVD. The pseudo-inverse of $A$ is defined as
+  $
+    A^dagger := V Sigma^dagger U^T
+    wide "where" Sigma^dagger := diag(1/sigma_1, ..., 1/sigma_r, 0, ..., 0)
+  $
+]
+
+#theorem[
+  The solution to the over-specified system in the least squares sense is given by
+  $
+    x^* = A^dagger b
+  $
+]
+
+#proof[
+  Start by a change of variable: define $w := V^T x$ so that $x = V w$. Then
+  $
+    norm(A x - b)^2 & = norm(A V w - b)^2 \
+                    & = norm(U Sigma V^T V w - b)^2 \
+                    & = norm(U Sigma w - b)^2 \
+                    & = norm(Sigma w - U^T b)^2 \
+  $
+  Now we split the norm in the components before $r$ and after $r$:
+  $
+    norm(Sigma w - U^T b)^2 & = sum^r_(i = 1) [sigma_i w_i - (U^T b)_i]^2
+                              + sum^p_(i = r+1) [(U^T b)_i]^2
+  $
+  Since $sigma_i > 0$ when $i <= r$ we get that $w_i = (U^T b)/sigma_i$ for all $i <= r$. For
+  $i > r$ we can choose $w_i$ freely, but minimizing the norm tells us that they should all be set
+  to zero.
+
+  This gives $w^* = Sigma^dagger U^T b$, meaning
+  $
+    x^* = V w^* = V Sigma^dagger U^T b = A^dagger b
+  $
+  as desired.
+]
 
 = Multi-grid methods
 
-TODO
+Consider a problem where we are, for example, solving some differential equation. The discretization
+on an evenly spaced grid gives us a sparse matrix, since all points in the grid only interact with
+the neighbouring ones.
+
+We usually rely on the residual to estimate how good our solver is performing. The idea of
+multi-grid methods is, given the residuals, estimate the true error as
+$
+  A_h e_h^((k)) = r_h^((k))
+$
+(where $h$ is the grid spacing, more on that later) and use it to correct the solution.
+
+This is particularly useful for using the weighted Jacobi method to solve differential equations.
+After one iteration the error updates as $e^((k+1))_h = B e^((k))_k$ for some $B$ we don't really
+care about right now. In this case the error can be described as the combination of multiple
+oscillatory modes. This method is good at removing modes which oscillate very fast, while it takes a
+long time to converge when the modes look almost flat.
+
+#example[
+  Consider a 2D surface where the edges are kept at a fixed temperature. Given some heat sources
+  spread in the surface we want to see how the temperature evolves.
+
+  In this problem the weighted Jacobi solver is very good at fixing errors in near by regions of the
+  surface, since there the modes oscillate faster, while it struggles to fix errors when they are
+  spread out in the whole surface since their modes are smooth.
+]
+
+Multi-grid methods exploit the fact that smooth modes look more oscillatory when looked at from a
+coarser grid.
+
+== Introduction on two grids
+
+#definition(title: [Interpolation operator])[
+  Consider an operator $cal(I)_h^(h') : R^(n_a) -> R^(n_b)$, where $n_a$ is the dimension of the
+  grid with spacing $h$ and $n_b$ is the dimension of the grid with spacing $h'$.
+]
+
+Many times we consider $h' = k h$ with $k in NN$ so that the interpolation operator becomes trivial:
+when moving from fine to coarse we just drop the extra points; when moving from coarse to fine we
+linearly interpolate between the two points in the coarser grid.
+
+These operators are linear and can therefore be written as matrices.
+
+#example(title: [Interpolation operator $3 -> 6$])[
+  $
+    I_(2 h )^(h ) vec(a, b, c) =
+    mat(
+      1, 0, 0;
+      1/2, 1/2, 0;
+      0, 1, 0;
+      0, 1/2, 1/2;
+      0, 0, 1
+    )
+    vec(a, b, c) =
+    vec(
+      a,
+      (a + b)/2,
+      b,
+      (b + c)/2,
+      c
+    )
+  $
+]
+
+Then the method we present now consists of:
++ Solve the problem on the fine grid and compute the residual $r_h$.
++ Restrict the residual to the coarser grid $r_(2 h)$.
++ Solve the error equation in the coarser grid $A_(2 h) e_(2 h) = r_(2 h)$, where
+  $A_(2 h) := I^(2h)_h A_h I_(2h)^h$.
++ Interpolate the error back to the finer grid $e_h$.
++ Correct the estimate $x_h <- x_h + e_h$.
+
+== Cycles
+
+Instead of just moving between a fine and a coarse grid, we can choose some more sophisticated
+cycle. This is done mainly for performance: some times it might be too expensive to compute the
+direct solution even on a grid of size $2h$, therefore we use another multi-grid solver to go down
+another level, and so on.
+
+One of the most used one is the *V cycle*, where we start from a fine grid and we move $k$ grid
+down, then $k$ grid up, but there are other routines as well.
+
+#figure(
+  image("assets/nla/multigrid-cycles.svg"),
+  caption: [Examples of common multi-grid cycle paths.],
+)
 
 = Algebraic Multi-grid methods
 

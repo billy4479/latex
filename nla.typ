@@ -1134,7 +1134,7 @@ down, then $k$ grid up, but there are other routines as well.
   caption: [Examples of common multi-grid cycle paths.],
 )
 
-= Algebraic Multi-grid methods
+== Algebraic multi-grid methods
 
 These are methods developed when we cannot create a coarser grid because of numerical issues. We
 need to rely on a single grid and perform some algebra on just the matrix itself.
@@ -1171,11 +1171,157 @@ We partition $V$ in two sets $C$ (coarse) and $F$ (fine).
   + *End*.
 ]
 
+=== Interpolation
+
+Now that we have the partition we need a way to estimate points of $F$ given $C$.
+
+The idea is that, for a smooth error $e$,
+$
+  A e approx 0 <==> a_(i i) e_i + sum_(j in N_i) a_(i, j) e_j approx 0
+$
+This means that if all the neighbours of a given point are in $C$ we could solve the equation
+directly.
+
+If an $F$ point is strongly connected to another $F$ point then we cannot interpolate it directly.
+We can however rely on the neighbouring $C$ points to estimate the missing $F$ point.
+
+Note that if $C$ is very coarse, interpolation might be hard to parallelize.
+
 = Domain decomposition
 
-We want to split the domain of the problem in subdomains, solve the problem in the subdomains in
-parallel and reconstruct the solution of the big problem.
+This technique is used to split the domain of the underlying PDE in smaller subdomains, solve the
+problem in the subdomains in parallel and reconstruct the solution of the big problem.
 
 In general, sub-problems need to talk to each other because often we cannot split the problem in
 independent subdomains.
+
+== Overlapping domains (Schwartz)
+
+Assume we split our problem in two subdomains $Omega_1, Omega_2$. Since $Omega_1$ and $Omega_2$ are
+overlapping, there will be some parts of the boundary of $Omega_1$ in the interior of $Omega_2$ and
+viceversa.
+
+To solve PDEs we need boundary conditions _on the whole boundary_, so to obtain the part of the
+boundary of $Omega_1$ which is in the interior of $Omega_2$ we use the best estimate of the solution
+within $Omega_2$.
+
+We continue to refine the solution in $Omega_1$ and $Omega_2$ using the current best estimation of
+the solution available in the other domain.
+
+This is called *multiplicative Schwartz method* it chooses to use the best approximation available
+in spite of parallelism.
+
+Another possibility is the *additive Schwartz method* which computes the solution of all subdomains
+in parallels, trading parallelisms for less accurate iterations.
+
+=== Additive Schwartz preconditioner
+
+This idea can be used to construct very effective preconditioners.
+
+Consider the linear system $A x = b$. Split $A$ in subdomains $A = union.big_i A_i$, then $R_i$ is
+the *extraction operator* where $R_i x$ is the elements of $x$ which belong to subdomain $i$.
+
+#algorithm(title: [Additive Schwartz preconditioner])[
+  + Use some iterative solver to get a residual $r^((k)) = b - A x^((k))$.
+  + For each subdomain $i$
+    + Restrict the residual to $R r_i^((k))$.
+    + Solve the error equation for a correction $delta_i$:
+      $
+        A_i delta_i = R r_i^((k)) ==> delta_i = A^(-1)_i R_i r^((k))
+      $
+    + Extend the correction back by multiplying by $R^T_i$:
+      $
+        R_i^T delta_i = R_i^T A_i^(-1) R_i r^(k)
+      $
+  + This gives
+    $
+      x^((k+1)) = x^((k)) + [sum_i R_i^T A_i^(-1) R_i] r^((k))
+    $
+]
+
+We can then define $sum_i R_i^T A_i^(-1) R_i$ is called the Additive Schwartz preconditioner.
+
+=== Coarse-grid correction
+
+While methods like additive Schwartz can help reduce errors inside a certain subdomain, they take a
+long time to converge when the error spans across different subdomains, meaning that the subdomains
+disagree on what the prediction of a certain region should be.
+
+To address this we introduce a coarse grid in which we solve the problem for the whole domain. This
+can be very coarse, so that's not computationally too expensive, but it still helps far apart
+subdomains to finding a solution more quickly.
+
+== Non-overlapping domains (Schur)
+
+Here instead we split the domain in non-overlapping subdomains: each subdomain only shares the
+interface nodes $Gamma$ with other subdomains.
+
+The problem then looks like
+$
+  mat(
+    A_(I I), A_(I Gamma);
+    A_(I Gamma)^T, A_(Gamma Gamma)
+  )
+  vec(x_I, x_Gamma) = vec(b_I, b_Gamma)
+$
+
+Since the interior of the subdomains are not connected, $A_(I I)$ is block-diagonal, so solving in
+each subdomain can be done in parallel. We get
+$
+  x_I = A^(-1)_(I I) (b_I - A_(I Gamma) x_Gamma)
+$
+By substituting that in the second row we get
+$
+  underbrace((A_(Gamma Gamma) - A_(I Gamma)^T A^(-1)_(I I) A_(I Gamma)), =: S)x_Gamma
+  = b_Gamma - A_(I Gamma)^T A^(-1)_(I I) b_I
+$
+which is a smaller system only involving the interfaces.
+
+Even if this system is smaller, the matrix $S$ (the Schur complement) could be dense or hard to
+solve. In practice we never materialize it.
+
+Note that sometimes Schur is note enough and we still could need a preconditioner.
+
+= Direct methods
+
+Now we tackle solving $A x = b$ directly, in a finite number of operations.
+
+== LU factorization
+
+The idea is to factorize $A$ in two triangular matrices
+$
+  A = L U
+$
+so that the system can be solved as
+$
+  L y = b --> U x = y
+$
+just by using forward and backwards substitution.
+
+This is also nice since the factorization can then be cached and reused for subsequent solves with a
+different $b$.
+
+#theorem(title: [Existence of $L U$ factorization])[
+  If $A$ is invertible and the determinant of the top-left $i times i$ blocks of $A$ are all
+  non-zero for $i = 1, ..., n - 1$, then the LU factorization exists.
+]
+
+We can also introduce pivoting
+$
+  P A = L U
+$
+where $P$ is a matrix which can swap the rows of $A$. This can be done in solving a linear system,
+since rearranging the equations gives the same solution.
+
+=== Fill-in
+
+When factoring sparse matrices there is the issue that the factorization is usually not sparse. This
+phenomenon is called fill-in.
+
+Row (or even column) pivoting can greatly help reducing it.
+
+== Cholesky factorization
+
+If $A$ is SPD then we can do even better by factorizing it in $A = R^T R$ where $R$ is upper
+triangular.
 

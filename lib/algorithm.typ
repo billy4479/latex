@@ -10,8 +10,14 @@
   body
 }
 
-#let algorithm(body, title: none, ..args) = {
-  counter("algorithm").step()
+// Algorithms are wrapped in a `great-theorem-counted` figure with the
+// numberfunc metadata expected by `great-theorems-init`, so that a label can
+// be attached with `<alg:name>` and referenced with `@alg:name`, exactly like
+// theorems.
+#let algorithm(body, title: none, ..args) = figure(
+  kind: "great-theorem-counted",
+  supplement: "Algorithm",
+  outlined: false,
   block(
     width: 100%,
     breakable: false,
@@ -24,6 +30,14 @@
       right: 8pt,
     ),
   )[
+    #counter("algorithm").step()
+    // Number stored for the reference show rule in `great-theorems-init`.
+    #metadata(loc => numbering(
+      "1.1",
+      counter(heading).at(loc).first(),
+      counter("algorithm").at(loc).first(),
+    ))
+    #label("great-theorems:numberfunc")
     #context {
       let lvl = counter(heading).get().first()
       let n = counter("algorithm").get().first()
@@ -36,5 +50,5 @@
       ..args,
       body,
     )
-  ]
-}
+  ],
+)

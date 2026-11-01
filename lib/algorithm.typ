@@ -20,7 +20,7 @@
   outlined: false,
   block(
     width: 100%,
-    breakable: false,
+    breakable: true,
     fill: alg-color.lighten(90%),
     stroke: (left: 3pt + alg-color),
     inset: (
@@ -38,12 +38,30 @@
       counter("algorithm").at(loc).first(),
     ))
     #label("great-theorems:numberfunc")
-    #context {
+    // The title sticks to the pseudocode below it, so a page break cannot
+    // leave it orphaned at the bottom of a page.
+    #block(sticky: true)[#context {
       let lvl = counter(heading).get().first()
       let n = counter("algorithm").get().first()
       text(fill: alg-color)[#strong[Algorithm #numbering("1.1", lvl, n)] #h(0.5em) #title]
-    }
+    }]
     #set math.equation(numbering: none)
+    // Keep every pseudocode line in one piece: the box may only break between
+    // lines (grid rows), never inside one. Cells already wrapped are passed
+    // through, or this rule would match its own output forever.
+    #show grid.cell: it => {
+      let opts = it.fields()
+      let body = opts.remove("body")
+      if body.func() == block and body.at("breakable", default: true) == false {
+        return it
+      }
+      grid.cell(..opts, block(
+        above: 0pt,
+        below: 0pt,
+        breakable: false,
+        body,
+      ))
+    }
     #pseudocode-list(
       stroke: 1pt + alg-color.lighten(30%),
       line-number-alignment: top + right,

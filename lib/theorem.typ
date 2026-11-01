@@ -34,7 +34,7 @@
     counter: counter("thm"),
     numbering: dependent-numbering("1.1", levels: 1),
     titlix: title => text(color.darken(darken))[ #title ],
-    breakable: false,
+    breakable: true,
     fill: color.lighten(90%),
     stroke: (left: 3pt + color),
     inset: (

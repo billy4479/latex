@@ -20,7 +20,7 @@
 = Preliminaries
 
 We note $vv(x)$ a vector in $RR^n$, with $vv(0), vv(1)$ being the all zero and all 1 vectors,
-while $vv(e)_i$ are the vectors which form the canonical base of $RR^n$.
+while $vv(e)_i$ are the vectors which form the canonical basis of $RR^n$.
 
 Recall that a matrix is *nilpotent* if $exists k in NN$ such that $bold(A)^k = bold(0)$.
 
@@ -36,7 +36,7 @@ singular and cannot be inverted.
 Orthogonal matrices have that $bold(A)^T = bold(A)^(-1)$.
 
 Upper and lower triangular matrices are non-singular (i.e. invertible) iff the diagonal elements are
-all different from 0. They are called unitary if the diagonals are all 1.
+all different from 0. They are called *unit triangular* if the diagonals are all 1.
 
 == LU factorization
 $
@@ -50,7 +50,7 @@ by
 $
   A = L^T L
 $
-where $L$ is the same lower triangular matrix with positive entries on the diagonal.
+where $L$ is a lower triangular matrix with positive entries on the diagonal.
 
 == QR decomposition
 
@@ -64,7 +64,7 @@ where $Q$ is orthogonal and $R$ is upper triangular.
 
 Never compute it unless triangular, in which case $det(A)$ is the product of the diagonal.
 
-Use LU factorization to compute determinant: $det(A) = plus.minus det(U)$ (since $L$ is unitary).
+Use LU factorization to compute determinant: $det(A) = plus.minus det(U)$ (since $L$ is unit).
 The $plus.minus$ comes from the permutation matrix.
 
 == Sparse matrices
@@ -105,7 +105,7 @@ $
 $
 where $B$ is the _iteration matrix_ and, together with $vv(f)$, fully specify the method.
 
-The first criterion to chose these parameters is *consistency*: if $vv(x)^((k))$ is the correct
+The first criterion to choose these parameters is *consistency*: if $vv(x)^((k))$ is the correct
 solution, then $vv(x)^((k + 1)) = vv(x)^((k))$. This gives
 $
   vv(x) = B vv(x) + vv(f) ==> vv(f) = (I - B) vv(x) = (I - B) A^(-1) vv(b)
@@ -133,7 +133,8 @@ $
 Therefore, for the error to go to zero we need $norm(B) < 1$. This is a sufficient condition for
 convergence.
 
-In practice, to make sure $norm(B) < 1$ we set its spectral radius $rho(B) > 1$.
+In practice, convergence is ensured by requiring the spectral radius $rho(B) < 1$: this is a
+necessary and sufficient condition for convergence.
 
 #definition(title: "Spectral radius")[
   The spectral radius $rho(B)$ is defined as
@@ -144,7 +145,7 @@ In practice, to make sure $norm(B) < 1$ we set its spectral radius $rho(B) > 1$.
 ]
 
 #proposition[
-  The spectral radius is the smallest of the induced norms.
+  The spectral radius is the infimum of all induced norms.
 ]
 
 === Stopping criterion
@@ -152,8 +153,8 @@ In practice, to make sure $norm(B) < 1$ we set its spectral radius $rho(B) > 1$.
 Ideally we want to stop when $norm(vv(x) - vv(x)^((k)))/norm(vv(x)) <= epsilon$, however we don't know the true
 solution $vv(x)$.
 
-#definition(title: "Conditioning number")[
-  Given a matrix $A$, its conditioning number is defined as
+#definition(title: "Condition number")[
+  Given a matrix $A$, its condition number is defined as
   $
     kappa(A) = norm(A) dot.op norm(A^(-1))
   $
@@ -170,7 +171,7 @@ $
 $
 and it can be shown that
 $
-  norm(vv(e)^((k))) <= 1 / (1- rho(B)) norm(vv(delta)^((k)))
+  norm(vv(e)^((k))) <= 1 / (1 - norm(B)) norm(vv(delta)^((k)))
 $
 
 === Preconditioning
@@ -179,7 +180,7 @@ We introduce an SPD matrix $P^(-1)$ and we solve
 $
   P^(-1/2) A P^(-1/2) vv(z) = P^(-1/2) vv(b)
 $
-Then $vv(x) = P^(1/2) vv(z)$.
+Then $vv(x) = P^(-1/2) vv(z)$.
 
 We try to chose $P$ such that $kappa(P^(-1/2) A P^(-1/2)) << kappa(A)$.
 
@@ -193,7 +194,7 @@ We can also write this in matrix form:
 $
   A = P - N
 $
-This also preserves sparsity
+This also preserves sparsity.
 
 == Richardson method
 
@@ -210,7 +211,7 @@ We want
 $
   B alpha = I - alpha P^(-1) A
 $
-such that the spectral radius of $B alpha$ is as smaller that $1$. The role of $alpha$ is to push
+such that the spectral radius of $B alpha$ is smaller than $1$. The role of $alpha$ is to push
 back the eigenvalues towards $0$.
 
 #theorem(title: [$P = I, A "SPD"$])[
@@ -242,18 +243,19 @@ back the eigenvalues towards $0$.
 ]
 
 #remark[
-  Let $A$ be an SPD matrix. Then, there exists an unique matrix $A^(1/2)$ SPD such that
+  Let $A$ be an SPD matrix. Then, there exists a unique matrix $A^(1/2)$ SPD such that
   $(A^(1/2))^2 = A$.
 ]
 
 #remark[
-  Let $A, B^(-1)$ be SPD matrices. Then $B^(-1/2) A B^(1/2) = B^(-1) A$ is also SPD.
+  Let $A, B^(-1)$ be SPD matrices. Then $B^(-1/2) A B^(-1/2)$ is also SPD, and $B^(-1) A$
+  (which is similar to it) has real positive eigenvalues.
 ]
 
 
-This means that in @thm:rich-P-spd $lambda_"max"$ could be complex. Note that we do not want to
-compute eigenvalues: this is a non-linear problem, which is very expensive to solve, especially
-because we are starting from a linear problem.
+This means that in @thm:rich-P-spd the eigenvalues of $P^(-1) A$ are real and positive, so
+$lambda_"max"$ is well-defined. Note that we do not want to compute eigenvalues: this is a non-linear
+problem, which is very expensive to solve, especially because we are starting from a linear problem.
 
 We can now exploit the fact that $A$ is SPD. This means that $Phi(vv(y)) = 1/2 vv(y)^T A vv(y) - vv(y)^T vv(b)$ (call it
 the _energy function_) is convex, and the unique minimum is given by $grad Phi(vv(y)) = vv(0) = A vv(y) - vv(b)$,
@@ -274,7 +276,7 @@ $
 
 To compute $alpha_k$ we can just expand $Phi(vv(x)^((k + 1)))$ and look at it as a function of $alpha_k$
 and looking for its minimizer. Doing the algebra, we find out that $Phi(vv(x)^((k + 1)))$ is a 1
-dimensional parabola in $alpha_k$, which is is trivial to minimize.
+dimensional parabola in $alpha_k$, which is trivial to minimize.
 
 This gives us
 $
@@ -290,7 +292,7 @@ This gives us a full algorithm:
 
 === Convergence
 
-This method, in precise arithmetic, always converges.
+This method, in exact arithmetic, always converges.
 
 #definition(title: "Matrix-induced norm")[
   Let $A$ be an SPD matrix. For a vector $vv(z)$ we define its norm induced by $A$ as
@@ -303,19 +305,19 @@ This method, in precise arithmetic, always converges.
 The speed of convergence depends on $A$:
 $
   norm(vv(e)^((k + 1)))_A <= (kappa(A) - 1)/(kappa(A) + 1) norm(vv(e)^((k)))_A ==>
-  norm(vv(e)^((k + 1)))_A <= ((kappa(A) - 1)/(kappa(A) + 1))^k norm(vv(e)^((0)))_A
+  norm(vv(e)^((k)))_A <= ((kappa(A) - 1)/(kappa(A) + 1))^k norm(vv(e)^((0)))_A
 $
 
 === Adding back the preconditioner
 
 Now let $P != I$
 $
-  A vv(x) = vv(p) ==> P^(1/2) A P^(-1/2) vv(y) = P^(1/2) vv(b) quad "with" vv(y) = P^(1/2) vv(x)
+  A vv(x) = vv(p) ==> P^(-1/2) A P^(-1/2) vv(y) = P^(-1/2) vv(b) quad "with" vv(y) = P^(1/2) vv(x)
 $
 where the bound for the error is
 
 $
-  norm(vv(e)^((k + 1)))_A <= [(kappa(P^(1/2) A P^(-1/2)) - 1)/(kappa(P^(1/2) A P^(-1/2)) + 1)]
+  norm(vv(e)^((k + 1)))_A <= [(kappa(P^(-1/2) A P^(-1/2)) - 1)/(kappa(P^(-1/2) A P^(-1/2)) + 1)]
   norm(vv(e)^((k)))_A
 $
 
@@ -331,7 +333,7 @@ Indeed, we can define the algorithm as
   + *While* `Stopping condition`
     + Solve $P vv(z)^((k)) = vv(r)^((k))$ for $vv(z)^((k))$
     + Compute $alpha_k = ((vv(z)^((k)))^T vv(r)^((k)))/((vv(z)^((k)))^T A vv(z)^((k)))$
-    + Update $vv(x)^((k + 1)) = vv(x)^((k)) + alpha vv(z)^((k))$
+    + Update $vv(x)^((k + 1)) = vv(x)^((k)) + alpha_k vv(z)^((k))$
     + Update $vv(r)^((k + 1)) = vv(r)^((k)) - alpha_k A vv(z)^((k))$
   + *End*
 ]
@@ -370,7 +372,7 @@ preceding one, leading to a zig-zag pattern.
 This also has the advantage that $vv(d)^((k))$ form a basis of $RR^n$, which means that the method
 converges in at most $n$ steps.
 
-The problem is then reframed as "finding iteratively a base to $RR^n$ in order to represent $vv(x)$".
+The problem is then reframed as "finding iteratively a basis of $RR^n$ in order to represent $vv(x)$".
 
 At each step we need to find $vv(d)^((k+1))$ given the current residuals and the previous direction. The
 next direction is given by
@@ -423,7 +425,7 @@ well.
 
 == Krylov space methods
 
-Consider the Richardson method with $alpha=1$. Can write
+Consider the Richardson method with $alpha = 1$. We can write
 $
   r^((k+1)) & = vv(b) - A vv(x)^((k + 1)) = vv(b) - A (vv(x)^((k)) + vv(r)^((k))) \
             & = vv(b) - A vv(x)^((k)) - A vv(r)^((k)) = vv(r)^((k)) - A vv(r)^((k))
@@ -431,7 +433,7 @@ $
 Similar arguments can be made for all methods we discussed so far. This means that $vv(r)^((k + 1))$ is
 a linear polynomial of $vv(r)^((k))$.
 
-This means we can can recursively write each $vv(r)^((k))$. Then the residuals lie on
+This means we can recursively write each $vv(r)^((k))$. Then the iterates lie in
 $
   vv(x)^((0)) + "span"{ vv(r)^((0)), A vv(r)^((0)), ..., A^(k-1) vv(r)^((0)) }
 $
@@ -449,8 +451,8 @@ where the space spanned by this vectors is a Krylov space.
   There exists a positive integer $nu$ such that
   $
     dim(cal(K)_s (A, vv(y))) = cases(
-      s quad & "if"s <= nu,
-      nu quad & "if"s >= nu,
+      s quad & "if" s <= nu,
+      nu quad & "if" s >= nu,
     )
   $
 ]
@@ -522,12 +524,12 @@ $
 $
 
 The naive base of the Krylov space however is numerically very bad, and those vectors become almost
-linearly independent very quickly. The idea to fix this is to use Arnoldi's iteration, i.e. run
+linearly dependent very quickly. The idea to fix this is to use Arnoldi's iteration, i.e. run
 Gram-Schmidt on the Krylov sequence to produce an orthonormal basis of the space.
 
 #algorithm(title: "GMRES")[
   + Choose $vv(x)^((0))$.
-  + Compute $vv(r)^((0)) = vv(b) - A vv(x)$.
+  + Compute $vv(r)^((0)) = vv(b) - A vv(x)^((0))$.
   + *While* (`Stopping condition`)
     + Compute $vv(q)_k$ with a suitable method.
     + Form $Q_k$ as the $n times k$ matrix formed by $vv(q)_1, ..., vv(q)_k$.
@@ -639,7 +641,7 @@ If we need only a few eigenvalues we can do something better, exploiting the geo
 interpretation of the eigenvalue problem. We introduce the *power method*.
 
 #algorithm(title: "Power method")[
-  + Let $lambda_1, ..., lambda_n$ be the eigenvalue of $A$,
+  + Let $lambda_1, ..., lambda_n$ be the eigenvalues of $A$,
   + Order such that $abs(lambda_1) > abs(lambda_2) >= ... >= abs(lambda_n)$. Note that the first one
     is _isolated_.
   + Let $vv(x)^((0))$ be the initial guess, such that $norm(vv(x)^((0))) = 1$.
@@ -659,7 +661,7 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
   $
 ]
 #proof[
-  Since $A$ is diagonalizable, the set of eigenvectors for a basis for $C^n$. Which means that for
+  Since $A$ is diagonalizable, the set of eigenvectors form a basis for $CC^n$. Which means that for
   any $vv(x)^((0))$ can be written in that basis:
   $
     vv(x)^((0)) = sum^n_(i = 1) alpha_i vv(v)_i wide "for suitable" alpha_1, ..., alpha_n
@@ -689,7 +691,7 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
     This concludes the proof of the first lemma.
   ]
 
-  From the result of the lemma we decouple $i = 1$ from the sum and pull out $alpha_1 lambda_1$ (we
+  From the result of the lemma we decouple $i = 1$ from the sum and pull out $alpha_1 lambda_1^k$ (we
   can do this since we are assuming that $alpha_1 != 0$).
   $
     A^k vv(x)^((0)) & = alpha_1 lambda_1^k vv(v)_1 + sum^n_(i = 2) alpha_i lambda_i^k vv(v)_i \
@@ -723,18 +725,18 @@ interpretation of the eigenvalue problem. We introduce the *power method*.
   diverges to $oo$, $0$, or has a rotating phase. This is where normalization comes in.
 
   $
-    vv(x)^((k + 1)) & = (A^k vv(x)^((k))) / norm(A^k vv(x)^((k))) \
+    vv(x)^((k)) & = (A^k vv(x)^((0))) / norm(A^k vv(x)^((0))) \
                 & = (alpha_1 lambda_1^k)/(abs(alpha_1) abs(lambda_1^k))
                   (vv(v)_1 + vv(r)^((k)))/norm(vv(v)_1 + vv(r)^((k))) \
                 & = e^(i theta_k) (vv(v)_1 + vv(r)^((k)))/norm(vv(v)_1 + vv(r)^((k)))
   $
   and as $k -> oo$ we get
   $
-    vv(x)^((k + 1)) = e^(i theta_k) vv(v)_1/norm(vv(v)_1)
+    lim_(k -> oo) vv(x)^((k)) = e^(i theta_k) vv(v)_1/norm(vv(v)_1)
   $
   where the error decays as $bigO(abs(lambda_2/lambda_1)^k)$.
 
-  When we reach the stopping condition $vv(x)^((k))$ is sufficiently close to $vv(x)_1$ that we can use
+  When we reach the stopping condition $vv(x)^((k))$ is sufficiently close to $vv(v)_1$ that we can use
   @prop:rayleigh to estimate the eigenvalue. The error also decays as
   $bigO(abs(lambda_2/lambda_1)^k)$.
 ]
@@ -762,7 +764,7 @@ We now want to compute the smallest eigenvalue
 $abs(lambda_1) >= ... >= abs(lambda_(n - 1)) > abs(lambda_n)$, where the smallest one is isolated.
 
 #remark[
-  Let $A$ be invertible. Then $(lambda_i, v_i)$ is an eigenpair of $A$ iff $(1/lambda, v_i)$ is an
+  Let $A$ be invertible. Then $(lambda_i, v_i)$ is an eigenpair of $A$ iff $(1/lambda_i, v_i)$ is an
   eigenpair of $A^(-1)$.
 ]
 
@@ -796,10 +798,11 @@ $
 then, the eigenvalues of $M_mu$ satisfy
 $
   M_mu vv(w) = xi vv(w) & <==> (A - mu I) vv(w) = xi vv(w) \
-                & <==> A vv(w) = (mu - xi) vv(w)
+                & <==> A vv(w) = (mu + xi) vv(w)
 $
 
-This means that the eigenvalue closest to $mu$ is the minimum eigenvalue of $M_mu$, we can compute
+This means that the eigenvalue closest to $mu$ is the eigenvalue of $M_mu$ with smallest modulus, we
+can compute
 it by using the inverse power method (with shift).
 
 The convergence rate is given by
@@ -813,8 +816,8 @@ $
 
 #definition(title: "QR factorization")[
   Let $A in RR^(m times n)$. $A$ admits a QR factorization if
-  - $exists Q in R^(m times m)$ orthogonal ($Q^T = Q^(-1)$)
-  - $exists R in R^(m times n)$ upper trapezoidal such that
+  - $exists Q in RR^(m times m)$ orthogonal ($Q^T = Q^(-1)$)
+  - $exists R in RR^(m times n)$ upper trapezoidal such that
   $
     A = Q R
   $
@@ -825,8 +828,8 @@ Gram-Schmidt to create an orthogonal matrix derived from the columns of $A$, how
 not always stable, we will see some methods to mitigate this.
 
 The QR factorization could be *full* or *partial*:
-- In the full QR factorization $Q in RR^(m times m)$ is a full orthogonal matrix and $R^(n times m)$
-  is a upper trapezoidal matrix.
+- In the full QR factorization $Q in RR^(m times m)$ is a full orthogonal matrix and $R in RR^(m times n)$
+  is an upper trapezoidal matrix.
 - In the partial one, we note that $R$ is padded with zero-rows in the lower part, therefore the
   last columns of $Q$ are useless. We therefore only compute $hat(Q) in RR^(m times n)$ and
   $hat(R) in RR^(n times n)$ which is an upper triangular matrix.
@@ -851,11 +854,9 @@ The QR factorization could be *full* or *partial*:
         + Let $r_(i, j) <- vv(q)_i^H vv(a)_j$.
       + *End*
       + Let $vv(w)_j <- vv(w)_j - r_(i, j) vv(q)_i$.
-      + *If* i = j:
-        + Assign $r_(j, j) <- norm(vv(w)_j)$.
-      + *End*
-      + Normalize $vv(q)_j <- vv(w)_j / norm(vv(w)_j)$.
     + *End*
+    + Assign $r_(j, j) <- norm(vv(w)_j)$.
+    + Normalize $vv(q)_j <- vv(w)_j / r_(j, j)$.
   + *End*
 ]
 
@@ -893,7 +894,7 @@ Schur vectors.
     + Find $Q^((k-1)), R^((k-1))$ such that $A^((k-1)) = Q^((k-1)) R^((k-1))$, this is a QR
       factorization.
     + Define $A^((k)) = R^((k-1)) Q^((k-1))$ (which will be different from $A^((k-1))$ since
-      products are not commutable.
+      products are not commutable).
     + Define $U^((k)) = U^((k - 1)) Q^((k - 1))$.
   + *End*
   + *Return* $T = A^((k)), U = U^((k))$.
@@ -911,7 +912,7 @@ Applying this arguments to the whole sequence we show that all the $A^((k))$ are
 Assuming that all eigenvalues are isolated all elements below the diagonal converge to zero, and the
 spectrum can be read on the diagonal.
 
-== Lanzos algorithm
+== Lanczos algorithm
 
 This algorithm computes in one shot the extreme eigenvalues for a SPD matrix $A$.
 
@@ -931,7 +932,7 @@ It can be proven that this decomposition exists and is unique given the first co
 
 The decomposition is obtained by imposing $A Q = Q T$ column by column:
 $
-  A vv(q)_n = beta_(n - 1) vv(q)_(n - 1) + alpha_n vv(q)_n + beta_(n + 1) vv(q)_(n + 1) \
+  A vv(q)_n = beta_(n - 1) vv(q)_(n - 1) + alpha_n vv(q)_n + beta_n vv(q)_(n + 1) \
   "by orthogonality"
   ==> cases(
     alpha_n & = vv(q)_n^H A vv(q)_n,
@@ -947,8 +948,8 @@ $
     + *End*
     + Compute $vv(q)_k = vv(r)_(k - 1)/beta_(k-1)$.
     + Compute $alpha_k = vv(q)_k^T A vv(q)_k$.
-    + Compute $vv(r)_k = (A - alpha_k) vv(q)_k - beta_(k - 1) vv(q)_(k - 1)$.
-    + Let $beta_k = abs(vv(r)_k)$.
+    + Compute $vv(r)_k = (A - alpha_k I) vv(q)_k - beta_(k - 1) vv(q)_(k - 1)$.
+    + Let $beta_k = norm(vv(r)_k)$.
   + *End*
 ]
 
@@ -956,7 +957,7 @@ Then at each iteration the extreme eigenvalues of $T = Q^T_k A Q_k$ converge to 
 
 === Why this is useful
 
-First of all, note that the algorithm is fully build on mat-vec multiplications, which is the only
+First of all, note that the algorithm is fully built on mat-vec multiplications, which is the only
 viable operation for big and sparse matrices.
 
 Lanczos does not yield a triangular or diagonal matrix, so eigenvalues cannot be read anywhere in
@@ -965,7 +966,7 @@ $T$, when we are done computing $T$ we still need to solve for its eigenvalues.
 However, we don't need to compute the full $T$, often a few iterations are enough. This gives a
 $T in RR^(k times k)$, which can be easily solved via Schur decomposition (since $T$ is both
 Hessenberg and symmetric this allows to compute QR factorizations in $bigO(n^2)$ instead of
-$bigO(n^3)$). Of course the approximation of the result gets better as $k -> n$ but we can often can
+$bigO(n^3)$). Of course the approximation of the result gets better as $k -> n$ but we can often
 stop way before.
 
 = Non-square systems
@@ -975,7 +976,7 @@ stop way before.
 In this kind of systems the matrices are high and thin, i.e. the number of rows is much larger than
 the number of columns.
 
-An example of this kind of matrix is *linear or polynomial regressions*: we have a lot of sample but
+An example of this kind of matrix is *linear or polynomial regressions*: we have a lot of samples but
 only two parameters.
 
 In these systems we will never be able to have zero residuals, however the goal for a regression is
@@ -995,7 +996,7 @@ $
      min_x Phi(vv(x)) & <==> grad Phi(vv(x)) = vv(0) \
       grad Phi(vv(x)) & = grad (vv(b) - A vv(x))^T (vv(b) - A vv(x)) \
                   & = grad (vv(b)^T vv(b) - vv(b)^T A vv(x) - vv(x)^T A^T vv(b) + vv(x)^T A^T A vv(x)) \
-                  & = - vv(b)^T A - A^T vv(b) + 2 A^T A vv(x) \
+                  & = - 2 A^T vv(b) + 2 A^T A vv(x) \
                   & = 2 A^T A vv(x) - 2 A^T vv(b) \
   grad Phi(vv(x)) = vv(0) & <==> A^T A vv(x) = A^T vv(b)
 $
@@ -1004,12 +1005,12 @@ $
   If $A$ is full-rank $A^T A$ is SPD.
 ]
 #proof[
-  We want to show that $vv(x)^T A^T A vv(x) > 0$ for all $vv(x) in R^n without {vv(0)}$. But
+  We want to show that $vv(x)^T A^T A vv(x) > 0$ for all $vv(x) in RR^n without {vv(0)}$. But
   $vv(x)^T A^T A vv(x) = norm(A vv(x))^2$, so that, if $A$ has full rank, $A vv(x) != vv(0)$ for all $vv(x) != vv(0)$. By the
-  properties of the norm we have $norm(vv(y)) > 0$ for all $vv(y) != vv(0)$, showing that $A A^T$ is positive
+  properties of the norm we have $norm(vv(y)) > 0$ for all $vv(y) != vv(0)$, showing that $A^T A$ is positive
   definite.
 
-  Symmetry is just $(A^T A)^T = (A^T)^T A^T = A A^T$.
+  Symmetry is just $(A^T A)^T = A^T (A^T)^T = A^T A$.
 ]
 
 This gives us very powerful methods to solve this system, like conjugate gradient or the Cholesky
@@ -1022,7 +1023,7 @@ matrix that $A^T A$ even loses its positive definiteness.
 === QR to the rescue
 
 Instead of computing $A^T A$ we try to transform $A$. The best candidate is to use orthogonal
-matrices, since $norm(Q^T (A vv(x) - vv(b)))^2 = norm(A vv(x) - vv(b))$.
+matrices, since $norm(Q^T (A vv(x) - vv(b)))^2 = norm(A vv(x) - vv(b))^2$.
 
 #theorem[
   Let $vv(x)^* = hat(R)^(-1) hat(Q)^T vv(b)$. Then $vv(x)^*$ is the solution to the system in the least squares
@@ -1042,8 +1043,8 @@ matrices, since $norm(Q^T (A vv(x) - vv(b)))^2 = norm(A vv(x) - vv(b))$.
   that all those terms cancel, while the terms involving $Q$ can be brought out into their own term.
 
   We note that the tail elements do not involve $vv(x)$, so there is nothing we can do about them, we
-  are left with minimizing $norm(hat(R) vv(x) - Q^T vv(b))$. This happens when
-  $hat(R) vv(x) = Q^T vv(b) <==> vv(x) = R^(-1) Q^T vv(b)$ as stated.
+  are left with minimizing $norm(hat(R) vv(x) - hat(Q)^T vv(b))$. This happens when
+  $hat(R) vv(x) = hat(Q)^T vv(b) <==> vv(x) = hat(R)^(-1) hat(Q)^T vv(b)$ as stated.
 ]
 
 We still have an issue: if $A$ is singular the whole concept of solution breaks as $hat(R)$ becomes
@@ -1107,9 +1108,9 @@ this gives us a concrete orthonormal basis of the image and the kernel of $A$.
   Now we split the norm in the components before $r$ and after $r$:
   $
     norm(Sigma vv(w) - U^T vv(b))^2 & = sum^r_(i = 1) [sigma_i w_i - (U^T vv(b))_i]^2
-                              + sum^p_(i = r+1) [(U^T vv(b))_i]^2
+                              + sum^m_(i = r+1) [(U^T vv(b))_i]^2
   $
-  Since $sigma_i > 0$ when $i <= r$ we get that $w_i = (U^T vv(b))/sigma_i$ for all $i <= r$. For
+  Since $sigma_i > 0$ when $i <= r$ we get that $w_i = (U^T vv(b))_i / sigma_i$ for all $i <= r$. For
   $i > r$ we can choose $w_i$ freely, but minimizing the norm tells us that they should all be set
   to zero.
 
@@ -1134,7 +1135,7 @@ $
 (where $h$ is the grid spacing, more on that later) and use it to correct the solution.
 
 This is particularly useful for using the weighted Jacobi method to solve differential equations.
-After one iteration the error updates as $vv(e)^((k+1))_h = B vv(e)^((k))_k$ for some $B$ we don't really
+After one iteration the error updates as $vv(e)^((k+1))_h = B vv(e)^((k))_h$ for some $B$ we don't really
 care about right now. In this case the error can be described as the combination of multiple
 oscillatory modes. This method is good at removing modes which oscillate very fast, while it takes a
 long time to converge when the modes look almost flat.
@@ -1143,7 +1144,7 @@ long time to converge when the modes look almost flat.
   Consider a 2D surface where the edges are kept at a fixed temperature. Given some heat sources
   spread in the surface we want to see how the temperature evolves.
 
-  In this problem the weighted Jacobi solver is very good at fixing errors in near by regions of the
+  In this problem the weighted Jacobi solver is very good at fixing errors in nearby regions of the
   surface, since there the modes oscillate faster, while it struggles to fix errors when they are
   spread out in the whole surface since their modes are smooth.
 ]
@@ -1164,7 +1165,7 @@ linearly interpolate between the two points in the coarser grid.
 
 These operators are linear and can therefore be written as matrices.
 
-#example(title: [Interpolation operator $3 -> 6$])[
+#example(title: [Interpolation operator $3 -> 5$])[
   $
     I_(2 h )^(h ) vec(a, b, c) =
     mat(
@@ -1196,7 +1197,7 @@ Then the method we present now consists of:
 == Cycles
 
 Instead of just moving between a fine and a coarse grid, we can choose some more sophisticated
-cycle. This is done mainly for performance: some times it might be too expensive to compute the
+cycle. This is done mainly for performance: sometimes it might be too expensive to compute the
 direct solution even on a grid of size $2h$, therefore we use another multi-grid solver to go down
 another level, and so on.
 
@@ -1215,7 +1216,7 @@ need to rely on a single grid and perform some algebra on just the matrix itself
 
 #definition(title: "Associated graph")[
   Let $A$ be a $n times n$ matrix. Its associated graph is a graph $G = (V, E)$ where
-  $V = 1, ..., n$ and
+  $V = {1, ..., n}$ and
   $
     E = {e_(i, j) | a_(i, j) != 0 and i != j}
   $
@@ -1230,12 +1231,12 @@ Given a matrix $A$ we generate its associated graph. Then we want to remove the 
   $
 ]
 
-This gives a set of vectors $S_i$ which are strongly correlated to $i$. In turns, we can construct a
+This gives a set of nodes $S_i$ which are strongly correlated to $i$. In turn, we can construct a
 *strength matrix* $S$ where each row is $S_i forall i in 1, ..., n$.
 
 We partition $V$ in two sets $C$ (coarse) and $F$ (fine).
 
-#algorithm(title: "General coarsing algorithm")[
+#algorithm(title: "General coarsening algorithm")[
   + Let $C <- varnothing$ and $F <- varnothing$.
   + *While* $C union F != V$:
     + Pick $i in 1, ..., n$ such that $v_i in.not C union F$.
@@ -1269,11 +1270,11 @@ problem in the subdomains in parallel and reconstruct the solution of the big pr
 In general, sub-problems need to talk to each other because often we cannot split the problem in
 independent subdomains.
 
-== Overlapping domains (Schwartz)
+== Overlapping domains (Schwarz)
 
 Assume we split our problem in two subdomains $Omega_1, Omega_2$. Since $Omega_1$ and $Omega_2$ are
 overlapping, there will be some parts of the boundary of $Omega_1$ in the interior of $Omega_2$ and
-viceversa.
+vice versa.
 
 To solve PDEs we need boundary conditions _on the whole boundary_, so to obtain the part of the
 boundary of $Omega_1$ which is in the interior of $Omega_2$ we use the best estimate of the solution
@@ -1282,23 +1283,23 @@ within $Omega_2$.
 We continue to refine the solution in $Omega_1$ and $Omega_2$ using the current best estimation of
 the solution available in the other domain.
 
-This is called *multiplicative Schwartz method* it chooses to use the best approximation available
+This is called *multiplicative Schwarz method* it chooses to use the best approximation available
 in spite of parallelism.
 
-Another possibility is the *additive Schwartz method* which computes the solution of all subdomains
-in parallels, trading parallelisms for less accurate iterations.
+Another possibility is the *additive Schwarz method* which computes the solution of all subdomains
+in parallel, trading parallelism for less accurate iterations.
 
-=== Additive Schwartz preconditioner
+=== Additive Schwarz preconditioner
 
 This idea can be used to construct very effective preconditioners.
 
 Consider the linear system $A vv(x) = vv(b)$. Split $A$ in subdomains $A = union.big_i A_i$, then $R_i$ is
 the *extraction operator* where $R_i vv(x)$ is the elements of $vv(x)$ which belong to subdomain $i$.
 
-#algorithm(title: [Additive Schwartz preconditioner])[
+#algorithm(title: [Additive Schwarz preconditioner])[
   + Use some iterative solver to get a residual $vv(r)^((k)) = vv(b) - A vv(x)^((k))$.
   + For each subdomain $i$
-    + Restrict the residual to $R vv(r)_i^((k))$.
+    + Restrict the residual to $R_i vv(r)^((k))$.
     + Solve the error equation for a correction $delta_i$:
       $
         A_i vv(delta)_i = R vv(r)_i^((k)) ==> vv(delta)_i = A^(-1)_i R_i vv(r)^((k))
@@ -1313,11 +1314,11 @@ the *extraction operator* where $R_i vv(x)$ is the elements of $vv(x)$ which bel
     $
 ]
 
-We can then define $sum_i R_i^T A_i^(-1) R_i$ is called the Additive Schwartz preconditioner.
+We can then define $sum_i R_i^T A_i^(-1) R_i$ is called the Additive Schwarz preconditioner.
 
 === Coarse-grid correction
 
-While methods like additive Schwartz can help reduce errors inside a certain subdomain, they take a
+While methods like additive Schwarz can help reduce errors inside a certain subdomain, they take a
 long time to converge when the error spans across different subdomains, meaning that the subdomains
 disagree on what the prediction of a certain region should be.
 
@@ -1354,7 +1355,7 @@ which is a smaller system only involving the interfaces.
 Even if this system is smaller, the matrix $S$ (the Schur complement) could be dense or hard to
 solve. In practice we never materialize it.
 
-Note that sometimes Schur is note enough and we still could need a preconditioner.
+Note that sometimes Schur is not enough and we still could need a preconditioner.
 
 = Direct methods
 

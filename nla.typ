@@ -363,12 +363,12 @@ preceding one, leading to a zig-zag pattern.
 
 #theorem(title: "Conjugate gradient method error")[
   $
-    norm(vv(e)^((k)))_A <= (2 c^k)/(1 + c^(2k)) norm(vv(e)^((0)))_A quad "with" c = (sqrt(K(A)) - 1)/(sqrt(K(A))+1)
+    norm(vv(e)^((k)))_A <= (2 c^k)/(1 + c^(2k)) norm(vv(e)^((0)))_A quad "with" c = (sqrt(kappa(A)) - 1)/(sqrt(kappa(A))+1)
   $
 ]
 
 This also has the advantage that $vv(d)^((k))$ form a basis of $RR^n$, which means that the method
-converges in exactly $n$ steps.
+converges in at most $n$ steps.
 
 The problem is then reframed as "finding iteratively a base to $RR^n$ in order to represent $vv(x)$".
 
@@ -389,15 +389,16 @@ well.
 #algorithm(title: "Preconditioned conjugate gradient method")[
   + Given $vv(x)^((0))$.
   + Compute $vv(r)^((0)) = vv(b) - A vv(x)^((0))$.
-  + Set $vv(d)^((0)) = vv(r)^((0))$.
+  + Solve $P vv(z)^((0)) = vv(r)^((0))$ for $vv(z)^((0))$.
+  + Set $vv(d)^((0)) = vv(z)^((0))$.
   + *While* (`Stopping criterion`):
     + Compute
-      $ alpha_k = ((vv(z)^((k)))^T vv(r)^((k)))/((vv(z)^((k)))^T A vv(z)^((k))) $
+      $ alpha_k = ((vv(z)^((k)))^T vv(r)^((k)))/((vv(d)^((k)))^T A vv(d)^((k))) $
     + Compute $vv(x)^((k+1)) = vv(x)^((k)) + alpha_k vv(d)^((k))$.
     + Compute $vv(r)^((k+1)) = vv(r)^((k)) - alpha_k A vv(d)^((k))$.
     + Solve $P vv(z)^((k + 1)) = vv(r)^((k+1))$ for $vv(z)^((k+1))$.
     + Compute
-      $ beta_k = ((A vv(d)^((k)))^T vv(z)^((k+1)))/((A vv(d)^((k)))^T A vv(d)^((k))) $
+      $ beta_k = ((A vv(d)^((k)))^T vv(z)^((k+1)))/((vv(d)^((k)))^T A vv(d)^((k))) $
     + Set $vv(d)^((k+1)) = vv(z)^((k+1)) - beta_k vv(d)^((k))$.
   + *End*
 ]<alg:cg>
@@ -406,13 +407,19 @@ well.
   Let $A in RR^(n times n)$ be an SPD matrix, choose $vv(x)^((0)) in RR^n$ arbitrarily and compute
   $vv(r)^((0)) = vv(b) - A vv(x)^((0))$. By running @alg:cg in exact arithmetic, at each $k$, the vectors
   generated up to $k + 1$ satisfy:
-  + *Full conjugacy of directions*: $vv(d)^((i)) A vv(d)^((j)) = 0$ for all $i != j$ and $i,j <= k+1$.
+  + *Full conjugacy of directions*: $(vv(d)^((i)))^T A vv(d)^((j)) = 0$ for all $i != j$ and $i,j <= k+1$.
   + *Full orthogonality of residuals*: $(vv(r)^((i)))^T vv(r)^((j)) = 0$ for all $i != j$ and $i,j <= k+1$.
   + *Common growing subspace*: $"span"{vv(d)^((0)), ..., vv(d)^((k+1))} = "span"{vv(r)^((0)), ..., vv(r)^((k+1))}$.
   + *Short recurrence*: each $vv(d)^((k+1))$ is build only from @eq:cg-short-recurrence, no earlier
     vector needs to be read.
 ]
 #proof[Skip.]
+
+#remark[
+  These properties hold for plain CG ($P = I$). When $P != I$ they hold in the transformed space:
+  the residuals are orthogonal with respect to $P^(-1)$, i.e. $(vv(r)^((i)))^T P^(-1) vv(r)^((j)) = 0$
+  for all $i != j$.
+]
 
 == Krylov space methods
 

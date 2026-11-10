@@ -29,6 +29,7 @@
       documents = [
         "nla"
         "pc"
+        "nmpde"
       ];
 
     in

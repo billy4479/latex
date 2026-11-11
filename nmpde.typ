@@ -14,39 +14,242 @@
 #show: thm-init
 #show: alg-init
 
-#let ub(it) = $upright(bold(it))$
-#let vv(it) = math.bold(it)
+#let vu(it) = $upright(bold(it))$
+#let vb(it) = math.bold(it)
+#let va(it) = math.arrow(it)
 
-= AAA
+= Introduction
 
-Consider the original problem
+== Refresher: derivatives on $RR^d$
+
+Let $Omega subset RR^d$ be open, $u: Omega -> RR$ a scalar field, and $va(F): Omega -> RR^d$ a
+vector field. Unless stated otherwise, assume the fields have continuous derivatives of the order
+appearing in each formula.
+
+Notation: $C^k (overline(Omega), RR^d)$ is the set of continuously $k$-times differentiable
+functions with domain $overline(Omega)$ and image $RR^d$.
+
+=== Gradients
+
+#definition(title: [Gradient and directional derivative])[
+  The gradient of $u$ is
+  $
+    grad u = mat(pdv(u, x_1), ..., pdv(u, x_d))^T.
+  $
+  For a unit vector $va(e)$, the directional derivative is
+  $
+    D_(arrow(e)) u(x)
+    = lim_(t -> 0) (u(x + t va(e)) - u(x))/t
+    = grad u(x) dot.op va(e).
+  $
+]
+
+#definition(title: [Jacobian and Hessian])[
+  The Jacobian of $va(F)$ and the Hessian of $u$ are the matrices
+  $
+    (D va(F))_(i j) = pdv(F_i, x_j),
+    quad (D^2 u)_(i j) = pdv(u, x_i, x_j),
+    quad i, j = 1, dots, d.
+  $
+  In particular, $D^2 u = D(grad u)$ when $u in C^2(Omega)$.
+]
+
+#theorem(title: [Schwarz's theorem])[
+  If $u in C^2(Omega)$, then mixed second derivatives commute:
+  $
+    pdv(u, x_i, x_j) = pdv(u, x_j, x_i).
+  $
+  Consequently, the Hessian $D^2 u$ is symmetric.
+]
+
+#proof[Skip.]
+
+=== Divergence
+
+#definition(title: [Divergence])[
+  The divergence of $va(F)$ is the scalar field
+  $
+    div va(F) = sum_(i=1)^d pdv(F_i, x_i) = tr(D va(F)).
+  $
+]
+
+#definition(title: [Laplacian])[
+  The Laplacian of $u$ is
+  $
+    Delta u = div(grad u)
+    = sum_(i=1)^d pdv(pdv(u, x_i), x_i) = tr(D^2 u).
+  $
+  For a vector field, the Laplacian is applied componentwise.
+]
+
+#definition(title: [Normal derivative])[
+  At a smooth point of $partial Omega$, let $va(n)$ be the outward unit normal. The normal
+  derivative is
+  $
+    pdv(u, n) = grad u dot.op va(n).
+  $
+  Thus $va(F) dot.op va(n)$ is the outward normal flux of $va(F)$.
+]
+
+#theorem(title: [Product and chain rules])[
+  For scalar fields $u, v, a$, a vector field $va(F)$, a differentiable function $g: RR -> RR$, and
+  a differentiable map $va(Phi): U -> Omega$,
+  $
+                  grad(u v) & = u grad v + v grad u, \
+               div(u va(F)) & = grad u dot.op va(F) + u div va(F), \
+              div(a grad u) & = grad a dot.op grad u + a Delta u, \
+                 grad(g(u)) & = g'(u) grad u, \
+    grad(u compose va(Phi)) & = (D va(Phi))^T ((grad u) compose va(Phi)).
+  $
+]
+
+#proof[Skip.]
+
+For the integral identities below, assume $Omega$ is bounded with $C^1$ boundary and $va(n)$ is its
+outward unit normal. The fields and their required derivatives are assumed continuous up to the
+boundary. The same identities hold on piecewise smooth domains, with the normal defined on each
+smooth face.
+
+#theorem(title: [Divergence theorem (Gauss)])[
+  For $va(F) in C^1(overline(Omega); RR^d)$,
+  $
+    integral_Omega div va(F) dif x
+    = integral_(partial Omega) va(F) dot.op va(n) dif S.
+  $
+]
+#proof[Skip.]
+
+#theorem(title: [Integration by parts])[
+  For $u in C^1(overline(Omega))$ and $va(F) in C^1(overline(Omega); RR^d)$,
+  $
+    integral_Omega grad u dot.op va(F) dif x
+    = - integral_Omega u div va(F) dif x
+    + integral_(partial Omega) u va(F) dot.op va(n) dif S.
+  $
+  In particular, for each $i = 1, dots, d$,
+  $
+    integral_Omega pdv(u, x_i) v dif x
+    = - integral_Omega u pdv(v, x_i) dif x
+    + integral_(partial Omega) u v n_i dif S.
+  $
+]
+#proof[Skip.]
+
+#theorem(title: [Green's identities])[
+  For $u, v in C^2(overline(Omega))$, the first identity is
+  $
+    integral_Omega grad u dot.op grad v dif x
+    = - integral_Omega v Delta u dif x
+    + integral_(partial Omega) v pdv(u, n) dif S.
+  $
+  The second identity is
+  $
+    integral_Omega (u Delta v - v Delta u) dif x
+    = integral_(partial Omega)
+    (u pdv(v, n) - v pdv(u, n)) dif S.
+  $
+]<thm:green>
+#proof[Skip.]
+
+#corollary(title: [Diffusion term in weak form])[
+  For $a, v in C^1(overline(Omega))$ and $u in C^2(overline(Omega))$,
+  $
+    integral_Omega (-div(a grad u)) v dif x
+    = integral_Omega a grad u dot.op grad v dif x
+    - integral_(partial Omega) a pdv(u, n) v dif S.
+  $
+  The boundary term vanishes wherever $v = 0$ (Dirichlet test functions), while prescribed fluxes
+  enter through $a pdv(u, n)$ (Neumann data).
+]
+#proof[Skip.]
+
+== What is a PDE
+
+#definition(title: [PDE])[
+  A Partial Differential Equation is generally defined as
+  $
+    cases(
+      L u = f wide & "in" Omega,
+      "Boundary conditions" wide & "on" partial Omega
+    )
+  $
+  where $f: RR^d -> RR$ is a known function, and $L$ is a generic differential operator. The goal is
+  to find the function the function $u: RR^d -> RR$ satisfying the conditions.
+]<def:pde-general>
+
+== Weak problem
+
+#let po = $("P")$
+#let pw = $("PW")$
+
+Lets start with an example. This representation is also called the *original problem* #po.
+
+#example(title: [Laplace equation])[
+  $
+    cases(
+      -laplace u = f wide & "in" Omega subset RR^d,
+      "Boundaries conditions" wide & "on" partial Omega
+    )
+  $
+  Here, going back to the general @def:pde-general, we have that $L = -laplace$,
+  $laplace = div grad$ is the divergence of the gradient.
+]
+#solution[
+  Now consider a test function $v: RR^d -> RR$ and multiply it on both sides:
+  $
+    -laplace u dot.op v = f dot.op v
+  $
+  then we integrate and use the first identity of @thm:green.
+  $
+        & - integral_Omega laplace u dot.op v = integral_Omega f dot.op v \
+    ==> & integral_Omega grad u dot.op grad v - integral_(partial Omega) (grad u dot.op va(n)) v =
+          integral_Omega f dot.op v
+  $
+  Then, we don't want any unknown integrating on the boundary. Since $v$ is a test function, we
+  choose it such that $evaluated(v)_(partial Omega) = 0$, giving
+  $
+    integral_(partial Omega) (grad u dot.op va(n)) v = 0
+  $
+]
+
+This is our *weak problem* #pw. Defined as
 $
-  cases(
-    L u = f wide & "in" Omega subset RR^d,
-    "Boundaries conditions" wide & "on" partial Omega
-  )
+  integral_Omega grad u dot.op grad v = integral_Omega f dot.op v
+  wide forall v: RR^d -> RR "s.t." evaluated(v)_(partial Omega) = 0
 $
 
-Then the *weak problem* is
+In order to solve this problem we need to relax it by considering the solution $u$ to be
+approximated by a _finite element function_ $u_N tilde u$, i.e.
 $
-  "Find" u in V "s.t." a(u, v) = F(v) wide forall v in V
+  abs("Image"(u_N)) = N
 $
-where
-- $a : V times V -> RR$ is a bilinear form
-- $F: V -> RR$ is a linear functional
+The problem we need to solve is then
+$
+  integral_omega grad u_N dot.op grad v_N = integral_omega f dot.op v_N
+  wide forall v_N "s.t." evaluated(v_N)_(partial omega) = 0
+$
 
-#example(title: [ADR])[
+Then, this finite version approximation, suggests we can represent $u_N$ in a finite-dimensional
+vector space
+$
+  u_N(x) = sum^N_(i = 1) u_i phi_i (x) wide forall x in RR^d
+$
+where $phi_i$ is the basis of the space.
+
+= Elliptic PDEs
+
+#definition(title: [ADR])[
   The original problem is
   $
     cases(
-      L u = - dd(w) (mu grad u) + vec(b) dot.op grad u + sigma u = f wide & "in" Omega,
+      L u = - div (mu grad u) + va(b) dot.op grad u + sigma u = f wide & "in" Omega subset RR^d,
       u = phi wide & "on" Gamma_D,
       mu pdv(u, n) = psi wide & "on" Gamma_N
     )
   $
   where the data is
   $
-    {mu, vec(b), sigma, f, phi, psi, Omega, Gamma_D, Gamma_F}
+    {mu, va(b), sigma, f, phi, psi, Omega, Gamma_D, Gamma_F}
   $
   and the solution is $u$.
 ]

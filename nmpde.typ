@@ -425,3 +425,176 @@ This corollary is very important, since this means that the solution is *stable*
   $
   but $a(u, v_h) - a(u_h, v_h) = a(u - u_h, v_k)$, giving the result.
 ]
+
+=== Analysis for Elliptic PDEs
+
+TODO: missing continuity
+
+#proposition(title: [Coercivity])[
+  There exists $alpha > 0$ such that
+  $
+    abs(a(v, v)) <= alpha norm(v)^2 wide forall v in V
+  $
+  for $a(v, u) = integral_Omega mu grad u grad v
+  + integral_Omega va(b) dot.op grad u dot.op v
+  + integral_Omega sigma v^2$.
+]
+
+#proof[
+  Start by substituting $u = v$.
+  $
+    a(v, v) & = integral_Omega mu grad v grad v
+              + integral_Omega va(b) dot.op grad v dot.op v
+              + integral_Omega sigma v^2 \
+            & = integral_Omega mu (grad v)^2
+              + integral_Omega va(b) dot.op grad v dot.op v
+              + integral_Omega sigma v^2 \
+            & = integral_Omega mu (grad v)^2
+              + 1/2 integral_Omega va(b) dot.op grad (v^2)
+              + integral_Omega sigma v^2 \
+  $
+
+  If $va(b) = 0$ we just get
+  $
+    & = integral_Omega mu (grad v)^2
+      + integral_Omega sigma v^2 \
+    & >= min mu norm(grad v)^2_(L^2) + min sigma norm(v)^2_(L^2) \
+    & >= min(mu, sigma) (norm(grad v)_(L^2)^2 + norm(v)_(L^2)^2) \
+    & = min(mu, sigma) norm(v)^2
+  $
+  where we assume that $mu > 0$ and $sigma > 0$.
+
+  Otherwise, if $va(b) != 0$, we get
+  $
+    & integral_Omega mu (grad v)^2
+      + 1/2 integral_Omega va(b) dot.op grad (v^2)
+      + integral_Omega sigma v^2 \
+    & = integral_Omega mu (grad v)^2
+      - 1/2 integral_Omega div va(b) v^2
+      + 1/2 integral_(partial Omega) va(b) dot.op va(n) v^2
+      + integral_Omega sigma v^2 \
+    & = integral_Omega mu (grad v)^2
+      + integral_Omega underbrace((sigma -1/2 div va(b)), gamma >= 0) v^2
+      + 1/2 integral_(partial Omega) va(b) dot.op va(n) v^2 \
+    & >= min mu norm(grad v)^2_(L^2) + min gamma norm(v)^2_(L^2)
+      + 1/2 integral_(partial Omega) underbrace(va(b) dot.op va(n), >= 0) v^2 \
+    & >= min(mu, gamma) (norm(grad v)_(L^2)^2 + norm(v)_(L^2)^2) \
+    & = min(mu, gamma) norm(v)^2
+  $
+  where we add the new assumption that $va(b) dot.op va(n) >= 0$.
+]
+
+#example[
+  Now consider
+  $
+    L u = - div (mu grad u) + div (va(b) u) + sigma n
+  $
+  Check coercivity.
+]
+#solution[
+  The only different part is the second term $div(va(b) u)$, so we just check
+  $
+    integral_Omega div(va(b) u) v &
+    = - integral_Omega va(b) u grad v + integral_(partial Omega) va(b) dot.op va(n) u v \
+    = - integral_Omega va(b) v grad v + integral_(partial Omega) va(b) dot.op va(n) v^2\
+  $
+
+  TODO: finish here
+]
+
+#proposition[
+  There exists $K > 0$ such that
+  $
+    abs(F(v)) <= K norm(v)
+  $
+]
+#proof[
+  $
+    abs(F(v)) & <= abs(integral_Omega f v)
+                + abs(integral_(Gamma_N) psi v)
+                + abs(a(R phi, v)) \
+              & <= norm(f)_(L^2 (Omega)) norm(v)_(L^2 (Omega))
+                + norm(psi)_(L^2 (Gamma_N)) norm(v)_(L^2 (Gamma_N))
+                + M norm(R phi)_V norm(v)_V
+  $
+
+  #lemma(title: [Trace inequality])[
+    If $v in H^1 (Omega)$
+    $
+      norm(v)_(L^2 (partial Omega)) <= c_1 norm(v)_V
+    $
+    for a constant $c_1$.
+
+    Similarly, for a constant $c_2$
+    $
+      norm(R phi)_V <= c_2 norm(phi)_(H^(1/2) (Gamma))
+    $
+  ]
+  #proof[
+    Skip.
+  ]
+
+
+  $
+    abs(F(v)) & <= norm(f)_(L^2 (Omega)) norm(v)_(L^2 (Omega))
+                + c_1 norm(psi)_(L^2 (Gamma_N)) norm(v)_V
+                + c_2 M norm(phi)_(H^(1/2)_(Gamma_D)) norm(v)_V \
+              & <=^"Poincarre" c_P norm(f)_(L^2 (Omega)) norm(v)_(V)
+                + c_1 norm(psi)_(L^2 (Gamma_N)) norm(v)_V
+                + c_2 M norm(phi)_(H^(1/2)_(Gamma_D)) norm(v)_V \
+              & <= (c_P norm(f)_(L^2 (Omega))
+                  + c_1 norm(psi)_(L^2 (Gamma_N))
+                  + c_2 M norm(phi)_(H^(1/2)_(Gamma_D)) ) norm(v)_V
+  $
+]
+
+=== Convergence
+
+#proposition(title: [Convergence estimate])[
+  $
+    norm(u - u_h)_(H^1 (Omega)) <= C M/phi h^r abs(u)_(H^(r + 1) (Omega)) wide "for" r = 1, 2, 3
+  $
+  and $h$ is the degree of the approximate polynomials.
+
+  Different norms give different results
+  $
+    norm(u - u_h)_(L^2 (Omega)) <= tilde(C) M/phi h^r abs(u)_(H^(r + 1) (Omega)) wide "for" r = 1, 2, 3
+  $
+]
+
+#proof[Skip.]
+
+= Parabolic Equations
+
+This is the same problem as before but here we consider that our solution depends on time.
+
+$
+  pdv(u, t) + L u = f wide x in Omega, 0 < t < T
+$
+
+The domain of this problem is a cylinder $Q_T = Omega times (0, T)$, and its boundary is
+$Sigma_T = partial Omega times (0, T)$.
+
+Usual boundaries conditions are
+$
+  cases(
+    u = phi wide & "on" Gamma_D times (0, T),
+    mu pdv(u, n) = psi wide & "on" Gamma_N times (0, T),
+    u = u_0 wide & "in" Omega\, t = 0
+  )
+$
+
+As usual, multiply by $v$ and integrate
+$
+  integral_Omega pdv(u, t) v dd(x) + integral_Omega L u v dd(x) = integral_Omega f v dd(x)
+$
+
+#remark[
+  We cannot incorporate $t$ into $x$ since we only consider the first order derivative of $t$, while
+  $x$ is differentiated twice.
+]
+
+#theorem(title: [Lax-Millgram])[
+  Under the same assumptions as @thm:lax-milgram, the problem is well posed.
+]
+#proof[Skip, but a different one.]

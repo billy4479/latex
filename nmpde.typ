@@ -254,6 +254,131 @@ where $phi_i$ is the basis of the space.
   and the solution is $u$.
 ]
 
+#remark[
+  $
+    pdv(u, n) = grad u vec(n)
+  $
+]
+
+In this PDE we can split $L u$ in three terms
+$
+  L u =
+  underbrace(- div (mu grad u), "diffusion")
+  + underbrace(va(b) dot.op grad u, "convection/transport")
+  + underbrace(sigma u, "reaction/absortion")
+$
+
+
+Also note that the boundary $partial Omega = Gamma_D union Gamma_N$ (and
+$Gamma_D inter Gamma_N = varnothing$), so we have different boundary conditions on different parts
+of the boundary.
+
+== Finding the Weak Problem
+
+As in the Laplace equation, we start by multiplying both sides by a test function $v$ and follow the
+same procedure (integrate + Green's).
+
+$
+                        & integral_Omega L u v = integral_Omega f v \
+           ==>^"expand" & integral_Omega - div(mu grad u) v
+                          + integral_Omega va(b) dot.op grad u dot.op v
+                          + integral_Omega sigma u dot.op v
+                          = integral_Omega f v \
+          ==>^"Green's" & integral_Omega mu grad(u) grad v - integral_(partial Omega) mu grad u va(n) v
+                          + integral_Omega va(b) dot.op grad u dot.op v
+                          + integral_Omega sigma u dot.op v
+                          = integral_Omega f v \
+   ==>^"split boundary" & integral_Omega mu grad(u) grad v
+                          - integral_(Gamma_D) mu grad u va(n) v
+                          - integral_(Gamma_N) mu grad u va(n) v
+                          + integral_Omega va(b) dot.op grad u dot.op v
+                          + integral_Omega sigma u dot.op v
+                          = integral_Omega f v \
+  ==>^"substitute b.c." & integral_Omega mu grad(u) grad v
+                          - integral_(Gamma_D) mu pdv(u, n) v
+                          - underbrace(integral_(Gamma_N) psi v, "function of data")
+                          + integral_Omega va(b) dot.op grad u dot.op v
+                          + integral_Omega sigma u dot.op v
+                          = integral_Omega f v \
+$
+We now impose $evaluated(v)_(Gamma_D) = 0$ so that we eliminate the solution from the boundary.
+
+This leaves us with
+
+$
+  underbrace(
+    integral_Omega mu grad(u) grad v
+    + integral_Omega va(b) dot.op grad u dot.op v
+    + integral_Omega sigma u dot.op v, a(u, v)
+  )
+  = underbrace(
+    integral_Omega f v
+    + integral_(Gamma_N) psi v, F(v)
+  )
+$
+
+#definition(title: [Square integrable])[
+  $
+    L^2(Omega) := {v: Omega --> RR : integral_Omega v^2(x) dd(x) < infinity}
+  $
+]
+
+#definition(title: [Sobder space])[
+  $
+    H^1 (Omega) = { v: Omega --> RR : v in L^2 (Omega)
+      and (pdv(v, x_i) in L^2 (Omega)) forall i = 1, ... d}
+  $
+
+  Moreover
+  $
+    H^1_Gamma (Omega) = {v: Omega --> RR : v in H^1 and evaluated(v)_Gamma = 0}
+  $
+]
+
+Our problem then reduces to reduces to
+$
+  "Find" u in H^1 "s.t." cases(
+    a(u, v) = F(v) wide & "in" Omega,
+    u = phi wide & "on" Gamma_D
+  ) wide forall v in H_(Gamma_D)^1
+$
+
+Then, we extend $phi$ on the whole $Omega$ by defining $R: phi --> R phi$ such that
+$
+  cases(
+    R phi in H^1 (Omega),
+    evaluated(R phi)_(Gamma_D) = phi
+  )
+$
+
+Now define
+$
+  u^0 = u - R phi
+$
+such that
+$
+  evaluated(u^0)_(Gamma_D) = evaluated(u)_(Gamma_D) - evaluated(R phi)_(Gamma_D)
+  = phi - phi = 0
+  ==> u^0 in H^1_(Gamma_D)
+$
+meaning we can decompose $u = u^0 + R phi$.
+
+In turns, since $a$ is bilinear, we can split it as
+$
+  a(u^0, v) = a(R phi, v) = F(v)
+$
+but $R phi$ only depends on data, so $a(R phi, v)$ can be moved to the right.
+$
+  a(u^0, v) = tilde(F) (v)
+$
+
+This means we define our search space $V$ as
+$
+  V = H^1_(Gamma_D) = cases()
+$
+
+TODO
+
 == Analysis of Weak Problem
 
 Assumptions:
@@ -269,7 +394,7 @@ Assumptions:
 
 #theorem(title: [Lax-Milgram lemma])[
   Under the above assumptions, there exists a solution $u$ to the weak problem.
-]
+]<thm:lax-milgram>
 #proof[Very hard, skip.]
 
 #corollary[

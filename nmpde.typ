@@ -315,7 +315,7 @@ $
     integral_Omega f v
     + integral_(Gamma_N) psi v, F(v)
   )
-$
+$<eq:def-a>
 
 #definition(title: [Square integrable])[
   $
@@ -379,20 +379,60 @@ $
 
 TODO
 
-== Analysis of Weak Problem
+== General analysis of Weak Problem
 
-Assumptions:
-+ $exists norm(dot) : V -> RR$ a norm, such that $forall v in V ==> norm(v) >= 0$ and
-  $norm(v) = 0 <==> v = 0$.
-+ $V$ is an Hilbert space: $exists (dot, dot): V times V -> RR$ inner product, such that
-  $norm(v)^2 = (v, v)$.
-+ $a$ is continuous/bounded, then $exists M > 0$ such that $abs(a(u, v)) <= M norm(v) norm(u)$,
-  $forall v, u in V$.
-+ $a$ is cohercive: $exists alpha > 0$ such that $a(v, v) >= alpha norm(v)^2$, $forall v in V$.
-+ $F$ is linear and bounded/continuous: $exists k > 0$ such that $abs(F(v)) <= k norm(v)$,
-  $forall v in V$.
+=== Norms
+
+#definition(title: [Inner product on $H^1 (Omega)$])[
+  Let $u, v in H^1 (Omega)$. The inner product can be defined as the convolution (?) of $u$ and $v$
+  plus the convolution of their gradients.
+  $
+    (u, v)_(H^1 (Omega)) & := integral_Omega u v + integral_Omega grad u grad v \
+                         & = (u, v)_(L^2 (Omega)) + (grad u, grad v)_(L^2 (Omega))
+  $
+]
+
+#proposition(title: [$H^1 (Omega)$ norm])[
+  $
+    norm(v)_(h^1 (omega)) = sqrt(integral_omega v^2 + integral_omega (grad v)^2)
+  $
+]
+#proof[
+  From the definition of inner product on $H^1 (Omega)$ we have
+  $
+    norm(v)_(h^1 (omega)) & = sqrt((v, v)_(H^1 (Omega))) \
+                          & = sqrt(norm(v)_(L^2 (Omega)) + norm(grad v)_(L^2 (Omega))) \
+                          & = sqrt(integral_Omega v^2 + integral_Omega (grad v)^2)
+  $
+]
+
+#definition(title: [Seminorm on $H^1 (Omega)$])[
+  The seminorm on $H^1 (Omega)$ is denoted with $abs(dot)_(H^1 (Omega))$ and defined as
+  $
+    abs(v)_(H^1 (Omega)) := norm(grad v)_(L^2 (Omega)) = sqrt((grad v, grad v))
+  $
+]
+
+From the definition we can easily see that
+$
+  abs(v)_(H^1 (Omega)) <= norm(v)_(H^1 (Omega))
+$
+
+=== Lax-Milgram
 
 #theorem(title: [Lax-Milgram lemma])[
+  Consider a PDE $L u = f$, where $u : V -> RR$. Define $a$ and $F$ as in @eq:def-a.
+
+  + $exists norm(dot) : V -> RR$ a norm, such that $forall v in V ==> norm(v) >= 0$ and
+    $norm(v) = 0 <==> v = 0$.
+  + $V$ is an Hilbert space: $exists (dot, dot): V times V -> RR$ inner product, such that
+    $norm(v)^2 = (v, v)$.
+  + $a$ is continuous/bounded, then $exists M > 0$ such that $abs(a(u, v)) <= M norm(v) norm(u)$,
+    $forall v, u in V$.
+  + $a$ is cohercive: $exists alpha > 0$ such that $a(v, v) >= alpha norm(v)^2$, $forall v in V$.
+  + $F$ is linear and bounded/continuous: $exists k > 0$ such that $abs(F(v)) <= k norm(v)$,
+    $forall v in V$.
+
   Under the above assumptions, there exists a solution $u$ to the weak problem.
 ]<thm:lax-milgram>
 #proof[Very hard, skip.]
@@ -411,24 +451,120 @@ Assumptions:
   as desired.
 ]
 
+=== Stability
+
+As we know, to compute an approximate solution, we want to search for a candidate in a countable set
+of functions, called $V_h$, where $h$ is the "grid size".
+
+#let pg = $("G")$
+$
+  pg wide "Find" u_h in V_h "s.t." a(u_h, v_h) = F(v_h) quad forall v_h in V_h
+$
+
 This corollary is very important, since this means that the solution is *stable*.
 
-#theorem(title: [Céa lemma (Galurkin orthogonality)])[
+#theorem(title: [Céa lemma ])[
   $
     a(u - u_h, v_h) = 0 wide forall v_h in V_h
   $
 ]
 #proof[
-  $v = v_h$, then $("PW") without ("G")$.
+  Consider #pw. Since $v$ can be chosen arbitrarily in $V$, let $v = v_h in V_h subset V$. Now
+  subtract #pg from #pw.
   $
-    a(u, v_h) - a(u_h, v_h) = F(u_h) - F(u_h) = 0
+    a(u, v_h) - a(u_h, v_h) = F(v_h) - F(v_h) = 0
   $
-  but $a(u, v_h) - a(u_h, v_h) = a(u - u_h, v_k)$, giving the result.
+  but $a(u, v_h) - a(u_h, v_h) = a(u - u_h, v_h)$, giving the result.
 ]
 
-=== Analysis for Elliptic PDEs
+#remark(title: [Galurkin orthogonality])[
+  If $a(dot, dot)$ is symmetric, then
+  $
+    u - u_h perp v_h wide forall v_h
+  $
+]
+
+This means that, if $a$ is symmetric, then we know that $u_h$ is the projection of $u$ onto $V_h$,
+i.e. the best possible result.
+
+=== Convergence
+#proposition(title: [Convergence])[
+  If $a$ satisfies the assumptions of @thm:lax-milgram, there holds
+  $
+    lim_(h -> 0) norm(u - u_h) = 0
+  $
+  for a properly chosen $V_h$.
+]
+#proof[
+  Lets start from a lemma.
+
+  #lemma[
+    $
+      norm(u - u_h) <= M/alpha norm(u - w_h) wide forall w_h in V_h
+    $
+  ]
+
+  #proof[
+    Start from coercivity:
+    $
+      alpha norm(u - u_h)^2 & <= a(u - u_h, u - u_h) \
+                            & = a(u - u_h, u - w_h + w_h - u_h) wide "for any" w_h in V_h \
+                            & = a(u - u_h, u - w_h) + underbrace(
+                                a(u - u_h, w_h - u_h),
+                                = 0 "by G.O."
+                              ) \
+                            & = a(u - u_h, u - w_h) \
+                            & <= M norm(u - u_h) norm(u - w_h)
+    $
+    where the last step is given by continuity of $a$. By simplifying the norm squared we get the
+    result.
+  ]
+
+  The result of the lemma implies
+  $
+    norm(u - u_h) <= M/alpha inf_(w_h in V_h) norm(u - w_h)
+  $
+
+  By taking limits as $h -> 0$ we get
+  $
+    lim_(h -> 0) norm(u - u_h) <= M/alpha lim_(h -> 0) inf_(w_h in V_h) norm(u - w_h)
+  $
+
+  We now want to show that
+  $
+    lim_(h -> 0) inf_(w_h in V_h) norm(u - w_h) = 0
+  $
+  since this is equivalent to the desired result.
+
+  To do so we go back to the choice of $V_h$: we want to chose is such that, as $h -> 0$,
+  $V_h -> V$. This is called "saturation property".
+]
+
+=== Choosing $V_h$
+
+Consider the set of piecewise polynomial functions:
+$
+  cal(X)_h^r = {v_h : Omega -> RR : v_h in C^0 (Omega) and evaluated(v_h)_(k_j) in PP^r quad forall j}
+$
+where $Omega = union.big_j k_j$ and $max_j abs(k_j) = h$.
+
+Then a sensible choice for $V_h$ is
+$
+  V_h := {v_h in cal(X)_h^r : evaluated(v_h)_(Gamma_D) = 0}
+$
+
+A basis could be chosen simply by letting
+$
+  phi_j (x_i) = delta_(i j)
+$
+
+== Analysis of elliptic PDEs
+
+=== Continuity of $a$
 
 TODO: missing continuity
+
+=== Coercivity
 
 #proposition(title: [Coercivity])[
   There exists $alpha > 0$ such that
@@ -502,6 +638,7 @@ TODO: missing continuity
   TODO: finish here
 ]
 
+=== Continuity of $F$
 #proposition[
   There exists $K > 0$ such that
   $

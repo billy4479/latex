@@ -823,22 +823,37 @@ Furthermore, we can relax coercivity to *weak coercivity*, which is still suffic
   $
     pdv(u, t) + L u = f
   $
-  with $L u = -mu laplace u$ and Neumann B.C.
+  with $L u = -mu laplace u$, constant $mu > 0$, and homogeneous Neumann boundary conditions:
+  $
+    cases(
+      pdv(u, t) - mu laplace u = f wide & "in" Omega times (0, T),
+      mu pdv(u, va(n)) = 0 wide & "on" partial Omega times (0, T),
+      u(0, x) = u_0(x) wide & "in" Omega.
+    )
+  $
+  Here $va(n)$ is the outward unit normal. No heat crosses the boundary: the body is insulated.
 
   Why do we need weak coercivity?
 ]
 #solution[
-  Let $V = H^1 (Omega)$, then
+  We do not fix $u$ on the boundary, so $V = H^1 (Omega)$. The Neumann condition is used when
+  integrating by parts. Then
   $
-    a(v, v) = mu norm(grad v)^2_(L^2) = mu abs(v)^2
+    a(v, v) = mu norm(grad v)^2_(L^2 (Omega)) = mu abs(v)^2_(H^1 (Omega)).
   $
-  where $abs(v)$ represents the seminorm, which is not a norm on $V$.
+  This is a squared seminorm, not a squared norm: any nonzero constant has zero gradient, but a
+  nonzero $H^1$ norm. So $a$ is not coercive on $V$.
 
-  However, by adding an $norm(dot)_(L^2)$ term, we get a norm:
+  However, adding an $L^2$ term fixes this. For any $lambda > 0$,
   $
-    a(v, v) + lambda norm(v)^2_(L^2)
+    a(v, v) + lambda norm(v)^2_(L^2 (Omega))
+    >= min(mu, lambda) norm(v)^2_(H^1 (Omega)).
   $
-  giving a norm on $V$.
+  Its square root is a norm equivalent to the $H^1$ norm. This is weak coercivity. We are not
+  changing the PDE, just checking an inequality for $a$.
+
+  Diffusion smooths temperature differences, but a uniform temperature stays uniform when $f = 0$.
+  This is not a uniqueness problem here, since the initial condition fixes that temperature.
 ]
 
 == Approximate solution

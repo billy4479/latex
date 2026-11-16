@@ -419,6 +419,32 @@ $
   abs(v)_(H^1 (Omega)) <= norm(v)_(H^1 (Omega))
 $
 
+#theorem(title: [Controlling the $L^2$ norm])[
+  For every $v in H^1 (Omega)$,
+  $
+    norm(v)_(L^2 (Omega)) <= norm(v)_(H^1 (Omega)).
+  $
+  If $Omega$ is bounded, connected and Lipschitz, and $Gamma_D$ has positive boundary measure,
+  Poincaré's inequality also gives
+  $
+    norm(v)_(L^2 (Omega)) <= c_P norm(grad v)_(L^2 (Omega)) wide forall v in V,
+  $
+  where $V$ is from @def:search-test-space and $c_P > 0$ does not depend on $v$. So on $V$ we can
+  also use the gradient norm: it is equivalent to the full $H^1$ norm.
+]<thm:l2-control>
+#proof[
+  The first bound follows directly from
+  $
+    norm(v)^2_(H^1 (Omega)) = norm(v)^2_(L^2 (Omega)) + norm(grad v)^2_(L^2 (Omega)).
+  $
+  The proof of Poincaré's inequality is omitted. Together with the first bound, it gives
+  $
+    norm(grad v)_(L^2 (Omega)) <= norm(v)_(H^1 (Omega))
+    <= sqrt(1 + c_P^2) norm(grad v)_(L^2 (Omega)),
+  $
+  which is the equivalence of the two norms on $V$.
+]
+
 === Lax-Milgram
 
 #theorem(title: [Lax-Milgram lemma])[

@@ -589,18 +589,34 @@ $
 
 === Continuity of $a$
 
-TODO: missing continuity
+#proposition(title: [Continuity])[
+  If $mu$, $va(b)$ and $sigma$ are bounded, then
+  $
+    abs(a(u, v)) <= M norm(u)_(H^1 (Omega)) norm(v)_(H^1 (Omega)),
+  $
+  with $M = norm(mu)_(L^infinity) + norm(va(b))_(L^infinity) + norm(sigma)_(L^infinity)$.
+]
+#proof[
+  Bound the coefficients, then apply Cauchy-Schwarz to each integral:
+  $
+    abs(a(u, v)) & <= norm(mu)_(L^infinity) norm(grad u)_(L^2) norm(grad v)_(L^2)
+                   + norm(va(b))_(L^infinity) norm(grad u)_(L^2) norm(v)_(L^2)
+                   + norm(sigma)_(L^infinity) norm(u)_(L^2) norm(v)_(L^2).
+  $
+  Each $L^2$ norm on the right is bounded by the corresponding full $H^1$ norm. Factor these out to
+  get the result.
+]
 
 === Coercivity
 
 #proposition(title: [Coercivity])[
   There exists $alpha > 0$ such that
   $
-    abs(a(v, v)) <= alpha norm(v)^2 wide forall v in V
+    a(v, v) >= alpha norm(v)^2_(H^1 (Omega)) wide forall v in V
   $
-  for $a(v, u) = integral_Omega mu grad u grad v
-  + integral_Omega va(b) dot.op grad u dot.op v
-  + integral_Omega sigma v^2$.
+  for $a(u, v) = integral_Omega mu grad u dot.op grad v
+  + integral_Omega (va(b) dot.op grad u) v
+  + integral_Omega sigma u v$, under the positivity assumptions used below.
 ]
 
 #proof[
@@ -644,13 +660,17 @@ TODO: missing continuity
     & >= min(mu, gamma) (norm(grad v)_(L^2)^2 + norm(v)_(L^2)^2) \
     & = min(mu, gamma) norm(v)^2
   $
-  where we add the new assumption that $va(b) dot.op va(n) >= 0$.
+  Here we assume uniform lower bounds $mu >= mu_0 > 0$ and $gamma >= gamma_0 > 0$, and
+  $va(b) dot.op va(n) >= 0$ on $Gamma_N$; on $Gamma_D$, $v = 0$ already. Then
+  $alpha = min(mu_0, gamma_0)$. In the case $va(b) = 0$, use a positive lower bound for $sigma$
+  instead of $gamma$. If the reaction lower bound is only zero, we can still use Poincaré's
+  inequality when the assumptions of @thm:l2-control hold.
 ]
 
 #example[
   Now consider
   $
-    L u = - div (mu grad u) + div (va(b) u) + sigma n
+    L u = - div (mu grad u) + div (va(b) u) + sigma u
   $
   Check coercivity.
 ]
@@ -662,7 +682,26 @@ TODO: missing continuity
     = - integral_Omega va(b) v grad v + integral_(partial Omega) va(b) dot.op va(n) v^2\
   $
 
-  TODO: finish here
+  Put $u = v$ and use $v grad v = 1/2 grad(v^2)$. Integrating by parts once more gives
+  $
+    -1/2 integral_Omega va(b) dot.op grad(v^2)
+    + integral_(partial Omega) va(b) dot.op va(n) v^2
+    = 1/2 integral_Omega div(va(b)) v^2
+    + 1/2 integral_(partial Omega) va(b) dot.op va(n) v^2.
+  $
+  So the full expression is
+  $
+    a(v, v) = integral_Omega mu abs(grad v)^2
+    + integral_Omega (sigma + 1/2 div(va(b))) v^2
+    + 1/2 integral_(partial Omega) va(b) dot.op va(n) v^2.
+  $
+  Compared to the previous operator, the sign of $1/2 div(va(b))$ has changed. Take
+  $mu >= mu_0 > 0$, $sigma + 1/2 div(va(b)) >= gamma_0 > 0$, and $va(b) dot.op va(n) >= 0$ on
+  $Gamma_N$. Then
+  $
+    a(v, v) >= min(mu_0, gamma_0) norm(v)^2_(H^1 (Omega)).
+  $
+  Again, if the reaction lower bound is zero, Poincaré's inequality can replace it.
 ]
 
 === Continuity of $F$
@@ -1074,6 +1113,9 @@ would be enough.
 ]
 
 #theorem(title: [Stability of linear problems])[
+
+  TODO: see recording
+
   Consider a linear problem
   $
     cases(
@@ -1089,31 +1131,77 @@ would be enough.
     )
   $
 
-  Then, for some $delta$ small,
+  For a constant matrix $A$, on any fixed interval $[0, T]$,
   $
-    norm(z - y) < delta
+    norm(z(t) - y(t)) <= exp(T norm(A)) norm(delta).
   $
+  Here we use the Euclidean norm and its induced matrix norm. If the symmetric part $(A + A^T)/2$ is
+  negative semidefinite, we get the stronger bound
+  $
+    norm(z(t) - y(t)) <= norm(delta) wide forall t >= 0.
+  $
+  So a general linear problem has bounded amplification on a finite interval; a dissipative one does
+  not amplify the perturbation at all.
 ]
 
 #proof[
-  We just subtract the two systems:
+  Subtract the systems and set $w = z - y$. The common forcing cancels:
+  $
+    dv(w, t) = A w, quad w(0) = delta.
+  $
+  Thus $w(t) = exp(t A) delta$. Using the matrix exponential series,
+  $norm(exp(t A)) <= exp(t norm(A))$, giving the first bound.
 
-  TODO
+  For the stronger bound, track the squared error instead:
+  $
+    1/2 dv(, t) norm(w)^2 = w dot.op A w <= 0.
+  $
+  Its norm cannot increase. The key assumption here is dissipativity, not just linearity.
 ]
 
 #corollary(title: [Stability of parabolic])[
-  Using the BE method
-
-  TODO
+  Assume $a$ is coercive and use the full $H^1$ norm on $V$, as in the energy estimate above.
+  Backward Euler satisfies, for every $Delta t > 0$,
+  $
+    norm(u_h^N)^2_(L^2) + alpha Delta t sum_(n=0)^(N-1) norm(u_h^(n+1))^2_V
+    <= norm(u_(0 h))^2_(L^2) + (Delta t)/alpha sum_(n=0)^(N-1) norm(f^(n+1))^2_(L^2).
+  $
+  In particular, if $f = 0$, the $L^2$ norm cannot increase from one step to the next. The
+  difference of two solutions with the same forcing also cannot grow:
+  $
+    norm(u_h^N - tilde(u)_h^N)_(L^2) <= norm(u_(0 h) - tilde(u)_(0 h))_(L^2).
+  $
+  There is no restriction on $Delta t$ for these stability bounds.
 ]
 #proof[
   $
     integral_Omega (u_h^(n + 1) - u_h^n)/(Delta t) v_h dd(x) + a (u^(n+1)_h, v_h) = F^(n + 1) (v_h)
     wide forall v_h in V_h
   $
-  We choose $v_h = u_h^(n + 1)$.
+  Choose $v_h = u_h^(n + 1)$. The useful identity is
+  $
+    (a-b) a = 1/2 (a^2 - b^2 + (a-b)^2).
+  $
+  Apply it inside the integral and multiply by $2 Delta t$:
+  $
+    norm(u_h^(n+1))^2_(L^2) - norm(u_h^n)^2_(L^2)
+    + norm(u_h^(n+1) - u_h^n)^2_(L^2)
+    + 2 alpha Delta t norm(u_h^(n+1))^2_V
+    <= 2 Delta t norm(f^(n+1))_(L^2) norm(u_h^(n+1))_(L^2).
+  $
+  This is the discrete version of the earlier energy calculation. As before, use
+  $norm(v)_(L^2) <= norm(v)_V$ and Young's inequality:
+  $
+    2 norm(f^(n+1))_(L^2) norm(u_h^(n+1))_(L^2)
+    <= 1/alpha norm(f^(n+1))^2_(L^2) + alpha norm(u_h^(n+1))^2_V.
+  $
+  Absorb the last term into the left-hand side and drop the nonnegative squared increment. Sum over
+  $n = 0, dots, N-1$: the consecutive $L^2$ terms cancel, giving the estimate.
 
-  TODO
+  If $f = 0$, the one-step inequality already shows that the norm cannot increase. For two solutions
+  with the same forcing, subtract their discrete equations: the difference satisfies the same scheme
+  with zero forcing. Apply the same argument to that difference. This last argument only needs
+  $a(v, v) >= 0$, so it also covers the Neumann heat equation.
 ]
 
 

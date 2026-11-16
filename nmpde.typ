@@ -540,7 +540,7 @@ i.e. the best possible result.
   $V_h -> V$. This is called "saturation property".
 ]
 
-=== Choosing $V_h$
+=== Choosing $V_h$ <sec:choosing-vh>
 
 Consider the set of piecewise polynomial functions:
 $
@@ -553,7 +553,7 @@ $
   V_h := {v_h in cal(X)_h^r : evaluated(v_h)_(Gamma_D) = 0}
 $
 
-A basis could be chosen simply by letting
+When $r = 1$, a basis could be chosen simply by letting
 $
   phi_j (x_i) = delta_(i j)
 $
@@ -720,10 +720,15 @@ $
     u = u_0 wide & "in" Omega\, t = 0
   )
 $
+this is generally referred as an Initial-Boundary Value Problem (IBVP).
 
 As usual, multiply by $v$ and integrate
 $
   integral_Omega pdv(u, t) v dd(x) + integral_Omega L u v dd(x) = integral_Omega f v dd(x)
+$
+which can be written as well as
+$
+  integral_Omega pdv(u, t) v dd(x) + a(u, v) = F(v)
 $
 
 #remark[
@@ -731,7 +736,279 @@ $
   $x$ is differentiated twice.
 ]
 
-#theorem(title: [Lax-Millgram])[
+#theorem(title: [Lax-Milgram])[
   Under the same assumptions as @thm:lax-milgram, the problem is well posed.
 ]
 #proof[Skip, but a different one.]
+
+Furthermore, we can relax coercivity to *weak coercivity*, which is still sufficient.
+
+#definition(title: [weak coercivity])[
+  $
+    exists alpha > 0 exists lambda > 0 "s.t." a(v, v) + lambda norm(v)^2_(L_2 (Omega))
+    >= alpha norm(v)^2_V wide forall v in V
+  $
+]
+
+#example(title: [Heat equation])[
+  Consider the problem
+  $
+    pdv(u, t) + L u = f
+  $
+  with $L u = -mu laplace u$ and Neumann B.C.
+
+  Why do we need weak coercivity?
+]
+#solution[
+  Let $V = H^1 (Omega)$, then
+  $
+    a(v, v) = mu norm(grad v)^2_(L^2) = mu abs(v)^2
+  $
+  where $abs(v)$ represents the seminorm, which is not a norm on $V$.
+
+  However, by adding an $norm(dot)_(L^2)$ term, we get a norm:
+  $
+    a(v, v) + lambda norm(v)^2_(L^2)
+  $
+  giving a norm on $V$.
+]
+
+== Approximate solution
+
+As before, we discretize $V$ to $V_h$, we however do _not_ discretize $t$: this is called a
+*semi-discretization*.
+
+Since $V_h$ is a linear space, there exists a basis ${phi_i}^(N_h)_(i = 1)$. We can choose one as in
+@sec:choosing-vh. This means that
+$
+  forall t, wide u_h (t, x) = sum^(N_h)_(j = 1) u_j (t) phi_j (x)
+$
+this gives us a decomposition of the solution where the basis depends on space, while the
+coefficients depend only on time.
+
+Now we plug this in $pw_h$ and choose $v_h = phi_i$ for all $i$.
+$
+  cases(
+    display(
+      integral_Omega sum_j pdv(u_j, t) phi_j phi_i (x) dd(x) + a(sum_j u_j (t) phi_j, phi_i) =
+      F(phi_i)
+    )
+    wide forall i = 1\, ...\, N_h,
+    u_h (t = 0) = u_(0 h)
+  )
+$
+but $u_j$ does not depend on $x$, so we can pull it out of $a$:
+$
+  sum_j pdv(u_j, t) underbrace(integral_Omega phi_j phi_i (x) dd(x), m_(i, j))
+  + sum_j u_j (t) underbrace(a(phi_j, phi_i), a_(i, j))
+  = underbrace(F(phi_i), F_i)
+$
+giving
+$
+  M dv(va(u), t) + A va(u) = va(F)
+$<eq:ell-ode>
+where
+$
+  va(u) = va(u)(t) = vec(u_1 (t) = u_h (t, x_1), dots.v, u_(N_h) (t) = u_h (t, x_(N_h)))
+$
+
+We now want to solve @eq:ell-ode. This is, however just a *system of first order, linear, ordinary
+differential equations*.
+
+#remark[
+  To solve this problem we need to use a numerical method, such as Euler's method (forwards or
+  backwards), central derivative, or Runge-Kutta.
+
+  Here the professor went on a side-quest explaining how these methods work (skip RK) and applied
+  them to our problem.
+]
+
+These methods give us a way to approximate the derivative as a finite sum by discretizing $t$. We
+get
+$
+  cases(
+    M va(u)^(n + 1) = M va(u)^(n) + Delta t (va(F)^n - A va(u)^n) wide & ("FE"),
+    (M + Delta t A) va(u)^(n) = M va(u)^(n-1) + Delta t va(F)^n wide & ("BE"),
+    M va(u)^(n + 1) = M va(u)^(n-1) + 2 Delta t (va(F)^n - A va(u)^n) wide & ("CD"),
+  )
+$
+Note that, assuming $M = I$, $("FE")$ and $("CD")$ are explicit, while $("BE")$ is implicit, i.e.
+requires a linear solve per iteration. If $M != I$ we still need to invert $M$ or, more likely,
+introduce a linear solver for that too.
+
+$M$ is commonly called the *mass matrix* while $A$ is the *stiffness matrix*.
+
+#remark(title: [Mass lumping])[
+  This is a method to approximate $M$ as a diagonal matrix $tilde(M)$. The diagonal entries of
+  $tilde(M)$ are obtained by summing the corresponding row.
+
+  This turns $("FE")$ and $("CD")$ in true explicit methods, which require no solve step.
+]
+
+Another method we could use is Crank-Nicolson
+$
+  M (va(u)^(n + 1) - va(u)^n)/(Delta t) + 1/2 A (va(u)^n + va(u)^(n+1)) = 1/2 (va(F)^n + va(F)^(n+1))
+$
+this is second order and implicit, but only requires one step.
+
+#figure(
+  table(
+    columns: (auto, auto, auto, auto),
+    table.header([*Method*], [*\# Steps*], [*Impl/Expl*], [*Order*]),
+    [FE], $1$, [Explicit], $1$,
+    [BE], $1$, [Implicit], $1$,
+    [CD], $2$, [Explicit], $2$,
+    [CN], $1$, [Implicit], $2$,
+  ),
+  caption: [Some numerical methods to solve ODEs.],
+)
+
+We can also define generally a $theta$-method. We choose $theta in [0, 1]$ then
+$
+  M (va(u)^(n + 1) - va(u)^n)/(Delta t) + A (theta va(u)^n + (1 - theta)va(u)^(n+1))
+  = theta va(F)^n + (1-theta) va(F)^(n+1)
+$
+
+We now need to see how to choose $Delta t$. In general, implicit methods are way more stable than
+explicit ones, which therefore require a more adequate choice of $Delta t$.
+
+#definition(title: [Stability])[
+  Let $delta$ small. Then we say a solution is stable if there exists $C > 0$ such that
+  $
+    abs(u(t) - u_delta (t)) <= C abs(u_0 - (u_0 + delta)) = C delta wide forall t
+  $
+]
+
+== Analysis
+
+#proposition(title: [Boundedness])[
+  The parabolic PDE satisfies
+  $
+    norm(u_h (t))_(L^2) <= norm(u_(0 h))_(L^2) wide forall t in (0, T)
+  $
+]
+#proof[
+  Let $v_h = u_h (t)$ for all $t$.
+
+  $
+    integral_Omega pdv(u_h, t) u_h dd(x) + a(u_h, u_h) = F(u_h)
+  $
+  by coercivity we have
+  $
+    1/2 dv(, t) integral_Omega u^2_h (t) dd(x) + alpha norm(u_h (t))^2_V <= F(u_h) <=
+    norm(f(t))_(L^2) norm(u_h (t))_(L^2)
+  $
+  now integrate over $t$, by the fundamental theorem of calculus we get
+  $
+    integral_Omega u^2_h (t) dd(x)
+    + 2 alpha integral_0^t norm(u_h (s))^2_V dd(s)
+    <= integral_omega u^2_(0 h) dd(x)
+    + 2 integral_0^t norm(f(s))_(L^2 (Omega))^2 norm(u_h (s))^2_(L^2 (Omega)) dd(s) \
+    ==>
+    norm(u_h (t))^2_(L^2 (Omega)) + 2 alpha integral_0^t norm(u_h (s))^2_V dd(s)
+    <= norm(u_(0 h))^2_(L^2 (Omega))
+    + 2 integral_0^t norm(f(s))_(L^2 (Omega)) norm(u_h (s))_(L^2 (Omega)) dd(s) \
+  $
+
+  If $f = 0$ we can just remove the whole last term, and, since the second terms is $>=0$, we are
+  done.
+
+  #lemma(title: [Young inequality])[
+    $
+      a b <= epsilon a^2 + 1/(4 epsilon) b^2 wide forall a, b in RR, epsilon > 0
+    $
+  ]
+  #proof[
+    Start by noting that
+    $
+      (sqrt(epsilon) a - 1/(2 sqrt(epsilon)) b)^2 >= 0
+    $
+    since it is a squared quantity.
+
+    Then expand
+    $
+      epsilon a^2 + b^2 /(4 epsilon) - a b >= 0
+    $
+    and rearranging terms we get the result.
+  ]
+
+  Now we use this inequality on the last part of the above equation (the one dependent on $f$) to
+  get
+  $
+    2 integral_0^t norm(f(s))_(L^2 (Omega)) norm(u_h (s))_(L^2 (Omega)) dd(s)
+    & <= 2/(4 epsilon) integral^t_0 norm(f(s))^2_(L^2 (Omega)) dd(s)
+    + 2 epsilon integral^t_0 norm(u_h (s))^2_(L^2 (Omega)) dd(s) \
+    & <= 1/(2 epsilon) integral^t_0 norm(f(s))^2_(L^2 (Omega)) dd(s)
+    + 2 epsilon integral^t_0 norm(u_h (s))^2_V dd(s) \
+  $
+  where we bound the $L^2 (Omega)$ norm by the $V$ norm. This allows to have the same norm on both
+  sides of the inequality.
+
+  Now choose $epsilon = alpha/2$. This gets us
+  $
+    norm(u_h (t))^2_(L^2 (Omega)) + alpha integral_0^t norm(u_h (s))^2_V dd(s)
+    <= norm(u_(0 h))^2_(L^2 (Omega)) + 1/alpha integral^t_0 norm(f(s))^2_(L^2 (Omega)) dd(s)
+  $
+  This is the result, as we are bounding the solution by the data.
+]
+
+#theorem(title: [Stability of linear problems])[
+  Consider a linear problem
+  $
+    cases(
+      dv(y, t) = A y + b,
+      evaluated(y)_(t = 0) = y_0
+    )
+  $
+  and perturb it
+  $
+    cases(
+      dv(z, t) = A z + b,
+      evaluated(z)_(t = 0) = y_0 + delta
+    )
+  $
+
+  Then, for some $delta$ small,
+  $
+    norm(z - y) < delta
+  $
+]
+
+#proof[
+  We just subtract the two systems:
+
+  TODO
+]
+
+#corollary(title: [Stability of parabolic])[
+  Using the BE method
+
+  TODO
+]
+#proof[
+  $
+    integral_Omega (u_h^(n + 1) - u_h^n)/(Delta t) v_h dd(x) + a (u^(n+1)_h, v_h) = F^(n + 1) (v_h)
+    wide forall v_h in V_h
+  $
+  We choose $v_h = u_h^(n + 1)$.
+
+  TODO
+]
+
+
+#proposition(title: [Convergence])[
+  $
+    abs(u(t^n, x_j) - u^n_h (x_j)) -->^(Delta t -> 0, h -> 0) 0
+  $
+  where $t^n = n Delta t$.
+
+  Moreover, for some constant $C(u) > 0$
+  $
+    norm(u(t^n) - u^n_h)_(H^1 (Omega)) <= C (Delta t^P + h^r)
+  $
+  where $r$ is the order of finite elements, while $P$ is the order of the time discretization
+  method.
+]
+
+#proof[
+]

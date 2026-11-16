@@ -273,7 +273,7 @@ Also note that the boundary $partial Omega = Gamma_D union Gamma_N$ (and
 $Gamma_D inter Gamma_N = varnothing$), so we have different boundary conditions on different parts
 of the boundary.
 
-== Finding the Weak Problem
+== Finding the Weak Problem <sec:elliptic-weak-formulation>
 
 As in the Laplace equation, we start by multiplying both sides by a test function $v$ and follow the
 same procedure (integrate + Green's).
@@ -372,12 +372,13 @@ $
   a(u^0, v) = tilde(F) (v)
 $
 
-This means we define our search space $V$ as
-$
-  V = H^1_(Gamma_D) = cases()
-$
-
-TODO
+#definition(title: [Search and test space])[
+  We take
+  $
+    V = H^1_(Gamma_D) (Omega) = {v in H^1 (Omega) : evaluated(v)_(Gamma_D) = 0}.
+  $
+  If there is no Dirichlet boundary, $V = H^1 (Omega)$.
+]<def:search-test-space>
 
 == General analysis of Weak Problem
 
@@ -722,28 +723,95 @@ $
 $
 this is generally referred as an Initial-Boundary Value Problem (IBVP).
 
-As usual, multiply by $v$ and integrate
-$
-  integral_Omega pdv(u, t) v dd(x) + integral_Omega L u v dd(x) = integral_Omega f v dd(x)
-$
-which can be written as well as
-$
-  integral_Omega pdv(u, t) v dd(x) + a(u, v) = F(v)
-$
+Let's start with zero boundary data, then see what changes when $psi$ and $phi$ are nonzero. We use
+the same spatial bilinear form $a$ as in the elliptic case. For the derivations below, assume enough
+regularity to integrate by parts.
+
+We use the space $V$ from @def:search-test-space for the test functions and the unknown with zero
+Dirichlet data.
+
+#proposition(title: [Homogeneous boundary data])[
+  If $phi = 0$ and $psi = 0$, the weak formulation is: find $u(t) in V$ such that
+  $
+    integral_Omega pdv(u, t) v dd(x) + a(u, v) = integral_Omega f(t) v dd(x)
+    wide forall v in V,
+  $
+  with $u(0) = u_0$.
+]
+#proof[
+  *Same as elliptic:* multiply by $v in V$ and integrate in space, now at each fixed $t$:
+  $
+    integral_Omega pdv(u, t) v dd(x) + integral_Omega L u v dd(x)
+    = integral_Omega f(t) v dd(x).
+  $
+  *Same as elliptic:* integrate the spatial term by parts as in @sec:elliptic-weak-formulation. We
+  get the same $a(u, v)$; the boundary terms vanish because $v = 0$ on $Gamma_D$ and $psi = 0$ on
+  $Gamma_N$.
+
+  *New:* the term $integral_Omega pdv(u, t) v dd(x)$ remains. We do not integrate by parts in time.
+  The unknown is now $u(t) in V$, and we also need the initial condition $u(0) = u_0$.
+]
+
+#proposition(title: [Nonzero Neumann data])[
+  If $phi = 0$ but $psi != 0$, the same formulation holds with right-hand side
+  $
+    F(t)(v) = integral_Omega f(t) v dd(x) + integral_(Gamma_N) psi(t) v dd(s).
+  $
+  The space $V$ and the initial condition do not change.
+]
+#proof[
+  *Same as elliptic:* nonzero Neumann data give a boundary term when integrating by parts:
+  $
+    integral_Omega L u v dd(x) = a(u, v) - integral_(Gamma_N) psi(t) v dd(s).
+  $
+  Move the boundary integral to the right-hand side, exactly as before. There is no new boundary
+  step here: $psi$ and $F$ can now depend on $t$.]
+
+#proposition(title: [Nonzero Dirichlet data])[
+  If also $phi != 0$, take a sufficiently regular lifting $w(t) = R phi(t)$ and write $u = z + w$.
+  Then $z(t) in V$ satisfies
+  $
+    integral_Omega pdv(z, t) v dd(x) + a(z, v) = tilde(F)(t)(v) wide forall v in V,
+  $
+  where
+  $
+    tilde(F)(t)(v) = F(t)(v) - integral_Omega pdv(w, t) v dd(x) - a(w(t), v),
+  $
+  and $z(0) = u_0 - w(0)$.
+]
+#proof[
+  *Same as elliptic:* choose a lifting with $w = phi$ on $Gamma_D$, so $z = u - w$ has zero
+  Dirichlet data. Substitute $u = z + w$ and use the bilinearity of $a$:
+
+  $
+    integral_Omega (pdv(z, t) + pdv(w, t)) v dd(x) + a(z, v) + a(w, v) = F(t)(v).
+  $
+  *Same as elliptic:* move $a(w, v)$ to the right-hand side.
+
+  *New:* the time derivative also splits, so we must move $integral_Omega pdv(w, t) v dd(x)$ to the
+  right. This term vanishes if the lifting is independent of time. We must also transform the
+  initial condition: $z(0) = u_0 - w(0)$.
+]
+
+From now on, call the unknown with zero Dirichlet data $u$ again, and include any lifting terms in
+$F$. This way we can always work with the same weak formulation.
 
 #remark[
-  We cannot incorporate $t$ into $x$ since we only consider the first order derivative of $t$, while
-  $x$ is differentiated twice.
+  We can group $(x, t)$ together, but this does not turn the problem into an elliptic one: we
+  differentiate once in $t$ and twice in $x$. We also need an initial condition, not just boundary
+  conditions in space.
 ]
 
-#theorem(title: [Lax-Milgram])[
-  Under the same assumptions as @thm:lax-milgram, the problem is well posed.
+#theorem(title: [Parabolic well-posedness])[
+  Under the continuity and coercivity assumptions on $a$ from @thm:lax-milgram, and with suitable
+  initial data and forcing, the parabolic problem is well posed: a solution exists, is unique, and
+  depends continuously on the data.
 ]
-#proof[Skip, but a different one.]
+#proof[Skip. A different proof is needed: we cannot apply Lax-Milgram directly.]
 
 Furthermore, we can relax coercivity to *weak coercivity*, which is still sufficient.
 
-#definition(title: [weak coercivity])[
+#definition(title: [Weak coercivity])[
   $
     exists alpha > 0 exists lambda > 0 "s.t." a(v, v) + lambda norm(v)^2_(L_2 (Omega))
     >= alpha norm(v)^2_V wide forall v in V

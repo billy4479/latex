@@ -990,11 +990,23 @@ explicit ones, which therefore require a more adequate choice of $Delta t$.
 
 == Analysis
 
-#proposition(title: [Boundedness])[
-  The parabolic PDE satisfies
+For the following energy estimates, assume homogeneous boundary data, so that
+$F(t)(v) = integral_Omega f(t) v dd(x)$. Assume *coercivity* for simplicity, even if weak coercivity
+would be enough.
+
+#proposition(title: [Energy estimate and boundedness])[
+  The semidiscrete solution satisfies
   $
-    norm(u_h (t))_(L^2) <= norm(u_(0 h))_(L^2) wide forall t in (0, T)
+    norm(u_h (t))^2_(L^2 (Omega)) + alpha integral_0^t norm(u_h (s))^2_V dd(s)
+    <= norm(u_(0 h))^2_(L^2 (Omega)) + 1/alpha integral_0^t norm(f(s))^2_(L^2 (Omega)) dd(s).
   $
+  In particular, if $f = 0$, then
+  $
+    norm(u_h (t))_(L^2 (Omega)) <= norm(u_(0 h))_(L^2 (Omega)) wide forall t in [0, T].
+  $
+  The general estimate bounds the solution by the initial data and forcing; the unforced case says
+  that its $L^2$ norm cannot increase. The latter only requires $a(v, v) >= 0$, so it also applies
+  to the homogeneous Neumann heat equation above.
 ]
 #proof[
   Let $v_h = u_h (t)$ for all $t$.
@@ -1011,16 +1023,16 @@ explicit ones, which therefore require a more adequate choice of $Delta t$.
   $
     integral_Omega u^2_h (t) dd(x)
     + 2 alpha integral_0^t norm(u_h (s))^2_V dd(s)
-    <= integral_omega u^2_(0 h) dd(x)
-    + 2 integral_0^t norm(f(s))_(L^2 (Omega))^2 norm(u_h (s))^2_(L^2 (Omega)) dd(s) \
+    <= integral_Omega u^2_(0 h) dd(x)
+    + 2 integral_0^t norm(f(s))_(L^2 (Omega)) norm(u_h (s))_(L^2 (Omega)) dd(s) \
     ==>
     norm(u_h (t))^2_(L^2 (Omega)) + 2 alpha integral_0^t norm(u_h (s))^2_V dd(s)
     <= norm(u_(0 h))^2_(L^2 (Omega))
     + 2 integral_0^t norm(f(s))_(L^2 (Omega)) norm(u_h (s))_(L^2 (Omega)) dd(s) \
   $
 
-  If $f = 0$ we can just remove the whole last term, and, since the second terms is $>=0$, we are
-  done.
+  First consider $f = 0$. The last term vanishes and the energy term on the left is nonnegative,
+  giving the unforced boundedness statement. For general $f$, continue with Young's inequality.
 
   #lemma(title: [Young inequality])[
     $
@@ -1050,8 +1062,8 @@ explicit ones, which therefore require a more adequate choice of $Delta t$.
     & <= 1/(2 epsilon) integral^t_0 norm(f(s))^2_(L^2 (Omega)) dd(s)
     + 2 epsilon integral^t_0 norm(u_h (s))^2_V dd(s) \
   $
-  where we bound the $L^2 (Omega)$ norm by the $V$ norm. This allows to have the same norm on both
-  sides of the inequality.
+  where we use $norm(v)_(L^2 (Omega)) <= norm(v)_V$ for the chosen full $H^1$ norm. This gives the
+  same time-integrated $V$ norm as on the left, allowing us to absorb part of it.
 
   Now choose $epsilon = alpha/2$. This gets us
   $
@@ -1120,4 +1132,5 @@ explicit ones, which therefore require a more adequate choice of $Delta t$.
 ]
 
 #proof[
+  TODO
 ]

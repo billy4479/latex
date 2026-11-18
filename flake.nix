@@ -30,6 +30,7 @@
         "nla"
         "pc"
         "nmpde"
+        "bigliettini"
       ];
 
     in

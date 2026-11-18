@@ -1159,7 +1159,7 @@ would be enough.
   Its norm cannot increase. The key assumption here is dissipativity, not just linearity.
 ]
 
-#corollary(title: [Stability of parabolic])[
+#proposition(title: [Stability of parabolic])[
   Assume $a$ is coercive and use the full $H^1$ norm on $V$, as in the energy estimate above.
   Backward Euler satisfies, for every $Delta t > 0$,
   $
@@ -1174,34 +1174,159 @@ would be enough.
   There is no restriction on $Delta t$ for these stability bounds.
 ]
 #proof[
+  Start from backwards euler (i.e. $theta = 1$):
   $
-    integral_Omega (u_h^(n + 1) - u_h^n)/(Delta t) v_h dd(x) + a (u^(n+1)_h, v_h) = F^(n + 1) (v_h)
-    wide forall v_h in V_h
+    integral_Omega (u_h^(n + 1) - u_h^n)/(Delta t) v_h dd(x) + a (u^(n+1)_h, v_h)
+    = integral_Omega f^(n + 1) v_h dd(x) wide forall v_h in V_h
   $
-  Choose $v_h = u_h^(n + 1)$. The useful identity is
+  Choose $v_h = u_h^(n + 1)$. This gives
   $
-    (a-b) a = 1/2 (a^2 - b^2 + (a-b)^2).
+    integral_Omega (u_h^(n + 1) - u_h^n)/(Delta t) u_h^(n+1) dd(x) + a (u^(n+1)_h, u^(n+1)_h)
+    = integral_Omega f^(n+1) u_h^(n+1)
   $
-  Apply it inside the integral and multiply by $2 Delta t$:
+  We use coercivity and Cauchy-Schwarz: (TODO: what else?)
   $
-    norm(u_h^(n+1))^2_(L^2) - norm(u_h^n)^2_(L^2)
-    + norm(u_h^(n+1) - u_h^n)^2_(L^2)
-    + 2 alpha Delta t norm(u_h^(n+1))^2_V
-    <= 2 Delta t norm(f^(n+1))_(L^2) norm(u_h^(n+1))_(L^2).
+    1/(2 Delta t) (norm(u_h^(n+1))^2_(L^2 (Omega)) - norm(u_h^n)^2_(L^2 (Omega)))
+    + alpha norm(u_h^(n+1))^2_V <= norm(f^(n+1))_(L^2 (Omega)) norm(u_h^(n+1))_(L^2 (Omega))
   $
-  This is the discrete version of the earlier energy calculation. As before, use
-  $norm(v)_(L^2) <= norm(v)_V$ and Young's inequality:
+  Now use Young inequality on the rhs:
   $
-    2 norm(f^(n+1))_(L^2) norm(u_h^(n+1))_(L^2)
-    <= 1/alpha norm(f^(n+1))^2_(L^2) + alpha norm(u_h^(n+1))^2_V.
+    norm(f^(n+1))_(L^2 (Omega)) norm(u_h^(n+1))_(L^2 (Omega))
+    & <= epsilon norm(u_h^(n+1))^2_(L^2 (Omega)) + 1/(4 epsilon) norm(f^(n+1))^2_(L^2 (Omega)) \
+    & <= epsilon norm(u_h^(n+1))^2_V + 1/(4 epsilon) norm(f^(n+1))^2_(L^2 (Omega))
   $
-  Absorb the last term into the left-hand side and drop the nonnegative squared increment. Sum over
-  $n = 0, dots, N-1$: the consecutive $L^2$ terms cancel, giving the estimate.
+  by choosing $epsilon = alpha/2$ we get
+  $
+    norm(u_h^(n+1))^2_(L^2 (Omega)) - norm(u_h^n)^2_(L^2 (Omega)) + alpha Delta t norm(u_h^(n+1))^2_V
+    <= (Delta t)/alpha norm(f^(n + 1))^2_(L^2 (Omega))
+  $
 
-  If $f = 0$, the one-step inequality already shows that the norm cannot increase. For two solutions
-  with the same forcing, subtract their discrete equations: the difference satisfies the same scheme
-  with zero forcing. Apply the same argument to that difference. This last argument only needs
-  $a(v, v) >= 0$, so it also covers the Neumann heat equation.
+  We now sum over the $n$:
+  $
+    sum^m_(n = 0) (norm(u_h^(n+1))^2_(L^2 (Omega)) - norm(u_h^n)^2_(L^2 (Omega)))
+    + alpha Delta t sum^m_(n = 0) norm(u_h^(n+1))^2_V \
+    <= (Delta t)/alpha sum^m_(n = 0) norm(f^(n + 1))^2_(L^2 (Omega))
+  $
+
+  Now we notice that this is a telescopic sum:
+  $
+    norm(u_h^(m+1))^2_(L^2 (Omega)) + alpha Delta t sum^m_(n = 0) norm(u^(n + 1)_h)^2_V <=
+    norm(u^0)^2_(L^2 (Omega)) + (Delta t)/alpha sum^m_(n = 0) norm(f^n)^2_(L^2 (Omega))
+  $
+
+  Which is exactly what we want.
+]
+
+#proposition(title: [Stability of the $theta$ method])[
+]
+#proof[
+  We will only prove what happens when $f = 0$.
+
+  Start from the general $theta$-method formula
+  $
+    integral_Omega (u_h^(n+1) - u_h^n)/(Delta t) v_h dd(x) +
+    a(theta u_h^(n+1) + (1 + Omega) u^n_h, v_h) = 0 wide forall v_h in V_h
+  $
+
+  #definition(title: [Eigenfunctions])[
+    Let $a$ be a bilinear form. We say that $w$ is an eigenfunction of $a$ with eigenvalue $lambda$
+    is
+    $
+      a(w, v) = lambda integral_Omega w v dd(x) wide forall v in V
+    $
+  ]
+
+  #lemma[
+    If $a$ is a symmetric and cohercive bilinear form of a finite space, then its eigenfunctions are
+    $w_h in V_h$. Eigenfunctions form an orthonormal basis of $V_h$.
+  ]
+
+  We can decompose
+  $
+    u_h^n (x) = sum_(j = 1)^(N_h) u_j^n w_h^j (x)
+  $
+
+  Then, we take $v_h = w_h^i$
+  $
+    1/(Delta t) integral_Omega sum_(j = 1)^(N_h) (u_j^(n+1) - u_j^n) w_h^j w_h^i dd(x) \
+    + a(theta sum_(j = 1)^(N_h) u_j^(n + 1) w_h^j + (1- theta) sum_(j = 1)^(N_h) u_j^n w_h^j, w^i_h) = 0
+  $
+
+  $
+    1/(Delta t) sum_(j = 1)^(N_h) (u_j^(n+1) - u_j^n) integral_Omega w_h^j w_h^i dd(x) \
+    + sum_(j = 1)^(N_h) (theta u_j^(n + 1) + (1- theta) u_j^n ) a(w_h^j, w^i_h) = 0
+  $
+
+  $
+    1/(Delta t) sum_(j = 1)^(N_h) (u_j^(n+1) - u_j^n) delta_(i j)
+    + sum_(j = 1)^(N_h) (theta u_j^(n + 1) + (1- theta) u_j^n ) lambda^j_h delta_(i j) = 0
+  $
+
+  Giving, for each $i = 1, ..., N_h$:
+  $
+    1/(Delta t) (u_i^(n+1) - u_i^n) + (theta u_i^(n + 1) + (1 - theta) u_i^n ) lambda^i_h = 0
+  $
+  and by rearranging we get
+  $
+    u_i^(n+1) = underbrace(
+      [(1 - Delta t lambda_h^i (1-theta))/(1 + Delta t lambda_h^i
+        theta)], P_i(Delta t, theta)
+    ) u_i^n
+  $
+  Assuming $P_i(Delta t, theta) < 1$ for all $i$, we get that
+  $
+    sum_(i = 1)^(N_h) abs(u_i^(n+1))^2 <= sum_(i = 1)^(N_h) abs(u_i^n)^2
+  $
+
+  #remark[
+    $
+      norm(u_h^n)^2_(L^2 (Omega)) = (sum_())
+    $
+
+    TODO: complete here by decomposing using the eigenfunctions
+  ]
+
+  Using the remark above we obtain that
+  $
+    norm(u_h^(n+1))_(L^2)^2 < norm(u_h^n)_(L^2)^2
+  $
+  which in turns is
+  $
+    norm(u_h^n)_(L^2)^2 < norm(u^0)_(L^2)^2
+  $
+
+  #lemma(title: [Condition for stability])[
+    $abs(P_i) < 1$ is always true when $theta in [1/2, 1]$.
+
+    If $theta in [0, 1/2)$, we need
+    $
+      Delta t < 2/(lambda_h^i (1 - 2 theta))
+    $
+  ]
+  #proof[
+    The statement we want to prove is identical to
+    $
+      -1 - Delta t lambda^i_h theta < 1 - Delta t lambda_h^i (1-theta)
+    $
+    For all $Delta t > 0$ we can
+    $
+      -1 - Delta t lambda^i_h theta <
+      1 - Delta t lambda_h^i (1-theta) < 1 + Delta t lambda_h^i theta
+    $
+    then, rearranging
+    $
+      Delta t [- theta lambda_h^i + lambda_h^i (1 - theta)] < 2
+    $
+    or equivalently
+    $
+      Delta t lambda_h^i (1 - 2 theta) < 2
+    $
+
+    Since $lambda_h^i$ is positive, the only way this inequality is false is if the content of the
+    parenthesis is also positive. If $1 - 2 theta < 0$ this is always verified.
+  ]
+
+  When the above condition applies, we have the result.
 ]
 
 
@@ -1222,3 +1347,89 @@ would be enough.
 #proof[
   TODO
 ]
+
+= Navier-Stokes Equations
+
+This equation governs incompressible viscous fluids.
+
+$
+  cases(
+    display(pdv(va(u), t) - nu laplace va(u) + (va(u) dot grad) va(u) + grad p = va(f)) wide
+    & x in Omega \, 0<t<T,
+    div va(u) = 0 wide & x in Omega\, 0<t< T
+  )
+$
+
+We are considering the viscosity $nu >= 0$ constant and both the velocity $va(u)$ and the pressure
+$p$ are unknowns.
+
+Initial and boundary conditions are
+$
+  cases(
+    va(u) = va(psi) wide & "on" Gamma_D,
+    display(v pdv(va(u), va(n)) - p va(n) = va(psi)) wide & "on" Gamma_N,
+    va(u) = u^0
+  )
+$
+
+Note that this is a non-linear equation: the fluid is propelled by its own velocity.
+
+Some common simplifications are:
+- At steady state we set the time derivative to zero.
+- If the velocity is small we can drop the quadratic term and linearize the equation, getting us the
+  Stokes version.
+- Do both at the same time.
+
+== Weak formulation
+
+=== Static Stokes
+
+Let $V$ be the velocity space and $Q$ be the pressure space.
+
+$
+  cases(
+    display(integral_Omega - nu laplace u v dd(x) + integral_Omega grad p v dd(x) = f v) wide & forall v in V,
+    display(integral_Omega div u q dd(x) = 0) wide & forall q in Q
+  )
+$
+using Green formula
+$
+  cases(
+    display(
+      nu integral_Omega - grad u grad v dd(x) - integral_(partial Omega) nu pdv(u, n) v dd(x)
+      + integral_Omega grad p v dd(x) = f v
+    ) wide & forall v in V,
+    display(integral_Omega div u q dd(x) = 0) wide & forall q in Q
+  )
+$
+and substituting the boundary conditions
+
+TODO: something missing here
+$
+  cases(
+    display(
+      nu integral_Omega - grad u grad v dd(x)
+      - integral_(Gamma_D) nu pdv(u, n) v dd(x)
+      - integral_(Gamma_N) psi v dd(x)
+      + integral_Omega grad p v dd(x) = f v
+    ) wide & forall v in V,
+    display(integral_Omega div u q dd(x) = 0) wide & forall q in Q
+  )
+$
+and take $v = 0$ on $Gamma_D$
+
+This gives us
+$
+  cases(
+    V = {v in {H^1 (Omega)}^d : evaluated(v)_(Gamma_D) = 0},
+    Q = display(
+      cases(
+        L^2 (Omega) wide & "if" Gamma_N != varnothing,
+        display(
+          L^2_0 (Omega) = {q in L^2 (Omega) : integral_Omega q dd(x) = 0} wide &
+          "if" Gamma_D = partial Omega
+        )
+      )
+    )
+  )
+$
